@@ -1,0 +1,77 @@
+#!/bin/csh
+
+# Motif
+#
+# Copyright (c) 1987-2012, The Open Group. All rights reserved.
+#
+# These libraries and programs are free software; you can
+# redistribute them and/or modify them under the terms of the GNU
+# Lesser General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option)
+# any later version.
+#
+# These libraries and programs are distributed in the hope that
+# they will be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with these librararies and programs; if not, write
+# to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+# Floor, Boston, MA 02110-1301 USA
+
+# This script runs all the automated QATS tests, as defined in the file
+# ./tests/General/dirsAuto
+
+unalias cd
+unalias pushd
+unalias popd
+
+set dirs_file = ../tests/General/dirsAuto
+set DIR_LIST = (`cat $dirs_file`)
+set TESTS_HOME = $cwd
+
+echo  $#DIR_LIST " directories of automated tests to be run..."
+
+# Go to the lib dir and build the Motif libraries local
+
+cd $TESTS_HOME/../lib
+echo "I am in " $cwd
+
+set DIR = $cwd:t
+if (-e make.$DIR) then
+	mv  make.$DIR make.$DIR.bak
+endif
+make -i >& make.$DIR
+
+# Go to each automated test directory
+
+foreach dir ($DIR_LIST)
+        cd $TESTS_HOME/../$dir
+	set DIR = $cwd:t
+        echo "I am in " $cwd
+
+# Make all the automated tests and supporting files in this directory
+
+        if (-e make.$DIR) then
+                mv  make.$DIR make.$DIR.bak
+        endif
+        make IMAKE_DEFINES=-DAUTOMATION Makefile
+        make -i >& make.$DIR
+
+# Use the generated RUN script to run all of the tests
+
+        if (-e RUN.$DIR) then
+            if (-e RUN.$DIR.bak) then
+                rm -f RUN.$DIR.bak
+            endif
+            mv RUN.$DIR RUN.$DIR.bak
+        endif
+        RUN -T -D 1 -genrep -Dir -d :0.0 >& RUN.$DIR
+
+# Clean up the directory before leaving
+
+        make clean
+
+end

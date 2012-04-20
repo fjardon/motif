@@ -1,0 +1,561 @@
+
+------- Closed defects in project motif-code      -------
+
+
+Component: MWM                  Sub-component: MWM programmatic inter
+
+CDExc04974 Performance improvement for loading Mwm unspecified pixmap
+
+Component: MWM                  Sub-component: MWM user interface    
+
+CDExc09508 Geometry in icon box seems a little of
+
+Component: UIL                  Sub-component: Mrm library           
+
+CDExc20147 In  Mrm.h  the  value of RGMListSizeMax is set to 100
+CDExc23994 potential minor memory leak with UIL render table
+
+Component: UIL                  Sub-component: UIL                   
+
+CDExc23721 Uil Library does not function properly in a 64-bit envorinment
+CDExc23723 Colors in XmRenditions in UIL Cause Program to Abor
+
+Component: Xm                   Sub-component:                       
+
+CDExc11803 XsetCloseDown Not supported on X11-XNews serve
+CDExc12623 XmClipboard man page incompatible with Solaris ma
+CDExc16992 Can`t enter cc: in compose windo
+CDExc17274 Assertions 3, 6, and 7 fail in ColorObj testcase
+
+Component: Xm                   Sub-component: ANSI-C compliance     
+
+CDExc22903 Misc. compiler warning
+CDExc23666 VSM: problem with XmProcessTraversa
+
+Component: Xm                   Sub-component: BaseClass             
+
+CDExc23205 BaseClass.c`_XmTransformSubResources refers to R5 Xt bugs, probably fixe
+
+Component: Xm                   Sub-component: Build issues          
+
+CDExc23985 make: Fatal error: Don`t know how to make target `os2Lib.rules
+CDExc23987 possible difficulty building 2.1.20 with gcc
+CDExc24111 Missing entries from the Xm and Mrm export list
+
+Component: Xm                   Sub-component: C++ .h compile        
+
+CDExc09648 C++ linake proble
+
+Component: Xm                   Sub-component: Clipboard             
+
+CDExc23920 XmClipboardUndoCopy crashes VSM4.1 funcs/clpundocp tes
+CDExc24009 users of ClipboardFindItem must check validity of heade
+
+Component: Xm                   Sub-component: Color                 
+
+CDExc24003 closing 2nd display causes 1st to cras
+
+Component: Xm                   Sub-component: Demos                 
+
+CDExc23986 failures to install in hellomotifi18n dem
+
+Component: Xm                   Sub-component: Drag and Drop         
+
+CDExc09420 setting f.menu <Btn2Down> interferes with DN
+CDExc23482 XmDisplay does not support multiscreen applicatio
+CDExc24060 VSM: Funcs/XmDropSiteRegister fails on Alph
+CDExc24066 Dialog fails to post if drag is in progress; pointer grab locks system
+CDExc24067 Attempting to drag from a pulldown menu locks display
+
+Component: Xm                   Sub-component: Geometry Management Me
+
+CDExc20432 slight layout differences in Pane if children set values before managed/re
+
+Component: Xm                   Sub-component: Memory issues         
+
+CDExc23475 Motif binary compatibility mechanism has bug in XmResolve[All]PartOffse
+CDExc23674 XmResolveAllPartOffsets appears to be off by one class leve
+CDExc23709 Memory leaks in various widget
+CDExc23725 Memory Leak in _XmRenditionCop
+
+Component: Xm                   Sub-component: Menu button interactio
+
+CDExc09773 Menus must ungrab with CurrentTime
+CDExc20402 Cascade button keeps highlight when pull down is gon
+CDExc20403 incorrectly highlight 2 buttons in tear-off men
+
+Component: Xm                   Sub-component: Menu event handling   
+
+CDExc09772 Changes make to menus and mwm to support event time - was CurrentTime -
+CDExc20060 Motif menu accellarators are confused by don`t care modifier bit
+CDExc20401 grab conflict proble
+CDExc24004 Check for NULL pointer uses the wrong field
+
+Component: Xm                   Sub-component: Menu layout           
+
+CDExc20404 cascade button not supported in Tear-off men
+
+Component: Xm                   Sub-component: PC Style Convergence  
+
+CDExc22767 moving left off of leftmost menu button should select window men
+
+Component: Xm                   Sub-component: Pixmap Converters     
+
+CDExc23099 Missing pixmap
+
+Component: Xm                   Sub-component: Pixmap cache          
+
+CDExc19778 XmGePixmapByDepth core dumps on monochrome system
+
+Component: Xm                   Sub-component: Synthetic Resources   
+
+CDExc23943 Manager GetValuesHook has obsolete code for NULL ArgVa
+
+Component: Xm                   Sub-component: TearOff Menus         
+
+CDExc23923 Tear off menu crash when hitting escap
+
+Component: Xm                   Sub-component: Traits Other          
+
+CDExc23944 XmQTcareParentVisual redraw methods need to check that widget is realized
+
+Component: Xm                   Sub-component: Translations and Virtu
+
+CDExc23279 Sun virtual bindings out of dat
+
+Component: Xm                   Sub-component: VendorShell           
+
+CDExc23560 Thread unsafe of XmeGetDefaultRenderTabl
+CDExc23672 Events can sometime `sneak` in during processing of primary modal
+CDExc23720 XtRemoveGrab asked to remove a widget not on the lis
+
+Component: Xm                   Sub-component: XmArrowButtonGadget   
+
+CDExc20513 Motif sash sizing error
+
+Component: Xm                   Sub-component: XmCascadeButton       
+
+CDExc09768 problem with two cascade buttons are sharing the same submenu pan
+CDExc24069 Program dies in call to XmCascadeButtonHighligh
+
+Component: Xm                   Sub-component: XmComboBox            
+
+CDExc22532 Combo Box arrow still active when XmNarrowSize set to 
+CDExc23729 XmComboBox Cuts Off Text in Text Fiel
+
+Component: Xm                   Sub-component: XmCommand             
+
+CDExc23892 CDExc23345 needs to be reversed or fixed differentl
+CDExc23990 XmCommandAppendValue causes TCM Error in VSM4.1 on Alph
+
+Component: Xm                   Sub-component: XmContainer           
+
+CDExc23204 XmContainer marquee selection funky in out-of-bounds case
+CDExc23305 XmContainer denies geometry requests for children resizin
+CDExc24005 container widget outline loses widget
+CDExc24006 Container has drag & drop problems, causes SEG
+CDExc24061 Container widget always supports inappropriate drag operations
+CDExc24062 Container widget does not react properly to Button1Down event
+
+Component: Xm                   Sub-component: XmDialogShell         
+
+CDExc23706 dialog box doesn`t take input after rapid clicking away from button
+
+Component: Xm                   Sub-component: XmDisplay             
+
+CDExc23773 Invalid use of XtGetValue function on create only resource
+
+Component: Xm                   Sub-component: XmDrawnButton         
+
+CDExc23999 DrawnButton in menu produces warning, and has no translation
+CDExc24000 DrawnButton does not show proper visuals when in men
+
+Component: Xm                   Sub-component: XmFileSelectionBox    
+
+CDExc23897 compound widget display difference
+CDExc23921 VSM4.1 widgets/filesb1{2} causes SIGBUS on HP-U
+
+Component: Xm                   Sub-component: XmIconGadget          
+
+CDExc19866 XmIconGadget doesn`t honor XmNlayoutDirection resourc
+
+Component: Xm                   Sub-component: XmIm                  
+
+CDExc23895 A bug in XmText and XmList widget
+
+Component: Xm                   Sub-component: XmLabel               
+
+CDExc23608 Indicator size not recalculated in ToggleBtn when String is used as labe
+
+Component: Xm                   Sub-component: XmList                
+
+CDExc19518 ListBeginExtend behaves non-intuitively when no selection exist
+CDExc19559 List c-a-Btn1 actions are wrong
+CDExc19642 Toolkit/List/List2 test List1SW widget scrollbar too lon
+CDExc22405 Item highlightlighting may erase parts of adjacent item
+CDExc23894 fatal defect in XmList widge
+CDExc23896 XmList fails to adjust to size changes, clips dat
+CDExc23914 auto-created IC not free
+CDExc23996 Highlight spacing off by one for XmLis
+
+Component: Xm                   Sub-component: XmMenuShell           
+
+CDExc23280 XmMenuShell issues unnecessary XmFontListFree cal
+
+Component: Xm                   Sub-component: XmNotebook            
+
+CDExc20033 XmNotebook: can`t set XmNcurrentPageNumber before widget is realize
+CDExc23791 Tabs do not go to correct `heights` for prior page numbers in noteboo
+CDExc23797 notebook first back page drawn incorrectly for some XmNbindingType
+CDExc23798 notebook size incorrect with specific XmNbackPagePlacement/XmNorientatio
+CDExc23801 notebook size includes tab scrollers even if not manage
+CDExc23802 top major tab shadow not drawn if frameShadowThickness = 
+CDExc24070 Notebook gives error when the bindingType is XmSPIRAL
+
+Component: Xm                   Sub-component: XmPanedWindow/Sash    
+
+CDExc23984 XmPanedWindow does not respond to change in XmNorientatio
+
+Component: Xm                   Sub-component: XmPushButtonGadget    
+
+CDExc17352 Btn2 double-click while Btn1 holds down a button gadget, stay
+CDExc24011 PushBG has dup call to XtSetKeyboardFocus in Enter event handler
+
+Component: Xm                   Sub-component: XmRenderTable/XmFontLi
+
+CDExc23590 XmeGetDefaultTable`s doc need new inf
+
+Component: Xm                   Sub-component: XmRowColumn WorkArea|R
+
+CDExc23893 lib/Xm/RowColumn.h missing function prototype
+
+Component: Xm                   Sub-component: XmScrolledWindow      
+
+CDExc04585 paging grab need to apply to inner SW, plus the begin/end line data should
+
+Component: Xm                   Sub-component: XmSelectionBox        
+
+CDExc21358 The default action in the SelectionBox ListItems XmList widget is broken
+
+Component: Xm                   Sub-component: XmSpinBox             
+
+CDExc23604 XmSpinBox does not handle XmManager resources properl
+
+Component: Xm                   Sub-component: XmString              
+
+CDExc23922 funcs/stlength VSM4.1 test causes warning on Solari
+
+Component: Xm                   Sub-component: XmText                
+
+CDExc05686 It is impossible to set the slider color on a scrollbar of a scrolled Text
+CDExc16629 XmTextPosToXY can mess up curso
+CDExc23645 XmTextSetTopCharacter does not work for zero positio
+CDExc23898 locale bug in XmTextSetTopCharacter in Motif2.
+
+Component: Xm                   Sub-component: XmTextField           
+
+CDExc20409 Performance bug in XmTextFiel
+CDExc20656 The XmTextField returns the type `TEXT` as the selection type
+CDExc24076 Compilation warnings in TextField widget code
+
+Component: Xm                   Sub-component: XmToggleButton        
+
+CDExc08708 ToggleButton`s XmNvalueChangedCallback firing incorrectl
+CDExc20667 Toggles` XmNselectPixmap handling doesn`t detect NULL pixma
+CDExc23615 ToggleBtn indicator resizes automatically even if XmNindicatorSize is se
+CDExc24058 VSM: Widgets/XmToggleButton/3 fails on Alph
+CDExc24064 ToggleBtn indicatorSize is zero if no pixmap is specifie
+
+Component: Xm                   Sub-component: XmToggleButtonGadget  
+
+CDExc23991 XmToggleButtonGadgetGetState causes TCM Error in VSM4.
+CDExc24059 VSM: Widgets/XmToggleButtonGadget/3 fails on Alph
+CDExc24065 ToggleBtnGadget indicatorSize is zero if no pixmap is specified
+CDExc24074 DisArm call back is not redrawing the visual correctly.
+CDExc24075 ToggleButtonGadget`s XmNvalueChangedCallback gives some problem
+
+Component: Xm                   Sub-component: other                 
+
+CDExc20062 XmosP.h may need to change alloca definition for Solaris 2.
+CDExc20066 _XmVirtKeysLoadFileBindings puts comments from .motifbind file into the MO
+CDExc23236 Xmos.c handling of select uses wrong types on some system
+CDExc23237 Messages.c has nested comment
+CDExc23643 Supplied CTL code for Xm/XmXOC.h has Xlcint.h as include which is X11`
+CDExc23689 Name space collision between /usr/include/term.h and Xm.
+CDExc23722 Bug in Motif 2.1 Mrm Library with TabList
+CDExc23891 testing applications for binary compatibility with earlier release
+CDExc24019 osfHelp on sun doesn`t bind to <Key>F
+
+Component: other                Sub-component: Build issues          
+
+CDExc09774 SharedXmRev is still defined as 1.
+CDExc22904 Misc. compiler warning
+CDExc23416 Add Motif macros: BuildMotifDemos BuildMotifConfig BuildWMLTabl
+CDExc23992 exportlistgen needs to eliminate warnings about symbols missing from expor
+
+Component: other                Sub-component: Exm C Reference Widget
+
+CDExc09667 ExmMenuButton in pulldown menu does not respond if menu is posted by a cli
+
+Component: other                Sub-component: WML                   
+
+CDExc05118 Warnings and prototypes in wml
+
+Component: other                Sub-component: other                 
+
+CDExc06053 VenShellM1 Panel 5 test logic erroneous
+CDExc21080 XmCxxXmString.h copy constructor arg should be cons
+CDExc23850 2.1.n release notes needs information about UID file
+
+------- Closed defects in project motif-test      -------
+
+
+Component: MT                   Sub-component:                       
+
+CDExc23534 Tests/DragAndDrop/DNDDrop2 has bulltenboard animation style out wron
+CDExc23535 Auto scrolling in DNDScrool of tests/DragAndDrop is not workin
+
+Component: MWM                  Sub-component: MWM programmatic inter
+
+CDExc06738 Update RUN in ./tests/mwm/P
+CDExc08730 PIVMwm.dat tells you to click on the wrong butto
+CDExc09351 some tests fail in VenShellM
+
+Component: MWM                  Sub-component: MWM user interface    
+
+CDExc07988 TransFamilyM1 test needs some looking into
+CDExc08732 test mwmwrc file syntax wron
+CDExc23491 Inconsistancy in docs/tests for mw
+
+Component: UIL                  Sub-component: UIL                   
+
+CDExc07945 Compiler warnings while building uil/Manual/callUil test
+CDExc07959 uil/Manual/validator/RUN script has wrong location of ui
+CDExc08012 uil/dataStructs/Translations should be updated to reflect expected behavio
+
+Component: Xm                   Sub-component: Clipboard             
+
+CDExc09391 CopyByName seems to fail in test Cutpaste4
+
+Component: Xm                   Sub-component: Cxx Foundry Widgets   
+
+CDExc08969 CxxManager test does not build
+CDExc09527 In CxxManager and CxxPrimitive Coverage reports are wrong
+
+Component: Xm                   Sub-component: Demos                 
+
+CDExc09760 Compilation errors when building gmalloc.o in tests/internal/Performance/U
+
+Component: Xm                   Sub-component: Drag and Drop         
+
+CDExc06759 Correct DNDDrop1 tes
+CDExc07911 Instructions for DNDList1 should indicate you need a multi-line Text widge
+CDExc08900 Instruction Panel should be changed for DNDDrop
+CDExc08901 DNDScroll instructions has vertical and horizontal scrollbars switche
+CDExc09631 Intruction Panel wrong for DNDScroll tes
+
+Component: Xm                   Sub-component: I18N misc             
+
+CDExc09712 Missing new lines at end of .dat file
+
+Component: Xm                   Sub-component: Menu button interactio
+
+CDExc05914 SimpleM1 - test says there should be four pushbuttons displayed, but there
+CDExc08226 Menu1 test does not compile cleanly on alpha
+
+Component: Xm                   Sub-component: Menu event handling   
+
+CDExc07441 MenuBar1 does a KCancel when it really wants to do a ClickM
+
+Component: Xm                   Sub-component: Performance           
+
+CDExc23536 tests/Performance has CSText in it
+
+Component: Xm                   Sub-component: Resolution Independenc
+
+CDExc06071 RIPanedWin3.Scr has a typ
+
+Component: Xm                   Sub-component: TearOff Menus         
+
+CDExc07360 Test tries to add popup callback to row column widge
+
+Component: Xm                   Sub-component: Uniform Transfer Model
+
+CDExc24137 UTM tests fail to build due to use of CSTex
+
+Component: Xm                   Sub-component: VendorShell           
+
+CDExc06761 Don`t know how to make target VenShellM2.da
+
+Component: Xm                   Sub-component: XmComboBox            
+
+CDExc08654 ComboBox is a Manager not a Primitive and should be treated as such in Vis
+CDExc09289 ComboBox4 not updating with items being added to list
+CDExc23507 ComboBox1d test does not wor
+
+Component: Xm                   Sub-component: XmDialogShell         
+
+CDExc06772 No .dat file for DiaShellM
+CDExc06797 Test dies when destroying parent of a destroyed dialog message
+
+Component: Xm                   Sub-component: XmDrawingArea         
+
+CDExc09654 Problem with DrawArea2 test
+
+Component: Xm                   Sub-component: XmFileSelectionBox    
+
+CDExc24057 Widgets are getting resized when sensitivity changes
+
+Component: Xm                   Sub-component: XmForm                
+
+CDExc08393 Form1h script file has a syntax erro
+CDExc08640 Test crashing on Alpha due to script proble
+
+Component: Xm                   Sub-component: XmLabel               
+
+CDExc07864 MessageDia4 test needs to change calls from XtVaSetValues to XtSetValues f
+
+Component: Xm                   Sub-component: XmList                
+
+CDExc05904 ListM1 does not print message to term window as instructions suggest
+
+Component: Xm                   Sub-component: XmPanedWindow/Sash    
+
+CDExc07266 Incorrect dimensions for paned window and its children
+
+Component: Xm                   Sub-component: XmRowColumn WorkArea|R
+
+CDExc07701 RowCol1 logs two visual differences when run on alph
+
+Component: Xm                   Sub-component: XmScrollBar           
+
+CDExc24156 Scrollbar7 gives warning message and VISERRO
+
+Component: Xm                   Sub-component: XmSpinBox             
+
+CDExc22661 SpinBox QATS tests are using wrong value for arrowOrientation
+
+Component: Xm                   Sub-component: XmString              
+
+CDExc23502 Missing golden data for tests/XmString/StringTa
+
+Component: Xm                   Sub-component: XmText                
+
+CDExc09472 Get error about not being able to load font in ScrollText3
+
+Component: Xm                   Sub-component: XmTrackingLocate/Event
+
+CDExc06132 Test Grab1 crashes on Sun and HP and OSF/1
+CDExc07979 TrackingLocM2 test needs to be revisite
+CDExc08938 Problems with instruction panel for TrackingLocM1
+CDExc08953 Empty Shell widget in TrackingLocM
+
+Component: Xm                   Sub-component: Xme Transfer API      
+
+CDExc06819 XmeClipboardSink segv`
+CDExc08903 XmeTransfer test fails on alphas
+
+Component: Xm                   Sub-component: other                 
+
+CDExc20064 tests/Toolkit/Converters/Conversion2.c does not pass lin
+CDExc20077 tests/Manual/validator has outdated reference lo
+CDExc20082 Cutpaste4a give strange behavio
+CDExc20085 stupid varargs code in test routine kills u
+CDExc20089 XmeString test issues warnin
+CDExc20090 XmeTransfer test screwed u
+CDExc20095 ./XmeString: ERROR: incorrect XmString component encountere
+CDExc20098 test claims that CR 5989 is still a proble
+CDExc20101 VenShellM1 tests fai
+CDExc20113 automated Toolkit/ComboBox tests fai
+CDExc23215 tests/Toolkit/Extensibility/XmeTransfer doesn`t work at al
+CDExc23217 HorPanedWin1 wrong about siz
+CDExc23295 PanedWinM1 uses old XtGetValues(NULL
+CDExc23296 MessageBM1 item does not appea
+CDExc23306 ScrollText1 lies about resource setting
+CDExc23311 Visual1 uses wrong handling for sensitivit
+CDExc23328 Toolkit/Manual/BBoardM1 uses old form of XtGetValues(NULL
+CDExc23508 Automate constraint widget testin
+CDExc23928 Several tests in Toolkit/ResInd fail due to NULL ArgVa
+CDExc23929 Several tests in Toolkit/Scrollbar fail due to NULL ArgVa
+CDExc23983 Primitive/Label4 fails on Su
+
+Component: other                Sub-component: Automation            
+
+CDExc04952 mvsGetSubObjects must free memory allocated by XmFontListGetNextFont
+CDExc05254 TransFamily test exits with a signal under automatio
+CDExc06084 Automation is not doing the select for Text
+CDExc06591 Uninitialized memory read in Create/mvsGetRscVal`mvsGetResourceValue-  -
+CDExc07311 Automation doesn`t do printfs of callbacks - could this be related to the 
+CDExc08232 segv, event/actions when using ClickKey <Mod1> Kq
+CDExc09002 Automation dumps core in DragSliderValue if slider can not be found
+CDExc23848 Automation Imakefile does not pass CDEBUGFLAG
+CDExc23930 Several tests in Toolkit/Select depend on OSF site-specific directorie
+CDExc23946 AutoWmCmd.c is corrupted
+CDExc23956 Typo in QATS Automation error message
+CDExc23982 RUN_auto script contains OSF-specific display nam
+CDExc23993 Automation message SCRMSG19 is missing a wor
+CDExc24010 QATS environment setup files contain OSF-specific informatio
+CDExc24022 .motifbind file for HP-UX had bad osfMenu and osfMenuBar definition
+CDExc24032 Select/Command2 golden .prt file needs to be re-recorde
+CDExc24033 Error in script file for Container2
+CDExc24037 Golden data for textSl needs to be re-recorde
+
+Component: other                Sub-component: UIL                   
+
+CDExc04903 uil matrix tests are not complete
+
+Component: other                Sub-component: VendorShell           
+
+CDExc07291 Test instructions site the incorrect font for the pushbutton label
+CDExc08736 DiaShell1 not compiling clean on Alph
+
+Component: other                Sub-component: XmDialogShell         
+
+CDExc04891 uil test ErrorDia hasdefunct resource
+
+Component: other                Sub-component: XmManager             
+
+CDExc08642 Manager directory not compiling clean on Alph
+
+Component: other                Sub-component: XmMenuShell           
+
+CDExc07244 The following tests in tests/Toolkit/Manual generate compiler warnings whe
+
+Component: other                Sub-component: XmPanedWindow/Sash    
+
+CDExc08645 Instruction wrong in HorPanedWin
+
+Component: other                Sub-component: XmPushButton          
+
+CDExc08601 Buttons directory not compiling clean on Alph
+
+Component: other                Sub-component: XmTrackingLocate/Event
+
+CDExc07986 Instructions need a correction in TrackingLocM2 test
+
+Component: other                Sub-component: other                 
+
+CDExc03831 Several tests in Constraint directory need looking into. Instructions don`
+CDExc05398 Some Text tests use functions that are in Obsolete.
+CDExc05441 ScrollText1, Instruction Panel 3, instruction number 2 - looks like incorr
+CDExc05600 AutoParser leaks memor
+CDExc06123 Defunct tests/uil/matrix directory, tests no longer usefu
+CDExc06128 Makefile in Toolkit/Manual does not build all the test
+CDExc06129 Instructions for ListM1 is wrong, no message sent to stdou
+CDExc06131 Toolkit/Manual/SharedTearM1 segv when displayed onto a Sun or HP but not 3
+CDExc06142 Toolkit/Manual/SharedTearM1 segv on the Sun - betelgeuse 
+CDExc07288 The following tests failed in VenShellM1
+CDExc07449 RowCol* tests need to be added to  the foreach loop in RUN.custom
+CDExc07772 Top list CRs needing testcases can be inadvertently removed from the topli
+CDExc08412 compilation warnings for UTM/UTMPrim1.
+CDExc08935 DNDIcon1, Panel 7 wrong instructionin no. 3
+CDExc09713 DND test does not run correctly
+CDExc23543 Test failure of tests/Toolkit/Converters/RepType
+CDExc23924 Crash in Toolkit/PanedWin/PanedWin
+CDExc23927 Toolkit/Primitive/Label2 segv on Solari
+CDExc23948 Primitive/Label5 uses obsolete _XmGetImageFromFile(
+CDExc23965 Golden .prt file for Converters/RepType2 needs update for Motif 2.0 value
+CDExc24035 .motifbind file for Sun needs updat
+CDExc24038 MessageDiaM1 code does not match instruction pane
+CDExc24055 ColorM1.h does not compile on Su
+CDExc24174 Toolkit/CxxManager and Toolkit/CxxPrimitive directories are obsolet

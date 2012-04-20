@@ -1,0 +1,435 @@
+
+                               Motif 2.1.30
+
+                              Release Notes
+
+                              The Open Group
+
+
+This document provides Release notes for Motif 2.1.30.
+Please see the COPYRIGHT.MOTIF file included with this release.
+
+
+Introduction
+
+This document describes Motif version 2.1.30. Whenever "Motif"
+is used in these release notes, it means Motif 2.1.30.
+
+This document and accompanying text files contain important
+information. Please read them carefully before starting the build and
+installation procedures.
+
+The command line instructions provided here are for csh. They may vary
+depending on the particular shell you are using.  
+
+
+Unloading the Distribution
+
+If you received this distribution on physical media (CD)
+rather than electronically, the distribution  should include appropriate
+instructions in hardcopy form. The hardcopy information pertains to your
+particular distribution format.
+
+The instructions in this document can be used for unloading from
+electronic distribution.
+
+Distribution Format
+
+The distribution consists of a single gzip'd tar file. This file contains
+the source code, test code, and documentation of Motif.
+
+To unpack the distribution, create a directory to hold all of the sources
+and untar everything into that directory:
+
+      % mkdir $MOTIFSOURCEDIR
+      % cd $MOTIFSOURCEDIR
+
+and then either
+
+      % tar zxf tar-file-name
+
+or
+      % gzip -dc tar-file-name| tar xf -
+
+
+where $MOTIFSOURCEDIR designates the master source directory.  If you
+unpack the distribution, you will have the following subdirectory under
+$MOTIFSOURCEDIR:
+
+      motif
+
+Note that directory permissions stored in the tar file are generally
+set world writable. Make sure your umask is set the way you want before
+unpacking the distribution.
+
+Disk Space Requirements
+
+Approximately 70MB of disk space are required to unpack the Motif distribution.
+Disk usage is as follows (all amounts are in MB):
+
+      motif         19
+      motif/tests   39
+      motif/doc     13
+
+
+Building Motif
+
+This section provides a generic description of the build process for Motif.
+Motif has been built on the following platforms:
+      Digital  AlphaStation 200   Digital UNIX V4.0
+      Fujitsu  DS/90 7000         UXP/DS V20L10
+      HP       HP9000/7xx         HP-UX 10.20
+      IBM      RS/6000            AIX 4.2
+      Novell   Intel 486/Pentium  UnixWare 2.02
+      SGI      Indigo 2           Irix 6.2
+      Sun      SPARCstation       Solaris 2.4
+      Linux    Intel              Redhat6.0/6.1
+
+
+To build Motif, you must have an ANSI C compiler installed on your system
+and available in your $PATH. You should not have /usr/ucb in your $PATH,
+or the build is likely to fail.
+
+If you expect to build the distribution on more than one machine using
+a shared source tree, or you just want to keep the binaries out of
+the source tree, you may want to use the X11 program lndir to create a
+symbolic link tree on each build machine. The links require additional
+disk space but take less disk space than multiple copies of the source
+tree.
+
+Create a build directory that is not a subdirectory of the Motif master
+source directory, for example:
+
+      % mkdir $MOTIFBUILDDIR
+
+Create a symbolic link tree using the following command:
+      % lndir $MOTIFSOURCEDIR $MOTIFBUILDDIR
+
+where $MOTIFSOURCEDIR is the Motif master source directory. Note that
+the directory containing the lndir program must be in your $PATH.
+Note that the builds described below must be done in the order given:
+
+Building Motif
+
+1. Customize $MOTIFBUILDDIR/motif/config/cf/site.def to reflect local
+preferences for install locations, compilers, paths, etc. Note that
+the default install location is /usr/dt, and is probably not the one
+you want. You should change it to where you want Motif to be installed,
+probably /usr.
+
+
+2.  If you are building with imports (the default setup in site.def),
+construct the necessary links as follows:
+
+              % cd $MOTIFBUILDDIR/motif
+              % mkdir -p imports/x11
+              % cd imports/x11
+              % ln -s <X11_bin_directory> bin
+              % ln -s <X11_includes_directory> include
+              % ln -s <X11_libs_directory> lib
+
+3. Set your current directory as follows:
+
+        % cd $MOTIFBUILDDIR/motif
+
+4. See if there is a BootstrapCFlags mentioned in the
+comments in the <vendor>.cf file. This file is in the directory
+$MOTIFBUILDDIR/motif/config/cf. If there isn't a definition for
+BootstrapCFlags, type:
+
+        % make World >& world.log
+
+If there is a BootstrapCFlags definition, take its value and type:
+        % make World BOOTSTRAPCFLAGS="value" >& world.log
+
+Installing Motif
+
+Before installing Motif, check to see if you already have an installed
+version of Motif. If so and you want a completely new installation
+(which is recommended), then rename it or back it up and then remove it.
+
+Installing Motif
+To install motif do the following as root:
+
+      % cd $MOTIFBUILDDIR/motif
+      % make install >& install.log
+
+
+Documentation
+The Motif guides have been provided in postscript.
+These are located in the directory $MOTIFBUILDDIR/motif/doc/ps. With this
+release, the Motif and CDE style guides have been combined and reworked
+into three new volumes: Motif and CDE Style Guide, Motif and CDE Style
+Guide Reference, and Motif and CDE Style Guide Certification Checklist.
+
+The documentation consists of:
+
+mot-pg/		Motif Programmer's Guide
+mot-ref/	Motif Programmer's Reference
+mot-mcsg.ps.Z	Motif and CDE Style Guide
+mot-cdesgr.ps.Z	Motif and CDE Style Guide Reference
+mot-csgcc.ps.Z	Motif and CDE Style Guide Certification Checklist
+mot-wwg.ps.Z	Motif Widget Writer's Guide
+mot-ug/		Motif User's Guide
+mot-gloss.ps.Z	Motif Glossary
+
+Manual pages in man format are provided.
+These are located in the directory $MOTIFBUILDDIR/motif/doc/man.
+
+
+Building the Motif QATS Tests
+
+Most of the information required to build and run the Motif/QATS can be
+found in the following files:
+
+      $MOTIFBUILDDIR/motif/tests/doc/Output/draft/ps/chap1
+      $MOTIFBUILDDIR/motif/tests/doc/Output/draft/ps/chap2
+      $MOTIFBUILDDIR/motif/tests/doc/Output/draft/ps/chap3
+      $MOTIFBUILDDIR/motif/tests/doc/Output/draft/ps/chap4
+      $MOTIFBUILDDIR/motif/tests/environment/README
+
+
+
+Installing Tests
+
+Test execution is fully functional inside the tests directory
+structure. No installation is required.
+
+
+Running Tests
+
+The QATS must be run on a display controlled by a Motif 2.x version
+of mwm (not dtwm). A suitable version of mwm is built in the
+$MOTIFBUILDDIR/motif/clients/mwm directory.
+
+Test Execution Results
+
+The Motif/QATS automated tests and Motif window manager were built as
+described in an earlier section.  Automated tests were built and run
+on all reference platforms. Sun, HP, and SGI displays were used for
+displaying tests. Motif window managers built on different platforms
+were used to manage the windows while running the tests. The complete
+QATS is executed on Sun, HPUX, and SGI platforms while only the new
+tests or suites were executed on the remaining reference platforms.
+
+Missing Keys WARNINGS
+
+The keys on the keyboards used on the HP and Sun platforms are
+insufficient for the needs of the tests (keys missing from the keyboard
+that were expected to be mapped for the tests), causing "AUTOWARNING"
+errors in every one of the tests. The standard report generation scripts
+detect these benign errors and flag the entire test as an error. Since
+these were not considered to be fatal errors (after inspection of the
+test code), the analysis scripts filtered out AUTOWARNING errors that
+came from missing keys at the very beginning of a test run.
+
+New Test Clients
+Several new test clients were added to the QATS during this release,
+some automated and some manual. Test clients were added to the following
+directories:
+
+      tests/Toolkit/Buttons
+      tests/uil/widgets
+
+Golden data was generated where necessary.
+
+Golden Data Generation
+
+Some new QATS test suites, which do not have any previous recordings,
+were run in record mode to generate golden data. The recordings were
+added to this release. These new automated test suites are:
+
+      tests/Toolkit/ComboBox
+      tests/Toolkit/SpinBox
+      tests/Toolkit/Notebook
+      tests/Toolkit/IconVC
+
+
+Test Results
+
+The results were compared with the recordings made against Motif 2.0. The
+results are mostly consistent with the previous runs carried out at
+OSF. There are failures due to both QATS problems and Motif defects. All
+the errors/failures reported during the run are due to known problems
+in both QATS and Motif code and have defects already opened against
+them. Also, the results were consistent across all the platforms on
+which the tests were executed.
+
+
+Compatibility
+
+Compatibility with CDE/Motif 1.2 was given great emphasis in this release,
+even at the expense of compatibility with OSF/Motif 2.0. Some OSF/Motif
+2.0 applications may experience problems because of the following changes:
+
+*The XmCSText widget has been withdrawn, as have those APIs added to
+OSF/Motif 2.0 solely to support it.
+
+*Mrm support for word-size independent .uid files has been
+removed. Existing .uid files compiled with Motif 2.0 uil may not be
+readable. As in OSF/Motif 1.2, .uid files are portable only between
+machines with the same word size.
+
+*New XmComboBox XmNpositionMode and XmSpinBox XmNpositionType resources
+default to incompatible index values, and should be forced by all
+applications using these widgets. XmONE_BASED is recommended for
+XmComboBox widgets because it lets applications distinguish between new
+values entered in the text field and the first item in the list.
+
+*XmStringCreateLocalized() now handles new lines and tabs.  *The
+_XmStrings array has, on some machines, been split into multiple
+sub-arrays with the same techniques used by libXt. This preserves
+compatibility with Motif 1.2 and permits future expansion.
+
+*Labels for automatically created sub-widgets (like the buttons in a
+File Selection Box) are now unconditionally localized, and may not be
+set or overridden by the user.
+
+*The XmDisplay XmNenableThinThickness resource now has wider effect than
+it did in Motif 2.0.
+
+*The XmDisplay XmNenableToggleVisual resource now changes the way
+XmNindicatorOn and XmNindicatorType values are rendered, instead of
+simply changing their default values.  Motif 2.0 applications that called
+XtSetValues for these resources may notice a change. New constants have
+been added to obtain the old behavior.
+
+*In Motif 2.0 there were two distinct XmREPLACE constants, with different
+values. The XmMergeMode constant has been renamed XmMERGE_REPLACE. This
+is a source compatibility issue; binary compatibility is unaffected.
+
+*XmDisplay XmNdragReceiverProtocolStyle default value has been reverted
+to XmDRAG_PREFER_PREREGISTER. Users may find that XmDRAG_PREFER_DYNAMIC
+is more efficient.
+
+*The XmNenableEtchedInMenu resource causes buttons and toggles in menus
+to be rendered with colors different from those in earlier releases.
+
+*XmScrolledList and XmScrolledText scrollbar colors are computed
+differently. They are now derived from the scrolled window's background
+color, not the color of the XmList or XmText widget.
+
+*To promote convergence with dtwm, mwm's panning and virtual screen
+support has been removed, as has mwm's support for workspaces.
+
+*The XmCxx library of C++ wrappers has been moved to the demos/lib
+directory.
+
+
+New Functionality
+
+The following paragraphs summarize the new functionality of this release
+relative to Motif 2.0.  Please refer to the specific on-line documentation
+for more detailed information.
+
+Printing
+
+Starting with this release, Motif includes support for printing using
+an X protocol based print server. This print server produces output in
+three formats: PCL, Postscript and Raster.
+
+Thread-Safe Libraries
+
+Xm and Mrm are thread-safe enabled. This means that the libraries
+themselves are thread safe and a multithreaded application need not do
+explicit locking when accessing these libraries.  This is supported only
+for platforms that support multithreaded programming.
+
+
+Internationalization
+
+There are several new features that support the internationalization of
+Motif and developing applications for international markets. Motif now
+supports the On-The-Spot input method for Text widget. Vertical Writing
+is also supported.
+
+
+Open/Closed Defect Lists
+
+Two files listing defect reports are provided in the directories
+$MOTIFSOURCEDIR/motif: 
+
+
+OPENBUGS
+
+Lists the currently known unresolved defects reported against Motif components.
+
+CLOSEDBUGS
+
+Lists the defects that have been resolved since Motif 2.0.
+
+
+X11R6.4
+This release has been built and tested upon a base of X11R6.4 patchlevel 3.
+
+
+   Changes to X11R6.4:
+
+	CDE and Motif 2.1.30 have been built and tested upon a base of 
+	X11R6.4 patchlevel 3.  During the development of 2.1.20, a 
+	significant defect in the I18N code of X was discovered; if you have
+	not yet corrected this problem, you are advised to do so prior
+	to making use of 2.1.30.
+
+	The symptom is that when XMODIFIERS is not set, there is a possibility
+	of memory corruption.   It is recommended that the following patch 
+	be applied:
+
+	*** imInt.c@@/main/5       Sat May 30 21:04:36 1998
+	--- xc/lib/X11/imInt.c       Mon Aug 24 16:17:25 1998
+	***************
+	*** 1,4 ****
+	! /* $TOG: README-2.1.30 /main/1 1999/12/14 14:52:14 devobj $ */
+	  /******************************************************************
+	  
+	             Copyright 1992, 1993, 1994 by FUJITSU LIMITED
+	--- 1,4 ----
+	! /* $TOG: README-2.1.30 /main/1 1999/12/14 14:52:14 devobj $ */
+	  /******************************************************************
+	  
+	             Copyright 1992, 1993, 1994 by FUJITSU LIMITED
+	***************
+	*** 166,174 ****
+	  _XimMakeImName(lcd)
+	      XLCd         lcd;
+	  {
+	!     char* begin;
+	!     char* end;
+	!     char* ret;
+	      int       i = 0;
+	      char* ximmodifier = XIMMODIFIER;
+	  
+	--- 166,174 ----
+	  _XimMakeImName(lcd)
+	      XLCd         lcd;
+	  {
+	!     char* begin = NULL;
+	!     char* end = NULL;
+	!     char* ret = NULL;
+	      int       i = 0;
+	      char* ximmodifier = XIMMODIFIER;
+	  
+	***************
+	*** 182,189 ****
+	      }
+	      ret = Xmalloc(end - begin + 2);
+	      if (ret != NULL) {
+	!       (void)strncpy(ret, begin, end - begin + 1);
+	!       ret[end - begin + 1] = '\0';
+	      }
+	      return ret;
+	  }
+	--- 182,192 ----
+	      }
+	      ret = Xmalloc(end - begin + 2);
+	      if (ret != NULL) {
+	!       if (begin != NULL && end != NULL) {
+	!           (void)strncpy(ret, begin, end - begin + 1);
+	!           ret[end - begin + 1] = '\0';
+	!         }
+	!       else *ret = '\0';
+	      }
+	      return ret;
+	  }
+
+
