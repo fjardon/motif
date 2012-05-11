@@ -106,7 +106,7 @@ void TakeOff(Widget area, Airport this, XButtonEvent *evt, int spot)
    flight->number = rand();
    flight->from = this;
    flight->gate = spot;
-   sprintf(msg, "Flight %d leaving from gate %d",
+   sprintf(msg, "Flight %ld leaving from gate %d",
 	   flight->number, flight->gate);
    Paging(this, msg);
    n = 0;
@@ -263,11 +263,11 @@ static void PlaneHasLanded(Widget dc, Flight flight,
       spot->empty = True;
       XClearArea(this->display, XtWindow(this->airport), 
 		 spot->x, spot->y, plane_width, plane_height, False);
-     sprintf(msg, "Passengers from flight %d have landed safely",
+     sprintf(msg, "Passengers from flight %ld have landed safely",
 	      flight->number);
    }
    else
-     sprintf(msg, "Flight %d has returned", flight->number);
+     sprintf(msg, "Flight %ld has returned", flight->number);
    Paging(this, msg);
 }
 

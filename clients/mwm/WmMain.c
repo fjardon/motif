@@ -37,9 +37,7 @@ static char rcsid[] = "$TOG: WmMain.c /main/8 1998/04/20 13:01:09 mgreess $"
 
 #include "WmGlobal.h"
 
-#ifndef NO_MULTIBYTE
-#include <locale.h>
-#endif
+#include <X11/Xlocale.h>
 #ifdef WSM
 #include <Dt/Message.h>
 #include <Dt/EnvControlP.h>

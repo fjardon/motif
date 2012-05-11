@@ -36,6 +36,8 @@ static char rcsid[] = "$XConsortium: WmSignal.c /main/6 1996/10/17 16:20:07 drk 
  */
 
 #include "WmGlobal.h" /* This should be the first include */
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <signal.h>
 
 
@@ -235,6 +237,8 @@ void SetupWmSignalHandlers (int dummy)
     signal (SIGQUIT, QuitWmSignalHandler);
 
     signal (SIGTERM, QuitWmSignalHandler);
+
+    signal (SIGCHLD, ChildProcSignalHandler);
 #endif /* WSM */
 
 
@@ -266,3 +270,39 @@ void QuitWmSignalHandler (int dummy)
     }
 
 } /* END OF FUNCTION QuitWmSignalHandler */
+
+
+/*************************************<->*************************************
+ *
+ *  ChildProcSignalHandler ()
+ *
+ *
+ *  Description:
+ *  -----------
+ *  This function is called on receipt of a signal that the child of the 
+ *  window manager has terminated.
+ *  This child signal handler is primarily used to wait() for child
+ *  processes that were inherited from the user's .xsession if the last
+ *  command in the .xsession is a "exec mwm".  These inherited child
+ *  processes were not spawned the WmFunction.c:F_Exec() routine and
+ *  therefore would not be reaped by the wait() in that routine until
+ *  a menu item using F_Exec() was invoked by the user.
+ *
+ *************************************<->***********************************/
+
+void ChildProcSignalHandler (int dummy)
+{
+   pid_t pid;
+   int status;
+   void (*intStat) ();
+   void (*quitStat) ();
+   
+   intStat = (void (*)())signal (SIGINT, SIG_IGN);
+   quitStat = (void (*)())signal (SIGQUIT, SIG_IGN);
+
+   pid = wait(&status);
+   signal(SIGCHLD, ChildProcSignalHandler); 
+
+   signal (SIGINT, intStat);
+   signal (SIGQUIT, quitStat);
+}

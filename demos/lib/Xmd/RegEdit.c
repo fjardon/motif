@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <Xm/XmP.h>		
 #include <X11/ShellP.h>		
+#include "RegEdit.h"
 #include "RegEditI.h"
 
 

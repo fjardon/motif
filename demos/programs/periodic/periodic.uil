@@ -2012,10 +2012,10 @@ object cancelButton : XmPushButton {
 };
 object showDialog : XmInformationDialog {
     arguments {
-	XmNdialogTitle = "OSF/Motif Release 2.0";
+	XmNdialogTitle = "Motif Release 2.1";
 	XmNcancelLabelString = "Enjoy!";
 	XmNmessageString =
-		compound_string("OSF/Motif Release 2.0", separate = true) &
+		compound_string("Motif Release 2.1", separate = true) &
 		compound_string("", separate = true) &
 		compound_string("June 1994", separate = true) &
 		compound_string("", separate = true) &

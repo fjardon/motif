@@ -50,8 +50,8 @@ FILES = \
 	siemens_9733 \
 	siemens_wx200 \
 	sony \
-	sun_mit \
-	sun_news \
+	sun \
+	sun_at \
 	tek
 
 

@@ -38,6 +38,7 @@ static char rcsid[] = "$TOG: Dog.c /main/7 1997/05/02 10:11:08 dbl $"
 #include <stdio.h>
 #include <X11/StringDefs.h>
 #include <Xm/XmP.h>
+#include <Xm/DrawP.h>
 #include "DogP.h"
 
 #ifdef USING_UIL

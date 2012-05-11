@@ -2,6 +2,12 @@
 			Transfer v1.0
 			-------------
 
+************************************************************************
+*  This demo requires the XmCSText widget, which is not present in     *
+*  Motif 2.1.  But even though the demo will not compile, the code is  *
+*  still useful as a reference.                                        *
+************************************************************************
+
 Transfer is a demonstration of data transfer between clients.  It
 implements all forms of transfer supported by Motif and allows the
 user to interrogate the values of the different targets.

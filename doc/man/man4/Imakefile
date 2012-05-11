@@ -1,0 +1,8 @@
+XCOMM Imakefile
+
+MANDIR = $(FILEMANDIR)
+MANSUFFIX = $(FILEMANSUFFIX)
+
+all::
+
+InstallMotifManPage(mwmrc,4)

@@ -679,6 +679,7 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 	(context_id, sizeof(double), &offset, (char **) &dblptr) ;
       if ( result != MrmSUCCESS ) return result ;
  
+#ifdef USE_ORIGINAL_MOTIF_CODE
       /* This is necessary for machines (such as hp9000) that require
 	 doubles to be aligned on 8 byte boundaries. */
       diff = ((long)dblptr % 8);
@@ -690,6 +691,7 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 	  if ( result != MrmSUCCESS ) return result ;
 	}         
       dblptr = (double *)((char *)dblptr + diff);
+#endif
        
       *dblptr = *((double *) arg_val) ;
       _MrmOSHostDoubleToIEEE(dblptr);

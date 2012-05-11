@@ -2,9 +2,6 @@
                    README File for notebook Example 
 
 The notebook example demonstrates a simple use of the XmNotebook widget. 
-To build the program, just type 
-
- $ make
 
 To run the program, just type:
 

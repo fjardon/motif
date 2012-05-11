@@ -5087,12 +5087,11 @@ ContainerExpandOrCollapse(
     c = GetContainerConstraint(focus_cwid);
 
     /* check LtoR and reduce to _COLLAPSE and _EXPAND values */
-    if ((state_to == _LEFT)
+    if ((state_to == _COLLAPSE)
+     || (state_to == _LEFT && (! LayoutIsRtoLM(cw)))
      || (state_to == _RIGHT && (LayoutIsRtoLM(cw))))
 	    new_state = XmCOLLAPSED;
     else 
-    if ((state_to == _RIGHT)
-     || (state_to == _LEFT && (LayoutIsRtoLM(cw))))
 	    new_state = XmEXPANDED;
 
     /* check if there is anything to do */
@@ -7195,11 +7194,18 @@ StartSelect(
 		{
 		  /* CR 8400 - clicking on selected item should
 		     unselect in SINGLE mode */
-		  if (current_cwid 
+
+		  /* Fix by Metro Link.
+		     First, get the constraints if current_cwid is valid. */
+		  if (current_cwid)
+		    c = GetContainerConstraint(current_cwid);
+		  
+		  /* Now check to see if the *item* is selected. */
+		  if (current_cwid
 		      && current_cwid == cw->container.anchor_cwid &&
+		      c->selection_visual == XmSELECTED &&
 		      cw->container.selection_state == XmSELECTED) {
 		    /* Unselect if clicking on a selected item */
-		    c = GetContainerConstraint(current_cwid);
 		    cw->container.selection_state = XmNOT_SELECTED;
 		    MarkCwid(current_cwid,False);
 		    cw->container.anchor_cwid = NULL;

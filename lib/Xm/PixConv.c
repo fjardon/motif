@@ -344,11 +344,14 @@ GetPixmap (
    
    /* if PIXMAP forced, force depth to be positive, meaning
       always a pixmap even if xbm specified */
+   /* ...as long as the foreground color is not XmUNSPECIFIED_PIXEL.
+      Otherwise, the pixmap gets created with a bogus foreground color.
+      (Metro Link fix) */
    /* this is mainly for backgroundPixmap */
    /* if the resource name was available in the converter, I could
       give it to GetColorInfo and have the class decide.. Xt problem */
 
-   if ((depth < 0) && 
+   if ((depth < 0) && (acc_color_rec.foreground != XmUNSPECIFIED_PIXEL) &&
        ((converter_type == CONVERT_PIXMAP) ||
 	(_XmGetBitmapConversionModel(screen) == XmMATCH_DEPTH)))
        depth = - depth ;

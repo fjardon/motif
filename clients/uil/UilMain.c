@@ -336,6 +336,7 @@ char	*rac_argv[ ];
 
     common_main();
 
+    return 0;    /* make compiler happy */
 }
 #endif /* !CALLABLE */
 

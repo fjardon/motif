@@ -177,7 +177,7 @@ static Widget MenuBarEntry(Widget menubar, String entry, String labels[],
  *    Main loop
  */
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 #define MAIN_CHILDREN		3
 #define FORM_CHILDREN		2
@@ -299,6 +299,8 @@ void main(int argc, char *argv[])
 
    XtRealizeWidget(theWidgetRoot);
    XtAppMainLoop(this->context);
+
+   return 0;    /* make compiler happy */
 }
 
 /* ===============================================================

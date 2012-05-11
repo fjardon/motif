@@ -29,7 +29,7 @@
 #endif
 
 #ifndef XmConst
-#if (defined(__STDC__) && __STDC__)  ||  !defined( NO_CONST )
+#if defined(__STDC__) || !defined( NO_CONST )
 #define XmConst const
 #else
 #define XmConst

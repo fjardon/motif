@@ -210,8 +210,6 @@ static char myName[] = "fileview" ;
 static int save_argc;
 static char ** save_argv;
 
-static void Setup(Widget button, XtPointer client_data, XtPointer call_data);
-
 static String MyLanguageProc(Display * dpy, String xnl,
 			     XtAppContext theContext);
 

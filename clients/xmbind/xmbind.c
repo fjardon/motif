@@ -35,7 +35,7 @@ static char rcsid[] = "$TOG: xmbind.c /main/10 1997/06/18 17:34:48 samborn $"
 extern Boolean _XmVirtKeysLoadFileBindings(char *fileName, String *binding);
 extern int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding);
 
-void main(argc, argv)
+int main(argc, argv)
     int argc;
     char **argv;
 {
@@ -88,5 +88,7 @@ void main(argc, argv)
     XtFree (bindings);
    
     exit(0);
+
+    return 0;    /* make compiler happy */
 }
 

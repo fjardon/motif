@@ -1189,7 +1189,7 @@ void WithdrawWindow (ClientData *pCD)
      * Free the icon associated with the client window:
      */
 
-    if ((pCD->iconFlags & ICON_HINTS_PIXMAP) && pCD->iconPixmap)
+    if (PIXMAP_IS_VALID( pCD->iconPixmap )) 
     {
 	XFreePixmap (DISPLAY, pCD->iconPixmap);
     }

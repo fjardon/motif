@@ -1,4 +1,9 @@
-XCOMM platform:  $TOG: sun.cf /main/176 1997/12/09 17:27:51 kaleb $
+XCOMM platform:  $TOG: sun.cf /main/163 1997/06/08 20:08:23 kaleb $
+
+
+
+
+XCOMM platform:  $XFree86: xc/config/cf/sun.cf,v 3.31.2.10 1999/09/02 11:34:12 dawes Exp $
 
 #ifndef OSName
 # define OSName		DefaultOSName
@@ -29,6 +34,10 @@ XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVe
  *    provide appropriate values for the various compiler related
  *    configuration varibles used here.
  * 
+ * If you say you have the SunPro C compiler, we assume you have 
+ * version 2.0.x of the compiler.  If you have version 3.0.x instead, 
+ * define CCompilerMajorVersion as 3 in site.def
+ *
  * If you don't tell us which C compiler you have, we assume you have 
  * the SunPro C compiler under Solaris 2.x, and the bundled /bin/cc 
  * under SunOS 4.1.x
@@ -50,6 +59,13 @@ XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVe
  *
  */
 
+#ifndef HasGcc2
+#define HasGcc2 NO
+#endif
+#ifndef HasGcc
+#define HasGcc HasGcc2
+#endif
+
 #ifndef HasSunC
 # if (HasCenterLineC || HasGcc || HasGcc2 || OSMajorVersion < 5)
 #  define HasSunC NO
@@ -60,33 +76,20 @@ XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVe
 
 #if HasSunC 
 # ifndef CCompilerMajorVersion
-#  define CCompilerMajorVersion DefaultSunProCCompilerMajorVersion
+#  define CCompilerMajorVersion 3
+#  define DefaultCDebugFlags	-xO3
+#  define OptimizedCDebugFlags	-xO3
 # endif
-# ifndef CCompilerMinorVersion
-#  define CCompilerMinorVersion DefaultSunProCCompilerMinorVersion
-# endif
-XCOMM SunPro C CCompilerMajorVersion./**/CCompilerMinorVersion
 #endif
 
 #if HasSunCplusplus
 # ifndef HasCplusplus
 #  define HasCplusplus YES
+#  define OptimizedCplusplusDebugFlags	-xO3
 # endif
 # ifndef CplusplusCompilerMajorVersion
-#  ifdef DefaultSunProCplusplusCompilerMajorVersion
-#   define CplusplusCompilerMajorVersion DefaultSunProCplusplusCompilerMajorVersion
-#  else
-#   define CplusplusCompilerMajorVersion 3
-#  endif
+#  define CplusplusCompilerMajorVersion	4
 # endif
-# ifndef CplusplusCompilerMinorVersion
-#  ifdef DefaultSunProCplusplusCompilerMinorVersion
-#   define CplusplusCompilerMinorVersion DefaultSunProCplusplusCompilerMinorVersion
-#  else
-#   define CplusplusCompilerMinorVersion 0
-#  endif
-# endif
-XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 #endif
 
 #if HasCenterLineC
@@ -107,6 +110,7 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 # endif
 #endif
 
+
 #if OSMajorVersion < 4 || (OSMajorVersion == 4 && OSMinorVersion < 1)
 /* We do not guarantee this will work */
 # define BootstrapCFlags	-DNOSTDHDRS
@@ -126,43 +130,35 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 
 #ifdef i386Architecture
 # if OSMajorVersion > 4
-#  define ServerExtraDefines	AllocateLocalDefines XFree86ServerDefines
-#  define ServerOSDefines	XFree86ServerOSDefines
+#  define ServerExtraDefines AllocateLocalDefines XFree86ServerDefines -D__EXTENSIONS__
+#  define ServerOSDefines    XFree86ServerOSDefines
 # else
 #  define ServerExtraDefines AllocateLocalDefines
-#  define ServerOSDefines	-DDDXOSINIT
+#  define ServerOSDefines   -DDDXOSINIT
 # endif
 #else
 # define ServerExtraDefines AllocateLocalDefines
-# define ServerOSDefines	-DDDXOSINIT
-# define HasPlugin		YES
+# define ServerOSDefines   -DDDXOSINIT
 #endif
 
 #define XkbServerDefines  -DXKB_ALWAYS_USES_SOFT_REPEAT
 
 #if OSMajorVersion > 4
-#define ConnectionFlags		-DTCPCONN -DUNIXCONN -DLOCALCONN
 #if HasSunC
 /* 
  * Assume /opt/SUNWspro/bin/ contains symlinks to the appropriate tools
  */
 #ifndef  CcCmd
-# define CcCmd			/opt/SUNWspro/bin/cc
+# define CcCmd		/opt/SUNWspro/bin/cc
 #endif
 #ifndef  CplusplusCmd
-# define CplusplusCmd		/opt/SUNWspro/bin/CC
+# define CplusplusCmd	/opt/SUNWspro/bin/CC
 #endif
 #ifndef  CplusplusFilt
-#  define CplusplusFilt 	/opt/SUNWspro/bin/c++filt
+# define CplusplusFilt	/opt/SUNWspro/bin/c++filt
 #endif
 #ifndef  CplusplusDependIncludes
-#if CplusplusCompilerMajorVersion > 3
-# define CplusplusDependIncludes	-I/opt/SUNWspro/SC4.0/include/CC
-#elif CplusplusCompilerMajorVersion > 2
 # define CplusplusDependIncludes	-I/opt/SUNWspro/SC3.0/include/CC
-#else
-# define CplusplusDependIncludes	-I/opt/SUNWspro/SC2.0.1/include/CC
-#endif
 #endif
 #endif
 
@@ -187,6 +183,7 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 # else
 #  define StandardDefines	  -Dsun -DSVR4
 #  define ToolkitStringsABIOptions	-sparcabi
+#  define HasPlugin         YES
 # endif
 # define ExtraLibraries    -lsocket -lnsl
 # if OSMinorVersion > 1
@@ -206,7 +203,14 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 #  endif
 # endif 		/* OSMinorVersion > 1 */
 # ifndef UseExportLists
-#  define UseExportLists YES
+#  if OSMinorVersion > 4
+#   define UseExportLists YES
+#  else
+#   define UseExportLists NO
+#  endif
+# endif
+# if OSMinorVersion > 5
+#  define HasSnprintf YES
 # endif
 # define HasVFork          NO
 # define InstKmemFlags	  -g sys -m 2711
@@ -244,18 +248,37 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 # ifndef XsunMonoServer
 #  define XsunMonoServer	  NO		/* monochrome only */
 # endif
+# ifndef BuildPexExt
+#  define BuildPexExt	  (XsunServer || Xsun24Server)
+# endif
 #endif /* not i386Architecture */
 
-#if HasGcc || HasGcc2
+#if (OSMajorVersion > 4) && defined(i386Architecture)
+#ifndef HasSolx86ApertureDriver
+#define HasSolx86ApertureDriver	YES
+#endif
+#endif
+
+#if HasGcc
 # if OSMajorVersion > 4 && defined(i386Architecture)
 #  ifndef DefaultCCOptions
+#   if UseInstalled
 #    define DefaultCCOptions -DNO_ASM
+#   else
+#    if OSMinorVersion > 6
+#     define DefaultCCOptions -DNO_ASM -D__EXTENSIONS__
+#    elif OSMinorVersion > 3
+#     define DefaultCCOptions -ansi -pedantic -DNO_ASM -D__EXTENSIONS__
+#    else
+#     define DefaultCCOptions -DNO_ASM
+#    endif
+#   endif
 #  endif
 # endif
 # if HasGcc2
 #  ifndef OptimizedCDebugFlags
 #   ifdef i386Architecture
-#    define OptimizedCDebugFlags -m486 DefaultGcc2i386Opt
+#    define OptimizedCDebugFlags DefaultGcc2i386Opt
 #   else
 #    define OptimizedCDebugFlags -O2
 #   endif
@@ -270,7 +293,7 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 
 # endif /* HasGcc2 (else) */
 
-#else /* not HasGcc, not HasGcc2 */
+#else /* not HasGcc */
 
 # define AllocateLocalDefines -DINCLUDE_ALLOCA_H
 
@@ -314,7 +337,7 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 
 # define PexCCOptions DefaultCCOptions
 
-#endif /* HasGcc || HasGcc2 (else) */
+#endif /* HasGcc (else) */
 
 #if OSMajorVersion < 5
 # define SharedAllocateLocalDefines -DINCLUDE_ALLOCA_H

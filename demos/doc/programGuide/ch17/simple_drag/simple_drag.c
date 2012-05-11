@@ -27,6 +27,7 @@
  */
 #include <Xm/MainW.h>
 #include <Xm/CascadeB.h>
+#include <Xm/MessageB.h>
 #include <Xm/PushBG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/ScrollBar.h>
@@ -101,6 +102,8 @@ main(int argc, char **argv)
 
    XtRealizeWidget(toplevel);
    XtAppMainLoop(app_context);
+
+   return 0;    /* make compiler happy */
 }
 
 
@@ -133,7 +136,7 @@ ConvertCallback(Widget  w,
                      XtPointer call_data)
 {
  XmConvertCallbackStruct  *ccs = (XmConvertCallbackStruct *)call_data;
- int  *value;
+ int  value;
  Atom COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False);
  Atom TARGETS = XInternAtom(XtDisplay(w), "TARGETS", False);
  Atom MOTIF_EXPORT_TARGETS =

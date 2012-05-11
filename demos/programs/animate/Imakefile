@@ -25,24 +25,25 @@ XCOMM HISTORY
 XCOMM 
 XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:40:35 drk $
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) MrmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) MrmClientLibs 
-EXTRA_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)
 
-SRCS = animate.c
-OBJS = animate.o
+SRCS = xmanimate.c
+OBJS = xmanimate.o
 
 NormalLibraryObjectRule()
 
-MSimpleUilTarget(animate)
+MSimpleUilTarget(xmanimate)
 MSimpleUidTarget(dog)
 MSimpleUidTarget(plane)
 MSimpleUidTarget(superman)
 
 InstallAppDefaults(XmdAnimate)
-InstallManPage(animate,$(MANDIR))
+InstallManPage(xmanimate,$(MANDIR))
+InstallMotifHelpFile(xmanimate)
 
 DependTarget()

@@ -26,7 +26,7 @@ INCLUDES = -I. -I$(INCLUDESRC) -I$(MINCLUDESRC)
 
         DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
-EXTRA_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary 
 
 SRCS=	panner.c
 

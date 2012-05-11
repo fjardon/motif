@@ -170,6 +170,8 @@ UrmCreateWidgetInstanceCleanup (URMResourceContextPtr	context_id,
   else if (widgetrec->variety != UilMrmAutoChildVariety)
     return Urm__UT_Error("UrmCreateWidgetInstanceCleanup", _MrmMMsg_0055,
 			 NULL, context_id, MrmBAD_WIDGET_REC);
+
+  return MrmSUCCESS;
 }
 
 

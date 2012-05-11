@@ -48,6 +48,7 @@ static char rcsid[] = "$TOG: ToggleB.c /main/43 1999/12/06 18:09:38 samborn $"
 #include "LabelI.h"
 #include "MenuProcI.h"
 #include "MenuStateI.h"
+#include "MenuUtilI.h"
 #include "PrimitiveI.h"
 #include "RepTypeI.h"
 #include "TravActI.h"
@@ -2121,11 +2122,21 @@ DrawToggle
     y = (int)((w->core.height - w->toggle.indicator_dim))/2;
   else
     {
+      /* Center indicator vertically next to the first line of text. */
       int fudge = Xm3D_ENHANCE_PIXEL;
+      Dimension text_height;
+      int line_count, height_diff;
 
-      y = w->label.TextRect.y;
-      if (Lab_IsMenupane(w))
-	y += (w->toggle.indicator_dim + 2) / 4; /* adjust in menu */
+      text_height = XmStringHeight(w->label.font, w->label._label);
+      if ((line_count = XmStringLineCount(w->label._label)) < 1)
+	line_count = 1;
+      
+      height_diff = ((int)text_height / line_count) -
+                    (int)w->toggle.indicator_dim;
+      if (height_diff < 0)
+	height_diff = 0;
+      
+      y = w->label.TextRect.y + (height_diff / 2);
 
       /* CR 2337: Keep large indicators inside the toggle. */
       /*	Is this definition of fudge right??? */

@@ -1,4 +1,5 @@
-XCOMM $TOG: lnxLib.rules /main/14 1998/03/16 11:15:30 mgreess $
+XCOMM $XConsortium: lnxLib.rules /main/13 1996/09/28 16:11:01 rws $
+XCOMM $XFree86: xc/config/cf/lnxLib.rules,v 3.28.2.4 1998/12/18 11:56:08 dawes Exp $
 
 /*
  * Linux shared library rules (DLL & ELF versions)
@@ -13,6 +14,36 @@ XCOMM $TOG: lnxLib.rules /main/14 1998/03/16 11:15:30 mgreess $
 #define SharedOldX NO
 
 #if UseElfFormat
+
+#if (LinuxCLibMajorVersion >= 5 && LinuxCLibMinorVersion >= 4) || LinuxCLibMajorVersion >= 6
+#undef SpecialMalloc
+#define SpecialMalloc NO
+#undef UseInternalMalloc
+#define UseInternalMalloc NO
+#endif
+
+#if LinuxCLibMajorVersion <= 5
+/*
+ *	#define BaseShLibReqs	-lc
+ *
+ * I don't want to use this since the normal ELF executables should
+ * be linked with libc.so. If it is not, i.e., static, the variables in
+ * libc.so which is loaded in because of the other shared libraries
+ * may have different values than the ones in the static ELF
+ * executables. That happens if the binaries are linked with libg.a
+ * or libc_p.a.
+ *
+ * If an ELF executable linked with libg.a or libc_p.a loads a shared
+ * object which needs libc.so via dlopen (), I think it should fail.
+ * It is a very bad idea. The moral story is DON'T USE dlopen () IN
+ * ELF EXECUTABLES LINKED WITH libg.a OR libc_p.a. H.J.
+ *
+ */
+#define BaseShLibReqs
+#else
+/* With GNU libc 2 this works fine. */
+#define BaseShLibReqs	-lc
+#endif
 
 #ifndef SharedDataSeparation
 #define SharedDataSeparation NO
@@ -36,7 +67,17 @@ XCOMM $TOG: lnxLib.rules /main/14 1998/03/16 11:15:30 mgreess $
 #define PositionIndependentCplusplusFlags -fPIC
 #endif
 #ifndef ExtraLoadFlags
+#if LinuxBinUtilsMajorVersion >= 26
+#ifdef UseInstalled
+#if LinuxBinUtilsMajorVersion < 27
+#define ExtraLoadFlags -Wl,-rpath-link,$(USRLIBDIRPATH)
+#endif
+#else
+#define ExtraLoadFlags -Wl,-rpath-link,$(BUILDLIBDIR)
+#endif
+#else
 #define ExtraLoadFlags -Wl,-rpath,$(USRLIBDIRPATH)
+#endif
 #endif
 
 /*
@@ -48,8 +89,8 @@ XCOMM $TOG: lnxLib.rules /main/14 1998/03/16 11:15:30 mgreess $
 install:: Concat(lib,libname.so.rev) 					@@\
 	MakeDir($(DESTDIR)dest)						@@\
 	$(INSTALL) $(INSTALLFLAGS) $(INSTBINFLAGS) Concat(lib,libname.so.rev) $(DESTDIR)dest @@\
-	(T=`echo Concat($(DESTDIR)dest/lib,libname.so.rev) | sed 's/\.[^\.]*$$//'`;\
-		$(RM) $$T && $(LN) Concat(lib,libname.so.rev) $$T)	@@\
+	@T=`echo Concat($(DESTDIR)dest/lib,libname.so.rev) | sed 's/\.[^\.]*$$//'`;\
+	  set -x; $(RM) $$T && $(LN) Concat(lib,libname.so.rev) $$T	@@\
 	$(RM) Concat($(DESTDIR)dest/lib,libname.so)			@@\
 	$(LN) Concat(lib,libname.so.rev) Concat($(DESTDIR)dest/lib,libname.so)
 #endif /* InstallSharedLibrary */
@@ -68,27 +109,50 @@ install:: Concat(lib,libname.so.rev) 					@@\
  * the library gone for long periods.
  */
 #ifndef SharedLibraryTarget
+#ifdef UseInstalled
+#define LinkBuildSonameLibrary(lib) true
+#else
+#define LinkBuildSonameLibrary(lib) (RemoveFile($(BUILDLIBDIR)/lib); \
+	cd $(BUILDLIBDIR); $(LN) $(BUILDINCTOP)/$(CURRENT_DIR)/lib .)
+#endif
+
 #define SharedLibraryTarget(libname,rev,solist,down,up)			@@\
 AllTarget(Concat(lib,libname.so.rev))					@@\
 									@@\
 Concat(lib,libname.so.rev):  solist $(EXTRALIBRARYDEPS)			@@\
 	$(RM) $@~							@@\
-	(cd down; T=`echo $@ | sed 's/\.[^\.]*$$//'`; \
-		$(CC) -o up/$@~ $(SHLIBLDFLAGS) -Wl,-soname,$$T solist $(REQUIREDLIBS); \
-		$(RM) $$T && $(LN) $@ $$T)				@@\
+	@SONAME=`echo $@ | sed 's/\.[^\.]*$$//'`; set -x; \		@@\
+		(cd down; $(CC) -o up/$@~ $(SHLIBLDFLAGS) -Wl,-soname,$$SONAME solist $(REQUIREDLIBS) BaseShLibReqs); \ @@\
+		$(RM) $$SONAME; $(LN) $@ $$SONAME; \			@@\
+		LinkBuildSonameLibrary($$SONAME)			@@\
 	$(RM) $@ 							@@\
 	$(MV) $@~ $@							@@\
 	$(RM) Concat(lib,libname.so)					@@\
 	$(LN) $@ Concat(lib,libname.so)					@@\
 	LinkBuildLibrary($@)						@@\
 	LinkBuildLibrary(Concat(lib,libname.so))			@@\
-	(T=`echo $@ | sed 's/\.[^\.]*$$//'`; \
-		$(RM) $(BUILDLIBDIR)/$$T; cd $(BUILDLIBDIR); $(LN) $(BUILDLIBTOP)/$(CURRENT_DIR)/$$T .) @@\
 									@@\
 clean::									@@\
+	@MAJREV=`expr rev : '\(.*\)\.'`; \				@@\
+	set -x; $(RM) Concat(lib,libname.so.$$MAJREV)			@@\
 	$(RM) Concat(lib,libname.so.rev) Concat(lib,libname.so)
 
 #endif /* SharedLibraryTarget */
+
+#ifndef SharedDepModuleTarget
+#define SharedDepModuleTarget(name,deps,solist)				@@\
+AllTarget(name)								@@\
+									@@\
+name: deps								@@\
+	$(RM) $@~							@@\
+	$(CC) -o $@~ $(SHLIBLDFLAGS) solist $(REQUIREDLIBS) BaseShLibReqs @@\
+	$(RM) $@							@@\
+	$(MV) $@~ $@							@@\
+									@@\
+clean::									@@\
+	$(RM) name
+
+#endif /* SharedDepModuleTarget */
 
 /*
  * SharedLibraryDataTarget - generate rules to create shlib data file;
@@ -115,7 +179,7 @@ clean::									@@\
 #define SharedLibraryLoadFlags /**/
 #endif
 #ifndef PositionIndependentCFlags
-#define PositionIndependentCFlags -B/usr/dll/jump/
+#define PositionIndependentCFlags -B/usr/bin/jump
 #endif
 
 /*
@@ -142,7 +206,7 @@ clean::									@@\
  *  JUMP_FUNCS_Xfoo = $(JUMP_ROOT_Xfoo)/jump_funcs	<see DLL docs>
  *  JUMP_IGNORE_Xfoo = $(JUMP_ROOT_Xfoo)/jump_ignore	<see DLL docs>
  *  JUMP_EXPORT_Xfoo = $(JUMP_DIR_Xfoo)/jump.vars	<exported symbols>
- *  JUMP_IMPORT_Xfoo = $(JUMP_DIR_Xbar)			<imported symbols>
+ *  JUMP_IMPORT_Xfoo = $(JUMP_EXPORT_Xbar)		<imported symbols>
  *  JUMP_ADDRESS_Xfoo = 0xXXXXXXXX			<fill in with address>
  *  JUMP_JUMPTABLESIZE_Xfoo = 0x4000			<adjust if necessary>
  *  JUMP_GOTSIZE_Xfoo = 4096				<adjust if necessary>
@@ -182,7 +246,7 @@ JUMP_IS_HOST_X11 = YES
 JUMP_STUBLIBS_X11 = libX11.sa libSM.sa libICE.sa
 JUMP_SIBDIRS_X11 = $(JUMP_ROOT_SM) $(JUMP_ROOT_ICE)
 JUMP_DIR_X11 = $(JUMP_ROOT_X11)/shared
-JUMP_DEFS_X11 = $(XDMAUTHDEFS)
+JUMP_DEFS_X11 = $(XDMAUTHDEFS) $(XKB_DEFINES)
 JUMP_VARS_X11 = $(JUMP_ROOT_X11)/jump_vars
 JUMP_FUNCS_X11 = $(JUMP_ROOT_X11)/jump_funcs
 JUMP_IGNORE_X11 = $(JUMP_ROOT_X11)/jump_ignore
@@ -207,13 +271,13 @@ JUMP_IS_HOST_ICE = NO
 JUMP_HOST_ICE = $(JUMP_ROOT_X11)
 JUMP_DIR_ICE = $(JUMP_DIR_X11)
 
-XCOMM libXt.so (Xt, Xmu, Xext, Xi, Xtst)
+XCOMM libXt.so (Xt, Xmu, Xext, Xi, Xtst, Xp)
 JUMP_ROOT_Xt = $(TOOLKITSRC)
 JUMP_IS_HOST_Xt = YES
-JUMP_STUBLIBS_Xt = libXt.sa libXmu.sa libXext.sa libXi.sa libXtst.sa
+JUMP_STUBLIBS_Xt = libXt.sa libXmu.sa libXext.sa libXi.sa libXtst.sa libXp.sa
 JUMP_SUBDIRS_Xt = $(JUMP_ROOT_X11)
 JUMP_SIBDIRS_Xt = $(JUMP_ROOT_Xmu) $(JUMP_ROOT_Xext) \
-	$(JUMP_ROOT_Xi) $(JUMP_ROOT_Xtst)
+	$(JUMP_ROOT_Xi) $(JUMP_ROOT_Xtst) $(JUMP_ROOT_Xp)
 JUMP_DIR_Xt = $(JUMP_ROOT_Xt)/shared
 JUMP_VARS_Xt = $(JUMP_ROOT_Xt)/jump_vars
 JUMP_FUNCS_Xt = $(JUMP_ROOT_Xt)/jump_funcs
@@ -223,9 +287,9 @@ JUMP_IMPORT_Xt = $(JUMP_EXPORT_X11)
 JUMP_ADDRESS_Xt = 0x602a0000
 JUMP_JUMPTABLESIZE_Xt = 0x4000
 JUMP_GOTSIZE_Xt = 4096
-JUMP_STUBNAMES_Xt = libXt libXmu libXext libXi libXtst
+JUMP_STUBNAMES_Xt = libXt libXmu libXext libXi libXtst libXp
 JUMP_STUBS_IMPORT_Xt = $(JUMP_STUBS_IMPORT_X11)
-JUMP_SIBARS_Xt = jump/libXmu.a~ jump/libXext.a~ jump/libXi.a~ jump/libXtst.a~
+JUMP_SIBARS_Xt = jump/libXmu.a~ jump/libXext.a~ jump/libXi.a~ jump/libXtst.a~ jump/libXp.a~
 JUMP_LDLIBS_Xt = $(JUMP_SIBARS_Xt) $(JUMP_ROOT_ICE)/libICE.sa \
 	$(JUMP_ROOT_SM)/libSM.sa $(JUMP_ROOT_X11)/libX11.sa $(JUMP_LDLIBS_libc)
 
@@ -252,6 +316,12 @@ JUMP_ROOT_Xtst = $(XTESTLIBSRC)
 JUMP_IS_HOST_Xtst = NO
 JUMP_HOST_Xtst = $(JUMP_ROOT_Xt)
 JUMP_DIR_Xtst = $(JUMP_DIR_Xt)
+
+XCOMM libXp (part of libXt.so)
+JUMP_ROOT_Xp = $(XPLIBSRC)
+JUMP_IS_HOST_Xp = NO
+JUMP_HOST_Xp = $(JUMP_ROOT_Xt)
+JUMP_DIR_Xp = $(JUMP_DIR_Xt)
 
 XCOMM libXaw.so (Xaw)
 JUMP_ROOT_Xaw = $(AWIDGETSRC)

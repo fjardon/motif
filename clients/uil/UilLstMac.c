@@ -197,7 +197,7 @@ URMResourceContext	* az_context;
     az_src_rec = widget_entry->header.az_src_rec;
 
     if (widget_entry->resource_id != 0 ) {
-	sprintf (buffer, "Resource ID: %08X", widget_entry->resource_id);
+	sprintf (buffer, "Resource ID: %08lX", widget_entry->resource_id);
 	src_append_machine_code (
 		az_src_rec,
 		0,
@@ -913,7 +913,7 @@ URMResourceContext	* az_context;
     az_src_rec = value_entry->header.az_src_rec;
 
     if (value_entry->resource_id != 0) {
-	sprintf (buffer, "Resource ID: %08X", value_entry->resource_id);
+	sprintf (buffer, "Resource ID: %08lX", value_entry->resource_id);
 	src_append_machine_code (
 		az_src_rec,
 		0,
@@ -969,7 +969,7 @@ URMResourceContext	* az_context;
 	case sym_k_horizontal_integer_value:
 	case sym_k_vertical_integer_value:
 
-	    sprintf (buffer, "value: %d",
+	    sprintf (buffer, "value: %ld",
 		     (* (unsigned long *) rc_buffer) );
 	    src_append_machine_code (
 		az_src_rec, 0, rc_size, rc_buffer, buffer );
@@ -983,7 +983,7 @@ URMResourceContext	* az_context;
 
 	    for (offset = 0; offset < (int)rc_size; offset += sizeof(int), index++)
 		{
-		sprintf (buffer, "value[%d]: %d",
+		sprintf (buffer, "value[%d]: %ld",
 			 index, ((unsigned long *) rc_buffer)[index] );
 		
 		src_append_machine_code

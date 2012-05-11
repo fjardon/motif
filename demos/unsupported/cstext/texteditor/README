@@ -1,10 +1,18 @@
 /* $XConsortium: README /main/3 1996/07/15 14:10:29 drk $ */
-					   XmdTextEditor v2.0
-					   ------------------
 
-XmdTextEditor is a primitive text editor, based on Motif's XmCSText widget,
-which makes use of its XmNsource resource to allow multiple views
-on the same underlying text.  In addition it uses the rendition features of XmString to allow the modification of the rendition of pieces of text, and the conversion functions of XmString to read and write different file formats.  This version of XmdTextEditor will work only with Motif 2.0 and later version.
+                           XmdTextEditor v2.0
+                           ------------------
+
+**************************************************************************
+* This demo only works with Motif 2.0.  It does not work with Motif 2.1. *
+**************************************************************************
+
+XmdTextEditor is a primitive text editor, based on Motif 2.0's XmCSText
+widget, which makes use of its XmNsource resource to allow multiple views
+on the same underlying text.  In addition it uses the rendition features
+of XmString to allow the modification of the rendition of pieces of text,
+and the conversion functions of XmString to read and write different file
+formats.  This version of XmdTextEditor will work only with Motif 2.0.
 
 The View menu includes
 

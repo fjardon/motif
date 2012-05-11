@@ -2,9 +2,7 @@
                    README File for simple_drag Example 
 
 The simple_drag program demonstrates how a Motif application can add an
-XmNconvertCallback procedure.  To build the program, just type:
-
- $ make
+XmNconvertCallback procedure.
 
 To run the program, just type:
 

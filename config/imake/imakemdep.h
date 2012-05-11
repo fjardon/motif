@@ -1,4 +1,4 @@
-/* $TOG: imakemdep.h /main/102 1998/02/06 11:02:26 kaleb $ */
+/* $TOG: imakemdep.h /main/101 1997/06/06 09:13:20 bill $ */
 /*
 
  * Motif
@@ -38,6 +38,10 @@
  *     These will be passed to the compile along with the contents of the
  *     make variable BOOTSTRAPCFLAGS.
  */
+#if defined(clipper) || defined(__clipper__)
+#define imake_ccflags "-O -DSYSV -DBOOTSTRAPCFLAGS=-DSYSV"
+#endif
+
 #ifdef hpux
 #ifdef hp9000s800
 #define imake_ccflags "-DSYSV"
@@ -63,7 +67,7 @@
 #ifdef imake_ccflags
 #undef imake_ccflags
 #endif
-#define imake_ccflags "-Dsco"
+#define imake_ccflags "-Dsco -DSYSV"
 #endif
 
 #ifdef sony
@@ -166,12 +170,24 @@
 #endif
 
 #ifdef  MACH
+#ifdef __GNU__
+#define imake_ccflags ""
+#else
 #define imake_ccflags "-DNOSTDHDRS"
+#endif
 #endif
 
 /* this is for OS/2 under EMX. This won't work with DOS */
 #if defined(__EMX__)
 #define imake_ccflags "-DBSD43"
+#endif
+
+#if defined(__QNX__) && !defined(__QNXNTO__)
+#define imake_ccflags "-D__QNX__ -D_i386"
+#endif
+
+#if defined(__QNXNTO__)
+#define imake_ccflags "-D__QNXNTO__"
 #endif
 
 #else /* not CCIMAKE */
@@ -205,6 +221,9 @@
 #define INLINE_SYNTAX
 #define MAGIC_MAKE_VARS
 #endif
+#ifdef __minix_vmd
+#define FIXUP_CPP_WHITESPACE
+#endif
 
 /*
  * Step 4:  USE_CC_E, DEFAULT_CC, DEFAULT_CPP
@@ -220,6 +239,9 @@
 #define DEFAULT_CC "cl"
 #endif
 #ifdef apollo
+#define DEFAULT_CPP "/usr/lib/cpp"
+#endif
+#if defined(clipper) || defined(__clipper__)
 #define DEFAULT_CPP "/usr/lib/cpp"
 #endif
 #if defined(_IBMR2) && !defined(DEFAULT_CPP)
@@ -240,8 +262,11 @@
 #ifdef _CRAY
 #define DEFAULT_CPP "/lib/pcpp"
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__FreeBSD__)
+#if defined(__386BSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
 #define DEFAULT_CPP "/usr/libexec/cpp"
+#endif
+#if defined(__FreeBSD__)
+#define USE_CC_E
 #endif
 #if defined(__sgi) && defined(__ANSI_CPP__)
 #define USE_CC_E
@@ -255,6 +280,21 @@
 #if defined(__EMX__)
 /* expects cpp in PATH */
 #define DEFAULT_CPP "cpp"
+#endif
+#if defined(__GNU__)
+#define USE_CC_E
+#endif
+#if defined (__QNX__)
+#define DEFAULT_CPP "/usr/X11R6/bin/cpp"
+#endif 
+
+#if defined(Lynx)
+/* On LynxOS 2.4.0 imake gets built with the old "legacy"
+ * /bin/cc which has a rather pedantic builtin preprocessor.
+ * Using a macro which is not #defined (as in Step 5
+ * below) flags an *error*
+ */
+#define __NetBSD_Version__ 0
 #endif
 
 /*
@@ -278,12 +318,20 @@
 char *cpp_argv[ARGUMENTS] = {
 	"cc",		/* replaced by the actual program to exec */
 	"-I.",		/* add current directory to include path */
+#if !defined(__NetBSD_Version__) || __NetBSD_Version__ < 103080000
 #ifdef unix
 	"-Uunix",	/* remove unix symbol so that filename unix.c okay */
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__FreeBSD__) || defined(MACH)
+#endif
+#if defined(__386BSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__FreeBSD__) || defined(MACH) || defined(linux) || defined(__GNU__)
 # ifdef __i386__
 	"-D__i386__",
+# endif
+# ifdef __sparc__
+	"-D__sparc__",
+# endif
+# ifdef __m68k__
+	"-D__m68k__",
 # endif
 # ifdef __GNUC__
 	"-traditional",
@@ -359,9 +407,7 @@ char *cpp_argv[ARGUMENTS] = {
 #endif /* MOTOROLA */
 #if defined(M_UNIX) || defined(sco)
 	"-Dsco",
-# if defined(sco324)
-	"-Dsco324",
-# endif
+	"-DSYSV",
 #endif
 #ifdef i386
 	"-Di386",
@@ -388,59 +434,56 @@ char *cpp_argv[ARGUMENTS] = {
 #  endif
 #  ifdef SCO
 	"-DSCO",
-#   ifdef SCO324
-	"-DSCO324",
+#   ifdef _SCO_DS
+    "-DSCO325 -DSVR4",
 #   endif
 #  endif
-#  ifdef ESIX
+# endif
+# ifdef ESIX
 	"-DESIX",
-#  endif
-#  ifdef ATT
+# endif
+# ifdef ATT
 	"-DATT",
-#  endif
-#  ifdef DELL
+# endif
+# ifdef DELL
 	"-DDELL",
-#  endif
 # endif
 #endif
-#ifdef SYSV386		/* System V/386 folks, obsolete */
+#ifdef SYSV386           /* System V/386 folks, obsolete */
 	"-Di386",
 # ifdef SVR4
 	"-DSVR4",
 # endif
-# ifdef SYSV
-	"-DSYSV",
-#  ifdef ISC
+# ifdef ISC
 	"-DISC",
-#   ifdef ISC40
+#  ifdef ISC40
 	"-DISC40",       /* ISC 4.0 */
-#   else
-#    ifdef ISC202
+#  else
+#   ifdef ISC202
 	"-DISC202",      /* ISC 2.0.2 */
-#    else
-#     ifdef ISC30
+#   else
+#    ifdef ISC30
 	"-DISC30",       /* ISC 3.0 */
-#     else
+#    else
 	"-DISC22",       /* ISC 2.2.1 */
-#     endif
 #    endif
 #   endif
 #  endif
-#  ifdef SCO
+# endif
+# ifdef SCO
 	"-DSCO",
-#   ifdef SCO324
-	"-DSCO324",
-#   endif
+#  ifdef _SCO_DS
+	"-DSCO325 -DSVR4",
 #  endif
-#  ifdef ESIX
+# endif
+# ifdef ESIX
 	"-DESIX",
-#  endif
-#  ifdef ATT
+# endif
+# ifdef ATT
 	"-DATT",
-#  endif
-#  ifdef DELL
+# endif
+# ifdef DELL
 	"-DDELL",
-#  endif
 # endif
 #endif
 #ifdef __osf__
@@ -450,6 +493,12 @@ char *cpp_argv[ARGUMENTS] = {
 # endif
 # ifdef __alpha
 	"-D__alpha",
+# endif
+# ifdef __amiga__
+	"-D__amiga__",
+# endif
+# ifdef __alpha__
+	"-D__alpha__",
 # endif
 # ifdef __i386__
 	"-D__i386__",
@@ -495,13 +544,13 @@ char *cpp_argv[ARGUMENTS] = {
 # ifdef CROSS_COMPILE
 	"-DCROSS_COMPILE",
 #  ifdef CROSS_i80386
-	"-DCROSS_i80386",
+	"-Di80386",
 #  endif
 #  ifdef CROSS_sparc
-	"-DCROSS_sparc",
+	"-Dsparc",
 #  endif
 #  ifdef CROSS_mc68000
-	"-DCROSS_mc68000",
+	"-Dmc68000",
 #  endif
 # else
 #  ifdef i80386
@@ -527,6 +576,24 @@ char *cpp_argv[ARGUMENTS] = {
 	"-Demxos2",
 #endif
 
+#if defined (__QNX__) && !defined(__QNXNTO__)
+	"-traditional",
+	"-D__QNX__",
+#endif
+
+#if defined(__QNXNTO__)
+	"-traditional",
+	"-D__QNXNTO__",
+#if defined(i386)
+	"-Di386",
+#endif
+#if defined(PPC)
+	"-DPPC",
+#endif
+#if defined(MIPS)
+	"-DMIPS",
+#endif
+#endif
 };
 
 
@@ -540,6 +607,10 @@ char *cpp_argv[ARGUMENTS] = {
  *	Supported uname arguments are "snrvm", and if you specify multiple
  *	arguments they will be separated by spaces.  No more than 5 arguments
  *	may be given.  Unlike uname() order of arguments matters.
+ *
+ *	DEFAULT_OS_MAJOR_REV_FROB, DEFAULT_OS_MINOR_REV_FROB,
+ *	DEFAULT_OS_TEENY_REV_FROB, and DEFAULT_OS_NAME_FROB can be used to
+ *	modify the results of the use of the various strings.
  */
 #if defined(aix)
 /* uname -v returns "x" (e.g. "4"), and uname -r returns "y" (e.g. "1") */
@@ -547,7 +618,7 @@ char *cpp_argv[ARGUMENTS] = {
 # define DEFAULT_OS_MINOR_REV	"r %[0-9]"
 /* No information available to generate default OSTeenyVersion value. */
 # define DEFAULT_OS_NAME	"srvm %[^\n]"
-#elif defined(sun) || defined(sgi) || defined(ultrix) || defined(__uxp__) || defined(linux) || defined(sony)
+#elif defined(sun) || defined(sgi) || defined(ultrix) || defined(__uxp__) || defined(sony)
 /* uname -r returns "x.y[.z]", e.g. "5.4" or "4.1.3" */
 # define DEFAULT_OS_MAJOR_REV	"r %[0-9]"
 # define DEFAULT_OS_MINOR_REV	"r %*d.%[0-9]"
@@ -576,13 +647,100 @@ char *cpp_argv[ARGUMENTS] = {
 # define DEFAULT_OS_MAJOR_REV	"v V%[0-9]"
 # define DEFAULT_OS_MINOR_REV	"v V%*dL%[0-9]"
 # define DEFAULT_OS_NAME	"srvm %[^\n]"
-#elif defined(__FreeBSD__)
-/* NetBSD, OpenBSD, 386BSD, and BSD/OS too? */
+#elif defined(linux)
+# define DEFAULT_OS_MAJOR_REV	"r %[0-9]"
+# define DEFAULT_OS_MINOR_REV	"r %*d.%[0-9]"
+# define DEFAULT_OS_TEENY_REV	"r %*d.%*d.%[0-9]"
+# define DEFAULT_OS_NAME	"srm %[^\n]"
+#elif defined(ISC)
+/* ISC all Versions ? */
+/* uname -r returns "x.y", e.g. "3.2" ,uname -v returns "x" e.g. "2" */
+# define DEFAULT_OS_MAJOR_REV   "r %[0-9]"
+# define DEFAULT_OS_MINOR_REV   "r %*d.%[0-9]"
+# define DEFAULT_OS_TEENY_REV   "v %[0-9]" 
+/* # define DEFAULT_OS_NAME        "srm %[^\n]" */ /* Not useful on ISC */
+#elif defined(__FreeBSD__) || defined(__OpenBSD__)
+/* BSD/OS too? */
 /* uname -r returns "x.y[.z]-mumble", e.g. "2.1.5-RELEASE" or "2.2-0801SNAP" */
 # define DEFAULT_OS_MAJOR_REV   "r %[0-9]"
 # define DEFAULT_OS_MINOR_REV   "r %*d.%[0-9]"
 # define DEFAULT_OS_TEENY_REV   "r %*d.%*d.%[0-9]" 
 # define DEFAULT_OS_NAME        "srm %[^\n]"
+# if defined(__FreeBSD__)
+/* Use an alternate way to find the teeny version for -STABLE, -SNAP versions */
+#  define DEFAULT_OS_TEENY_REV_FROB(buf, size)				\
+    do {								\
+	if (*buf == 0) {						\
+		int __mib[2];						\
+		size_t __len;						\
+		int __osrel;						\
+									\
+		__mib[0] = CTL_KERN;					\
+		__mib[1] = KERN_OSRELDATE;				\
+		__len = sizeof(__osrel);				\
+		sysctl(__mib, 2, &__osrel, &__len, NULL, 0);		\
+		if (__osrel < 210000) {					\
+			if (__osrel < 199607)				\
+				buf[0] = '0';				\
+			else if (__osrel < 199612)			\
+				buf[0] = '5';				\
+			else if (__osrel == 199612)			\
+				buf[0] = '6';				\
+			else						\
+				buf[0] = '8'; /* guess */		\
+		} else {						\
+			buf[0] = ((__osrel / 1000) % 10) + '0';		\
+		}							\
+		buf[1] = 0;						\
+	}								\
+    } while (0)
+# else
+   /* OpenBSD - Add DEFAULT_MACHINE_ARCHITECTURE */
+#  define DEFAULT_MACHINE_ARCHITECTURE "m %[^\n]"
+# endif
+#elif defined(__NetBSD__)
+/*
+ * uname -r returns "x.y([ABCD...]|_mumble)", e.g.:
+ *	1.2	1.2_BETA	1.2A	1.2B
+ *
+ * That means that we have to do something special to turn the
+ * TEENY revision into a form that we can use (i.e., a string of
+ * decimal digits).
+ *
+ * We also frob the name DEFAULT_OS_NAME so that it looks like the
+ * 'standard' NetBSD name for the version, e.g. "NetBSD/i386 1.2B" for
+ * NetBSD 1.2B on an i386.
+ */
+# define DEFAULT_OS_MAJOR_REV   "r %[0-9]"
+# define DEFAULT_OS_MINOR_REV   "r %*d.%[0-9]"
+# define DEFAULT_OS_TEENY_REV   "r %*d.%*d%[A-Z]" 
+# define DEFAULT_OS_TEENY_REV_FROB(buf, size)				\
+    do {								\
+	if (*(buf) >= 'A' && *(buf) <= 'Z') /* sanity check */		\
+		snprintf((buf), (size), "%d", *(buf) - 'A' + 1);	\
+	else								\
+	    *(buf) = '\0';						\
+    } while (0)
+# define DEFAULT_OS_NAME        "smr %[^\n]"
+# define DEFAULT_OS_NAME_FROB(buf, size)				\
+    do {								\
+	char *__sp;							\
+	if ((__sp = strchr((buf), ' ')) != NULL)			\
+		*__sp = '/';						\
+    } while (0)
+#elif defined(DGUX)
+# define DEFAULT_OS_MAJOR_REV	"r R%[0-9]"
+# define DEFAULT_OS_MINOR_REV	"r R%*d.%[0-9]"
+# define DEFAULT_OS_TEENY_REV	"r R%*d.%*dMU%[0-9]"
+# define DEFAULT_OS_NAME	"smr %[^\n]"
+#else
+# if defined(__Lynx__) || defined(Lynx)
+/* Lynx 2.4.0 /bin/cc doesn't like #elif */
+#  define DEFAULT_OS_MAJOR_REV   "r %[0-9]"
+#  define DEFAULT_OS_MINOR_REV   "r %*d.%[0-9]"
+#  define DEFAULT_OS_TEENY_REV   "r %*d.%*d.%[0-9]" 
+#  define DEFAULT_OS_NAME        "srm %[^\n]"
+# endif
 #endif
 
 #else /* else MAKEDEPEND */
@@ -595,6 +753,12 @@ char *cpp_argv[ARGUMENTS] = {
 struct symtab	predefs[] = {
 #ifdef apollo
 	{"apollo", "1"},
+#endif
+#if defined(clipper) || defined(__clipper__)
+	{"clipper", "1"},
+	{"__clipper__", "1"},
+	{"clix", "1"},
+	{"__clix__", "1"},
 #endif
 #ifdef ibm032
 	{"ibm032", "1"},
@@ -710,6 +874,9 @@ struct symtab	predefs[] = {
 #ifdef m68k
         {"m68k", "1"},
 #endif
+#ifdef __m68k__
+	{"__m68k__", "1"},
+#endif
 #ifdef m88k
         {"m88k", "1"},
 #endif
@@ -737,8 +904,14 @@ struct symtab	predefs[] = {
 #ifdef __osf__
 	{"__osf__", "1"},
 #endif
+#ifdef __amiga__
+	{"__amiga__", "1"},
+#endif
 #ifdef __alpha
 	{"__alpha", "1"},
+#endif
+#ifdef __alpha__
+	{"__alpha__", "1"},
 #endif
 #ifdef __DECC
 	{"__DECC",  "1"},
@@ -801,8 +974,17 @@ struct symtab	predefs[] = {
 #ifdef __NetBSD__
 	{"__NetBSD__", "1"},
 #endif
+#ifdef __ELF__
+	{"__ELF__", "1"},
+#endif
 #ifdef __EMX__
 	{"__EMX__", "1"},
+#endif
+#if defined(__QNX__) && !defined(__QNXNTO__)
+	{"__QNX__", "1"},
+#endif
+#ifdef __QNXNTO__
+	{"__QNXNTO__", "1"},
 #endif
 	/* add any additional symbols before this line */
 	{NULL, NULL}

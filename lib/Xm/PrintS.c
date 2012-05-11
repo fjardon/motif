@@ -12,6 +12,8 @@
 #include <Xm/PrintSP.h>
 #include "ImageCachI.h"
 #include "SyntheticI.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 /********    Static Function Declarations    ********/
 

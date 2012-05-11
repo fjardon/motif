@@ -61,6 +61,7 @@ static char rcsid[] = "$TOG: CascadeBG.c /main/28 1999/02/01 18:47:11 mgreess $"
 #include "RCMenuI.h"
 #include "SyntheticI.h"
 #include "TravActI.h"
+#include "TraversalI.h"
 #include "UniqueEvnI.h"
 
 #define CASCADE_PIX_SPACE     4	/* pixels between label and bit map */

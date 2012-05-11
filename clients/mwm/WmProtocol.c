@@ -59,6 +59,8 @@ static char rcsid[] = "$TOG: WmProtocol.c /main/8 1997/06/18 17:31:34 samborn $"
 # include "WmDebug.h"
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
+#include <Xm/TransferP.h>
+
 /*
  * Function Declarations:
  */

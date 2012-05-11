@@ -23,12 +23,10 @@ XCOMM
 XCOMM 
 XCOMM HISTORY
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) XmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) XmClientLibs 
-         MANDIR = /usr/local/man/man1
-      MANSUFFIX = 1     
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)
 
 SRCS = notebook.c interface.c
@@ -38,4 +36,4 @@ MComplexProgramTarget(notebook,$(LOCAL_LIBRARIES),NullParameter)
 
 InstallProgram(notebook,$(BINDIR))
 
-InstallManPage(notebook, $(MANDIR))
+InstallManPage(notebook,$(MANDIR))

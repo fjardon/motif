@@ -54,7 +54,11 @@ SRCS2		= onHelp.c
 OBJS2		= onHelp.o
 	
 MComplexProgramTarget_2(onHelp,$(LOCAL_LIBRARIES),NullParameter)
+AllTarget(onHelp)
+clean::
+	RemoveTargetProgram(onHelp)
 
 DependTarget()
 
+InstallMotifHelpFile(helpOn)
 

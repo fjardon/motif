@@ -1,6 +1,7 @@
 XCOMM ---------------------------------------------------------------------
 XCOMM Imake rules for building libraries, programs, scripts, and data files
-XCOMM rules:  $TOG: Imake.rules /main/227 1998/02/02 12:07:57 kaleb $
+XCOMM rules:  $TOG: Imake.rules /main/222 1997/07/17 20:04:40 kaleb $
+XCOMM rules:  $XFree86: xc/config/cf/Imake.rules,v 3.33.2.10 1998/11/04 10:53:01 dawes Exp $
 
 /*
  *		   MACHINE-INDEPENDENT RULES; DO NOT MODIFY
@@ -77,6 +78,7 @@ XCOMM rules:  $TOG: Imake.rules /main/227 1998/02/02 12:07:57 kaleb $
  * InstallNamedProg		(srcname,dstname,dest)
  * InstallNamedProgNoClobber	(srcname,dstname,dest)
  * MakeFlagsToShellFlags	(makeflags,shellcmd)
+ * MakeNamedTargetSubdir	(dir,flags,subname)
  * LinkFileList			(step,list,dir,sub)
  * LinkVarDirectory		(mdir,cdir,rdir,ldir)
  * InstallMultipleDestFlags	(step,list,dest,flags)
@@ -162,6 +164,8 @@ XCOMM rules:  $TOG: Imake.rules /main/227 1998/02/02 12:07:57 kaleb $
  * CppSourceFile		(dst,src,defs,deplist)
  * MakeDirectories		(step,dirs)
  * AllTarget			(depends)
+ * StaticLibrary		(libpath,libname)
+ * MakeMutex			(targets)
  *
  *
  * The following are in specific <os>Lib.rules:
@@ -492,7 +496,7 @@ clean clean.tc::							@@\
 #define BuildIncludesTop(srclist)					@@\
 includes:: srclist							@@\
 	MakeDir($(BUILDINCDIR))						@@\
-	@(set -x; cd $(BUILDINCDIR); for i in srclist; do \		@@\
+	@(set -x; cd $(BUILDINCDIR) && for i in srclist; do \		@@\
 		RemoveFile($$i); \					@@\
 		$(LN) $(BUILDINCTOP)/$(CURRENT_DIR)/$$i .; \		@@\
 	done)
@@ -502,7 +506,7 @@ includes:: srclist							@@\
 #define BuildIncludes(srclist,dstsubdir,dstupdir)			@@\
 includes:: srclist							@@\
 	MakeDir($(BUILDINCDIR)/dstsubdir)				@@\
-	@(set -x; cd $(BUILDINCDIR)/dstsubdir; for i in srclist; do \	@@\
+	@(set -x; cd $(BUILDINCDIR)/dstsubdir && for i in srclist; do \	@@\
 		RemoveFile($$i); \					@@\
 		$(LN) $(BUILDINCTOP)/dstupdir/$(CURRENT_DIR)/$$i .; \	@@\
 	done)
@@ -524,7 +528,7 @@ $(BUILDBINDIR)/binary: binary						@@\
 #define BuildInterfaces(srclist,dstsubdir,dstupdir)			@@\
 interfaces::								@@\
 	MakeDir($(BUILDINCDIR)/dstsubdir)				@@\
-	@(set -x; cd $(BUILDINCDIR)/dstsubdir; for i in srclist; do \	@@\
+	@(set -x; cd $(BUILDINCDIR)/dstsubdir && for i in srclist; do \	@@\
 		RemoveFile($$i); \					@@\
 		$(LN) $(BUILDINCTOP)/dstupdir/$(CURRENT_DIR)/$$i .; \	@@\
 	done)
@@ -640,6 +644,20 @@ InstallProgram(program,$(BINDIR))					@@\
 InstallManPage(program,$(MANDIR))
 #endif /* ProgramTargetHelper */
 
+#ifndef ProgramTargetHelperNoMan
+#define ProgramTargetHelperNoMan(program,srcs,objs,deplib,locallib,syslib) @@\
+ProgramTargetName(program): $(objs) $(deplib)				@@\
+	RemoveTargetProgram($@)						@@\
+	LinkRule($@,$(LDOPTIONS),$(objs),locallib $(LDLIBS) syslib)	@@\
+									@@\
+CenterProgramTarget(program,$(srcs),$(objs),locallib,syslib)		@@\
+SentinelProgramTarget(program,$(objs) $(deplib),$(objs) locallib $(LDLIBS) syslib) @@\
+PurifyProgramTarget(program,$(objs) $(deplib),$(objs) locallib $(LDLIBS) syslib) @@\
+ProofProgramTarget(program,$(objs) $(deplib),$(objs) locallib $(LDLIBS) syslib) @@\
+									@@\
+InstallProgram(program,$(BINDIR))
+#endif /* ProgramTargetHelperNoMan */
+
 #ifndef CplusplusProgramTargetHelper
 #define	CplusplusProgramTargetHelper(program,srcs,objs,deplib,locallib,syslib) @@\
 ProgramTargetName(program): $(objs) $(deplib)				@@\
@@ -692,10 +710,31 @@ clean::									@@\
 #endif /* ComplexCplusplusProgramTarget */
 
 /*
+ * ComplexProgramTargetNoMan - generate rules for compiling and linking
+ * the program specified by $(OBJS) and $(SRCS), installing the program 
+ * and generating dependencies.  It should only be used in Imakefiles
+ * that describe a single program.
+ */
+#ifndef ComplexProgramTargetNoMan
+#define ComplexProgramTargetNoMan(program)				@@\
+        PROGRAM = program						@@\
+									@@\
+AllTarget(program)							@@\
+									@@\
+ProgramTargetHelperNoMan(program,SRCS,OBJS,DEPLIBS,$(LOCAL_LIBRARIES),NullParameter) @@\
+									@@\
+DependTarget()								@@\
+LintTarget()								@@\
+									@@\
+clean::									@@\
+	RemoveFile(ProgramTargetName(program))
+#endif /* ComplexProgramTargetNoMan */
+
+/*
  * ComplexProgramTarget_1 - generate rules for compiling and linking the
  * program specified by $(OBJS1) and $(SRCS1), installing the program and its
  * man page, and generating dependencies for it and any programs described
- * by $(SRCS2) throgh $(SRCS10).  It should be used to build the primary 
+ * by $(SRCS2) through $(SRCS10).  It should be used to build the primary 
  * program in Imakefiles that describe multiple programs.
  */
 #ifndef ComplexProgramTarget_1
@@ -894,7 +933,7 @@ CplusplusProgramTargetHelper(program,SRCS10,OBJS10,DEPLIBS10,locallib,syslib)
  */
 #ifndef ServerTargetWithFlags
 #define	ServerTargetWithFlags(server,subdirs,objects,libs,syslibs,flags) @@\
-AllTarget(server)							@@\
+AllTarget(ProgramTargetName(server))					@@\
 ProgramTargetName(server): subdirs objects libs				@@\
 	MoveToBakFile($@)						@@\
 	LinkRule($@,$(LDOPTIONS),objects,libs $(LDLIBS) syslibs) @@\
@@ -1018,9 +1057,9 @@ install::  fromlib							@@\
 #ifndef InstallLibraryAlias
 #define	InstallLibraryAlias(libname,alias,dest)				@@\
 install::								@@\
-	-(cd $(DESTDIR)dest; \						@@\
+	-(cd $(DESTDIR)dest && ( \					@@\
 		RemoveFile(LibraryTargetName(alias)); \			@@\
-		$(LN) LibraryTargetName(libname) LibraryTargetName(alias))
+		$(LN) LibraryTargetName(libname) LibraryTargetName(alias)))
 #endif /* InstallLibraryAlias */
 
 
@@ -1070,6 +1109,43 @@ install.man::								@@\
 	RemoveFile($${TMP}))
 #endif /* InstallManPageAliases */
 
+
+/*
+ * InstallGenManPageLong - More general rules for installing manual pages --
+ * doesn't assume MANSUFFIX.
+ */
+#ifndef InstallGenManPageLong
+#define	InstallGenManPageLong(file,destdir,dest,suffix)			@@\
+install.man:: file.man							@@\
+	MakeDir($(DESTDIR)destdir)					@@\
+	$(INSTALL) -c $(INSTMANFLAGS) file.man $(DESTDIR)destdir/dest.suffix
+#endif /* InstallGenManPageLong */
+
+
+/*
+ * InstallGenManPage - general equivalent of InstallManPage
+ */
+#ifndef InstallGenManPage
+#define	InstallGenManPage(file,destdir,suffix)				@@\
+InstallGenManPageLong(file,destdir,file,suffix)
+#endif /* InstallGenManPage */
+
+
+/*
+ * InstallGenManPageAliases - general equivalent of InstallManPageAliases
+ */
+#ifndef InstallGenManPageAliases
+#define	InstallGenManPageAliases(file,destdir,suffix,aliases)		@@\
+install.man::								@@\
+	@(TMP=/tmp/tmp.$$$$; \						@@\
+	RemoveFile($${TMP}); \						@@\
+	echo .so `basename destdir`/file.suffix > $${TMP}; \		@@\
+	for i in aliases; do (set -x; \					@@\
+	$(INSTALL) $(INSTALLFLAGS) $(INSTMANFLAGS) $${TMP} $(DESTDIR)destdir/$$i.suffix); \ @@\
+	done; \								@@\
+	RemoveFile($${TMP}))
+#endif /* InstallGenManPageAliases */
+
 /*
  * ManKeywordsTarget - generate the database used by "man -k".
  * This rule updates the index in the directory "manpath", which
@@ -1090,6 +1166,17 @@ install.man::								@@\
 #define	InstallNamedNonExec(srcname,dstname,dest)			@@\
 InstallNamedTarget(install,srcname,$(INSTDATFLAGS),dest,dstname)
 #endif /* InstallNamedNonExec */
+
+
+/*
+ * InstallLinkKitNamedNonExec - rule for installing server Link Kit files.
+ *                         (only used for XFree86). This is a no-op
+ *                         rule so that Imakefiles on non-XFree86 systems
+ *                         continue to build Makefiles correctly.
+ */
+#ifndef InstallLinkKitNamedNonExec
+#define InstallLinkKitNamedNonExec(srcname,dstname,dest)
+#endif
 
 
 /*
@@ -1170,6 +1257,7 @@ InstallNamedTarget(install,program.script,$(INSTBINFLAGS),dest,program)
 InstallNamedTarget(install,srcname,$(INSTBINFLAGS),dest,dstname)
 #endif /* InstallNamedProg */
 
+
 /*
  * InstallNamedProgNoClobber - Like InstallNamedProg, but doesn't
  * do the install if an installed version already exists.
@@ -1178,6 +1266,18 @@ InstallNamedTarget(install,srcname,$(INSTBINFLAGS),dest,dstname)
 #define InstallNamedProgNoClobber(srcname,dstname,dest)			@@\
 InstallNamedTargetNoClobber(install,srcname,$(INSTBINFLAGS),dest,dstname)
 #endif /* InstallNamedProgNoClobber */
+
+
+/*
+ * InstallLinkKitNamedProg - rule for installing server Link Kit files.
+ *                         (only used for XFree86). This is a no-op
+ *                         rule so that Imakefiles on non-XFree86 systems
+ *                         continue to build Makefiles correctly.
+ */
+#ifndef InstallLinkKitNamedProg
+#define InstallLinkKitNamedProg(srcname,dstname,dest)
+#endif
+
 
 /*
  * MakeFlagsToShellFlags - set variables before starting a loop.
@@ -1198,6 +1298,15 @@ InstallNamedTargetNoClobber(install,srcname,$(INSTBINFLAGS),dest,dstname)
 #endif
 
 /*
+ * MakeNamedTargetSubdir - do make in a subdir.
+ */
+#ifndef MakeNamedTargetSubdir
+#define MakeNamedTargetSubdir(dir,flags,subname)\
+		(cd dir && $(MAKE) $(MFLAGS) $(PARALLELMFLAGS) \	@@\
+			flags subname)
+#endif
+
+/*
  * LinkFileList - link a list of files from one place to another
  */
 #ifndef LinkFileList
@@ -1208,30 +1317,35 @@ step:: list								@@\
 	for i in list; do (set -x; RemoveFile($$i); $(LN) sub/$$i .); done
 #endif
 
+
 /*
  * LinkVarDirectory
  *
  * Make links from $LIBDIR (<ProjectRoot>/lib/X11) to /var/X11/
- * For example /usr/X11R6/lib/X11/xdm ==> /var/X11/xdm so that X 
- * binaries can be mounted from a read-only volume like a CD-ROM;
- * but files that may need to be edited can be stored locally on 
- * read-write media. If someone has an existing installation, be
- * careful and move existing files to the new location in /var.
+ * For example /usr/X11R6/lib/X11/xdm ==> /var/X11/xdm so that X can be
+ * run from a read-only volume like a CD-ROM.
+ *
+ * Since the link is used in the installation process, we need to
+ * make the link relative in order to honor $(DESTDIR) if it is set
  */
 #ifndef LinkVarDirectory
-#if HasVarDirectory
+#if HasVarDirectory && HasSymLinks
 #define LinkVarDirectory(mdir,cdir,rdir,ldir)				@@\
 install::								@@\
 	MakeDir(Concat($(DESTDIR)$(LIBDIR)/,cdir))			@@\
-	MakeDir(Concat($(VARDIR)/,mdir))				@@\
+	MakeDir(Concat($(DESTDIR)$(VARDIR)/,mdir))			@@\
 	@MakeFlagsToShellFlags(i,set +e); \				@@\
 	if [ -d Concat($(DESTDIR)$(LIBDIR)/,cdir) ]; then \		@@\
+	  RELPATH=`echo Concat($(LIBDIR)/,cdir) | \			@@\
+		sed -e 's:^.::' -e 's:[^/.][^/]*:..:'g`; \		@@\
 	  cd Concat($(DESTDIR)$(LIBDIR)/,cdir); \			@@\
-	  if [ -d rdir -a ! -h rdir ]; then \ 				@@\
-	    (cd rdir; tar cf - . | (cd Concat($(VARDIR)/,mdir); tar xf -; exit 0); exit 0); \ @@\
+	  if [ -d rdir -a ! -h rdir ]; then \				@@\
+	    (cd rdir; tar cf - . | \					@@\
+		(cd Concat($(DESTDIR)$(VARDIR)/,mdir);\			@@\
+		 tar xf -; exit 0); exit 0); \ 				@@\
 	  fi; \								@@\
 	  $(RM) -r rdir; \						@@\
-	  $(LN) Concat($(VARDIR)/,mdir) ldir; \				@@\
+	  $(LN) Concat($${RELPATH}$(VARDIR)/,mdir) ldir; \		@@\
 	fi
 #else
 #define LinkVarDirectory(mdir,cdir,rdir,ldir)
@@ -1253,6 +1367,17 @@ step:: list								@@\
 		(set -x; $(INSTALL) $(INSTALLFLAGS) flags $$i $(DESTDIR)dest); \	@@\
 	done
 #endif /* InstallMultipleDestFlags */
+
+
+/*
+ * InstallLinkKitMultipleDestFlags - rule for installing server Link Kit files.
+ *                         (only used for XFree86). This is a no-op
+ *                         rule so that Imakefiles on non-XFree86 systems
+ *                         continue to build Makefiles correctly.
+ */
+#ifndef InstallLinkKitMultipleDestFlags
+#define InstallLinkKitMultipleDestFlags(list,dest,flags)
+#endif
 
 
 /*
@@ -1307,7 +1432,11 @@ InstallMultipleDestFlags(install.man,list,dest,$(INSTMANFLAGS))
 #if HasClearmake
 #define IncludeMakefile(file) @@sinclude file
 #else
+#if HasBsdMake
+#define IncludeMakefile(file) @@# dependencies are in .depend
+#else
 #define IncludeMakefile(file) /**/
+#endif
 #endif
 #endif
 
@@ -1360,6 +1489,7 @@ DependDependency()							@@\
 depend:: DependFileName							@@\
 									@@\
 DependFileName::							@@\
+	RemoveFile($@)							@@\
 	RunProgram(DEPEND,-f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- $(SRCS)) > $@
 #else /* HasMakefileSafeInclude */
 #define	DependTarget()							@@\
@@ -1381,6 +1511,7 @@ DependDependency()							@@\
 depend:: DependFileName							@@\
 									@@\
 DependFileName::							@@\
+	RemoveFile($@)							@@\
 	RunProgram(DEPEND,-f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- srcs1) > $@	@@\
 	RunProgram(DEPEND,-f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- srcs2) >> $@	@@\
 	RunProgram(DEPEND,-f- $(DEPENDFLAGS) -- $(ALLDEFINES) $(DEPEND_DEFINES) -- srcs3) >> $@
@@ -1433,7 +1564,7 @@ target:: ProgramTargetName($(IMAKE))					@@\
 NoCmpScript(ProgramTargetName($(IMAKE)) $(IMAKE).Osuf)			@@\
 									@@\
 ProgramTargetName($(IMAKE)) $(IMAKE).Osuf:				@@\
-	-@(cd $(IMAKESRC); if [ -f Makefile ]; then \			@@\
+	-@(cd $(IMAKESRC) && if [ -f Makefile ]; then \			@@\
 	echo "checking $@ in $(IMAKESRC) first..."; $(MAKE) all; else \	@@\
 	echo "bootstrapping $@ from Makefile.ini in $(IMAKESRC) first..."; \	@@\
 	$(MAKE) -f Makefile.ini BOOTSTRAPCFLAGS="$(BOOTSTRAPCFLAGS)"; fi; \	@@\
@@ -1520,7 +1651,7 @@ ProjectUnsharedLibReferences(varname,libname,libsource,$(BUILDLIBDIR))
  */
 #ifndef ProjectUnsharedLibReferences
 #define ProjectUnsharedLibReferences(varname,libname,libsource,buildlibdir)	@@\
-Concat3(DEP,varname,LIB) = _UseCat($(USRLIBDIR)/lib,buildlibdir/lib,libname.a)	@@\
+Concat3(DEP,varname,LIB) = _UseCat($(USRLIBDIR)/,buildlibdir/,LibraryTargetName(libname))	@@\
 Concat(varname,LIB) = LoaderLibPrefix Concat(-l,libname)		@@\
 LintLibReferences(varname,libname,libsource)
 #endif
@@ -1611,17 +1742,29 @@ LintLibReferences(varname,libname,libsource)
  * LibObjCompile - compile fragment for unshared/profiled/debugged objects
  */
 #ifndef LibObjCompile
+#if HasGcc || HasGcc2
+#define LibObjCompile(dir,options) RemoveFiles($@ dir/$@)		@@\
+	ClearmakeOSName \
+	$(CC) -c $(CCOPTIONS) $(ALLDEFINES) options $*.c -o dir/$@
+#else
 #define LibObjCompile(dir,options) RemoveFiles($@ dir/$@)		@@\
 	ClearmakeOSName \
 	$(CC) -c $(CCOPTIONS) $(ALLDEFINES) options $*.c		@@\
 	$(MV) $@ dir/$@
 #endif
+#endif
 
 #ifndef LibObjCplusplusCompile
+#if HasGcc || HasGcc2
+#define LibObjCplusplusCompile(dir,options) RemoveFiles($@ dir/$@)	@@\
+	ClearmakeOSName \
+	$(CXX) -c $(CXXOPTIONS) $(CXXDEFINES) options $*.CCsuf -o dir/$@
+#else
 #define LibObjCplusplusCompile(dir,options) RemoveFiles($@ dir/$@)	@@\
 	ClearmakeOSName \
 	$(CXX) -c $(CXXOPTIONS) $(CXXDEFINES) options $*.CCsuf		@@\
 	$(MV) $@ dir/$@
+#endif
 #endif
 
 /*
@@ -1727,6 +1870,8 @@ dst.c:  src.c								@@\
 									@@\
 SpecialCObjectRule(dst,NullParameter,flags)				@@\
 									@@\
+includes:: dst.c							@@\
+									@@\
 depend::  dst.c								@@\
 									@@\
 clean::									@@\
@@ -1756,6 +1901,22 @@ clean::									@@\
 #endif /* LexFile */
 
 #ifndef YaccFile
+#if HasGnuMake
+#define YaccFile(file,flags)						@@\
+depend:: file.c								@@\
+									@@\
+file.h: file.c								@@\
+									@@\
+file.c: file.y								@@\
+	ClearmakeOSName \
+	$(YACC) flags file.y						@@\
+	$(MV) y.tab.c file.c						@@\
+	@if [ -f y.tab.h ]; then set -x; $(MV) y.tab.h file.h; \	@@\
+	else exit 0; fi							@@\
+									@@\
+clean::									@@\
+	RemoveFiles(y.tab.c y.tab.h file.h file.c)
+#else
 #define YaccFile(file,flags)						@@\
 depend:: file.c								@@\
 									@@\
@@ -1768,6 +1929,7 @@ file.h file.c: file.y							@@\
 									@@\
 clean::									@@\
 	RemoveFiles(y.tab.c y.tab.h file.h file.c)
+#endif
 #endif /* YaccFile */
 
 #ifndef YaccFileNoFlags
@@ -2085,9 +2247,9 @@ clean::									@@\
 #define MakeSubincludesForBuild(step,dir,srclist)			@@\
 step::  dir srclist							@@\
 	@-(list=`echo srclist | sed -e 's/[^ ]*\///g'`; \		@@\
-		set -x; cd dir; RemoveFiles($$list))			@@\
+		set -x; cd dir && RemoveFiles($$list))			@@\
 	@for i in srclist; do \						@@\
-		(set -x; cd dir; $(LN) ../$$i .); \			@@\
+		(set -x; cd dir && $(LN) ../$$i .); \			@@\
 	done								@@\
 									@@\
 dir::									@@\
@@ -2096,7 +2258,7 @@ dir::									@@\
 clean::									@@\
 	@-(if [ -d dir ]; then \					@@\
 		list=`echo srclist | sed -e 's/[^ ]*\///g'`; \		@@\
-		set -x; cd dir; RemoveFile($$list); else exit 0; fi)
+		set -x; cd dir && RemoveFile($$list); else exit 0; fi)
 #endif
 
 
@@ -2144,7 +2306,7 @@ name::									@@\
 	for i in dirs ;\						@@\
 	do \								@@\
 		echo verb "in $(CURRENT_DIR)/$$i..."; \			@@\
-		(cd $$i &&  $(MAKE) $(MFLAGS) flags subname); \		@@\
+		MakeNamedTargetSubdir($$i,flags,subname); \		@@\
 	done
 #endif
 
@@ -2181,12 +2343,22 @@ NamedTargetSubdirs(depend,dirs,"depending",NullParameter,depend)
  * ForceSubdirs - force make to build subdirectories
  */
 #ifndef ForceSubdirs
+#if !HasBsdMake
 #define ForceSubdirs(dirs)						@@\
 dirs: FRC								@@\
+	@echo "making all in $(CURRENT_DIR)/$@..."			@@\
+	@MakeNamedTargetSubdir($@,PassCDebugFlags,all)			@@\
+									@@\
+FRC:
+#else
+/* For BSD 4.4 make */
+#define ForceSubdirs(dirs)						@@\
+dirs: .EXEC								@@\
 	@cd $@ ; echo "making all in $(CURRENT_DIR)/$@..."; \		@@\
 	$(MAKE) $(MFLAGS) PassCDebugFlags all				@@\
 									@@\
-FRC:
+.EXEC:
+#endif
 #endif /* ForceSubdirs */
 
 /*
@@ -2296,7 +2468,7 @@ MakeLintSubdirs(dirs,lintlib,lintlib)
 #define MakeMakeSubdirs(dirs,target)					@@\
 $(ONESUBDIR)/Makefile:							@@\
 	@MakeFlagsToShellFlags(n,executeit="no"); \			@@\
-	cd $(ONESUBDIR); \						@@\
+	cd $(ONESUBDIR) && \						@@\
 	if [ "$$executeit" != "no" ]; then \				@@\
 		ImakeSubCmdHelper -DTOPDIR=$(IMAKETOP) -DCURDIR=$(ONECURDIR)$(ONESUBDIR); \ @@\
 	fi;								@@\
@@ -2348,9 +2520,13 @@ target::								@@\
 			fi; \						@@\
 		fi; \							@@\
 		$(MAKE) $(MFLAGS) $(MAKE_OPTS) ONESUBDIR=$$i ONECURDIR=$$curdir IMAKETOP=$$imaketop IMAKEPREFIX=$$imakeprefix $$i/Makefile; \	@@\
-		cd $$i;	\						@@\
-		$(MAKE) $(MFLAGS) Makefiles; \				@@\
-		cd $$newtop; \						@@\
+		if [ -d $$i ] ; then \					@@\
+			cd $$i; \					@@\
+			$(MAKE) $(MFLAGS) Makefiles; \			@@\
+			cd $$newtop; \					@@\
+		else \							@@\
+			exit 1; \					@@\
+		fi; \							@@\
 	done
 
 #ifdef UseInstalled
@@ -2447,7 +2623,7 @@ depend:: dst
 step::									@@\
 	DirFailPrefix@MakeFlagsToShellFlags(i,set +e); \		@@\
 	for i in dirs; do if [ -d $(DESTDIR)$$i ]; then \		@@\
-		set +x; else (set -x; $(MKDIRHIER) $(DESTDIR)$$i); fi \	@@\
+		set +x; else (set -x; $(MKDIRHIER) $(DESTDIR)$$i); fi; \ @@\
 	done
 #endif /* MakeDirectories */
 
@@ -2463,3 +2639,17 @@ all:: depends
 #ifdef DefineOldLibraryRules
 #include <oldlib.rules>
 #endif
+
+#ifndef StaticLibrary
+#define StaticLibrary(libpath,libname) Concat3(libpath,/,LibraryTargetName(libname))
+#endif
+
+/*
+ * MakeMutex - generate mutex rules for parallel make
+ */
+#ifndef MakeMutex
+#ifdef MutexDirective
+#define MakeMutex(targets)						@@\
+MutexDirective:	targets
+#endif /* MutexDirective */
+#endif /* MakeMutex */

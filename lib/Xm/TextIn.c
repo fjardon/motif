@@ -1289,9 +1289,14 @@ PrintableString(XmTextWidget tw,
 #ifdef HAS_WIDECHAR_FUNCTIONS
     int i, csize;
     wchar_t wc;
+#ifndef NO_MULTIBYTE
     for (i = 0, csize = mblen(str, tw->text.char_size);
 	 i < n;
 	 i += csize, csize=mblen(&(str[i]), tw->text.char_size))
+#else
+    for (i = 0, csize = *str ? 1 : 0; i < n;
+	 i += csize, csize = str[i] ? 1 : 0)
+#endif
       {
 	if (csize < 0) 
 	  return False;
@@ -1307,9 +1312,14 @@ PrintableString(XmTextWidget tw,
      * printable. Better than nothing...
      */
     int i, csize;
+#ifndef NO_MULTIBYTE
     for (i = 0, csize = mblen(str, tw->text.char_size);
 	 i < n;
 	 i += csize, csize=mblen(&(str[i]), tw->text.char_size))
+#else
+    for (i = 0, csize = *str ? 1 : 0; i < n;
+	 i += csize, csize = str[i] ? 1 : 0)
+#endif
       {
 	if (csize < 0)
 	  return False;

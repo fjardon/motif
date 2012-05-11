@@ -1,5 +1,5 @@
 XCOMM platform:  $XConsortium: Amoeba.cf /main/12 1996/09/28 16:04:48 rws $
-XCOMM platform:  $XFree86: xc/config/cf/Amoeba.cf,v 3.6 1995/01/28 15:40:08 dawes Exp $
+XCOMM platform:  $XFree86: xc/config/cf/Amoeba.cf,v 3.9 1996/12/23 05:50:00 dawes Exp $
 
 /*  The presence of this configuration file in the X distribution
  *  does not imply full support for the system it describes.

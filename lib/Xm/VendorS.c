@@ -1004,7 +1004,7 @@ RemoveGrab(
 	        Widget incrWid = modals[i+incr].wid;
 		/* if it's not the shell, or it is the shell but some 
 		   other entry for another grab */
-		if ( (incrWid != shell) || (modals[i].ve != ve) )    
+		if ( (incrWid != shell) || (modals[i+incr].ve != ve) )    
 		  {
 		      if  ((ve != NULL) && (modals[i+incr].grabber == ve))
                         {   

@@ -1,4 +1,7 @@
-XCOMM platform:  $TOG: sgi.cf /main/49 1998/02/26 09:12:19 barstow $
+XCOMM platform:  $TOG: sgi.cf /main/45 1997/06/18 18:01:03 kaleb $
+XCOMM
+XCOMM
+XCOMM $XFree86: xc/config/cf/sgi.cf,v 1.1.1.5.2.4 1999/06/18 13:47:28 hohndel Exp $
 
 #ifndef OSName
 # define OSName		DefaultOSName
@@ -67,6 +70,7 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 # define BuildLibPathVar	_RLD_ROOT=/dev/null LD_LIBRARYN32_PATH
 # define SystemBuildLibPath	/usr/lib32:/lib32
 # define LdCmd			ld -n32
+# define AsCmd			as -n32
 #else
 # define BuildLibPathVar	_RLD_ROOT=/dev/null LD_LIBRARY_PATH
 # define SystemBuildLibPath	/usr/lib:/lib
@@ -109,7 +113,7 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 # if OSMajorVersion < 6
 #  define sgiCCOptions -xansi
 # else
-#  define CppCmd cc -E -cckr
+#  define CppCmd cc -E
 #  ifdef Mips64Architecture
 /* set Mips64Architecture in host.def. Usually don't need it but we
  * (the X Consortium) want a  64-bit big-endian machine to test on. */
@@ -121,7 +125,7 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 #  else
 #   define sgiCCOptions -xansi
 #  endif
-#  if OSMinorVersion == 2
+#  if OSMinorVersion > 1
 /* if you haven't installed patch 1361, 1403, or 1645 on IRIX 6.2 then you
  * must add "#define HasPosixThreads NO" in your site.def or host.def file
  */
@@ -131,11 +135,11 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 #   define ThreadedX HasPosixThreads
 #   define ThreadsLibraries -lpthread
 /* 
- * Add "#define HasSgiThreadsPatch1403 YES" to your site.def or host.def if 
+ * Add "#define HasSgiThreadsPatch1403 NO" to your site.def or host.def if 
  * that's which patch you have.
  */
 #   ifndef HasSgiThreadsPatch1403
-#    define HasSgiThreadsPatch1403 NO
+#    define HasSgiThreadsPatch1403 YES
 #   endif
 #   if (HasSgiThreadsPatch1403) 
 #    define SystemMTDefines -D_POSIX_THREAD_SAFE_FUNCTIONS
@@ -226,33 +230,8 @@ man_keywords::								@@\
 dst::  src deplist							@@\
 	RemoveFile($@)							@@\
 	ClearmakeOSName \
-	$(CPP) CppNoLineInfoOption defs src 2>/dev/null | CppSedMagic >$@; @@\
+	$(CPP) CppNoLineInfoOption defs src | CppSedMagic >$@; 		@@\
 									@@\
 clean::									@@\
 	RemoveFiles(dst)
 #endif /* CppFileTarget */
-
-#ifndef CppScriptTarget
-#if ExecableScripts		/* can use #! instead of colon */
-#define CppScriptTarget(dst,src,defs,deplist)				@@\
-dst::	src deplist							@@\
-	RemoveFile($@)							@@\
-	ClearmakeOSName \
-	$(CPP) CppNoLineInfoOption defs src | CppSedMagic >$@		@@\
-	chmod a+x $@							@@\
-									@@\
-clean::									@@\
-	RemoveFiles(dst)
-#else
-#define CppScriptTarget(dst,src,defs,deplist)				@@\
-dst::  src deplist							@@\
-	RemoveFile($@)							@@\
-	ClearmakeOSName \
-	echo \: >$@							@@\
-	sed '1d' src | $(CPP) CppNoLineInfoOption defs | CppSedMagic >>$@	@@\
-	chmod a+x $@							@@\
-									@@\
-clean::									@@\
-	RemoveFile(dst)
-#endif /* ExecableScripts */
-#endif /* CppScriptTarget */

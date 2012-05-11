@@ -74,6 +74,9 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion)
 #if OSMajorVersion > 3
 #define TermcapLibrary		-lcurses
 #endif
+#if OSMajorVersion >= 3
+#define HasMkstemp		YES
+#endif
 #endif
 
 /*

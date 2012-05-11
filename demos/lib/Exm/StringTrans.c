@@ -48,6 +48,7 @@
 #include <Xm/TraitP.h>        /* for traits */
 #include <Xm/TransferT.h>     /* for XmQTtransfer trait */
 #include <Xm/SpecRenderT.h>   /* for XmLABEL_RENDER_TABLE */
+#include <Xm/DrawP.h>         /* for XmeClearBorder */
 
 /* Declare all static functions. */
 static void ClassPartInitialize(

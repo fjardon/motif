@@ -33,7 +33,7 @@
 .SH DESCRIPTION
 The Motif Workspace Manager (Wsm) uses the new Workspace Manager protocol
 supported in the Motif Window Manager (Mwm) 2.0.  This application
-will only work with Mwm Version 2.0 or later.
+will only work with Mwm Version 2.0.
 .PP
 Wsm provides a way for users to group windows and applications into
 workspaces or rooms.  Only one room or workspace is visible at one

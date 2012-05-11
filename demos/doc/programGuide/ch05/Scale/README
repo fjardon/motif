@@ -2,9 +2,6 @@
                    README File for XmScale/tic_mark Example 
 
 The tic_mark example demonstrates a simple use of the XmScale widget. 
-To build the program, just type 
-
- $ make
 
 To run the program, just type:
 

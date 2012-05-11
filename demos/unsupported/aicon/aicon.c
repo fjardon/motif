@@ -349,7 +349,7 @@ XtPointer client_data ;
 
 
  
-void
+int
 main(int argc, char **argv)
 {
     
@@ -390,4 +390,5 @@ main(int argc, char **argv)
     
     XtAppMainLoop(app_context);
     
+   return 0;    /* make compiler happy */
 }

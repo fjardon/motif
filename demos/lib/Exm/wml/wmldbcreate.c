@@ -104,7 +104,7 @@ int DEBUG=FALSE;
 char outfilename[80];
 char debugfilename[80];
 
-main(argc, argv)
+int main(argc, argv)
 int argc;
 char **argv;
 {

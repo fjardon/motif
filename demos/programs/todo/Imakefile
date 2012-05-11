@@ -23,12 +23,12 @@ XCOMM HISTORY
 XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:45:56 drk $
          EXMSRC = ../../lib/Exm
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
          EXMLIB = $(EXMSRC)/libExm.a
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) $(EXMLIB) XmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) $(EXMLIB) XmClientLibs 
-EXTRA_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary 
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)
 
 SRCS=   todo.c io.c actions.c
@@ -40,3 +40,4 @@ MComplexProgramTarget(todo,$(LOCAL_LIBRARIES),NullParameter)
 
 InstallManPage(todo,$(MANDIR))
 InstallAppDefaults(XmdTodo)
+InstallMotifHelpFile(todo)

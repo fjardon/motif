@@ -64,13 +64,13 @@ XCOMM old -DPANELIST
 XCOMM INCLUDES = -I. -I$(BMSLIBSRC)
 INCLUDES = -I.
 
-DEPLIBS = $(DEPXMLIB)  $(DEPXTOOLLIB) $(DEPXLIB)
+       DEPLIBS1 = ./WmWsmLib/libWsm.a XmClientDepLibs
 LOCAL_LIBRARIES = ./WmWsmLib/libWsm.a XmClientLibs
-SYS_LIBRARIES = -lm
+  SYS_LIBRARIES = MathLibrary
 
 /** You must explicitly list the dependent libraries in DEPLIBS */
 
-#if defined(AlphaArchitecture)
+#if defined(OSF1Architecture) && defined(AlphaArchitecture)
 EXTRA_DEFINES = -DMULTIBYTE -DMINIMAL_DT -DALPHA_BUG_FIX -DOSF_v1_2_4
 SYS_LIBRARIES = -lm $(TTLIB)
 #endif
@@ -116,6 +116,10 @@ SYS_LIBRARIES = -lm -liconv
 EXTRA_DEFINES = -DMULTIBYTE -DMINIMAL_DT -DPORT_NOVFORK
 #endif /* SCOArchitecture */
 
+#if defined (LinuxArchitecture)
+EXTRA_DEFINES = MwmDefines
+#endif /* LinuxArchitecture */
+
 XCOMM old         DEFINES = AutoDefines MwmDefines
 XCOMM old        INCLUDES = -I. -I$(INCLUDESRC) -I$(MINCLUDESRC)  AutoIncludes
 XCOMM old        DEPLIBS1 = ./WmWsmLib/libWsm.a XmClientDepLibs
@@ -157,7 +161,7 @@ XCOMM old Clock.c PanelS.c PopupMenu.c Session.c UI.c WmIPC.c WmOL.c WmXSMP.c
 XCOMM old Button.c
 
 NormalLibraryObjectRule()
-ComplexProgramTarget_1(mwm,$(LOCAL_LIBRARIES),$(SYSTEM_LIBRARIES))
+MComplexProgramTarget_1(mwm,$(LOCAL_LIBRARIES),$(SYSTEM_LIBRARIES))
 
 SpecialObjectRule(WmResParse.o,NullParameter,-DLIBDIR='"'$(XPROJECTROOT)/lib/X11'"')
 SpecialObjectRule(WmResource.o,NullParameter,-DBITMAPDIR='"'$(XPROJECTROOT)/include/X11/bitmaps/'"')
@@ -200,7 +204,7 @@ CppFileTarget(Mwm.defs, Mwm.defs.src,$(LOCAL_CPP_DEFINES),)
 CppFileTarget(sys.mwmrc,sys.mwmrc.src,$(LOCAL_CPP_DEFINES),)
 */
 
-InstallNonExecFile(system.mwmrc,$(LIBDIR))
+InstallNonExecFile(system.mwmrc,$(XPROJECTROOT)/lib/X11)
 InstallAppDefaults(Mwm)
 
 MessageCatalogRule(Mwm)

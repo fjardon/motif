@@ -113,5 +113,7 @@ int main(int argc, char **argv)
     exit(1);
 
   XtAppMainLoop(app_context);
+
+  return 0;    /* make compiler happy */
 }
 

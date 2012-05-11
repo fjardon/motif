@@ -48,10 +48,13 @@ static char rcsid[] = "$TOG: DrawnB.c /main/20 1999/04/29 13:05:14 samborn $"
 #include "XmI.h"
 #include "RepTypeI.h"
 #include "LabelI.h"
+#include "MenuUtilI.h"
 #include "MenuProcI.h"
+#include "MenuStateI.h"
 #include "PrimitiveI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
+#include "UniqueEvnI.h"
 
 
 #define DELAY_DEFAULT 100	

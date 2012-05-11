@@ -39,7 +39,7 @@ MSimpleUidSubdirTarget(l_strings,japanese/uid)
 MSimpleUidSubdirTarget(l_strings,swedish/uid)
 
 install::
-	$(RM) $(UIDDIR)/l_strings.uid
+	$(RM) $(DESTDIR)$(UIDDIR)/l_strings.uid
 
 InstallManPage(helloint,$(MANDIR))
 

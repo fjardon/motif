@@ -1612,8 +1612,12 @@ _XmTextUpdateLineTable(Widget widget,
       }
     } else {
       while (length--) {
+#ifndef NO_MULTIBYTE
 	char_size = mblen(ptr, tw->text.char_size);
 	if (char_size < 0) break; /* error */
+#else
+	char_size = *ptr ? 1 : 0;
+#endif
 	cur_start++;
 	if (char_size == 1 && *ptr == '\012') {
 	  ptr++;
@@ -2928,7 +2932,9 @@ _XmTextCountCharacters(char *str,
   if (num_count_bytes <= 0)
     return 0;
   
+#ifndef NO_MULTIBYTE
   if (MB_CUR_MAX == 1 || MB_CUR_MAX == 0) /* Sun sets MB_CUR_MAX to 0, Argg!!*/
+#endif
     return num_count_bytes;
   
   for (bptr = str; num_count_bytes > 0; count++, bptr+= char_size) {

@@ -46,7 +46,7 @@ static void DoneCallback(Widget button,
    XtVaGetValues(locale_box, XmNmenuHistory, &b, NULL);
    XtVaGetValues(b, XmNuserData, &SelectedLocale, NULL);
    LocaleName = LocaleTable[CurrentOS][SelectedLocale];
-   printf ("language selected\n", SelectedLocale);
+   printf ("language selected\n");
 }
 
 /* ===============================================================
@@ -193,7 +193,7 @@ static void SelectLocale(ViewPtr this, OS os, String os_name)
  * Check that the language specified is 
  * supported by fileview and libX and libC.
  */
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 #define C_locale_name "C"
    char **p1, **p2;
@@ -309,6 +309,7 @@ void main(int argc, char *argv[])
    /* XtRealizeWidget(this->text_source); */
    XtAppMainLoop(theContext);
    
+   return 0;    /* make compiler happy */
 }
 
 /* ===============================================================

@@ -1,4 +1,5 @@
-XCOMM $TOG: sv4Lib.rules /main/19 1999/03/22 16:26:02 mgreess $
+XCOMM $XConsortium: sv4Lib.rules /main/18 1996/09/28 16:13:29 rws $
+XCOMM $XFree86: xc/config/cf/sv4Lib.rules,v 3.4 1996/12/23 05:50:34 dawes Exp $
 
 /*
  * SVR4 shared library rules
@@ -24,7 +25,7 @@ XCOMM $TOG: sv4Lib.rules /main/19 1999/03/22 16:26:02 mgreess $
 #endif
 #ifndef PositionIndependentCFlags
 # if HasGcc2
-#  define PositionIndependentCFlags -fPIC
+#  define PositionIndependentCFlags -fpic
 # else
 #  define PositionIndependentCFlags -K PIC
 # endif
@@ -44,12 +45,22 @@ XCOMM $TOG: sv4Lib.rules /main/19 1999/03/22 16:26:02 mgreess $
  * InstallSharedLibrary - generate rules to install the shared library.
  */
 #ifndef InstallSharedLibrary
+#if StripInstalledPrograms
+# define InstallSharedLibrary(libname,rev,dest)				@@\
+install:: Concat(lib,libname.so.rev) 					@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) Concat(lib,libname.so.rev) $(DESTDIR)dest @@\
+	mcs -d Concat($(DESTDIR)dest/lib,libname.so.rev)		@@\
+	$(RM) Concat($(DESTDIR)dest/lib,libname.so)			@@\
+	cd $(DESTDIR)dest; $(LN) Concat(lib,libname.so.rev) Concat(lib,libname.so)
+#else
 # define InstallSharedLibrary(libname,rev,dest)				@@\
 install:: Concat(lib,libname.so.rev) 					@@\
 	MakeDir($(DESTDIR)dest)						@@\
 	$(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) Concat(lib,libname.so.rev) $(DESTDIR)dest @@\
 	$(RM) Concat($(DESTDIR)dest/lib,libname.so)			@@\
 	cd $(DESTDIR)dest; $(LN) Concat(lib,libname.so.rev) Concat(lib,libname.so)
+#endif
 
 #endif /* InstallSharedLibrary */
 
@@ -100,6 +111,23 @@ clean::									@@\
 	$(RM) Concat(lib,libname.so.rev) Concat(lib,libname.so)
 
 #endif /* SharedLibraryTarget */
+
+
+#ifndef SharedDepModuleTarget
+#define SharedDepModuleTarget(name,deps,solist)				@@\
+AllTarget(name)								@@\
+									@@\
+name: deps								@@\
+	$(RM) $@~							@@\
+	$(LD) -o $@~ $(SHLIBLDFLAGS) solist $(REQUIREDLIBS)		@@\
+	$(RM) $@							@@\
+	$(MV) $@~ $@							@@\
+									@@\
+clean::									@@\
+	$(RM) name
+
+#endif /* SharedDepModuleTarget */
+
 
 /*
  * SharedLibraryDataTarget - generate rules to create shlib data file;

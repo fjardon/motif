@@ -38,6 +38,12 @@
 #define _ExmTabB_h
 
 
+/* Allow for C++ compilation. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* Include appropriate files. */
 #include <Exm/CommandB.h>  /* public header file for ExmCommandButton */
 #include <Xm/JoinSideT.h> /* contains defs. needed by ExmNopenSide resource */

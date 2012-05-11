@@ -2132,7 +2132,7 @@ XmeStandardConvert(Widget w,
 	current = XtParent(current)) {
       if (XtIsShell(current)) {
 	XGetWindowProperty(XtDisplay(current), XtWindow(current), 
-			   XA_WM_CLASS, 0L, 100000, False,
+			   XA_WM_CLASS, 0L, 100000L, False,
 			   (Atom) AnyPropertyType, 
 			   &cs -> type,
 			   &cs -> format,
@@ -2156,7 +2156,7 @@ XmeStandardConvert(Widget w,
 	current = XtParent(current)) {
       if (XtIsShell(current)) {
 	XGetWindowProperty(XtDisplay(current), XtWindow(current), 
-			   XA_WM_NAME, 0L, 100000, False,
+			   XA_WM_NAME, 0L, 100000L, False,
 			   (Atom) AnyPropertyType, 
 			   &type,
 			   &format,

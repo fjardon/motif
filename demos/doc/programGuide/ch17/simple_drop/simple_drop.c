@@ -33,11 +33,13 @@ widget so that a pixmap can be dropped into it
 #include <Xm/MainW.h>
 #include <Xm/Frame.h>
 #include <Xm/CascadeB.h>
+#include <Xm/MessageB.h>
 #include <Xm/PushBG.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Label.h>
 #include <Xm/DrawingA.h>
 #include <Xm/Transfer.h>
+#include <Xm/TransferP.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -117,6 +119,8 @@ main(int argc, char **argv)
 
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app_context);
+
+    return 0;    /* make compiler happy */
 }
 
 
@@ -141,7 +145,8 @@ DestinationCallback(Widget  w,
  /* Ask the source to return a list of all the export targets that
     it knows how to convert. */
  XmTransferValue(dcs->transfer_id, _MOTIF_EXPORT_TARGETS, 
-                 (XtCallbackProc)TransferProc, NULL, NULL);
+                 (XtCallbackProc)TransferProc, NULL,
+                 XtLastTimestampProcessed(XtDisplay(w)));
 }
 
 
@@ -184,7 +189,8 @@ TransferProc(Widget  w,
      if (PIXMAP_is_supported)  {
        printf("TransferProc: Asking for PIXMAP.\n");
        XmTransferValue(scs->transfer_id, PIXMAP,
-                   (XtCallbackProc)TransferProc, NULL, NULL);
+                   (XtCallbackProc)TransferProc, NULL,
+                   XtLastTimestampProcessed(XtDisplay(w)));
      }
    }
 

@@ -1,4 +1,5 @@
-XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
+XCOMM $TOG: Imake.cf /main/28 1997/06/25 08:31:36 barstow $
+XCOMM $XFree86: xc/config/cf/Imake.cf,v 3.34.2.14 1999/07/29 09:22:23 hohndel Exp $
 /*
  * To add support for another platform:
  * 
@@ -18,6 +19,13 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
  *     4.  Create a .cf file with the name given by MacroFile.
  */
 
+#if defined(clipper) || defined(__clipper__)
+# undef clipper
+# define MacroIncludeFile <ingr.cf>
+# define MacroFile ingr.cf
+# define IngrArchitecture
+#endif /* clipper */
+
 #ifdef ultrix
 # define MacroIncludeFile <ultrix.cf>
 # define MacroFile ultrix.cf
@@ -33,7 +41,7 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # define UltrixArchitecture
 #endif /* ultrix */
 
-#if defined(vax) && !defined(UltrixArchitecture)
+#if defined(vax) && !defined(UltrixArchitecture) && !defined(__NetBSD__)
 # define MacroIncludeFile <bsd.cf>
 # define MacroFile bsd.cf
 # undef vax
@@ -51,6 +59,63 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # undef i386
 #endif /* bsdi */
 
+#ifdef __OpenBSD__
+# undef __OpenBSD__
+# undef __NetBSD__
+# define OpenBSDArchitecture
+# define MacroIncludeFile <OpenBSD.cf>
+# define MacroFile OpenBSD.cf
+# ifdef __i386__
+#  define i386BsdArchitecture
+#  define i386Architecture
+#  undef i386
+# endif
+# if defined(__sparc__) || defined(sparc)
+#  define SparcArchitecture
+#  undef sparc
+# endif
+# ifdef mips
+#   define MipsArchitecture
+#   ifdef arc
+#     define ArcArchitecture
+#     undef arc
+#   endif
+#   ifdef pmax
+#     define PmaxArchitecture
+#     undef pmax
+#   endif
+#   undef mips
+# endif
+# ifdef __alpha__
+#   define AlphaArchitecture
+#   undef __alpha__
+# endif
+# ifdef mc68020
+#  define Mc68020Architecture
+#  if defined(amiga)
+#   define AmigaArchitecture
+#   undef amiga
+#  endif
+#  if defined(hp300)
+#   define Hp300Architecture
+#   undef hp300
+#  endif
+#  if defined(mac68k)
+#    define Mac68kArchitecture
+#    undef mac68k
+#  endif
+#  if defined(mvme68k)
+#   define Mvme68kArchitecture
+#   undef mvme68k
+#  endif
+#  if defined(sun3) 
+#   define Sun3Architecture
+#   undef sun3
+#  endif
+#  undef mc68000
+# endif
+#endif /* OpenBSD */
+
 #ifdef __NetBSD__
 # define MacroIncludeFile <NetBSD.cf>
 # define MacroFile NetBSD.cf
@@ -64,6 +129,24 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # if defined(__sparc__) || defined(sparc)
 #  define SparcArchitecture
 #  undef sparc
+# endif
+# ifdef mips
+#   define MipsArchitecture
+#   define ArcArchitecture
+#   undef mips
+# endif
+# ifdef __alpha__
+#   define AlphaArchitecture
+#   undef __alpha__
+# endif
+# ifdef mc68000
+#   define Mc68020Architecture
+#   undef mc68000
+# endif
+# if defined(arm32) || defined(__arm32__)
+#   define Arm32Architecture
+#   undef arm32
+#   undef __arm32__
 # endif
 #endif /* NetBSD */
 
@@ -133,15 +216,21 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 #endif /* hpux */
 
 #ifdef sco
-# define MacroIncludeFile <sco.cf>
-# define MacroFile sco.cf
+# define MacroIncludeFile <sco5.cf>
+# define MacroFile sco5.cf
 # undef sco
 # undef USL
 # undef SYSV
 # undef i386
-/* # define i386Architecture */
+# undef SCO
+# undef SVR4
+# define i386Architecture
 # define SCOArchitecture
-#endif /* sco */
+# define i386SVR3Architecture
+# define SVR3Architecture
+# define i386ScoArchitecture
+# define i386Sco325Architecture
+#endif /* sco - SCO Open Server 5 */
 
 #ifdef USL
 # define MacroIncludeFile <usl.cf>
@@ -317,10 +406,14 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # endif
 #endif /* MOTOROLA */
 
-#ifdef SVR4
+#if defined(SVR4) && !defined(DGUX)
 # ifdef i386
 #  define i386Architecture
 #  undef i386
+# endif
+# ifdef PC98
+#  define PANIX98Architecture
+#  undef PC98
 # endif
 # define SVR4Architecture
 # define MacroIncludeFile <svr4.cf>
@@ -330,13 +423,40 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 
 #ifdef SYSV
 # ifdef i386
-#  define MacroIncludeFile <x386.cf>
-#  define MacroFile x386.cf
-#  define i386SVR3Architecture
-#  undef i386
-# endif
+# undef i386
+#  ifdef ISC
+#   define i386Architecture	
+#   define i386SVR3Architecture	
+#   define MacroIncludeFile <isc.cf>
+#   define MacroFile isc.cf
+#   define i386IscArchitecture
+#   undef ISC
+#   ifdef ISC202
+#    define IscVersion 202
+#    undef ISC202
+#   else
+#    ifdef ISC30
+#     define IscVersion 300
+#     undef ISC30
+#    else
+#     ifdef ISC40
+#      define IscVersion 400
+#      undef ISC40
+#     else
+#      define IscVersion 221
+#     endif /* ISC40 */
+#    endif /* ISC30 */
+#   endif /* ISC202 */
+#  endif /* ISC */
+#  ifndef MacroFile
+#   define i386SVR3Architecture
+#   define MacroIncludeFile <x386.cf>
+#   define MacroFile x386.cf
+#  endif /* MacroFile */
+# endif /* i386 */
 #endif /* SYSV */
 
+/* SYSV386 is here for backward compatibility only */
 #ifdef SYSV386
 # undef i386
 # ifdef SVR4
@@ -346,14 +466,42 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 #  define MacroIncludeFile <svr4.cf>
 #  define MacroFile svr4.cf
 #  undef SVR4
-# else
-#  define MacroIncludeFile <x386.cf>
-#  define MacroFile x386.cf
-#  define i386SVR3Architecture
-# endif
+# else /* ! SVR4 */
+#  ifdef ISC
+#   define i386Architecture	
+#   define i386SVR3Architecture	
+#   define MacroIncludeFile <isc.cf>
+#   define MacroFile isc.cf
+#   define i386IscArchitecture
+#   undef ISC
+#   ifdef ISC202
+#    define IscVersion 202
+#    undef ISC202
+#   else
+#    ifdef ISC30
+#     define IscVersion 300
+#     undef ISC30
+#    else
+#     ifdef ISC40
+#      define IscVersion 400
+#      undef ISC40
+#     else
+#      define IscVersion 221
+#     endif /* ISC40 */
+#    endif /* ISC30 */
+#   endif /* ISC202 */
+#  endif /* ISC */
+#  ifndef MacroFile
+#   define i386SVR3Architecture
+#   define MacroIncludeFile <x386.cf>
+#   define MacroFile x386.cf
+#  endif /* MacroFile */
+# endif /* ! SVR4 */
 #endif /* SYSV386 */
 
 #ifdef DGUX
+# define i386Architecture
+# define SVR4Architecture
 # define MacroIncludeFile <DGUX.cf>
 # define MacroFile DGUX.cf
 # undef DGUX
@@ -407,18 +555,68 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # ifdef i386
 #  define i386Architecture
 #  undef i386
+# endif /* i386 */
 # ifdef __i386__
 #  ifndef i386Architecture
 #   define i386Architecture
 #  endif
 #  undef __i386__
-# endif /* i386 */
+# endif /* __i386__ */
 # ifdef __alpha
 #  define AlphaArchitecture
 #  undef __alpha
 # endif /* __alpha */
-#endif
+# ifdef __alpha__
+#  define AlphaArchitecture
+#  undef __alpha__
+# endif /* __alpha__ */
+# ifdef mc68000
+#  define Mc68020Architecture
+#  undef mc68000
+# endif /* mc68000 */
+# ifdef powerpc
+#  define PowerPCArchitecture
+#  undef powerpc
+# endif
+# if defined(arm) || defined(__arm__)
+#   define ArmArchitecture
+#   undef arm
+#   undef __arm__
+#   if defined(__ARM_ARCH_4__)
+#     define Arm4Architecture
+#     define Arm32Architecture
+#     undef __ARM_ARCH_4__
+#   endif
+#   if defined(__ARM_ARCH_3__)
+#     define Arm3Architecture
+#     undef __ARM_ARCH_3__
+#   endif
+# endif
 #endif /* linux */
+
+#if (defined(__Lynx__) || defined(Lynx)) && (defined(i386) || defined(__i386__) || defined(__x86__) || defined(__powerpc__) || defined(__sparc__) || defined(sparc))
+# define MacroIncludeFile <lynx.cf>
+# define MacroFile lynx.cf
+# define LynxOSArchitecture
+# undef __Lynx__
+# undef Lynx
+# undef lynx
+# if defined(i386) || defined(__i386__) || defined(__x86__)
+#  define i386Architecture
+#  undef i386
+#  undef __i386__
+#  undef __x86__
+# endif
+# ifdef __powerpc__
+#  define ppcArchitecture
+#  undef __powerpc__
+# endif
+# if defined(sparc) || defined(__sparc__)
+#  define SparcArchitecture
+#  undef sparc
+#  undef __sparc__
+# endif
+#endif /* LynxOS AT/PPC/microSPARC */
 
 #ifdef __uxp__
 # define MacroIncludeFile <fujitsu.cf>
@@ -463,6 +661,65 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # define MacroFile nec.cf
 # define NecArchitecture
 #endif
+
+#ifdef minix 
+#define MacroIncludeFile <minix.cf>
+#define MacroFile minix.cf
+#undef minix
+#define MinixArchitecture
+#define i386Architecture
+#endif /* minix */
+
+#ifdef MACH
+#ifdef __GNU__
+#define MacroIncludeFile <gnu.cf>
+#define MacroFile gnu.cf
+#define GNUMachArchitecture
+#else
+#define MacroIncludeFile <mach.cf>
+#define MacroFile mach.cf
+#endif
+#undef MACH
+#ifdef	i386
+#define i386MachArchitecture
+#define i386Architecture
+#endif	/* i386 */
+#undef i386
+#endif /* MACH */
+
+#ifdef emxos2
+#define MacroIncludeFile <os2.cf>
+#define MacroFile os2.cf
+#define OS2Architecture
+#define i386Architecture
+#endif /* emxos2 */
+
+#if defined(__QNX__) && !defined(__QNXNTO__)
+#define MacroIncludeFile <QNX.cf>
+#define MacroFile QNX.cf
+#define QNXArchitecture
+#define i386Architecture
+#endif /* QNX4 */
+
+#ifdef __QNXNTO__
+#define MacroIncludeFile <nto.cf>
+#define MacroFile nto.cf
+#define NTOArchitecture
+#ifdef PPC
+# define PPCArchitecture
+# undef PPC
+#else
+#ifdef MIPS
+# define mipsArchitecture
+# undef MIPS
+#else
+#ifdef i386
+# define i386Architecture
+# undef i386
+#endif
+#endif
+#endif
+#endif /* QNX/Neutrino */
 
 #ifndef MacroIncludeFile
 XCOMM WARNING:  Imake.cf not configured; guessing at definitions!!!

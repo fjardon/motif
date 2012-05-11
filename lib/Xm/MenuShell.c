@@ -614,6 +614,10 @@ Initialize(
 
     ms->menu_shell.label_font_list = XmFontListCopy (defaultFont);   
 
+    if(ms->menu_shell.default_font_list != NULL)
+        ms->menu_shell.default_font_list =
+            XmFontListCopy(ms->menu_shell.default_font_list);   
+
     _XmSetSwallowEventHandler((Widget) ms, True);
 
     /*
@@ -2212,6 +2216,8 @@ Destroy(
 {
     XmMenuShellWidget ms = (XmMenuShellWidget) wid ;
     _XmDestroyFocusData(ms->menu_shell.focus_data);
+    if (ms->menu_shell.default_font_list != NULL) 
+       XmFontListFree (ms->menu_shell.default_font_list);
 
     if (ms->menu_shell.button_font_list != NULL) 
        XmFontListFree (ms->menu_shell.button_font_list);

@@ -1,4 +1,5 @@
 XCOMM platform:  $XConsortium: ncr.cf /main/28 1996/09/28 16:11:31 rws $
+XCOMM platform:  $XFree86: xc/config/cf/ncr.cf,v 3.18 1996/12/27 06:50:22 dawes Exp $
 
 #ifndef OSName
 #define OSName			Unix System V Release 4/MP-RAS
@@ -14,6 +15,10 @@ XCOMM operating system:  OSName
 
 /* Build Flags */
 
+XCOMM
+XCOMM These flags build correctly on SVR4/MP-RAS 3.0. If building on
+XCOMM SVR4/MP-RAS 2.X, you must add -DWINTCP to StandardDefines
+XCOMM
 #define StandardDefines		-DSVR4 -DNCR -Di386
 #define DefaultCCOptions	-Xa -Hnocopyr -W0,-asm
 #define DefaultCDebugFlags	-O3
@@ -86,6 +91,9 @@ install.man::                                                           @@\
 	$(INSTALL) -c $(INSTMANFLAGS) file.z $(DESTDIR)destdir/dest.z; \@@\
 	fi
 
+#define InstallGenManPageLong(file,destdir,dest,suffix)			@@\
+	InstallManPageLong(file,destdir,dest)
+
 #define InstallMultipleManSuffix(list,dest,suff)                        @@\
 install.man:: 								@@\
 	MakeDir($(DESTDIR)dest)						@@\
@@ -110,5 +118,8 @@ install.man:: 								@@\
 		(cd $(DESTDIR)destdir; $(LN) file.z $$i.z);\		@@\
 		); \							@@\
 	done
+
+#define InstallGenManPageAliases(file,destdir,suffix,aliases)		@@\
+	InstallManPageAliases(file,destdir,aliases)
 
 #include <svr4.cf>

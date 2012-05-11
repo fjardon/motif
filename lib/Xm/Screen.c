@@ -39,6 +39,7 @@ static char rcsid[] = "$TOG: Screen.c /main/16 1997/06/18 17:41:50 samborn $"
 #include <Xm/DisplayP.h>
 #include "DragIconI.h"
 #include "HashI.h"
+#include "ImageCachI.h"
 #include "MessagesI.h"
 #include "RepTypeI.h"
 #include "ScreenI.h"

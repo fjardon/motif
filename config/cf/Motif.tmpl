@@ -384,11 +384,13 @@ XCOMM $TOG: Motif.tmpl /main/6 1999/05/19 17:00:05 mgreess $
 /* hardcoded default path.  Contrary to the original duplicate of USRLIBDIR
    in the Imakefiles. */
 #ifndef VirtualBindingsPath
-# define VirtualBindingsPath /usr/lib/Xm/bindings
+# define VirtualBindingsPath $(USRLIBDIR)/Xm/bindings
 #endif
 
               MTOP = MTop
+#if !UseInstalledMotif
 TOP_MOTIF_INCLUDES = -I$(MINCLUDESRC)
+#endif
 #if defined(UseInstalled) || (UseInstalledMotif && UseInstalledX11)
       UIL_INCLUDES = -I$(USRINCDIR)/uil
 #else
@@ -446,7 +448,7 @@ TOP_MOTIF_INCLUDES = -I$(MINCLUDESRC)
   AUTOCREATESRC = $(AUTOSRCLIB)/Create
   AUTOVISUALSRC = $(AUTOSRCLIB)/Visual
     AUTOUTILSRC = $(AUTOSRCLIB)/Util
-  AUTOEXTRALIBS = -ll -ly -lm
+  AUTOEXTRALIBS = $(LEXLIB) -lm
 #else
      TESTCOMSRC = $(MANUALSRCLIB)/Common
 #endif

@@ -2788,7 +2788,7 @@ SetVerticalScrollbar(XmListWidget lw)
   if ((!lw->list.Mom) ||
       (!lw->list.vScrollBar) ||
       (lw->list.FromSetSB))
-    return;
+    return False;
 
 
   lw->list.FromSetSB = TRUE;
@@ -2872,7 +2872,7 @@ SetHorizontalScrollbar(XmListWidget lw)
   if ((!lw->list.Mom) ||
       (!lw->list.hScrollBar) ||
       (lw->list.FromSetSB))
-    return;
+    return False;
 
   lw->list.FromSetSB = TRUE;
 

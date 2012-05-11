@@ -26,7 +26,7 @@ XCOMM HISTORY
        INCLUDES = -I.
         DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
-EXTRA_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary
 
 SRCS= main.c dragsource.c dropsite.c
 

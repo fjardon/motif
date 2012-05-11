@@ -1333,7 +1333,7 @@ ClipboardGetAtomFromId(
 	case 1: item = XmS_MOTIF_CLIP_NEXT_ID;
 	    break;
 	default:
-    	    sprintf( atomname, "_MOTIF_CLIP_ITEM_%d", itemid );
+    	    sprintf( atomname, "_MOTIF_CLIP_ITEM_%ld", itemid );
     	    item = atomname;
 	    break;	
     }

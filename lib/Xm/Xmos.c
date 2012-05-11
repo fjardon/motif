@@ -404,8 +404,12 @@ _XmOSFindPatternPart(String fileSpec)
 	  }
 	prev2Char = prevChar;
 	prevChar = *lookAheadPtr;
+#ifndef NO_MULTIBYTE
 	lookAheadPtr += ((MB_CUR_MAX > 1) ? 
 			 abs(mblen(lookAheadPtr, MB_CUR_MAX)) : 1);
+#else
+	lookAheadPtr++;
+#endif
       } 
   } while (!hasWildcards  &&  *lookAheadPtr++);
   
@@ -546,7 +550,11 @@ GetFixedMatchPattern(String pattern)
   bufPtr = outputBuf;
   *bufPtr++ = '^';
   
+#ifndef NO_MULTIBYTE
   while ((len = mblen(pattern, MB_CUR_MAX)) > 0)
+#else
+  while ((len = *pattern ? 1 : 0))
+#endif
     {
       if (len <= 1)
 	{
@@ -977,7 +985,7 @@ int
 _XmOSFileCompare(XmConst void *sp1,
 		 XmConst void *sp2)
 {
-  return strcmp(*((String *) sp1), *((String *) sp2));
+  return strcmp(*((XmConst String *) sp1), *((XmConst String *) sp2));
 }
 
 /*************************************************************************

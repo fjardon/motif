@@ -166,7 +166,7 @@ Use the TextField to specify the size\n\
 *ScaleCombo.SpinBox.Month.position:6
 *ScaleCombo.SpinBox.Month.editable: False
 *ScaleCombo.SpinBox.Month.numValues:12
-#*ScaleCombo.SpinBox.Month.wrap: False
+!*ScaleCombo.SpinBox.Month.wrap: False
 *ScaleCombo.SpinBox.Month.values:January,February,March,April,May,June,July,August,September,October,November,December
 
 *ScaleCombo.SpinBox.Year.spinBoxChildType: numeric
@@ -203,8 +203,8 @@ Use the TextField to specify the size\n\
 *ScaleCombo.SimpleSpinBoxNumeric.maximumValue: 12
 *ScaleCombo.SimpleSpinBoxNumeric.minimumValue: 1
 *ScaleCombo.SimpleSpinBoxNumeric.position: 1
-#*ScaleCombo.SimpleSpinBoxNumeric.wrap: False
-#*ScaleCombo.SimpleSpinBoxNumeric.positionType: position_index
+!*ScaleCombo.SimpleSpinBoxNumeric.wrap: False
+!*ScaleCombo.SimpleSpinBoxNumeric.positionType: position_index
 
 *ScaleCombo.SelectionBoxDebug.rightAttachment: attach_position
 *ScaleCombo.SelectionBoxDebug.rightPosition: 50

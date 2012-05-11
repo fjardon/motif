@@ -64,6 +64,7 @@ static void Initialize (
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args);
+static void ClassInitialize(void);
 static void ClassPartInitialize(
                         WidgetClass widgetclass);
 static void Destroy (
@@ -205,7 +206,7 @@ exmCommandButtonClassRec = {
     /* superclass */                 (WidgetClass)&exmStringClassRec,
     /* class_name */                 "ExmCommandButton",
     /* widget_size */                sizeof(ExmCommandButtonRec),
-    /* class_initialize */           NULL,
+    /* class_initialize */           ClassInitialize,
     /* class_part_initialize */      ClassPartInitialize,
     /* class_inited */               FALSE,
     /* initialize */                 Initialize,
@@ -313,6 +314,26 @@ Initialize (
 
 /************************************************************************
  *
+ *  ClassInitialize
+ *      Called by the Intrinsics the first time a widget of this class is 
+ *      instantiated.
+ *
+ ************************************************************************/
+static void 
+ClassInitialize(void)
+{
+#ifndef USE_ORIGINAL_MOTIF_CODE
+ /* Install the XmQTtakesDefault trait on CommandButton only. */
+   XmeTraitSet((XtPointer) exmCommandButtonWidgetClass, XmQTtakesDefault, 
+               (XtPointer) &commandButtonTDT);
+#endif
+}
+
+
+
+
+/************************************************************************
+ *
  *  ClassPartInitialize
  *      Called by the Intrinsics when this widget or a subclass of this
  *      widget is instantiated.  
@@ -326,9 +347,11 @@ ClassPartInitialize(
    XmeTraitSet((XtPointer) widgetclass, XmQTactivatable, 
                (XtPointer) &commandButtonAT);
 
+#ifdef USE_ORIGINAL_MOTIF_CODE
  /* Install the XmQTtakesDefault trait on CommandButton and its subclasses. */
    XmeTraitSet((XtPointer) widgetclass, XmQTtakesDefault, 
                (XtPointer) &commandButtonTDT);
+#endif
 }
 
 
@@ -704,7 +727,7 @@ ShowAsDefault(Widget w,
  ExmCommandButtonWidgetClass cbwc = (ExmCommandButtonWidgetClass)XtClass(w);
  ExmCommandButtonWidget cbw = (ExmCommandButtonWidget)w;
  Position   start_x_of_outer_shadow,  start_y_of_outer_shadow; 
- Dimension  margin_push_out;
+ Dimension  margin_push_out=0;
  Dimension  width_of_outer_shadow, height_of_outer_shadow; 
  int   dx, dy, width, height;
  GC    top_GC, bottom_GC;

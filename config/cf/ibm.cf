@@ -1,4 +1,4 @@
-XCOMM platform:  $TOG: ibm.cf /main/82 1998/02/26 17:03:51 kaleb $
+XCOMM platform:  $XConsortium: ibm.cf /main/80 1996/12/26 08:52:31 kaleb $
 
 #ifndef OSName
 # define OSName		DefaultOSName
@@ -23,7 +23,6 @@ XCOMM operating system:  OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 #if OSMajorVersion > 3 || (OSMajorVersion == 3 && OSMinorVersion >= 2)
 #define HasBSD44Sockets		YES
 #define HasPutenv		YES
-#define HasPlugin		YES
 /*
  * If you do not have threads support installed, put
  * #define HasPosixThreads	NO
@@ -102,6 +101,8 @@ baseobj.Osuf:	basedep.CCsuf						@@\
 #define CppCmd			/usr/ccs/lib/cpp
 #define ExpandManNames		YES
 #define ExtensionOSDefines	-DXTESTEXT1
+#define XibmServer		YES
+#define ibmIncludeSKYWAY	YES
 
 /* IBM cpp has slightly non-standard line directives, but supports -P */
 #define CppNoLineInfoOption	-P

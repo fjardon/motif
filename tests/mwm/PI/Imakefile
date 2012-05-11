@@ -32,10 +32,11 @@ LOCAL_LIBRARIES = TestClientLibs $(XMWSMLIB)
 DEPS = PICommon.o
 
 SRCS = PIColormap.c PICommon.c PIConfig.c PIHints.c PIIconSt.c \
-       PIMwmHints.c PIMwmInfo.c PINames.c PIProto.c PISizeHints.c PIConfig2.c PICCI.c PIVMwm.c
+       PIMwmHints.c PIMwmInfo.c PINames.c PIProto.c PISizeHints.c \
+       PIConfig2.c PICCI.c
 
 PROGRAMS = PIMwmHints PIColormap PIHints PIMwmInfo PIIconSt PIProto PINames \
-		   PISizeHints PIConfig PIConfig2 PICCI PIVMwm
+		   PISizeHints PIConfig PIConfig2 PICCI
 
 NormalLibraryObjectRule()
 

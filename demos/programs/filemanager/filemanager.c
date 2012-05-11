@@ -34,6 +34,7 @@ static char rcsid[] = "$XConsortium: filemanager.c /main/6 1995/07/14 09:41:39 d
 #include <stdlib.h>
 #include <stdio.h>
 #include <Xm/Xm.h>           /* Motif Toolkit */
+#include <Xm/Container.h>
 #include "filemanager.h"
 
 Display  	*display;
@@ -170,6 +171,8 @@ main(int argc, char* argv[])
 		  UpdateDir, (XtPointer) 0);
 
   XtAppMainLoop(app_context);
+
+  return 0;    /* make compiler happy */
 }
 
 /* Adjust the size of the underlying container widget to be
@@ -202,7 +205,7 @@ ErrorHandler(Display *display, XErrorEvent *event)
   XGetErrorText(display, event -> error_code, errortext, 100);
 
   printf("X Protocol error: %s\n", errortext);
-  printf("XID %d serial %d major %d minor %d\n",
+  printf("XID %ld serial %ld major %d minor %d\n",
 	 event -> resourceid,
 	 event -> serial,
 	 event -> request_code,
@@ -222,7 +225,7 @@ UpdateDir(XtPointer data, XtIntervalId *id)
 		  (XtTimerCallbackProc) UpdateDir, 0);
 
   if (stat(currentdir, &buf) != 0) {
-    printf("Can't stat directory: %d\n", currentdir);
+    printf("Can't stat directory: %s\n", currentdir);
     return;
   }
 

@@ -144,10 +144,20 @@ _XmTextBytesToCharacters(char * characters,
   case 2: {
     bits16_ptr = (BITS16 *) characters;
     tmp_bytes = (unsigned char*) bytes;
-    for (num_bytes = mblen((char*)tmp_bytes, max_char_size), 
+    for (
+#ifndef NO_MULTIBYTE
+	 num_bytes = mblen((char*)tmp_bytes, max_char_size), 
+#else
+	 num_bytes = *tmp_bytes ? 1 : 0,
+#endif
 	 temp_bits16 = 0; 
 	 num_chars > 0 && num_bytes > 0;
-	 num_chars--, num_bytes = mblen((char*)tmp_bytes, max_char_size), 
+	 num_chars--,
+#ifndef NO_MULTIBYTE
+	 num_bytes = mblen((char*)tmp_bytes, max_char_size), 
+#else
+	 num_bytes = *tmp_bytes ? 1 : 0,
+#endif
 	 temp_bits16 = 0, bits16_ptr ++) {
       if (num_bytes == 1) {
 	temp_bits16 = (BITS16) *tmp_bytes++;

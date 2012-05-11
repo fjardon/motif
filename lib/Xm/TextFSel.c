@@ -790,6 +790,7 @@ DropTransferProc(Widget w, XtPointer closure,
   char * total_value = NULL;
   wchar_t * wc_total_value;
   unsigned long total_length = 0;
+  int wc_total_length;
   Boolean replace = False;
   XmAnyCallbackStruct cb;
 
@@ -872,15 +873,15 @@ DropTransferProc(Widget w, XtPointer closure,
 				      insertPosRight, (char *) total_value,
 				      (int)total_length, False);
   } else {
+    wc_total_length = _XmTextFieldCountCharacters(tf, total_value,
+                                                  total_length);
     wc_total_value = (wchar_t*)XtMalloc((unsigned)
-					total_length * sizeof(wchar_t));
-    /* Note: casting total_length to an int may result in a truncation. */
-    total_length = mbstowcs(wc_total_value, total_value,
-			    (int)total_length);
-    if (total_length > 0)
+					wc_total_length * sizeof(wchar_t));
+    wc_total_length = mbstowcs(wc_total_value, total_value, wc_total_length);
+    if (wc_total_length > 0)
       replace = _XmTextFieldReplaceText(tf, ds->event, insertPosLeft, 
 					insertPosRight, (char *)wc_total_value,
-					(int)total_length, False);
+					wc_total_length, False);
     XtFree((char*)wc_total_value);
   }
   

@@ -23,12 +23,10 @@ XCOMM
 XCOMM 
 XCOMM HISTORY
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) XmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) XmClientLibs 
-         MANDIR = /usr/local/man/man1
-      MANSUFFIX = 1     
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)
 
 SRCS = tic_mark.c interface.c
@@ -38,4 +36,4 @@ MComplexProgramTarget(tic_mark,$(LOCAL_LIBRARIES),NullParameter)
 
 InstallProgram(tic_mark,$(BINDIR))
 
-InstallManPage(tic_mark, $(MANDIR))
+InstallManPage(tic_mark,$(MANDIR))

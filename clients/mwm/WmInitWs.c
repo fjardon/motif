@@ -58,6 +58,7 @@ static char rcsid[] = "$TOG: WmInitWs.c /main/18 1999/09/20 15:18:22 mgreess $"
 #include <X11/Shell.h>
 #include <X11/Core.h>
 #include <X11/keysym.h>
+#include <Xm/AtomMgr.h>
 #ifndef NO_HP_KEY_REMAP
 #include <Xm/VirtKeysP.h>
 

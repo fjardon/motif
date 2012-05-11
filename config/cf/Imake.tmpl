@@ -1,7 +1,12 @@
 XCOMM ----------------------------------------------------------------------
 XCOMM Makefile generated from IMAKE_TEMPLATE and INCLUDE_IMAKEFILE
-XCOMM $TOG: Imake.tmpl /main/249 1997/10/13 15:28:56 kaleb $
+XCOMM $TOG: Imake.tmpl /main/245 1997/05/20 10:05:47 kaleb $
 XCOMM
+XCOMM
+XCOMM
+XCOMM
+XCOMM $XFree86: xc/config/cf/Imake.tmpl,v 3.32.2.12 1999/01/09 14:18:57 dawes Exp $
+XCOMM ----------------------------------------------------------------------
 
 /*
  * generic imake template
@@ -97,6 +102,12 @@ XCOMM the platform-specific parameters - edit site.def to change
 
 /* the following are needed before we can include Imake.rules */
 
+#ifndef HasVarDirectory
+#define HasVarDirectory		NO
+#endif
+#ifndef HasSymLinks
+#define HasSymLinks		YES
+#endif
 #ifndef SystemV
 #define SystemV			NO	/* SYSV (R3) */
 #endif
@@ -114,6 +125,15 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #ifndef HasTestCenter
 #define HasTestCenter		NO
+#endif
+#ifndef HasBsdMake
+#define HasBsdMake		NO
+#endif
+#ifndef HasGnuMake
+#define HasGnuMake		NO
+#endif
+#ifndef HasParallelMake
+#define HasParallelMake		NO
 #endif
 #ifndef RemoveTargetProgramByMoving
 #define RemoveTargetProgramByMoving NO
@@ -134,15 +154,11 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 
 #ifndef HasMakefileSafeInclude	    /* -include or sinclude in a Makefile */
-#if HasClearmake
-#define HasMakefileSafeInclude	YES
+#if HasClearmake || HasBsdMake
+#define HasMakefileSafeInclude YES
 #else
-#define HasMakefileSafeInclude	NO   /* see also vendor-specific .cf files */
+#define HasMakefileSafeInclude NO   /* see also vendor-specific .cf files */
 #endif
-#endif
-
-#ifndef HasVarDirectory
-#define HasVarDirectory		YES
 #endif
 
 #include <Imake.rules>
@@ -156,11 +172,18 @@ XCOMM the platform-specific parameters - edit site.def to change
 #ifndef OSMinorVersion
 #define OSMinorVersion          0
 #endif
+#ifndef OSTeenyVersion
+#define OSTeenyVersion          0
+#endif
 #ifndef UnalignedReferencesAllowed
 #define UnalignedReferencesAllowed NO	/* if arbitrary deref is okay */
 #endif
 #ifndef AvoidNullMakeCommand
+#if !HasBsdMake
 #define AvoidNullMakeCommand NO
+#else
+#define AvoidNullMakeCommand YES
+#endif
 #endif
 #if AvoidNullMakeCommand
 #ifndef NullMakeCommand
@@ -237,6 +260,12 @@ XCOMM the platform-specific parameters - edit site.def to change
 #ifndef HasBsearch
 #define HasBsearch		YES	/* assume yes */
 #endif
+#ifndef HasSnprintf
+#define HasSnprintf		NO	/* assume not */
+#endif
+#ifndef HasMkstemp
+#define HasMkstemp		NO	/* assume not */
+#endif
 #ifndef HasFortran
 #define HasFortran		NO
 #endif
@@ -275,6 +304,12 @@ XCOMM the platform-specific parameters - edit site.def to change
 #ifndef HasZlib
 #define HasZlib			NO
 #endif
+#if !HasZlib		/* if OS doesn't have it, we'll build it */
+#undef GzipLibrary	/* GzipLibrary was valid only if HasZlib */
+#endif
+#ifndef GzipLibrary	/* if OS config didn't define it, assume it's -lz */
+#define GzipLibrary -lz
+#endif
 #if HasKrb5
 #ifndef Krb5Includes
 #define Krb5Includes -I/krb5/include
@@ -287,6 +322,152 @@ XCOMM the platform-specific parameters - edit site.def to change
 #define Krb5Includes /**/
 #undef Krb5Libraries
 #define Krb5Libraries /**/
+#endif
+#ifndef UseGnuMalloc
+#define UseGnuMalloc		NO
+#endif
+#ifndef GnuMallocLibrary
+#define GnuMallocLibrary -lgmalloc
+#endif
+#ifndef MallocLibraries
+#if UseGnuMalloc
+#define MallocLibraries	GnuMallocLibrary
+#else
+#define MallocLibraries	/**/
+#endif
+#endif
+#ifndef HasTk
+#define HasTk NO
+#endif
+#ifndef TkLibName
+#if HasTk
+#define TkLibName tk
+#else
+#define TkLibName
+#endif
+#endif
+TKLIBNAME = TkLibName
+#ifndef TkLibDir
+#if HasTk
+#define TkLibDir /usr/local/lib
+#else
+#define TkLibDir
+#endif
+#endif
+TKLIBDIR = TkLibDir
+#ifndef TkIncDir
+#if HasTk
+#define TkIncDir /usr/local/include
+#else
+#define TkIncDir
+#endif
+#endif
+#ifndef TkLibrary
+#ifdef HasTk
+#define TkLibrary Concat(-L,$(TKLIBDIR)) Concat(-l,$(TKLIBNAME))
+#else
+#define TkLibrary
+#endif
+#endif
+#ifndef HasTcl
+#define HasTcl NO
+#endif
+#ifndef TclLibName
+#if HasTcl
+#define TclLibName tcl
+#else
+#define TclLibName
+#endif
+#endif
+TCLLIBNAME = TclLibName
+#ifndef TclLibDir
+#if HasTcl
+#define TclLibDir /usr/local/lib
+#else
+#define TclLibDir
+#endif
+#endif
+TCLIBDIR = TclLibDir
+#ifndef TclIncDir
+#if HasTcl
+#define TclIncDir /usr/local/include
+#else
+#define TclIncDir
+#endif
+#endif
+#ifndef TclLibrary
+#ifdef HasTcl
+#define TclLibrary Concat(-L,$(TCLLIBDIR)) Concat(-l,$(TCLLIBNAME))
+#else
+#define TclLibrary
+#endif
+#endif
+/* Japanese version of Tk anc Tcl */
+#ifndef HasJpTk
+#define HasJpTk NO
+#endif
+#ifndef JpTkLibName
+#if HasJpTk
+#define JpTkLibName tkjp
+#else
+#define JpTkLibName
+#endif
+#endif
+JPTKLIBNAME = JpTkLibName
+#ifndef JpTkLibDir
+#if HasJpTk
+#define JpTkLibDir /usr/local/lib
+#else
+#define JpTkLibDir
+#endif
+#endif
+JPTKLIBDIR = JpTkLibDir
+#ifndef JpTkIncDir
+#if HasJpTk
+#define JpTkIncDir /usr/local/include/jp
+#else
+#define JpTkIncDir
+#endif
+#endif
+#ifndef JpTkLibrary
+#ifdef HasJpTk
+#define JpTkLibrary Concat(-L,$(JPTKLIBDIR)) Concat(-l,$(JPTKLIBNAME))
+#else
+#define JpTkLibrary
+#endif
+#endif
+#ifndef HasJpTcl
+#define HasJpTcl NO
+#endif
+#ifndef JpTclLibName
+#if HasJpTcl
+#define JpTclLibName tcljp
+#else
+#define JpTclLibName
+#endif
+#endif
+JPTCLLIBNAME = JpTclLibName
+#ifndef JpTclLibDir
+#if HasJpTcl
+#define JpTclLibDir /usr/local/lib
+#else
+#define JpTclLibDir
+#endif
+#endif
+JPTCLIBDIR = JpTclLibDir
+#ifndef JpTclIncDir
+#if HasJpTcl
+#define JpTclIncDir /usr/local/include/jp
+#else
+#define JpTclIncDir
+#endif
+#endif
+#ifndef JpTclLibrary
+#ifdef HasJpTcl
+#define JpTclLibrary Concat(-L,$(JPTCLLIBDIR)) Concat(-l,$(JPTCLLIBNAME))
+#else
+#define JpTclLibrary
+#endif
 #endif
 #ifndef NeedConstPrototypes
 #define NeedConstPrototypes	NO
@@ -309,6 +490,9 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #ifndef UseCCMakeDepend			/* use slow cc -E script */
 #define UseCCMakeDepend NO
+#endif
+#ifndef UseGccMakeDepend		/* use slowish but correct gcc -M */
+#define UseGccMakeDepend NO
 #endif
 
 /* DefaultUsrBin is independent of ProjectRoot.
@@ -335,6 +519,14 @@ XCOMM the platform-specific parameters - edit site.def to change
 #define AlternateUsrLibDir YES
 #endif
 #endif
+#ifndef VarLibDir
+#ifdef ProjectVar
+#define VarLibDir Concat(ProjectVar,/lib)
+#else
+#define VarLibDir /var/lib
+#endif
+#endif
+
 #ifndef ShLibDir
 #define ShLibDir UsrLibDir
 #endif
@@ -394,7 +586,7 @@ XCOMM the platform-specific parameters - edit site.def to change
 #define ConfigSrc $(TOP)/config
 #endif
 #ifndef DependDir
-#if UseCCMakeDepend
+#if UseCCMakeDepend || UseGccMakeDepend
 #define DependDir $(CONFIGSRC)/util
 #else
 #define DependDir $(CONFIGSRC)/makedepend
@@ -462,6 +654,12 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #ifndef InstKmemFlags     /* put -g kmem -m 2711 in site.def... */
 #define InstKmemFlags InstUidFlags
+#endif
+#ifndef HasStickyDirBit
+#define HasStickyDirBit	YES
+#endif
+#ifndef ParallelMakeFlags
+#define ParallelMakeFlags /**/
 #endif
 #ifndef ArCmdBase
 #define ArCmdBase ar
@@ -629,9 +827,6 @@ XCOMM the platform-specific parameters - edit site.def to change
 #ifndef CpCmd
 #define CpCmd cp
 #endif
-#ifndef HasSymLinks
-#define HasSymLinks YES
-#endif
 #ifndef LnCmd /* can use cp instead of ln if necessary */
 #if HasSymLinks
 #define LnCmd ln -s
@@ -643,7 +838,7 @@ XCOMM the platform-specific parameters - edit site.def to change
 #define MakeCmd make
 #endif
 #ifndef MvCmd
-#define MvCmd mv
+#define MvCmd mv -f
 #endif
 #ifndef RanlibCmd
 #define RanlibCmd ranlib
@@ -672,7 +867,11 @@ XCOMM the platform-specific parameters - edit site.def to change
 #define StandardCppDefines StandardDefines
 #endif
 #ifndef Malloc0ReturnsNull
+#if UseGnuMalloc
+#define Malloc0ReturnsNull YES
+#else
 #define Malloc0ReturnsNull NO
+#endif
 #endif
 #if Malloc0ReturnsNull
 #ifndef Malloc0ReturnsNullDefines
@@ -757,17 +956,29 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #endif
 #ifndef DependCmd
+#if UseGccMakeDepend
+#ifdef UseInstalled		/* assume BINDIR in path */
+#define DependCmd gccmakedep
+#else
+#define DependCmd $(DEPENDSRC)/gccmakedep
+#endif
+#else
 #ifdef UseInstalled		/* assume BINDIR in path */
 #define DependCmd makedepend
 #else
 #define DependCmd $(DEPENDSRC)/makedepend
 #endif
 #endif
+#endif
 #ifndef DependFlags
 #define DependFlags /**/
 #endif
 #ifndef DependFileName
+#if !HasBsdMake
 #define DependFileName Makefile.dep
+#else
+#define DependFileName .depend
+#endif
 #endif
 #ifndef ExportListCmd
 # ifndef ExportListGenSource
@@ -786,7 +997,7 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #endif
 #ifndef TroffCmd
-#define TroffCmd psroff
+#define TroffCmd groff -Tps
 #endif
 #ifndef NroffCmd
 #define NroffCmd nroff
@@ -808,6 +1019,9 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #ifndef ColCmd
 #define ColCmd col
+#endif
+#ifndef ColFlags
+#define ColFlags -b
 #endif
 #ifndef DvipsCmd
 #define DvipsCmd dvips
@@ -848,6 +1062,9 @@ XCOMM the platform-specific parameters - edit site.def to change
 #ifndef CCsuf
 #define CCsuf cc
 #endif
+#ifndef SHsuf
+#define SHsuf sh
+#endif
 #ifndef ManSuffix
 #define ManSuffix	n		/* use just one tab or cpp will die */
 #endif
@@ -884,6 +1101,9 @@ XCOMM the platform-specific parameters - edit site.def to change
 #ifndef SiteIConfigFiles
 #define SiteIConfigFiles /**/
 #endif
+#ifndef OtherIConfigFiles
+#define OtherIConfigFiles /**/
+#endif
 #ifndef ExtraFilesToClean
 #define ExtraFilesToClean /**/
 #endif
@@ -907,6 +1127,7 @@ XCOMM the platform-specific parameters - edit site.def to change
 
           INCROOT = IncRoot		/* base of where to put header files */
         USRLIBDIR = UsrLibDir		/* nonshared libraries */
+        VARLIBDIR = VarLibDir		/* xdm runtime files */
          SHLIBDIR = ShLibDir            /* shared libraries */
        LINTLIBDIR = LintlibDir		/* lint libraries */
           MANPATH = ManPath		/* top of manual page tree */
@@ -978,6 +1199,7 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
               EQN = EqnCmd
              NEQN = NeqnCmd
               COL = ColCmd
+         COLFLAGS = ColFlags
 #if HasLatex
             DVIPS = DvipsCmd
             LATEX = LatexCmd
@@ -999,7 +1221,7 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
       STD_DEFINES = StandardDefines $(PROJECT_DEFINES)
  EXTRA_LOAD_FLAGS = ExtraLoadFlags
   EXTRA_LDOPTIONS = ExtraLoadOptions
-  EXTRA_LIBRARIES = ExtraLibraries Krb5Libraries
+  EXTRA_LIBRARIES = MallocLibraries ExtraLibraries Krb5Libraries
              TAGS = TagsCmd
 #if ConstructMFLAGS
            MFLAGS = -$(MAKEFLAGS)
@@ -1007,6 +1229,7 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
 #if ConstructMAKEFLAGS
         MAKEFLAGS = $(MFLAGS)
 #endif
+   PARALLELMFLAGS = ParallelMakeFlags
 #if HasSharedLibraries
     SHAREDCODEDEF = SharedCodeDef
          SHLIBDEF = SharedLibraryDef
@@ -1139,6 +1362,24 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
    LDCOMBINEFLAGS = LdCombineFlags
       DEPENDFLAGS = DependFlags
 
+XCOMM Not sure this belongs here
+         TKLIBDIR = TkLibDir
+         TKINCDIR = TkIncDir
+        TKLIBNAME = TkLibName
+        TKLIBRARY = TkLibrary
+        TCLLIBDIR = TclLibDir
+        TCLINCDIR = TclIncDir
+       TCLLIBNAME = TclLibName
+       TCLLIBRARY = TclLibrary
+       JPTKLIBDIR = JpTkLibDir
+       JPTKINCDIR = JpTkIncDir
+      JPTKLIBNAME = JpTkLibName
+      JPTKLIBRARY = JpTkLibrary
+      JPTCLLIBDIR = JpTclLibDir
+      JPTCLINCDIR = JpTclIncDir
+     JPTCLLIBNAME = JpTclLibName
+     JPTCLLIBRARY = JpTclLibrary
+
         MACROFILE = MacroFile
            RM_CMD = $(RM)
 
@@ -1157,7 +1398,7 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
 	even one config file, say site.def or host.def, changes. */
      ICONFIGFILES = $(IRULESRC)/Imake.tmpl $(IRULESRC)/X11.tmpl \
 			$(IRULESRC)/site.def $(IRULESRC)/$(MACROFILE) \
-			SiteIConfigFiles $(EXTRA_ICONFIGFILES)
+			OtherIConfigFiles SiteIConfigFiles $(EXTRA_ICONFIGFILES)
 #endif
 
 #ifndef TopLevelProject

@@ -2641,11 +2641,19 @@ _XmStringCharacterCount(XtPointer text,
 	else {
 	  int cnt = 0;
 	  int len;
+#ifndef NO_MULTIBYTE
 	  while (byte_count > 0 && (len = mblen(s, MB_CUR_MAX)) > 0) {
 	    cnt++;
 	    s += len;
 	    byte_count -= len;
 	  }
+#else
+	  while (byte_count > 0 && *s) {
+	    cnt++;
+	    s++;
+	    byte_count--;
+	  }
+#endif
 	  return cnt;
 	}
       }
@@ -3376,15 +3384,23 @@ SubStringPosition(
 {
   char *a = (char*) _XmEntryTextGet(seg); 
   char *b = (char*) _XmEntryTextGet(under_seg);
+  char *seg_tag = _XmEntryTag(seg);
   int i, j, k, begin, max, width;
   unsigned int seg_len, under_seg_len;
   Boolean fail;
   
-  if (!((_XmEntryTag(seg) == _XmEntryTag(under_seg)) ||
-	((strcmp(_XmEntryTag(seg), XmFONTLIST_DEFAULT_TAG) == 0) &&
+  /* Metro Link fix: _XmEntryTag(seg) can be NULL, but the original Motif
+   * code never checked for that.  We check, and if it is NULL, we treat
+   * it as if it was set to XmFONTLIST_DEFAULT_TAG. */
+  
+  if (seg_tag == NULL)
+    seg_tag = XmFONTLIST_DEFAULT_TAG;
+  
+  if (!((seg_tag == _XmEntryTag(under_seg)) ||
+	((strcmp(seg_tag, XmFONTLIST_DEFAULT_TAG) == 0) &&
 	 _XmStringIsCurrentCharset(_XmEntryTag(under_seg))) ||
 	((strcmp(_XmEntryTag(under_seg), XmFONTLIST_DEFAULT_TAG) == 0) &&
-	 _XmStringIsCurrentCharset(_XmEntryTag(seg)))))
+	 _XmStringIsCurrentCharset(seg_tag))))
     return;
   
   seg_len = _XmEntryByteCountGet(seg);
@@ -3487,12 +3503,20 @@ SubStringPosition(
 	    break;
 	  }
       } else {
+#ifndef NO_MULTIBYTE
 	len_a = mblen(&a[i], MB_CUR_MAX);
+#else
+	len_a = a[i] ? 1 : 0;
+#endif
 	if (len_a < 1) return;
 	len_a1 = len_a;
 	
 	for (j = 0; j < under_seg_len; j += len_b) {
+#ifndef NO_MULTIBYTE
 	  len_b = mblen(&b[j], MB_CUR_MAX);
+#else
+	  len_b = b[j] ? 1 : 0;
+#endif
 	  if (len_b < 1) return;
 	  
 	  if (len_b == len_a1) {
@@ -3844,7 +3868,11 @@ _XmStringDrawSegment(Display *d,
 	      p += seg_len; 
 	      for (i = 0; i < seg_len; i += len)
 		{
+#ifndef NO_MULTIBYTE
 		  len = mblen(q, MB_CUR_MAX);
+#else
+		  len = *q ? 1 : 0;
+#endif
 		  if (len < 1) /* Something went wrong, just return for now. */
 		    return;
             
@@ -7381,7 +7409,8 @@ XmeSetWMShellTitle(
 	      /* Don't need this, since dialog_title will be converted from
 	       *   original XmString to compound text.
 	       */
-	      XtFree( (char *) tag) ;
+	      if (tag != NULL)
+	        XtFree( (char *) tag) ;
 	      XtFree( (char *) text) ;
 	      text = NULL ;
 	    }
@@ -7701,7 +7730,11 @@ XmStringParseText(XtPointer    text,
   halt = (end_ptr && (ptr >= (char*) end_ptr));
   while (!halt && (wide_char ? *((wchar_t*) ptr) : *ptr))
     {
+#ifndef NO_MULTIBYTE
       int len = (wide_char ? sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
+#else
+      int len = (wide_char ? sizeof(wchar_t) : 1);
+#endif
       advanced = False;
 
       /* If we have an invalid character, treat it as a single byte. */
@@ -8024,7 +8057,11 @@ unparse_components(char          **result,
 	      else
 		unparse_text(result, length, output_type, 
 			     XmSTRING_COMPONENT_TEXT, 
+#ifndef NO_MULTIBYTE
 			     mblen((char*) pat->pattern, MB_CUR_MAX),
+#else
+			     *((char *) pat->pattern) ? 1: 0,
+#endif
 			     pat->pattern);
 	      
 	      /* Skip all but the last matched component. */

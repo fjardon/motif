@@ -1274,8 +1274,12 @@ GetNextXmString(
          else
          {
 	    if (MB_CUR_MAX > 1) {
+#ifndef NO_MULTIBYTE
 	      if ((csize = mblen(*s, MB_CUR_MAX)) < 0)
 	        break;
+#else
+	      csize = **s ? 1 : 0;
+#endif
 	      strncpy(tmp, *s, csize);
 	      tmp += csize;
 	      (*s) += csize;
@@ -1427,8 +1431,12 @@ CvtStringToStringTable(
             if(    *p == '\\' && *(p + 1) == ','    )
             {   p++ ;
                 } 
+#ifndef NO_MULTIBYTE
 	    if((csize = mblen(p, MB_CUR_MAX)) < 0)
  	      break;
+#else
+	    csize = *p ? 1 : 0;
+#endif
             } 
         if(    i == size    )
         {   

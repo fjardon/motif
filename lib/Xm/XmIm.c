@@ -244,7 +244,7 @@ static void set_callback_values(Widget w,
 static void regist_real_callback(Widget w,
                      XIMProc call,
                      int swc);
-static XIMProc get_real_callback(Widget w,
+static XICProc get_real_callback(Widget w,
                   int swc,
 		  Widget *real_widget);
 static void move_preedit_string(XmImXICInfo icp,
@@ -1160,7 +1160,7 @@ set_values(Widget w,
   int flags = 0;
   Pixel bg;
   char *ret;
-  unsigned long mask;
+  unsigned long mask = 0;
   Boolean unrecognized = False;
   
   p = w;
@@ -1260,7 +1260,6 @@ set_values(Widget w,
     }
     if (XtIsRealized(p)) {
       if (XmIsDialogShell(p)) {
-	int i;
 	for (i = 0; 
 	     i < ((CompositeWidget)p)->composite.num_children; 
 	     i++)
@@ -1419,7 +1418,7 @@ ImPreeditStartCallback(XIC xic,
 		       XPointer client_data,
 		       XPointer call_data)
 {
-  XIMProc proc;
+  XICProc proc;
   Widget real = NULL;
 
   if (!client_data){
@@ -1438,7 +1437,7 @@ ImPreeditDoneCallback(XIC xic,
 		      XPointer client_data,
 		      XPointer call_data)
 {
-  XIMProc proc;
+  XICProc proc;
   Widget w = (Widget)client_data;
   XmImShellInfo im_info;
   XmImXICInfo icp;
@@ -1469,7 +1468,7 @@ ImPreeditDrawCallback(XIC xic,
 		      XPointer client_data,
 		      XPointer call_data)
 {
-  XIMProc proc;
+  XICProc proc;
   Widget w = (Widget)client_data;
   XmImShellInfo im_info;
   XmImXICInfo icp;
@@ -1596,7 +1595,7 @@ ImPreeditCaretCallback(XIC xic,
 		       XPointer client_data,
 		       XPointer call_data)
 {
-  XIMProc proc;
+  XICProc proc;
   Widget w = (Widget)client_data;
   XmImShellInfo im_info;
   XmImXICInfo icp;
@@ -1635,7 +1634,7 @@ ImPreeditCaretCallback(XIC xic,
     (*proc)(xic, (XPointer)real, call_data);
 }
 
-static XIMProc
+static XICProc
 get_real_callback(Widget w,
                   int swc,
 		  Widget *real_widget)
@@ -1646,9 +1645,9 @@ get_real_callback(Widget w,
   XmImRefRec refs;
 
   if ((im_info = get_im_info(w, False)) == NULL)
-        return (XIMProc)NULL;
+        return (XICProc)NULL;
   if ((icp = im_info->shell_xic) == NULL)
-        return (XIMProc)NULL;
+        return (XICProc)NULL;
 
   if (*real_widget == NULL) 
     *real_widget = XtWindowToWidget(XtDisplay(w), icp->focus_window);
@@ -1666,9 +1665,9 @@ get_real_callback(Widget w,
   }
 
   if (refs.callbacks[target])
-    return (XIMProc)refs.callbacks[target][swc];
+    return (XICProc)refs.callbacks[target][swc];
   else
-    return (XIMProc)NULL;
+    return (XICProc)NULL;
 }
 
 static void
@@ -1800,7 +1799,7 @@ move_preedit_string(XmImXICInfo icp,
   PreeditBuffer pb = icp->preedit_buffer;
   XIMPreeditDrawCallbackStruct draw_data;
   XIMText text;
-  XIMProc proc;
+  XICProc proc;
 
   proc = get_real_callback(wfrom, PREEDIT_DONE, &wfrom);
   if (proc)
@@ -1823,7 +1822,7 @@ move_preedit_string(XmImXICInfo icp,
   draw_data.text = &text;
   proc = get_real_callback(wto, PREEDIT_DRAW, &wto);
   if (proc)
-    (*proc)(icp->xic, (XPointer)wto, &draw_data);
+    (*proc)(icp->xic, (XPointer)wto, (XPointer)&draw_data);
 }   
 
 

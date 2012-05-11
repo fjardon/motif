@@ -1,4 +1,9 @@
-XCOMM platform:  $TOG: usl.cf /main/51 1998/03/23 12:27:39 mgreess $
+XCOMM platform:  $TOG: usl.cf /main/50 1997/04/17 14:11:39 barstow $
+
+
+
+
+XCOMM platform:  $XFree86: xc/config/cf/usl.cf,v 3.13.2.1 1997/05/03 09:43:10 dawes Exp $
 
 #ifndef OSName
 # define OSName		DefaultOSName
@@ -38,23 +43,17 @@ XCOMM operating system: OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVer
 #else
 #define XawI18nDefines		-DHAS_WCHAR_H -DHAS_ISW_FUNCS
 #endif
-
-#if OSMajorVersion == 2
-#  if OSMinorVersion == 0
-#    define ExtraLibraries	-lsocket -lnsl -lgen -lw
-#  else
-#    define ExtraLibraries	-lsocket -lnsl -L/usr/ccs/lib -lgen
-#  endif
-
-#  define ThreadedX		YES
-#  define HasThreadSafeAPI	NO
-   /* UnixWare does not have MT-safe pwd routines. */
-#  define MTSafeAPIDefines	-DXUSE_MTSAFE_API -DXNO_MTSAFE_PWDAPI \
-				-DXNO_MTSAFE_GRPAPI
-#  define SystemMTDefines	-D_REENTRANT
-#  define ThreadsLibraries	-lthread
-#  define ThreadsCplusplusLibraries	-lthread
-#  define DefaultCCOptions	-W0,-2A -Xa -Dasm=__asm
+#if OSTeenyVersion > 1
+# define ExtraLibraries		-lsocket -lnsl -lgen -lw
+# define ThreadedX		YES
+# define HasThreadSafeAPI	NO
+/* UnixWare does not have MT-safe pwd routines. */
+# define MTSafeAPIDefines	\
+-DXUSE_MTSAFE_API -DXNO_MTSAFE_PWDAPI -DXNO_MTSAFE_GRPAPI
+# define SystemMTDefines	-D_REENTRANT
+# define ThreadsLibraries	-lthread
+# define ThreadsCplusplusLibraries	-lthread
+# define DefaultCCOptions	-W0,-2A -Xa -Dasm=__asm
 #endif
 #define BuildLibPathVar	  LD_LIBRARY_PATH
 
@@ -100,17 +99,9 @@ XCOMM operating system: OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVer
 
 /* Remove -lc because select.o is not relocatable. */
 /* Remove -lgen (and set UseLocalRegex) because no shared library exists. */
-#if OSMajorVersion == 2
-#  if OSMinorVersion == 0
-#    define SharedXmReqs $(LDPRELIBS) SharedXReqs -lsocket -lnsl -lw
-#    define SharedMrmReqs $(LDPRELIBS) $(XMLIB) SharedXReqs -lsocket -lnsl -lw
-#    define SharedUilReqs $(LDPRELIBS) $(MRESOURCELIB) $(XMLIB) SharedXReqs -lsocket -lnsl -lw
-#  else
-#    define SharedXmReqs $(LDPRELIBS) SharedXReqs -lsocket -lnsl
-#    define SharedMrmReqs $(LDPRELIBS) $(XMLIB) SharedXReqs -lsocket -lnsl
-#    define SharedUilReqs $(LDPRELIBS) $(MRESOURCELIB) $(XMLIB) SharedXReqs -lsocket -lnsl
-#  endif
-#endif
+#define SharedXmReqs $(LDPRELIBS) SharedXReqs -lsocket -lnsl -lw
+#define SharedMrmReqs $(LDPRELIBS) $(XMLIB) SharedXReqs -lsocket -lnsl -lw
+#define SharedUilReqs $(LDPRELIBS) $(MRESOURCELIB) $(XMLIB) SharedXReqs -lsocket -lnsl -lw
   
 /* <X11/Xos_r.h> requires process locking for missing _r functions */
 #define TtClientLibs $(TTLIB) $(XTOOLLIB) $(XLIB)

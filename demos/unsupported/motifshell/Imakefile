@@ -25,8 +25,10 @@ XCOMM HISTORY
 XCOMM 
 XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:53:07 drk $
 
+      MSHELLDIR = $(LIBDIR)/motifshell
         DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
+        DEFINES = -DMSHELLDIR=\"$(MSHELLDIR)\"
 
 SRCS = motifshell.c
 OBJS = motifshell.o
@@ -34,11 +36,15 @@ OBJS = motifshell.o
 MSimpleProgramTarget(motifshell)
 InstallProgram(motifshell,$(BINDIR))
 
-InstallNonExec(motif,$(BINDIR))
-InstallNonExec(welcome,$(BINDIR))
-InstallNonExec(research,$(BINDIR))
-InstallNonExec(principles,$(BINDIR))
-InstallNonExec(membership,$(BINDIR))
-InstallNonExec(help,$(BINDIR))
+install::
+	MakeDir($(DESTDIR)$(MSHELLDIR))
+
+InstallNonExec(motif,$(MSHELLDIR))
+InstallNonExec(welcome,$(MSHELLDIR))
+InstallNonExec(research,$(MSHELLDIR))
+InstallNonExec(principles,$(MSHELLDIR))
+InstallNonExec(membership,$(MSHELLDIR))
+InstallNonExec(help,$(MSHELLDIR))
+InstallNonExec(motifshell.c,$(MSHELLDIR))
 
 DependTarget()

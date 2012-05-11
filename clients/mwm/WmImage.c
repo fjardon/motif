@@ -107,56 +107,103 @@ Pixmap MakeClientIconPixmap (
 	Pixmap iconBitmap, 
 	Pixmap iconMask)
 {
-    Window root;
-    int x;
-    int y;
-    unsigned int bitmapWidth;
-    unsigned int bitmapHeight;
-    unsigned int border;
-    unsigned int depth;
+  Window root;
+  int x;
+  int y;
+  unsigned int  bitmapWidth;
+  unsigned int  bitmapHeight;
+  unsigned int  border;
+  unsigned int  depth;
+  WmScreenData *pSD;
 
+  if (pCD)
+    pSD = pCD->pSD;
+  else
+    pSD = wmGD.pActiveSD;
     
-    /*
-     * Check out the attributes of the bitmap to insure that it is usable.
-     */
+  /*
+   * Get pixmap attributes and ensure that it is usable.
+   */
+   
+  if (!XGetGeometry (DISPLAY, iconBitmap, &root, &x, &y,
+      &bitmapWidth, &bitmapHeight, &border, &depth))
+  {
+    Warning (((char *)GETMESSAGE(38, 1, "Invalid icon pixmap")));
+    return ((Pixmap)NULL);
+  }
 
-    if (!XGetGeometry (DISPLAY, iconBitmap, &root, &x, &y,
-	     &bitmapWidth, &bitmapHeight, &border, &depth))
-    {
-	Warning (((char *)GETMESSAGE(38, 1, "Invalid icon bitmap")));
-	return ((Pixmap)NULL);
-    }
-
-    if (ROOT_FOR_CLIENT(pCD) != root)
-    {
-	/*
-	 * The bitmap was not made with usable parameters.
-	 */
-#ifdef WSM
-	Warning (((char *)GETMESSAGE(38, 9, "Icon bitmap cannot be used on this screen")));
-#else /* WSM */
-	Warning ("Invalid root for icon bitmap");
-#endif /* WSM */
-	return ((Pixmap)NULL);
-    }
-
-#ifdef DISALLOW_DEEP_ICONS
-    if (depth != 1)
-    {
-	Warning (((char *)GETMESSAGE(38, 10, "Color icon pixmap not supported")));
-	return ((Pixmap)NULL);
-    }
-#endif
-
-    /*
-     * Color the bitmap, center it in a pixmap ....
-     */
-
-    return (MakeIconPixmap (pCD, iconBitmap, (Pixmap)iconMask, 
-	    bitmapWidth, bitmapHeight, depth));
-
+  /*
+   * Color the bitmap, center it in a pixmap ....
+   */
+  return (MakeIconPixmap (pCD, iconBitmap, iconMask, 
+			  bitmapWidth, bitmapHeight, depth));
 
 } /* END OF FUNCTION MakeClientIconPixmap */
+
+
+
+/*************************************<->*************************************
+ *
+ *  GetNamedPixmap (pCD, iconName)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  This function gets the named pixmap.  bitmapDirectory is searched first
+ *  then, if not set, /usr/lib/X11/bitmaps is searched.  Finally, if that
+ *  also fails, XMBLANGPATH is used.
+ *
+ *  Inputs:
+ *  ------
+ *  iconName = pointer to the icon name (bitmap file path name or NULL)
+ *
+ * 
+ *  Outputs:
+ *  -------
+ *  RETURN = icon pixmap or XmUNSPECIFIED_PIXMAP
+ * 
+ *************************************<->***********************************/
+
+Pixmap GetNamedPixmap (Screen *scr, String iconName,
+		       Pixel fg, Pixel bg, int depth)
+{
+  Pixmap       pixmap = XmUNSPECIFIED_PIXMAP;
+
+
+  if (iconName) {
+    /*
+     * If name is not absolute, then try the bitmapDirectory location.
+     * Note that bitmapDirectory defaults to "/usr/lib/X11/bitmaps" if
+     * not set.  The user could have set bitmapDirectory to "" though.
+     */
+    if ((iconName[0] != '/') && (wmGD.bitmapDirectory))
+      {
+	char *fullPathName;
+	
+	
+	fullPathName = (char*) XtMalloc(strlen(wmGD.bitmapDirectory) +
+					strlen(iconName) + 2);
+	sprintf(fullPathName, "%s/%s", wmGD.bitmapDirectory, iconName);
+	
+	pixmap = XmGetPixmapByDepth(scr, fullPathName, fg, bg, depth);
+	
+	XtFree(fullPathName);
+      }
+    
+    /*
+     * If failed to get pixmap with bitmapDirectory, try
+     * using XBMLANGPATH.
+     */
+    if (!PIXMAP_IS_VALID( pixmap ))
+      pixmap = XmGetPixmapByDepth(scr, iconName, fg, bg, depth);
+
+    /*
+     * Warning message handling on error left to the calling routine.
+     */
+  }
+  
+  return (pixmap);
+}
 
 
 
@@ -185,204 +232,49 @@ Pixmap MakeClientIconPixmap (
 
 Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
 {
-    int          bitmapIndex;
-#ifdef WSM
-    Pixmap	pixmap, pixmap_r, mask;
-    Window	root;
-    int		x, y;
-    unsigned int	width, height, border_width, depth;
-    String	sIconFileName;
-    int		iconSizeDesired;
-#endif /* WSM */
+  Pixmap pixmap;
+  unsigned int width, height;
+  int depth;
 
-    /*
-     * Get the bitmap cache entry (will read data from file if necessary).
-     * If unable to find the iconName file return NULL.
-     */
 
-#ifdef WSM
-    if ((bitmapIndex = GetBitmapIndex (PSD_FOR_CLIENT(pCD), iconName,
-			False)) < 0)
-#else /* WSM */
-    if ((bitmapIndex = GetBitmapIndex (PSD_FOR_CLIENT(pCD), iconName)) < 0)
-#endif /* WSM */
+  if (iconName)
     {
-#ifdef WSM
-       if ((PSD_FOR_CLIENT(pCD)->displayResolutionType == LOW_RES_DISPLAY) ||
-           (PSD_FOR_CLIENT(pCD)->displayResolutionType == VGA_RES_DISPLAY))
-       {
-          iconSizeDesired = XmMEDIUM_ICON_SIZE;
-       }
-       else
-       {
-          iconSizeDesired = XmLARGE_ICON_SIZE;
-       }
-
-       pixmap = XmUNSPECIFIED_PIXMAP;
-
-       sIconFileName = XmGetIconFileName( 
-			XtScreen(PSD_FOR_CLIENT(pCD)->screenTopLevelW1),
-			NULL,
-			iconName,
-			NULL,
-			iconSizeDesired);
-
-       if (sIconFileName != NULL)
-       {
-	   pixmap = XmGetPixmap (
-			XtScreen (PSD_FOR_CLIENT(pCD)->screenTopLevelW1), 
-			sIconFileName,
-			pCD->iconImageForeground, 
-			pCD->iconImageBackground);
-       }
-
-       if (pixmap == XmUNSPECIFIED_PIXMAP)
-       {
-	   pixmap = XmGetPixmap (
-			XtScreen (PSD_FOR_CLIENT(pCD)->screenTopLevelW1), 
-			iconName,
-			pCD->iconImageForeground, 
-			pCD->iconImageBackground);
-       }
-
-       if (pixmap == XmUNSPECIFIED_PIXMAP)
-       {
-            MWarning (((char *)GETMESSAGE(38, 7, "Unable to read bitmap file %s\n")), iconName);
-       }
-       else
-       {
-	   mask = _DtGetMask (XtScreen(PSD_FOR_CLIENT(pCD)->screenTopLevelW1), 
-			(sIconFileName == NULL) ? iconName : sIconFileName);
-	   if (mask == XmUNSPECIFIED_PIXMAP) 
-	   {
-	       mask = (Pixmap) NULL;
-	   }
-
-	   if (sIconFileName != NULL)
-	       XtFree(sIconFileName);
-
-	   /*
-	    * We need to synchronize DISPLAY1 here because the pixmap and mask 
-	    * were created on that display connection, and we must ensure that 
-	    * the server has processed those requests before we attempt to use 
-	    * the pixmap and mask on DISPLAY.  We thus assume that the 
-	    * subsequent XGetGeometry() call is successful.
-	    */
-	   XSync(DISPLAY1, False);	
-
-	   (void) XGetGeometry (DISPLAY, pixmap, &root, &x, &y, &width,
-		       &height, &border_width, &depth);
-
-	   pixmap_r = MakeIconPixmap (pCD, pixmap, mask,
-				     width, height, depth);
-
-	   XmDestroyPixmap (XtScreen (PSD_FOR_CLIENT(pCD)->screenTopLevelW1), 
-				pixmap);
-	   if (mask)
-	       XmDestroyPixmap (
-		   XtScreen (PSD_FOR_CLIENT(pCD)->screenTopLevelW1), mask);
-
-	   return (pixmap_r);
-       }
-
-       if (sIconFileName != NULL)
-	   XtFree (sIconFileName);
-#endif /* WSM */
-	return ((Pixmap)NULL);
+      pixmap = GetNamedPixmap (ScreenOfDisplay(DISPLAY, pCD->pSD->screen),
+			       iconName,
+			       pCD->iconImageForeground,
+			       pCD->iconImageBackground, 
+			       DefaultDepth(DISPLAY, pCD->pSD->screen));
+      
+      if (!PIXMAP_IS_VALID( pixmap ))
+	{
+	  Warning (((char *)GETMESSAGE(38, 1, "Invalid icon pixmap")));
+	}
+      else
+	{
+	  XmeGetPixmapData(ScreenOfDisplay(DISPLAY, pCD->pSD->screen), pixmap,
+			   NULL, &depth, NULL, NULL, NULL, NULL,
+			   &width, &height);
+      
+	  pixmap = MakeIconPixmap (pCD, pixmap, XmUNSPECIFIED_PIXMAP,
+				   width, height, depth);
+	}
     }
 
-    /*
-     * Color the bitmap, center it in a pixmap ....
-     */
+  /*
+   * If no name was given or we couldn't find the specified pixmap,
+   * then use the default.
+   */
 
-    return (MakeCachedIconPixmap (pCD, bitmapIndex, (Pixmap)NULL));
+  if (!iconName || (!PIXMAP_IS_VALID( pixmap )))
+    {
+      pixmap = MakeIconPixmap (pCD, pCD->pSD->builtinIconPixmap, XmUNSPECIFIED_PIXMAP,
+			       iImage_width, iImage_height, 1);
+    }
+  
+
+  return (pixmap);
 
 } /* END OF FUNCTION MakeNamedIconPixmap */
-
-
-
-
-/*************************************<->*************************************
- *
- *  Pixmap
- *  MakeCachedIconPixmap (pCD, bitmapIndex, mask)
- *
- *
- *  Description:
- *  -----------
- *  Convert the cached bitmap and mask into an icon pixmap.
- *
- *
- *  Inputs:
- *  ------
- *  pCD		- (nonNULL) pointer to client data (icon colors and tiles)
- *  bitmapIndex	- bitmap cache index of image to be converted
- *  mask	- bitmap mask, 1 for bits of "bitmap" to be kept
- *
- * 
- *  Outputs:
- *  -------
- *  RETURN 	- icon pixmap or NULL
- *
- *
- *  Comments:
- *  --------
- *  o "mask" is not used.
- * 
- *************************************<->***********************************/
-Pixmap MakeCachedIconPixmap (ClientData *pCD, int bitmapIndex, Pixmap mask)
-{
-    BitmapCache  *bitmapc;
-    PixmapCache  *pixmapc;
-    Pixmap        pixmap = (Pixmap)NULL;
-    WmScreenData *pSD = PSD_FOR_CLIENT(pCD);
-
-    if (bitmapIndex < 0)
-    {
-	return ((Pixmap)NULL);
-    }
-    bitmapc = &(pSD->bitmapCache[bitmapIndex]);
-
-    /*
-     * Search for an icon pixmap matching the client icon colors.
-     */
-
-    pixmapc = bitmapc->pixmapCache;
-    while (pixmapc)
-    {
-        if ((pixmapc->pixmapType == ICON_PIXMAP) &&
-	    (pixmapc->foreground == pCD->iconImageForeground) &&
-	    (pixmapc->background == pCD->iconImageBackground))
-        {
-	    pixmap = pixmapc->pixmap;
-	    break;
-        }
-	pixmapc = pixmapc->next;
-    }
-
-    /* 
-     * If a matching pixmap was not found in the pixmap cache for this bitmap
-     *   then create the icon pixmap with the appropriate colors.
-     * If have sufficient memory, save the pixmap info in the pixmapCache.
-     */
-
-    if (!pixmap &&
-        (pixmap = MakeIconPixmap (pCD, bitmapc->bitmap, mask,
-				     bitmapc->width, bitmapc->height, 1)) &&
-	(pixmapc = (PixmapCache *) XtMalloc (sizeof (PixmapCache))))
-    {
-
-        pixmapc->pixmapType = ICON_PIXMAP;
-	pixmapc->foreground = pCD->iconImageForeground;
-	pixmapc->background = pCD->iconImageBackground;
-	pixmapc->pixmap = pixmap;
-	pixmapc->next = bitmapc->pixmapCache;
-	bitmapc->pixmapCache = pixmapc;
-    }
-
-    return (pixmap);
-
-} /* END OF FUNCTION MakeCachedIconPixmap */
 
 
 

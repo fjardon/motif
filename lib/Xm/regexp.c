@@ -928,7 +928,6 @@ int
 _XmRegexec(XmRegexpRec *prog, char *string)
 {
 	register char	*s;
-	extern char	*strchr();
 
 	/* Be paranoid... */
 	if (prog == NULL || string == NULL) {

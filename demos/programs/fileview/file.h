@@ -25,7 +25,7 @@
 */ 
 /*   $XConsortium: file.h /main/5 1995/07/14 10:02:43 drk $ */
 
-#include <locale.h>
+#include <X11/Xlocale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <Xm/Xm.h>

@@ -37,6 +37,7 @@ static char rcsid[] = "$XConsortium: dogs.c /main/5 1995/07/14 10:07:19 drk $"
 
 #include <stdio.h>
 #include <Xm/Xm.h>
+#include <Xm/MessageB.h>
 #include <Mrm/MrmPublic.h>
 #include "Square.h"
 #include "Dog.h"
@@ -72,7 +73,7 @@ static Widget dog2_id;
 static Widget dog3_id;
 static Widget help_id;
 
-main(argc, argv)
+int main(argc, argv)
     int argc;
     char **argv;
 {
@@ -107,6 +108,8 @@ main(argc, argv)
     XtManageChild(app_main);
     XtRealizeWidget(shell);
     XtAppMainLoop(app_context);
+
+    return 0;    /* make compiler happy */
 }
 
 static void create_cb(w, id, reason)

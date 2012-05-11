@@ -23,7 +23,7 @@
 ! 
 ! HISTORY
 
-animate.geometry: 470x275
+xmanimate.geometry: 470x275
 *horizontalSpacing: 20
 *verticalSpacing: 20
 
@@ -32,3 +32,4 @@ animate.geometry: 470x275
 *XmScale.showValue : true
 *XmScale.bottomOffset : 10
 
+*help_manager.helpFile: xmanimate

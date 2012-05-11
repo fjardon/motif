@@ -41,6 +41,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #endif /* __cplusplus */
 
 #include <Xm/Xm.h>	/* For _NO_PROTO declaration. */
+#include <MrmosI.h>
 
 /************************************************************
  *

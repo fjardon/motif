@@ -202,7 +202,7 @@ void InitBuiltinSystemMenu(void)
     gotItAll = True;
     if(gotItAll)
     {
-#ifdef sun
+#if 1
         tmpString = ((char *)GETMESSAGE(62, 60, "Restore _R  Alt<Key>F5 f.restore"));
 #else
         tmpString = ((char *)GETMESSAGE(62, 49, "Restore _R  f.restore"));
@@ -220,7 +220,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#ifdef sun
+#if 1
         tmpString = ((char *)GETMESSAGE(62, 61, "Move _M  Alt<Key>F7 f.move"));
 #else
         tmpString = ((char *)GETMESSAGE(62, 50, "Move _M  f.move"));
@@ -238,7 +238,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#ifdef sun
+#if 1
         tmpString = ((char *)GETMESSAGE(62, 62, "Size _S  Alt<Key>F8 f.resize"));
 #else
         tmpString = ((char *)GETMESSAGE(62, 51, "Size _S  f.resize"));
@@ -256,7 +256,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#ifdef sun
+#if 1
         tmpString = ((char *)GETMESSAGE(62, 63, "Minimize _n  Alt<Key>F9 f.minimize"));
 #else
         tmpString = ((char *)GETMESSAGE(62, 52, "Minimize _n  f.minimize"));
@@ -274,7 +274,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#ifdef sun
+#if 1
 	tmpString = ((char *)GETMESSAGE(62, 64, "Maximize _x  Alt<Key>F10 f.maximize"));
 #else
 	tmpString = ((char *)GETMESSAGE(62, 53, "Maximize _x  f.maximize"));
@@ -292,7 +292,7 @@ void InitBuiltinSystemMenu(void)
     }
     if(gotItAll)
     {
-#ifdef sun
+#if 1
         tmpString = ((char *)GETMESSAGE(62, 65, "Lower _L  Alt<Key>F3 f.lower"));
 #else
         tmpString = ((char *)GETMESSAGE(62, 54, "Lower _L  f.lower"));

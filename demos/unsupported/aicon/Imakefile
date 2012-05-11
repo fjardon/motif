@@ -23,13 +23,11 @@ XCOMM
 XCOMM 
 XCOMM HISTORY
  
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) XmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) XmClientLibs 
-EXTRA_LIBRARIES = -lm 
-         MANDIR = /usr/local/man/man1
-      MANSUFFIX = 1     
+  SYS_LIBRARIES = MathLibrary 
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)
 
 SRCS = aicon.c
@@ -38,3 +36,4 @@ OBJS = aicon.o
 MSimpleProgramTarget(aicon)
 
 InstallProgram(aicon,$(BINDIR))
+InstallMotifHelpFile(aicon)

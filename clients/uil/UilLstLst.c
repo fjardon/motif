@@ -737,7 +737,7 @@ src_source_record_type	*az_src_rec;
 		sprintf ((char *)hex_longword, "%lX", (* code_ptr));
 	      }
 	      else{
-                sprintf ((char *)hex_longword, "%08X", (* code_ptr));
+                sprintf ((char *)hex_longword, "%08lX", (* code_ptr));
 	      }
 
 		_move (& buffer [start_hex_long [j]],
@@ -789,7 +789,7 @@ src_source_record_type	*az_src_rec;
 		      sprintf ((char *)hex_longword, "%lX", (* code_ptr));
 		    }
 		    else{
-		      sprintf ((char *)hex_longword, "%08X", (*code_ptr));
+		      sprintf ((char *)hex_longword, "%08lX", (*code_ptr));
 		    }
 
 		    _move (& buffer [start_hex_long [i]],

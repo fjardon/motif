@@ -28,7 +28,7 @@
  * (c) Copyright 1996 FUJITSU LIMITED.
  * (c) Copyright 1996 Hitachi.
  */ 
-XCOMM $TOG: cde.rules /main/4 1998/02/06 10:53:52 kaleb $
+XCOMM $XConsortium: cde.rules /main/2 1996/12/04 10:13:04 swick $
 
 /* Note whether we are the top level project. */
 #ifndef SeenTopLevelProject
@@ -101,7 +101,7 @@ XCOMM $TOG: cde.rules /main/4 1998/02/06 10:53:52 kaleb $
 #endif
 #define TopIncludes	TopInclude $(TOP_CDE_INCLUDES) $(TOP_MOTIF_INCLUDES) $(TOP_X_INCLUDES)
 
-#if UseInstalledCDE && defined(CDEProjectRoot)
+#if UseInstalledCDE && defined(CdeProjectRoot)
 # define CDEBuildLibPath	$(CDEPROJECTROOT)/lib
 #elif UseInstalledCDE
 # define CDEBuildLibPath	$(USRLIBDIR)

@@ -1453,12 +1453,12 @@ sym_dump_value( XmConst sym_value_entry_type *az_value_entry )
     case sym_k_integer_value:
     case sym_k_horizontal_integer_value:
     case sym_k_vertical_integer_value:
-	_debug_output("  integer: %d \n", 
+	_debug_output("  integer: %ld \n", 
 		      az_value_entry->value.l_integer );
 	break;
 
     case sym_k_bool_value:
-	_debug_output("  boolean: %d \n", 
+	_debug_output("  boolean: %ld \n", 
 		      az_value_entry->value.l_integer );
 	break;
 
@@ -1508,7 +1508,7 @@ common_special_type:
 	_debug_output("  %s", special_type );
 
 	if (az_value_entry->obj_header.b_flags & sym_m_builtin)
-	    _debug_output("  code: %d \n", az_value_entry->value.l_integer );
+	    _debug_output("  code: %ld \n", az_value_entry->value.l_integer );
 	else
 	    output_text( az_value_entry->w_length, 
 			 az_value_entry->value.c_value);

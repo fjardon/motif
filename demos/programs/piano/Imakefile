@@ -25,7 +25,7 @@ XCOMM HISTORY
        INCLUDES = $(XPM_INCLUDES)
         DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
-  SYS_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary
 
 SRCS = piano.c
 OBJS = piano.o

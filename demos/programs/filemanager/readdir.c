@@ -28,6 +28,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <pwd.h>
 #include <Xm/Xm.h>           /* Motif Toolkit */
 #include <Mrm/MrmPublic.h>   /* Mrm */
@@ -95,6 +96,7 @@ expandPath(char *dirname)
   Boolean parentdir = False;
   Boolean curdir = False;
   Boolean isroot = False;
+  char *dir;
   int length;
 
   if (strcmp(dirname, "/") == 0) isroot = True;
@@ -113,27 +115,27 @@ expandPath(char *dirname)
       strcpy(buf, currentdir);
     }
 
-    currentdir = buf;
-    length = strlen(currentdir);
-    if (length > 2 && currentdir[length] == '/') currentdir[length] = 0;
+    dir = buf;
+    length = strlen(dir);
+    if (length > 2 && dir[length] == '/') dir[length] = 0;
 
     if (parentdir) {
-      n = strrchr(currentdir, '/');
-      if (n != NULL) n = strrchr(currentdir, '/');
+      n = strrchr(dir, '/');
+      if (n != NULL) n = strrchr(dir, '/');
       if (n != NULL) *n = 0; /* truncate */
     }
 
     /* Look for ../ or ./ at the beginning of the string */
     partial = strchr(dirname, '/');
     if (partial != NULL) {
-      strcat(currentdir, "/");
-      strcat(currentdir, partial);
+      strcat(dir, "/");
+      strcat(dir, partial);
     } 
 
     /* If we are empty here,  then we started with ../ */
-    if (currentdir[0] == 0) strcpy(currentdir, "/");
+    if (dir[0] == 0) strcpy(dir, "/");
 
-    return(XtNewString(currentdir));
+    return(XtNewString(dir));
   } else {
     return(XtNewString(dirname));
   }
@@ -459,7 +461,9 @@ static void readIcon(str, icon, mask, fg, bg)
     }
 
     *icon = XmGetPixmap(XtScreen(toplevel), str, fg, bg);
-    *mask = XmGetPixmapByDepth(XtScreen(toplevel), msk, fg, bg, 1);
+    *mask = XmGetPixmapByDepth(XtScreen(toplevel), msk,
+                               WhitePixelOfScreen(XtScreen(toplevel)),
+                               BlackPixelOfScreen(XtScreen(toplevel)), 1);
   }
 }
 
@@ -469,7 +473,6 @@ getIcons(int ind, Pixmap *icon, Pixmap *mask, Pixmap *sicon, Pixmap *smask)
   Boolean	isdir;
   Boolean	isexec;
   Boolean	canRead;
-  ushort	fmask;
   FileInfoRec *info = &FI[ind];
   mode_t	mode;
   XrmQuark	path[10];

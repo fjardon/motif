@@ -23,8 +23,8 @@
 /* 
  * HISTORY
  * $Log: RowCol1_1.c,v $
- * Revision 1.1  2002/01/04 22:13:09  jimk
- * added files
+ * Revision 1.2  2002/01/05 15:21:27  jimk
+ * Pulled in the sources from OpenMotif 2.1.30_5
  *
  * Revision 1.1.3.1  1994/08/01  19:57:51  deblois
  * 	no change.

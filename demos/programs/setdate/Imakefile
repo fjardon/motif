@@ -24,8 +24,6 @@ XCOMM HISTORY
 
         DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
-         MANDIR = /usr/local/man/man1
-      MANSUFFIX = 1     
 
 SRCS = setDate.c
 OBJS = setDate.o

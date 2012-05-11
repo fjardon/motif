@@ -30,3 +30,5 @@
 extern void SetupWmSignalHandlers (int);
 extern void QuitWmSignalHandler (int);
 extern void RestoreDefaultSignalHandlers (void);
+extern void ChildProcSignalHandler (int);
+

@@ -665,9 +665,13 @@ SetValues(
         } 
 
     /* Over-ride BBoard to disallow a direct change of button id's
+     * unless it's a template dialog.  For those, if you can't set it
+     * here then you can never set it.
     */
-    if ( current->bulletin_board.cancel_button
-                                        != new_w->bulletin_board.cancel_button) {
+    if ( ( current->message_box.dialog_type != XmDIALOG_TEMPLATE ) &&
+         ( current->bulletin_board.cancel_button !=
+                                        new_w->bulletin_board.cancel_button ) )
+    {
         new_w->bulletin_board.cancel_button 
                                        = current->bulletin_board.cancel_button;
         XmeWarning( (Widget) new_w, WARNING5);

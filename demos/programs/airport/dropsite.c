@@ -169,7 +169,7 @@ static void TaxiIn(Widget transfer, Airport this,
 
       flight_number =  *((long *)value); 
       this->park.spots[this->to.gate].empty = False;
-      sprintf(msg, "Flight %d arrived at gate %d",
+      sprintf(msg, "Flight %ld arrived at gate %d",
 	   flight_number, this->to.gate);
       Paging(this, msg);
       DrawAirport(this, XtWindow(this->airport),

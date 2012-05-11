@@ -53,7 +53,8 @@ FILE	*source_file;
 /*
 **  Entry point
 */
-main()
+int
+main(int argc, char *argv[])
 {
     Uil_command_type	    command_desc;
     Uil_compile_desc_type   compile_desc;

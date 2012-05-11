@@ -35,6 +35,7 @@
 *******************************************************************/
 
 #include <Xm/XmAll.h>
+#include "AdjView.h"
 
 static void ClipResize (Widget clip_window, 
 			XtPointer client_data, XtPointer call_data) ;

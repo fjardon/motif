@@ -1,4 +1,9 @@
-$TOG: README /main/76 1998/05/11 14:35:10 barstow $
+$TOG: README /main/66 1997/05/20 10:05:36 kaleb $
+
+
+
+
+$XFree86: xc/config/cf/README,v 1.1.1.9.2.3 1998/01/23 12:35:07 dawes Exp $
 
 The easiest way to write an Imakefile is to find another one that does
 something similar and copy/modify it!
@@ -46,6 +51,7 @@ Imake.tmpl provides defaults for the following variables:
 	FortranDebugFlags	flags for Fortran debug info
 	FortranFlags		Fortran compiler flags
 	HasBSD44Sockets		boolean for system has BSD4.4 sockets
+	HasBsdMake		use the 4.4BSD variant of the make program?
 	HasBsearch		boolean for libc has bsearch()
 	HasBrokenCCForLink	boolean for brain damaged cc driver
 	HasCenterLineC		boolean for system has CenterLine C compiler
@@ -58,6 +64,7 @@ Imake.tmpl provides defaults for the following variables:
 	HasGcc			boolean for system has GNU gcc compiler
 	HasGcc2			boolean for system has GNU gcc 2.x compiler
 	HasGcc2ForCplusplus	use gcc 2 for C++ programs?
+	HasGnuMake		use the GNU make program?
 	HasKrb5			system has Kerberos version 5 support?
 	HasLargeTmp		boolean for system has /tmp space
 	HasLatex		system has LaTeX document preparation software
@@ -122,12 +129,9 @@ Imake.tmpl provides defaults for the following variables:
 	OSMajorVersion		major version number of operating system
 	OSMinorVersion		minor version number of operating system
 	OptimizedCDebugFlags	C compiler flags to turn on optimization
-	XtPopdownConformance	XtPopdown conformans to the specification
 	PreProcessCmd		command to run /lib/cpp on scripts
 	RanlibCmd		command to clean up libraries
 	RanlibInstFlags		flags to ranlib after copying
-	ResourceConfigurationManagement boolean for Xt's Resource Configuration
-					Management
 	RmCmd			command to delete files
 	ShLibDir		directory in which to install shared libraries
 	StandardCppDefines	-D's for running cpp
@@ -143,42 +147,40 @@ Imake.tmpl provides defaults for the following variables:
 	UNCOMPRESSPATH		command to run uncompress
 	UnalignedReferencesAllowed	boolean for unaligned copies ok
 	UsrLibDir		directory in which to install libraries
+	VarDirectory		directory in /var for logs, etc., and config
 	YaccCmd			command to run yacc
 
 X11.tmpl provides defaults for the following variables:
 
 	AdmDir			directory containing system log files
-	AllocateLocalDefines	-D's to turn on alloca() (should be in Imake.tmpl)
+	AllocateLocalDefines	-D's to turn on alloca()
 	BDFTOSNFFILT		command to run bdftosnf
 	BaseExtensionDefines	universal extensions to use
 	BinDir			directory in which to install programs
-	BuildAppgroup		build AppGroup extension in server
-	BuildCup		build Colormap Utilization extension in server
-	BuildDBE		build DOUBLE-BUFFER extension
-	BuildDIS		build Document Imaging Subset of XIE
-	BuildDPMS		build Display Power Management Signaling extension
+	BuildAppgroup		build AppGroup extension
 	BuildFontServer		build font server
 	BuildFonts		build pcf fonts
 	BuildIncRoot		relative path to location of headers in build
 	BuildIncTop		path from build includes directory to top
-	BuildEVI		build EVI server extension
 	BuildLBX		build LBX (aka X.fast) server extension
-	BuildMultibuffer	build Multibuffer extension (obsolete)
-	BuildPlugin		build xrx plug-in for web browsers
-	BuildRECORD		Build RECORD extension
 	BuildPexExt		build PEX server extension and fonts
 	BuildPhigs		build Phigs (obsolete)
 	BuildServer		build X server
 	BuildXAudio		build Audio 
 	BuildXAServer		build Audio server
-	BuildXCSecurity		Build Security Extension
 	BuildXIE		build X Image Extension
+	BuildDIS		build Document Imaging Subset of XIE
+	BuildXCSecurity		Build Security Extension
 	BuildXInputExt		build X Input extension (requires ddx support,
-					which exists only in Xhp and XFree86)
+					which exists only in Xhp)
 	BuildXInputLib		build X Input library
 	BuildXKB		build X Keyboard Extension?
 	BuildXKBlib		build X Keyboard Extension into Xlib?
 	UseXKBInClients		Use XKB functions in normal clients?
+	BuildDBE		build DOUBLE-BUFFER extension
+	BuildMultibuffer	build Multibuffer extension (obsolete)
+	BuildRECORD		Build RECORD extension
+	BuildPlugin		build xrx plug-in for web browsers
 	ConfigDir		install directory for config files
 	ConnectionFlags		-D's for supported transports
 	ContribDir		location of user-contributed sources
@@ -232,7 +234,6 @@ X11.tmpl provides defaults for the following variables:
 	ManPath			full path of parent directory
 	ManSourcePath		common prefix of man page directories
 	ManSuffix		man suffix for programs
-	MiscManSuffix		man suffix for miscellaneous pages
 	NeedDefaultDepLibs	boolean for enabling default DEPLIBS
 	NlsDir			directory in which to install nls files
 	NormalLibFS		build libFS.a
@@ -307,7 +308,6 @@ X11.tmpl provides defaults for the following variables:
 	TwmDir			directory in which to install twm config files
 	UseCCMakeDepend		boolean for using alternate makedepend script
 	UseRgbTxt		use rgb.txt file as is instead of DBM-compiled
-	VarDirectory		directory in /var for logs, etc., and config
 	VendorHasX11R6_3libXext	don't need Security & AppGroup in xrx plug-in
 	XAppLoadDir		directory in which to install app defaults
 	XFileSearchPathBase	base file search path
@@ -502,9 +502,8 @@ SUBDIRS			for an Imakefile in a directory containing
 			Such an Imakefile also needs to #define IHaveSubdirs
 			and call MakeSubdirs() and DependSubdirs().
 MANSUFFIX		suffix used by InstallManPage* rules.
-			May be set to $(LIBMANSUFFIX), $(FILEMANSUFFIX), or
-			$(MISCMANSUFFIX) in directories for libraries or data 
-			files.
+			May be set to $(LIBMANSUFFIX) or $(FILEMANSUFFIX) in
+			directories for libraries or data files.
 
 
 Rule-specific variables that may be set in an individual Imakefile.

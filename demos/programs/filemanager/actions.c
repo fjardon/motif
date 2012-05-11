@@ -32,6 +32,7 @@
 #include <pwd.h>
 #include <Xm/Xm.h>           /* Motif Toolkit */
 #include <Mrm/MrmPublic.h>   /* Mrm */
+#include <Xm/Container.h>
 #include <Xm/SelectioB.h>
 #include <Xm/TextF.h>
 #include "filemanager.h"

@@ -24,7 +24,7 @@ XCOMM
 XCOMM HISTORY
 
 INCLUDES = -I. -I$(INCLUDESRC) -I$(MINCLUDESRC) -I$(MLIBSRC) -I../../. -I$(MTOP)/include
-DEPLIBS = $(DEPXMLIB)  $(DEPXTOOLLIB) $(DEPXLIB)
+DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
 
 WMLDIR = $(MTOP)/tools/wml
@@ -56,7 +56,7 @@ $(TARGETS):	$(TABLE) $(WMLDIR)/motif.wml
 	$(YACC) -d $(YACCFLAGS) $(UILY)
 	$(MV) y.tab.c UilLexPars.c
 	$(MV) y.tab.h UilLexPars.h
-	$(CLIENTENVSETUP) $(WMLDIR)/wmluiltok < $(UILY) > tokens.dat
+	$(WMLDIR)/wmluiltok < $(UILY) > tokens.dat
 	$(RM) wml-uil.mm
 	$(CPP) -I$(WMLDIR) $(TABLE) | $(WMLDIR)/wml
 	$(RM) tokens.dat

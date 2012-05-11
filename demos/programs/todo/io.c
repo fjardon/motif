@@ -30,6 +30,7 @@ static char *rcsid = "$XConsortium: io.c /main/6 1995/07/14 09:46:23 drk $";
 #endif
 #endif
 
+#include <stdlib.h>
 #include <unistd.h>
 #include <Xm/Xm.h>
 #include <Xm/MessageB.h>

@@ -44,7 +44,7 @@ static char rcsid[] = "$TOG: WmWinInfo.c /main/18 1999/02/04 15:17:25 mgreess $"
 #include "WmIBitmap.h"
 
 #include <Xm/Xm.h>
-#include <locale.h>
+#include <X11/Xlocale.h>
 #ifdef PANELIST
 #include "WmPanelP.h"
 #endif /* PANELIST */

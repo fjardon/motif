@@ -49,34 +49,31 @@
 .TH "mwmrc" "special file"
 .SH "NAME"
 \fBmwmrc\fP \(em the
-mwm Window Manager Resource Description File
+Motif Window Manager Resource Description File
 .SH "DESCRIPTION"
 .PP
-The \fBmwmrc\fP window manager is a supplementary resource
-file that controls much of the behavior of the CDE window manager \fBmwm\fP\&. It contains descriptions of resources that cannot easily be
+The \fBmwmrc\fP file is a supplementary resource
+file that controls much of the behavior of the Motif window manager \fBmwm\fP\&. 
+It contains descriptions of resources that cannot easily be
 written using standard X Window System, Version 11 resource syntax\&. The resource
 description file contains entries that are referred to by X resources in
-defaults files (for example, \fB/usr/mwm/app-defaults/$LANG/mwm\fP)
+defaults files (for example, \fB/usr/X11R6/lib/X11/app-defaults/Mwm\fP)
 or in the \fBRESOURCE_MANAGER\fP property on the
 root window\&. For example, the resource description file enables you to specify
 different types of window menus; however, an X resource is used to specify
-which of these window menus the \fBmwm\fP should use for a particular
-window\&. The specifications of the resource description file supported by the
-mwm workspace manager are a strict superset of the specifications supported
-by the OSF Motif Window Manager (\fBmwm 1\&.2\&.4\fP)\&. In other words,
-the \fBsystem\&.mwmrc\fP or \fB$HOME/\&.mwmrc\fP file
-that you\&'ve used for \fBmwm\fP is easily made usable by \fBmwm\fP\&.
+which of these window menus \fBmwm\fP should use for a particular
+window\&. 
 .SS "Location"
 .PP
-The workspace manager searches for one of the following resource description
+The window manager searches for one of the following resource description
 files, where \fI$LANG\fP is the value of the language environment
 on a per-user basis:
 .PP
 .nf
 \f(CW$HOME/$LANG/\&.mwmrc
 $HOME/\&.mwmrc
-/usr/lib/X11/$LANG/system\&.mwmrc
-/usr/lib/X11/system\&.mwmrc\fR
+/usr/X11R6/lib/X11/$LANG/system\&.mwmrc
+/usr/X11R6/lib/X11/system\&.mwmrc\fR
 .fi
 .PP
 .PP
@@ -87,7 +84,7 @@ resource\&. The following shows how a different resource description file can
 be specified from the command line:
 .PP
 .nf
-\f(CW/usr/mwm/bin/mwm -xrm "mwm*configFile: mymwmrc"\fR
+\f(CW/usr/X11R6/bin/X11/mwm -xrm "mwm*configFile: mymwmrc"\fR
 .fi
 .PP
 .SS "Resource Types"
@@ -95,9 +92,9 @@ be specified from the command line:
 The following types of resources can be described in the mwm resource
 description file:
 .IP "\fBButtons\fP" 10
-Workspace manager functions can be bound (associated) with button events\&.
+Window manager functions can be bound (associated) with button events\&.
 .IP "\fBKeys\fP" 10
-Workspace manager functions can be bound (associated) with key press
+Window manager functions can be bound (associated) with key press
 events\&.
 .IP "\fBMenus\fP" 10
 Menu panes can be used for the window menu and other menus posted with
@@ -111,22 +108,21 @@ quoted to avoid special interpretation (for example, the comment character
 can be quoted to prevent it from being interpreted as the comment character)\&.
 A quoted item can be contained in double quotes (\fB" "\fP)\&.
 Single characters can be quoted by preceding them by the back-slash character
-(\fB\\fP), except for workspace names, which may contain no back-slash
-characters\&. If a line ends with a back-slash, the next line is considered
+(\fB\\\fP)\&. If a line ends with a back-slash, the next line is considered
 a continuation of that line\&. All text from an unquoted \fB#\fP
 to the end of the line is regarded as a comment and is not interpreted as
 part of a resource description\&. If \fB!\fP is the first character
 in a line, the line is regarded as a comment\&.
-.SS "Workspace Manager Functions"
+.SS "Window Manager Functions"
 .PP
-Workspace manager functions can be accessed with button and key bindings,
-and with workspace manager menus\&. Functions are indicated as part of the specifications
+Window manager functions can be accessed with button and key bindings,
+and with window manager menus\&. Functions are indicated as part of the specifications
 for button and key binding sets, and menu panes\&. The function specification
 has the following syntax:
 .PP
 .nf
 \f(CW\fBfunction\fP = \fBfunction_name\fP [\fBfunction_args\fP]
-\fBfunction_name\fP = \fBworkspace manager function\fP
+\fBfunction_name\fP = \fBwindow manager function\fP
 \fBfunction_args\fP = {\fBquoted_item\fP | \fBunquoted_item\fP}\fR
 .fi
 .PP
@@ -156,10 +152,9 @@ transient windows) are restacked with their associated primary window\&. If
 an \fIicon\fP function argument is specified then
 the function applies only to icons\&. If an \fIwindow\fP
 function argument is specified then the function applies only to windows\&.
-.IP "\fBf\&.exec\fP \fBcommand\fP
-(or \fI!\fP \fBcommand\fP)" 10
+.IP "\fBf\&.exec\fP \fBcommand\fP (or \fI!\fP \fBcommand\fP)" 10
 This function causes \fIcommand\fP to be
-executed (using the value of the \fI$MWMSHELL\fP or \fI$SHELL\fP environment variable if set; otherwise, \fB/usr/bin/sh\fP )\&. The \fI!\fP notation can be used in place of the \fBf\&.exec\fP function name\&.
+executed (using the value of the \fI$MWMSHELL\fP or \fI$SHELL\fP environment variable if set; otherwise, \fB/bin/sh\fP )\&. The \fI!\fP notation can be used in place of the \fBf\&.exec\fP function name\&.
 .IP "\fBf\&.focus_color\fP" 10
 This function sets the colormap focus to a client window\&. If this function
 is done in a root context, then the default colormap (setup by the X Window
@@ -215,7 +210,7 @@ This function installs the next colormap in the list of colormaps for
 the window with the colormap focus\&.
 .IP "\fBf\&.next_key\fP [ \fIicon\fP | \fIwindow\fP | \fItransient\fP]" 10
 This function sets the keyboard input focus to the next window/icon
-in the set of windows/icons managed by the workspace manager (the ordering
+in the set of windows/icons managed by the window manager (the ordering
 of this set is based on the stacking of windows on the screen)\&. This function
 is treated as \fBf\&.nop\fP if \fBkeyboardFocusPolicy\fP
 is not explicit\&. The keyboard input focus is only moved to windows that do
@@ -243,8 +238,8 @@ being used) on the root window or in the icon box\&. In general this causes
 icons to be "packed" into the icon grid\&.
 .IP "\fBf\&.pass_keys\fP" 10
 This function is used to enable/disable (toggle) processing of key bindings
-for workspace manager functions\&. When it disables key binding processing all
-keys are passed on to the window with the keyboard input focus and no workspace
+for window manager functions\&. When it disables key binding processing all
+keys are passed on to the window with the keyboard input focus and no window
 manager functions are invoked\&. If the \fBf\&.pass_keys\fP function
 is invoked with a key binding to disable key binding processing the same key
 binding can be used to enable key binding processing\&.
@@ -259,7 +254,7 @@ This function installs the previous colormap in the list of colormaps
 for the window with the colormap focus\&.
 .IP "\fBf\&.prev_key\fP [ \fIicon\fP | \fIwindow\fP | \fItransient\fP]" 10
 This function sets the keyboard input focus to the previous window/icon
-in the set of windows/icons managed by the workspace manager (the ordering
+in the set of windows/icons managed by the window manager (the ordering
 of this set is based on the stacking of windows on the screen)\&. This function
 is treated as \fBf\&.nop\fP if \fIkeyboardFocusPolicy\fP is not explicit\&. The keyboard input focus is only moved to windows
 that do not have an associated secondary window that is application modal\&.
@@ -271,8 +266,7 @@ argument is specified then the function applies only to icons\&. If an
 applies only to windows\&.
 .IP "\fBf\&.quit_mwm\fP" 10
 This function terminates mwm (but NOT the X window system)\&.
-.IP "\fBf\&.raise\fP\ [\fI-\fP\fIclient\fP | \fIwithin\fP
-| \fIfreeFamily\fP]" 10
+.IP "\fBf\&.raise\fP\ [\fI-\fP\fIclient\fP | \fIwithin\fP | \fIfreeFamily\fP]" 10
 This function raises a primary window to the top of the global window
 stack (where it is obscured by no other window) and raises the secondary window
 (transient window or dialog box) within the client family\&. The arguments to
@@ -311,7 +305,7 @@ is iconified, then \fBf\&.restore_and_raise\fP restores it to
 its maximized state and raises it to the top of the window stack\&. If a normal
 window is iconified, then \fBf\&.restore_and_raise\fP restores
 it to its normalized state and raises it to the top of the window stack\&.
-.IP "2f\&.restart" 10
+.IP "\fBf\&.restart\fP" 10
 This function causes mwm to be restarted (effectively terminated and
 re-executed)\&. Restart is necessary for \fBmwm\fP to incorporate
 changes in both the \fBmwmrc\fP file and X resources\&.
@@ -335,13 +329,13 @@ property\&. A menu item label is grayed out if the menu item is used to do \fBf\
 This function causes a menu separator to be put in the menu pane at
 the specified location (the label is ignored)\&.
 .IP "\fBf\&.set_behavior\fP" 10
-This function causes the workspace manager to restart with the default
+This function causes the window manager to restart with the default
 behavior (if a custom behavior is configured) or a custom behavior (if a
 default behavior is configured)\&. By default this is bound to \fIShift\ Ctrl\ Alt\ <Key>!\fP\&.
 .IP "\fBf\&.title\fP" 10
 This function inserts a title in the menu pane at the specified location\&.
-.IP "\fIf\&.version\fP" 10
-This function causes the workspace manager to display its release version
+.IP "\fBf\&.version\fP" 10
+This function causes the window manager to display its release version
 in a dialog box\&.
 .SS "Function Constraints"
 .PP
@@ -361,11 +355,13 @@ An icon has been selected as an object for the function\&.
 If a function is specified in a type of resource where it is not supported
 or is invoked in a context that does not apply then the function is treated
 as \fBf\&.nop\fP\&. The following table indicates the resource
-types and function contexts in which workspace manager functions apply\&.
+types and function contexts in which window manager functions apply\&.
+.PP
 .TS
 tab();
 lw(2.289841i) lw(1.851594i) lw(1.358566i).
-\fIFunction\fPContextsResources
+FunctionContextsResources
+_
 \fBf\&.beep\fProot,icon,windowbutton,key,menu
 \fBf\&.circle_down\fProot,icon,windowbutton,key,menu
 \fBf\&.circle_up\fProot,icon,windowbutton,key,menu
@@ -388,7 +384,7 @@ lw(2.289841i) lw(1.851594i) lw(1.358566i).
 \fBf\&.post_wmenu\fProot,icon,windowbutton,key
 \fBf\&.prev_cmap\fProot,icon,windowbutton,key,menu
 \fBf\&.prev_key\fProot,icon,windowbutton,key,menu
-\fIf\&.quit_mwm\fProotbutton,key,menu (root only)
+\fBf\&.quit_mwm\fProotbutton,key,menu (root only)
 \fBf\&.raise\fProot,icon,windowbutton,key,menu
 \fBf\&.raise_lower\fPicon,windowbutton,key,menu
 \fBf\&.refresh\fProot,icon,windowbutton,key,menu
@@ -402,9 +398,9 @@ lw(2.289841i) lw(1.851594i) lw(1.358566i).
 \fBf\&.separator\fProot,icon,windowmenu
 \fBf\&.set_behavior\fProot,icon,windowbutton,key,menu
 \fBf\&.title\fProot,icon,windowmenu
-\fIf\&.version\fProot,icon,windowbutton,key,menu
+\fBf\&.version\fProot,icon,windowbutton,key,menu
 .TE
-.SH "WORKSPACE MANAGER EVENT SPECIFICATION"
+.SH "WINDOW MANAGER EVENT SPECIFICATION"
 .PP
 Events are indicated as part of the specifications for button and key
 binding sets, and menu panes\&. Button events have the following syntax:
@@ -417,10 +413,12 @@ binding sets, and menu panes\&. Button events have the following syntax:
 .PP
 The following table indicates the values that can be used for \fBmodifier_name\fP\&. Note that [Alt] and [Meta] can be used interchangably
 on some hardware\&.
+.PP
 .TS
 tab();
 lw(1.097588i) lw(4.402412i).
 ModifierDescription
+_
 CtrlControl Key
 ShiftShift Key
 AltAlt Key
@@ -438,10 +436,12 @@ The X server may map some of these symbols to the Mod1 - Mod5 modifier keys\&.
 These keys may or may not be available on your hardware: Key Symbol Caps Lock
 Shift Lock Kana Lock Num Lock Scroll Lock The following table indicates the
 values that can be used for \fBbutton_event_name\fP\&.
+.PP
 .TS
 tab();
 lw(1.290570i) lw(4.209430i).
 ButtonDescription
+_
 Btn1DownButton 1 Press
 Btn1UpButton 1 Release
 Btn1ClickButton 1 Press and Release
@@ -464,8 +464,8 @@ Btn5ClickButton 5 Press and Release
 Btn5Click2Button 5 Double Click
 .TE
 .PP
-Key events that are used by the workspace manager for menu mnemonics
-and for binding to workspace manager functions are single key presses; key
+Key events that are used by the window manager for menu mnemonics
+and for binding to window manager functions are single key presses; key
 releases are ignored\&. Key events have the following syntax:
 .PP
 .nf
@@ -482,11 +482,11 @@ prefix)\&.
 .SH "BUTTON BINDINGS"
 .PP
 The \fBbuttonBindings\fP resource value is the name of
-a set of button bindings that are used to configure workspace manager behavior\&.
-A workspace manager function can be done when a button press occurs with
+a set of button bindings that are used to configure window manager behavior\&.
+A window manager function can be done when a button press occurs with
 the pointer over a framed client window, an icon or the root window\&. The
 context for indicating where the button press applies is also the context
-for invoking the workspace manager function when the button press is done
+for invoking the window manager function when the button press is done
 (significant for functions that are context sensitive)\&. The button binding
 syntax is
 .PP
@@ -515,7 +515,7 @@ is not done\&.
 .SH "KEY BINDINGS"
 .PP
 The \fBkeyBindings\fP resource value is the name of a set
-of key bindings that are used to configure workspace manager behavior\&. A
+of key bindings that are used to configure window manager behavior\&. A
 window manager function can be done when a particular key is pressed\&. The
 context in which the key binding applies is indicated in the key binding specification\&.
 The valid contexts are the same as those that apply to button bindings\&. The
@@ -549,7 +549,7 @@ focus (\fIroot\fP if no window or icon has the
 keyboard input focus)\&.
 .SH "MENU PANES"
 .PP
-Menus can be popped up using the \fBf\&.post_wmenu\fP and \fBf\&.menu\fP workspace manager functions\&. The context for workspace manager
+Menus can be popped up using the \fBf\&.post_wmenu\fP and \fBf\&.menu\fP window manager functions\&. The context for window manager
 functions that are done from a menu is \fIroot\fP,
 \fIicon\fP or \fIwindow\fP depending
 on how the menu was popped up\&. In the case of the \fIwindow\fP menu or menus popped up with a key binding, the location of
@@ -594,10 +594,10 @@ has the following syntax:
 .PP
 The first matching \fBcharacter\fP in the label is underlined\&.
 If there is no matching \fBcharacter\fP in the label, no mnemonic
-is registered with the workspace manager for that label\&. Although the \fBcharacter\fP must exactly match a character in the label, the mnemonic
+is registered with the window manager for that label\&. Although the \fBcharacter\fP must exactly match a character in the label, the mnemonic
 does not execute if any modifier (such as Shift) is pressed with the character
 key\&. The \fBaccelerator\fP specification is a key event specification
-with the same syntax as is used for key bindings to workspace manager functions\&.
+with the same syntax as is used for key bindings to window manager functions\&.
 .SH "INCLUDING FILES"
 .PP
 You may include other files into your mwmrc file by using the
@@ -623,13 +623,14 @@ check this file if the appearance or behavior of \fBmwm\fP
 is not what you expect\&.
 .SH "FILES"
 .PP
+.nf
 \fB$HOME/$LANG/\&.mwmrc
 $HOME/\&.mwmrc
-/usr/lib/X11/$LANG/system\&.mwmrc
-/usr/lib/X11/system\&.mwmrc
-$HOME/\&.mwm/errorlog\fP
+/usr/X11R6/lib/X11/$LANG/system\&.mwmrc
+/usr/X11R6/lib/X11/system\&.mwmrc\fP
+.fi
 .SH "RELATED INFORMATION"
 .PP
-\fBmwm\fP(1), \fBmwm(\fP1X),
+\fBmwm\fP(1),
 \fBX\fP(1)\&. 
 ...\" created by instant / docbook-to-man, Sun 22 Dec 1996, 20:36

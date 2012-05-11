@@ -73,13 +73,13 @@
 *XmContainer.selectColor:		lightblue
 
 ! This is the amount by which subdirectories will be indented
-*XmContainer.outlineIndentation:	1cm
+*XmContainer.outlineIndentation:	3fu
 
 ! This is the width of the first column in the detail view
-*XmContainer.outlineColumnWidth:	6cm
+*XmContainer.outlineColumnWidth:	35fu
 
 ! ... and these are the widths of the subsequent columns
-*XmContainer.detailTabList:		+3cm,+3cm,+3cm
+*XmContainer.detailTabList:		+9fu,+15fu,+10fu
 
 ! This defines the font to be used for the icons.  Note that this
 ! definition for the renderTable can be much more complex

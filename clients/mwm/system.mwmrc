@@ -26,7 +26,7 @@
 ! 
 
 !!
-!!  DEFAULT Mwm 1.2 RESOURCE DESCRIPTION FILE (system.mwmrc)
+!!  DEFAULT Mwm RESOURCE DESCRIPTION FILE (system.mwmrc)
 !!
 !!  NOTE: To personalize this file, copy this file before editing it.
 !!  	  Personalize copies of the Mwm resource file typically
@@ -50,7 +50,7 @@ Menu DefaultRootMenu
 !	"Toggle Behavior..."	f.set_behavior
 	 no-label		f.separator
 	"Restart..."		f.restart
-!	"Quit..."		f.quit_mwm
+	"Quit..."		f.quit_mwm
 
 }
 

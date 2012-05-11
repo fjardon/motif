@@ -2116,7 +2116,7 @@ _XmStringByteCompare(
   if (!a && !b) return(TRUE);
   if (!a || !b) return(FALSE);
 
-  return(XmStringCompare(a, b));
+  return(XmStringByteCompare(a, b));
 }
 
 Dimension 

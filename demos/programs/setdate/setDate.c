@@ -25,8 +25,11 @@
  * HISTORY
  */
 
+#include <stdlib.h>
 #include <time.h>
+#ifndef CSRG_BASED
 #include <langinfo.h>
+#endif
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
@@ -64,7 +67,7 @@ int dy, yr, mn,  hr, mi;
 Widget day, month, year, hour, minute;
 char *dateCommand = NULL;
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   Widget        shell, panedw, rc, rc2, sb1, sb2;
   Widget	label, label2;
@@ -128,6 +131,7 @@ main(int argc, char **argv)
   day = XmCreateTextField(sb1, "Day", args, argcount);
   XtManageChild(day);
    
+#ifndef CSRG_BASED
   months[0]  = XmStringCreate(nl_langinfo(MON_1), XmSTRING_DEFAULT_CHARSET);
   months[1]  = XmStringCreate(nl_langinfo(MON_2), XmSTRING_DEFAULT_CHARSET);
   months[2]  = XmStringCreate(nl_langinfo(MON_3), XmSTRING_DEFAULT_CHARSET);
@@ -140,6 +144,20 @@ main(int argc, char **argv)
   months[9]  = XmStringCreate(nl_langinfo(MON_10), XmSTRING_DEFAULT_CHARSET);
   months[10]  = XmStringCreate(nl_langinfo(MON_11), XmSTRING_DEFAULT_CHARSET);
   months[11]  = XmStringCreate(nl_langinfo(MON_12), XmSTRING_DEFAULT_CHARSET);
+#else
+  months[0]  = XmStringCreate("January", XmSTRING_DEFAULT_CHARSET);
+  months[1]  = XmStringCreate("February", XmSTRING_DEFAULT_CHARSET);
+  months[2]  = XmStringCreate("March", XmSTRING_DEFAULT_CHARSET);
+  months[3]  = XmStringCreate("April", XmSTRING_DEFAULT_CHARSET);
+  months[4]  = XmStringCreate("May", XmSTRING_DEFAULT_CHARSET);
+  months[5]  = XmStringCreate("June", XmSTRING_DEFAULT_CHARSET);
+  months[6]  = XmStringCreate("July", XmSTRING_DEFAULT_CHARSET);
+  months[7]  = XmStringCreate("August", XmSTRING_DEFAULT_CHARSET);
+  months[8]  = XmStringCreate("September", XmSTRING_DEFAULT_CHARSET);
+  months[9]  = XmStringCreate("October", XmSTRING_DEFAULT_CHARSET);
+  months[10]  = XmStringCreate("November", XmSTRING_DEFAULT_CHARSET);
+  months[11]  = XmStringCreate("December", XmSTRING_DEFAULT_CHARSET);
+#endif
 
   argcount = 0;
   XtSetArg(args[argcount], XmNpositionType, XmPOSITION_INDEX), argcount++;
@@ -218,6 +236,8 @@ main(int argc, char **argv)
   XtRealizeWidget(shell);
 
   XtAppMainLoop(context);
+
+  return 0;    /* make compiler happy */
 }
 
 void ValueChanged(Widget w, XtPointer client_data, XtPointer data)

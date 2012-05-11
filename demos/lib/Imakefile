@@ -31,7 +31,7 @@ XCOMM   $XConsortium: Imakefile /main/6 1996/04/02 11:39:58 drk $
 CPLUSPLUSDIRS = XmCxx ExmCxx
 #endif
 
-SUBDIRS = Exm ${CPLUSPLUSDIRS} Wsm Xmd
+SUBDIRS = Exm ${CPLUSPLUSDIRS} Xmd
 
 MakeSubdirs($(SUBDIRS))
 DependSubdirs($(SUBDIRS))

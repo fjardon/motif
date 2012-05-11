@@ -678,6 +678,7 @@ GetImage(
     Boolean useIconFileCache;
     Boolean useMask;
     Boolean useColor;
+    int xpmStatus;
 
     /* init so that we can call safely XpmFreeAttributes. */
     attrib.valuemask = 0;
@@ -775,11 +776,12 @@ GetImage(
 
     *image = NULL ;
 
-    if (XmeXpmReadFileToImage(display,
+    xpmStatus = XmeXpmReadFileToImage(display,
 			      file_name,
 			      image,
 			      &mask_image,
-			      &attrib) < 0)
+			      &attrib);
+    if (xpmStatus < 0)
 	*image = NULL ;
     else {
 	/* store allocated colors */
@@ -827,6 +829,11 @@ GetImage(
 		acc_color->bottom_shadow_color= XmUNSPECIFIED_PIXEL;
 		acc_color->select_color = XmUNSPECIFIED_PIXEL;
 		acc_color->highlight_color = XmUNSPECIFIED_PIXEL;
+		if (acc_color->foreground == XmUNSPECIFIED_PIXEL
+		    && acc_color->background == XmUNSPECIFIED_PIXEL) {
+		    acc_color->foreground = 1;
+		    acc_color->background = 0;
+		}
 	    } else {
 
 		/* we've loaded a xpm, check which symbolics
@@ -873,17 +880,22 @@ GetImage(
 	   for we don't want to keep them in the image
 	   cache, since they need color lookup,
 	   which is done one level up in the pixmap cache */
-	if ((*image)->depth == 1) {
+	if (((*image)->depth == 1)
+	    && (acc_color->foreground == 1)
+	    && (acc_color->background == 0)
+	    ) {
 	    _XmInstallImage (*image, image_name, hot_x, hot_y);
 	    return TRUE ;
 	} else {
-	    XmeXpmFreeAttributes(&attrib);
+	    if (xpmStatus >= 0)
+		XmeXpmFreeAttributes(&attrib);
 	    return NOT_CACHED ; /* mean the image can be destroyed
 				   after it is used */
 	}
     }
     
-    XmeXpmFreeAttributes(&attrib);
+    if (xpmStatus >= 0)
+	XmeXpmFreeAttributes(&attrib);
 
     return FALSE ;
 } 
@@ -1320,6 +1332,18 @@ _XmGetScaledPixmap(
        only handle unequal depths for bitmaps. */
     if ((image->depth != depth) && (image->depth != 1))
 	return (XmUNSPECIFIED_PIXMAP);
+
+    /* force the foreground/background if a Bitmap
+       is returned. These values are going to go in the cache
+       too, so we will have to remember this forcing for the
+       case -depth: you ask for -depth and some 
+       foreground/background, that should match a depth 1
+       with 1/0. Look at ComparePixmapDatas above for details */
+
+    if (depth == 1) {
+	acc_color->foreground = 1;
+	acc_color->background = 0;
+    }
 
     /* XPutImage will only deepen bitmaps -- fake it with pixmaps. */
     old_image_format = image->format;

@@ -1,5 +1,5 @@
 <title>Overview</title>
-<bold>Draw : a drawing demo using Motif 1.2</bold>
+<bold>Draw : a drawing demo using Motif</bold>
 
 
 If the TextField is empty, BSelect in the workarea starts a new polyline,

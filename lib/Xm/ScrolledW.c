@@ -1457,7 +1457,8 @@ static void
 DeleteChild(
         Widget child )
 {
-    XmScrolledWindowWidget sw = (XmScrolledWindowWidget) XtParent(child);
+    Widget swWid = XtParent(child);
+    XmScrolledWindowWidget sw = (XmScrolledWindowWidget) swWid;
     XtWidgetProc      delete_child;
     
     if (child == sw->swindow.WorkWindow)
@@ -1467,6 +1468,10 @@ DeleteChild(
         sw->swindow.hScrollBar = NULL;
     if (child == (Widget) sw->swindow.vScrollBar)
         sw->swindow.vScrollBar = NULL;
+
+    /* Clean up the Navigator.  Metro Link fix, suggested by
+     * Kevin B. Hendricks of Java-Linux project. */
+    RemoveNavigator(swWid, child);
 
     _XmProcessLock();
     delete_child = 

@@ -66,3 +66,5 @@ draw.height:500
 *fontList:-adobe-helvetica-bold-r-normal-*-14-*-*-*-*-*-*-*
 *highlightColor:Black
 *autoUnmanage: True
+
+*help_manager.helpFile: draw

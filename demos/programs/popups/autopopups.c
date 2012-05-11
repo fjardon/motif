@@ -57,7 +57,7 @@ int rectx, recty, recth, rectw;
 
 Widget	popup1, popup2, popup3, popup4, popup5;
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   Widget        shell;
   Widget        frame1, frame2;
@@ -222,6 +222,8 @@ main(int argc, char **argv)
   XtRealizeWidget(shell);
 
   XtAppMainLoop(context);
+
+  return 0;    /* make compiler happy */
 }
 
 

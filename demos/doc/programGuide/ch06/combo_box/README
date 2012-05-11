@@ -2,9 +2,6 @@
                    README File for combo_box Example 
 
 The combo_box example demonstrates a simple use of the XmComboBox widget. 
-To build the program, just type 
-
- $ make
 
 To run the program, just type:
 

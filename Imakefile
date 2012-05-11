@@ -27,13 +27,13 @@ XCOMM   $TOG: Imakefile /main/22 1999/05/19 17:00:13 mgreess $
 #define IHaveSubdirs
 #define PassCDebugFlags CDEBUGFLAGS="$(CDEBUGFLAGS)"
 
-RELEASE = "Release 2.1.20"
+RELEASE = "Release 2.1.30"
 PRODUCT = "Motif"
 #if BuildMotifDemos
       DEMOSDIRECTORY = demos
 #endif
       SUBDIRS = config localized lib tools/wml clients $(DEMOSDIRECTORY) \
-	bitmaps bindings
+	bitmaps bindings doc/man
       CDE_SUBDIRS = lib clients/uil clients/xmbind
 
 MakeSubdirs($(SUBDIRS))
@@ -54,6 +54,7 @@ VerifyOS::
 
 includes::
 	MakeDir($(BUILDINCDIR))
+	MakeDir($(BUILDLIBDIR))
 	MakeDir($(BUILDDOCDIR))
 	MakeDir($(BUILDLOCDIR))
 

@@ -54,6 +54,7 @@
 
 /* Include appropriate header files. */
 #include <Xm/Screen.h>
+#include <Xm/CascadeB.h>
 #include <Xm/DrawP.h>
 #include <Xm/ManagerP.h>
 #include <X11/ShellP.h>
@@ -484,11 +485,22 @@ BorderHighlight (
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
   
   if (mw->menu_button.armed == True) return;
-  
+
+#ifndef USE_ORIGINAL_MOTIF_CODE
+  XmeDrawShadows (XtDisplay (mw), XtWindow (mw),
+		  mw->primitive.top_shadow_GC,
+		  mw->primitive.bottom_shadow_GC,
+		  mw->primitive.highlight_thickness,
+		  mw->primitive.highlight_thickness,
+		  mw->core.width - 2 * mw->primitive.highlight_thickness,
+		  mw->core.height - 2 * mw->primitive.highlight_thickness,
+		  mw->primitive.shadow_thickness, XmSHADOW_OUT);
+#else
   mw->menu_button.armed = True;
   
   if (wc->simple_class.draw_shadow)
     (*(wc->simple_class.draw_shadow)) ((Widget) mw);
+#endif
 }
 
 
@@ -508,11 +520,20 @@ BorderUnhighlight (
   
   if (mw->menu_button.armed == False) 
     return;
-  
+
+#ifndef USE_ORIGINAL_MOTIF_CODE  
+  XmeClearBorder (XtDisplay (mw), XtWindow(mw),
+		  mw->primitive.highlight_thickness,
+		  mw->primitive.highlight_thickness,
+		  mw->core.width - 2 * mw->primitive.highlight_thickness,
+		  mw->core.height - 2 * mw->primitive.highlight_thickness,
+		  mw->primitive.shadow_thickness);
+#else
   mw->menu_button.armed = False;
   
   if (wc->simple_class.draw_shadow)
     (*(wc->simple_class.draw_shadow)) ((Widget) mw);
+#endif
 }
 
 

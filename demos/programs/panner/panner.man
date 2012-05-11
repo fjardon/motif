@@ -36,8 +36,7 @@ the desktop Mwm is running on.  With Panner, you can see a miniature
 version of your desktop and interactively pan the display. Panner
 also allows you to connect to other displays and pan them as well.
 Please use this feature with discretion; it can be most anoying to
-others >:-).  Also note that Panner will only work with Mwm 2.0 or
-later.
+others >:-).  Also note that Panner will only work with Mwm 2.0.
 .PP
 Panner starts up displaying notebook widget with one page.  Each page
 in the notebook represents a display screen.  As you add other

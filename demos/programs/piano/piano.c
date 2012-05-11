@@ -1662,7 +1662,7 @@ void CreateMenuBar (Widget parent)
 /*--------------------------------------------------------------------*
  |                              Main                                  |
  *--------------------------------------------------------------------*/
-void
+int
 main(int argc, char **argv)
 {
    Widget           shell, mainWin, panedWin;
@@ -1709,5 +1709,7 @@ main(int argc, char **argv)
    GetBell(XtDisplay(shell));
    
    XtAppMainLoop(context);
+
+   return 0;    /* make compiler happy */
 }
 

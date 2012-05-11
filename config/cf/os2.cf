@@ -1,12 +1,12 @@
-XCOMM $TOG: os2.cf /main/2 1997/08/05 08:51:25 kaleb $
+XCOMM $XConsortium: os2.cf /main/1 1996/10/31 14:47:25 kaleb $
 
 
 
-XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes Exp $
+XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.18.2.8 1999/07/13 07:09:36 hohndel Exp $
 
 #define OSName           OS/2
 #define OSVendor	 IBM
-#define OSMajorVersion    3
+#define OSMajorVersion    4
 #define OSMinorVersion    0
 
 /*
@@ -19,8 +19,7 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
  */
 #define BootstrapCFlags   -DBSD43
 
-/* X_WCHAR and X_LOCALE are set in Xosdefs.h */
-#define StandardDefines   /**/
+#define StandardDefines   -DX_LOCALE -DX_WCHAR
 #define XawI18nDefines    -DUSE_XWCHAR_STRING -DUSE_XMBTOWC
 
 /* This will redirect everything to /XFree86
@@ -44,6 +43,7 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 
 /* more directories */
 #define AdmDir		        $(LIBDIR)/adm
+#define ConfigDir		$(X11ROOT)$(LIBDIR)/config
         DESTDIR = $(X11ROOT)
 
 /* for the man pages */
@@ -62,7 +62,6 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define NroffCmd	groff -Tascii
 #define	EqnCmd 		eqn -Tascii
 #define TroffCmd        groff -Tps
-          COL = /usr/bin/col
          NEQN = NeqnCmd
         NROFF = NroffCmd
 
@@ -70,8 +69,13 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define OSDefines		-D__EMX__ -D__i386__ -Demxos2 -D_POSIX_SOURCE \
 				-D_BSD_SOURCE -D_GNU_SOURCE
 
+#ifndef BuildXKB
 #define BuildXKB		YES
+#endif
 #define BuildImplibs		YES
+#ifndef BuildLBX
+#define BuildLBX		YES
+#endif
 
 /* some more properties of the OS/2 implementation */
 #define HasNdbm         	YES
@@ -86,27 +90,29 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define	HasSymLinks		NO
 #define HasVFork		NO
 #define HasVarDirectory		NO
+#define HasStrcasecmp		NO
 #define Malloc0ReturnsNull	YES
 #define SetTtyGroup     	NO
 #ifndef HasLibCrypt
 # define HasLibCrypt		NO
 #endif
 #ifndef HasShm
-# define HasShm          	NO
+# define HasShm          	YES
 #endif
 #define ConnectionFlags		-DTCPCONN -DOS2PIPECONN
 #define StdIncDir $(C_INCLUDE_PATH)
+#define HasStickyDirBit		NO
 
-/* XF86Setup stuff */
-#define HasTcl			YES
-#define TclLibDir		$(X11ROOT)$(SHLIBDIR)
-#define TclIncDir		$(X11ROOT)$(INCROOT)/tcl
-#define TclLibName		xtcl
+/* XF86Setup stuff - does not work yet! */
+#define HasTcl			NO
+/*define TclLibDir		$(X11ROOT)$(SHLIBDIR)*/
+/*define TclIncDir		$(X11ROOT)$(INCROOT)/tcl*/
+/*define TclLibName		xtcl*/
 
-#define HasTk			YES
-#define TkLibDir		$(X11ROOT)$(SHLIBDIR)
-#define TkIncDir		$(X11ROOT)$(INCROOT)/tk
-#define TkLibName		xtk
+#define HasTk			NO
+/*define TkLibDir		$(X11ROOT)$(SHLIBDIR)*/
+/*define TkIncDir		$(X11ROOT)$(INCROOT)/tk*/
+/*define TkLibName		xtk*/
 
 /*
  * Compiler Features
@@ -130,11 +136,11 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define PreProcessCmd	CppCmd
 
 #define CcCmd	gcc
-#define DefaultCCOptions	-D__ST_MT_ERRNO -Zmtd -Zsysv-signals
-#define LibraryCCOptions	-D__ST_MT_ERRNO -Zmtd -Zsysv-signals
-#define ServerCCOptions		-D__ST_MT_ERRNO  -Zmtd -Zsysv-signals
+#define DefaultCCOptions	-D__ST_MT_ERRNO__ -Zmtd -Zsysv-signals
+#define LibraryCCOptions	-D__ST_MT_ERRNO__ -Zmtd -Zsysv-signals
+#define ServerCCOptions	-D__ST_MT_ERRNO__ -Zmtd -Zsysv-signals
 
-#define CplusplusCmd	g++
+#define CplusplusCmd g++
 #define CplusplusOptions	-Zmtd -Zsysv-signals
 
 #define MakeCmd x11make 
@@ -145,9 +151,8 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define InstallCmd	install
 
 #define LdCmd	ld
-#define ExtraLoadFlags	/**/
-#define ExtraLibraries	$(LIBRARY_PATH)/binmode.Osuf -lsocket -lbsd
-/*define ServerExtraSysLibs -lemxio*/
+#define ExtraLoadFlags	-Zbin-files
+#define ExtraLibraries	-lsocket -lbsd
 
 /* quite a number of programs you need, most of them the same as
  * with Unix, but listed here for completeness
@@ -161,6 +166,7 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define LintCmd	/**/
 #define MvCmd	mv
 #define CompressCmd	compress
+#define GzipCmd	gzip
 #define LnCmd cp
 #define CpCmd cp
 #define RmCmd	ImakeHelper 4 
@@ -186,17 +192,12 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define InstDatFlags /**/
 #define InstallFlags /**/
 
-#ifdef i386Architecture
-# define OptimizedCDebugFlags 	-m486 DefaultGcc2i386Opt
-# define ServerOSDefines	XFree86ServerOSDefines -DDDXTIME
-#else
-# define OptimizedCDebugFlags 	-O
-# define ServerOSDefines 	/**/
-#endif
-#ifdef i386Architecture
+#define OptimizedCDebugFlags 	DefaultGcc2i386Opt
+#define ServerOSDefines	XFree86ServerOSDefines -DDDXTIME
 #define ServerExtraDefines GccGasOption XFree86ServerDefines
-#else
-#define ServerExtraDefines GccGasOption
+
+#if HasShm
+# define ServerExtraSysLibs	-lshm
 #endif
 
 /*
@@ -209,6 +210,7 @@ _NULLCMD_ = @ rem
 #define StripInstalledPrograms	NO
 #define CompressAllFonts	YES
 #define CompressManPages	YES
+#define GzipFontCompression	YES
 #define DefaultUserPath		.;/os2;/emx/bin;/tcpip/bin;$(BINDIR)
 #define DefaultSystemPath	/os2;/emx/bin;$(BINDIR)
 

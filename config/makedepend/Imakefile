@@ -1,4 +1,9 @@
 XCOMM $TOG: Imakefile /main/27 1997/04/30 15:38:09 kaleb $
+XCOMM
+XCOMM
+XCOMM
+XCOMM
+XCOMM $XFree86: xc/config/makedepend/Imakefile,v 3.4.2.1 1997/06/11 12:08:35 dawes Exp $
 
     SRCS = include.c main.c parse.c pr.c cppsetup.c ifparser.c 
     OBJS = include.o main.o parse.o pr.o cppsetup.o ifparser.o 
@@ -32,7 +37,7 @@ INCLUDES = -I$(IMAKESRC) -I$(TOP)/include $(TOP_X_INCLUDES)/X11
 
  DEPLIBS =
 
-#if defined(MacIIArchitecture) || defined(SequentArchitecture)
+#if defined(MacIIArchitecture) || defined(SequentArchitecture) || defined(i386ScoArchitecture)
  XBSDLIB = /**/
 #endif
 
@@ -78,3 +83,10 @@ ComplexProgramTarget(makedepend)
 SpecialCObjectRule(main,$(ICONFIGFILES),$(MAIN_DEFINES))
 
 InstallManPageLong(mkdepend,$(MANDIR),makedepend)
+
+#ifdef OS2Architecture
+all::
+	$(CP) ProgramTargetName(makedepend) /
+#endif
+
+InstallLinkKitNamedProg(makedepend,makedepend,$(LINKKITDIR)/config/makedepend)

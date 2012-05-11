@@ -382,14 +382,22 @@ XmeGetNextCharacter(XtPointer     *in_out,
       else
 	comp_type = XmSTRING_COMPONENT_TEXT;
       if ((text_end == NULL) || (ptr < (char*) text_end))
+#ifndef NO_MULTIBYTE
 	len = mblen(ptr, MB_CUR_MAX);
+#else
+        len = *ptr ? 1 : 0;
+#endif
       break;
 
     case XmMULTIBYTE_TEXT:
       /* In Motif 2.0 dynamic switching of locales isn't supported. */
       comp_type = XmSTRING_COMPONENT_LOCALE_TEXT;
       if ((text_end == NULL) || (ptr < (char*) text_end))
+#ifndef NO_MULTIBYTE
 	len = mblen(ptr, MB_CUR_MAX);
+#else
+        len = *ptr ? 1 : 0;
+#endif
       break;
 
     case XmWIDECHAR_TEXT:

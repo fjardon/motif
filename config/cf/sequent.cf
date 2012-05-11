@@ -1,4 +1,4 @@
-XCOMM platform:  $TOG: sequent.cf /main/5 1999/05/19 16:59:58 mgreess $
+XCOMM platform:  $XConsortium: sequent.cf /main/4 1996/12/04 10:10:49 swick $
 /*
  * SET VERSION NUMBERS BEFORE MAKING MAKEFILES; also, you'll need to install
  * util/scripts/bsdinstall.sh before doing a "make install"
@@ -77,11 +77,6 @@ RANLIB = :
 #define BuildServer		NO
 #define BuildXInputLib		NO
 #define BuildPexClients		NO
-
-#define BuildMotifConfig	NO
-#define BuildMotifDemos		NO
-#define BuildWMLTable		NO
-
 
 #define LnCmd			ln -s
 

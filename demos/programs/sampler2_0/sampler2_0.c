@@ -149,7 +149,7 @@ static void sb_OkCB(Widget w, XtPointer client_data,
 static Widget ssb_GetTextField(Widget w);
 
 
-#define APP_CLASS "XmdSample2_0"
+#define APP_CLASS "XmdSampler2_0"
 
 
 static Widget toplevel ;  /* used in OKCB for set its size */

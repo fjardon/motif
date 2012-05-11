@@ -63,6 +63,12 @@ XCOMM $TOG: Motif.rules /main/8 1999/03/22 15:12:48 mgreess $
 # define ImportMotif		NO
 #endif
 
+#if UseInstalledMotif
+#define ClientEnvSetup /**/
+#else
+#define ClientEnvSetup $(CLIENTENVSETUP)
+#endif
+
 #ifndef MSimpleProgramTarget
 #define MSimpleProgramTarget(program)                                   @@\
 AllTarget(program)                                                      @@\
@@ -97,7 +103,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid: program.uil $(DEPUIL)                                      @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -111,7 +117,7 @@ AllTarget(subdir/program.uid)                                           @@\
 	                                                                @@\
 subdir/program.uid: subdir/program.uil $(DEPUIL)                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS) -o $@ subdir/program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS) -o $@ subdir/program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNamedTarget(install,subdir/program.uid,$(INSTDATFLAGS),$(UIDDIR)/subdir,program.uid) @@\
                                                                         @@\
@@ -125,7 +131,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid: program.uil $(DEPUIL)                                      @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(LIBDIR)/locale/uid)                    @@\
                                                                         @@\
@@ -140,7 +146,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS1) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_1) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_1) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -155,7 +161,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS2) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_2) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_2) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -170,7 +176,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS3) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_3) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_3) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -185,7 +191,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS4) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_4) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_4) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -200,7 +206,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS5) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_5) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_5) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -215,7 +221,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS6) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_6) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_6) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -230,7 +236,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS7) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_7) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_7) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -245,7 +251,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS8) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_8) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_8) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -260,7 +266,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS9) $(DEPUIL)                                        @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_9) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_9) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -275,7 +281,7 @@ AllTarget(program.uid)                                                  @@\
 	                                                                @@\
 program.uid:  $(UILS10) $(DEPUIL)                                       @@\
 	RemoveTargetProgram($@)                                         @@\
-	$(CLIENTENVSETUP) $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_10) -o $@ program.uil $(UIL_INCLUDES)	@@\
+	ClientEnvSetup $(UIL) $(UILFLAGS) $(LOCAL_UILFLAGS_10) -o $@ program.uil $(UIL_INCLUDES)	@@\
 	                                                                @@\
 InstallNonExecFile(program.uid,$(UIDDIR))                               @@\
                                                                         @@\
@@ -425,6 +431,43 @@ program: $(OBJS9) $(DEPLIBS9)						@@\
 CenterProgramTarget(program,$(SRCS9),$(OBJS9),locallib,syslib)		@@\
 									@@\
 InstallProgram(program,$(BINDIR))
+#endif
+
+/*
+ * InstallMotifHelpFile - Install a Motif demo program help file
+ */
+#ifndef InstallMotifHelpFile
+#define InstallMotifHelpFile(file)					@@\
+InstallNamedTarget(install,file.help,$(INSTDATFLAGS),$(LIBDIR)/help,file.help)
+#endif
+
+/*
+ * InstallMotifManPage - Install a Motif man page
+ */
+#if defined(FreeBSDArchitecture) && CompressManPages
+
+#ifndef CompressManPage
+#define CompressManPage(file)						@@\
+file.gz: file								@@\
+	-$(COMPRESSMANCMD) -c file > file.gz				@@\
+									@@\
+clean::									@@\
+	$(RM) file.gz
+#endif
+
+#ifndef InstallMotifManPage
+#define InstallMotifManPage(file,section)				@@\
+CompressManPage(file.section)						@@\
+									@@\
+install.man:: file.section.gz						@@\
+	$(INSTALL) $(INSTALLFLAGS) $(INSTMANFLAGS) file.section.gz $(DESTDIR)$(MANDIR)/file.$(MANSUFFIX).gz
+#endif
+#else /* FreeBSDArchitecture */
+#ifndef InstallMotifManPage
+#define InstallMotifManPage(file,section)				@@\
+install.man:: file.section						@@\
+	$(INSTALL) $(INSTALLFLAGS) $(INSTMANFLAGS) file.section $(DESTDIR)$(MANDIR)/file.$(MANSUFFIX)
+#endif
 #endif
 
 #ifdef AUTOMATION
@@ -723,7 +766,11 @@ clean::									@@\
 #endif
 
 #ifndef MotifProjectDefines
-# define MotifProjectDefines	MotifDefines MessageCatalogDefines
+#if UseInstalledMotif
+#  define MotifProjectDefines	/**/
+# else
+#  define MotifProjectDefines	MotifDefines MessageCatalogDefines
+# endif
 #endif
 #ifdef ProjectDefines
 # undef ProjectDefines

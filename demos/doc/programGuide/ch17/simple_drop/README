@@ -3,9 +3,6 @@
 
 The SimpleDrop demonstrates how a Motif application can add an
 XmNdestinationCallback procedure to an XmDrawingArea widget.
-To build the program, just type:
-
- $ make
 
 To run the program, just type:
 

@@ -43,4 +43,4 @@ HEADERS = \
 
 all::
 
-InstallMultipleFlags($(HEADERS),$(INCDIR)/bitmaps,$(INSTINCFLAGS))
+InstallMultipleFlags($(HEADERS),$(XPROJECTROOT)/include/X11/bitmaps/,$(INSTINCFLAGS))

@@ -2,9 +2,6 @@
                    README File for container Example 
 
 The container example demonstrates a simple use of the XmContainer widget. 
-To build the program, just type 
-
- $ make
 
 To run the program, just type:
 

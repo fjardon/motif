@@ -366,7 +366,7 @@ ObjectAtPoint(
 	widget = cw->composite.children[i];
 
 	/* do not care for gadget only for the DA input */
-	if (XtIsManaged (widget)) {
+	if (XmIsGadget(widget) && XtIsManaged (widget)) {
 	    if (x >= widget->core.x && y >= widget->core.y && 
 		x < widget->core.x + widget->core.width    && 
 		y < widget->core.y + widget->core.height)

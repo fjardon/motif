@@ -60,8 +60,24 @@ COMMON_OBJ =	UilCmd.o	UilDiags.o	UilKeyTab.o	UilLexAna.o  \
 		UilSymNam.o	UilSymStor.o	UilData.o \
 		UilLstMac.o	UilSemVal.o	UilSemCSet.o	UilDB.o
 
+#if DoSharedLib && DoNormalLib
+NORMAL_OBJ =	unshared/UilCmd.o	unshared/UilDiags.o \
+	unshared/UilKeyTab.o	unshared/UilLexAna.o	unshared/UilLexPars.o \
+	unshared/UilLstLst.o	unshared/UilP2Out.o	unshared/UilP2Reslv.o \
+	unshared/UilSarComp.o	unshared/UilSarExp.o	unshared/UilSarInc.o \
+	unshared/UilSarMod.o	unshared/UilSarObj.o	unshared/UilSarProc.o \
+	unshared/UilSarVal.o	unshared/UilSrcSrc.o	unshared/UilSymNam.o \
+	unshared/UilSymStor.o	unshared/UilData.o	unshared/UilLstMac.o \
+	unshared/UilSemVal.o	unshared/UilSemCSet.o	unshared/UilDB.o
+
+OBJS2 =	$(NORMAL_OBJ)	unshared/UilMain.o
+
+unshared/UilMain.o: UilMain.o
+#else
+OBJS2 =	$(COMMON_OBJ)	UilMain.o
+#endif
+
 OBJS =		$(COMMON_OBJ)	UilParser.o
-OBJS2 =		$(COMMON_OBJ)	UilMain.o
 
 HEADERS = 	Uil.h		UilSymGl.h	UilDBDef.h	UilSymDef.h \
 		UilDef.h	XmAppl.uil
@@ -79,6 +95,8 @@ SpecialLibObjectRule(UilDB.o,NullParameter,-DLIBDIR='"'$(XPROJECTROOT)/lib/X11'"
 LinkFile(UilParser.c,UilMain.c)
 SpecialLibObjectRule(UilParser.o,NullParameter,-DCALLABLE)
 
+clean::
+	$(RM) $(PROGRAMS)
 
 DependTarget3($(COMMON_SRC),UilMain.c,UilParser.c)
 

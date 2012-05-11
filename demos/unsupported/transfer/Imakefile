@@ -25,11 +25,11 @@ XCOMM HISTORY
 XCOMM 
 XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:46:53 drk $
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) XmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) XmClientLibs 
-EXTRA_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary 
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)
 
 SRCS = transfer.c actions.c list.c interface.c
@@ -40,3 +40,4 @@ NormalLibraryObjectRule()
 MComplexProgramTarget(transfer,$(LOCAL_LIBRARIES),NullParameter)
 
 InstallManPage(transfer,$(MANDIR))
+InstallMotifHelpFile(transfer)

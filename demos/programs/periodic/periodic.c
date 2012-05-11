@@ -40,8 +40,10 @@ static char rcsid[] = "$XConsortium: periodic.c /main/8 1996/04/22 23:28:50 pasc
  *****************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <Xm/Xm.h>
 #include <Xm/ComboBox.h>
+#include <Xm/RowColumn.h>
 #include <Xm/Scale.h>
 #include <Xm/ScrolledW.h>
 #include <Xm/ToggleB.h>
@@ -231,6 +233,8 @@ main(
     XtManageChild(appMain);
     XtRealizeWidget(shell);
     XtAppMainLoop(appContext);
+
+    return 0;    /* make compiler happy */
 }
 
 static void

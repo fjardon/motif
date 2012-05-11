@@ -40,6 +40,21 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
  */
 
 #include "WmGlobal.h"
+#include <sys/types.h>
+#ifndef X_NOT_STDC_ENV
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#else
+extern int putenv();
+extern char *getenv();
+extern int atoi();
+extern pid_t wait();
+
+#ifndef PORT_NOVFORK
+extern pid_t vfork();
+#endif /* PORT_NOVFORK */
+#endif
 #ifndef WSM
 #include <signal.h>
 #endif
@@ -93,12 +108,6 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
 
 #include <Xm/RowColumnP.h> /* for MS_LastManagedMenuTime */
 extern XmMenuState _XmGetMenuState();
-
-extern int putenv ();
-extern char * getenv ();
-#ifndef PORT_NOVFORK
-extern pid_t vfork();
-#endif /* PORT_NOVFORK */
 
 static unsigned int GetEventInverseMask(XEvent *event);
 
@@ -996,6 +1005,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
 #ifndef WSM
     void (*intStat) ();
     void (*quitStat) ();
+    void (*chldStat) ();
 #endif /* WSM */
     char *shell;
     char *shellname;
@@ -1018,6 +1028,19 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
     }
 #endif /* PANELIST */
 
+#ifndef WSM
+    /* For now use only for non WSM code.  May integrate to WSM later. */
+    /*
+     * Disable SIGCHLD while we wait for this child to exit, otherwise
+     * we will go into the ChildProcSignalHandler and will never get the
+     * correct child pid in the while loop below. pgw@ixi 30-5-95 IBIS 20585.
+     *
+     * Moved before fork() to avoid race condition.
+     * Change handler to SIG_DFL, SIG_IGN causes bug. paulsh@sequent 31-08-95.
+     */
+    chldStat = (void (*)())signal (SIGCHLD, SIG_DFL); 
+#endif
+
     /*
      * Fork a process to exec a shell to run the specified command:
      */
@@ -1030,7 +1053,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
     {
 
 #ifndef NO_SETPGRP
-#if defined(SVR4) || defined(__OSF1__) || defined(__osf__) || defined(linux)
+#if defined(SVR4) || defined(__OSF1__) || defined(__osf__) || defined(_POSIX_JOB_CONTROL)
 	setsid();
 #else
 #ifdef SYSV
@@ -1129,6 +1152,12 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
 #else /* WSM */
     while ((w = wait (&status)) != pid && (w != -1));
 
+    /*
+     * Currently the only purpose for setting the local variable "status"
+     * here is as a convenience for setting break points or querying the
+     * value of "status" when using a debugger.
+     * Otherwise the value of "status" is unused beyond this point.
+     */
     if (w == -1)
     {
 	status = -1;
@@ -1138,6 +1167,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
 #ifndef WSM
     signal (SIGINT, intStat);
     signal (SIGQUIT, quitStat);
+    signal (SIGCHLD, chldStat);
 #endif /* WSM */
 
     /*
@@ -1757,7 +1787,7 @@ void Do_Focus_Key (ClientData *pCD, Time focusTime, long flags)
 		   /* user clicked on the frame but we don't want the focus */
 		   /* set it to the client's frame */
 		   XSetInputFocus (DISPLAY, pcdFocus->clientBaseWin,
-				RevertToPointerRoot, focusTime);
+				RevertToPointerRoot, CurrentTime);
 		  }
 		  else if ( !(flags & CLIENT_AREA_FOCUS)                   &&
 		       !(pcdFocus->protocolFlags & PROTOCOL_WM_TAKE_FOCUS) &&
@@ -1765,12 +1795,12 @@ void Do_Focus_Key (ClientData *pCD, Time focusTime, long flags)
 		     )
 		  {
 		    XSetInputFocus (DISPLAY, focusWindow,
-				    RevertToPointerRoot, focusTime);
+				    RevertToPointerRoot, CurrentTime);
 		  }
 		  else
 		  {
 		    XSetInputFocus (DISPLAY, focusWindow,
-				      RevertToParent, focusTime);
+				      RevertToParent, CurrentTime);
 		  }
 		}
 		else

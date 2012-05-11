@@ -230,7 +230,7 @@ _WmGrabMasks ( unsigned int modifiers, int *pnum_masks )
     unsigned int mask;
 
     /* count the number of masks in the lock sequence */
-    for (num_masks=0; wmGD.pLockMaskSequence[num_masks] != NULL; num_masks++);
+    for (num_masks=0; wmGD.pLockMaskSequence[num_masks] != 0; num_masks++);
 
     /* insure we have enough space for our returned masks */
     if ((pRetMasks == NULL) || (len_ret_masks < num_masks+2))

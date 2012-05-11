@@ -59,7 +59,7 @@ static void FillItPlease();
 static void NearlyEvenSpread();
 static Widget AddStem() ;
 
-main(argc, argv) 
+int main(argc, argv) 
 int argc; char **argv;
 {
     XtAppContext app_context;
@@ -94,6 +94,8 @@ int argc; char **argv;
     XtManageChildren(forms, p);
     XtRealizeWidget(toplevel);
     XtAppMainLoop(app_context);
+
+    return 0;    /* make compiler happy */
 }
 
 

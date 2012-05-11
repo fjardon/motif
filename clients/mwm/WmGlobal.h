@@ -2010,6 +2010,10 @@ typedef struct _ClientData *PtrClientData;
 /* global return buffer */
 #define MAXWMPATH				1023
 #define MAXBUF				(MAXWMPATH+1)
+
+#define PIXMAP_IS_VALID(pix) \
+  ((pix) != XmUNSPECIFIED_PIXMAP && (pix) != None && (pix) != (Pixmap)NULL)
+  
 #ifdef WSM
 
 /*************************************<->*************************************

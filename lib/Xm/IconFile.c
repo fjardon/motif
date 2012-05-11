@@ -38,7 +38,7 @@
 */
 
 #include <stdio.h>
-#include <locale.h>
+#include <X11/Xlocale.h>
 #include <X11/Xos.h>
 #include <Xm/IconFileP.h>
 #include <Xm/ColorObjP.h>
@@ -89,7 +89,7 @@
 /**************** Icon PATH defines ********/
 
 
-static XmConst char ABSOLUTE_IPATH[] = "19 Oct 1995B";
+static XmConst char ABSOLUTE_IPATH[] = "%H%B";
 static XmConst char ABSOLUTE_PATH[] = "\
 %P\
 %S";
@@ -171,22 +171,28 @@ MakeCachedDirEntry(String dirName)
     else {
 	int	bufLen, oldBufLen = 0;
 	char	stackBuf[MAX_CACHE_DIR_SIZE];
+	char    *p;
 	int	numFiles = 0;
 	int	nameHeapSize = 0;
 	_Xreaddirparams dirEntryBuf;
 
+        /* 
+         * Original code was caching each struct direct in stackBuf.
+         * Instead, just cache currDirect->d_name, null-terminated.
+         */
         cachedDirType = DtVALID_CACHED_DIR;
 	while ((currDirect = _XReaddir(fileDesc, dirEntryBuf)) != NULL) {
-	  bufLen = currDirect->d_reclen;
-	  if (bufLen + oldBufLen >= MAX_CACHE_DIR_SIZE) {
+	  bufLen = strlen(currDirect->d_name);
+	  if (bufLen + oldBufLen + 1 >= MAX_CACHE_DIR_SIZE) {
 	    /*
 	     * don't cache this one
 	     */
 	    cachedDirType = DtUNCACHED_DIR;
 	    break;
 	  } else {
-	    (void) memcpy(&(stackBuf[oldBufLen]), (void *)currDirect, bufLen);
+	    (void) memcpy(&(stackBuf[oldBufLen]), currDirect->d_name, bufLen);
 	    oldBufLen += bufLen;
+            stackBuf[oldBufLen++] = '\0';
 	  }
 	}
 	if (oldBufLen == 0) {
@@ -200,13 +206,15 @@ MakeCachedDirEntry(String dirName)
 	    String		nameHeap;
 	    Cardinal		i;
 
-	    for (currDirect = (struct dirent *)stackBuf;
-		 ((char *)currDirect - stackBuf) < oldBufLen;
-		 currDirect = (struct dirent *) 
-		 (((char *)currDirect) + currDirect->d_reclen)) {
+            /*
+             * Go through stackBuf and count the length of all
+             * the names.  Don't count the nulls.
+             */
+            for (p = stackBuf ; p - stackBuf < oldBufLen;
+		 p = p + strlen(p) + 1) {
 
 		numFiles++;
-		nameHeapSize += strlen (currDirect->d_name);
+		nameHeapSize += strlen(p);
 	    }
 	    /*
 	     * we allocate an extra nameOffset to track the length of
@@ -227,17 +235,13 @@ MakeCachedDirEntry(String dirName)
 	    nameHeap = (String)
 	      &(validDir->nameOffsets[numFiles + 1]);
 
-	    for (i = 0, currDirect = (struct dirent *)stackBuf;
-		 i < validDir->numFiles;
-		 i++,
-		 currDirect = (struct dirent *) 
-		 (((char *)currDirect) + currDirect->d_reclen)) {
+            /* Copy the strings from stackBuf to nameHeap.  Omit the nulls. */
+            for (i = 0, p = stackBuf; i < validDir->numFiles;
+                 i++, p = p + strlen(p) + 1) {
 
-		validDir->nameOffsets[i + 1] = 
-		  validDir->nameOffsets[i] + strlen (currDirect->d_name);
-		memcpy(&(nameHeap[validDir->nameOffsets[i]]),
-		       &(currDirect->d_name[0]),
-		       strlen (currDirect->d_name));
+		validDir->nameOffsets[i + 1] =
+		  validDir->nameOffsets[i] + strlen(p);
+		memcpy(&(nameHeap[validDir->nameOffsets[i]]), p, strlen(p));
 	    }
           cachedDir = (DtCachedDir)validDir ;
 	}
@@ -430,10 +434,21 @@ find_slash(String str)
   if (MB_CUR_MAX == 1) {
       return strchr(str, '/');
   } else {
+#ifndef NO_MULTIBYTE
       while ((n = mblen(str, MB_CUR_MAX)) >0) {
+#else
+      if (!str) return NULL;
+      while ((n = *str ? 1 : 0) > 0) {
+#endif
+#ifndef NO_MULTIBYTE
         if (n == 1 && *str == '/')
             return str;
         str += n;
+#else
+	if (*str == '/')
+	    return str;
+	str++;
+#endif
       }
       return NULL;
   }
@@ -565,7 +580,6 @@ XmGetIconFileName(
 
     /* generate the icon paths once per application: iconPath and bmPath */
     if (!iconNameCache) {
-	String 		tmpPath;
 	Boolean		junkBoolean;
 
 	iconNameCache =  _XmAllocHashTable(100, 
@@ -579,13 +593,11 @@ XmGetIconFileName(
 	strcpy(stackString, homedir) ;
 
 	if (useColor) {
-	    tmpPath = getenv("XMICONSEARCHPATH");
+	    iconPath = _XmOSInitPath(NULL, "XMICONSEARCHPATH", &junkBoolean);
 	}
 	else {
-	    tmpPath = getenv("XMICONBMSEARCHPATH");
+	    iconPath = _XmOSInitPath(NULL, "XMICONBMSEARCHPATH", &junkBoolean);
 	}
-	if (tmpPath) iconPath = XtNewString(tmpPath);
-	else iconPath = XtNewString(ABSOLUTE_IPATH);
 
 	/* 1.2 path as a fallback */
 	bmPath = _XmOSInitPath(NULL, "XBMLANGPATH", &junkBoolean);

@@ -412,6 +412,7 @@ XmString     decoString;
 
     n = 0;
     XtSetArg(argList[n], XmNminimumValue, 1); n++;
+    XtSetArg(argList[n], XmNposition, 1); n++;
     XtSetArg(argList[n], XmNspinBoxChildType, XmNUMERIC); n++;
     XtSetArg(argList[n], XmNeditable, False); n++;
 

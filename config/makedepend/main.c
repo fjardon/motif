@@ -1,4 +1,4 @@
-/* $TOG: main.c /main/86 1998/03/25 08:17:50 kaleb $ */
+/* $XConsortium: main.c /main/84 1996/12/04 10:11:23 swick $ */
 /*
 
  * Motif
@@ -45,6 +45,10 @@
 
 #if NeedVarargsPrototypes
 #include <stdarg.h>
+#endif
+
+#ifdef MINIX
+#define USE_CHMOD	1
 #endif
 
 #ifdef DEBUG
@@ -115,7 +119,7 @@ catch (sig)
 	fatalerr ("got signal %d\n", sig);
 }
 
-#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32)
+#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(__EMX__) || defined(Lynx_22)
 #define USGISH
 #endif
 
@@ -129,7 +133,7 @@ catch (sig)
 struct sigaction sig_act;
 #endif /* USGISH */
 
-main(argc, argv)
+int main(argc, argv)
 	int	argc;
 	char	**argv;
 {
@@ -142,6 +146,8 @@ main(argc, argv)
 	struct symtab *psymp = predefs;
 	char *endmarker = NULL;
 	char *defincdir = NULL;
+	char **undeflist = NULL;
+	int numundefs = 0, i;
 
 	ProgramName = argv[0];
 
@@ -236,6 +242,20 @@ main(argc, argv)
 				argc--;
 			}
 			break;
+		case 'U':
+			/* Undef's override all -D's so save them up */
+			numundefs++;
+			if (numundefs == 1)
+			    undeflist = malloc(sizeof(char *));
+			else
+			    undeflist = realloc(undeflist,
+						numundefs * sizeof(char *));
+			if (argv[0][2] == '\0') {
+				argv++;
+				argc--;
+			}
+			undeflist[numundefs - 1] = argv[0] + 2;
+			break;
 		case 'Y':
 			defincdir = argv[0]+2;
 			break;
@@ -315,15 +335,42 @@ main(argc, argv)
 			warning("ignoring option %s\n", argv[0]);
 		}
 	}
+	/* Now do the undefs from the command line */
+	for (i = 0; i < numundefs; i++)
+	    undefine(undeflist[i], &maininclist);
+	if (numundefs > 0)
+	    free(undeflist);
+
 	if (!defincdir) {
 #ifdef PREINCDIR
 	    if (incp >= includedirs + MAXDIRS)
 		fatalerr("Too many -I flags.\n");
 	    *incp++ = PREINCDIR;
 #endif
+#ifdef __EMX__
+	    {
+		char *emxinc = getenv("C_INCLUDE_PATH");
+		/* can have more than one component */
+		if (emxinc) {
+		    char *beg, *end;
+		    beg= (char*)strdup(emxinc);
+		    for (;;) {
+			end = (char*)strchr(beg,';');
+			if (end) *end = 0;
+		    	if (incp >= includedirs + MAXDIRS)
+				fatalerr("Too many include dirs\n");
+			*incp++ = beg;
+			if (!end) break;
+			beg = end+1;
+		    }
+		}
+	    }
+#else /* !__EMX__, does not use INCLUDEDIR at all */
 	    if (incp >= includedirs + MAXDIRS)
 		fatalerr("Too many -I flags.\n");
 	    *incp++ = INCLUDEDIR;
+#endif
+
 #ifdef POSTINCDIR
 	    if (incp >= includedirs + MAXDIRS)
 		fatalerr("Too many -I flags.\n");
@@ -419,6 +466,21 @@ main(argc, argv)
 	exit(0);
 }
 
+#ifdef __EMX__
+/*
+ * eliminate \r chars from file
+ */
+static int elim_cr(char *buf, int sz)
+{
+	int i,wp;
+	for (i= wp = 0; i<sz; i++) {
+		if (buf[i] != '\r')
+			buf[wp++] = buf[i];
+	}
+	return wp;
+}
+#endif
+
 struct filepointer *getfile(file)
 	char	*file;
 {
@@ -439,6 +501,9 @@ struct filepointer *getfile(file)
 		fatalerr("cannot allocate mem\n");
 	if ((st.st_size = read(fd, content->f_base, st.st_size)) < 0)
 		fatalerr("failed to read %s\n", file);
+#ifdef __EMX__
+	st.st_size = elim_cr(content->f_base,st.st_size);
+#endif
 	close(fd);
 	content->f_len = st.st_size+1;
 	content->f_p = content->f_base;
@@ -465,7 +530,7 @@ char *copy(str)
 	return(p);
 }
 
-match(str, list)
+int match(str, list)
 	register char	*str, **list;
 {
 	register int	i;
@@ -508,7 +573,7 @@ char *getline(filep)
 			}
 			continue;
 		}
-#ifdef WIN32
+#if defined(WIN32) || defined(__EMX__)
 		else if (*p == '/' && *(p+1) == '/') { /* consume comments */
 			*p++ = ' ', *p++ = ' ';
 			while (*p && *p != '\n')
@@ -563,7 +628,7 @@ char *base_name(file)
 	return(file);
 }
 
-#if defined(USG) && !defined(CRAY) && !defined(SVR4)
+#if defined(USG) && !defined(CRAY) && !defined(SVR4) && !defined(__EMX__) && !defined(clipper) && !defined(__clipper__)
 int rename (from, to)
     char *from, *to;
 {
@@ -614,12 +679,12 @@ redirect(line, makefile)
 		fatalerr("cannot open \"%s\"\n", makefile);
 	sprintf(backup, "%s.bak", makefile);
 	unlink(backup);
-#ifdef WIN32
+#if defined(WIN32) || defined(__EMX__)
 	fclose(fdin);
 #endif
 	if (rename(makefile, backup) < 0)
 		fatalerr("cannot rename %s to %s\n", makefile, backup);
-#ifdef WIN32
+#if defined(WIN32) || defined(__EMX__)
 	if ((fdin = fopen(backup, "r")) == NULL)
 		fatalerr("cannot open \"%s\"\n", backup);
 #endif
@@ -642,7 +707,7 @@ redirect(line, makefile)
 	    }
 	}
 	fflush(fdout);
-#if defined(USGISH) || defined(_SEQUENT_)
+#if defined(USGISH) || defined(_SEQUENT_) || defined(USE_CHMOD)
 	chmod(makefile, st.st_mode);
 #else
         fchmod(fileno(fdout), st.st_mode);

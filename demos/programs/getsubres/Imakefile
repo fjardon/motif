@@ -23,11 +23,11 @@ XCOMM
 XCOMM 
 XCOMM HISTORY
 
-     DEMOLIBDIR = $(MTOP)/demos/lib/
+     DEMOLIBDIR = $(MTOP)/demos/lib
         DEMOLIB = $(DEMOLIBDIR)/Xmd/libXmd.a
         DEPLIBS = $(DEMOLIB) XmClientDepLibs
 LOCAL_LIBRARIES = $(DEMOLIB) XmClientLibs 
-EXTRA_LIBRARIES = -lm 
+  SYS_LIBRARIES = MathLibrary 
  EXTRA_INCLUDES = -I$(DEMOLIBDIR)   
 
 SRCS = getsubres.c
@@ -39,5 +39,6 @@ MSimpleProgramTarget(getsubres)
 
 InstallProgram(getsubres,$(BINDIR))
 InstallManPage(getsubres,$(MANDIR))
+InstallMotifHelpFile(getsubres)
 
 DependTarget()

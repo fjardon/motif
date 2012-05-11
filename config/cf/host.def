@@ -1,0 +1,17 @@
+#ifdef BeforeVendorCF
+
+#define TopLevelProject         Motif
+#define ProjectRoot             /usr/X11R6
+#define X11ProjectRoot          /usr/X11R6
+#define VirtualBindingsPath     $(LIBDIR)/bindings
+#define ImportX11               YES
+#define USE_BYACC               YES
+#define NoMessageCatalog        YES
+#define ForceNormalLib          YES
+#define HasVarDirectory         NO
+#define DebugLibXm              YES
+#define DebugLibMrm             YES
+#define DebugLibUil             YES
+#define LexLib                  -lfl
+
+#endif /* BeforeVendorCF */

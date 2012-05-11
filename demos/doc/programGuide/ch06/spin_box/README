@@ -2,9 +2,6 @@
                    README File for spin_box Example 
 
 The spin_box example demonstrates some simple uses of the XmSpinBox widget. 
-To build the program, just type 
-
- $ make
 
 To run the program, just type:
 

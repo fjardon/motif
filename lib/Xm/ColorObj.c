@@ -685,7 +685,7 @@ ColorCachePropertyExists(
     if (value != NULL)  {
         if (value[length - 1] != XmPIXEL_SET_PROP_VERSION)
 	   return False ;
-	value[length - 1] = NULL ; /* extract version info */
+	value[length - 1] = 0 ; /* extract version info */
 
         FetchPixelData(w, value, screen);
     }
@@ -1239,9 +1239,9 @@ XmeGetIconControlInfo(
 
 
 /**********************************************************************/
-/** XmGetPixelData()                                                **/
+/** XmeGetColorObjData()                                             **/
 /**              pixelSet should be an array of num_pixelSet entries  **/
-/**              Contrary to the Xme version, use the correct display **/
+/**              Contrary to XmeGetPixelData, use the correct display **/
 /**                                                                  **/
 /**  for instance, to access the primary background, use
              primary_background = pixelSet[primary_id].bg ;          */

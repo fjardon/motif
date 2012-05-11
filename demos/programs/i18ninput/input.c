@@ -25,9 +25,9 @@
  * HISTORY
 */ 
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <memory.h>
-#include <locale.h>
+#include <X11/Xlocale.h>
 #include <Xm/Protocols.h>
 #include <Xm/Xm.h>
 #include <Xm/CascadeB.h>

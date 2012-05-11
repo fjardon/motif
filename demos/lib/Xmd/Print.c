@@ -27,6 +27,7 @@
  */
 
 #include <Xm/XmP.h>
+#include <Xm/ToggleB.h>
 #include <Xm/ToggleBG.h>
 #include <Xm/TextF.h>
 #include <Xm/LabelG.h>
@@ -36,6 +37,8 @@
 #include <Xm/MessageB.h>
 #include <Xm/SelectioB.h>
 #include "PrintP.h"
+#include <stdlib.h>
+#include <ctype.h>
 
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 

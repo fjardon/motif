@@ -28,7 +28,7 @@ XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:53:30 drk $
 #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
 
 SUBDIRS = Exm hellomotif motifshell xmapdef xmforc \
-	dogs uilsymdump xmfonts xmform dainput
+	dogs uilsymdump xmfonts xmform dainput aicon
  
 
 MakeSubdirs($(SUBDIRS))
