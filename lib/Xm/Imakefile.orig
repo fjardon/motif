@@ -37,44 +37,6 @@ XCOMM  This is unpublished proprietary source code of FUJITSU LIMITED
 #define HugeLibrary	YES
 #define LargePICTable	YES
 
-XCOMM Modifications made by Robert Hartley (rhartley@ics.com)
-XCOMM for the Open Motif Everywhere v2.3 release.
-
-#ifndef ExtraWidgets
-#define ExtraWidgets YES
-#endif
-
-#if ExtraWidgets
-EXTRA_WID_SRCS = XmExtDefs.c XmExtUtil.c \
-                 Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
-                 Ext18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
-                 Hierarchy.c Outline.c Table.c TabBox.c TabList.c TabStack.c \
-                 DrawUtils.c Tree.c
-EXTRA_WID_OBJS = XmExtDefs.o XmExtUtil.o \
-                 Column.o ButtonBox.o ColorS.o Picture.o DataFSel.o DataF.o \
-                 Ext18List.o Paned.o FontS.o IconBox.o IconButton.o xmlist.o \
-                 Hierarchy.o Outline.o Table.o TabBox.o TabList.o TabStack.o \
-                 DrawUtils.o Tree.o
-EXTRA_WID_HEADERS = Ext.h ExtP.h ExtDefs.h XmExtDefs.h \
-                    Column.h ColumnP.h \
-                    ButtonBox.h ButtonBoxP.h \
-                    ColorS.h ColorSP.h \
-                    Picture.h PictureP.h DataF.h DataFP.h DataFSelP.h \
-                    Ext18List.h Ext18ListP.h \
-                    Paned.h PanedP.h FontS.h FontSP.h \
-                    IconBox.h IconBoxP.h IconButton.h IconButtonP.h xmlist.h \
-                    Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
-                    Table.h TableP.h TabBox.h TabBoxP.h TabStack.h TabStackP.h \
-                    TabList.h DrawUtils.h Tree.h TreeP.h
-                    
-#else
-EXTRA_WID_SRCS = /* */
-EXTRA_WID_OBJS = /* */
-EXTRA_WID_HEADERS = /* */
-#endif
-
-
-
 #include <Threads.tmpl>
 
 #ifdef SharedXmReqs
@@ -97,12 +59,12 @@ DEPEND_DEFINES = $(REGEX_DEFINES)
 
     LINTLIBS = $(LINTXLIB) $(LINTXTOOL)
 
-     DEFINES = XmDefines
+     DEFINES = XmDefines StrcasecmpDefines
 SRCH_DEFINES = -DLIBDIR=\"$(XPROJECTROOT)/lib/X11\" -DINCDIR=\"$(XPROJECTROOT)/include/X11\"
 BINDINGS_DEF = -DXMBINDDIR_FALLBACK=\"VirtualBindingsPath\"
 STRINGSABIOPTIONS = ToolkitStringsABIOptions
 
-HEADERS1 = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
+HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         BulletinB.h     BulletinBP.h    CacheP.h        CascadeB.h \
         CascadeBG.h     CascadeBGP.h    CascadeBP.h     Command.h \
         CommandP.h      CutPaste.h      DialogS.h \
@@ -147,10 +109,6 @@ HEADERS1 = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h
-
-HEADERS2 = $(EXTRA_WID_HEADERS)
-
-HEADERS = $(HEADERS1) $(HEADERS2)
 
 SRCS1 = ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
         CascadeB.c      CascadeBG.c     Command.c       CutPaste.c \
@@ -214,6 +172,7 @@ NEW_WID_SRCS =             IconH.c         Container.c     IconG.c  \
            SSpinB.c        TxtPropCv.c     XmStringSeg.c   TranslNew.c
 #endif
 
+
 OBJS1 = ArrowB.o        ArrowBG.o       BulletinB.o     CallbackI.o \
         CascadeB.o      CascadeBG.o     Command.o       CutPaste.o \
         Dest.o          DialogS.o       DialogSE.o      DragBS.o \
@@ -276,10 +235,10 @@ NEW_WID_OBJS =             IconH.o         Container.o     IconG.o  \
            SSpinB.o        TxtPropCv.o     XmStringSeg.o   TranslNew.o  
 #endif
 
-   SRCS3 = $(OBSO_SRCS) $(XPM_SRCS) $(REGEX_SRCS) $(NEW_WID_SRCS) $(EXTRA_WID_SRCS)
-   OBJS3 = $(OBSO_OBJS) $(XPM_OBJS) $(REGEX_OBJS) $(NEW_WID_OBJS) $(EXTRA_WID_OBJS)
+   SRCS3 = $(OBSO_SRCS) $(XPM_SRCS) $(REGEX_SRCS) $(NEW_WID_SRCS)
+   OBJS3 = $(OBSO_OBJS) $(XPM_OBJS) $(REGEX_OBJS) $(NEW_WID_OBJS)
 
-    SRCS = $(SRCS1) $(SRCS2) $(SRCS3) 
+    SRCS = $(SRCS1) $(SRCS2) $(SRCS3)
     OBJS = $(OBJS1) $(OBJS2) $(OBJS3)
 
 #if SharedDataSeparation

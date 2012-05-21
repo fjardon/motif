@@ -1,0 +1,40 @@
+Feb 11, 2002 targets
+
+Changed the following to Xm version:
+(WIP = Work In Progress)
+
+integrated - Column
+integrated - ButtonBox
+integrated - ColorSelector
+integrated - DataField
+integrated - Ext18List
+integrated - FontSelector(*1)
+integrated - IconBox
+integrated - IconButton
+integrated - Outline
+integrated - Paned (*2)
+integrated - Table
+integrated - TabStack
+integrated - Tree
+
+(*1) - need to verify ComboBox usage
+(*2) - need to see about replacing Xi version with the real Xm version.
+Rick Scott's ToolTips from Motif CVS
+
+
+
+Defines needed to build Xi widgets:
+-D_BSD_SOURCE
+-DFUNCPROTO=15
+-D__i386__
+-DICS_EPAK_30
+-Dlinux
+-DNARROWPROTO
+-DNO_MESSAGE_CATALOG
+-DOS_MAJOR_VERSION=2
+-D_POSIX_C_SOURCE=199309L
+-D_POSIX_SOURCE
+-D_SVID_SOURCE
+-DXmRENAME_WIDGETS
+-DXmResolveAllPartOffsets=XiResolveAllPartOffsets
+-D_XOPEN_SOURCE
