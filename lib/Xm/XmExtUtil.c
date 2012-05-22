@@ -839,7 +839,10 @@ XiCompareXtWidgetGeometry(geom1, geom2)
 void
 _XmInitialIzeConverters(Widget w)
 {
-    _XiPostInitialIzeConverters(w, "ICS Enhancement Pak 4.0");
+#if  0
+     /* Dont know where this symbol comes from */
+    _XiPostInitialIzeConverters(w, "Motif 2.5.0");
+#endif
 }
 
 #include <Xm/XmP.h>

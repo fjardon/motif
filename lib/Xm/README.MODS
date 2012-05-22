@@ -24,11 +24,11 @@ Rick Scott's ToolTips from Motif CVS
 
 
 Defines needed to build Xi widgets:
--D_BSD_SOURCE
--DFUNCPROTO=15
--D__i386__
--DICS_EPAK_30
--Dlinux
+-D_BSD_SOURCE    // THis isnt used.?
+-DFUNCPROTO=15   // This is used but i dont know why
+-D__i386__       /* This isnt needed */
+-DICS_EPAK_30    /* This doesnt look like its needed */
+-Dlinux	         /* This also donsnt look needed */
 -DNARROWPROTO
 -DNO_MESSAGE_CATALOG
 -DOS_MAJOR_VERSION=2
