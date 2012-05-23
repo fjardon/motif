@@ -2753,7 +2753,7 @@ FamilyChanged(Widget w, XtPointer fsw_ptr, XtPointer junk)
 {
     XmFontSelectorWidget fsw = (XmFontSelectorWidget) fsw_ptr;
     FontData * cf = XmFontS_font_info(fsw)->current_font;
-    String str = XiCombinationBoxGetValue(w);
+    String str = XmCombinationBoxGetValue(w);
     char buf[BUFSIZ];
     XrmQuark familyq = XrmStringToQuark(str);
 
@@ -2790,7 +2790,7 @@ SizeChanged(Widget w, XtPointer fsw_ptr, XtPointer junk)
 {
     XmFontSelectorWidget fsw = (XmFontSelectorWidget) fsw_ptr;
     FontData * cf = XmFontS_font_info(fsw)->current_font;
-    String str = XiCombinationBoxGetValue(w);
+    String str = XmCombinationBoxGetValue(w);
     char buf[BUFSIZ];
     short size;
 
@@ -3039,7 +3039,7 @@ ToggleNameWindow(Widget w, XtPointer fsw_ptr, XtPointer data)
 					       buf, BUFSIZ));
 	}
 	else {
-	    String str = XiCombinationBoxGetValue(XmFontS_family_box(fsw));
+	    String str = XmCombinationBoxGetValue(XmFontS_family_box(fsw));
 	    DisplayCurrentFont(fsw, str);
 	    XtFree((XtPointer) str);
 	}

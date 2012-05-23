@@ -3581,6 +3581,13 @@ XmComboBoxSetItem(Widget   widget,
     XmeWarning(widget, SETBADITEM);
 
   _XmAppUnlock(app);
+
+}
+ /* Jim Added this function to appease the Combo Box Symbol God */
+XmString
+XmCombinationBoxGetValue(Widget widget)
+{
+    return (GetEditBoxValue(widget));
 }
 
 /*

@@ -12,9 +12,9 @@ extern "C" {
 #endif
 
 #ifdef XiRENAME_WIDGETS
-Const char _XiXXEPakStrings[] = {
+Const char _XmXXExtStrings[] = {
 #else
-Const char _XiEPakStrings[] = {
+Const char _XmExtStrings[] = {
 #endif
 'i','t','e','m','F','o','u','n','d','C','a','l','l','b','a','c','k',0,
 'i','t','e','m','N','o','t','F','o','u','n','d','C','a','l','l','b','a','c','k',0,

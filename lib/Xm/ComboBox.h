@@ -69,6 +69,10 @@ extern void XmComboBoxDeletePos (Widget widget,
 				 int    pos);
 extern void XmComboBoxSelectItem (Widget   widget,
 				  XmString item);
+
+/* JIM ADDED THIS TO APEASE SYMBOL GOD */
+extern XmString  XmCombinationBoxGetValue(Widget widget);
+
 extern void XmComboBoxSetItem (Widget   widget,
 			       XmString item);
 extern void XmComboBoxUpdate (Widget widget);

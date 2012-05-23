@@ -18,6 +18,9 @@ integrated - TabStack
 integrated - Tree
 
 (*1) - need to verify ComboBox usage
+   I added a function the Xm Combo Box, which btw is built totaly differently 
+ (and far inferiorly) to the XiComboBox. The function appeases the FontSelectors request
+ and needs to be verified. You can find the function by searching for Jim 
 (*2) - need to see about replacing Xi version with the real Xm version.
 Rick Scott's ToolTips from Motif CVS
 
