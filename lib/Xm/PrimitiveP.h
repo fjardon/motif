@@ -128,7 +128,7 @@ typedef struct _XmPrimitivePart
 
    XmDirection layout_direction;
 #endif
-
+   XmString tool_tip_string;
 } XmPrimitivePart;
 
 #ifdef XM_PART_BC

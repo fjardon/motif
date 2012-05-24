@@ -43,6 +43,8 @@ static char rcsid[] = "$TOG: TravAct.c /main/14 1999/05/27 13:58:09 mgreess $"
 #include <Xm/DisplayP.h>
 #include <Xm/ScrolledWP.h>
 
+#include "ToolTipI.h"
+
 
 #define EVENTS_EQ(ev1, ev2) \
   ((((ev1)->type == (ev2)->type) &&\
@@ -290,6 +292,7 @@ _XmPrimitiveEnter(Widget wid,
 		  String *params,	/* unused */
 		  Cardinal *num_params)	/* unused */
 {   
+  _XmToolTipEnter(wid, event, params, num_params);
   if (_XmGetFocusPolicy(wid) == XmPOINTER)
     {   
       if (event->xcrossing.focus)
@@ -309,6 +312,7 @@ _XmPrimitiveLeave(Widget wid,
 		  String *params,	/* unused */
 		  Cardinal *num_params)	/* unused */
 {   
+  _XmToolTipLeave(wid, event, params, num_params);
   if (_XmGetFocusPolicy(wid) == XmPOINTER)
     {   
       if (event->xcrossing.focus)
@@ -390,6 +394,10 @@ _XmEnterGadget(Widget wid,
 	       String *params,		/* unused */
 	       Cardinal *num_params)	/* unused */
 {   
+  if (XmIsGadget(wid) && ((XmGadget)wid)->gadget.traversal_on)
+  {
+      _XmToolTipEnter(wid, event, params, num_params);
+  }
   if (_XmGetFocusPolicy(wid) == XmPOINTER)
     {   
       XmFocusData focusData = _XmGetFocusData(wid);
@@ -439,6 +447,11 @@ _XmLeaveGadget(Widget wid,
 	       String *params,		/* unused */
 	       Cardinal *num_params)	/* unused */
 {   
+  if (XmIsGadget(wid) && ((XmGadget)wid)->gadget.traversal_on)
+  {
+      _XmToolTipLeave(wid, event, params, num_params);
+  }
+
   if (_XmGetFocusPolicy(wid) == XmPOINTER)
     {   
       _XmCallFocusMoved(wid, XtParent(wid), event);

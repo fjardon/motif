@@ -319,6 +319,14 @@ extern "C" {
 #define XmRWidgetClass			XtRWidgetClass
 #define XmRWidgetList			XtRWidgetList
 #define XmRWindow			XtRWindow
+#define XmNtoolTipString 		"toolTipString"
+#define XmCToolTipString 		"ToolTipString"
+#define XmNtoolTipPostDelay 		"toolTipPostDelay"
+#define XmCToolTipPostDelay 		"ToolTipPostDelay"
+#define XmNtoolTipPostDuration 		"toolTipPostDuration"
+#define XmCToolTipPostDuration 		"ToolTipPostDuration"
+#define XmNtoolTipEnable 		"toolTipEnable"
+#define XmCToolTipEnable 		"ToolTipEnable"
 
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration */

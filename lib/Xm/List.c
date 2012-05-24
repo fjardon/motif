@@ -66,7 +66,8 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include "TraversalI.h"
 #include "XmRenderTI.h"
 #include "XmStringI.h"
-
+#include "ToolTipI.h"
+
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
 #define	CTRLDOWN	4
@@ -5941,6 +5942,7 @@ ListLeave(Widget wid,
 {
   XmListWidget lw = (XmListWidget) wid;
   int interval = 200;
+  _XmToolTipLeave(wid, event, params, num_params);
 
   if ((_XmGetFocusPolicy((Widget) lw) == XmPOINTER) &&
       (lw->primitive.highlight_on_enter))

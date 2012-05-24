@@ -55,6 +55,8 @@ static char rcsid[] = "$TOG: Gadget.c /main/17 1997/07/07 11:38:57 cshi $"
 #include "SyntheticI.h"
 #include "TraitI.h"
 #include "TraversalI.h"
+#include "ToolTipI.h"
+
 
 
 #define INVALID_UNIT_TYPE 255
@@ -75,6 +77,10 @@ static void GetBottomShadowColor(
                         Widget w,
                         int offset,
                         XtArgVal *value) ;
+static void GetToolTipString( 
+			 Widget wid,
+			 int resource_offset,
+			 XtArgVal *value) ;
 static void ClassInitialize( void ) ;
 static void ClassPartInit( 
                         WidgetClass g) ;
@@ -197,6 +203,12 @@ static XtResource resources[] =
      XtOffsetOf(XmGadgetRec, gadget.layout_direction),
      XmRCallProc, (XtPointer) _XmDirectionDefault
    },
+   {
+     XmNtoolTipString, XmCToolTipString, XmRXmString,
+     sizeof(XmString), 
+     XtOffsetOf(XmGadgetRec, gadget.tool_tip_string),
+     XmRImmediate, (XtPointer) NULL
+   },
 };
 
 
@@ -257,6 +269,10 @@ static XmSyntheticResource syn_resources[] =
      XtOffsetOf( struct _XmGadgetRec, object.parent),
      GetBottomShadowColor,
      NULL },
+   { XmNtoolTipString, 
+     sizeof (XmString),
+     XtOffsetOf(XmGadgetRec, gadget.tool_tip_string), 
+     GetToolTipString, NULL },
 };
 
 static XmBaseClassExtRec baseClassExtRec = {
@@ -410,7 +426,18 @@ GetBottomShadowColor(
 
     *value = (XtArgVal) mw->manager.bottom_shadow_color;
 }
+static void 
+GetToolTipString(Widget wid,
+	       int resource,	/* unused */
+	       XtArgVal *value)
+{
+  XmGadget pw = (XmGadget) wid;
+  XmString string;
+ 
+  string = XmStringCopy(pw->gadget.tool_tip_string);
 
+  *value = (XtArgVal) string;
+}
 
 /************************************************************************
  *
@@ -572,6 +599,17 @@ Initialize(
 	(secondaryCreate = (*cePtr)->secondaryObjectCreate))
       (*secondaryCreate)( (Widget) request, (Widget) gw, args, num_args);
 
+    if (gw->gadget.tool_tip_string)
+    {
+	if (!XmStringEmpty(gw->gadget.tool_tip_string))
+	{
+	    gw->gadget.tool_tip_string = XmStringCopy(gw->gadget.tool_tip_string);
+	}
+	else
+	{
+	    gw->gadget.tool_tip_string = NULL;
+	}
+    }
    gw->gadget.event_mask = 0;
    gw->gadget.have_traversal = FALSE ;
    gw->gadget.highlighted = FALSE ;
@@ -618,7 +656,14 @@ static void
 Destroy(
         Widget w )
 {
+   XmGadget g = (XmGadget)w;
+
    _XmNavigDestroy(w);
+   _XmToolTipLeave(w, NULL, NULL, NULL);
+   if (g->gadget.tool_tip_string)
+   {
+     XmStringFree(g->gadget.tool_tip_string);
+   }
 }
 
 
@@ -642,6 +687,22 @@ SetValues(
         XmGadget req = (XmGadget) rw ;
         XmGadget new_w = (XmGadget) nw ;
    Boolean returnFlag;
+
+    if (XtIsSensitive(cw) != XtIsSensitive(nw))
+    {
+    	if (!XtIsSensitive(nw))
+    	{
+	    _XmToolTipLeave(nw, NULL, NULL, NULL);
+    	}
+    }
+    if (new_w->gadget.tool_tip_string != cur->gadget.tool_tip_string)
+    {
+	if (cur->gadget.tool_tip_string)
+	{
+	    XmStringFree(cur->gadget.tool_tip_string);
+	}
+	new_w->gadget.tool_tip_string = XmStringCopy(new_w->gadget.tool_tip_string);
+    }
 
    /* CR 7124: XmNlayoutDirection is a CG resource. */
    if (cur->gadget.layout_direction != new_w->gadget.layout_direction)

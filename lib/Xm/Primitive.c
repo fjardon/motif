@@ -51,6 +51,7 @@ static char rcsid[] = "$TOG: Primitive.c /main/25 1999/01/27 16:08:04 mgreess $"
 #include "ResConverI.h"
 #include "ResIndI.h"
 #include "SyntheticI.h"
+#include "ToolTipI.h"
 #include "TraitI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
@@ -68,6 +69,10 @@ static void GetXFromShell(
 			 int resource_offset,
 			 XtArgVal *value) ;
 static void GetYFromShell( 
+			 Widget wid,
+			 int resource_offset,
+			 XtArgVal *value) ;
+static void GetToolTipString( 
 			 Widget wid,
 			 int resource_offset,
 			 XtArgVal *value) ;
@@ -336,6 +341,12 @@ static XtResource resources[] =
      XmRCallProc, (XtPointer) _XmDirectionDefault
    },
 #endif
+   {
+     XmNtoolTipString, XmCToolTipString, XmRXmString,
+     sizeof(XmString), 
+     XtOffsetOf(XmPrimitiveRec, primitive.tool_tip_string),
+     XmRImmediate, (XtPointer) NULL
+   },
 };
 
 #ifdef XM_PART_BC
@@ -376,7 +387,12 @@ static XmSyntheticResource syn_resources[] =
    { XmNshadowThickness, 
      sizeof (Dimension),
      XtOffsetOf(XmPrimitiveRec, primitive.shadow_thickness), 
-     XmeFromHorizontalPixels, XmeToHorizontalPixels }
+     XmeFromHorizontalPixels, XmeToHorizontalPixels },
+
+   { XmNtoolTipString, 
+     sizeof (XmString),
+     XtOffsetOf(XmPrimitiveRec, primitive.tool_tip_string), 
+     GetToolTipString, NULL },
 };
 
 
@@ -561,6 +577,19 @@ GetYFromShell(
 	 XmeFromVerticalPixels(wid,  resource_offset, value);
     }
 }
+static void 
+GetToolTipString(Widget wid,
+	       int resource,	/* unused */
+	       XtArgVal *value)
+{
+  XmPrimitiveWidget pw = (XmPrimitiveWidget) wid;
+  XmString string;
+ 
+  string = XmStringCopy(pw->primitive.tool_tip_string);
+
+  *value = (XtArgVal) string;
+}
+
 
 
 
@@ -734,6 +763,17 @@ Initialize(
     translations = (XtTranslations) ((XmPrimitiveClassRec *) XtClass( pw))
 	->primitive_class.translations ;
     _XmProcessUnlock();
+    if (pw->primitive.tool_tip_string)
+    {
+	if (!XmStringEmpty(pw->primitive.tool_tip_string))
+	{
+	    pw->primitive.tool_tip_string = XmStringCopy(pw->primitive.tool_tip_string);
+	}
+	else
+	{
+	    pw->primitive.tool_tip_string = NULL;
+	}
+    }
     if(    pw->primitive.traversal_on
        && translations  &&  pw->core.tm.translations
        && !XmIsLabel( pw)    )
@@ -868,7 +908,11 @@ Destroy(
    XmPrimitiveWidget pw = (XmPrimitiveWidget) w ;
 
    _XmNavigDestroy(w);
-
+   _XmToolTipLeave(w, NULL, NULL, NULL);
+   if (pw->primitive.tool_tip_string)
+   {
+      XmStringFree(pw->primitive.tool_tip_string);
+   }
    XtReleaseGC( w, pw->primitive.top_shadow_GC);
    XtReleaseGC( w, pw->primitive.bottom_shadow_GC);
    XtReleaseGC( w, pw->primitive.highlight_GC);
@@ -895,6 +939,22 @@ SetValues(
    XmPrimitiveWidget curpw = (XmPrimitiveWidget) current;
    XmPrimitiveWidget newpw = (XmPrimitiveWidget) new_w;
    Boolean returnFlag = False;
+
+    if (XtIsSensitive(current) != XtIsSensitive(new_w))
+    {
+    	if (!XtIsSensitive(new_w))
+    	{
+	    _XmToolTipLeave(new_w, NULL, NULL, NULL);
+    	}
+    }
+    if (newpw->primitive.tool_tip_string != curpw->primitive.tool_tip_string)
+    {
+	if (curpw->primitive.tool_tip_string)
+	{
+	    XmStringFree(curpw->primitive.tool_tip_string);
+	}
+	newpw->primitive.tool_tip_string = XmStringCopy(newpw->primitive.tool_tip_string);
+    }
 
    /* CR 7124: XmNlayoutDirection is a CG resource. */
    if (XmPrim_layout_direction(curpw) != XmPrim_layout_direction(newpw))

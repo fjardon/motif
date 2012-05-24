@@ -55,6 +55,8 @@ externalref WidgetClass vendorShellWidgetClass;
 
 extern Boolean XmIsMotifWMRunning( 
                         Widget shell) ;
+extern Widget XmToolTipGetLabel(Widget wid);
+
 
 /********    End Public Function Declarations    ********/
 

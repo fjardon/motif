@@ -146,7 +146,7 @@ HEADERS1 = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         Gadget.h        LayoutT.h       IconH.h         IconHP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
-        Print.h         PrintSP.h       XpmP.h		Xmfuncs.h
+        Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
 
 HEADERS2 = $(EXTRA_WID_HEADERS)
 
@@ -188,7 +188,7 @@ SRCS2 = Desktop.c       Messages.c      Transltns.c     RepType.c \
         GetRes.c        BBUtil.c        ChColor.c       ColObjFunc.c \
         DrTog.c         DrArrow.c       DrPoly.c        DrHiDash.c \
         ValTime.c       FocusAct.c      CvtUnit.c       ScalTics.c \
-        ScroVis.c       WidGet.c        PrintS.c
+        ScroVis.c       WidGet.c        PrintS.c  	ToolTip.c
 
 OBSO_SRCS = Obso1_2.c ObsoStr.c ObsoXme.c Obso2_0.c
 
@@ -250,7 +250,7 @@ OBJS2 = Desktop.o       Messages.o      Transltns.o     RepType.o \
         GetRes.o        BBUtil.o        ChColor.o       ColObjFunc.o \
         DrTog.o         DrArrow.o       DrPoly.o        DrHiDash.o \
         ValTime.o       FocusAct.o      CvtUnit.o       ScalTics.o \
-        ScroVis.o       WidGet.o        PrintS.o
+        ScroVis.o       WidGet.o        PrintS.o	ToolTip.o
 
 OBSO_OBJS = Obso1_2.o ObsoStr.o ObsoXme.o Obso2_0.o
 

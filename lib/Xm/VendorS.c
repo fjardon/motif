@@ -1652,6 +1652,11 @@ VendorExtInitialize(
     ve->vendor.im_height = 0;
     ve->vendor.im_vs_height_set = False;
     ve->vendor.im_info = NULL;
+    ve->vendor.label = NULL;
+    ve->vendor.slider = NULL; 
+    ve->vendor.timer = (XtIntervalId)0;
+    ve->vendor.duration_timer = (XtIntervalId)0;
+    ve->vendor.leave_time = (Time)0;
 
 }
 

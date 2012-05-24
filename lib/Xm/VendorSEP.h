@@ -115,6 +115,17 @@ typedef struct {
  XmInputPolicy		input_policy;
 
  Boolean 		verify_preedit;
+
+ /* toolTip related stuff */
+ Widget label;			/* XmLabel for the tips */
+ int post_delay;		/* delay before posting XmNtoolTipPostDelay */
+ int post_duration;		/* duration XmNtoolTipPostDuration */
+ XtIntervalId timer;		/* timer for post delay */
+ XtIntervalId duration_timer;	/* timer for duration */
+ Time leave_time;		/* time of the last leave event */
+ Widget slider;			/* the XmSlideContext used to slide in the tip */
+ Boolean enable;		/* flag to disable all this stuff */
+
 } XmVendorShellExtPart, *XmVendorShellExtPartPtr;
 
 externalref XmVendorShellExtClassRec 	xmVendorShellExtClassRec;
