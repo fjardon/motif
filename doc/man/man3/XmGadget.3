@@ -134,6 +134,8 @@ XmNunitTypeXmCUnitTypeunsigned chardynamicCSG
 _____
 XmNuserDataXmCUserDataXtPointerNULLCSG
 _____
+XmNtoolTipStringXmCToolTipStringXmStringNULLCSG
+_____
 .TE
 .IP "\fBXmNbackground\fP" 10
 Specifies the background color for the gadget\&.
@@ -307,6 +309,11 @@ and \fBXmNverticalFontUnit\fP\&.
 .IP "\fBXmNuserData\fP" 10
 Allows the application to attach any necessary specific data to the gadget\&.
 This is an internally unused resource\&.
+
+.IP "\fBXmNtoolTipString\fP" 10
+The XmString to display as the toolTip. If this resource is NULL, no tip
+will be displayed. ToolTips are described in VendorShell(3)
+
 .SS "Inherited Resources"
 .PP
 Gadget inherits resources from the

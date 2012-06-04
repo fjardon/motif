@@ -67,6 +67,18 @@ It also manages the MWM-specific communication needed by all VendorShell
 subclasses\&.
 See the \fBmwm\fP reference page for more information\&.
 .PP
+It is also responsible for managing toolTips. All \fBXmPrimitive\fP and
+\fBXmGadget\fP
+subclasses have an \fBXmNtoolTipString\fP resource. If \fBXmNtoolTipEnable\fP
+is True, and
+the pointer enters a Primitive or Gadget that has traversal enabled, and the
+XmNtoolTipString is not NULL, the \fBXmNtoolTipString\fP will be displayed according
+to the VendorShell resources for controlling toolTips. VendorShell displays
+the XmNtooTipString in an XmLabel that is a child of a transientShell. The name
+of the transientShell is TipShell, and the name of the XmLabel is TipLabel.
+The appearance of the tip can be controlled by specifing resources on these
+widgets.
+.PP
 If an application uses the \fBXmNmwmDecorations\fP,
 \fBXmNmwmFunctions\fP, or \fBXmNmwmInputMode\fP resource, it should
 include the file \fBXm/MwmUtil\&.h\fP\&.
@@ -170,6 +182,12 @@ _____
 XmNunitTypeXmCUnitTypeunsigned charXmPIXELSCSG
 _____
 XmNuseAsyncGeometryXmCUseAsyncGeometryBooleanFalseCSG
+_____
+XmNtoolTipPostDelayXmCToolTipPostDelayint5000CSG
+_____
+XmNtoolTipPostDurationXmCToolTipPostDurationint5000CSG
+_____
+XmNtoolTipEnableXmCToolTipEnableBooleanFalseCSG
 _____
 .TE
 .IP "\fBXmNaudibleWarning\fP" 10
@@ -500,6 +518,18 @@ on asynchronous notification\&.
 When the value of this resource is False, \fBXmNwaitForWm\fP and
 \fBXmNwmTimeout\fP are unaffected\&.
 The default is False\&.
+
+.IP "\fBXmNtoolTipPostDelay\fP" 10
+Specifies the time, in milliseconds, to wait after the pointer enters
+a widget before posting the toolTip associated with this widget.
+
+.IP "\fBXmNtoolTipPostDuration\fP" 10
+Specifies the time, in milliseconds, that the toolTip is displayed. A value
+of 0 will display the tip indefinitly.
+
+.IP "\fBXmNtoolTipEnable\fP" 10
+Specifies whether toolTips are enabled for this shell or not.
+
 .SS "Inherited Resources"
 .PP
 VendorShell inherits behavior and resources from the

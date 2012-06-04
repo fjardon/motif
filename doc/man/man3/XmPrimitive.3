@@ -135,6 +135,8 @@ XmNunitTypeXmCUnitTypeunsigned chardynamicCSG
 _____
 XmNuserDataXmCUserDataXtPointerNULLCSG
 _____
+XmNtoolTipStringXmCToolTipStringXmStringNULLCSG
+_____
 .TE
 .IP "\fBXmNbottomShadowColor\fP" 10
 Specifies the color to use to draw the bottom and right sides of the
@@ -349,6 +351,11 @@ and \fBXmNverticalFontUnit\fP\&.
 .IP "\fBXmNuserData\fP" 10
 Allows the application to attach any necessary specific data to the widget\&.
 It is an internally unused resource\&.
+
+.IP "\fBXmNtoolTipString\fP" 10
+The XmString to display as the toolTip. If this resource is NULL, no tip
+will be displayed. ToolTips are described in VendorShell(3)
+
 .SS "Dynamic Color Defaults"
 .PP
 The foreground, background, top shadow, bottom shadow, and
