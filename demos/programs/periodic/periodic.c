@@ -179,6 +179,11 @@ static String fallbackResources[] = {
 "*scrollFrame*XmScrollBar.width:          50",
 "*toggleButtonControls*Text.marginHeight:  1",
 "*toggleButtonControls.spacing:            0",
+"?.toolTipEnable: True",
+"?.toolTipPostDelay: 2000",
+"?.toolTipPostDuration: 5000",
+"?.TipShell.TipLabel.background: yellow",
+"*pushButton.toolTipString: A Tool Tip for all children of XmGadget and XmPrimitive",
 
 "*fontList:                      *-*-*-medium-r-*-*-*-100-*-*-p-*-*-*",
 "*HeaderDA*fontList:             *-*-*-bold-r-*-*-*-100-*-*-p-*-*-*",

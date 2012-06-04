@@ -637,20 +637,22 @@ object pushFrame : XmFrame {
 	}; }; 
 	XmForm {
 	    controls {
-		XmPushButton { arguments {
-		    XmNleftAttachment = XmATTACH_FORM;
-		    XmNrightAttachment = XmATTACH_FORM;
-		    XmNtopAttachment = XmATTACH_POSITION;
-		    XmNtopPosition = 10;
-		    XmNbottomAttachment = XmATTACH_POSITION;
-		    XmNbottomPosition = 90;
-		    XmNlabelString = pushButtonText;
-		}; };
-	    };
+		XmPushButton pushButton;
+		    };
 	};
     };
 };
-
+object pushButton : XmPushButton {
+       arguments {
+           XmNleftAttachment = XmATTACH_FORM;
+           XmNrightAttachment = XmATTACH_FORM;
+           XmNtopAttachment = XmATTACH_POSITION;
+           XmNtopPosition = 10;
+           XmNbottomAttachment = XmATTACH_POSITION;
+           XmNbottomPosition = 90;
+           XmNlabelString = pushButtonText;
+       };
+};
 object toggleFrame : XmFrame {
     arguments {
 	arguments formArgs;
@@ -677,6 +679,7 @@ object toggleButton : XmToggleButton {
 	XmNbottomAttachment = XmATTACH_POSITION;
 	XmNbottomPosition = 90;
 	XmNlabelString = toggleButtonText;
+        XmNtoolTipString = "Tool Tips work when set in the uil file";
     };
     callbacks {
 	XmNvalueChangedCallback = procedure ToggleLightsCb();

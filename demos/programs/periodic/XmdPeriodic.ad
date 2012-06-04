@@ -31,6 +31,12 @@ XmdPeriodic*scrollFrame*XmScrollBar.width:          50
 XmdPeriodic*toggleButtonControls*Text.marginHeight:  1
 XmdPeriodic*toggleButtonControls.spacing:            0
 
+?.toolTipEnable: True
+?.toolTipPostDelay: 10
+?.toolTipPostDuration: 1000
+?.TipShell.TipLabel.background: yellow
+*background: yello
+*toolTipString: Jimmy was here
 XmdPeriodic*fontList:                      *-*-*-medium-r-*-*-*-100-*-*-p-*-*-*
 XmdPeriodic*HeaderDA*fontList:             *-*-*-bold-r-*-*-*-100-*-*-p-*-*-*
 XmdPeriodic*titleLabel.fontList:           *-*-*-bold-r-*-*-*-180-*-*-p-*-*-*
