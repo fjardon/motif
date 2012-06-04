@@ -59,6 +59,7 @@ static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
 #include "VendorSI.h"
 #include "ResIndI.h"
 #include "XmI.h"
+#include <Xm/SlideC.h>
 
 #define Events ((unsigned int) (ButtonPressMask | ButtonReleaseMask | \
 		EnterWindowMask | LeaveWindowMask))
@@ -256,6 +257,13 @@ static XtResource resources[] =
 	  XtOffsetOf(ShellRec, shell.visual), 
 	  XtRImmediate, (XtPointer)INVALID_VISUAL
    },
+   {
+          XmNanimate, 
+	  XmCAnimate, 
+	  XmRBoolean, sizeof(Boolean), 
+	  XtOffsetOf( struct _XmMenuShellRec, menu_shell.animate),
+	  XmRImmediate, (XtPointer) False
+   },           
 };
 
 
@@ -416,6 +424,20 @@ _XmFastPopdown(
 }
 
 
+        
+static void
+slideCancel(Widget w, Widget slide)
+{
+    XtRemoveCallback(w, XmNunmapCallback, (XtCallbackProc)slideCancel, slide);
+    XtDestroyWidget(slide);
+}
+
+static void
+slideFinish(Widget slide, Widget w)
+{
+    XtRemoveCallback(w, XmNunmapCallback, (XtCallbackProc)slideCancel, slide);
+}
+
 
 static void
 _XmPopupI(
@@ -446,7 +468,38 @@ _XmPopupI(
 	} else if (grab_kind == XtGrabNonexclusive) {
 	    _XmAddGrab(widget, FALSE, spring_loaded);
 	}
-	XtRealizeWidget(widget);
+	XtRealizeWidget(widget);	
+        if (XmIsMenuShell(shell_widget) && ((XmMenuShellWidget)shell_widget)->menu_shell.animate)
+	{
+	    if (XmIsRowColumn(shell_widget->composite.children[0]))
+	    {
+	    Dimension width, height;
+	    XtWidgetGeometry geo;
+	    Widget slider;
+
+		XtQueryGeometry(widget, NULL, &geo);
+		width = geo.width;
+		height = geo.height;
+		switch (RC_Type(shell_widget->composite.children[0]))
+		{
+		case XmMENU_POPUP:
+		    XtResizeWidget(widget, 1, 1, XtBorderWidth(widget));
+		    break;
+		case XmMENU_PULLDOWN:
+		    XtResizeWidget(widget, width, 1, XtBorderWidth(widget));
+		    break;
+		default:
+		    break;
+		}
+		slider = XtVaCreateWidget("MenuSlider", xmSlideContextWidgetClass, XmGetXmDisplay(XtDisplay(widget)),
+		    XmNslideWidget, widget,
+		    XmNslideDestWidth, width,
+		    XmNslideDestHeight, height,
+		    NULL);
+		XtAddCallback(slider, XmNslideFinishCallback, (XtCallbackProc)slideFinish, shell_widget->composite.children[0]);
+		XtAddCallback(shell_widget->composite.children[0], XmNunmapCallback, (XtCallbackProc)slideCancel, slider);
+	    }
+	}
 	XMapRaised(XtDisplay(widget), XtWindow(widget));
     } else
 	XRaiseWindow(XtDisplay(widget), XtWindow(widget));

@@ -48,6 +48,7 @@ typedef struct
     XmFontList              button_font_list;
     XmFontList              label_font_list;
     XmDirection             layout_direction;
+    Boolean                 animate;
 } XmMenuShellPart;
 
 

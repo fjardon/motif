@@ -105,7 +105,7 @@ STRINGSABIOPTIONS = ToolkitStringsABIOptions
 HEADERS1 = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         BulletinB.h     BulletinBP.h    CacheP.h        CascadeB.h \
         CascadeBG.h     CascadeBGP.h    CascadeBP.h     Command.h \
-        CommandP.h      CutPaste.h      DialogS.h \
+        CommandP.h      CutPaste.h      DialogS.h       SlideC.h\
         DialogSP.h      DialogSEP.h     DragC.h         DragCP.h \
         DragDrop.h      DragIcon.h      DragIconP.h     DragOverS.h \
         DragOverSP.h    DropTransP.h    DropSMgr.h      DropSMgrP.h \
@@ -188,7 +188,8 @@ SRCS2 = Desktop.c       Messages.c      Transltns.c     RepType.c \
         GetRes.c        BBUtil.c        ChColor.c       ColObjFunc.c \
         DrTog.c         DrArrow.c       DrPoly.c        DrHiDash.c \
         ValTime.c       FocusAct.c      CvtUnit.c       ScalTics.c \
-        ScroVis.c       WidGet.c        PrintS.c  	ToolTip.c
+        ScroVis.c       WidGet.c        PrintS.c  	ToolTip.c \
+        SlideC.c
 
 OBSO_SRCS = Obso1_2.c ObsoStr.c ObsoXme.c Obso2_0.c
 
@@ -250,7 +251,8 @@ OBJS2 = Desktop.o       Messages.o      Transltns.o     RepType.o \
         GetRes.o        BBUtil.o        ChColor.o       ColObjFunc.o \
         DrTog.o         DrArrow.o       DrPoly.o        DrHiDash.o \
         ValTime.o       FocusAct.o      CvtUnit.o       ScalTics.o \
-        ScroVis.o       WidGet.o        PrintS.o	ToolTip.o
+        ScroVis.o       WidGet.o        PrintS.o	ToolTip.o \
+        SlideC.o
 
 OBSO_OBJS = Obso1_2.o ObsoStr.o ObsoXme.o Obso2_0.o
 
