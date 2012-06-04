@@ -743,6 +743,7 @@ Class
 			XmNnavigationType;
 			XmNpopupHandlerCallback;
 			XmNshadowThickness;
+                        XmNtoolTipString;
 			XmNtopShadowColor;
 			XmNtopShadowPixmap;
 			XmNtraversalOn;
@@ -782,6 +783,9 @@ Resource
 	XmNshadowThickness : Argument
 		{ Type = horizontal_float;
 		  Default = "2"; };
+	XmNtoolTipString : Argument
+   		{ Type = compound_string;
+   		   Default= "Null"; };
 	XmNtopShadowColor : Argument
 		{ Type = color;
 		  Default = "dynamic"; };
@@ -836,6 +840,7 @@ Class
 			XmNtraversalOn;
 			XmNunitType;
 			XmNuserData;
+			XmNtoolTipString;
 			! inherited resources
 			};
 		};
@@ -2226,6 +2231,9 @@ Class
 			XmNpreeditType;
 			XmNrealizeCallback;
 			XmNshellUnitType;
+			XmNtoolTipEnable;
+			XmNtoolTipPostDuration;
+			XmNtoolTipPostDelay;
 			! This is really a Shell resource
 			XmNuseAsyncGeometry;
 			! inherited resources
@@ -2236,6 +2244,15 @@ Class
 		};
 
 Resource 
+	XmNtoolTipEnable : Argument
+		{ Type = boolean;
+		  Default = "False"; };
+	XmNtoolTipPostDuration : Argument
+		{ Type = integer;
+		  Default = "1000"; };
+	XmNtoolTipPostDelay : Argument
+		{ Type = integer;
+		  Default = "1000"; };
 	XmNaudibleWarning : Argument
 		{ Type = integer;
 		  EnumerationSet = AudibleWarning;
