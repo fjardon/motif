@@ -72,7 +72,7 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
-extern WidgetClass xiFontSelectorWidgetClass;
+extern WidgetClass xmFontSelectorWidgetClass;
 
 #if defined(__cplusplus)
 }

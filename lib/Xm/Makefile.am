@@ -210,7 +210,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
-        ${SLIDE_HDRS}	${XMTHEME_HDRS}
+        ${SLIDE_HDRS}	${XMTHEME_HDRS} ${EXTRA_HDRS}
 
 SRCS1 = ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
         CascadeB.c      CascadeBG.c     Command.c       CutPaste.c \
