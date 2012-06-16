@@ -318,10 +318,10 @@ Widget , short
 typedef struct _XmI18ListClassRec	*XmI18ListWidgetClass;
 typedef struct _XmI18ListRec	*XmI18ListWidget;
 
-extern XmExt18ListClassRec xiExt18ListClassRec;
+extern XmExt18ListClassRec xmExt18ListClassRec;
 
 extern XmI18ListClassRec xiI18ListClassRec;
-extern WidgetClass xiI18ListWidgetClass; 
+extern WidgetClass xmI18ListWidgetClass; 
 
 #if defined(__cplusplus)
 }
