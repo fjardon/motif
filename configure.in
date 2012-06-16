@@ -302,6 +302,7 @@ demos/programs/sampler2_0/Makefile \
 demos/programs/setdate/Makefile \
 demos/programs/todo/Makefile \
 demos/programs/workspace/Makefile \
+demos/programs/tooltips/Makefile \
 demos/unsupported/Makefile \
 demos/unsupported/Xm2.2/Makefile \
 demos/unsupported/Xm2.2/ButtonBox/Makefile \
@@ -327,7 +328,6 @@ demos/unsupported/dainput/Makefile \
 demos/unsupported/dogs/Makefile \
 demos/unsupported/hellomotif/Makefile \
 demos/unsupported/motifshell/Makefile \
-demos/unsupported/tooltips/Makefile \
 demos/unsupported/uilsymdump/Makefile \
 demos/unsupported/xmapdef/Makefile \
 demos/unsupported/xmfonts/Makefile \
