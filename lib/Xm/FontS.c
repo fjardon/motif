@@ -378,7 +378,7 @@ XmFontSelectorClassRec xiFontSelectorClassRec = {
   }
 };
 
-WidgetClass xiFontSelectorWidgetClass = (WidgetClass) &xiFontSelectorClassRec;
+WidgetClass xmFontSelectorWidgetClass = (WidgetClass) &xiFontSelectorClassRec;
 
 XmOffsetPtr XmFontS_offsets;
 XmOffsetPtr XmFontSC_offsets;
@@ -2829,7 +2829,7 @@ ChangeEncoding(Widget w, XtPointer data, XtPointer junk)
     FontData *cf;
     char buf[BUFSIZ];
 
-    for ( ; !XtIsSubclass(w, xiFontSelectorWidgetClass); w = XtParent(w)) {}
+    for ( ; !XtIsSubclass(w, xmFontSelectorWidgetClass); w = XtParent(w)) {}
     fsw = (XmFontSelectorWidget) w;
     cf = XmFontS_font_info(fsw)->current_font;
 
@@ -3330,7 +3330,7 @@ ClassInitialize()
     XmFontSelectorClassRec* wc = &xiFontSelectorClassRec;
 
     int i;
-    XmResolveAllPartOffsets(xiFontSelectorWidgetClass,
+    XmResolveAllPartOffsets(xmFontSelectorWidgetClass,
 			    &XmFontS_offsets,
 			    &XmFontSC_offsets);
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
@@ -3723,6 +3723,6 @@ Widget
 XiCreateFontSelector(Widget parent, String name,
 		     ArgList args, Cardinal num_args)
 {
-    return(XtCreateWidget(name, xiFontSelectorWidgetClass,
+    return(XtCreateWidget(name, xmFontSelectorWidgetClass,
 			  parent, args, num_args));
 }
