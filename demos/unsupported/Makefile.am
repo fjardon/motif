@@ -5,7 +5,6 @@ SUBDIRS =   Xm2.2\
             xmfonts\
             xmforc\
             xmform\
-            tooltips\
             Exm\
             aicon\
             dogs\
