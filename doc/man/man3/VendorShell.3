@@ -179,15 +179,15 @@ XmNtextFontListXmCTextFontListXmFontListdynamicCSG
 _____
 XmNtextRenderTableXmCTextRenderTableXmRenderTabledynamicCSG
 _____
-XmNunitTypeXmCUnitTypeunsigned charXmPIXELSCSG
-_____
-XmNuseAsyncGeometryXmCUseAsyncGeometryBooleanFalseCSG
-_____
 XmNtoolTipPostDelayXmCToolTipPostDelayint5000CSG
 _____
 XmNtoolTipPostDurationXmCToolTipPostDurationint5000CSG
 _____
 XmNtoolTipEnableXmCToolTipEnableBooleanFalseCSG
+_____
+XmNunitTypeXmCUnitTypeunsigned charXmPIXELSCSG
+_____
+XmNuseAsyncGeometryXmCUseAsyncGeometryBooleanFalseCSG
 _____
 .TE
 .IP "\fBXmNaudibleWarning\fP" 10
@@ -424,6 +424,17 @@ is found, the default is implementation dependent\&.
 Refer to
 \fBXmRenderTable\fP(3) for more information on the creation and structure
 of a render table\&.
+.IP "\fBXmNtoolTipEnable\fP" 10
+Specifies whether toolTips are enabled for this shell or not.
+
+.IP "\fBXmNtoolTipPostDelay\fP" 10
+Specifies the time, in milliseconds, to wait after the pointer enters
+a widget before posting the toolTip associated with this widget.
+
+.IP "\fBXmNtoolTipPostDuration\fP" 10
+Specifies the time, in milliseconds, that the toolTip is displayed. A value
+of 0 will display the tip indefinitely.
+
 .IP "\fBXmNunitType\fP" 10
 Provides the basic support for resolution independence\&. It defines
 the type of units a widget uses with sizing and positioning resources\&.
@@ -518,17 +529,6 @@ on asynchronous notification\&.
 When the value of this resource is False, \fBXmNwaitForWm\fP and
 \fBXmNwmTimeout\fP are unaffected\&.
 The default is False\&.
-
-.IP "\fBXmNtoolTipPostDelay\fP" 10
-Specifies the time, in milliseconds, to wait after the pointer enters
-a widget before posting the toolTip associated with this widget.
-
-.IP "\fBXmNtoolTipPostDuration\fP" 10
-Specifies the time, in milliseconds, that the toolTip is displayed. A value
-of 0 will display the tip indefinitly.
-
-.IP "\fBXmNtoolTipEnable\fP" 10
-Specifies whether toolTips are enabled for this shell or not.
 
 .SS "Inherited Resources"
 .PP
