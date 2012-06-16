@@ -270,7 +270,7 @@ static XmPartResource resources[] = {
 #undef offset
 };
 
-XmI18ListClassRec xiI18ListClassRec = {
+XmI18ListClassRec xmI18ListClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	XM_I18LIST_CLASS_NAME,
@@ -319,7 +319,7 @@ XmI18ListClassRec xiI18ListClassRec = {
   }
 };
 
-WidgetClass xiI18ListWidgetClass = (WidgetClass)&xiI18ListClassRec;
+WidgetClass xmI18ListWidgetClass = (WidgetClass)&xmI18ListClassRec;
 
 XmOffsetPtr XmI18List_offsets;
 
@@ -351,7 +351,7 @@ XmOffsetPtr XmI18List_offsets;
 static void
 ClassInitialize()
 {
-    XmResolveAllPartOffsets(xiI18ListWidgetClass,
+    XmResolveAllPartOffsets(xmI18ListWidgetClass,
 			    &XmI18List_offsets,
 			    NULL);
 }
@@ -449,10 +449,10 @@ Realize(Widget w, Mask *valueMask, XSetWindowAttributes * attributes)
 
     AdjustFirstRowAndCol( ilist );
 
-    (*xiI18ListWidgetClass->core_class.superclass->core_class.realize)
+    (*xmI18ListWidgetClass->core_class.superclass->core_class.realize)
 	(w, valueMask, attributes);
 
-    (*xiI18ListWidgetClass->core_class.resize)(w);
+    (*xmI18ListWidgetClass->core_class.resize)(w);
 }
 
 /*	Function Name: SetValues

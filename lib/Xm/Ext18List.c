@@ -25,6 +25,11 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
 
 #include <Xm/Ext18ListP.h>
@@ -53,14 +58,14 @@
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-extern Xm18RowInfo *XmExtI18ListFindRow(Widget, String, int *, Boolean, Boolean);
-extern int *XmExtI18ListGetSelectedRowArray(XmI18ListWidget, int *);
-extern void XmExtI18ListMakeRowVisible(XmI18ListWidget, int);
-extern void XmExtI18ListDeselectRow(XmI18ListWidget, int);
-extern void XmExtI18ListSelectRow(XmI18ListWidget, int, Boolean);
-extern void XmExtI18ListSelectAllItems(XmI18ListWidget, Boolean);
-extern void XmExtI18ListDeselectItems(XmI18ListWidget, XmString, int);
-extern void XmExtI18ListSelectItems(XmI18ListWidget, XmString, int, Boolean);
+extern Xm18RowInfo *XmI18ListFindRow(Widget, String, int *, Boolean, Boolean);
+extern int *XmI18ListGetSelectedRowArray(XmI18ListWidget, int *);
+extern void XmI18ListMakeRowVisible(XmI18ListWidget, int);
+extern void XmI18ListDeselectRow(XmI18ListWidget, int);
+extern void XmI18ListSelectRow(XmI18ListWidget, int, Boolean);
+extern void XmI18ListSelectAllItems(XmI18ListWidget, Boolean);
+extern void XmI18ListDeselectItems(XmI18ListWidget, XmString, int);
+extern void XmI18ListSelectItems(XmI18ListWidget, XmString, int, Boolean);
 
 /************************************************************
 *	STATIC FUNCTION DECLARATIONS
@@ -126,7 +131,7 @@ static XmPartResource resources[] = {
 };
 
 
-XmExt18ListClassRec xiExt18ListClassRec = {
+XmExt18ListClassRec xmExt18ListClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	XM_EXT_18_LIST_CLASS_NAME,
@@ -191,7 +196,7 @@ XmExt18ListClassRec xiExt18ListClassRec = {
   }
 };
 
-WidgetClass xmExt18ListWidgetClass = (WidgetClass)&xiExt18ListClassRec;
+WidgetClass xmExt18ListWidgetClass = (WidgetClass)&xmExt18ListClassRec;
 
 XmOffsetPtr XmExt18List_offsets;
 XmOffsetPtr XmExt18ListC_offsets;
@@ -658,7 +663,7 @@ ActivateTextSearch(Widget w, XtPointer elist_ptr, XtPointer client)
       reset = !streq(ptr, XmExt18List_last_search(elist));
 
     /* Last parameter tells search proc to highlight a matching row... */
-    match = XmExtI18ListFindRow(XmExt18List_ilist(elist), ptr,
+    match = XmI18ListFindRow(XmExt18List_ilist(elist), ptr,
 			     &find_info.column, reset, True);
 
     find_info.event = cbs->event;
@@ -1042,7 +1047,7 @@ XmExt18ListGetSelectedRows(Widget w)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    return(XmExtI18ListGetSelectedRows(XmExt18List_ilist(elist)));
+    return(XmI18ListGetSelectedRows(XmExt18List_ilist(elist)));
 }
 
 /*	Function Name: XmCreateExtended18List
@@ -1081,7 +1086,7 @@ XmExt18ListUnselectAllItems( Widget w )
 {
   XmExt18ListWidget elist = (XmExt18ListWidget)w;
 
-  XmExt18IListUnselectAllItems( XmExt18List_ilist(elist) );
+  Xm18IListUnselectAllItems( XmExt18List_ilist(elist) );
 }
 
 
@@ -1096,7 +1101,7 @@ XmExt18ListUnselectItem( Widget w, Xm18RowInfo *row_info )
 {
   XmExt18ListWidget elist = (XmExt18ListWidget) w;
   
-  XmExt18IListUnselectItem( XmExt18List_ilist(elist), row_info );
+  Xm18IListUnselectItem( XmExt18List_ilist(elist), row_info );
 }
 
 
@@ -1110,7 +1115,7 @@ XmExt18ListToggleRow(Widget w, short row)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    XmExtI18ListToggleRow(XmExt18List_ilist(elist), row);
+    XmI18ListToggleRow(XmExt18List_ilist(elist), row);
 }
 
 /*  Function Name: XmExt18ListSelectItems
@@ -1126,7 +1131,7 @@ void XmExt18ListSelectItems(Widget w, XmString item,
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
     
-    XmExtI18ListSelectItems((XmI18ListWidget)XmExt18List_ilist(elist),
+    XmI18ListSelectItems((XmI18ListWidget)XmExt18List_ilist(elist),
 			 item, column, notify);
 }
 
@@ -1142,7 +1147,7 @@ XmExt18ListDeselectItems(Widget w, XmString item, int column)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    XmExtI18ListDeselectItems((XmI18ListWidget)XmExt18List_ilist(elist),
+    XmI18ListDeselectItems((XmI18ListWidget)XmExt18List_ilist(elist),
 			   item, column);
 }
 
@@ -1156,7 +1161,7 @@ void XmExt18ListSelectAllItems(Widget w, Boolean notify)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
     
-    XmExtI18ListSelectAllItems((XmI18ListWidget)XmExt18List_ilist(elist), notify);
+    XmI18ListSelectAllItems((XmI18ListWidget)XmExt18List_ilist(elist), notify);
 }
 
 /*  Function Name: XmExt18ListSelectRow
@@ -1171,7 +1176,7 @@ XmExt18ListSelectRow(Widget w, int row, Boolean notify)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    XmExtI18ListSelectRow((XmI18ListWidget)XmExt18List_ilist(elist), row, notify);
+    XmI18ListSelectRow((XmI18ListWidget)XmExt18List_ilist(elist), row, notify);
 }
 
 /*  Function Name: XmExt18ListDeselectRow
@@ -1185,7 +1190,7 @@ XmExt18ListDeselectRow(Widget w, int row)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    XmExtI18ListDeselectRow((XmI18ListWidget)XmExt18List_ilist(elist), row);
+    XmI18ListDeselectRow((XmI18ListWidget)XmExt18List_ilist(elist), row);
 }
 
 /*  Function Name: XmExt18GetSelectedRowArray
@@ -1200,7 +1205,7 @@ XmExt18ListGetSelectedRowArray(Widget w, int *num_rows)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    return XmExtI18ListGetSelectedRowArray((XmI18ListWidget)XmExt18List_ilist(elist),
+    return XmI18ListGetSelectedRowArray((XmI18ListWidget)XmExt18List_ilist(elist),
 					num_rows);
 }
 
@@ -1215,7 +1220,7 @@ XmExt18ListMakeRowVisible(Widget w, int row)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
-    XmExtI18ListMakeRowVisible((XmI18ListWidget)XmExt18List_ilist(elist), row);
+    XmI18ListMakeRowVisible((XmI18ListWidget)XmExt18List_ilist(elist), row);
 }
 
 

@@ -22,6 +22,10 @@
  * 
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <Xm/ColumnP.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Label.h>
