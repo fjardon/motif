@@ -53,8 +53,8 @@ save_LIBS="$LIBS"
 save_CFLAGS="$CFLAGS"
 LIBS="$X_LIBS $LIBS"
 CFLAGS="$X_CFLAGS $CFLAGS"
-AC_CHECK_HEADERS(X11/Xmu/Editres.h, 
-AC_CHECK_LIB(Xmu, _XEditResCheckMessages, 
+AC_CHECK_HEADERS(X11/Xmu/Editres.h,
+AC_CHECK_LIB(Xmu, _XEditResCheckMessages,
 X_XMU=-lXmu
 AC_DEFINE(HAVE_LIBXMU)
 , X_XMU="", -lXt -lX11)
@@ -303,6 +303,19 @@ demos/programs/setdate/Makefile \
 demos/programs/todo/Makefile \
 demos/programs/workspace/Makefile \
 demos/programs/tooltips/Makefile \
+demos/programs/newwidgets/Makefile \
+demos/programs/newwidgets/FontSel/Makefile \
+demos/programs/newwidgets/ButtonBox/Makefile \
+demos/programs/newwidgets/ColorSel/Makefile \
+demos/programs/newwidgets/Column/Makefile \
+demos/programs/newwidgets/Combo2/Makefile \
+demos/programs/newwidgets/Ext18List/Makefile \
+demos/programs/newwidgets/IconB/Makefile \
+demos/programs/newwidgets/Outline/Makefile \
+demos/programs/newwidgets/Paned/Makefile \
+demos/programs/newwidgets/TabStack/Makefile \
+demos/programs/newwidgets/Toolbar/Makefile \
+demos/programs/newwidgets/Tree/Makefile \
 demos/unsupported/Makefile \
 demos/unsupported/Xm2.2/Makefile \
 demos/unsupported/Xm2.2/ButtonBox/Makefile \
