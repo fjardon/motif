@@ -5,12 +5,10 @@ AC_CONFIG_AUX_DIR(.)
 
 AM_MAINTAINER_MODE
 
-dnl The version of the LessTif libraries
-dnl Refer to section 6 of the libtool manual before screwing
-dnl with these!!!!
-CURRENT=3
-REVISION=30
-AGE=1
+dnl The version of the OpenMotif libraries
+CURRENT=2
+REVISION=2
+AGE=0
 AC_SUBST(CURRENT)
 AC_SUBST(REVISION)
 AC_SUBST(AGE)
