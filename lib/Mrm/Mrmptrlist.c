@@ -23,6 +23,11 @@
 /* 
  * HISTORY
  */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Mrmptrlist.c /main/12 1996/11/13 14:03:53 drk $"
