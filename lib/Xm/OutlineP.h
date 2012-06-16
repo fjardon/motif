@@ -49,23 +49,23 @@ extern "C" {
 *	MACROS
 *************************************************************/
 
-#define XiOutlineIndex (XmHierarchyIndex + 1)
+#define XmOutlineIndex (XmHierarchyIndex + 1)
 
-extern XmOffsetPtr XiOutline_offsets;
-extern XmOffsetPtr XiOutlineC_offsets;
+extern XmOffsetPtr XmOutline_offsets;
+extern XmOffsetPtr XmOutlineC_offsets;
 
-#define XiOutlineField(w,f,t) XmField(w, XiOutline_offsets, XiOutline, f, t)
-#define XiOutline_top_node_of_display(w) XiOutlineField(w, top_node_of_display, OutlineConstraints)
-#define XiOutline_max_width(w) XiOutlineField(w, max_width, Dimension)
-#define XiOutline_max_widget_width(w) XiOutlineField(w, max_widget_width, Dimension)
-#define XiOutline_child_op_list(w) XiOutlineField(w, child_op_list, XmList)
-#define XiOutline_ul_point(w) XiOutlineField(w, ul_point, XPoint)
-#define XiOutline_lr_point(w) XiOutlineField(w, lr_point, XPoint)
-#define XiOutline_draw_gc(w) XiOutlineField(w, draw_gc, GC)
+#define XmOutlineField(w,f,t) XmField(w, XmOutline_offsets, XmOutline, f, t)
+#define XmOutline_top_node_of_display(w) XmOutlineField(w, top_node_of_display, OutlineConstraints)
+#define XmOutline_max_width(w) XmOutlineField(w, max_width, Dimension)
+#define XmOutline_max_widget_width(w) XmOutlineField(w, max_widget_width, Dimension)
+#define XmOutline_child_op_list(w) XmOutlineField(w, child_op_list, XmList)
+#define XmOutline_ul_point(w) XmOutlineField(w, ul_point, XPoint)
+#define XmOutline_lr_point(w) XmOutlineField(w, lr_point, XPoint)
+#define XmOutline_draw_gc(w) XmOutlineField(w, draw_gc, GC)
 
-#define XiOutline_indent_space(w) XiOutlineField(w, indent_space, Dimension)
-#define XiOutline_constrain_width(w) XiOutlineField(w, constrain_width, Boolean)
-#define XiOutline_connect_nodes(w) XiOutlineField(w, connect_nodes, Boolean)
+#define XmOutline_indent_space(w) XmOutlineField(w, indent_space, Dimension)
+#define XmOutline_constrain_width(w) XmOutlineField(w, constrain_width, Boolean)
+#define XmOutline_connect_nodes(w) XmOutlineField(w, connect_nodes, Boolean)
 
 
 
@@ -75,47 +75,47 @@ extern XmOffsetPtr XiOutlineC_offsets;
  * These macros don't use the standard fieldmacro(widget) form.  They take
  * _pointers to OutlineConstraintsRec structures_.  Be careful.
  */
-#define XiOutlineCField(constraints, variable, type) \
+#define XmOutlineCField(constraints, variable, type) \
         (*(type *)(((char *) constraints) + \
-        XiOutlineC_offsets[XiOutlineIndex] + \
-        XtOffsetOf(XiOutlineConstraintPart, variable)))
+        XmOutlineC_offsets[XmOutlineIndex] + \
+        XtOffsetOf(XmOutlineConstraintPart, variable)))
 
-#define XiOutlineC_top_node_of_display(c) XiOutlineCField(c, top_node_of_display, HierarchyConstraintRec*)
-#define XiOutlineC_widget_x(c) XiOutlineCField(c, widget_x, Position)
-#define XiOutlineC_open_close_x(c) XiOutlineCField(c, open_close_x, Position)
-#define XiOutlineC_height(c) XiOutlineCField(c, height, Dimension)
-#define XiOutlineC_new_x(c) XiOutlineCField(c, new_x, Position)
-#define XiOutlineC_new_y(c) XiOutlineCField(c, new_y, Position)
-#define XiOutlineC_oc_new_x(c) XiOutlineCField(c, oc_new_x, Position)
-#define XiOutlineC_oc_new_y(c) XiOutlineCField(c, oc_new_y, Position)
-#define XiOutlineC_map(c) XiOutlineCField(c, map, Boolean)
-#define XiOutlineC_unmap(c) XiOutlineCField(c, unmap, Boolean)
-#define XiOutlineC_move(c) XiOutlineCField(c, move, Boolean)
+#define XmOutlineC_top_node_of_display(c) XmOutlineCField(c, top_node_of_display, HierarchyConstraintRec*)
+#define XmOutlineC_widget_x(c) XmOutlineCField(c, widget_x, Position)
+#define XmOutlineC_open_close_x(c) XmOutlineCField(c, open_close_x, Position)
+#define XmOutlineC_height(c) XmOutlineCField(c, height, Dimension)
+#define XmOutlineC_new_x(c) XmOutlineCField(c, new_x, Position)
+#define XmOutlineC_new_y(c) XmOutlineCField(c, new_y, Position)
+#define XmOutlineC_oc_new_x(c) XmOutlineCField(c, oc_new_x, Position)
+#define XmOutlineC_oc_new_y(c) XmOutlineCField(c, oc_new_y, Position)
+#define XmOutlineC_map(c) XmOutlineCField(c, map, Boolean)
+#define XmOutlineC_unmap(c) XmOutlineCField(c, unmap, Boolean)
+#define XmOutlineC_move(c) XmOutlineCField(c, move, Boolean)
 
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-typedef void (*XiOutlineCalcLocationProc)(Widget, Boolean);
-typedef int (*XiOutlineMaxWidthProc)(Widget);
+typedef void (*XmOutlineCalcLocationProc)(Widget, Boolean);
+typedef int (*XmOutlineMaxWidthProc)(Widget);
     
 typedef struct {
     /*Calculates the maximum width of the outline.*/
-    XiOutlineMaxWidthProc calc_max_width;
+    XmOutlineMaxWidthProc calc_max_width;
     /* Calculates the locations of the objects. */
-    XiOutlineCalcLocationProc calc_locations;
+    XmOutlineCalcLocationProc calc_locations;
     /* Just in case we need it later. */
     XtPointer extension;
 } OutlineClassPart;
 
-typedef struct _XiOutlineClassRec {
+typedef struct _XmOutlineClassRec {
     CoreClassPart		core_class;
     CompositeClassPart		composite_class;
     ConstraintClassPart		constraint_class;
     XmManagerClassPart		manager_class;
     HierarchyClassPart          hierarchy_class;
     OutlineClassPart    	outline_class;
-} XiOutlineClassRec;
+} XmOutlineClassRec;
 
 typedef struct _OutlineNodeInfo {
     /*
@@ -136,7 +136,7 @@ typedef struct _OutlineNodeInfo {
     Boolean map, unmap, move;
 } OutlineNodeInfo;
 
-typedef OutlineNodeInfo XiOutlineConstraintPart;
+typedef OutlineNodeInfo XmOutlineConstraintPart;
 
 typedef struct _OutlineConstraintRec {
     XmManagerConstraintPart manager;
@@ -168,25 +168,25 @@ typedef struct _OutlinePart {
 
 } OutlinePart;
 
-typedef OutlinePart XiOutlinePart;
+typedef OutlinePart XmOutlinePart;
 
-typedef struct _XiOutlineRec {
+typedef struct _XmOutlineRec {
     CorePart		core;
     CompositePart	composite;
     ConstraintPart	constraint;
     XmManagerPart	manager;
     HierarchyPart	hierarchy;
     OutlinePart		outline;
-} XiOutlineRec;
+} XmOutlineRec;
 
-#define XtInheritCalcMaxWidth 		((XiOutlineMaxWidthProc)_XtInherit)
-#define XtInheritCalcLocations 		((XiOutlineCalcLocationProc)_XtInherit)
+#define XtInheritCalcMaxWidth 		((XmOutlineMaxWidthProc)_XtInherit)
+#define XtInheritCalcLocations 		((XmOutlineCalcLocationProc)_XtInherit)
 
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
 
-extern XiOutlineClassRec 	xiOutlineClassRec;
+extern XmOutlineClassRec 	xiOutlineClassRec;
 
 /************************************************************
 *	STATIC DECLARATIONS

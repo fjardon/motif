@@ -38,7 +38,7 @@ XCOMM  This is unpublished proprietary source code of FUJITSU LIMITED
 #define LargePICTable	YES
 
 XCOMM Modifications made by Robert Hartley (rhartley@ics.com)
-XCOMM for the Open Motif Everywhere v2.3 release.
+XCOMM for the Open Motif Everywhere v2.2 release.
 
 #ifndef ExtraWidgets
 #define ExtraWidgets YES
@@ -47,14 +47,14 @@ XCOMM for the Open Motif Everywhere v2.3 release.
 #if ExtraWidgets
 EXTRA_WID_SRCS = XmExtDefs.c XmExtUtil.c \
                  Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
-                 Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
-                 Hierarchy.c Outline.c Table.c TabBox.c TabList.c TabStack.c \
-                 DrawUtils.c Tree.c
+                 Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c \
+                 xmlist.c Hierarchy.c Outline.c Table.c TabBox.c TabList.c \
+                 TabStack.c DrawUtils.c Tree.c
 EXTRA_WID_OBJS = XmExtDefs.o XmExtUtil.o \
                  Column.o ButtonBox.o ColorS.o Picture.o DataFSel.o DataF.o \
-                 Ext18List.o I18List.o Paned.o FontS.o IconBox.o IconButton.o xmlist.o \
-                 Hierarchy.o Outline.o Table.o TabBox.o TabList.o TabStack.o \
-                 DrawUtils.o Tree.o
+                 Ext18List.o I18List.o Paned.o FontS.o IconBox.o IconButton.o \
+                 xmlist.o Hierarchy.o Outline.o Table.o TabBox.o TabList.o \
+                 TabStack.o DrawUtils.o Tree.o
 EXTRA_WID_HEADERS = Ext.h ExtP.h ExtDefs.h XmExtDefs.h \
                     Column.h ColumnP.h \
                     ButtonBox.h ButtonBoxP.h \
@@ -66,7 +66,6 @@ EXTRA_WID_HEADERS = Ext.h ExtP.h ExtDefs.h XmExtDefs.h \
                     Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
                     Table.h TableP.h TabBox.h TabBoxP.h TabStack.h TabStackP.h \
                     TabList.h DrawUtils.h Tree.h TreeP.h
-                    
 #else
 EXTRA_WID_SRCS = /* */
 EXTRA_WID_OBJS = /* */

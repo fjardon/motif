@@ -97,8 +97,8 @@ typedef Widget (*XmWidgetFunc)();
 #define XiNbadRowPixmap "badRowPixmap"
 #define XiNbadRowPixmapMsg "Extended List: Row pixmaps must have depth of 1."
 
-#define XiNbadXlfdFont "badXlfdFont"
-#define XiNbadXlfdFontMsg \
+#define XmNbadXlfdFont "badXlfdFont"
+#define XmNbadXlfdFontMsg \
 "%s: All Xlfd fonts must contain 14 hyphens\n'%s' is not valid."
 
 #define XiNcellNotEmpty "cellNotEmpty"
@@ -115,8 +115,8 @@ typedef Widget (*XmWidgetFunc)();
 #define XiNconversionFailureMsg \
 	"%s: Unable to perform string to %s conversion."
 
-#define XiNcouldNotFindFamilyData "couldNotFindFamilyData"
-#define XiNcouldNotFindFamilyDataMsg \
+#define XmNcouldNotFindFamilyData "couldNotFindFamilyData"
+#define XmNcouldNotFindFamilyDataMsg \
   "%s: Could not find family data for family '%s'."
 
 #define XiNforceGreaterThanZero "forceGreaterThanZero"

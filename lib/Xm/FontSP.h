@@ -309,7 +309,7 @@ typedef struct _XmFontSelectorConstraintsRec
  *       STATIC DECLARATIONS
  ************************************************************/
 
-extern XmFontSelectorClassRec	xiFontSelectorClassRec;
+extern XmFontSelectorClassRec	xmFontSelectorClassRec;
 
 #ifdef __cplusplus
 }	/* Closes scope of 'extern "C"' declaration */

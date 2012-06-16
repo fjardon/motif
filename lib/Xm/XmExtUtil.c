@@ -25,11 +25,6 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <X11/IntrinsicP.h>
 #include <Xm/XmP.h>
@@ -844,10 +839,9 @@ XiCompareXtWidgetGeometry(geom1, geom2)
 void
 _XmInitialIzeConverters(Widget w)
 {
-#if  0
-     /* Dont know where this symbol comes from */
-    _XiPostInitialIzeConverters(w, "Motif 2.5.0");
-#endif
+    fprintf(stderr,
+    "What does this next line do?  - rhartley\nfilename: %s, line: %d",  __FILE__, __LINE__);
+/*    _XiPostInitialIzeConverters(w, "ICS Enhancement Pak 4.0"); */
 }
 
 #include <Xm/XmP.h>
@@ -863,7 +857,7 @@ _XmInitialIzeConverters(Widget w)
 */
 /* And rewritten to support manual alignment.  HP/UX aligns doubles to
 ** 8 bytes, but everthing else to 4.  There is NO WAY to discover at
-** runtime whether or not a structure containts doubles.  It cannot be
+** runtime whether or not a structure contains doubles.  It cannot be
 ** done, period; thus, the OSF mechanism won't work for PA-RISC
 ** processors.  We get around that by specifying an extra flag (see
 ** XiResolvePartOffsets64) saying "align my subpart (only) to 8

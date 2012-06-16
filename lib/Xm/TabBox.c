@@ -30,11 +30,6 @@
  * OVERLAYED_LAYOUT - Controls if the overlayed layout is supported
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
 #include <stdlib.h>
 #include <Xm/TabBoxP.h>
 #ifdef SCROLLED_LAYOUT

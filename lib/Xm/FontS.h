@@ -58,7 +58,7 @@ typedef struct _XmFontSelectorRec *XmFontSelectorWidget;
  *       EXTERNAL DECLARATIONS
  ************************************************************/
 
-/*	Function Name: XiCreateFontSelector
+/*	Function Name: XmCreateFontSelector
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -66,7 +66,7 @@ typedef struct _XmFontSelectorRec *XmFontSelectorWidget;
  *	Returns: The Widget created.
  */
 
-Widget XiCreateFontSelector(
+Widget XmCreateFontSelector(
 #ifndef _NO_PROTO
 Widget, String, ArgList, Cardinal
 #endif

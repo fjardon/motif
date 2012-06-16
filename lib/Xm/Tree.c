@@ -26,11 +26,6 @@
 *	INCLUDE FILES
 *************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
 #include <stdio.h>
 #include "xmlist.h"
 #include <Xm/TreeP.h>

@@ -44,8 +44,8 @@
 extern "C" {
 #endif
 
-typedef struct _XiOutlineClassRec	*XiOutlineWidgetClass;
-typedef struct _XiOutlineRec		*XiOutlineWidget;
+typedef struct _XmOutlineClassRec	*XmOutlineWidgetClass;
+typedef struct _XmOutlineRec		*XmOutlineWidget;
 
 /************************************************************
 *	MACROS
@@ -69,7 +69,7 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
-extern WidgetClass xiOutlineWidgetClass;
+extern WidgetClass xmOutlineWidgetClass;
 
 #if defined(__cplusplus)
 }

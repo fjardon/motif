@@ -25,11 +25,6 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <Xm/HierarchyP.h>
 #include <Xm/PushB.h>

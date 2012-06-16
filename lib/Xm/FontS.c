@@ -21,11 +21,7 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
+#define dbg() fprintf(stderr, "XtAddCallback() on line: %d\n", __LINE__);
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -309,7 +305,7 @@ static XtResource subresources[] = {
 
 #define SuperClass ((ConstraintWidgetClass) &xmPanedClassRec)
 
-XmFontSelectorClassRec xiFontSelectorClassRec = {
+XmFontSelectorClassRec xmFontSelectorClassRec = {
    {
 /* core class fields */
     /* superclass         */   (WidgetClass) SuperClass,
@@ -378,7 +374,7 @@ XmFontSelectorClassRec xiFontSelectorClassRec = {
   }
 };
 
-WidgetClass xmFontSelectorWidgetClass = (WidgetClass) &xiFontSelectorClassRec;
+WidgetClass xmFontSelectorWidgetClass = (WidgetClass) &xmFontSelectorClassRec;
 
 XmOffsetPtr XmFontS_offsets;
 XmOffsetPtr XmFontSC_offsets;
@@ -1320,9 +1316,9 @@ UpdateBoldItalic(XmFontSelectorWidget fsw)
 
 	params[1] = XrmQuarkToString(cf->familyq);
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XiNcouldNotFindFamilyData, XiNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
 			XmCICSWidgetSetError,
-			XiNcouldNotFindFamilyDataMsg, params, &num);
+			XmNcouldNotFindFamilyDataMsg, params, &num);
 	return;
     }
 
@@ -1379,9 +1375,9 @@ UpdateFixedProportional(XmFontSelectorWidget fsw)
 
 	params[1] = XrmQuarkToString(cf->familyq);
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XiNcouldNotFindFamilyData, XiNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
 			XmCICSWidgetSetError,
-			XiNcouldNotFindFamilyDataMsg, params, &num);
+			XmNcouldNotFindFamilyDataMsg, params, &num);
 	return;
     }
 
@@ -1559,9 +1555,9 @@ UpdateSizes(XmFontSelectorWidget fsw)
 
 	params[1] = XrmQuarkToString(cf->familyq);
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XiNcouldNotFindFamilyData, XiNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
 			XmCICSWidgetSetError,
-			XiNcouldNotFindFamilyDataMsg, params, &num);
+			XmNcouldNotFindFamilyDataMsg, params, &num);
 	return;
     }    
     
@@ -1786,9 +1782,9 @@ SetDisplayedFont(XmFontSelectorWidget fsw, String new_font)
 		
 		params[1] = new_font;
 		XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-				XiNbadXlfdFont, XiNbadXlfdFont, 
+				XmNbadXlfdFont, XmNbadXlfdFont, 
 				XmCICSWidgetSetError,
-				XiNbadXlfdFontMsg, params, &num);
+				XmNbadXlfdFontMsg, params, &num);
 	    }
 	    else {
 		ChangeMode(fsw, False, False);
@@ -2097,10 +2093,10 @@ CreateChildren(XmFontSelectorWidget fsw, ArgList args, Cardinal num_args)
     XtFree((XtPointer) margs);
     XtFree((XtPointer) temp_txt);
 
-    XtAddCallback(temp, XmNlosingFocusCallback,
+    dbg(); XtAddCallback(temp, XmNlosingFocusCallback,
 		  RemoveUserError, (XtPointer) fsw);
 
-    XtAddCallback(temp, XmNmodifyVerifyCallback,
+    dbg(); XtAddCallback(temp, XmNmodifyVerifyCallback,
 		  RemoveUserError, (XtPointer) fsw);
 
     num_largs = 0;
@@ -2157,7 +2153,7 @@ CreateTopWidgets(XmFontSelectorWidget fsw, Widget parent,
 				   pane, margs, num_args + num_largs);
     XtFree((XtPointer) margs);
 
-    XtAddCallback(button, XmNvalueChangedCallback,
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback,
 		  ToggleMiddlePane, (XtPointer) fsw);
 }
 
@@ -2244,8 +2240,8 @@ CreateFamilyBox(XmFontSelectorWidget fsw, Widget parent,
     c_box = XtCreateManagedWidget("families", xmComboBoxWidgetClass,
 				  parent, margs, num_args + num_largs);
 
-    XtAddCallback(c_box, XmNverifyTextCallback, FamilyChanged, (XtPointer)fsw);
-    XtAddCallback(c_box, XmNupdateTextCallback, FamilyChanged, (XtPointer)fsw);
+    dbg(); XtAddCallback(c_box, XmNverifyTextCallback, FamilyChanged, (XtPointer)fsw);
+    dbg(); XtAddCallback(c_box, XmNupdateTextCallback, FamilyChanged, (XtPointer)fsw);
 
     XtFree((XtPointer) margs);
     XtFree((XtPointer) temp);
@@ -2295,8 +2291,8 @@ CreateSizesBox(XmFontSelectorWidget fsw, Widget parent,
     XtFree(temp);
     AddToXlfdOnlyList(fsw, c_box);
 
-    XtAddCallback(c_box, XmNverifyTextCallback, SizeChanged, (XtPointer)fsw);
-    XtAddCallback(c_box, XmNupdateTextCallback, SizeChanged, (XtPointer)fsw);
+    dbg(); XtAddCallback(c_box, XmNverifyTextCallback, SizeChanged, (XtPointer)fsw);
+    dbg(); XtAddCallback(c_box, XmNupdateTextCallback, SizeChanged, (XtPointer)fsw);
 
     XtFree((XtPointer) margs);
     XmFontS_size_box(fsw) = c_box;
@@ -2338,13 +2334,13 @@ CreateBoldItalicBox(XmFontSelectorWidget fsw, Widget parent,
     button = XtCreateManagedWidget("boldButton", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
     XmFontS_bold_toggle(fsw) = button;
-    XtAddCallback(button, XmNvalueChangedCallback, ToggleBold, (XtPointer)fsw);
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, ToggleBold, (XtPointer)fsw);
 
     margs[num_str].value = (XtArgVal) ITALIC_STRING(fsw);
     button = XtCreateManagedWidget("italicButton", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
     XmFontS_italic_toggle(fsw) = button;
-    XtAddCallback(button, 
+    dbg(); XtAddCallback(button, 
 		  XmNvalueChangedCallback, ToggleItalic, (XtPointer) fsw);
 
     XtFree((XtPointer) margs);
@@ -2388,14 +2384,14 @@ CreateSpacingBox(XmFontSelectorWidget fsw, Widget parent,
     button = XtCreateManagedWidget("proportionalButton",
 				   xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, ToggleProportional,
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, ToggleProportional,
 		  (XtPointer) fsw);
     XmFontS_proportional(fsw) = button;
     
     margs[num_str].value = (XtArgVal) MONO_SPACE_STRING(fsw);
     button = XtCreateManagedWidget("monoButton", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, ToggleFixed,
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, ToggleFixed,
 		  (XtPointer) fsw);
     XmFontS_monospace(fsw) = button;
     
@@ -2403,7 +2399,7 @@ CreateSpacingBox(XmFontSelectorWidget fsw, Widget parent,
     margs[num_set].value = (XtArgVal) True;
     button = XtCreateManagedWidget("bothButton", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, ToggleBothSpacing,
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, ToggleBothSpacing,
 		  (XtPointer) fsw);
     XmFontS_any_spacing(fsw) = button;
     SetFlag(&(XmFontS_user_state(fsw)), USER_FIXED | USER_PROPORTIONAL, True);
@@ -2449,13 +2445,13 @@ CreateFontChoiceBox(XmFontSelectorWidget fsw, Widget parent,
 				   box, margs, num_args + num_largs);
     XmFontS_xlfd_toggle(fsw) = button;
 
-    XtAddCallback(button, XmNvalueChangedCallback, XlfdMode, (XtPointer) fsw);
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, XlfdMode, (XtPointer) fsw);
 
     margs[num_str].value = (XtArgVal) OTHER_FONT_STRING(fsw);
     margs[num_set].value = (XtArgVal) False;
     button = XtCreateManagedWidget("otherButton", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, OtherMode, (XtPointer) fsw);
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, OtherMode, (XtPointer) fsw);
     XmFontS_other_toggle(fsw) = button;
 
     XtFree((XtPointer) margs);
@@ -2500,21 +2496,21 @@ CreateResolutionBox(XmFontSelectorWidget fsw, Widget parent,
     margs[num_set].value = (XtArgVal) (XmFontS_font_info(fsw)->resolution == 75);
     button = XtCreateManagedWidget("dpi75Button", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, Toggle75DPI, fsw);
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, Toggle75DPI, fsw);
     XmFontS_dpi75(fsw) = button;
     
     margs[num_str].value = (XtArgVal) DPI100_STRING(fsw);
     margs[num_set].value = (XtArgVal) (XmFontS_font_info(fsw)->resolution == 100);
     button = XtCreateManagedWidget("dpi100Button", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, Toggle100DPI, fsw);
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, Toggle100DPI, fsw);
     XmFontS_dpi100(fsw) = button;
     
     margs[num_str].value = (XtArgVal) BOTH_STRING(fsw);
     margs[num_set].value = (XtArgVal) False;
     button = XtCreateManagedWidget("anyButton", xmToggleButtonWidgetClass, 
 				   box, margs, num_args + num_largs);
-    XtAddCallback(button, XmNvalueChangedCallback, ToggleBothDPI, fsw);
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback, ToggleBothDPI, fsw);
     XmFontS_dpiAny(fsw) = button;
 
     XtFree((XtPointer) margs);
@@ -2560,7 +2556,7 @@ CreateOtherChoiceBox(XmFontSelectorWidget fsw, Widget parent,
 				   box, margs, num_args + num_largs);
     XmFontS_use_scaling_toggle(fsw) = button;
     AddToXlfdSensitiveList(fsw, button);
-    XtAddCallback(button, XmNvalueChangedCallback,
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback,
 		  ToggleScaling, (XtPointer) fsw);
 
     margs[num_str].value = (XtArgVal) SHOW_NAME_STRING(fsw);
@@ -2570,7 +2566,7 @@ CreateOtherChoiceBox(XmFontSelectorWidget fsw, Widget parent,
 				   box, margs, num_args + num_largs);
     XmFontS_show_font_toggle(fsw) = button;
 
-    XtAddCallback(button, XmNvalueChangedCallback,
+    dbg(); XtAddCallback(button, XmNvalueChangedCallback,
 		  ToggleNameWindow, (XtPointer) fsw);
 
     XmFontS_option_menu(fsw) = CreateEncodingMenu(fsw, box, args, num_args);
@@ -2653,7 +2649,7 @@ CreateEncodingMenu(XmFontSelectorWidget fsw,
 				   pulldownMenu, margs,
 				   num_args + num_largs);
     
-    XtAddCallback(button,
+    dbg(); XtAddCallback(button,
 		  XmNactivateCallback, ChangeEncoding, (XtPointer) 0);
 
     current = 0;
@@ -2670,7 +2666,7 @@ CreateEncodingMenu(XmFontSelectorWidget fsw,
 				       num_args + num_largs);
 	XmStringFree(label);
 
-	XtAddCallback(button,
+	dbg(); XtAddCallback(button,
 		      XmNactivateCallback, ChangeEncoding, (XtPointer) i);
 
 	if (streq(*encodings, ENCODING_STRING(fsw)))
@@ -2876,9 +2872,9 @@ ToggleScaling(Widget w, XtPointer fsw_ptr, XtPointer data)
 
 	params[1] = XrmQuarkToString(cf->familyq);
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XiNcouldNotFindFamilyData, XiNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
 			XmCICSWidgetSetError,
-			XiNcouldNotFindFamilyDataMsg, params, &num);
+			XmNcouldNotFindFamilyDataMsg, params, &num);
 	return;
     }
 
@@ -2931,9 +2927,9 @@ ToggleBold(Widget w, XtPointer fsw_ptr, XtPointer data)
 
 	params[1] = XrmQuarkToString(cf->familyq);
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XiNcouldNotFindFamilyData, XiNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
 			XmCICSWidgetSetError,
-			XiNcouldNotFindFamilyDataMsg, params, &num);
+			XmNcouldNotFindFamilyDataMsg, params, &num);
 
 	return;
     }
@@ -2976,9 +2972,9 @@ ToggleItalic(Widget w, XtPointer fsw_ptr, XtPointer data)
 
 	params[1] = XrmQuarkToString(cf->familyq);
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XiNcouldNotFindFamilyData, XiNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
 			XmCICSWidgetSetError,
-			XiNcouldNotFindFamilyDataMsg, params, &num);
+			XmNcouldNotFindFamilyDataMsg, params, &num);
 	return;
     }
 
@@ -3327,7 +3323,7 @@ RemoveUserError(Widget w, XtPointer fsw_ptr, XtPointer data)
 static void
 ClassInitialize()
 {
-    XmFontSelectorClassRec* wc = &xiFontSelectorClassRec;
+    XmFontSelectorClassRec* wc = &xmFontSelectorClassRec;
 
     int i;
     XmResolveAllPartOffsets(xmFontSelectorWidgetClass,
@@ -3711,7 +3707,7 @@ GetValuesHook(Widget w, ArgList args, Cardinal * num_args)
  *
  ************************************************************/
 
-/*	Function Name: XiCreateFontSelector
+/*	Function Name: XmCreateFontSelector
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -3720,7 +3716,7 @@ GetValuesHook(Widget w, ArgList args, Cardinal * num_args)
  */
 
 Widget
-XiCreateFontSelector(Widget parent, String name,
+XmCreateFontSelector(Widget parent, String name,
 		     ArgList args, Cardinal num_args)
 {
     return(XtCreateWidget(name, xmFontSelectorWidgetClass,
