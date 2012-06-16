@@ -43,6 +43,11 @@
  * W. Snitily but has been modified for my special need
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 #include <ctype.h>
 

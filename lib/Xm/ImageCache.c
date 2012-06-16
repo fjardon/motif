@@ -37,6 +37,11 @@
 static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include "XmI.h"

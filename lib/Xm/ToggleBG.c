@@ -23,6 +23,11 @@
 /* 
  * HISTORY
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: ToggleBG.c /main/46 1999/12/06 18:10:15 samborn $"

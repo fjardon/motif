@@ -23,6 +23,11 @@
 /* 
  * HISTORY
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Separator.c /main/14 1996/03/25 17:53:11 barstow $"

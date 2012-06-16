@@ -8,6 +8,11 @@
  * (c) Copyright 1996 FUJITSU LIMITED.
  * (c) Copyright 1996 Hitachi.
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XmI.h"
 #include <Xm/PrintSP.h>
 #include "ImageCachI.h"

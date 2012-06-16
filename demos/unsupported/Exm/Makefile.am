@@ -1,0 +1,6 @@
+noinst_LIBRARIES = libExm.a
+
+libExm_a_SOURCES = Container.c
+noinst_HEADERS	= Container.h ContainerP.h
+
+INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/.. -I$(srcdir)/../../lib

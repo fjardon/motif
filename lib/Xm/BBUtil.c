@@ -27,6 +27,11 @@
  */
 
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/Xm.h>
 #include <Xm/PushBG.h>
 #include <Xm/LabelG.h>

@@ -24,6 +24,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: XmStringSeg.c /main/7 1995/09/19 23:13:59 cde-sun $"

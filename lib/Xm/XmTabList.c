@@ -23,6 +23,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: XmTabList.c /main/9 1999/04/27 17:49:59 samborn $"

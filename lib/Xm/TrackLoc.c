@@ -19,10 +19,13 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
- * HISTORY
-*/ 
+*/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TrackLoc.c /main/12 1995/10/25 20:24:41 cde-sun $"

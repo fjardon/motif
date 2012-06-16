@@ -23,6 +23,11 @@
 /* 
  * HISTORY
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: MenuUtil.c /main/16 1999/05/13 15:57:21 mgreess $"

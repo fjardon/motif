@@ -31,6 +31,11 @@ static char rcsid[] = "$XConsortium: GMUtils.c /main/11 1995/09/19 23:03:32 cde-
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*******************************************************************
  * This file contains the common geometry management set of routines
  * for both pure BulletinBoard (not subclasses) and DrawingArea.

@@ -23,6 +23,11 @@
 /* 
  * Motif Release 1.2.4
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: WmIconBox.c /main/7 1999/05/20 16:35:12 mgreess $"

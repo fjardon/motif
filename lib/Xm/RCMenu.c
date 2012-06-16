@@ -39,6 +39,11 @@
  * 	[1992/08/10  13:11:14  deblois]
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char *rcsid = "$TOG: RCMenu.c /main/25 1999/05/24 18:06:57 samborn $";

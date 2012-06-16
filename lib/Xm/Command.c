@@ -30,7 +30,9 @@ static char rcsid[] = "$TOG: Command.c /main/21 1999/01/26 18:12:51 mgreess $"
 #endif
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include "XmI.h"
 #include "CommandI.h"
 #include <Xm/DialogS.h>

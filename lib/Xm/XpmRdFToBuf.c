@@ -38,6 +38,11 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 #include <sys/stat.h>
 #if !defined(FOR_MSW) && !defined(WIN32)

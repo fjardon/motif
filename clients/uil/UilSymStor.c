@@ -29,6 +29,11 @@ static char rcsid[] = "$TOG: UilSymStor.c /main/15 1997/03/12 15:21:44 dbl $"
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 

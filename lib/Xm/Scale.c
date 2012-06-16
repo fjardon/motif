@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: Scale.c /main/31 1999/10/13 16:18:07 mgreess $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <limits.h>
 #ifndef CSRG_BASED

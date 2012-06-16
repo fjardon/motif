@@ -28,6 +28,11 @@
  * IconH.c: The IconHeader widget methods.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/IconHP.h>
 
 /********    Static Function Declarations    ********/

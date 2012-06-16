@@ -32,6 +32,11 @@ static char rcsid[] = "$XConsortium: DialogS.c /main/17 1996/03/25 17:50:11 bars
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 /* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XmI.h"
 #include <Xm/DialogSP.h>
 #include <Xm/DialogSEP.h>

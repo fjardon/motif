@@ -23,6 +23,11 @@
 /* 
  * HISTORY
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MapEvents.c /main/12 1995/09/19 23:05:22 cde-sun $"

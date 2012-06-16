@@ -30,6 +30,11 @@ static char rcsid[] = "$XConsortium: ArrowB.c /main/16 1995/10/25 19:50:57 cde-s
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <Xm/ArrowBP.h>
 #include <Xm/TransltnsP.h>

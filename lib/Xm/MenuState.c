@@ -26,6 +26,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/XmP.h>
 #include <Xm/RowColumnP.h>
 #include <Xm/ScreenP.h>

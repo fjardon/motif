@@ -26,6 +26,11 @@
  */
 /* #define DEBUG */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/IntrinsicP.h>

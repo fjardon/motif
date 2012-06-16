@@ -28,6 +28,11 @@
 static char rcsid[] = "$XConsortium: WmWinConf.c /main/8 1996/10/30 11:15:17 drk $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
  * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
 

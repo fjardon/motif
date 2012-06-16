@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: Display.c /main/23 1997/06/18 17:36:59 samborn $"
 #endif
 /* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 
 #include <X11/Intrinsic.h>

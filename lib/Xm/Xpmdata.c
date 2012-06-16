@@ -39,6 +39,11 @@ static char *RCS_Version = "$XpmVersion: 3.4i $";
 /* Internal version number */
 static char *RCS_Id = "$XpmId: xpm.shar,v 3.62 96/09/14 02:33:07 lehors Exp $";
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 #include <ctype.h>
 

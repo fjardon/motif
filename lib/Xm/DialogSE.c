@@ -28,6 +28,11 @@
 static char rcsid[] = "$XConsortium: DialogSE.c /main/10 1995/07/14 10:19:03 drk $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /*

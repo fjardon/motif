@@ -37,6 +37,11 @@
    It is still Dt centric for the PATH variables and the local variables.
 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <X11/Xlocale.h>
 #include <X11/Xos.h>

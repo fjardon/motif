@@ -26,6 +26,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/DrawP.h>
 #include "RegionI.h"
 #include "XmI.h"

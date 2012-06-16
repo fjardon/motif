@@ -33,6 +33,11 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* we don't want the XpmFree macro since we define the XpmFree function here */
 #define NO_XPMFREE_MACRO
 #include "XpmI.h"

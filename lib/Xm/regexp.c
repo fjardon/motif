@@ -54,6 +54,11 @@
  * precedence is structured in regular expressions.  Serious changes in
  * regular-expression syntax might require a total rethink.
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "regexpI.h"
 #include <stdio.h>
 #include <ctype.h>

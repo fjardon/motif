@@ -25,6 +25,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DragDrop.h>

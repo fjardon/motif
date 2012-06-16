@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>		/* for abs, float operation... */
 #endif

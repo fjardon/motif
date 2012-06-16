@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: ArrowBG.c /main/20 1999/01/26 15:30:15 mgreess $"
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <Xm/ArrowBGP.h>
 #include <Xm/DrawP.h>

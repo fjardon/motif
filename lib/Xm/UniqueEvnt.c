@@ -22,7 +22,12 @@
 */ 
 /* 
  * HISTORY
-*/ 
+*/
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UniqueEvnt.c /main/14 1996/11/25 11:33:58 pascale $"

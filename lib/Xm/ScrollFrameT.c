@@ -25,6 +25,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XmI.h"
 #include <Xm/TraitP.h>
 #include <Xm/ScrollFrameT.h>

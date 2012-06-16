@@ -39,6 +39,11 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 #include <ctype.h>
 

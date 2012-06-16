@@ -31,6 +31,11 @@ static char rcsid[] = "$XConsortium: DropTrans.c /main/15 1996/05/02 13:50:19 pa
 /*
 *  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/DropTransP.h>
 #include <Xm/DragCP.h>
 #include "XmI.h"

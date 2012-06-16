@@ -22,7 +22,12 @@
  */ 
 /* 
  * HISTORY
- */ 
+ */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"

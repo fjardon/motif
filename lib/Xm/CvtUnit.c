@@ -25,6 +25,9 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "XmI.h"
 #include "RepTypeI.h"

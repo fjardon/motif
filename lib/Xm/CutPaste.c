@@ -32,7 +32,9 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #define CUTPASTE
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include "XmI.h"		/* for MAX */
 #include <Xm/CutPaste.h>
 #include "MessagesI.h"

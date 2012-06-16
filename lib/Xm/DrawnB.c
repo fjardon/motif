@@ -33,6 +33,11 @@ static char rcsid[] = "$TOG: DrawnB.c /main/20 1999/04/29 13:05:14 samborn $"
  * Include files & Static Routine Definitions
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <X11/X.h>
 #include <Xm/ActivatableT.h>

@@ -30,6 +30,11 @@ static char rcsid[] = "$XConsortium: DropSMgrI.c /main/11 1995/07/14 10:30:45 dr
 #endif
 /* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <Xm/DropSMgrP.h>
 #include "XmI.h"

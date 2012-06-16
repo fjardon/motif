@@ -30,6 +30,11 @@ static char rcsid[] = "$XConsortium: GadgetUtil.c /main/16 1996/10/23 15:00:52 c
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>

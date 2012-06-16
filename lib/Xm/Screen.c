@@ -32,6 +32,11 @@ static char rcsid[] = "$TOG: Screen.c /main/16 1997/06/18 17:41:50 samborn $"
 /* (c) Copyright 1987, 1988, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <X11/Xatom.h>
 #include <Xm.h>			/* To make cpp on Sun happy. CR 5943 */

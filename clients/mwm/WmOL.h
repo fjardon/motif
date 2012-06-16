@@ -7,6 +7,13 @@
 
 #ifndef _WM_OL_H
 #define _WM_OL_H
+
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifndef NO_OL_COMPAT
 
 #ifdef REV_INFO

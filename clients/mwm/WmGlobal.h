@@ -1,5 +1,11 @@
 #ifndef _WmGlobal_h
 #define _WmGlobal_h
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* 
  * Motif
  *

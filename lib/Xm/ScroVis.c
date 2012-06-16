@@ -26,6 +26,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/ScrolledWP.h>
 #include <Xm/NavigatorT.h>
 #include "ScrollFramTI.h"

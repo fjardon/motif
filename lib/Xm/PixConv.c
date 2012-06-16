@@ -34,6 +34,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/AccColorT.h> 
 #include <Xm/TraitP.h> 
 #include <Xm/XmP.h>

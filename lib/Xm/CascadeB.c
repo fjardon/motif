@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: CascadeB.c /main/27 1999/08/11 14:26:35 mgreess $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XmI.h"		/* ShellP.h doesn't define externalref. */
 #include <X11/ShellP.h>
 #include <X11/keysymdef.h>

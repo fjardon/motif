@@ -29,6 +29,11 @@ static char rcsid[] = "$TOG: UilSarVal.c /main/13 1997/12/06 16:14:16 cshi $"
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 

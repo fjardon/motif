@@ -24,6 +24,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char *rcsid = "$XConsortium: RCLayout.c /main/6 1995/10/25 20:14:15 cde-sun $";

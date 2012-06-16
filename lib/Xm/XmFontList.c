@@ -25,6 +25,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>

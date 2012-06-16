@@ -23,9 +23,14 @@
  */
 #ifdef REV_INFO
 #ifndef lint
-static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.1 $ $Date: 2002/01/07 18:52:54 $"
+static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.2 $ $Date: 2002/01/10 20:56:28 $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 

@@ -28,6 +28,11 @@
 static char rcsid[] = "$XConsortium: ResInd.c /main/17 1996/06/07 11:40:05 daniel $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <limits.h>

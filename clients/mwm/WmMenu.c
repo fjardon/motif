@@ -23,6 +23,11 @@
 /* 
  * Motif Release 1.2.3
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WmMenu.c /main/15 1996/11/20 15:20:17 rswiston $"

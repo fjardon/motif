@@ -28,7 +28,9 @@
  * (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC. 
  * ALL RIGHTS RESERVED 
  */
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #endif

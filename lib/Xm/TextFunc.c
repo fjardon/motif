@@ -29,6 +29,11 @@
  *  This is unpublished proprietary source code of FUJITSU LIMITED
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/XmosP.h>
 #include <Xm/TextStrSoP.h>
 #include "XmI.h"

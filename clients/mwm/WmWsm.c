@@ -31,6 +31,11 @@
  * (c) Copyright 1996 Hitachi.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/Xm.h>
 #include "WmGlobal.h"
 #include "WmWsmLib/wsm_proto.h"

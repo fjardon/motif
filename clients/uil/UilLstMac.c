@@ -29,6 +29,11 @@ static char rcsid[] = "$TOG: UilLstMac.c /main/15 1997/03/12 15:21:48 dbl $"
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 

@@ -33,6 +33,11 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 #if !defined(NO_ZPIPE) && defined(WIN32)
 # define popen _popen

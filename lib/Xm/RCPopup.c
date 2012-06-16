@@ -24,6 +24,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char *rcsid = "$XConsortium: RCPopup.c /main/7 1996/03/28 15:15:24 daniel $";

@@ -30,6 +30,11 @@ static char rcsid[] = "$XConsortium: Frame.c /main/18 1996/10/15 15:01:45 cde-os
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/DrawP.h>
 #include <Xm/FrameP.h>
 #include <Xm/GadgetP.h>

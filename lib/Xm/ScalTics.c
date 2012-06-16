@@ -25,6 +25,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 
 #include <Xm/Xm.h>
 #include <Xm/XmosP.h>  /* for allocate local */

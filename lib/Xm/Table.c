@@ -34,6 +34,11 @@
  * the future, if someone ever adds constraints to the drawing area.  It
  * hasn't happened as of CDE 2.1 though.
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdlib.h>
 #include <stdio.h>
 

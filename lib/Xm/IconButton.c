@@ -25,6 +25,11 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <Xm/XmP.h>
 #if (XmVERSION >= 2)
 #include <Xm/DrawP.h>

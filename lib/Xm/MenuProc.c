@@ -26,6 +26,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
  * The following functions are used to separate the private class function
  * in RowColumn from the buttons that may be children of the RowColumn.

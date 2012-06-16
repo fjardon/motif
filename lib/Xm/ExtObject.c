@@ -33,6 +33,11 @@ static char rcsid[] = "$XConsortium: ExtObject.c /main/13 1995/10/25 20:03:50 cd
 /* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
 /* (c) Copyright 1988 MICROSOFT CORPORATION */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <string.h>
 #include "BaseClassI.h"
 #include "ExtObjectI.h"

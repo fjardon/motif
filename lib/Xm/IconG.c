@@ -25,6 +25,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/AccColorT.h>
 #include <Xm/CareVisualT.h>
 #include <Xm/ContItemT.h>

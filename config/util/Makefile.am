@@ -1,0 +1,3 @@
+MAINTAINERCLEANFILES =
+
+noinst_PROGRAMS = makestrs

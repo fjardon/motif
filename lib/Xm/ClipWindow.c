@@ -25,6 +25,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/ClipWindowP.h>
 #include <Xm/TransltnsP.h>
 #include <Xm/VirtKeysP.h>	/* for XmeVirtualToActualKeysyms */

@@ -31,6 +31,11 @@ static char rcsid[] = "$XConsortium: Simple.c /main/11 1995/09/19 23:08:54 cde-s
 /*
 *  (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdio.h>
 #include <X11/StringDefs.h>
 #include <Xm/RowColumnP.h>

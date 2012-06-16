@@ -28,6 +28,11 @@
 static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include "RepTypeI.h"

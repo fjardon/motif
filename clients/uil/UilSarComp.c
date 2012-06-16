@@ -29,6 +29,11 @@ static char rcsid[] = "$XConsortium: UilSarComp.c /main/11 1995/07/14 09:36:46 d
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 

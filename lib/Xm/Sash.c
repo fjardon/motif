@@ -32,6 +32,11 @@ static char rcsid[] = "$XConsortium: Sash.c /main/12 1995/07/13 17:51:55 drk $"
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 /* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <X11/cursorfont.h>
 #include "XmI.h"
 #include <Xm/SashP.h>

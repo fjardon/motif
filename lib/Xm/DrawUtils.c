@@ -1,4 +1,4 @@
-/*
+/* 
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,8 +19,11 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- *
- */
+*/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <X11/Intrinsic.h>
 #include <Xm/DrawUtils.h>

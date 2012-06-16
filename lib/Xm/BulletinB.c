@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: BulletinB.c /main/22 1999/10/13 16:15:40 mgreess $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "BulletinBI.h"
 #include <Xm/AtomMgr.h>
 #include <Xm/BaseClassP.h>

@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: ScrolledW.c /main/16 1997/07/25 16:49:57 samborn $"
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>    /* for abs, float operation... */
 #endif

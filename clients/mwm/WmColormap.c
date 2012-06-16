@@ -23,6 +23,11 @@
 /* 
  * Motif Release 1.2.3
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WmColormap.c /main/5 1996/10/30 11:14:44 drk $"

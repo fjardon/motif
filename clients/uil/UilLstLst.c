@@ -29,6 +29,11 @@ static char rcsid[] = "$TOG: UilLstLst.c /main/20 1999/07/21 09:03:16 vipin $"
 #endif
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 

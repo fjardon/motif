@@ -37,6 +37,11 @@ static char rcsid[] = "$XConsortium: Desktop.c /main/12 1995/07/14 10:17:30 drk 
 /*
 *  (c) Copyright 1988 MICROSOFT CORPORATION */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/DesktopP.h>
 #include <Xm/BaseClassP.h>
 #include <Xm/ScreenP.h>

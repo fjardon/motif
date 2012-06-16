@@ -36,6 +36,11 @@ static char rcsid[] = "$XConsortium: TearOffB.c /main/12 1996/03/06 17:09:22 pas
  * Include files & Static Routine Definitions
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/DrawP.h>
 #include <Xm/RowColumnP.h>
 #include <Xm/TearOffBP.h>

@@ -28,6 +28,11 @@
 static char rcsid[] = "$TOG: DragBS.c /main/29 1998/03/18 15:10:28 csn $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 

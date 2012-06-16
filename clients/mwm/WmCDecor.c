@@ -23,6 +23,11 @@
 /* 
  * Motif Release 1.2.1
 */ 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WmCDecor.c /main/7 1996/06/20 09:38:16 rswiston $"

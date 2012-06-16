@@ -28,6 +28,11 @@
 static char rcsid[] = "$TOG: PushBG.c /main/29 1999/05/27 14:18:33 mgreess $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 /* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */

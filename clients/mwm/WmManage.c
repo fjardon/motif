@@ -22,7 +22,12 @@
 */ 
 /* 
  * Motif Release 1.2.4
-*/ 
+*/
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: WmManage.c /main/11 1998/01/12 16:45:48 cshi $"

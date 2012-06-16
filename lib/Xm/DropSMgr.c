@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
 #endif
 /* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*****************************************************************************
  * THE DROPSITE DATABASE
  * 

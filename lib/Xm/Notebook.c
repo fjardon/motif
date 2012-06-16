@@ -23,6 +23,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <stdlib.h>
 #include <Xm/AccTextT.h>
 #include <Xm/ActivatableT.h>

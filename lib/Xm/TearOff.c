@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: TearOff.c /main/15 1997/08/21 14:19:26 csn $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <X11/cursorfont.h>
 
 #include <Xm/AtomMgr.h>

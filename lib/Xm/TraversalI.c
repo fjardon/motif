@@ -22,7 +22,12 @@
 */ 
 /* 
  * HISTORY
-*/ 
+*/
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: TraversalI.c /main/13 1997/10/13 11:28:33 cshi $"

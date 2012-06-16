@@ -27,6 +27,11 @@
  */
 
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <ctype.h>
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>

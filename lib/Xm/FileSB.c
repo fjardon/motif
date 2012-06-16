@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/XmosP.h>
 
 #include "XmI.h"

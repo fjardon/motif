@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
 #endif
 /*
 *  (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <Xm/AtomMgr.h>
 #include <Xm/XmP.h>
 #include <X11/Xresource.h>

@@ -35,6 +35,11 @@ static char rcsid[] = "$XConsortium: DragIcon.c /main/17 1996/10/14 10:44:37 pas
 #endif
 /* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/Xm.h>		/* To make cpp on Sun happy. CR 5943 */
 #include <Xm/DisplayP.h>
 #include <Xm/DragIconP.h>

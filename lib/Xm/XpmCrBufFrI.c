@@ -36,6 +36,11 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 
 LFUNC(WriteColors, int, (char **dataptr, unsigned int *data_size,

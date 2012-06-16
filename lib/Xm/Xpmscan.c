@@ -38,6 +38,11 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XpmI.h"
 
 #define MAXPRINTABLE 92			/* number of printable ascii chars

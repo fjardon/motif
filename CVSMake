@@ -1,0 +1,10 @@
+#!/bin/sh 
+#
+# Configure and make from fresh CVS checkout, or cvs update
+#
+
+libtoolize --force --automake && \
+aclocal && \
+autoconf && \
+autoheader && \
+automake --add-missing --include-deps --foreign

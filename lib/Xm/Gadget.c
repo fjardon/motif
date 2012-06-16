@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: Gadget.c /main/17 1997/07/07 11:38:57 cshi $"
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <ctype.h>
 #include <stdio.h>
 #include <X11/Intrinsic.h>	/* <X11/Shell.h> doesn't define externalref */

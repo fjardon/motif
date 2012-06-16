@@ -33,6 +33,11 @@
 ** by programs (that's why they are Xme now) 
 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 
 #define NO_XM_1_2_BC
 

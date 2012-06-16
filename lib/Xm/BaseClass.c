@@ -33,6 +33,11 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
 /* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
 #define HAVE_EXTENSIONS
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <Xm/XmP.h>
 #include <X11/ShellP.h>
 #include <Xm/ExtObjectP.h>

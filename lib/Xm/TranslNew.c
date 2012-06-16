@@ -25,6 +25,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* Define _XmConst before including TransltnsP.h or XmP.h, so that the
  * declarations will be in agreement with the definitions.
  */

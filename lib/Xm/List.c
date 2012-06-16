@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #endif
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <string.h>
 #include <stdio.h>
 #include <X11/Xatom.h>

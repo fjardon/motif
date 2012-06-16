@@ -32,6 +32,11 @@ static char rcsid[] = "$XConsortium: Draw.c /main/12 1995/10/25 20:02:15 cde-sun
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include "XmI.h"
 #include <Xm/DrawP.h>
 

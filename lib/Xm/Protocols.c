@@ -28,6 +28,11 @@
 static char rcsid[] = "$XConsortium: Protocols.c /main/15 1996/10/17 12:00:24 cde-osf $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <Xm/XmosP.h>           /* for bzero et al */

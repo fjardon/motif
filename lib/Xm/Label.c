@@ -31,6 +31,11 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <ctype.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>

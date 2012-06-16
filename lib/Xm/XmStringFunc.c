@@ -24,6 +24,11 @@
 /*
  * HISTORY
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: XmStringFunc.c /main/9 1999/10/14 11:20:50 mgreess $"

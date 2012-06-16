@@ -25,6 +25,11 @@
 /************************************************************
  *       INCLUDE FILES
  ************************************************************/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <Xm/Xm.h>
 #include <stdio.h>
 #include <Xm/ButtonBoxP.h>

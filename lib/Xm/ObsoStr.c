@@ -26,6 +26,11 @@
  * HISTORY
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 
 /*** This file contains the 700 or so globals that were used in 1.2.0
      but not in 1.2.1 where they were replaced by a big array */

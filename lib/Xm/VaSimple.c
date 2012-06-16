@@ -22,7 +22,12 @@
 */ 
 /* 
  * HISTORY
-*/ 
+*/
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: VaSimple.c /main/11 1995/10/25 20:26:43 cde-sun $"

@@ -31,6 +31,11 @@ static char rcsid[] = "$XConsortium: GeoUtils.c /main/13 1996/08/15 17:11:25 pas
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #endif

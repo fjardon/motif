@@ -30,6 +30,11 @@ static char rcsid[] = "$TOG: DragC.c /main/29 1997/10/07 12:19:52 cshi $"
 #endif
 /* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #ifndef DEFAULT_WM_TIMEOUT
 #define DEFAULT_WM_TIMEOUT 5000
 #endif
