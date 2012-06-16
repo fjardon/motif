@@ -25,11 +25,6 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <Xm/OutlineP.h>
 #include <Xm/DropSMgr.h>
@@ -102,12 +97,12 @@ static void LayoutChildren(Widget, Widget);
 static Boolean LocInRect(XRectangle *, Widget, Position, Position);
 static Boolean WidgetInRect(XRectangle *, Widget);
 static Boolean CheckWidget(XRectangle *, OutlineConstraints);
-static void ProcessChildQueue(XiOutlineWidget, XRectangle *);
-static void MoveNode(XiOutlineWidget, OutlineConstraints, Position,
+static void ProcessChildQueue(XmOutlineWidget, XRectangle *);
+static void MoveNode(XmOutlineWidget, OutlineConstraints, Position,
 		     Position, Position, Position, Boolean);
 static void ProcessNode(OutlineConstraints);
 static Boolean MoveNodesTimer(XtPointer);
-static void UnmapNode(XiOutlineWidget ow, OutlineConstraints node);
+static void UnmapNode(XmOutlineWidget ow, OutlineConstraints node);
 static void UnmapAllExtraNodes(Widget w, HierarchyConstraints node);
 static void NegotiateNodeWidth(Widget w, OutlineConstraints node);
 
@@ -117,12 +112,12 @@ static void _CalcNodeMidPoint( OutlineConstraints node, Widget w, LadderPoint *r
 static void _OutlineDrawLine(Widget w, XRectangle *rect, OutlineConstraints parent, 
 	  OutlineConstraints child, LadderPoint from_ladder_point,
 	  LadderPoint *to_ladder_point );
-static void CreateGC(XiOutlineWidget ow);
+static void CreateGC(XmOutlineWidget ow);
 
 /************************************************************
 *	STATIC DECLARATIONS
 *************************************************************/
-#define offset(field) XmPartOffset(XiOutline, field)
+#define offset(field) XmPartOffset(XmOutline, field)
 static XmPartResource resources[] = {
   {XmNindentSpace, XmCIndentSpace, XmRHorizontalDimension, sizeof(Dimension),
    offset(indent_space), XmRImmediate, (XtPointer)DEF_INDENT_SPACE},
@@ -141,11 +136,11 @@ static XmSyntheticResource get_resources[] =
 
 #undef offset
 
-XiOutlineClassRec xiOutlineClassRec = {
+XmOutlineClassRec xmOutlineClassRec = {
   { /* core fields */
     /* superclass		*/	((WidgetClass) SUPERCLASS),
-    /* class_name		*/	"XiOutline",
-    /* widget_size		*/	sizeof(XiOutlinePart),
+    /* class_name		*/	"XmOutline",
+    /* widget_size		*/	sizeof(XmOutlinePart),
     /* class_initialize		*/	ClassInitialize,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -186,7 +181,7 @@ XiOutlineClassRec xiOutlineClassRec = {
    {		/* constraint_class fields */
     /* resource list        */         NULL,
     /* num resources        */         0,
-    /* constraint size      */         sizeof(XiOutlineConstraintPart),	
+    /* constraint size      */         sizeof(XmOutlineConstraintPart),	
     /* init proc            */         ConstraintInitialize,
     /* destroy proc         */         ConstraintDestroy,
     /* set values proc      */         ConstraintSetValues,
@@ -218,10 +213,10 @@ XiOutlineClassRec xiOutlineClassRec = {
    }
 };
 
-WidgetClass xiOutlineWidgetClass = (WidgetClass) &xiOutlineClassRec;
+WidgetClass xmOutlineWidgetClass = (WidgetClass) &xmOutlineClassRec;
 
-XmOffsetPtr XiOutline_offsets;
-XmOffsetPtr XiOutlineC_offsets;
+XmOffsetPtr XmOutline_offsets;
+XmOffsetPtr XmOutlineC_offsets;
 
 /************************************************************
 *	STATIC CODE
@@ -235,17 +230,17 @@ XmOffsetPtr XiOutlineC_offsets;
 static void
 ClassInitialize()
 {
-    XiOutlineClassRec *wc = &xiOutlineClassRec;
+    XmOutlineClassRec *wc = &xmOutlineClassRec;
     int i;
 
-    XmResolveAllPartOffsets(xiOutlineWidgetClass,
-			    &XiOutline_offsets,
-			    &XiOutlineC_offsets);
+    XmResolveAllPartOffsets(xmOutlineWidgetClass,
+			    &XmOutline_offsets,
+			    &XmOutlineC_offsets);
 
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
         (wc->manager_class.syn_resources)[i].resource_offset =
             XmGetPartOffset(wc->manager_class.syn_resources + i,
-                            &XiOutline_offsets);
+                            &XmOutline_offsets);
 	}
 }
 
@@ -258,10 +253,10 @@ ClassInitialize()
 static void
 ClassPartInitialize(WidgetClass class)
 {
-    XiOutlineWidgetClass wc = (XiOutlineWidgetClass) class;
-    XiOutlineWidgetClass superC;
+    XmOutlineWidgetClass wc = (XmOutlineWidgetClass) class;
+    XmOutlineWidgetClass superC;
     
-    superC = (XiOutlineWidgetClass) wc->core_class.superclass;
+    superC = (XmOutlineWidgetClass) wc->core_class.superclass;
 
 /* 
  * We don't need to check for NULL super since we'll get to The functions
@@ -290,31 +285,31 @@ ClassPartInitialize(WidgetClass class)
 static void 
 Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) set;
+    XmOutlineWidget ow = (XmOutlineWidget) set;
 
     XmHierarchy_top_node(ow) = ((HierarchyConstraints) 
 			      XtRealloc((XtPointer) XmHierarchy_top_node(ow),
 					sizeof(OutlineConstraintRec)));
 
-    XiOutline_top_node_of_display(ow) = NULL;
+    XmOutline_top_node_of_display(ow) = NULL;
 
-    XiOutline_max_width(ow) = 0;	
-    XiOutline_max_widget_width(ow) = 0;
-    XiOutline_ul_point(ow).x = ow->core.width;
-    XiOutline_ul_point(ow).y = ow->core.height;
-    XiOutline_lr_point(ow).x = 0;
-    XiOutline_lr_point(ow).y = 0;
+    XmOutline_max_width(ow) = 0;	
+    XmOutline_max_widget_width(ow) = 0;
+    XmOutline_ul_point(ow).x = ow->core.width;
+    XmOutline_ul_point(ow).y = ow->core.height;
+    XmOutline_lr_point(ow).x = 0;
+    XmOutline_lr_point(ow).y = 0;
 
-    XiOutline_child_op_list(ow) = _XmListInit();
+    XmOutline_child_op_list(ow) = _XmListInit();
 
     CreateGC(ow);
 }
 
-static void CreateGC(XiOutlineWidget ow)
+static void CreateGC(XmOutlineWidget ow)
 {
     	XGCValues values;
 	values.foreground = ow->manager.foreground;
-	XiOutline_draw_gc(ow) = XtGetGC((Widget)ow, GCForeground, &values);
+	XmOutline_draw_gc(ow) = XtGetGC((Widget)ow, GCForeground, &values);
 }
 
 /*    Function Name: Destroy
@@ -325,10 +320,10 @@ static void CreateGC(XiOutlineWidget ow)
 static void
 Destroy(Widget widget)
 {
-  XiOutlineWidget ow = (XiOutlineWidget) widget;
+  XmOutlineWidget ow = (XmOutlineWidget) widget;
 
-  _XmListFree(XiOutline_child_op_list(ow)); 
-  XtReleaseGC(widget,XiOutline_draw_gc(ow));
+  _XmListFree(XmOutline_child_op_list(ow)); 
+  XtReleaseGC(widget,XmOutline_draw_gc(ow));
 }
 
 /*	Function Name: Resize
@@ -340,10 +335,10 @@ Destroy(Widget widget)
 static void 
 Resize(Widget w)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
 
     if (XmHierarchy_refigure_mode(ow)) {
-	if(XiOutline_constrain_width(ow))
+	if(XmOutline_constrain_width(ow))
 	    CalcLocations(w, False);
 	
 	LayoutChildren(w, NULL);
@@ -372,7 +367,7 @@ typedef struct _RedispInfo {
 static void
 Redisplay(Widget w, XEvent * event, Region region)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
     XEvent junk;
     RedispInfo info;
     int lrx, lry;		/* local variables for lower left corner. */
@@ -394,38 +389,38 @@ Redisplay(Widget w, XEvent * event, Region region)
      * that have yet to be processed.
      */
 
-    if (event->xexpose.x < XiOutline_ul_point(ow).x) 
-	XiOutline_ul_point(ow).x = event->xexpose.x;
-    if (event->xexpose.y < XiOutline_ul_point(ow).y) 
-	XiOutline_ul_point(ow).y = event->xexpose.y;
+    if (event->xexpose.x < XmOutline_ul_point(ow).x) 
+	XmOutline_ul_point(ow).x = event->xexpose.x;
+    if (event->xexpose.y < XmOutline_ul_point(ow).y) 
+	XmOutline_ul_point(ow).y = event->xexpose.y;
 
     lrx = event->xexpose.x + event->xexpose.width;
     lry = event->xexpose.y + event->xexpose.height;
 
-    if (lrx > XiOutline_lr_point(ow).x) 
-	XiOutline_lr_point(ow).x = lrx;
-    if (lry > XiOutline_lr_point(ow).y) 
-	XiOutline_lr_point(ow).y = lry;
+    if (lrx > XmOutline_lr_point(ow).x) 
+	XmOutline_lr_point(ow).x = lrx;
+    if (lry > XmOutline_lr_point(ow).y) 
+	XmOutline_lr_point(ow).y = lry;
 
     if (!info.found) {	/* No more expose events waiting - process these. */
 	XRectangle rect;
 
-	rect.x = XiOutline_ul_point(ow).x;
-	rect.y = XiOutline_ul_point(ow).y;
-	rect.width = XiOutline_lr_point(ow).x - XiOutline_ul_point(ow).x;
-	rect.height = XiOutline_lr_point(ow).y - XiOutline_ul_point(ow).y;
+	rect.x = XmOutline_ul_point(ow).x;
+	rect.y = XmOutline_ul_point(ow).y;
+	rect.width = XmOutline_lr_point(ow).x - XmOutline_ul_point(ow).x;
+	rect.height = XmOutline_lr_point(ow).y - XmOutline_ul_point(ow).y;
 
-	ProcessChildQueue((XiOutlineWidget) w, &rect);
-	if (XiOutline_connect_nodes(w))
+	ProcessChildQueue((XmOutlineWidget) w, &rect);
+	if (XmOutline_connect_nodes(w))
 		RedrawOutlineLines(w,&rect);
 	
 	/*
 	 * Reset upper right and lower left points.
 	 */
 
-	XiOutline_ul_point(ow).x = w->core.width;
-	XiOutline_ul_point(ow).y = w->core.height;
-	XiOutline_lr_point(ow).x = XiOutline_lr_point(ow).y = 0;
+	XmOutline_ul_point(ow).x = w->core.width;
+	XmOutline_ul_point(ow).y = w->core.height;
+	XmOutline_lr_point(ow).x = XmOutline_lr_point(ow).y = 0;
     }
 
 #if (XmVersion > 1001)
@@ -499,8 +494,8 @@ static Boolean
 SetValues(Widget current, Widget request, Widget set,
 	  ArgList args, Cardinal * num_args)
 {
-    XiOutlineWidget c_outline = (XiOutlineWidget) current; 
-    XiOutlineWidget outline = (XiOutlineWidget) set;
+    XmOutlineWidget c_outline = (XmOutlineWidget) current; 
+    XmOutlineWidget outline = (XmOutlineWidget) set;
     Boolean layout = False;
     Boolean retval = False;
 
@@ -510,13 +505,13 @@ SetValues(Widget current, Widget request, Widget set,
 	layout = True;
     }
 
-    if (XiOutline_indent_space(c_outline) != XiOutline_indent_space(outline))
+    if (XmOutline_indent_space(c_outline) != XmOutline_indent_space(outline))
     {
 	layout = True;
     }
 
-    if (XiOutline_constrain_width(c_outline)
-	!= XiOutline_constrain_width(outline))
+    if (XmOutline_constrain_width(c_outline)
+	!= XmOutline_constrain_width(outline))
     {
 	layout = True;
     }
@@ -524,11 +519,11 @@ SetValues(Widget current, Widget request, Widget set,
     if (XmHierarchy_refigure_mode(c_outline) != XmHierarchy_refigure_mode(outline))
 	layout = XmHierarchy_refigure_mode(outline);
 
-    if (XiOutline_connect_nodes(c_outline) != XiOutline_connect_nodes(outline))
+    if (XmOutline_connect_nodes(c_outline) != XmOutline_connect_nodes(outline))
 	retval = True;
 
     if (layout) {
-	XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(set);
+	XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(set);
 
 	(*(oc->outline_class.calc_locations))(set, True);
 	LayoutChildren(set, NULL);
@@ -537,7 +532,7 @@ SetValues(Widget current, Widget request, Widget set,
 
     if (c_outline->manager.foreground != outline->manager.foreground)
 	{
-  	XtReleaseGC(current,XiOutline_draw_gc(c_outline));
+  	XtReleaseGC(current,XmOutline_draw_gc(c_outline));
 	CreateGC(outline);
 	retval = True;
 	}
@@ -560,8 +555,8 @@ SetValues(Widget current, Widget request, Widget set,
 static void
 ChangeManaged(Widget w)
 {
-    XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(w);
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(w);
+    XmOutlineWidget ow = (XmOutlineWidget) w;
 
     if (XmHierarchy_refigure_mode(ow)) {
 	(*(oc->outline_class.calc_locations))(w, True);
@@ -588,8 +583,8 @@ static XtGeometryResult
 GeometryManager(Widget w, XtWidgetGeometry * request, 
 		XtWidgetGeometry * result)
 {
-    XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(XtParent(w));
-    XiOutlineWidget ow = (XiOutlineWidget)(XtParent(w));
+    XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(XtParent(w));
+    XmOutlineWidget ow = (XmOutlineWidget)(XtParent(w));
 
     result->request_mode = 0;
 
@@ -597,7 +592,7 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
     if (!(request->request_mode & (CWWidth | CWHeight | CWBorderWidth)))
 	return(XtGeometryNo);
 
-    if((XiOutline_constrain_width(ow)) &&
+    if((XmOutline_constrain_width(ow)) &&
        (request->request_mode & CWWidth) &&
        (request->width > w->core.width))
     {
@@ -680,8 +675,8 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
 static void
 ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 {
-    XiOutlineC_widget_x(set->core.constraints)
-      = XiOutlineC_open_close_x(set->core.constraints) = 0;
+    XmOutlineC_widget_x(set->core.constraints)
+      = XmOutlineC_open_close_x(set->core.constraints) = 0;
 }
 
 /*	Function Name: ConstraintSetValues
@@ -725,7 +720,7 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	 * Other operations have already been performed by my superclass. 
 	 */
 
-	if (XmHierarchy_refigure_mode((XiOutlineWidget)ow)) {
+	if (XmHierarchy_refigure_mode((XmOutlineWidget)ow)) {
 	    CalcLocations(ow, True);
 	    LayoutChildren(ow, NULL);
 	    redisplay = True;
@@ -744,7 +739,7 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
      }
 
     if (XtIsRealized(ow) && redisplay && 
-        (XmHierarchy_refigure_mode((XiOutlineWidget)ow)))
+        (XmHierarchy_refigure_mode((XmOutlineWidget)ow)))
     {
 	XClearArea(XtDisplay(ow), XtWindow(ow),
 		   0, 0, ow->core.width, ow->core.height, True);
@@ -768,14 +763,14 @@ ConstraintDestroy(Widget w)
 {
     OutlineConstraints node = GetNodeInfo(w);
     XmListElem *elem, *next;
-    XiOutlineWidget ow;
+    XmOutlineWidget ow;
 
     if (XmHierarchyC_state(node) == XiNotInHierarchy) 
 	return;
 
-    ow = (XiOutlineWidget) XtParent(w);
+    ow = (XmOutlineWidget) XtParent(w);
 
-    elem = XmListFirst(XiOutline_child_op_list(ow)); 
+    elem = XmListFirst(XmOutline_child_op_list(ow)); 
     while(elem != NULL) {
 	OutlineConstraints info = (OutlineConstraints) XmListElemData(elem);
 
@@ -786,7 +781,7 @@ ConstraintDestroy(Widget w)
 	     * Each widget will only be in the list once.
 	     */
 
-	    _XmListRemove(XiOutline_child_op_list(ow), elem);
+	    _XmListRemove(XmOutline_child_op_list(ow), elem);
 	    break;
 	}
 
@@ -813,7 +808,7 @@ static void
 ToggleNodeState(Widget w, XtPointer node_ptr, XtPointer call_data)
 {
     Widget ow = XtParent(w);
-    XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(ow);
+    XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(ow);
 
     (*(SUPERCLASS->hierarchy_class.toggle_node_state))(w, node_ptr, call_data);
 
@@ -860,16 +855,16 @@ static void
 CalcLocations(Widget w, Boolean allow_resize)
 {
     Cardinal             outline_depth, current_index;
-    XiOutlineWidget      ow = (XiOutlineWidget) w;
+    XmOutlineWidget      ow = (XmOutlineWidget) w;
     OutlineConstraints   node;
-    XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(w);
+    XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(w);
     register int         i;
     unsigned int         num_nodes;
     
     if (!XmHierarchy_refigure_mode(ow))
 	return;
 
-    XiOutline_max_widget_width(ow) = 0;	/* reset max_width. */
+    XmOutline_max_widget_width(ow) = 0;	/* reset max_width. */
 
     /*
      * Reset each node to be hidden;
@@ -887,7 +882,7 @@ CalcLocations(Widget w, Boolean allow_resize)
     GetNodeDimensions(w, (OutlineConstraints) XmHierarchy_top_node(ow),
 		      outline_depth, &num_nodes);
 
-    XiOutline_max_width(ow) = (*(oc->outline_class.calc_max_width))(w);
+    XmOutline_max_width(ow) = (*(oc->outline_class.calc_max_width))(w);
 
     XmHierarchy_num_nodes(ow) = num_nodes;
 			  
@@ -896,11 +891,11 @@ CalcLocations(Widget w, Boolean allow_resize)
 					       &current_index);
 
     if (num_nodes != 0) {
-	XiOutline_top_node_of_display(ow) = 
+	XmOutline_top_node_of_display(ow) = 
 	                     (OutlineConstraints) XmHierarchy_node_table(ow)[0];
     }
     else
-	XiOutline_top_node_of_display(ow) = NULL;
+	XmOutline_top_node_of_display(ow) = NULL;
 
     if (allow_resize)
 	RequestNewSize(w);
@@ -919,9 +914,9 @@ static void
 GetNodeDimensions(Widget w, OutlineConstraints node, 
 		  Cardinal depth, Cardinal *num)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
 
-    XiOutline_max_widget_width(ow) = 2 * XmHierarchy_h_margin(ow);
+    XmOutline_max_widget_width(ow) = 2 * XmHierarchy_h_margin(ow);
 
     GetNodeHeightAndWidth(w, node, depth, TRUE, num);
 }
@@ -954,7 +949,7 @@ RequestNewSize(Widget w)
     
     while (ret_val == XtGeometryAlmost) {
 	Dimension fwidth, fheight;  /* Final values */
-	if(XiOutline_constrain_width(w)) {
+	if(XmOutline_constrain_width(w)) {
 	    GetDesiredSize(w, &rwidth, &rheight, &fwidth, &fheight,
 			   False, True);
 	    ret_val = XtMakeResizeRequest(w, fwidth, fheight,
@@ -983,13 +978,13 @@ GetDesiredSize(Widget w, Dimension *width, Dimension *height,
 	       Dimension *width_ret, Dimension *height_ret, 
 	       Boolean recalc, Boolean allow_resize)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
     register int i, num, temp_height;
     OutlineConstraints * node;
-    XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(w);
+    XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(w);
 
     if (recalc) {
-	if(XiOutline_constrain_width(w)) {
+	if(XmOutline_constrain_width(w)) {
 	    Dimension tmp_width, tmp_height;
 	    tmp_height = w->core.height;
 	    tmp_width = w->core.width;
@@ -1010,16 +1005,16 @@ GetDesiredSize(Widget w, Dimension *width, Dimension *height,
 	}
     }
 
-    if(XiOutline_constrain_width(ow) && width) {
+    if(XmOutline_constrain_width(ow) && width) {
 	*width_ret = *width;
     } else {
-	*width_ret = XiOutline_max_width(ow);
+	*width_ret = XmOutline_max_width(ow);
     }
     temp_height = 0;
     node = (OutlineConstraints *) XmHierarchy_node_table(ow);
     num = XmHierarchy_num_nodes(ow);
     for (i = 0; i < num; i++, node++)
-	temp_height += XiOutlineC_height(*node) + XmHierarchy_v_margin(ow);
+	temp_height += XmOutlineC_height(*node) + XmHierarchy_v_margin(ow);
 
     *height_ret = temp_height + XmHierarchy_v_margin(ow);
 }
@@ -1035,9 +1030,9 @@ GetDesiredSize(Widget w, Dimension *width, Dimension *height,
 static void
 LayoutChildren(Widget w, Widget assign_child)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
-    XiOutlineWidgetClass oc = (XiOutlineWidgetClass) XtClass(w);
-    register OutlineConstraints disp_top = XiOutline_top_node_of_display(ow);
+    XmOutlineWidget ow = (XmOutlineWidget) w;
+    XmOutlineWidgetClass oc = (XmOutlineWidgetClass) XtClass(w);
+    register OutlineConstraints disp_top = XmOutline_top_node_of_display(ow);
     register HierarchyConstraints * node_table = XmHierarchy_node_table(ow);
     register Cardinal num_nodes = XmHierarchy_num_nodes(ow);
     register Position cur_y;
@@ -1056,14 +1051,14 @@ LayoutChildren(Widget w, Widget assign_child)
      * Remove the old list, replace it with the new one.
      */
 
-    if (XmListFirst(XiOutline_child_op_list(ow)) != NULL) {
+    if (XmListFirst(XmOutline_child_op_list(ow)) != NULL) {
 	if( XmHierarchy_work_proc_id(ow) != (XtWorkProcId) NULL )
 	{
 	    XtRemoveWorkProc(XmHierarchy_work_proc_id(ow));
 	    XmHierarchy_work_proc_id(ow) = (XtWorkProcId) NULL;
 	}
-	_XmListFree(XiOutline_child_op_list(ow));
-	XiOutline_child_op_list(ow) = _XmListInit();
+	_XmListFree(XmOutline_child_op_list(ow));
+	XmOutline_child_op_list(ow) = _XmListInit();
 	register_workproc = False;
     }
 
@@ -1090,7 +1085,7 @@ LayoutChildren(Widget w, Widget assign_child)
     while ( 
 	   ((int)cur_node < (int)num_nodes)
 	   &&
-	   (XiOutline_connect_nodes(ow) || ((int)cur_y < (int)ow->core.height) )
+	   (XmOutline_connect_nodes(ow) || ((int)cur_y < (int)ow->core.height) )
 		) 
     {
 	register Widget w;
@@ -1101,22 +1096,22 @@ LayoutChildren(Widget w, Widget assign_child)
 	    Widget w;
 	    
 	    w = XmHierarchyC_open_close_button(node);
-	    offset = (XiOutlineC_height(node) - 
+	    offset = (XmOutlineC_height(node) - 
 		      (w->core.height + 2 * w->core.border_width));
 
-	    oc_x = XiOutlineC_open_close_x(node);
+	    oc_x = XmOutlineC_open_close_x(node);
 	    oc_y = cur_y + offset/2;
 	}
 	
 	w = XmHierarchyC_widget(node);
 	if (assign_child == w) {
-	    w->core.x = XiOutlineC_widget_x(node);
+	    w->core.x = XmOutlineC_widget_x(node);
 	    w->core.y = cur_y;
 	}
 
-	MoveNode(ow, node, XiOutlineC_widget_x(node), cur_y, oc_x, oc_y, True);
+	MoveNode(ow, node, XmOutlineC_widget_x(node), cur_y, oc_x, oc_y, True);
 
-	cur_y += XiOutlineC_height(node) + v_margin;
+	cur_y += XmOutlineC_height(node) + v_margin;
 
 	cur_node++;
 	node_table++;
@@ -1158,7 +1153,7 @@ static void
 GetNodeHeightAndWidth(Widget w, OutlineConstraints node, 
 		      Cardinal outline_depth, Boolean recurse, Cardinal * num)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
     register int i;
     XtWidgetGeometry geom_pref;
 
@@ -1207,24 +1202,24 @@ GetNodeHeightAndWidth(Widget w, OutlineConstraints node,
 	 * indent_level = outline_depth;
 	 */
 	
-	XiOutlineC_open_close_x(node) = ((outline_depth *XiOutline_indent_space(ow)) +
+	XmOutlineC_open_close_x(node) = ((outline_depth *XmOutline_indent_space(ow)) +
 				      XmHierarchy_h_margin(ow));
 	if (XmHierarchyC_open_close_button(node) == NULL) 
-	    XiOutlineC_widget_x(node) = XiOutlineC_open_close_x(node);
+	    XmOutlineC_widget_x(node) = XmOutlineC_open_close_x(node);
 	else
-	    XiOutlineC_widget_x(node) = (XiOutlineC_open_close_x(node) + 
+	    XmOutlineC_widget_x(node) = (XmOutlineC_open_close_x(node) + 
 				      width + XmHierarchy_h_margin(ow));
 	
-	width2 += XiOutlineC_widget_x(node) + XmHierarchy_h_margin(ow);
-	if ( width2 > XiOutline_max_widget_width(ow) )
-	    XiOutline_max_widget_width(ow) = width2;
+	width2 += XmOutlineC_widget_x(node) + XmHierarchy_h_margin(ow);
+	if ( width2 > XmOutline_max_widget_width(ow) )
+	    XmOutline_max_widget_width(ow) = width2;
 
 	/*
 	 * Now, if we are set to constrain our childrens' widths, we need
 	 * to do a geometry negotiation and reset the width to whatever we
 	 * decide.
 	 */
-	if(XiOutline_constrain_width(w))
+	if(XmOutline_constrain_width(w))
 	{
 	    NegotiateNodeWidth(w, node);
 	    num_args = 0;
@@ -1232,7 +1227,7 @@ GetNodeHeightAndWidth(Widget w, OutlineConstraints node,
 	    XtGetValues(XmHierarchyC_widget(node), args, num_args);
 	}
 
-	XiOutlineC_height(node) = MAX(node_height, open_height);
+	XmOutlineC_height(node) = MAX(node_height, open_height);
 	
 	(*num)++;
     }
@@ -1278,7 +1273,7 @@ GetNodeInfo(Widget w)
 static int
 CalcMaxWidth(Widget w)
 {
-    return XiOutline_max_widget_width(w) + 2 * XmHierarchy_h_margin(w);
+    return XmOutline_max_widget_width(w) + 2 * XmHierarchy_h_margin(w);
 }
 
 /************************************************************
@@ -1304,7 +1299,7 @@ UnmapAllExtraNodes(Widget w, HierarchyConstraints node)
     if ((XmHierarchyC_status(node) & IS_COMPRESSED) && 
 	(XmHierarchyC_status(node) & IS_MAPPED))
     {
-	UnmapNode((XiOutlineWidget) w, (OutlineConstraints) node);
+	UnmapNode((XmOutlineWidget) w, (OutlineConstraints) node);
     }
 	
     ptr = XmHierarchyC_children(node);
@@ -1324,18 +1319,18 @@ UnmapAllExtraNodes(Widget w, HierarchyConstraints node)
  */
 
 static void
-MoveNode(XiOutlineWidget ow, OutlineConstraints node, Position x, Position y,
+MoveNode(XmOutlineWidget ow, OutlineConstraints node, Position x, Position y,
 	   Position oc_x, Position oc_y, Boolean map)
 {
-    XiOutlineC_new_x(node) = x;
-    XiOutlineC_new_y(node) = y;
-    XiOutlineC_oc_new_x(node) = oc_x;
-    XiOutlineC_oc_new_y(node) = oc_y;
-    XiOutlineC_map(node) = map;
-    XiOutlineC_move(node) = True;
-    XiOutlineC_unmap(node) = False;	
+    XmOutlineC_new_x(node) = x;
+    XmOutlineC_new_y(node) = y;
+    XmOutlineC_oc_new_x(node) = oc_x;
+    XmOutlineC_oc_new_y(node) = oc_y;
+    XmOutlineC_map(node) = map;
+    XmOutlineC_move(node) = True;
+    XmOutlineC_unmap(node) = False;	
 
-    _XmListAddBefore(XiOutline_child_op_list(ow), NULL, (XtPointer) node);
+    _XmListAddBefore(XmOutline_child_op_list(ow), NULL, (XtPointer) node);
 }
 
 /*	Function Name: UnmapNode
@@ -1347,13 +1342,13 @@ MoveNode(XiOutlineWidget ow, OutlineConstraints node, Position x, Position y,
  */
 
 static void
-UnmapNode(XiOutlineWidget ow, OutlineConstraints node)
+UnmapNode(XmOutlineWidget ow, OutlineConstraints node)
 {
-    XiOutlineC_map(node) = False;
-    XiOutlineC_move(node) = False;
-    XiOutlineC_unmap(node) = True;	
+    XmOutlineC_map(node) = False;
+    XmOutlineC_move(node) = False;
+    XmOutlineC_unmap(node) = True;	
 
-    _XmListAddBefore(XiOutline_child_op_list(ow), NULL, (XtPointer) node);
+    _XmListAddBefore(XmOutline_child_op_list(ow), NULL, (XtPointer) node);
 }
 
 /*	Function Name: ProcessChildQueue
@@ -1364,18 +1359,18 @@ UnmapNode(XiOutlineWidget ow, OutlineConstraints node)
  */
 
 static void
-ProcessChildQueue(XiOutlineWidget ow, XRectangle *vis)
+ProcessChildQueue(XmOutlineWidget ow, XRectangle *vis)
 {
     XmListElem *elem, *next;
 
-    elem = XmListFirst(XiOutline_child_op_list(ow)); 
+    elem = XmListFirst(XmOutline_child_op_list(ow)); 
     while(elem != NULL) {
 	OutlineConstraints info = (OutlineConstraints) XmListElemData(elem);
 
 	next = XmListElemNext(elem);
 
 	if (CheckWidget(vis, info))
-	    _XmListRemove(XiOutline_child_op_list(ow), elem);
+	    _XmListRemove(XmOutline_child_op_list(ow), elem);
 
 	elem = next;
     }
@@ -1395,14 +1390,14 @@ ProcessChildQueue(XiOutlineWidget ow, XRectangle *vis)
 static Boolean
 CheckWidget(XRectangle * visible, OutlineConstraints node)
 {
-    if (( ((XmHierarchyC_status(node) & IS_MAPPED) || XiOutlineC_map(node))  &&
+    if (( ((XmHierarchyC_status(node) & IS_MAPPED) || XmOutlineC_map(node))  &&
 	( WidgetInRect(visible, XmHierarchyC_open_close_button(node))        ||
 	  WidgetInRect(visible, XmHierarchyC_parent(node))                   ||
 	  WidgetInRect(visible, XmHierarchyC_widget(node)) ) )               ||
 	LocInRect(visible, XmHierarchyC_open_close_button(node),
-		    XiOutlineC_oc_new_x(node), XiOutlineC_oc_new_y(node))               ||
+		    XmOutlineC_oc_new_x(node), XmOutlineC_oc_new_y(node))               ||
 	LocInRect(visible, XmHierarchyC_widget(node),
-		    XiOutlineC_new_x(node), XiOutlineC_new_y(node)) )
+		    XmOutlineC_new_x(node), XmOutlineC_new_y(node)) )
     {
 	ProcessNode(node);
 	return(True);
@@ -1419,32 +1414,32 @@ CheckWidget(XRectangle * visible, OutlineConstraints node)
 static void
 ProcessNode(OutlineConstraints node)
 {
-    XiOutlineWidgetClass tc;
+    XmOutlineWidgetClass tc;
     Widget w = XmHierarchyC_widget(node);
 
     if (w == NULL)
 	return;
 
-    tc = (XiOutlineWidgetClass) XtClass(XtParent(w));
+    tc = (XmOutlineWidgetClass) XtClass(XtParent(w));
     
-    if (XiOutlineC_move(node)) {
+    if (XmOutlineC_move(node)) {
 	_XmMoveWidget(XmHierarchyC_widget(node), 
-		      XiOutlineC_new_x(node), XiOutlineC_new_y(node));
+		      XmOutlineC_new_x(node), XmOutlineC_new_y(node));
 	
 	if (XmHierarchyC_open_close_button(node) != NULL) 
 	    _XmMoveWidget(XmHierarchyC_open_close_button(node),
-			  XiOutlineC_oc_new_x(node), XiOutlineC_oc_new_y(node));
-	XiOutlineC_move(node) = False;
+			  XmOutlineC_oc_new_x(node), XmOutlineC_oc_new_y(node));
+	XmOutlineC_move(node) = False;
     }
     
-    if (XiOutlineC_map(node)) {
+    if (XmOutlineC_map(node)) {
 	(*tc->hierarchy_class.map_node)((HierarchyConstraints) node); 
-	XiOutlineC_map(node) = False;
+	XmOutlineC_map(node) = False;
     }
     
-    if (XiOutlineC_unmap(node)) {
+    if (XmOutlineC_unmap(node)) {
 	(*tc->hierarchy_class.unmap_node)((HierarchyConstraints) node); 
-	XiOutlineC_unmap(node) = False;
+	XmOutlineC_unmap(node) = False;
     }
 }
 
@@ -1501,13 +1496,13 @@ LocInRect(XRectangle *rect, Widget w, Position x, Position y)
 static Boolean
 MoveNodesTimer(XtPointer data)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) data;
-    XmListElem *elem = XmListFirst(XiOutline_child_op_list(ow));
+    XmOutlineWidget ow = (XmOutlineWidget) data;
+    XmListElem *elem = XmListFirst(XmOutline_child_op_list(ow));
 
     if (elem != NULL) { 
 	OutlineConstraints node = (OutlineConstraints) XmListElemData(elem);
 	ProcessNode(node);
-	_XmListRemove(XiOutline_child_op_list(ow), elem);
+	_XmListRemove(XmOutline_child_op_list(ow), elem);
 	return (False);
     }
     XmHierarchy_work_proc_id(ow) = (XtWorkProcId) NULL;
@@ -1519,7 +1514,7 @@ MoveNodesTimer(XtPointer data)
  *                     specified by node with the intent of fitting
  *                     the child within the existing width of the
  *                     Outline widget.
- *	Arguments:     w    - The XiOutline widget
+ *	Arguments:     w    - The XmOutline widget
  *                     node - The constraint record for the child in
  *                            question
  *	Returns:       The width negotiated
@@ -1532,7 +1527,7 @@ NegotiateNodeWidth(Widget w, OutlineConstraints node)
     XtGeometryResult result;
     Dimension curr_width, curr_height;
 
-    width_avail = w->core.width - XiOutlineC_widget_x(node);
+    width_avail = w->core.width - XmOutlineC_widget_x(node);
 
     curr_width = XmHierarchyC_widget(node)->core.width;
     curr_height = XmHierarchyC_widget(node)->core.height;
@@ -1615,7 +1610,7 @@ NegotiateNodeWidth(Widget w, OutlineConstraints node)
 static void
 RedrawOutlineLines(Widget w, XRectangle * rect)
 {
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
 
     if (XtIsRealized(w))	/* && has children */
 	DrawOutlineLine(w, rect, (OutlineConstraints) XmHierarchy_top_node(ow));
@@ -1647,7 +1642,7 @@ DrawOutlineLine(Widget w, XRectangle *rect, OutlineConstraints node)
     Boolean anyKidManaged = False; /* CR03730 Support Case 22066 */
     LadderPoint from_node_point, kid_point;
     LadderPoint last_kid_point;
-    XiOutlineWidget ow = (XiOutlineWidget)w;
+    XmOutlineWidget ow = (XmOutlineWidget)w;
 
     num_kids = XmHierarchyC_num_children(node);
     kids = (OutlineConstraints *) XmHierarchyC_children(node);
@@ -1688,7 +1683,7 @@ DrawOutlineLine(Widget w, XRectangle *rect, OutlineConstraints node)
     if (num_kids > 0 && anyKidManaged) 
 	{ /* CR03730 Support Case 22066 anyKidManaged added to prevent draw needless
 	     (x & y are not initialized if no kid managed) line */
-          XDrawLine(XtDisplay(w), XtWindow(w), XiOutline_draw_gc(ow), from_node_point.x, from_node_point.y,
+          XDrawLine(XtDisplay(w), XtWindow(w), XmOutline_draw_gc(ow), from_node_point.x, from_node_point.y,
 		from_node_point.x, last_kid_point.y );
 	}
    }
@@ -1700,7 +1695,7 @@ _CalcNodeMidPoint( OutlineConstraints node, Widget w, LadderPoint *ret_point )
   if (!XmHierarchyC_widget(node)) return;
 
   {
-  XiOutlineWidget ow = (XiOutlineWidget)w;
+  XmOutlineWidget ow = (XmOutlineWidget)w;
   Widget which;
   int value;
 
@@ -1708,11 +1703,11 @@ _CalcNodeMidPoint( OutlineConstraints node, Widget w, LadderPoint *ret_point )
 	value = (int)XtWidth(which=XmHierarchyC_open_close_button(node));
   else
 	{
-	value = (int)XiOutline_indent_space(ow);
+	value = (int)XmOutline_indent_space(ow);
 	which = XmHierarchyC_widget(node);
 	}
 
-    ret_point->x = XiOutlineC_open_close_x(node) + value/2;
+    ret_point->x = XmOutlineC_open_close_x(node) + value/2;
     ret_point->y = XtY(which)+XtHeight(which);	/* plus possible pad */
   }
 }
@@ -1724,7 +1719,7 @@ _OutlineDrawLine(Widget w, XRectangle *rect, OutlineConstraints parent,
 	  
 {
     GC gc;
-    XiOutlineWidget ow = (XiOutlineWidget) w;
+    XmOutlineWidget ow = (XmOutlineWidget) w;
     register int x2, y2;
     register int rx2, ry2, cx1, cx2, cy1, cy2;
 
@@ -1751,9 +1746,9 @@ _OutlineDrawLine(Widget w, XRectangle *rect, OutlineConstraints parent,
 	return;
     }
 
-    gc = XiOutline_draw_gc(ow);
+    gc = XmOutline_draw_gc(ow);
 	
-      x2 = XiOutlineC_open_close_x(child);
+      x2 = XmOutlineC_open_close_x(child);
       y2 = XtY(XmHierarchyC_widget(child)) + XtHeight(XmHierarchyC_widget(child))/2;
 
     cx1 = MIN(from_ladder_point.x, x2);
@@ -1798,6 +1793,6 @@ Widget
 XiCreateOutline(Widget parent, String name,
 		ArgList args, Cardinal num_args)
 {
-    return(XtCreateWidget(name, xiOutlineWidgetClass,
+    return(XtCreateWidget(name, xmOutlineWidgetClass,
 			  parent, args, num_args));
 }

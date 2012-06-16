@@ -49,12 +49,12 @@ EXTRA_WID_SRCS = XmExtDefs.c XmExtUtil.c \
                  Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
                  Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c \
                  xmlist.c Hierarchy.c Outline.c Table.c TabBox.c TabList.c \
-                 TabStack.c DrawUtils.c Tree.c
+                 TabStack.c DrawUtils.c Tree.c ComboBox2.c
 EXTRA_WID_OBJS = XmExtDefs.o XmExtUtil.o \
                  Column.o ButtonBox.o ColorS.o Picture.o DataFSel.o DataF.o \
                  Ext18List.o I18List.o Paned.o FontS.o IconBox.o IconButton.o \
                  xmlist.o Hierarchy.o Outline.o Table.o TabBox.o TabList.o \
-                 TabStack.o DrawUtils.o Tree.o
+                 TabStack.o DrawUtils.o Tree.o ComboBox2.o
 EXTRA_WID_HEADERS = Ext.h ExtP.h ExtDefs.h XmExtDefs.h \
                     Column.h ColumnP.h \
                     ButtonBox.h ButtonBoxP.h \
@@ -65,7 +65,7 @@ EXTRA_WID_HEADERS = Ext.h ExtP.h ExtDefs.h XmExtDefs.h \
                     IconBox.h IconBoxP.h IconButton.h IconButtonP.h xmlist.h \
                     Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
                     Table.h TableP.h TabBox.h TabBoxP.h TabStack.h TabStackP.h \
-                    TabList.h DrawUtils.h Tree.h TreeP.h
+                    TabList.h DrawUtils.h Tree.h TreeP.h ComboBox2.h ComboBox2P.h
 #else
 EXTRA_WID_SRCS = /* */
 EXTRA_WID_OBJS = /* */
