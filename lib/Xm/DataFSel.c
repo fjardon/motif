@@ -23,7 +23,7 @@
  */
 #ifdef REV_INFO
 #ifndef lint
-static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.4 $ $Date: 2002/01/14 18:20:30 $"
+static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.5 $ $Date: 2002/01/15 17:30:40 $"
 #endif
 #endif
 /*

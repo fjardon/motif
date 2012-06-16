@@ -2292,7 +2292,7 @@ XmCombinationBox2GetValue(Widget w)
     return(XmTextFieldGetString(XiComboBox_text(cbw)));
 }
 
-/*	Function Name: XiCreateCombinationBox
+/*	Function Name: XmCreateCombinationBox2
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -2301,7 +2301,7 @@ XmCombinationBox2GetValue(Widget w)
  */
 
 Widget
-XiCreateCombinationBox(Widget parent, String name,
+XmCreateCombinationBox2(Widget parent, String name,
 		      ArgList args, Cardinal num_args)
 {
     return(XtCreateWidget(name, xmCombinationBox2WidgetClass,

@@ -70,7 +70,7 @@ Widget				/* Combination box widget. */
 #endif
 );
 
-/*	Function Name: XiCreateCombinationBox
+/*	Function Name: XmCreateCombinationBox2
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -78,7 +78,7 @@ Widget				/* Combination box widget. */
  *	Returns: The Widget created.
  */
 
-Widget XiCreateCombinationBox(
+Widget XmCreateCombinationBox2(
 #ifndef _NO_PROTO
 Widget, String, ArgList, Cardinal
 #endif

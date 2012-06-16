@@ -1,4 +1,4 @@
-a   XCOMM $TOG: Imakefile /main/66 1997/07/03 12:33:05 samborn $
+XCOMM $TOG: Imakefile /main/66 1997/07/03 12:33:05 samborn $
 XCOMM
 XCOMM Motif
 XCOMM
@@ -145,7 +145,7 @@ HEADERS1 = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         Gadget.h        LayoutT.h       IconH.h         IconHP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
-        Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
+        Print.h         PrintSP.h       XpmP.h		Xmfuncs.h
 
 HEADERS2 = $(EXTRA_WID_HEADERS)
 
@@ -319,6 +319,28 @@ Obso1_2.o:
 	$(MV) Obso1_2.c~ Obso1_2.c
 	_NormalObjCompile($(_NOOP_))
 #endif
+
+all::  XmExtDefs.h
+
+depend::  XmExtDefs.h
+DependTarget()
+
+includes::  XmExtDefs.h
+
+defines:: defines.c
+	$(CC) defines.c -o defines
+
+XmExtDefs.h:: XmExtDefs.defs defines
+	./defines -s _XmExtStrings -c XmExtDefs.c -h XmExtDefs.h -x XiRENAME_WIDGETS _XiXXEPakStrings < XmExtDefs.defs
+
+minimal::
+	find . -name "*.o" -exec rm -f {} \;
+
+clean::
+	rm -rf defines
+	$(RM) XmExtDefs.c XmExtDefs.h
+
+
 
 MessageCatalogRule(Xm)
 

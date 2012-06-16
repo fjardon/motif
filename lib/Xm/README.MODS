@@ -14,12 +14,13 @@ demo works - Outline
 demo works - Paned (*2)
 demo works - Tree
 demo works - TabStack
+demo works - FontSelector
+demo works - ComboBox2
 no demo available - Table
-needs work - FontSelector(*1)  
 
-(*1) - need to verify ComboBox usage
 (*2) - need to see about replacing Xi version with the real Xm version.
-Rick Scott's ToolTips from Motif CVS
+
+- Jim has completed Rick Scott's ToolTips from Motif CVS
 
 
 
