@@ -8,7 +8,7 @@ noinst_PROGRAMS = helloint
 
 helloint_DEPENDENCIES = helloint.uid C/uid/l_strings.uid english/uid/l_strings.uid french/uid/l_strings.uid hebrew/uid/l_strings.uid japan/uid/l_strings.uid japanese/uid/l_strings.uid swedish/uid/l_strings.uid
 
-INCLUDES = -I$(top_srcdir)/lib
+INCLUDES = -I$(top_srcdir)/lib ${X_CFLAGS} 
 LDADD = $(top_builddir)/lib/Mrm/libMrm.la
 
 SUFFIXES = .uil .uid

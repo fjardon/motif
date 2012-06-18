@@ -4,7 +4,7 @@ noinst_PROGRAMS = hellomotif
 
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
 
 all: hellomotif.uid
 

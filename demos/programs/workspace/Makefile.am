@@ -15,6 +15,6 @@ xrmLib.h
 wsm_SOURCES = client_win.c command_ui.c wsm.c wsmData.c wsmDebug.c \
 		   wsmSend.c wsmStruct.c wsm_cb.c wsm_create.c xrmLib.c
 
-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib
+INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib ${X_CFLAGS} 
 
 LDADD = ../../../lib/Xm/libXm.la -L../../lib/Wsm -lWsm

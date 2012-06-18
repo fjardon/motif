@@ -6,4 +6,4 @@ SOURCES = piano.c
 
 LDADD = ../../../lib/Xm/libXm.la -lm
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
