@@ -2,7 +2,7 @@ SRCS = debug.c disp.c free.c pack.c recv.c send.c util.c utm_send.c
 
 noinst_HEADERS = utm_send.h	wsm_funcs.h	wsm_proto.h
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = ${X_CFLAGS} -I$(srcdir)/../../../lib
 
 libWsm_a_SOURCES = $(SRCS)
 
