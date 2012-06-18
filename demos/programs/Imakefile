@@ -29,7 +29,7 @@ XCOMM   $XConsortium: Imakefile /main/7 1996/04/23 17:30:40 pascale $
 
 SUBDIRS = Exm airport animate drag_and_drop draw earth filemanager fileview \
 	getsubres hellomotif hellomotifi18n i18ninput periodic \
-	piano popups sampler2_0 setdate todo
+	piano popups sampler2_0 setdate todo tooltips newwidgets
 
 MakeSubdirs($(SUBDIRS))
 DependSubdirs($(SUBDIRS))

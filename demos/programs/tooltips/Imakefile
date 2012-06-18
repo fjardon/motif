@@ -25,11 +25,11 @@ XCOMM HISTORY
         DEPLIBS = XmClientDepLibs
 LOCAL_LIBRARIES = XmClientLibs
 
-SRCS = test1.c
-OBJS = test1.o
+SRCS = tooltips.c
+OBJS = tooltips.o
 
-XCOMM MSimpleProgramTarget(test1)
+XCOMM MSimpleProgramTarget(tooltips)
 
-XCOMM InstallProgram(test1,$(BINDIR))
+XCOMM InstallProgram(tooltips,$(BINDIR))
 
 DependTarget()
