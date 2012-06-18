@@ -15,7 +15,7 @@ UILS= French.uil German.uil English.uil
 
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = ${X_CFLAGS} -I$(srcdir)/../../../lib
 
 all: French.uid German.uid English.uid
 
