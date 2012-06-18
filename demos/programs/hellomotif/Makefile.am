@@ -1,6 +1,6 @@
 EXTRA_DIST = hellomotif.uil
 
-noinst_PROGRAMS = hellomotif
+bin_PROGRAMS = hellomotif
 
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
 

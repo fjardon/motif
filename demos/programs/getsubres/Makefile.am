@@ -1,4 +1,4 @@
-noinst_PROGRAMS = getsubres
+bin_PROGRAMS = getsubres
 
 SOURCES = getsubres.c
 

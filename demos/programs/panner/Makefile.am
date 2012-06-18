@@ -1,6 +1,6 @@
-noinst_PROGRAMS = panner
+bin_PROGRAMS = panner
 
-SOURCES = panner.c
+panner_SOURCES = panner.c
 
 LDADD = ../../../lib/Xm/libXm.la
 

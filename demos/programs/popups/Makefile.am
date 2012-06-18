@@ -1,6 +1,6 @@
-noinst_PROGRAMS = autopopups
+bin_PROGRAMS = autopopups
 
-SOURCES = autopopups.c
+autopopups_SOURCES = autopopups.c
 
 LDADD = ../../../lib/Xm/libXm.la
 

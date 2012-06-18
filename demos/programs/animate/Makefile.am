@@ -8,7 +8,7 @@ superman6.xbm
 
 CLEANFILES =  dog.uid plane.uid superman.uid xmanimate.uid
 
-noinst_PROGRAMS = xmanimate
+bin_PROGRAMS = xmanimate
 
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Mrm/libMrm.la ../../../lib/Xm/libXm.la
 

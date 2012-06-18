@@ -1,4 +1,4 @@
-noinst_PROGRAMS = airport
+bin_PROGRAMS = airport
 
 airport_SOURCES = main.c dragsource.c dropsite.c
 

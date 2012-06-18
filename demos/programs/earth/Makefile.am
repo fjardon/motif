@@ -1,6 +1,6 @@
 EXTRA_DIST = terre.xbm
 
-noinst_PROGRAMS = earth
+bin_PROGRAMS = earth
 
 SOURCES = earth.c
 

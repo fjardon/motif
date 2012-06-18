@@ -1,6 +1,6 @@
 EXTRA_DIST = periodic.uil periodic_l.uil
 
-noinst_PROGRAMS = periodic
+bin_PROGRAMS = periodic
 
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
 

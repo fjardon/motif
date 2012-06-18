@@ -1,4 +1,4 @@
-noinst_PROGRAMS = simpleDemo
+bin_PROGRAMS = simpleDemo
 
 simpleDemo_SOURCES = simpleDemo.c
 

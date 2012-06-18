@@ -1,8 +1,8 @@
 EXTRA_DIST = piano.images
 
-noinst_PROGRAMS = piano
+bin_PROGRAMS = piano
 
-SOURCES = piano.c
+piano_SOURCES = piano.c
 
 LDADD = ../../../lib/Xm/libXm.la -lm
 

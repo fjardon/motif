@@ -1,4 +1,4 @@
-noinst_PROGRAMS = exm_in_c
+bin_PROGRAMS = exm_in_c
 
 exm_in_c_SOURCES = exm_in_c.c
 

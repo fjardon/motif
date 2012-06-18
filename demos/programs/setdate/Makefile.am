@@ -1,4 +1,4 @@
-noinst_PROGRAMS = setDate
+bin_PROGRAMS = setDate
 
 SOURCES = setDate.c
 

@@ -1,4 +1,4 @@
-noinst_PROGRAMS = draw
+bin_PROGRAMS = draw
 
 SOURCES = draw.c
 

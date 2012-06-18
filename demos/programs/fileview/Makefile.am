@@ -7,7 +7,7 @@ mainE.h \
 text.h \
 textE.h
 
-noinst_PROGRAMS = fileview
+bin_PROGRAMS = fileview
 
 fileview_SOURCES = main.c text.c file.c
 

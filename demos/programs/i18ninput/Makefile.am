@@ -1,4 +1,4 @@
-noinst_PROGRAMS = i18ninput
+bin_PROGRAMS = i18ninput
 
 i18ninput_SOURCES = i18ninput.c input.c 
 

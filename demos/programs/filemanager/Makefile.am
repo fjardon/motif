@@ -1,4 +1,4 @@
-noinst_PROGRAMS = filemanager
+bin_PROGRAMS = filemanager
 
 filemanager_SOURCES = filemanager.c actions.c readdir.c convert.c interface.c
 
