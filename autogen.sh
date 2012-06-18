@@ -8,7 +8,7 @@ cd "$srcdir"
 DIE=0
 
 #Don't do this unless using libtool
-#libtoolize --force --automake
+libtoolize --force --automake
 aclocal
 autoconf
 autoheader
