@@ -12,7 +12,7 @@ noinst_PROGRAMS = xmanimate
 
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Mrm/libMrm.la ../../../lib/Xm/libXm.la
 
-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib
+INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib ${X_CFLAGS} 
 
 all: dog.uid plane.uid superman.uid xmanimate.uid
 

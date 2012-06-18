@@ -1,6 +1,6 @@
 noinst_PROGRAMS = DNDDemo simpledrop
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
 
 LDADD = ../../../lib/Xm/libXm.la
 

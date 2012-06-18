@@ -8,7 +8,7 @@ CLEANFILES = exm_in_uil.uid
 LDADD = -L../../../lib/Exm -lExmMrm -lExm  $(top_builddir)/lib/Mrm/libMrm.la
 
 
-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib -I../../../lib
+INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib -I../../../lib ${X_CFLAGS} 
 
 SUFFIXES = .uil .uid
 
