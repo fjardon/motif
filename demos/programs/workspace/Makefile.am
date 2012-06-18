@@ -1,4 +1,4 @@
-noinst_PROGRAMS = wsm
+bin_PROGRAMS = wsm
 
 noinst_HEADERS = \
 command_ui.h \
