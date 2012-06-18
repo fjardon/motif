@@ -1,6 +1,6 @@
-noinst_PROGRAMS = tooltips
+bin_PROGRAMS = tooltips
 
-SOURCES = tooltips.c
+tooltips_SOURCES = tooltips.c
 
 LDADD = ../../../lib/Xm/libXm.la
 
