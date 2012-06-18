@@ -46,7 +46,7 @@ and untar everything into that directory:
 
 and then either
 
-      % tar zxf tar-file-name
+      % gtar zxf tar-file-name
 
 or
       % gzip -dc tar-file-name| tar xf -
@@ -122,19 +122,26 @@ probably /usr.
 2.  If you are building with imports (the default setup in site.def),
 construct the necessary links as follows:
 
-              % cd $MOTIFBUILDDIR/motif
-              % mkdir -p imports/x11
-              % cd imports/x11
-              % ln -s <X11_bin_directory> bin
-              % ln -s <X11_includes_directory> include
-              % ln -s <X11_libs_directory> lib
-
+        % cd $MOTIFBUILDDIR/motif
+        % mkdir -p imports/x11
+        % cd imports/x11
+        % ln -s <X11_bin_directory> bin
+        % ln -s <X11_includes_directory> include
+        % ln -s <X11_libs_directory> lib
+        % cd $MOTIFBUILDDIR/motif/config/cf
+	% mkdir OPENGROUP
+	% mv * OPENGROUP
+	% ln -s <X11_libs_directory>/X11/config/*
+	% rm Motif.tmpl Motif.rules host.def
+	% mv OPENGROUP/{Motif.tmpl,Motif.rules,host.def} .
+        
 3. Set your current directory as follows:
 
         % cd $MOTIFBUILDDIR/motif
-
+        
 4. Copy the Master Makefile into place :
-      % cp Makefile.imake-pure Makefile
+      
+        % cp Makefile.imake-pure Makefile
       
 5. See if there is a BootstrapCFlags mentioned in the
 comments in the <vendor>.cf file. This file is in the directory
