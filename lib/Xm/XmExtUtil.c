@@ -766,7 +766,7 @@ XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
 
 /*
  * Function:
- *	XiCompareXtWidgetGeometryToWidget(geom, widget)
+ *	XmCompareXtWidgetGeometryToWidget(geom, widget)
  * Description:
  *	This function compares an XtWidgetGeometry structure to the
  *	actual values contained in a widget.
@@ -778,9 +778,9 @@ XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
  */
 Boolean
 #ifndef _NO_PROTO
-XiCompareXtWidgetGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
+XmCompareXtWidgetGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
 #else
-XiCompareXtWidgetGeometryToWidget(geom, widget)
+XmCompareXtWidgetGeometryToWidget(geom, widget)
     XtWidgetGeometry *geom;
     Widget           widget;
 #endif

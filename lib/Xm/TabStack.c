@@ -121,7 +121,7 @@ static void TabSelectedCallback _ARGS((Widget, XtPointer, XtPointer));
 static void TearOffCallback _ARGS((Widget, XtPointer, XtPointer));
 static void XmTabStackMenu _ARGS((Widget, XEvent*, String*, Cardinal*));
 static void BuildMenu _ARGS((XmTabStackWidget));
-static void XiTabBoxDragTab _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxDragTab _ARGS((Widget, XEvent*, String*, Cardinal*));
 static Atom TabAtom _ARGS((Widget));
 static void HandleTabDrop _ARGS((Widget, XtPointer, XtPointer));
 static void TabTransferProc _ARGS((Widget, XtPointer, Atom*, Atom*,
@@ -208,10 +208,10 @@ static void XiMoveTabPanel _ARGS((Widget, Widget));
 #ifdef TEAR_OFF_TABS
 static XtActionsRec actions[] = {
     { "XmTabStackMenu",		  (XtActionProc) XmTabStackMenu           },
-    { "XiTabBoxDragTab",	  (XtActionProc) XiTabBoxDragTab          },
+    { "XmTabBoxDragTab",	  (XtActionProc) XmTabBoxDragTab          },
 };
 static char drag_translations[] = 
-    "<Btn2Down>:   XiTabBoxArmTab() XiTabBoxDragTab()\n\
+    "<Btn2Down>:   XiTabBoxArmTab() XmTabBoxDragTab()\n\
      <Btn3Down>:   XmTabStackMenu()\n\
      <Key>osfMenu: XmTabStackMenu()";
 #endif
@@ -1144,8 +1144,8 @@ Redisplay(widget, event, region)
      * set lets color ourselves that background.
      */
 	    
-    if( active != NULL &&
-        XiBackgroundSpecified(active) || XiSelectSpecified(tab) )
+    if( (active != NULL) &&
+        (XiBackgroundSpecified(active) || XiSelectSpecified(tab)) )
     {
 	GC        gc = XmTabStack__gc(tab);
 
@@ -1605,7 +1605,7 @@ QueryGeometry(widget, request, allowed)
 	 * we will return XtGeometryNo to indicate that we want to
 	 * stay the way we are.
 	 */
-	if( XiCompareXtWidgetGeometryToWidget(allowed, widget) )
+	if( XmCompareXtWidgetGeometryToWidget(allowed, widget) )
 	{
 	    return( XtGeometryNo );
 	}
@@ -1630,7 +1630,7 @@ QueryGeometry(widget, request, allowed)
 	 */
 	allowed->width = width;
 	allowed->height = height;
-	if( XiCompareXtWidgetGeometryToWidget(allowed, widget) )
+	if( XmCompareXtWidgetGeometryToWidget(allowed, widget) )
 	{
 	    return( XtGeometryNo );
 	}
@@ -1798,7 +1798,7 @@ QueryGeometry(widget, request, allowed)
 	}
     }
 
-    if( XiCompareXtWidgetGeometryToWidget(allowed, widget) )
+    if( XmCompareXtWidgetGeometryToWidget(allowed, widget) )
     {
 	return( XtGeometryNo );
     }
@@ -1888,7 +1888,7 @@ GeometryNo(tab, widget, request, allowed)
     allowed->width = box.width;
     allowed->height = box.height;
 
-    if( XiCompareXtWidgetGeometryToWidget(allowed,
+    if( XmCompareXtWidgetGeometryToWidget(allowed,
 					  XmTabStack_tab_box(tab)) )
     {
 	return( XtGeometryNo );
@@ -4334,10 +4334,10 @@ XmTabStackMenu(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-XiTabBoxDragTab(Widget widget, XEvent *event, String *params,
+XmTabBoxDragTab(Widget widget, XEvent *event, String *params,
 		Cardinal *num_params)
 #else
-XiTabBoxDragTab(widget, event, params, num_params)
+XmTabBoxDragTab(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;

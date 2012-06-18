@@ -209,7 +209,7 @@ char*, char*
 #endif
 );
 
-Boolean XiCompareXtWidgetGeometryToWidget(
+Boolean XmCompareXtWidgetGeometryToWidget(
 #ifndef _NO_PROTO
 XtWidgetGeometry*, Widget
 #endif

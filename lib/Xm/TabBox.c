@@ -1389,7 +1389,7 @@ QueryGeometry(widget, request, allowed)
 	}
     }
 
-    if( XiCompareXtWidgetGeometryToWidget(allowed, widget) )
+    if( XmCompareXtWidgetGeometryToWidget(allowed, widget) )
     {
 	return( XtGeometryNo );
     }
