@@ -64,8 +64,8 @@ typedef struct _XiCache {
 #define _ARGS(a) ()
 #endif
 
-extern XiTabAttributes _XmTabbedStackListGet _ARGS((XmTabbedStackList, int));
-extern XiTabAttributes _XmTabbedStackListArray _ARGS((XmTabbedStackList));
+extern XmTabAttributes _XmTabbedStackListGet _ARGS((XmTabbedStackList, int));
+extern XmTabAttributes _XmTabbedStackListArray _ARGS((XmTabbedStackList));
 extern int             _XmTabbedStackListCount _ARGS((XmTabbedStackList));
 
 
@@ -105,7 +105,7 @@ static void XiTabBoxTraversePrevious _ARGS((Widget, XEvent*, String*,
 					    Cardinal*));
 static void XiTabBoxTraverseNext _ARGS((Widget, XEvent*, String*, Cardinal*));
 
-static void CalcTabSize _ARGS((XiTabBoxWidget, XiTabAttributes,
+static void CalcTabSize _ARGS((XiTabBoxWidget, XmTabAttributes,
 			       XmTabOrientation, XmFontList, int, int, int,
 			       int, int, int, Dimension*, Dimension*));
 
@@ -124,7 +124,7 @@ static void Layout _ARGS((XiTabBoxWidget));
 static void Redisplay _ARGS((Widget, XEvent*, Region));
 static void RedisplayTabs _ARGS((XiTabBoxWidget, Region));
 
-static void DrawTab _ARGS((XiTabBoxWidget, XiTabAttributes, XiTabRect*,
+static void DrawTab _ARGS((XiTabBoxWidget, XmTabAttributes, XiTabRect*,
 			   _XiBoolean, _XiBoolean));
 
 static Boolean CvtStringToTabOrientation _ARGS((Display*, XrmValue*, Cardinal*,
@@ -169,26 +169,26 @@ static int CalcGeometryMajor _ARGS((XiTabBoxWidget, int));
 
 static void CallCallbacks _ARGS((XiTabBoxWidget, XEvent*, int, int));
 
-static void DrawVerticalTab _ARGS((XiTabBoxWidget, XiTabAttributes, GC,
+static void DrawVerticalTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
 				   _XiBoolean, int, int, int, _XiBoolean, int,
 				   int, XRectangle*, _XiBoolean, _XiBoolean));
-static void DrawLeftToRightTab _ARGS((XiTabBoxWidget, XiTabAttributes, GC,
+static void DrawLeftToRightTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*));
-static void DrawRightToLeftTab _ARGS((XiTabBoxWidget, XiTabAttributes, GC,
+static void DrawRightToLeftTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*, _XiBoolean));
-static void DrawTopToBottomTab _ARGS((XiTabBoxWidget, XiTabAttributes, GC,
+static void DrawTopToBottomTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*, _XiBoolean));
-static void DrawBottomToTopTab _ARGS((XiTabBoxWidget, XiTabAttributes, GC,
+static void DrawBottomToTopTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*, _XiBoolean));
 
 static void FillRoundedTab _ARGS((XiTabBoxWidget, GC, XiTabRect*, XiTabEdge));
 static void FillBeveledTab _ARGS((XiTabBoxWidget, GC, XiTabRect*, XiTabEdge));
 
-static XiTabAttributes GetTabInfo _ARGS((XiTabBoxWidget, int, int));
+static XmTabAttributes GetTabInfo _ARGS((XiTabBoxWidget, int, int));
 static int GetTabIndex _ARGS((XiTabBoxWidget, int, int));
 static void SelectTab _ARGS((XiTabBoxWidget, XEvent*, int, int));
 static Boolean IsTabSensitive _ARGS((XiTabBoxWidget, int));
@@ -196,7 +196,7 @@ static Widget XiGCParent _ARGS((XiTabBoxWidget));
 
 static void ResetImageCache _ARGS((XiTabBoxWidget));
 static void FreeImageCache _ARGS((XiTabBoxWidget));
-static int InfoToIndex _ARGS((XiTabBoxWidget, XiTabAttributes));
+static int InfoToIndex _ARGS((XiTabBoxWidget, XmTabAttributes));
 
 static Visual* GetShellVisual _ARGS((Widget));
 
@@ -1491,7 +1491,7 @@ DrawBorder(tab, gc, idx)
     int             highlight = XiTabBox_highlight_thickness(tab);
     XiTabRect       *geometry;
     XRectangle      *draw, rect[4];
-    XiTabAttributes info;
+    XmTabAttributes info;
 
     if( idx < 0 )
     {
@@ -2217,7 +2217,7 @@ XiTabBoxTraverseNext(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-CalcTabSize(XiTabBoxWidget tab, XiTabAttributes info,
+CalcTabSize(XiTabBoxWidget tab, XmTabAttributes info,
 	    XmTabOrientation orientation, XmFontList font_list,
 	    int shadow_thickness, int highlight_thickness,
 	    int margin_width, int margin_height,
@@ -2228,7 +2228,7 @@ CalcTabSize(tab, info, orientation, font_list, shadow_thickness,
 	    highlight_thickness, margin_width, margin_height, spacing,
 	    corner_size, width, height)
     XiTabBoxWidget   tab;
-    XiTabAttributes  info;
+    XmTabAttributes  info;
     XmTabOrientation orientation;
     XmFontList       font_list;
     int              shadow_thickness, highlight_thickness, margin_width,
@@ -2398,7 +2398,7 @@ CalcUnlimitedGeometry(tab, geometry)
 #endif
 {
     XmTabbedStackList       list = XiTabBox_tab_list(tab);
-    XiTabAttributes info;
+    XmTabAttributes info;
     int             i, count = _XmTabbedStackListCount(list),
                     width, height, max_width, max_height,
                     tab_width, tab_height;
@@ -2589,12 +2589,12 @@ CalcGeometry(tab, geometry)
 
 static void
 #ifndef _NO_PROTO
-DrawSegments(XiTabBoxWidget tab, XiTabAttributes info, XiTabRect *geometry,
+DrawSegments(XiTabBoxWidget tab, XmTabAttributes info, XiTabRect *geometry,
 	     XiTabEdge edge, int corner_size, int shadow, int selected)
 #else
 DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geometry;
     XiTabEdge       edge;
     int             corner_size, shadow, selected;
@@ -2901,13 +2901,13 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 
 static void
 #ifndef _NO_PROTO
-DrawSquareShadows(XiTabBoxWidget tab, XiTabAttributes info,
+DrawSquareShadows(XiTabBoxWidget tab, XmTabAttributes info,
 		  XiTabRect *geometry,
 		  Boolean selected, XiTabEdge edge, Dimension shadow)
 #else
 DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected;
     XiTabEdge       edge;
@@ -3241,14 +3241,14 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 
 static void
 #ifndef _NO_PROTO
-DrawRoundedShadows(XiTabBoxWidget tab, XiTabAttributes info,
+DrawRoundedShadows(XiTabBoxWidget tab, XmTabAttributes info,
 		   XiTabRect *geometry,
 		   Boolean selected, XiTabEdge edge,
 		   int shadow)
 #else
 DrawRoundedShadows(tab, info, geometry, selected, edge, shadow)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected;
     XiTabEdge       edge;
@@ -3346,14 +3346,14 @@ DrawRoundedShadows(tab, info, geometry, selected, edge, shadow)
 
 static void
 #ifndef _NO_PROTO
-DrawBeveledShadows(XiTabBoxWidget tab, XiTabAttributes info,
+DrawBeveledShadows(XiTabBoxWidget tab, XmTabAttributes info,
 		   XiTabRect *geometry,
 		   Boolean selected, XiTabEdge edge,
 		   int shadow)
 #else
 DrawBeveledShadows(tab, info, geometry, selected, edge, shadow)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected;
     XiTabEdge       edge;
@@ -3491,12 +3491,12 @@ DrawBeveledShadows(tab, info, geometry, selected, edge, shadow)
 
 static void
 #ifndef _NO_PROTO
-DrawTab(XiTabBoxWidget tab, XiTabAttributes info, XiTabRect *geometry,
+DrawTab(XiTabBoxWidget tab, XmTabAttributes info, XiTabRect *geometry,
 	Boolean selected, Boolean keyboard)
 #else
 DrawTab(tab, info, geometry, selected, keyboard)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected, keyboard;
 #endif
@@ -3513,7 +3513,7 @@ DrawTab(tab, info, geometry, selected, keyboard)
                      label_width = 0, label_height = 0, row;
     Boolean          have_pixmap = False, have_label = False;
     GC               gc = XiTabBox__tab_GC(tab);
-    XiTabAttributes  above;
+    XmTabAttributes  above;
 
     /*
      * Lets do the quick check here.  If we are not realized then there is
@@ -4926,7 +4926,7 @@ CalcTabGeometry(tab)
 #endif
 {
     XmTabbedStackList       list = XiTabBox_tab_list(tab);
-    XiTabAttributes info;
+    XmTabAttributes info;
     Dimension       width, height, max_width = 0, max_height = 0;
     int             count = _XmTabbedStackListCount(XiTabBox_tab_list(tab)), i;
     XRectangle      *geom;
@@ -5299,7 +5299,7 @@ CallCallbacks(tab, event, from, to)
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-DrawLeftToRightTab(XiTabBoxWidget tab, XiTabAttributes info, GC gc,
+DrawLeftToRightTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip)
@@ -5307,7 +5307,7 @@ DrawLeftToRightTab(XiTabBoxWidget tab, XiTabAttributes info, GC gc,
 DrawLeftToRightTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 		   pix_depth, have_label, label_width, label_height, clip)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     GC              gc;
     Boolean         have_pixmap;
     int             pix_width, pix_height, pix_depth;
@@ -5574,7 +5574,7 @@ DrawLeftToRightTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-DrawRightToLeftTab(XiTabBoxWidget tab, XiTabAttributes info, GC gc,
+DrawRightToLeftTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip, Boolean selected)
@@ -5583,7 +5583,7 @@ DrawRightToLeftTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 		   pix_depth, have_label, label_width, label_height, clip,
 		   selected)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     GC              gc;
     Boolean         have_pixmap;
     int             pix_width, pix_height, pix_depth;
@@ -6055,7 +6055,7 @@ DrawRightToLeftTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  */
 static void
 #ifndef _NO_PROTO
-DrawBottomToTopTab(XiTabBoxWidget tab, XiTabAttributes info, GC gc,
+DrawBottomToTopTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip, Boolean selected)
@@ -6064,7 +6064,7 @@ DrawBottomToTopTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 		   pix_depth, have_label, label_width, label_height, clip,
 		   selected)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     GC              gc;
     Boolean         have_pixmap;
     int             pix_width, pix_height, pix_depth;
@@ -6103,7 +6103,7 @@ DrawBottomToTopTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  */
 static void
 #ifndef _NO_PROTO
-DrawTopToBottomTab(XiTabBoxWidget tab, XiTabAttributes info, GC gc,
+DrawTopToBottomTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip, Boolean selected)
@@ -6112,7 +6112,7 @@ DrawTopToBottomTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 		   pix_depth, have_label, label_width, label_height, clip, 
 		   selected)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     GC              gc;
     Boolean         have_pixmap;
     int             pix_width, pix_height, pix_depth;
@@ -6154,7 +6154,7 @@ DrawTopToBottomTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-DrawVerticalTab(XiTabBoxWidget tab, XiTabAttributes info, GC gc,
+DrawVerticalTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
 		Boolean have_pixmap, int pix_width, int pix_height,
 		int pix_depth, Boolean have_label, int label_width,
 		int label_height, XRectangle *clip, Boolean top_to_bottom,
@@ -6164,7 +6164,7 @@ DrawVerticalTab(tab, info, gc, have_pixmap, pix_width, pix_height, pix_depth,
 		have_label, label_width, label_height, clip, top_to_bottom, 
 		selected)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
     GC              gc;
     Boolean         have_pixmap;
     int             pix_width, pix_height, pix_depth;
@@ -6895,7 +6895,7 @@ CalcStackedGeometry(tab, rect)
 #endif
 {
     XmTabbedStackList       list = XiTabBox_tab_list(tab);
-    XiTabAttributes info;
+    XmTabAttributes info;
     int             i, count = _XmTabbedStackListCount(list),
                     max_width, max_height,
                     tab_width, tab_height,
@@ -7358,7 +7358,7 @@ RedisplayTabs(tab, region)
 {
     XiTabRect       *geom;
     int             i, count = _XmTabbedStackListCount(XiTabBox_tab_list(tab));
-    XiTabAttributes info;
+    XmTabAttributes info;
     
     /*
      * Now lets walk through our list of tabs and redisplay any tab that 
@@ -7392,7 +7392,7 @@ HorizontalStackedBottomEdgeRedisplay(tab)
                     shadow = tab->manager.shadow_thickness, x,
                     height, offset, idx, below, corner, cnt, first, last,
                     x1, x2;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geom;
     GC		    gc = XiTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
@@ -7697,7 +7697,7 @@ HorizontalStackedTopEdgeRedisplay(tab)
                     shadow = tab->manager.shadow_thickness, x,
                     height, offset, idx, below, corner, cnt, first, last,
                     x1, x2;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geom;
     GC		    gc = XiTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
@@ -8001,7 +8001,7 @@ VerticalStackedRightEdgeRedisplay(tab)
                     shadow = tab->manager.shadow_thickness, y, width,
                     offset, idx, below, corner, cnt, first, last,
                     y1, y2;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geom;
     GC		    gc = XiTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
@@ -8305,7 +8305,7 @@ VerticalStackedLeftEdgeRedisplay(tab)
                     shadow = tab->manager.shadow_thickness, y, width,
                     offset, idx, below, corner, cnt, first, last,
                     y1, y2;
-    XiTabAttributes info;
+    XmTabAttributes info;
     XiTabRect       *geom;
     GC		    gc = XiTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
@@ -8592,7 +8592,7 @@ VerticalStackedRedisplay(tab)
     }
 }
 
-static XiTabAttributes
+static XmTabAttributes
 #ifndef _NO_PROTO
 GetTabInfo(XiTabBoxWidget tab, int row, int column)
 #else
@@ -8700,7 +8700,7 @@ IsTabSensitive(tab, idx)
     int            idx;
 #endif
 {
-    XiTabAttributes info = _XmTabbedStackListGet(XiTabBox_tab_list(tab), idx);
+    XmTabAttributes info = _XmTabbedStackListGet(XiTabBox_tab_list(tab), idx);
 
     if( info != NULL ) return( info->sensitive );
 
@@ -8719,7 +8719,7 @@ _XiTabBoxStackedGeometry(tab, size, rect)
 #endif
 {
     XmTabbedStackList       list = XiTabBox_tab_list(tab);
-    XiTabAttributes info;
+    XmTabAttributes info;
     int             i, count = _XmTabbedStackListCount(list),
                     max_width, max_height, tab_width, tab_height,
                     num_cols, num_rows, offset;
@@ -9074,11 +9074,11 @@ FreeImageCache(tab)
 
 static int
 #ifndef _NO_PROTO
-InfoToIndex(XiTabBoxWidget tab, XiTabAttributes info)
+InfoToIndex(XiTabBoxWidget tab, XmTabAttributes info)
 #else
 InfoToIndex(tab, info)
     XiTabBoxWidget  tab;
-    XiTabAttributes info;
+    XmTabAttributes info;
 #endif
 {
     return( (int)(info - _XmTabbedStackListArray(XiTabBox_tab_list(tab))) );

@@ -29,7 +29,7 @@
 typedef struct _XmTabbedStackListRec {
     int    allocated;
     int    used;
-    XiTabAttributes tabs;
+    XmTabAttributes tabs;
 } XmTabbedStackListRec;
 
 #define XmLIST_GROWTH_FACTOR 10
@@ -65,7 +65,7 @@ XmTabbedStackListCreate()
      */
     tabList = (XmTabbedStackList) XtMalloc(sizeof(XmTabbedStackListRec));
     tabList->allocated = tabList->used = 0;
-    tabList->tabs = (XiTabAttributes) NULL;
+    tabList->tabs = (XmTabAttributes) NULL;
 
     return( tabList );
 }
@@ -111,7 +111,7 @@ XmTabbedStackListCopy(tab_list)
      */
     if( newList->used == 0 )
     {
-        newList->tabs = (XiTabAttributes) NULL;
+        newList->tabs = (XmTabAttributes) NULL;
     }
     else
     {
@@ -119,7 +119,7 @@ XmTabbedStackListCopy(tab_list)
          * First allocate the memory for all the entries. and then copy
          * item by item the list.
          */
-        newList->tabs = (XiTabAttributes)
+        newList->tabs = (XmTabAttributes)
             XtMalloc(sizeof(XiTabAttributeRec) * newList->used);
 
         for( i = 0; i < newList->used; ++i )
@@ -217,7 +217,7 @@ XmTabbedStackListRemove(tab_list, position)
     int       position;
 #endif
 {
-    XiTabAttributes to, from;
+    XmTabAttributes to, from;
     int             count;
 
     if( tab_list == NULL || position < 0 ||
@@ -257,7 +257,7 @@ XmTabbedStackListRemove(tab_list, position)
  *      position   : int             - the position to place the new tab at
  *      mask       : XtValueMask     - the mask of attributes to set on the
  *                                     new tab
- *      attributes : XiTabAttributes - the list of attributes to set on the
+ *      attributes : XmTabAttributes - the list of attributes to set on the
  *				       new tab
  * Output:
  *      int - the position of the new tab in the list
@@ -265,16 +265,16 @@ XmTabbedStackListRemove(tab_list, position)
 int
 #ifndef _NO_PROTO
 XmTabbedStackListInsert(XmTabbedStackList tab_list, int position, XtValueMask mask,
-                XiTabAttributes attributes)
+                XmTabAttributes attributes)
 #else
 XmTabbedStackListInsert(tab_list, position, mask, attributes)
     XmTabbedStackList       tab_list;
     int             position;
     XtValueMask     mask;
-    XiTabAttributes attributes;
+    XmTabAttributes attributes;
 #endif
 {
-    XiTabAttributes newTab;
+    XmTabAttributes newTab;
 
     /*
      * First let's see if they gave us a valid XmTabbedStackList and position
@@ -295,7 +295,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 	 * grow the list by XmLIST_GROWTH_FACTOR.
 	 */
 	tab_list->allocated += XmLIST_GROWTH_FACTOR;
-	tab_list->tabs = (XiTabAttributes)
+	tab_list->tabs = (XmTabAttributes)
 	    XtRealloc((XtPointer) tab_list->tabs,
 		      sizeof(XiTabAttributeRec) * tab_list->allocated);
     }
@@ -312,7 +312,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
     }
     else
     {
-	XiTabAttributes to, from;
+	XmTabAttributes to, from;
 	int             count;
 
 	from = &(tab_list->tabs[position]);
@@ -407,7 +407,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
  *	tab_list   : XmTabbedStackList       - the XmTabbedStackList to append a tab to
  *	mask       : XtValueMask     - the mask of attributes to set on the
  *				       new tab
- *	attributes : XiTabAttributes - the list of attributes to set on the
+ *	attributes : XmTabAttributes - the list of attributes to set on the
  *				       new tab
  * Output:
  *	int - the position of the new tab
@@ -415,12 +415,12 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 int
 #ifndef _NO_PROTO
 XmTabbedStackListAppend(XmTabbedStackList tab_list, XtValueMask mask,
-                XiTabAttributes attributes)
+                XmTabAttributes attributes)
 #else
 XmTabbedStackListAppend(tab_list, mask, attributes)
     XmTabbedStackList       tab_list;
     XtValueMask     mask;
-    XiTabAttributes attributes;
+    XmTabAttributes attributes;
 #endif
 {
     /*
@@ -441,23 +441,23 @@ XmTabbedStackListAppend(tab_list, mask, attributes)
  *				       tab to modify.
  *	position   : int             - the index of the tab to modify
  *	mask       : XtValueMask     - the mask of attributes to modify
- *	attributes : XiTabAttributes - the list of attributes to modify
+ *	attributes : XmTabAttributes - the list of attributes to modify
  * Output:
  *	None.
  */
 void
 #ifndef _NO_PROTO
 XmTabbedStackListModify(XmTabbedStackList tab_list, int position, XtValueMask mask,
-                XiTabAttributes attributes)
+                XmTabAttributes attributes)
 #else
 XmTabbedStackListModify(tab_list, position, mask, attributes)
     XmTabbedStackList       tab_list;
     int             position;
     XtValueMask     mask;
-    XiTabAttributes attributes;
+    XmTabAttributes attributes;
 #endif
 {
-    XiTabAttributes tab;
+    XmTabAttributes tab;
 
     /*
      * First lets see if they gave us anything valid to work with and
@@ -549,21 +549,21 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
  * Input:
  *	tab_list   : XmTabbedStackList       - the tab list that contains the tab
  *	position   : int             - the tab index to query
- *	attributes : XiTabAttributes - the attributes returned.
+ *	attributes : XmTabAttributes - the attributes returned.
  * Output:
  *	None.
  */
 void
 #ifndef _NO_PROTO
-XmTabbedStackListQuery(XmTabbedStackList tab_list, int position, XiTabAttributes attributes)
+XmTabbedStackListQuery(XmTabbedStackList tab_list, int position, XmTabAttributes attributes)
 #else
 XmTabbedStackListQuery(tab_list, position, attributes)
     XmTabbedStackList       tab_list;
     int             position;
-    XiTabAttributes attributes;
+    XmTabAttributes attributes;
 #endif
 {
-    XiTabAttributes tab;
+    XmTabAttributes tab;
 
     /*
      * Make sure that we have valid data and if not "asta la vesta, baby"
@@ -783,7 +783,7 @@ XmTabbedStackListSimpleQuery(tab_list, position)
 
 /*
  * Function:
- *	XiTabAttributesFree(attributes)
+ *	XmTabAttributesFree(attributes)
  * Description:
  *	This deallocates any memory that the attribute structure is
  *	using.  This does not free the attribute structure.
@@ -795,10 +795,10 @@ XmTabbedStackListSimpleQuery(tab_list, position)
  */
 void
 #ifndef _NO_PROTO
-XiTabAttributesFree(XiTabAttributes attributes)
+XmTabAttributesFree(XmTabAttributes attributes)
 #else
-XiTabAttributesFree(attributes)
-    XiTabAttributes attributes;
+XmTabAttributesFree(attributes)
+    XmTabAttributes attributes;
 #endif
 {
     if( attributes->value_mode == XiTAB_VALUE_COPY )
@@ -840,9 +840,9 @@ _XmTabbedStackListCount(tab_list)
  *	tab_list : XmTabbedStackList - the tab list to index into
  *	int      : Position  - the index of the tab you want
  * Output:
- *	XiTabAttributes - a pointer to the specified tab
+ *	XmTabAttributes - a pointer to the specified tab
  */
-XiTabAttributes
+XmTabAttributes
 #ifndef _NO_PROTO
 _XmTabbedStackListGet(XmTabbedStackList tab_list, int position)
 #else
@@ -851,7 +851,7 @@ _XmTabbedStackListGet(tab_list, position)
     int       position;
 #endif
 {
-    XiTabAttributes tab;
+    XmTabAttributes tab;
 
     /*
      * Make sure that we have valid data and if not "asta la vesta, baby"
@@ -867,7 +867,7 @@ _XmTabbedStackListGet(tab_list, position)
     return( tab );
 }
 
-XiTabAttributes
+XmTabAttributes
 #ifndef _NO_PROTO
 _XmTabbedStackListArray(XmTabbedStackList tab_list)
 #else

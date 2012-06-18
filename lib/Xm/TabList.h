@@ -70,7 +70,7 @@ typedef struct _XiTabAttributeRec {
     Pixmap            background_pixmap;/* default: XiPIXMAP_DYNAMIC         */
     Boolean	      sensitive;        /* default: True                     */
     XiTabValueMode    value_mode;       /* default: XiTAB_VALUE_COPY         */
-} XiTabAttributeRec, * XiTabAttributes;
+} XiTabAttributeRec, * XmTabAttributes;
 
 typedef struct _XmTabbedStackListRec *XmTabbedStackList;
 
@@ -100,25 +100,25 @@ XmTabbedStackList, int
 
 int XmTabbedStackListInsert(
 #ifndef _NO_PROTO
-XmTabbedStackList, int, XtValueMask, XiTabAttributes
+XmTabbedStackList, int, XtValueMask, XmTabAttributes
 #endif
 );
 
 int XmTabbedStackListAppend(
 #ifndef _NO_PROTO
-XmTabbedStackList, XtValueMask, XiTabAttributes
+XmTabbedStackList, XtValueMask, XmTabAttributes
 #endif
 );
 
 void XmTabbedStackListModify(
 #ifndef _NO_PROTO
-XmTabbedStackList, int, XtValueMask, XiTabAttributes
+XmTabbedStackList, int, XtValueMask, XmTabAttributes
 #endif
 );
 
 void XmTabbedStackListQuery(
 #ifndef _NO_PROTO
-XmTabbedStackList, int, XiTabAttributes
+XmTabbedStackList, int, XmTabAttributes
 #endif
 );
 
@@ -166,7 +166,7 @@ XmTabbedStackList, XmTabbedStackList
 
 void XiTabAttibutesFree(
 #ifndef _NO_PROTO
-XiTabAttributes
+XmTabAttributes
 #endif
 );
 
