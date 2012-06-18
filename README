@@ -1,6 +1,9 @@
 Please see the file COPYRIGHT.MOTIF  for important information.
 
-Please see the file RELNOTES for release notes on how
+
+There are two ways to build OpenMotif: (Imake and AutoTools)
+
+IF you are using Imake please read INSTALL.imake for notes on how
 to build and install this product using Imake. 
 
 Please see the file INSTALL.configure on how to build and install
