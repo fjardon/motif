@@ -75,7 +75,7 @@ typedef enum { XmFillNone, XmFillMajor, XmFillMinor, XmFillAll } XmFillOption;
  *       EXTERNAL DECLARATIONS
  ************************************************************/
 
-/*	Function Name: XiCreateButtonBox
+/*	Function Name: XmCreateButtonBox
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -83,7 +83,7 @@ typedef enum { XmFillNone, XmFillMajor, XmFillMinor, XmFillAll } XmFillOption;
  *	Returns: The Widget created.
  */
 
-Widget XiCreateButtonBox(
+Widget XmCreateButtonBox(
 #ifndef _NO_PROTO
 Widget, String, ArgList, Cardinal
 #endif

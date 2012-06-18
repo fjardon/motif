@@ -1017,7 +1017,7 @@ CalcChildSize(XmButtonBoxWidget bbox, Widget w, Dimension max_major,
  *
  ************************************************************/
 
-/*	Function Name: XiCreateButtonBox
+/*	Function Name: XmCreateButtonBox
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -1026,7 +1026,7 @@ CalcChildSize(XmButtonBoxWidget bbox, Widget w, Dimension max_major,
  */
 
 Widget
-XiCreateButtonBox(Widget parent, String name, ArgList args, Cardinal num_args)
+XmCreateButtonBox(Widget parent, String name, ArgList args, Cardinal num_args)
 {
     return(XtCreateWidget(name, 
 			  xmButtonBoxWidgetClass, parent, args, num_args));
