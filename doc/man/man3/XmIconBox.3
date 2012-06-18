@@ -1,0 +1,131 @@
+.DT
+.TH XmIconBox 3X ""
+.SH NAME
+The IconBox widget class
+.SH SYNOPSIS
+#include <Xm/IconBox.h>
+.SH DESCRIPTION
+.PP
+.TS
+tab (%);
+l l.
+.TE
+.PP
+The Icon Box widget lays out its children on a grid with each child forced to be the 
+same size and with the location of each child specified as an X and Y location on the 
+grid.
+.PP
+The size of the Icon Box, its children, and the number of cells displayed are calculated 
+as described below. The general idea is that all children are always be shown and 
+should be given their desired size whenever possible. The user may add or delete cells 
+by resizing this window using the window manager widget.
+.PP
+.ta 5
+.HP 5
+\(bu	The preferred size is calculated by using the maximum desired child height or 
+width and making sure that these are no smaller than the minimum sizes. This size 
+is multiplied by the number of cells along the axis and properly padded to come 
+up with a preferred size. The number of cells is the maximum of the largest cellX 
+or cellY value and the minimum number of horizontal or vertical cells.
+.HP 5
+\(bu	If the Icon box is forced larger than its preferred size more cells are added at the 
+bottom-right of the widget while the children all remain at their preferred sizes.
+.HP 5
+\(bu	If the Icon box is forced smaller than its preferred size each cell is forced to be 
+smaller in order to allow all children to fit within the Icon Box. All children will 
+be forced to the same smaller size.
+.RE
+.PP
+.SH Normal Resources
+.PP
+.TS
+tab (%);
+l l l l.
+Name%Class%Type%Init. Value
+horizontalMargin%Margin%HorizontalDimension%4
+minimumHorizontalCells%DefaultCells%Int%8
+minimumVerticalCells%DefaultCells%Int%4
+minimumCellHeight%MinimumCellSize%VerticalDimension%10
+minimumCellWidth%MinimumCellSize%HorizontalDimension%20
+verticalMargin%Margin%VerticalDimension%4 
+.TE
+.PP
+All resource names begin with XmN and all resource class names begin with XmC.
+.PP
+.SH horizontalMargin
+.PP
+.SH verticalMargin
+.PP
+The amount of space between each cell and its neighbor or the edge of the Icon 
+Box.
+.PP
+.SH minimumHorizontalCells
+.PP
+.SH minimumVerticalCells
+.PP
+The minimum number of cells to display in the horizontal and vertical directions. 
+This number of cells will always be displayed.
+.PP
+.SH minimumCellWidth
+.PP
+.SH minimumCellHeight
+.PP
+The smallest size the cells are allowed to be in the direction specified.
+.PP
+.SH Constraint Resources
+.PP
+.TS
+tab (%);
+l l l l.
+Name%Class%Type%Initial Value
+cellX%CellX%Short%XmIconBoxAnyCell
+cellY%CellY%Short%XmIconBoxAnyCell
+.TE
+.PP
+All resource names begin with XmN and all resource class names begin with XmC.
+.PP
+.SH cellX
+.PP
+.SH cellY
+.PP
+The location of this cell in cell space. These coordinates may be any positive 
+integer. They determine where this widget will be placed relative to its neighbors. 
+Having two children at the same cell X and cell Y location will result in undefined 
+behavior. To place a cell at any empty cell, set cell X and cell Y to the value 
+XmIconBoxAnyCell.
+.PP
+.SH Convenience Routines
+.PP
+.SH XmCreateIconBox  - Widget creation convenience routine 
+.nf
+
+Widget XmCreateIconBox( 
+	Widget parent,     /* Widget id of parent for IconBox */
+	String name,       /* Name of the created widget */
+	ArgList args,      /* argument list */
+	Cardinal num_args  /* number of items in argument list */
+	)				 
+
+.nf
+.PP
+To find out if a cell in the icon box is empty use the XiIconBoxIsCellEmpty function:
+
+.HP 20
+Boolean XmIconBoxIsCellEmpty(Widget w, Position cell_x, Position cell_y)
+.ta 15
+.HP 15
+w		the icon box widget
+.HP 15
+cell_x		the x location of the cell to check
+.HP 15
+cell_y		the y location of the cell to check
+.PP
+This function returns True if the specified cell has no child in it, and False otherwise. 
+.PP
+.SH SEE ALSO
+.PP
+XiIconButton(3I)
+.PP
+.SH COPYRIGHT
+.PP
+Copyright (c) 1992 by Integrated Computer Solutions, Inc.
