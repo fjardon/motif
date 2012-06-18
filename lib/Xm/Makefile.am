@@ -2,11 +2,10 @@ MAINTAINERCLEANFILES = Makefile.in XmStrDefs.h XmStrDefsI.h XmStrDefs.c
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = xmstring.list Xm.msg Imakefile $(SLIDE_DIST) $(XMTHEME_DIST)
 
-INCLUDES = -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
+INCLUDES = ${X_CFLAGS} -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
            -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
-           -I$(srcdir)/.. \
-           ${X_CFLAGS}
+           -I$(srcdir)/.. 
 
 xmdir = $(includedir)/Xm
 
