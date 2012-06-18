@@ -2,7 +2,7 @@ MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = Mrm.msg Imakefile
 
-INCLUDES = -I$(srcdir)/.. -I.. -I../Xm
+INCLUDES = -I$(srcdir)/.. -I.. -I../Xm ${X_CFLAGS}
 
 mrmdir = $(includedir)/Mrm
 

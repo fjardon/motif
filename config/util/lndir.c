@@ -27,6 +27,11 @@
 
 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /* From the original /bin/sh script:
 
   Used to create a copy of the a directory tree that has links for all

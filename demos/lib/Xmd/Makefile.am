@@ -12,4 +12,4 @@ RegEdit.h RegEditI.h
 
 LDADD = ../../../lib/Xm/libXm.la libXmd.a
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 

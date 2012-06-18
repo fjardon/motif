@@ -315,6 +315,7 @@ demos/programs/newwidgets/Outline/Makefile \
 demos/programs/newwidgets/Paned/Makefile \
 demos/programs/newwidgets/TabStack/Makefile \
 demos/programs/newwidgets/Tree/Makefile \
+demos/programs/newwidgets/pixmaps/Makefile \
 demos/unsupported/Makefile \
 demos/unsupported/Exm/Makefile \
 demos/unsupported/aicon/Makefile \

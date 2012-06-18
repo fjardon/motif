@@ -2,7 +2,7 @@ SUBDIRS = wml
 
 noinst_LIBRARIES = libExm.a libExmMrm.a
 
-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/..
+INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/.. ${X_CFLAGS} 
    
 libExm_a_SOURCES = CommandB.c	Grid.c		Panner.c	MenuB.c \
                   Simple.c	String.c	StringTrans.c	TabB.c 

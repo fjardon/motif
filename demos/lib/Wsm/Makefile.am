@@ -4,4 +4,4 @@ libWsm_a_SOURCES = debug.c disp.c free.c pack.c recv.c send.c util.c utm_send.c
 
 noinst_HEADERS = wsm_funcs.h wsm_proto.h utm_send.h
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 

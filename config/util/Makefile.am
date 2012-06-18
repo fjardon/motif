@@ -1,3 +1,4 @@
 MAINTAINERCLEANFILES =
 
+INCLUDES = ${X_CFLAGS}
 noinst_PROGRAMS = makestrs

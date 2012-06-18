@@ -15,7 +15,7 @@ dogs_DEPENDENCIES = dogs.uid
 
 LDADD = ../../../lib/Mrm/libMrm.la
 
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
 
 SUFFIXES = .uil .uid
 

@@ -31,6 +31,11 @@
  */
 
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #define XTERM_PATH "/x11/programs/xterm/xterm"
 
 #include <stdio.h>
