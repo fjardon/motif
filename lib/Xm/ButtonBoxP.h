@@ -89,19 +89,19 @@ typedef struct _XmButtonBoxClassRec
 
 } XmButtonBoxClassRec;
 
-typedef struct _XiBBoxConstraintsPart {
+typedef struct _XmBBoxConstraintsPart {
     Dimension pref_width, pref_height;
-} XiBBoxConstraintsPart;
+} XmBBoxConstraintsPart;
     
-typedef struct _XiBBoxConstraintsRec {
+typedef struct _XmBBoxConstraintsRec {
     XmManagerConstraintPart	manager;
-    XiBBoxConstraintsPart	bbox;
-} XiBBoxConstraintsRec, *XiBBoxConstraints;
+    XmBBoxConstraintsPart	bbox;
+} XmBBoxConstraintsRec, *XmBBoxConstraints;
 
 /*
  * Match XmOffset nomenclature
  */
-typedef XiBBoxConstraintsPart XmButtonBoxConstraintPart;
+typedef XmBBoxConstraintsPart XmButtonBoxConstraintPart;
 
 typedef struct
 {

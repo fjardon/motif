@@ -152,7 +152,7 @@ XmButtonBoxClassRec xmButtonBoxClassRec = {
   { /* constraint_class fields */
     /* resource list      */    NULL,
     /* num resources      */ 	0,
-    /* constraint size    */ 	sizeof(XiBBoxConstraintsPart),
+    /* constraint size    */ 	sizeof(XmBBoxConstraintsPart),
     /* init proc          */ 	ConstraintInitialize,
     /* destroy proc       */ 	NULL,
     /* set values proc    */ 	ConstraintSetValues,
