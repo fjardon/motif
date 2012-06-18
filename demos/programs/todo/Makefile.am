@@ -1,4 +1,4 @@
-noinst_PROGRAMS = todo
+bin_PROGRAMS = todo
 
 noinst_HEADERS = page.h
 
