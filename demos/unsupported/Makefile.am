@@ -1,5 +1,4 @@
-SUBDIRS =   Xm2.2\
-            dainput\
+SUBDIRS =   dainput\
             hellomotif\
             xmapdef\
             xmfonts\
