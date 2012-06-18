@@ -1,0 +1,113 @@
+.TH XmDataField 1 "January 2002" "Manual page for XmDataField"<br>
+.\"
+.\" January 1st 2002
+.\" Man page author:
+.\"	Jeff LeBlanc <jeffl@ics.com>
+.SH NAME
+.I XmDataField
+The DataField widget class
+.SH SYNOPSIS 
+.B #include <Xm/DataF.h>
+.SH DESCRIPTION
+The DataField widget is a Data Presentation widget that handles display and entry of data as text. 
+The DataField widget is a subclass of the Motif XmTextField widget intended for data entry 
+applications. In addition to all of the normal XmTextField functionality, it supports regular 
+expression-based parsing and acceptance/rejection of its input through the XmNpicture resource, 
+and right justification through the XmNalignment resource. 
+.br
+.PP
+.B Keyboard navigation
+.PP
+Typical business applications demand better keyboard traversal than provided by Motif. The 
+DataField widget provides added capability by supporting several types of validation: a 
+DataField widget containing an invalid value will not give-up focus; the user must enter a correct 
+value before proceeding to another field.
+.SH Classes and Inherited Resources
+DataField inherits behavior and resources from Core, XmPrimitive, and XmTextField. For a 
+complete description of each resource, refer to the OSF/Motif Programmer’s Reference.
+.br
+.B Resources
+.br
+.B XmNalignment
+When set to XmALIGNMENT_END, the widget aligns all its text with the right hand side of the 
+input area.
+.br
+.B XmNautoFill
+When set to True, the widget "auto-fills" its contents when it can determine that the next 
+character in the string must be a particular literal. For instance, the picture "###-####" 
+automatically inserts a '-' character after receiving three numeric digits as input.
+.br
+.B XmNpicture
+Specifies a picture for data entry in the widget. A picture acts as a template that formats the value 
+you enter in a field. An example would be the US Phone Number picture: (###)###-####. The 
+picture is used to convert characters entered into the field to a formatted value.
+.br
+.TP Character interpretations
+.br
+The following lists and defines the characters you can use in a picture, and how the 
+DataField widget interprets them.
+.TP  
+.IR #
+.RI Any numeric digit
+.TP 
+.IR ?
+.RI Case insensitive letter
+.TP 
+.IR &
+.RI Uppercase letter (forces lowercase to uppercase)
+.TP 
+.IR @
+.RI Case insensitive character
+.TP 
+.IR !
+.RI Uppercase character
+.TP 
+.IR ;
+.RI Interpret the following character literally
+.TP 
+.IR *
+.RI Repeat the following character some number of times
+.TP 
+.IR []
+.RI Characters within brackets are optional
+.TP 
+.IR {}
+.RI Characters within braces are grouped
+.TP 
+.IR ,
+.RI Alternative values
+.TP 
+Other characters are interpreted literally.
+Set XmNpicture to NULL to disable regular expression processing. The DataField widget is 
+cleared whenever the XmNpicture resource is changed.
+.br
+.B XmNpictureErrorCallback
+Specifies a list of callbacks to be called when the XmDataField widget determines that data is 
+being entered that does not match the format specified by the XmNpicture resource.
+.br
+.B XmNvalidateCallback
+Specifies a list of callbacks to be called when data has been entered in the XmDataField widget 
+and the user has moved out of the XmDataField widget (usually by pressing the Tab key). The 
+callbacks can reject the movement of focus. 
+.br
+.SH Callback Routines
+.br A pointer to the following structure is passed to the list of routines for the XmNvalidateCallback:
+.nf
+typedef struct _XmDataFieldCallbackStruct {
+	Widget   w;       /* The XmDataField */   
+	String   text;    /* Proposed string */   
+	Boolean  accept;  /* Accept return value, for validation */
+} XmDataFieldCallbackStruct;
+.nf
+.SH "SEE ALSO"
+.br
+.SH WARNINGS
+.br
+.SH VERSION
+This manual page documents the XmColumn widget shipped in Motif version 2.2
+.SH AUTHOR
+.br
+(c) 2002 by Integrated Computer Solutions, Inc.
+.LP
+Edited by Kevin Cook.
+.PP
