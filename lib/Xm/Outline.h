@@ -55,7 +55,7 @@ typedef struct _XmOutlineRec		*XmOutlineWidget;
 *	GLOBAL FUNCTION DECLARATIONS
 *************************************************************/
 
-/*	Function Name: XiCreateOutline
+/*	Function Name: XmCreateOutline
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -63,7 +63,7 @@ typedef struct _XmOutlineRec		*XmOutlineWidget;
  *	Returns: The Widget created.
  */
 
-Widget XiCreateOutline(
+Widget XmCreateOutline(
 #ifndef _NO_PROTO
 Widget, String, ArgList, Cardinal
 #endif

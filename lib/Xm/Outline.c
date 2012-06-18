@@ -1781,7 +1781,7 @@ _OutlineDrawLine(Widget w, XRectangle *rect, OutlineConstraints parent,
  *
  ************************************************************/
 
-/*	Function Name: XiCreateOutline
+/*	Function Name: XmCreateOutline
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -1790,7 +1790,7 @@ _OutlineDrawLine(Widget w, XRectangle *rect, OutlineConstraints parent,
  */
 
 Widget
-XiCreateOutline(Widget parent, String name,
+XmCreateOutline(Widget parent, String name,
 		ArgList args, Cardinal num_args)
 {
     return(XtCreateWidget(name, xmOutlineWidgetClass,

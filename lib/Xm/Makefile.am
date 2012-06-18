@@ -24,7 +24,7 @@ EXTRA_HDRS = Ext.h ExtP.h ExtDefs.h XmExtDefs.h \
              IconBox.h IconBoxP.h IconButton.h IconButtonP.h xmlist.h \
              Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
              Table.h TableP.h TabBox.h TabBoxP.h TabStack.h TabStackP.h \
-             TabList.h DrawUtils.h Tree.h TreeP.h ComboBox2.h
+             TabList.h DrawUtils.h Tree.h TreeP.h ComboBox2.h ComboBox2P.h
 
 EXTRA_SRCS = XmExtDefs.c XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
