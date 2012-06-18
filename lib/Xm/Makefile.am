@@ -33,7 +33,7 @@ EXTRA_SRCS = XmExtDefs.c XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
              Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
              Hierarchy.c Outline.c Table.c TabBox.c TabList.c TabStack.c \
-             DrawUtils.c Tree.c ComboBox2.c
+             DrawUtils.c Tree.c ComboBox2.c XmStrDefs.ht  XmStrDefsI.ht
 
 if OM_SLIDEC
 
