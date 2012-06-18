@@ -1,0 +1,108 @@
+.TH XmColumn 1 "January 2002" "Manual page for XmColum"
+.\"
+.\" January 1st 2002
+.\" Man page author:
+.\"	Jeff LeBlanc <jeffl@ics.com>
+.SH NAME
+.I XmColumn
+The XmColumn Widget Class
+.SH SYNOPSIS
+.B #include <Xm/Column.h>
+.SH DESCRIPTION
+The Column widget displays its children stacked in a column, each with an optional associated 
+label: labels appear in one column, and children in another. This is useful for displaying, for 
+example, labeled data-entry fields.  It can also display all label-child pairs in a horizontal 
+orientation.This widget offers several constraint resources that allow specification of 
+characteristics of the label, such as displaying text or a pixmap, alignment of text, font to use, and so forth. It also offers several resources for setting defaults for children that specify no specic values.
+.SH Classes 
+.br
+Column inherits behavior and resources from Core, Composite, Constraint, XmManager, and 
+XmBulletinBoard.
+For a complete description of each resource, refer to the OSF/Motif Programmer’s Reference.
+Resources 
+.br
+.SH Resources
+.br
+.B XmNdefaultEntryLabelAlignment
+Specifies the default XmNentryLabelAlignment to use when a child specifies no significant value.
+Resources that specify Alignment have values of XmALIGNMENT_BEGINNING, 
+.br
+.B XmALIGNMENT_CENTER, XmALIGNMENT_END, and XmALIGNMENT_UNSPECIFIED. 
+Valid string values that can be used in a resources file are: alignment_unspecified, unspecified, 
+alignment_beginning, beginning, alignment_center, center, alignment_end, end. 
+.br
+.B XmNdefaultEntryLabelFontList
+Specifies the default XmNentryLabelFontList to use when a child specifies no significant value. If 
+unspecified, uses the XmBulletinBoard’s XmNlabelFontList resource.
+.br
+.B XmNdefaultFillStyle
+Specifies the default XmNfillStyle to use when a child specifies no significant value. 
+.br
+.B XmNdistribution
+Specifies whether the spacing between each pair of rows should be increased equally 
+(XmDISTRIBUTE_SPREAD) or remain constant (XmDISTRIBUTE_TIGHT) when the column is 
+resized vertically to be larger than its natural size. This resource has no effect if any child has its 
+.br
+.B XmNstretchable resource set to True. This resource is valid only when the orientation is vertical.
+.br
+.B XmNitemSpacing
+Specifies the spacing between each pair of rows (in vertical orientation) or between pairs of labels 
+and children (in horizontal orientation).
+.br
+.B XmNlabelSpacing
+Specifies the spacing between the column containing the labels and the column containing the 
+XmColumn’s children.
+.br
+.B XmNorientation
+Specifies the layout direction of the XmColumn. When XmVERTICAL, the widgets and their 
+associated labels are laid out in two vertical columns. When XmHORIZONTAL, the widgets and 
+their associated labels are laid out in a single row.
+.br
+.SH Constraint Resources
+.br The visual appearance of columns is affected by setting constraint resources on the children of 
+the XmColumn.
+These resources are derived from those supported by XmLabel; see the manual page for XmLabel 
+for valid values and usage.
+.br
+.B XmNentryLabelAlignment
+Specifies justification of text within the child’s associated label. Valid values are the same as 
+those for XmNdefaultEntryLabelAlignment.
+.br
+.B XmNentryLabelFontList
+Specifies fontList used to render the text within the child’s associated label.
+.br
+.B XmNentryLabelPixmap
+Specifies the pixmap used in the child’s associated label.
+.br
+.B XmNentryLabelString
+Specifies the text used in the child’s associated label.
+.br
+.B XmNentryLabelType
+Specifies whether to display a string (XmSTRING) or a pixmap (XmPIXMAP) in the child’s 
+associated label. 
+.br
+.B XmNfillStyle
+Specifies whether the child should be displayed at its natural size (XmFILL_RAGGED) or 
+stretched to fill the entire width of the column it is displayed within (XmFILL_FLUSH). 
+.br
+.B XmFILL_UNSPECIFIED uses the value of the XmColumn’s XmNdefaultFillStyle.
+.br
+.B XmNshowEntryLabel
+Specifies whether or not to display the child’s associated label.
+.br
+.B XmNstretchable
+Specifies whether the child should expand in size proportionately when the XmColumn is resized 
+vertically to be larger than its natural size.
+.SH Translations and Actions
+.SH "SEE ALSO"
+.br
+.SH WARNINGS
+.br
+.SH VERSION
+This manual page documents the XmColumn widget shipped in Motif version 2.2
+.SH AUTHOR
+.br
+(c) 2002 by Integrated Computer Solutions, Inc.
+.LP
+Edited by Kevin Cook.
+.PP
