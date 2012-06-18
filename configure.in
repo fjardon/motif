@@ -314,7 +314,6 @@ demos/programs/newwidgets/IconB/Makefile \
 demos/programs/newwidgets/Outline/Makefile \
 demos/programs/newwidgets/Paned/Makefile \
 demos/programs/newwidgets/TabStack/Makefile \
-demos/programs/newwidgets/Toolbar/Makefile \
 demos/programs/newwidgets/Tree/Makefile \
 demos/unsupported/Makefile \
 demos/unsupported/Exm/Makefile \
