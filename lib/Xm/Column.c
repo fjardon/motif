@@ -205,7 +205,7 @@ static void XmColumnLabelDestroyedCallback(
 /* structure member elements from private P.h file */
     unsigned char default_label_position;
     unsigned char       label_position;
-#define XmColumnC_label_position(w) XiColCField(w, label_position, unsigned char)
+#define XmColumnC_label_position(w) XmColCField(w, label_position, unsigned char)
 #define XmColumn_default_label_position(w) XmColField(w, default_label_position, unsigned char)
 
 #endif
@@ -403,7 +403,7 @@ XmColumnClassRec xiColumnClassRec = {
   }
 };
 
-WidgetClass xiColumnWidgetClass = (WidgetClass) &xiColumnClassRec;
+WidgetClass xmColumnWidgetClass = (WidgetClass) &xiColumnClassRec;
 
 XmOffsetPtr XmColumn_offsets;
 XmOffsetPtr XmColumnC_offsets;
@@ -430,7 +430,7 @@ ClassInitialize()
     XmColumnClassRec* wc = &xiColumnClassRec;
     int i;
 
-    XmResolveAllPartOffsets(xiColumnWidgetClass,
+    XmResolveAllPartOffsets(xmColumnWidgetClass,
 			    &XmColumn_offsets,
 			    &XmColumnC_offsets);
 
@@ -2926,7 +2926,7 @@ static void Get_entryLabelString (Widget widget, int offset, XtArgVal *value)
 Widget
 XmCreateColumn(Widget parent, String name, ArgList arg_list, Cardinal arg_cnt)
 {
-    return( XtCreateWidget(name, xiColumnWidgetClass, parent, arg_list,
+    return( XtCreateWidget(name, xmColumnWidgetClass, parent, arg_list,
 			   arg_cnt) );
 }
 

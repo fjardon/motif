@@ -58,7 +58,7 @@ typedef struct _XiTabBoxCallbackStruct {
 } XiTabBoxCallbackStruct;
 
 typedef struct _XiTabBoxRec      *XiTabBoxWidget;
-typedef struct _XiTabBoxClassRec *XiTabBoxWidgetClass;
+typedef struct _XmTabBoxClassRec *XiTabBoxWidgetClass;
 
 extern WidgetClass               xiTabBoxWidgetClass;
 

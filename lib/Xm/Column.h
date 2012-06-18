@@ -33,7 +33,7 @@ extern "C" {
 #include <Xm/Ext.h>
 #include <Xm/XmExtDefs.h>
 
-extern WidgetClass xiColumnWidgetClass;
+extern WidgetClass xmColumnWidgetClass;
 
 typedef struct _XmColumnClassRec * XmColumnWidgetClass;
 typedef struct _XmColumnRec      * XmColumnWidget;
@@ -42,8 +42,8 @@ enum { XmFILL_UNSPECIFIED, XmFILL_FLUSH, XmFILL_RAGGED };
 
 enum { XmDISTRIBUTE_TIGHT, XmDISTRIBUTE_SPREAD };
 
-#ifndef XiIsColumn
-#define XiIsColumn(w) (XtIsSubclass(w, xiColumnWidgetClass))
+#ifndef XmIsColumn
+#define XmIsColumn(w) (XtIsSubclass(w, xmColumnWidgetClass))
 #endif
 
 #if NeedFunctionPrototypes

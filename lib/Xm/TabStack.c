@@ -2184,7 +2184,7 @@ ChangeManaged(widget)
     int		      idx = 0;
     Cardinal          i;
     XmTabbedStackList         tl = NULL;
-    XiTabAttributeRec attr;
+    XmTabAttributeRec attr;
     XtWidgetGeometry  request, geom;
     XmString          xmstr;
     Boolean           changed_size = False;
@@ -2433,7 +2433,7 @@ ConstraintSetValues(current, request, set, arg_list, arg_cnt)
 #endif
 {
     XmTabStackWidget  tab = (XmTabStackWidget) XtParent(set);
-    XiTabAttributeRec attr;
+    XmTabAttributeRec attr;
     WidgetList        kid;
     Cardinal          i;
 
@@ -2820,7 +2820,7 @@ DrawShadows(tab, top_GC, bottom_GC, x, y, width, height)
     XFillRectangles(XtDisplay(tab), XtWindow(tab), bottom_GC, bottom_rects,
 		    num_bottom_rects);
     XiDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
-		bevel.x, bevel.y, shadow, XiBEVEL_BOTH);
+		bevel.x, bevel.y, shadow, XmBEVEL_BOTH);
 }
 
 static void
@@ -3375,7 +3375,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 		       x + shadow, y + base_height, base_width + shadow,
 		       shadow);
 	XiDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
-		    x, y + base_height, shadow, XiBEVEL_BOTTOM);
+		    x, y + base_height, shadow, XmBEVEL_BOTTOM);
 
 	x += base_width + shadow;
 	x2 = x + offset;
@@ -3480,7 +3480,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 	XiDrawBevel(XtDisplay(tab), XtWindow(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
-		    x, 0, shadow, XiBEVEL_BOTTOM);
+		    x, 0, shadow, XmBEVEL_BOTTOM);
 
 	x2 = x + offset;
 	y += shadow;
@@ -3544,7 +3544,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 		    XiDrawBevel(XtDisplay(tab), XtWindow(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
-				x2 - shadow, y, shadow, XiBEVEL_BOTTOM);
+				x2 - shadow, y, shadow, XmBEVEL_BOTTOM);
 		    x = x2;
 		}
 		x2 += offset;
@@ -3589,7 +3589,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 	XiDrawBevel(XtDisplay(tab), XtWindow(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
-		    0, y, shadow, XiBEVEL_BOTTOM);
+		    0, y, shadow, XmBEVEL_BOTTOM);
 	y2 = y + offset;
 	x += shadow;
 	x2 = y + base_width;
@@ -3650,7 +3650,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 		    XiDrawBevel(XtDisplay(tab), XtWindow(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
-				x, y2 - shadow, shadow, XiBEVEL_BOTTOM);
+				x, y2 - shadow, shadow, XmBEVEL_BOTTOM);
 		    y = y2;
 		}
 		y2 += offset;
@@ -3689,7 +3689,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 		       x + base_width, y + shadow, shadow,
 		       base_height + shadow);
 	XiDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
-		    x + base_width, y, shadow, XiBEVEL_BOTTOM);
+		    x + base_width, y, shadow, XmBEVEL_BOTTOM);
 
 	y += base_height + shadow;
 	y2 = y + offset;

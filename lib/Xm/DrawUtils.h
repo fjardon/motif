@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef __XiDraw_h__
-#define __XiDraw_h__
+#ifndef __XmDraw_h__
+#define __XmDraw_h__
 
 #include <Xm/Xm.h>
 #include <Xm/Ext.h>
@@ -32,11 +32,11 @@
 extern "C" {
 #endif
 
-typedef enum {XiBEVEL_BOTTOM, XiBEVEL_TOP, XiBEVEL_BOTH} XiBevelOption;
+typedef enum {XmBEVEL_BOTTOM, XmBEVEL_TOP, XmBEVEL_BOTH} XmBevelOption;
 
 void XiDrawBevel(
 #ifndef _NO_PROTO
-Display*, Drawable, GC, GC, int, int, unsigned int, XiBevelOption
+Display*, Drawable, GC, GC, int, int, unsigned int, XmBevelOption
 #endif
 );
 
@@ -44,4 +44,4 @@ Display*, Drawable, GC, GC, int, int, unsigned int, XiBevelOption
 }
 #endif
 
-#endif /* __XiDraw_h__ */
+#endif /* __XmDraw_h__ */

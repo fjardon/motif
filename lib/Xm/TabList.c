@@ -120,7 +120,7 @@ XmTabbedStackListCopy(tab_list)
          * item by item the list.
          */
         newList->tabs = (XmTabAttributes)
-            XtMalloc(sizeof(XiTabAttributeRec) * newList->used);
+            XtMalloc(sizeof(XmTabAttributeRec) * newList->used);
 
         for( i = 0; i < newList->used; ++i )
         {
@@ -242,7 +242,7 @@ XmTabbedStackListRemove(tab_list, position)
         from = &(tab_list->tabs[position+1]);
         count = tab_list->used - position;
         memmove((XtPointer) to, (XtPointer) from,
-                sizeof(XiTabAttributeRec) * count);
+                sizeof(XmTabAttributeRec) * count);
     }
 }
 
@@ -297,7 +297,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 	tab_list->allocated += XmLIST_GROWTH_FACTOR;
 	tab_list->tabs = (XmTabAttributes)
 	    XtRealloc((XtPointer) tab_list->tabs,
-		      sizeof(XiTabAttributeRec) * tab_list->allocated);
+		      sizeof(XmTabAttributeRec) * tab_list->allocated);
     }
 
     /*
@@ -318,7 +318,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 	from = &(tab_list->tabs[position]);
 	to = &(tab_list->tabs[position+1]);
 	count = tab_list->used - position;
-	memmove(to, from, sizeof(XiTabAttributeRec) * count);
+	memmove(to, from, sizeof(XmTabAttributeRec) * count);
 	newTab = &(tab_list->tabs[position]);
     }
     tab_list->used++;
@@ -682,7 +682,7 @@ XmTabbedStackListSimpleInsert(tab_list, position, label_string)
     XmString  label_string;
 #endif
 {
-    XiTabAttributeRec attributes;
+    XmTabAttributeRec attributes;
 
     attributes.label_string = label_string;
     
@@ -711,7 +711,7 @@ XmTabbedStackListSimpleAppend(tab_list, label_string)
     XmString  label_string;
 #endif
 {
-    XiTabAttributeRec attributes;
+    XmTabAttributeRec attributes;
 
     attributes.label_string = label_string;
     
@@ -743,7 +743,7 @@ XmTabbedStackListSimpleModify(tab_list, position, label_string)
     XmString  label_string;
 #endif
 {
-    XiTabAttributeRec attributes;
+    XmTabAttributeRec attributes;
 
     XmTabbedStackListModify(tab_list, position, XiTAB_LABEL_STRING, &attributes);
 }
@@ -769,7 +769,7 @@ XmTabbedStackListSimpleQuery(tab_list, position)
     int       position;
 #endif
 {
-    XiTabAttributeRec attributes;
+    XmTabAttributeRec attributes;
 
     XmTabbedStackListQuery(tab_list, position, &attributes);
 
@@ -897,9 +897,9 @@ _XmTabbedStackListArray(tab_list)
  *	list1 : XmTabbedStackList - tab list to compare
  *	list2 : XmTabbedStackList - tab list to compare
  * Output:
- *	XiTabResult - indicates the differences it any
+ *	XmTabResult - indicates the differences it any
  */
-XiTabResult
+XmTabResult
 #ifndef _NO_PROTO
 XmTabbedStackListCompare(XmTabbedStackList list1, XmTabbedStackList list2)
 #else
@@ -907,7 +907,7 @@ XmTabbedStackListCompare(list1, list2)
     XmTabbedStackList list1, list2;
 #endif
 {
-    XiTabResult result = XiTAB_CMP_EQUAL;
+    XmTabResult result = XiTAB_CMP_EQUAL;
     int         i;
 
     if( list1 == NULL && list2 != NULL ||

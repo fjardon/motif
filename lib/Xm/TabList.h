@@ -36,7 +36,7 @@ typedef enum {XmPIXMAP_TOP, XmPIXMAP_BOTTOM, XmPIXMAP_RIGHT, XmPIXMAP_LEFT,
 	      XmPIXMAP_NONE, XmPIXMAP_ONLY} XmPixmapPlacement;
 typedef enum {XiTAB_VALUE_COPY, XiTAB_VALUE_SHARE} XiTabValueMode;
 
-typedef enum {XiTAB_CMP_VISUAL, XiTAB_CMP_SIZE, XiTAB_CMP_EQUAL} XiTabResult;
+typedef enum {XiTAB_CMP_VISUAL, XiTAB_CMP_SIZE, XiTAB_CMP_EQUAL} XmTabResult;
 
 #define XiCOLOR_DYNAMIC ((Pixel)-1)
 #define XiPIXMAP_DYNAMIC ((Pixmap) 3)
@@ -59,7 +59,7 @@ typedef enum {XiTAB_CMP_VISUAL, XiTAB_CMP_SIZE, XiTAB_CMP_EQUAL} XiTabResult;
 				 XiTAB_LABEL_ALIGNMENT|XiTAB_STRING_DIRECTION|\
 				 XiTAB_BACKGROUND_PIXMAP|XiTAB_SENSITIVE)
 
-typedef struct _XiTabAttributeRec {
+typedef struct _XmTabAttributeRec {
     XmString          label_string;	/* default: NULL                     */
     XmStringDirection string_direction; /* default: XmSTRING_DIRECTION_L_TO_R*/
     Pixmap            label_pixmap;	/* default: XmUNSPECIFIED_PIXMAP     */
@@ -70,7 +70,7 @@ typedef struct _XiTabAttributeRec {
     Pixmap            background_pixmap;/* default: XiPIXMAP_DYNAMIC         */
     Boolean	      sensitive;        /* default: True                     */
     XiTabValueMode    value_mode;       /* default: XiTAB_VALUE_COPY         */
-} XiTabAttributeRec, * XmTabAttributes;
+} XmTabAttributeRec, * XmTabAttributes;
 
 typedef struct _XmTabbedStackListRec *XmTabbedStackList;
 
@@ -158,7 +158,7 @@ XmTabbedStackList, int
 #endif
 );
 
-XiTabResult XmTabbedStackListCompare(
+XmTabResult XmTabbedStackListCompare(
 #ifndef _NO_PROTO
 XmTabbedStackList, XmTabbedStackList
 #endif

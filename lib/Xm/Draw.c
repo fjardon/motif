@@ -375,18 +375,22 @@ void XmeDrawSeparator(Display *display, Drawable d,
 	   }
        /* draw the last dash, with possibly a different size */
        if (i*2*shadow_dash_size < (width - 2*margin))
-           if (shadow_thick < 4) {
+       {
+           if (shadow_thick < 4) 
+           {
 	       XDrawLine(display, d, top_gc, 
 			 x + margin + 2*i*shadow_dash_size, 
 			 center - shadow_thick/2, 
 			 x + (width - 2*margin), 
 			 center - shadow_thick/2); 
 	       if (shadow_thick > 1)
+               {
 		   XDrawLine(display, d, bottom_gc, 
 			 x + margin + 2*i*shadow_dash_size, 
 			 center, 
 			 x + (width - 2*margin), 
 			 center); 
+               }
 	   } else {
 	       DrawSimpleShadow(display, d, top_gc, bottom_gc, 
 				  x + margin + i*2*shadow_dash_size, 
@@ -395,6 +399,7 @@ void XmeDrawSeparator(Display *display, Drawable d,
 				  (shadow_thick/2)*2, 
 				  shadow_thick/2, 0);
 	   }
+       }
    } else {
        ndash = ((height - 2*margin)/shadow_dash_size + 1)/2 ;
        for (i=0; i<ndash; i++)

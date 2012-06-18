@@ -41,14 +41,14 @@
  *	y         : int          - the y location of the corner
  *	size      : unsigned int - the size of the corner
  *                                 (width = height = size)
- *	option    : XiBevelOption- what part of the bevel should we draw.
+ *	option    : XmBevelOption- what part of the bevel should we draw.
  * Output:
  *	None.
  */
 void
 #ifndef _NO_PROTO
 XiDrawBevel(Display *dpy, Drawable d, GC top_gc, GC bottom_gc,
-	    int x, int y, unsigned int size, XiBevelOption option)
+	    int x, int y, unsigned int size, XmBevelOption option)
 #else
 XiDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
     Display       *dpy;
@@ -56,7 +56,7 @@ XiDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
     GC            top_gc, bottom_gc;
     int           x, y;
     unsigned int  size;
-    XiBevelOption option;
+    XmBevelOption option;
 #endif
 {
     static     XRectangle saved[STATIC_RECTS], *alloced = NULL;
@@ -97,7 +97,7 @@ XiDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
      * set up the rectangles and pass them off to be drawn.  First the
      * top half of the beveled corner ...
      */
-    if( option == XiBEVEL_TOP )
+    if( option == XmBEVEL_TOP )
     {
 	for( i = 0; i < size; ++i )
 	{
@@ -108,7 +108,7 @@ XiDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
 	}
 	XFillRectangles(dpy, d, top_gc, rt, size);
     }
-    else if( option == XiBEVEL_BOTH )
+    else if( option == XmBEVEL_BOTH )
     {
 	XFillRectangle(dpy, d, top_gc, x, y, size, size);
     }
@@ -116,7 +116,7 @@ XiDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
     /*
      * ... And the the bottom half of the beveled corner.
      */
-    if( option == XiBEVEL_BOTH || option == XiBEVEL_BOTTOM )
+    if( option == XmBEVEL_BOTH || option == XmBEVEL_BOTTOM )
     {
 	for( i = 0; i < size; ++i )
 	{
