@@ -2,4 +2,4 @@ bin_PROGRAMS = xmbind
 
 LDADD = ../../lib/Xm/libXm.la
 
-INCLUDES = -I$(srcdir)/../../lib
+INCLUDES = ${X_CFLAGS} -I$(srcdir)/../../lib
