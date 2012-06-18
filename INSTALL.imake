@@ -83,7 +83,7 @@ Motif has been built on the following platforms:
       Novell   Intel 486/Pentium  UnixWare 2.02
       SGI      Indigo 2           Irix 6.2
       Sun      SPARCstation       Solaris 2.4
-      Linux    Intel              Redhat6.0/6.1
+      Linux    Intel              Redhat6.0->7.2
 
 
 To build Motif, you must have an ANSI C compiler installed on your system
@@ -104,6 +104,7 @@ source directory, for example:
 
 Create a symbolic link tree using the following command:
       % lndir $MOTIFSOURCEDIR $MOTIFBUILDDIR
+      
 
 where $MOTIFSOURCEDIR is the Motif master source directory. Note that
 the directory containing the lndir program must be in your $PATH.
@@ -132,7 +133,10 @@ construct the necessary links as follows:
 
         % cd $MOTIFBUILDDIR/motif
 
-4. See if there is a BootstrapCFlags mentioned in the
+4. Copy the Master Makefile into place :
+      % cp Makefile.imake-pure Makefile
+      
+5. See if there is a BootstrapCFlags mentioned in the
 comments in the <vendor>.cf file. This file is in the directory
 $MOTIFBUILDDIR/motif/config/cf. If there isn't a definition for
 BootstrapCFlags, type:
