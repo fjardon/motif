@@ -65,7 +65,7 @@ with a node that has no children has no defined semantics.
 tab (%);
 l l l l.
 Name%Class%Type%Initial Value
-connectStyle%ConnectStyle%unsigned char%XiTreeDirect
+connectStyle%ConnectStyle%unsigned char%XmTreeDirect
 horizontalNodeSpace%Dimension%HorizontalDimension%20
 verticalNodeSpace%Dimension%VerticalDimension%2
 .TE
@@ -74,14 +74,14 @@ All resource names begin with XmN and all resource class names begin with XmC.
 .PP
 .SH connectStyle
 .PP
-The style of the lines visually connecting parent nodes to children nodes. The valid styles are XiTreeDirect or XiTreeLadder.
+The style of the lines visually connecting parent nodes to children nodes. The valid styles are XmTreeDirect or XmTreeLadder.
 .SH horizontalNodeSpace
 .PP
 .SH verticalNodeSpace
 .PP
 The amount of space between each node in the tree and it nearest neighbor.
 
-The following resources are inherited from the XiHierarchy widget:
+The following resources are inherited from the XmHierarchy widget:
 
 .TS
 tab (%);
@@ -122,14 +122,14 @@ resource is the foreground color of the Tree widget.
 .PP
 The width of a connection line between a node and its parent
 .PP 
-The following constraint resources are inherited from the XiHierarchy widget:
+The following constraint resources are inherited from the XmHierarchy widget:
 .PP
 .TS
 tab (%);
 l l l l.
 Name%Class%Type%Initial Value
 insertBefore%InsertBefore%Widget%NULL
-nodeState%NodeState%XiHierarchyNodeState%Open
+nodeState%NodeState%XmHierarchyNodeState%Open
 parentNode%ParentNode%Widget%NULL
 .TE
 .PP
@@ -148,7 +148,7 @@ the hierarchy. As the state of nodes change the tree will attempt to resize itse
 tain its current configuration. If the tree is forced larger than the desired size the nodes 
 will be centered vertically and flush to the left edge of the tree widget. If the tree is 
 forced smaller, some nodes may be moved or drawn outside the end of the tree. For 
-this reason it is usually desirable to put the tree into a Scrolled Window or XiPorthole 
+this reason it is usually desirable to put the tree into a Scrolled Window  
 widget.
 .PP
 .SH SEE ALSO
