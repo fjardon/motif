@@ -557,6 +557,6 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateSimplePulldownMenu.3 \
     XmVaCreateSimpleRadioBox.3 \
     XmWidgetGetBaselines.3 \
-    XmWidgetGetDisplayRect.3 \
+    XmWidgetGetDisplayRect.3 
 
  
