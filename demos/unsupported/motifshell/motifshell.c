@@ -304,7 +304,7 @@ char *GetSource (char *fileptr)
   {
     /* Try looking in MSHELLDIR. */
     char pathname[1024];
-    strcpy(pathname, MSHELLDIR);
+    /* strcpy(pathname, MSHELLDIR); */
     strcat(pathname, "/");
     strcat(pathname, fileptr);
       
