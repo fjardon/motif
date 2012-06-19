@@ -19,4 +19,16 @@ SUBDIRS = airport \
          workspace \
          hellomotifi18n \
          tooltips \
-         newwidgets
+         ButtonBox \
+         Column \
+         FontSel \
+         Outline \
+         TabStack \
+         Tree \
+         ColorSel \
+         Combo2 \
+         Ext18List \
+         IconB \
+         Paned \
+         pixmaps
+
