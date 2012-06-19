@@ -4,7 +4,7 @@ EXTRA_DIST = BUGREPORT \
              Imakefile \
              LICENSE \
              OPENBUGS \
-             README RELEASE \
+             README RELEASE RELNOTES \
              INSTALL.configure INSTALL.imake
 
 MAINTAINERCLEANFILES = Makefile.in \

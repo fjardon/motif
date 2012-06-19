@@ -7,14 +7,14 @@ AM_MAINTAINER_MODE
 
 dnl The version of the OpenMotif libraries
 CURRENT=4
-REVISION=0
+REVISION=1
 AGE=2
 AC_SUBST(CURRENT)
 AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(openMotif,2.2.0)
+AM_INIT_AUTOMAKE(openMotif,2.2.1)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
@@ -242,6 +242,7 @@ clients/xmbind/Makefile \
 config/Makefile \
 config/cf/Makefile \
 config/imake/Makefile \
+config/util/Makefile \
 config/makedepend/Makefile \
 include/Makefile \
 include/Dt/Makefile \
