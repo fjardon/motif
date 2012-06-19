@@ -13,3 +13,6 @@ RegEdit.h RegEditI.h
 LDADD = ../../../lib/Xm/libXm.la libXmd.a
 
 INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
+
+EXTRA_DIST = Imakefile
+

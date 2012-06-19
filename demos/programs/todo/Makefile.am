@@ -4,7 +4,7 @@ man_MANS = todo.man
 
 data_DATA = README XmdTodo.ad example.todo todo.help
 
-EXTRA_DIST = README XmdTodo.ad example.todo todo.man todo.help
+EXTRA_DIST = README XmdTodo.ad example.todo todo.man todo.help Imakefile
 
 
 bin_PROGRAMS = todo

@@ -1,6 +1,8 @@
 bindir = ${prefix}/share/Xm/Outline
 datadir = ${prefix}/share/Xm/Outline
 
+EXTRA_DIST = Imakefile
+
 bin_PROGRAMS = outline
 outline_SOURCES = outline.c
 

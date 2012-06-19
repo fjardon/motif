@@ -13,7 +13,8 @@ EXTRA_DIST = bee.xpm bomb.xpm cherry.xpm \
     text.xpm \
     README  \
     sampler2_0.man \
-    sampler2_0.help
+    sampler2_0.help \
+    Imakefile
     
 bin_PROGRAMS = sampler2_0
 data_DATA = README sampler2_0.help

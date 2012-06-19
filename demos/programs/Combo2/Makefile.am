@@ -4,7 +4,7 @@ datadir = ${prefix}/share/Xm/combo2
 bin_PROGRAMS = combo
 data_DATA = Combo.ad
 
-EXTRA_DIST = Combo.ad
+EXTRA_DIST = Combo.ad Imakefile
 SOURCES = combo.c
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la

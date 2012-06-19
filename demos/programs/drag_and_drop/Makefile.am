@@ -8,4 +8,6 @@ DNDDemo_SOURCES = DNDDemo.c DNDDraw.c
 
 simpledrop_SOURCES = simpledrop.c
 
+EXTRA_DIST = Imakefile
+
 noinst_HEADERS = DNDDemo.h

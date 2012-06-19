@@ -1,6 +1,8 @@
 bindir = ${prefix}/share/Xm/Icon
 datadir = ${prefix}/share/Xm/Icon
 
+EXTRA_DIST = Imakefile
+
 data_DATA = small.bm
 
 bin_PROGRAMS = iconbuttondemo

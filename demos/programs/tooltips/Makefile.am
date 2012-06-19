@@ -1,6 +1,8 @@
 bindir = ${prefix}/share/Xm/tooltips
 datadir = ${prefix}/share/Xm/tooltips
 
+EXTRA_DIST = Imakefile
+
 bin_PROGRAMS = tooltips
 
 tooltips_SOURCES = tooltips.c

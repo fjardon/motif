@@ -1,6 +1,8 @@
 bindir = ${prefix}/share/Xm/Ext18list
 datadir = ${prefix}/share/Xm/Ext18list
 
+EXTRA_DIST = Imakefile
+
 bin_PROGRAMS = ext18list
 ext18list_SOURCES = bxutil-c.c  \
          callbacks-c.c  \

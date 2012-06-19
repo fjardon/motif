@@ -7,6 +7,8 @@ tabstack_SOURCES = bxutils.c  \
             creation.c  \
             main.c \
             creation.h
+      
+EXTRA_DIST = Imakefile
             
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la

@@ -5,7 +5,7 @@ data_DATA = XmdSetDate.ad README
 bin_PROGRAMS = setDate
 man_MANS = setDate.man
 
-EXTRA_DIST = XmdSetDate.ad README setDate.man
+EXTRA_DIST = XmdSetDate.ad README setDate.man Imakefile
 SOURCES = setDate.c
 
 LDADD = ../../../lib/Xm/libXm.la

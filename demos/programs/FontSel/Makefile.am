@@ -1,6 +1,8 @@
 bindir = ${prefix}/share/Xm/fontsel
 datadir = ${prefix}/share/Xm/fontsel
 
+EXTRA_DIST = Imakefile
+
 bin_PROGRAMS = fontsel
 fontsel_SOURCES = callbacks-c.c \
                   creation-c.c \

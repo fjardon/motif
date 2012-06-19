@@ -4,7 +4,7 @@ datadir = ${prefix}/share/Xm/helloint
 data_DATA = README helloint.uid
 
 SUBDIRS = C english french hebrew japan japanese swedish
-EXTRA_DIST = README helloint.uil
+EXTRA_DIST = README helloint.uil Imakefile
 CLEANFILES = helloint.uid
 
 bin_PROGRAMS = helloint

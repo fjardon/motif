@@ -6,7 +6,7 @@ man_MANS = simpleDemo.man
 bin_PROGRAMS = simpleDemo
 simpleDemo_SOURCES = simpleDemo.c
 
-EXTRA_DIST = simpleDemo.man README
+EXTRA_DIST = simpleDemo.man README Imakefile
 
 INCLUDES = -I$(srcdir)/../../../../lib \
            -I$(srcdir)/../../../lib ${X_CFLAGS} 

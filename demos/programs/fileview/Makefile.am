@@ -15,7 +15,7 @@ EXTRA_DIST = $(UILS) English.df French.df German.df \
         main.h \
         mainE.h \
         text.h \
-        textE.h
+        textE.h Imakefile
         
 UILS= French.uil German.uil English.uil
 

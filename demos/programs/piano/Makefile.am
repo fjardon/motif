@@ -11,7 +11,7 @@ EXTRA_DIST = piano.images \
              README \
              Inv8_part1.piano \
              Inv8_part2.piano \
-             piano.man
+             piano.man Imakefile
              
 LDADD = ../../../lib/Xm/libXm.la -lm
 

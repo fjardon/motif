@@ -8,7 +8,8 @@ EXTRA_DIST = dog.uil plane.uil superman.uil xmanimate.uil \
     superman3.xbm \
     superman4.xbm \
     superman5.xbm \
-    superman6.xbm
+    superman6.xbm \
+    Imakefile
 
 CLEANFILES =  dog.uid plane.uid superman.uid xmanimate.uid
 

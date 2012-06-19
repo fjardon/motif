@@ -16,7 +16,8 @@ filemanager_SOURCES = filemanager.c \
     convert.c \
     interface.c
 
-EXTRA_DIST = filemanager.man filemanager.help XmdFilemanager.ad
+EXTRA_DIST = filemanager.man filemanager.help XmdFilemanager.ad \
+           Imakefile
 
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la
 INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib ${X_CFLAGS} 
