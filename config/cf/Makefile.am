@@ -23,4 +23,4 @@ EXTRA_DIST = Imakefile Amoeba.cf Amoeba.cf apollo.cf bsd.cf bsdi.cf \
 	     xf86site.def xf86.tmpl xfree86.cf \
 
 MAINTAINERCLEANFILES =
-SUBDIRS	= util
+SUBDIRS	= 
