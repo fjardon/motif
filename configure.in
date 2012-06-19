@@ -240,10 +240,9 @@ clients/mwm/WmWsmLib/Makefile \
 clients/uil/Makefile \
 clients/xmbind/Makefile \
 config/Makefile \
-dnl config/cf/Makefile \
-dnl config/imake/Makefile \
-dnl config/makedepend/Makefile \
-config/util/Makefile \
+config/cf/Makefile \
+config/imake/Makefile \
+config/makedepend/Makefile \
 include/Makefile \
 include/Dt/Makefile \
 lib/Makefile \

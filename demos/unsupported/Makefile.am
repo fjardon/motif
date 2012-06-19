@@ -7,5 +7,4 @@ SUBDIRS =   dainput\
             Exm\
             aicon\
             dogs\
-            uilsymdump\
-	    unsupported
+            uilsymdump
