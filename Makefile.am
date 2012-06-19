@@ -5,7 +5,7 @@ EXTRA_DIST = BUGREPORT \
              LICENSE \
              OPENBUGS \
              README RELEASE RELNOTES \
-             INSTALL.configure INSTALL.imake
+             INSTALL.configure INSTALL.imake Makefile.imake-pure
 
 MAINTAINERCLEANFILES = Makefile.in \
              configure libtool \

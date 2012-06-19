@@ -1,4 +1,5 @@
-EXTRA_DIST = dogs.uil Dog.uil Square.uil bark.bm  down.bm  up.bm
+EXTRA_DIST = dogs.uil Dog.uil Square.uil bark.bm  down.bm  up.bm \
+   Imakefile
 
 noinst_HEADERS = Dog.h \
 DogP.h \
@@ -22,13 +23,4 @@ SUFFIXES = .uil .uid
 .uil.uid:
 	../../../clients/uil/uil $< -I$(srcdir) -o $@
 
-#        INCLUDES = -I.
-#         DEPLIBS = MrmClientDepLibs
-# LOCAL_LIBRARIES = MrmClientLibs
-#         DEFINES = /* -DOLD_DRAW_NEEDED */
-# 
-#            SRCS = dogs.c Dog.c Square.c
-#            OBJS = dogs.o Dog.o Square.o
-# 
-# MComplexProgramTarget(dogs,$(LOCAL_LIBRARIES),NullParameter)
-# MSimpleUidTarget(dogs)
+
