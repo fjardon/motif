@@ -1,0 +1,286 @@
+-------------------------------------------------------
+
+
+                               Motif 2.2.1
+
+                              Release Notes
+
+                             The Open Group
+                                   and
+                     Integrated Computer Solutions
+
+
+This document provides Release notes for Motif 2.2.1.
+This contains information on what is new in Motif 2.2.1
+Please see the COPYING file included with this release.
+
+
+Introduction
+
+This document and accompanying text files contain important
+information. Please read them carefully before starting the build and
+installation procedures.
+
+There are two ways to build Motif: (Imake and AutoTools)
+
+IF you are using Imake please read INSTALL.imake for notes on how
+to build and install this product using Imake.
+
+Please see the file INSTALL.configure on how to build and install
+this product using the autoconf tools. This method is not yet supported
+and doesn't always work. The recommended build method is still using
+Imake.
+
+
+
+1 What is Motif 2.2
+
+Motif is the freely available source code distribution for a
+user interface component toolkit.  Motif is built on top
+of the standard X Toolkit(Xt) and X11 libraries.
+
+1.1 Overview of Motif
+
+Motif 2.2 is an updated version of 2.1.  Any applications
+built against a previous 2.X release of Motif will be
+compatible with this release.  This is a source code release.
+After downloading the distribution, it will need to be unpacked
+and compiled.  The distribution contains the following items:
+
+     libXm source code and include files
+     Motif reference documentation (man pages)
+     Utility libraries
+     Demo programs
+
+
+2 What is unchanged in Motif 2.2
+
+This is an update release, with alls of the existing functional-
+ity (widgets, convenience functions, resources, etc) unchanged.
+There have been no widgets removed from the set, and several have
+been added.
+
+3 What is new in Motif 2.2
+
+The major new functionality in 2.2 is the addition of ten new widgets to the
+existing toolkit.  These widgets expand Motif's capabilities in several
+areas, including geometry management, resource specification, and user
+interaction.
+
+Motif 2.2 also adds in user-defined "ToolTips" to all widgets that are a
+subclass of XmPrimitive.  Any widget that is a child of a VendorShell gains
+this functionality.
+
+All libraries used in this release are compatible with previous
+Motif 2.X releases. However, applications or widgets that access internal
+Motif structures may require a recompile. See Section 7 for details.  
+
+
+3.1 ToolTips
+
+All widgets in Motif that are subclassed from XmPrimitive or XmGadget
+support the ability to display user-defined "ToolTips", small labels that
+appear in their own shell over the designated widget.  By setting the
+XmtoolTipEnable resource on the main application shell (or any subclass of
+VendorShell), each child widget gains the ability to show a ToolTip.  The
+text for each widget's tooltip is contained in the XmtoolTipString resource
+for that widget.
+
+3.2 New Widgets
+
+Motif 2.2 adds ten new widgets to the toolkit. 
+
+3.2.1 XmButtonBox
+
+The XmRowColumn widget is often used as a general layout manager, when in
+actuality it was designed for menu support.  As a result, application
+programmers often end up fighting with the widget to make it behave as they
+want.  To rectify this, the XmButtonBox was created to manage children
+(usually buttons) specifically in a single row or column layout.
+
+3.2.2 XmColorSelector
+
+This widget lets an end user choose a color using RGB sliders or by
+specifying a color name taken from the RBG database.  The selected color is
+displayed dynamically.
+
+3.2.3 XmColumn
+
+The XmColumn widget displays its children stacked in a column, each with an
+optional associated label.  The labels appear in one column and the children
+in another.  This greatly simplifies the creation of entry forms.
+
+3.2.4 XmDataField
+
+A subclass of XmTextField, the XmDataField widget handles display and entry
+of data as text.  In addition to the normal functionality of XmTextField, it
+adds regular expression parsing and input validity checking.
+
+3.2.5 XmExt18List
+
+The Extended Internationalized (I18N) List widget supports multiple columns,
+colored text, internationalized string, and pixmap display.  The list can be
+scrolled horizontally or vertically.  Additionally, it provides hooks for
+adding user-defined searching and sorting functionality.
+
+3.2.6 XmFontSelector
+
+The XmFontSelector widget introduces a widget-based method for end users to
+dynamically specify an X Logical Font Description (XLFD) interactively.  Font
+family, size, scaling, and encoding are all selectable, and the resulting
+font set is displayed.  Non-XLFD fonts are also displayable through this
+widget.  Wildcarding is also supported.
+
+3.2.7 XmIconBox
+
+This widget lays out its children on a grid, forcing each child to be the
+same size.  New cells are automatically added when it is resized.  The
+location of each child widget is specified as an X and Y location on the
+grid.
+
+3.2.8 XmIconButton
+
+Similar to the existing XmPushButton, the XmIconButton provides a selectable
+object that can simultaneously display both a label and a pixmap.  It
+supports the same set of callbacks as PushButton does.
+
+3.2.9 XmTabStack
+
+Designed to be a light-weight solution, the XmTabStack manages a group of
+widgets but only allows one child to be visible at a time.  Children are
+selected by selected the associated tab field.  Tabs can be configured to
+display on any side of the TabStack.
+
+3.2.10 XmTree
+
+The XmTree widget, another new container, displays its children in a
+tree-like format, showing a virtual parent-child relationship.  Portions of
+this hierarchy can be opened and closed dynamically by the user.
+
+3.3 Autotool Build Process
+It is now possible to build Motif using the Autotools. Please see 
+the file INSTALL.configure on how to build and install this product using
+the autoconf tools. 
+
+The Autotools are distributed under the GPL (see http://www.gnu.org). In 
+providing this alternative build process, several configurations files were
+pre-generated that are covered by the GPL. In addition, during the build
+process itself, several files may be generated that are also covered by the
+GPL. None of these files are linked into Motif itself. They are
+exclusively used in controlling the building of Motif. Consequently,
+their inclusion with this distribution does not effect the license under
+which Motif is distributed. The GPL Licensing FAQ:
+http://www.gnu.org/licenses/gpl-faq.html provides more details on this type
+of use.
+
+4.  Motif Distribution
+
+4.1 Motif Source Tree
+
+The general layout of Motif is this:
+
+bitmaps/     Various XMB files
+clients/     mwm, uil, xmbind
+config/      configuration, make, and imake files
+demos/       various supported (and unsupported) demos
+doc/         man pages
+include/     included files for building and using Motif
+lib/         source files for the Motif libraries
+localized/   localization support
+tools/       WML support
+BUGREPORT    template file for submitting bugs
+RELNOTES     This file
+REAMDE.configure building/installation instructions using configure
+REAMDE.imake building/installation instructions using imake
+
+4.2 Build Systems
+
+Motif 2.2 was built and tested on the following systems:
+
+     Darwin (MacOS X) 1.3.7
+     FreeBSD 4.4
+     Linux 2.4 (Redhat 7.2)
+
+In all cases the vendor's supplied compiler was used.
+
+4.3 OS Support
+
+The following platforms are supported operating systems:
+
+     Darwin (MacOS X) 1.3.7
+     FreeBSD          4.4
+     Linux            2.4  Redhat 7.2
+
+5 Filing Bug Reports
+
+If you find a reproducible bug in any of the Motif libraries
+or code, or an error in the documentation, please reference the
+BUGREPORT file and/or submit a bug report online at the Motif
+Development zone:
+
+http://bugs.motifzone.net
+
+The listing for the status of submitted bugs is maintained there.
+
+6. Documentation
+
+For postscript and pdf documentation (users guides
+and reference manuals), see URL
+http://www.opengroup.org/openmotif/docs/
+
+7. User Widget Compatibility Note
+
+Some structures in existing widgets have been changed in 
+Motif 2.2. This can cause compatibility problems that require
+a recompile if your application accesses any of the internal data
+structures of Motif Widgets and does not use the correct XmField 
+Macros. The most common situation for this problem is when your
+application uses internally developed widgets or widgets acquired
+from a third party. In this situation, please confirm that the 
+widgets use the XmField widgets. See the Motif 2.1 Widget Writer's 
+Guide (Section 14.2) for details.
+
+
+8. Change Log
+
+2.2.1 January 29, 2002
+
+a. The Test directory that contained the automated tests was 
+mentioned in the Release Notes but absent from source distribution. 
+The reference in the Release Notes was removed. The Tests are still
+available from the CVS tree.
+
+b. Due to an oversight, imake support was not included in 
+distribution. It was added back in this update.
+
+c. If an older version of Motif was installed, the Autoconf
+build would pick up the older #include files and fail. The
+Autoconf configuration files were updated to use the proper
+#include files.
+
+d. Formating errors in doc/man/man3/Makefile.am were corrected.
+
+e. The directory demos/unsupported/motifshell contained no source 
+code but was mentioned in configure.in. The proper source code was
+placed in this directory.
+
+f. ToolTip.c and SlideC.c were included in config.h twice. The
+extra reference was removed.
+
+g. The demos for the new widgets were originally placed in the
+directory demos/programs/newwidgets. To maintain consistency,
+they were moved to demos/programs.
+
+h. The Releases Notes specified the incorrect resource names for
+enabling tooltips and specifying the string. These typos were
+corrected. 
+
+i. Compatibility note for user developed widgets was added to
+Release Notes.
+
+
+
+
+2.2.0 January 28, 2002
+Initial Release
+
