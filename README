@@ -4,8 +4,8 @@ Please see the file RELNOTES for current Release information.
 
 There are two ways to build Motif: (imake and autotools)
 
-IF you are using imake please read INSTALL.imake for notes on how
-to build and install this product using imake. 
-
 Please see the file INSTALL.configure on how to build and install
 this product using the autoconf tools.
+
+IF you are using imake please read INSTALL.imake for notes on how
+to build and install this product using imake. 
