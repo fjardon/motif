@@ -20,7 +20,7 @@ EXTRA_DIST = Imakefile Amoeba.cf Amoeba.cf apollo.cf bsd.cf bsdi.cf \
 	     sunLib.tmpl sv3Lib.rules sv3Lib.tmpl sv4Lib.rules sv4Lib.tmpl \
 	     svr3.cf svr4.cf Threads.tmpl ultrix.cf usl.cf Win32.cf \
 	     Win32.rules WinLib.tmpl X11.rules X11.tmpl x386.cf xf86.rules \
-	     xf86site.def xf86.tmpl xfree86.cf \
+	     xf86site.def xf86.tmpl xfree86.cf 
 
 MAINTAINERCLEANFILES =
 SUBDIRS	= 
