@@ -4,5 +4,3 @@ EXTRA_DIST = Imakefile aminstall.sh bsdinst.sh checktree.c chownxterm.c \
 	     makestrs makestrs.c makestrs.man mdepend.cpp mergelib.cpp \
 	     mkdirhier.man mkdirhier.sh mkshadow syminst.sh x11mf.sh \
 	     xmkmf.cpp xmkmf.man
-MAINTAINERCLEANFILES =
-SUBDIRS	= 
