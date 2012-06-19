@@ -11,7 +11,7 @@ libtoolize --force --automake
 aclocal
 autoconf
 autoheader
-automake --foreign --add-missing
+automake --foreign  --include-deps --add-missing
 
 if test -z "$*"; then
         echo "I am going to run ./configure with no arguments - if you wish "
