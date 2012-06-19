@@ -1,4 +1,4 @@
-! This file contains strings which are used in the EPak for naming resources,
+! This file contains strings which are used in the OpenMotif for naming resources,
 ! resource classes, and resource types. The strings are compiled into a
 ! data file and referred to so that they occupy only one unit of data space.
 !

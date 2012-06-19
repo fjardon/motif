@@ -1,16 +1,22 @@
-EXTRA_DIST = $(UILS) English.df French.df German.df \
-file.h \
-fileE.h \
-fileview.h \
-main.h \
-mainE.h \
-text.h \
-textE.h
+bindir = ${prefix}/share/Xm/fileview
+datadir = ${prefix}/share/Xm/fileview
+
+data_DATA = French.uid German.uid English.uid \
+            English.df French.df German.df 
+         
 
 bin_PROGRAMS = fileview
-
 fileview_SOURCES = main.c text.c file.c
 
+EXTRA_DIST = $(UILS) English.df French.df German.df \
+        file.h \
+        fileE.h \
+        fileview.h \
+        main.h \
+        mainE.h \
+        text.h \
+        textE.h
+        
 UILS= French.uil German.uil English.uil
 
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la

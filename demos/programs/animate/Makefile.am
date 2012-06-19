@@ -1,18 +1,26 @@
+bindir = ${prefix}/share/Xm/animate
+datadir = ${prefix}/share/Xm/animate
+
+
 EXTRA_DIST = dog.uil plane.uil superman.uil xmanimate.uil \
-superman1.xbm \
-superman2.xbm \
-superman3.xbm \
-superman4.xbm \
-superman5.xbm \
-superman6.xbm
+    superman1.xbm \
+    superman2.xbm \
+    superman3.xbm \
+    superman4.xbm \
+    superman5.xbm \
+    superman6.xbm
 
 CLEANFILES =  dog.uid plane.uid superman.uid xmanimate.uid
+
+data_DATA = dog.uid plane.uid superman.uid xmanimate.uid
 
 bin_PROGRAMS = xmanimate
 
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Mrm/libMrm.la ../../../lib/Xm/libXm.la
 
-INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib ${X_CFLAGS} 
+INCLUDES = -I$(srcdir)/../../../lib \
+           -I$(srcdir)/../../lib \
+           ${X_CFLAGS} 
 
 all: dog.uid plane.uid superman.uid xmanimate.uid
 

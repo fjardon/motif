@@ -1,7 +1,11 @@
-EXTRA_DIST = periodic.uil periodic_l.uil
+
+bindir = ${prefix}/share/Xm/periodic
+datadir = ${prefix}/share/Xm/periodic
 
 bin_PROGRAMS = periodic
+data_DATA = periodic.uid XmdPeriodic.ad README
 
+EXTRA_DIST = periodic.uil periodic_l.uil XmdPeriodic.ad
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
 
 INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
@@ -13,3 +17,5 @@ periodic.uid: periodic.uil
 
 clean-local:
 	$(RM) periodic.uid
+
+    

@@ -1,3 +1,6 @@
+bindir = ${prefix}/share/Xm/tooltips
+datadir = ${prefix}/share/Xm/tooltips
+
 bin_PROGRAMS = tooltips
 
 tooltips_SOURCES = tooltips.c

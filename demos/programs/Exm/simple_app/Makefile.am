@@ -1,7 +1,14 @@
-bin_PROGRAMS = simpleDemo
+bindir = ${prefix}/share/Xm/Exm/simple_app
+datadir = ${prefix}/share/Xm/Exm/simple_app
 
+data_DATA = README
+man_MANS = simpleDemo.man
+bin_PROGRAMS = simpleDemo
 simpleDemo_SOURCES = simpleDemo.c
 
-INCLUDES = -I$(srcdir)/../../../../lib -I$(srcdir)/../../../lib ${X_CFLAGS} 
+EXTRA_DIST = simpleDemo.man README
 
-LDADD = ../../../../lib/Xm/libXm.la ../../../lib/Exm/libExm.a
+INCLUDES = -I$(srcdir)/../../../../lib \
+           -I$(srcdir)/../../../lib ${X_CFLAGS} 
+LDADD = ../../../../lib/Xm/libXm.la \
+        ../../../lib/Exm/libExm.a

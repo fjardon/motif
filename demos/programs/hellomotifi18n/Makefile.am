@@ -1,7 +1,10 @@
+bindir = ${prefix}/share/Xm/helloint
+datadir = ${prefix}/share/Xm/helloint
+
+data_DATA = README helloint.uid
+
 SUBDIRS = C english french hebrew japan japanese swedish
-
 EXTRA_DIST = README helloint.uil
-
 CLEANFILES = helloint.uid
 
 bin_PROGRAMS = helloint
