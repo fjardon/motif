@@ -1,3 +1,3 @@
 EXTRA_DIST = Imakefile
 MAINTAINERCLEANFILES =
-SUBDIRS	= util
+SUBDIRS	= cf imake makedepend util
