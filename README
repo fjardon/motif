@@ -7,7 +7,4 @@ IF you are using Imake please read INSTALL.imake for notes on how
 to build and install this product using Imake. 
 
 Please see the file INSTALL.configure on how to build and install
-this product using the autoconf tools. This method is not yet supported
-and doesn't always work. The recomended build method is still using
-Imake.
-
+this product using the autoconf tools.
