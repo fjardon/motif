@@ -86,20 +86,25 @@ XMTHEME_DIST = @XMTHEME_DIST@
 X_XMU = @X_XMU@
 YACC = @YACC@
 
-bindir = ${prefix}/share/Xm/Tree
-datadir = ${prefix}/share/Xm/Tree
+bindir = ${prefix}/share/Xm/Icon
+datadir = ${prefix}/share/Xm/Icon
 
-bin_PROGRAMS = tree
-tree_SOURCES = bxutil-c.c  tree.c
+data_DATA = small.bm
+
+bin_PROGRAMS = iconbuttondemo
+iconbuttondemo_SOURCES = bxutil-c.c  iconbuttondemo.c small.bm
 
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 
-INCLUDES = -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+INCLUDES = -I.. \
+           -I$(srcdir)/$(TOPDIR)/lib \
+           ${X_CFLAGS} 
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../include/config.h
 CONFIG_CLEAN_FILES = 
-bin_PROGRAMS =  tree$(EXEEXT)
+bin_PROGRAMS =  iconbuttondemo$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
@@ -111,15 +116,17 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-tree_OBJECTS =  bxutil-c.$(OBJEXT) tree.$(OBJEXT)
-tree_LDADD = $(LDADD)
-tree_DEPENDENCIES =  $(TOPDIR)/lib/Xm/libXm.la
-tree_LDFLAGS = 
+iconbuttondemo_OBJECTS =  bxutil-c.$(OBJEXT) iconbuttondemo.$(OBJEXT)
+iconbuttondemo_LDADD = $(LDADD)
+iconbuttondemo_DEPENDENCIES =  $(TOPDIR)/lib/Xm/libXm.la
+iconbuttondemo_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DATA =  $(data_DATA)
+
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -127,14 +134,14 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(tree_SOURCES)
-OBJECTS = $(tree_OBJECTS)
+SOURCES = $(iconbuttondemo_SOURCES)
+OBJECTS = $(iconbuttondemo_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .obj .s
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --foreign --include-deps demos/programs/Tree/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --foreign --include-deps demos/programs/IconB/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -210,9 +217,28 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-tree$(EXEEXT): $(tree_OBJECTS) $(tree_DEPENDENCIES)
-	@rm -f tree$(EXEEXT)
-	$(LINK) $(tree_LDFLAGS) $(tree_OBJECTS) $(tree_LDADD) $(LIBS)
+iconbuttondemo$(EXEEXT): $(iconbuttondemo_OBJECTS) $(iconbuttondemo_DEPENDENCIES)
+	@rm -f iconbuttondemo$(EXEEXT)
+	$(LINK) $(iconbuttondemo_LDFLAGS) $(iconbuttondemo_OBJECTS) $(iconbuttondemo_LDADD) $(LIBS)
+
+install-dataDATA: $(data_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(datadir)
+	@list='$(data_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(datadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(datadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(datadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(datadir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-dataDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(data_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(datadir)/$$p; \
+	done
 
 tags: TAGS
 
@@ -245,7 +271,7 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = demos/programs/Tree
+subdir = demos/programs/IconB
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
@@ -269,20 +295,20 @@ installcheck: installcheck-am
 install-exec-am: install-binPROGRAMS
 install-exec: install-exec-am
 
-install-data-am:
+install-data-am: install-dataDATA
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-dataDATA
 uninstall: uninstall-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(bindir)
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(datadir)
 
 
 mostlyclean-generic:
@@ -324,13 +350,14 @@ maintainer-clean: maintainer-clean-am
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+clean-libtool maintainer-clean-libtool uninstall-dataDATA \
+install-dataDATA tags mostlyclean-tags distclean-tags clean-tags \
+maintainer-clean-tags distdir info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
