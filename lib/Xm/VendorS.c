@@ -52,6 +52,11 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include <Xm/UnitTypeT.h>
 #include <Xm/VendorSEP.h>
 #include <Xm/VendorSP.h>
+
+#ifdef HAVE_X11_XMU_EDITRES_H
+#include <X11/Xmu/Editres.h>
+#endif
+
 #include <Xm/XmosP.h>		/* for bzero */
 #include "BaseClassI.h"
 #include "CallbackI.h"
@@ -1766,6 +1771,11 @@ Initialize(
 	 XmDisplay xmDisplay = (XmDisplay) XmGetXmDisplay (XtDisplay(new_w));
 
 	 xmDisplay->display.shellCount += 1;
+
+#ifdef HAVE_LIBXMU
+	XtAddEventHandler(new_w, (EventMask)0, True, _XEditResCheckMessages, NULL);
+#endif
+
     }
 
     /* install the Motif warning handler that works with XmeWarning */
