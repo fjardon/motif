@@ -7,4 +7,4 @@ bin_PROGRAMS = earth
 SOURCES = earth.c
 EXTRA_DIST = terre.xbm earth.man Imakefile
 LDADD = ../../../lib/Xm/libXm.la
-INCLUDES = -I$(srcdir)/../../../lib
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
