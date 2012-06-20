@@ -423,7 +423,9 @@ void XmeDrawSeparator(Display *display, Drawable d,
 				  shadow_thick/2, 0);
 	   }
        if (i*2*shadow_dash_size < (height - 2*margin))
-           if (shadow_thick < 4) {
+       {
+           if (shadow_thick < 4) 
+           {
 	       XDrawLine(display, d, top_gc, 
 			 center - shadow_thick/2, 
 			 y + margin + 2*i*shadow_dash_size, 
@@ -442,7 +444,8 @@ void XmeDrawSeparator(Display *display, Drawable d,
 				  (shadow_thick/2)*2, 
 				  (height - 2*margin) - i*2*shadow_dash_size, 
 				  shadow_thick/2, 0);
-	   }
+           }
+        }
    }
    _XmAppUnlock(app);
 }

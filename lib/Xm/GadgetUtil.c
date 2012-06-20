@@ -204,9 +204,11 @@ _XmDispatchGadgetInput(
         Mask mask )
 {
         XmGadget g = (XmGadget) wid ;
-   if (g->gadget.event_mask & mask && 
+   if ((g->gadget.event_mask & mask) && 
        XtIsSensitive ((Widget)g) && XtIsManaged ((Widget)g))
-      if (event != NULL) {
+   {
+      if (event != NULL) 
+      {
          XEvent synth_event;
 
 #define CopyEvent(source, dest, type) \
@@ -279,9 +281,13 @@ _XmDispatchGadgetInput(
          (*(((XmGadgetClass) (g->object.widget_class))->
              gadget_class.input_dispatch)) ((Widget) g, 
                                                (XEvent *) &synth_event, mask) ;
-      } else
+      } 
+      else
+      {
          (*(((XmGadgetClass) (g->object.widget_class))->
              gadget_class.input_dispatch)) ((Widget) g,
-                                                      (XEvent *) event, mask) ;
+                                                  (XEvent *) event, mask) ;
+      }
+   }
 }
 

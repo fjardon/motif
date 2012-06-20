@@ -1404,10 +1404,16 @@ SelfInsert(Widget w,
 	if (nextPos > lastPos) nextPos = lastPos;
       } else
 	if (nextPos >= lastPos) 
+        {
 	  if (lastPos < tw->text.source->data->length)
+          {
 	    nextPos = lastPos-1;
+          }
 	  else
+          {
 	    nextPos = lastPos;
+          }
+        }
     }
     block.ptr = str;
     block.length = n;
@@ -1693,18 +1699,23 @@ KeySelection(Widget w,
   if (*num_params == 0) {
     position = cursorPos;
     ProcessSelectParams(w, event, &left, &right, &position);
-  } else if (*num_params > 0) 
+  } else if (*num_params > 0)
+  {   
+       
     if(XmDirectionMatch(XmPrim_layout_direction(tw),
-			XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
+			XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) 
+    {
       if (_XmConvertActionParamToRepTypeId((Widget) w,
 				 XmRID_TEXT_VERTICAL_DIRECTION_ACTION_PARAMS,
-				 params[0], False, &value) == True) {
+				 params[0], False, &value) == True) 
+      {
 	SetAnchorBalancing(tw, cursorPos);
 	ProcessHorizontalParams(w, event, params, num_params, &left,
 				&right, &position);
       } else if (_XmConvertActionParamToRepTypeId((Widget) w,
 			       XmRID_TEXT_HORIZONTAL_DIRECTION_ACTION_PARAMS,
-			       params[0], False, &value) == True) {
+			       params[0], False, &value) == True) 
+      {
         /* The only legal values for this reptype are "right" and "left". If
 	   the parameter is a valid reptype, then it must be one of those
 	   values. */
@@ -1714,7 +1725,9 @@ KeySelection(Widget w,
 	DisplayInsertionPoint(tw);
 	return;
       }
-    } else {
+   } 
+    else 
+    {
 
       if (_XmConvertActionParamToRepTypeId((Widget) w,
 			         XmRID_TEXT_HORIZONTAL_DIRECTION_ACTION_PARAMS,
@@ -1738,6 +1751,7 @@ KeySelection(Widget w,
 	return;
       }
     }
+  }
   cursorPos = position;
   
   if (position < 0 || position > tw->text.last_position) {
@@ -1851,7 +1865,9 @@ SetNavigationAnchor(XmTextWidget tw,
       if (old_position < left || old_position > right)
 	/* start outside selection - anchor at start position */
 	data->anchor = old_position;
-      else if (!has_selection || left <= new_position && new_position <= right)
+      else if (!has_selection || 
+          ((left <= new_position) && 
+          (new_position <= right)))
 	/* no selection, or moving into selection */
 	SetAnchorBalancing(tw, old_position);
       else
@@ -1868,7 +1884,8 @@ SetNavigationAnchor(XmTextWidget tw,
     if (old_position < left || old_position > right)
       /* start outside selection - anchor at start position */
       data->anchor = old_position;
-    else if (!has_selection || left <= new_position && new_position <= right)
+    else if (!has_selection || 
+        ((left <= new_position) && (new_position <= right)))
       /* no selection, or moving into selection */
       SetAnchorBalancing(tw, old_position);
     else

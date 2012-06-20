@@ -1102,7 +1102,7 @@ _XmRCArmAndActivate(
 {
    XmRowColumnWidget m = (XmRowColumnWidget) w ;
    int i;
-   XmCascadeButtonWidget child;
+   XmCascadeButtonWidget child = NULL;
    XmMenuState mst = _XmGetMenuState((Widget)w);
    Time _time;
   

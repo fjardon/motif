@@ -1454,7 +1454,7 @@ HSlideLeftArrowCallback(Widget w, XtPointer client_data, XtPointer junk)
      * Don't bother if we're already as far left as we can go
      */
     if (XmI18List_left_loc(ilist) <= 0) {
-        register int i, begin, end, before;
+        register int i, begin, end, before = 0;
 
         for (i=0; i < XmI18List_num_columns(ilist); i++) {
             if (i == 0) 
@@ -1526,7 +1526,7 @@ HSlideRightArrowCallback(Widget w, XtPointer client_data, XtPointer junk)
      */
     width = GetListWidth((Widget) ilist);
     if ((int)width > (int)(i + ilist->core.width)) {
-        register int begin, end, before;
+        register int begin, end, before = 0;
 
         for (i=0; i < XmI18List_num_columns(ilist); i++) {
             if (i == 0) 

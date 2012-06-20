@@ -1943,14 +1943,20 @@ Initialize(
 	new_w->core.width = 1; 
       
       if ((new_w->label._acc_text != NULL) && (new_w->toggle.ind_on))
+      {
 	if (LayoutIsRtoLP(new_w))
+        {
 	  new_w->label.acc_TextRect.x = new_w->primitive.highlight_thickness +
 	    new_w->primitive.shadow_thickness + new_w->label.margin_width;
+      }
 	else
+        {
 	  new_w->label.acc_TextRect.x = new_w->core.width -
 	    new_w->primitive.highlight_thickness -
 	      new_w->primitive.shadow_thickness - new_w->label.margin_width -
 		  new_w->label.margin_right + LABEL_ACC_PAD;
+      }
+    }
     }
   
   if (request->core.height == 0)

@@ -3750,7 +3750,7 @@ InsertChar(Widget w,
 {
   XmTextFieldWidget tf = (XmTextFieldWidget) w;
   char insert_string[TEXT_MAX_INSERT_SIZE + 1]; /* NULL-terminated below */
-  XmTextPosition cursorPos, nextPos;
+  XmTextPosition cursorPos =0 , nextPos = 0;
   wchar_t * wc_insert_string;
   int insert_length, i;
   int num_chars;
@@ -4199,14 +4199,21 @@ SetNavigationAnchor(XmTextFieldWidget tf,
   if (!tf->text.add_mode) {
     if (extend) {
       if (old_position < left || old_position > right)
+      {
 	/* start outside selection - anchor at start position */
 	tf->text.prim_anchor = old_position;
-      else if (!has_selection || left <= new_position && new_position <= right)
+    }
+      else if (!has_selection || 
+          ((left <= new_position) && (new_position <= right)))
+      {
 	/* no selection, or moving into selection */
 	SetAnchorBalancing(tf, old_position);
+    }
       else
+      {
 	/* moving to outside selection */
 	SetAnchorBalancing(tf, new_position);
+    }
     } else {
       if (has_selection) {
 	SetSelection(tf, old_position, old_position, True);
@@ -4215,14 +4222,21 @@ SetNavigationAnchor(XmTextFieldWidget tf,
     }
   } else if (extend) {
     if (old_position < left || old_position > right)
+    {
       /* start outside selection - anchor at start position */
       tf->text.prim_anchor = old_position;
-    else if (!has_selection || left <= new_position && new_position <= right)
+  }
+    else if (!has_selection || 
+        ((left <= new_position )&& (new_position <= right)))
+    {
       /* no selection, or moving into selection */
       SetAnchorBalancing(tf, old_position);
+  }
     else
+    {
       /* moving to outside selection */
       SetAnchorBalancing(tf, new_position);
+  }
   }
 }
 
@@ -4892,12 +4906,16 @@ ExtendScanSelection(XmTextFieldWidget tf,
     bal_point = (float)(((float)(right - left) / 2.0) + (float)left);
   
   if (!tf->text.extending)
-    if ((float)new_position < bal_point) {
+  {
+    if ((float)new_position < bal_point) 
+    {
       tf->text.prim_anchor = tf->text.orig_right;
-    } else if ((float)new_position > bal_point) {
+    } 
+    else if ((float)new_position > bal_point) 
+    {
       tf->text.prim_anchor = tf->text.orig_left;
     }
-  
+}
   tf->text.extending = True;
   
   switch (TextF_SelectionArray(tf)[tf->text.sarray_index]) {
@@ -5003,10 +5021,16 @@ SetScanSelection(XmTextFieldWidget tf,
       SetSelection(tf, 0, tf->text.string_length, True);
     tf->text.pending_off = False;
     if (event->type == ButtonPress)
+    {
       if ((tf->text.string_length) / 2 <= new_position)
+      {
 	cursorPos = tf->text.string_length;
+      }
       else
+      {
 	cursorPos = 0;
+      }
+    }
     break;
   }
   
@@ -5179,11 +5203,13 @@ DoExtendedSelection(Widget w,
   position = GetPosFromX(tf, tf->text.select_pos_x);
   
   if (!tf->text.extending)
+  {
     if ((float)position < bal_point) {
       tf->text.prim_anchor = tf->text.orig_right;
     } else if ((float)position > bal_point) {
       tf->text.prim_anchor = tf->text.orig_left;
     }
+  }
   
   tf->text.extending = True;
   
@@ -7716,14 +7742,20 @@ Resize(Widget w)
     text_width = FindPixelLength(tf, TextF_Value(tf), tf->text.string_length);
 
   if (text_width - new_width < -offset)
+  {
     if (text_width - new_width >= 0)
+    {
       tf->text.h_offset = (new_width - text_width) + TextF_MarginWidth(tf) + 
 	tf->primitive.shadow_thickness +
 	tf->primitive.highlight_thickness;
+  }
     else
+    {
       tf->text.h_offset = TextF_MarginWidth(tf) + 
 	tf->primitive.shadow_thickness +
 	tf->primitive.highlight_thickness;
+  }
+}
 
 #endif
   
@@ -8881,9 +8913,9 @@ PreeditDraw(XIC xic,
     Widget w = (Widget) client_data;
     XmTextFieldWidget tf = (XmTextFieldWidget) client_data;
     int escapement, insert_length = 0;
-    char *mb = NULL, *over_mb;
-    wchar_t *wc = NULL, *over_wc, *tab_wc, *recover_wc;
-    XmTextPosition startPos, endPos, cursorPos, rest_len, tmp_end;
+    char *mb = NULL, *over_mb = NULL;
+    wchar_t *wc = NULL, *over_wc = NULL, *tab_wc = NULL , *recover_wc = NULL;
+    XmTextPosition startPos, endPos, cursorPos, rest_len =0 , tmp_end;
     Boolean replace_res;
     XRectangle overall_ink;
     int i;

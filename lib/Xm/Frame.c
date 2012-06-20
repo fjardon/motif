@@ -565,10 +565,16 @@ Initialize(
    new_w->frame.processing_constraints = False;
 
    if (new_w->frame.shadow_type == (unsigned char) XmINVALID_DIMENSION)
+   {
       if (XtIsShell (XtParent(new_w)))
+      {
          new_w->frame.shadow_type = XmSHADOW_OUT;
+      }
       else
+      {
          new_w->frame.shadow_type = XmSHADOW_ETCHED_IN;
+      }
+  }
 
    if (!XmRepTypeValidValue( XmRID_SHADOW_TYPE, new_w->frame.shadow_type,
 			(Widget) new_w))
@@ -577,11 +583,16 @@ Initialize(
    }
 
    if (request->manager.shadow_thickness == XmINVALID_DIMENSION)
+   {
       if (XtIsShell (XtParent(new_w)))
+      {
          new_w->manager.shadow_thickness = 1;
+     }
       else
+      {
          new_w->manager.shadow_thickness = 2;
-
+     }
+  }
    new_w->frame.old_shadow_x = 0;
    new_w->frame.old_shadow_y = 0;
    new_w->frame.old_width = new_w->core.width;

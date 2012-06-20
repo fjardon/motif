@@ -2345,15 +2345,21 @@ Initialize(
 	new_w->rectangle.width = 1;
       
       if ((LabG__acceleratorText(new_w) != NULL) && (TBG_IndOn(new_w)))
+      {
 	if (LayoutIsRtoLG(new_w))
+        {
 	  LabG_AccTextRect(new_w).x =   new_w->gadget.highlight_thickness +
 	    new_w->gadget.shadow_thickness + LabG_MarginHeight(new_w);
+      }
 	else
+        {
 	  LabG_AccTextRect(new_w).x = new_w->rectangle.width -
 	    new_w->gadget.highlight_thickness -
 	      new_w->gadget.shadow_thickness -
 		LabG_MarginHeight(new_w) -
 		  LabG_MarginRight(new_w) + LABELG_ACC_PAD;
+      }
+      }
     }
   
   if (request->rectangle.height == 0) 

@@ -2107,7 +2107,7 @@ VerticalLayout(cw, child, child_size, col_width, col_height)
     Cardinal   i, kidCnt = cw->composite.num_children, j;
     Position   x, y;
     int        cWidth, cMaxWidth, cMinWidth, cHeight, cBorder, cbWidth, cbHeight,
-               lWidth, lHeight, cnt, hExtra, hEach, hLeft, valid, space;
+               lWidth, lHeight, cnt, hExtra, hEach =0 , hLeft = 0, valid, space;
     Dimension  width, height;
     Boolean    change, stretch;
 

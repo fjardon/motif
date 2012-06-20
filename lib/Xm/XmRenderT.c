@@ -913,9 +913,11 @@ _XmRenderTableFindFirstFont(XmRenderTable rendertable,
       *rend_ptr = _XmRTRenditions(rendertable)[i];
 
       if (_XmRendFont(*rend_ptr) != NULL)
+      {
 	if (_XmRendFontType(*rend_ptr) == XmFONT_IS_FONT) f_idx = i;
 	else if (_XmRendFontType(*rend_ptr) == XmFONT_IS_FONTSET) fs_idx = i;
-    }
+      }
+  }
   if (fs_idx >= 0)
     {
       *rend_ptr = _XmRTRenditions(rendertable)[fs_idx];
@@ -1498,11 +1500,11 @@ XmRenderTableCopy(XmRenderTable table,
 		  XmStringTag *tags,
 		  int tag_count)
 {
-  XmRenderTable		rt;
-  _XmRenderTable	t;
+  XmRenderTable		rt = NULL;
+  _XmRenderTable	t = NULL;
   int			i, j, count;
   int			size;
-  XmRendition		rend;
+  XmRendition		rend = NULL;
   XtAppContext		app = NULL;
 
   if (table == NULL) return((XmRenderTable)NULL);

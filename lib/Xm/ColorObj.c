@@ -398,7 +398,7 @@ Initialize(
 {
     XmColorObj new_obj = (XmColorObj) nw ;
     int      i, nscreens;
-    Atom     tmpAtom;
+    Atom     tmpAtom = 0;
     unsigned long savetimeout = (unsigned long)-1 ;
     /* window id of the selection owner */
     Window SelectionOwner ;

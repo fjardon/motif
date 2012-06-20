@@ -1204,10 +1204,12 @@ SpinBArm(Widget armWidget,
 	 Cardinal *armCount)	/* unused */
 {
   if (armEvent->type == ButtonPress)
+  {
     if (ArrowWasHit(armWidget, XmARROW_UP, armEvent))
       SpinBAction(armWidget, XmARROW_UP);
     else if (ArrowWasHit(armWidget, XmARROW_DOWN, armEvent))
       SpinBAction(armWidget, XmARROW_DOWN);
+  }
 }
 
 /******************************************************************************
@@ -1617,8 +1619,8 @@ LayoutSpinBox(Widget w,
   int		Xposition, Xmargin;
 
   /* May need to update this if stacked arrows are put back */
-  Position	upX;
-  Position	downX;
+  Position	upX =0 ;
+  Position	downX  = 0;
 
   arrowLayout = (int) spinW->spinBox.arrow_layout;
   arrowSize = spinW->spinBox.arrow_size;
@@ -2319,13 +2321,17 @@ ArrowSpinUp(Widget w, XEvent *callEvent)
       
       /* Update the Text Widget */
       if (inPosition != spinC->position)
+      {
 	if (ArrowVerify((Widget)spinW, callEvent, XmCR_SPIN_NEXT))
 	  {
 	    UpdateChildText(spinW->spinBox.textw);
 	    ArrowCallback((Widget)spinW, callEvent, XmCR_SPIN_NEXT);
 	  }
 	else
+        {
 	  spinC->position = inPosition;
+        }
+      }
     }
   else
     ArrowCallback((Widget)spinW, callEvent, XmCR_SPIN_NEXT);
@@ -2369,13 +2375,17 @@ ArrowSpinDown(Widget w, XEvent *callEvent)
       
       /* Update the Text Widget */
       if (inPosition != spinC->position)
+      {
 	if (ArrowVerify((Widget)spinW, callEvent, XmCR_SPIN_PRIOR))
 	  {
 	    UpdateChildText(spinW->spinBox.textw);
 	    ArrowCallback((Widget)spinW, callEvent, XmCR_SPIN_PRIOR);
 	  }
 	else
+        {
 	  spinC->position = inPosition;
+        }
+      }
     }
   else
     ArrowCallback((Widget)spinW, callEvent, XmCR_SPIN_PRIOR);

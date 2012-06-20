@@ -78,8 +78,10 @@ GetNthTab(XmTabList tl, int pos, XmTab cur_tab, int cur_pos)
   count = _XmTabLCount(tl);
   
   if (abs(pos) >= count)
+  {
     if (pos > 0) return(_XmTabPrev(_XmTabLStart(tl)));
     else return(_XmTabLStart(tl));
+ }
 
   /* Convert pos and cur_pos to positives less than count */
   if (pos < 0) pos += count;
@@ -205,7 +207,7 @@ _XmCreateTabList(Widget parent,
 		 Cardinal argcount) /* unused */
 {
   XmRendition	rend = (XmRendition)parent;
-  XmTabList	tl;
+  XmTabList	tl = NULL;
   
   if (_XmRendTabs(rend) == NULL) 
     {

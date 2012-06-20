@@ -166,7 +166,7 @@ MakeCachedDirEntry(String dirName)
 {
     DIR * 		fileDesc = NULL;
     struct dirent	*currDirect;
-    DtCachedDir 	cachedDir;
+    DtCachedDir 	cachedDir = NULL;
     int			cachedDirType;
 
     if ((fileDesc = opendir (dirName)) == NULL)  {
@@ -549,7 +549,7 @@ XmGetIconFileName(
     Boolean		useColor;
     Boolean		useMask;
     Boolean		useIconFileCache;
-    Boolean		absolute;
+    Boolean		absolute = 0;
     XtFilePredicate	testFileFunc;
     String		homedir = NULL ;
     static String	iconPath = NULL;

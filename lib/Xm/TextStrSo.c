@@ -1351,7 +1351,8 @@ Scan(XmTextSource source,
       Increment(data, position, dir);
     }
     break;
-  case XmSELECT_ALL: 
+  case XmSELECT_ALL:
+  default: 
     if (dir == XmsdLeft)
       position = 0;
     else

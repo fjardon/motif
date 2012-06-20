@@ -1404,7 +1404,7 @@ XmStringConcatAndFree(XmString a,
   XmString 		a_str, b_str;
   _XmStringMultiRec     b_tmp;
   _XmStringEntry 	a_line, b_line, tmp_line, *segs=NULL;
-  _XmStringNREntry 	a_last, b_seg, tmp_seg;
+  _XmStringNREntry 	a_last, b_seg = NULL, tmp_seg;
   String		a_tag;
   String		b_tag;
   int 			i, j;
@@ -1740,14 +1740,18 @@ XmStringConcatAndFree(XmString a,
 	    }
 	    if (!_XmEntryOptimized(a_last) &&
 		(_XmEntryRendEndCountGet((_XmStringEntry)b_seg) != 0))
-	      if (_XmEntryOptimized(b_seg)) {
+            {
+	      if (_XmEntryOptimized(b_seg)) 
+              {
 		_XmUnoptSegRendEnds(a_last) = 
 		  (XmStringTag *)XtMalloc(sizeof(XmStringTag));
 		_XmUnoptSegRendEnds(a_last)[0] =
 		  _XmEntryRendEndGet((_XmStringEntry)b_seg, 0);
-	      } else if (modify_b) {
+	      } else if (modify_b) 
+              {
 		_XmUnoptSegRendEnds(a_last) = _XmUnoptSegRendEnds(b_seg);
-	      } else {
+	      } else 
+              {
 		int end_count = _XmEntryRendEndCountGet((_XmStringEntry)b_seg);
 		int k;
 		_XmUnoptSegRendEnds(a_last) = 
@@ -1756,6 +1760,7 @@ XmStringConcatAndFree(XmString a,
 		  _XmUnoptSegRendEnds(a_last)[k] = 
 		    _XmUnoptSegRendEnds(b_seg)[k];
 	      }
+          }
 	    _XmEntryRendEndCountSet
 	      (a_last, _XmEntryRendEndCountGet((_XmStringEntry)b_seg));
 	  } else
@@ -2455,7 +2460,7 @@ LineMetrics(_XmStringEntry line,
   XmTab			tab;
   unsigned short	tab_cnt;
   _XmStringNREntry	seg, peek_seg;
-  XmDirection 		lay_dir;
+  XmDirection 		lay_dir = 0;
   Boolean		set_direction = FALSE;
   
   d = _XmRendDisplay(*rend_io);
@@ -4068,7 +4073,7 @@ recursive_layout(_XmString string,
   _XmStringEntry        line;
   _XmStringNREntry 	seg, seg2;
   _XmStringNREntry 	last;
-  XmDirection           pop_dir;
+  XmDirection           pop_dir = 0;
   int                   pop_index = -1;
   int                   nseg, nline;
   int                   push_line;
@@ -6171,8 +6176,8 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 			Dimension      * descent)
 {
   unsigned short	count;
-  XmStringTag		*tags;
-  unsigned int		tag_count;
+  XmStringTag		*tags = NULL;
+  unsigned int		tag_count =0;
   Display		*d;
   XmStringTag		def_tag;
   XmStringTag		entry_tag;
@@ -8482,14 +8487,14 @@ XmeStringGetComponent(_XmStringContext context,
   Boolean                  pop_dir;
   XmDirection              push_dir;
   XmStringDirection	   dir;
-  XmStringTag		   tag;
-  int			   char_count;
-  XmTextType		   text_type;
-  char 		          *seg_text;
-  XmStringTag	          *begin_rends;
-  short			   begin_count;
-  XmStringTag	          *end_rends;
-  short			   end_count;
+  XmStringTag		   tag = NULL;
+  int			   char_count = 0;
+  XmTextType		   text_type = 0;
+  char 		          *seg_text = NULL;
+  XmStringTag	          *begin_rends = NULL;
+  short			   begin_count = 0;
+  XmStringTag	          *end_rends = NULL;
+  short			   end_count = 0;
   unsigned char		   tabs;
   _XmString		   opt = NULL;
   _XmStringEntry 	   seg = NULL;

@@ -1406,7 +1406,7 @@ LayoutOptionAndSize (
         Boolean calcMenuDimension )
 #endif /* NeedWidePrototypes */
 {
-   XtWidgetGeometry    *label_box, *button_box;
+   XtWidgetGeometry    *label_box = NULL, *button_box = NULL;
    Dimension c_width; 
    Dimension c_height;
    register XmRowColumnWidget p = (XmRowColumnWidget) RC_OptionSubMenu(menu);
@@ -1754,8 +1754,8 @@ _XmRCAdaptToSize(
 {
    Dimension w = XtWidth (m);
    Dimension h = XtHeight (m);
-   Dimension instigator_w;
-   Dimension instigator_h;
+   Dimension instigator_w = 0 ;
+   Dimension instigator_h = 0;
    short i;
    Widget *q;
 

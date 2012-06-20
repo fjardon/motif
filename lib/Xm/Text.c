@@ -1438,11 +1438,16 @@ _XmTextUpdateLineTable(Widget widget,
   length = block_num_chars;
   
   if (tw->text.line_table == NULL)
+  {
     if (tw->text.edit_mode == XmSINGLE_LINE_EDIT)
+    {
       InitializeLineTable(tw, 1);
+    }
     else
+    {
       InitializeLineTable(tw, INIT_TABLE_SIZE);
-  
+    }
+  }
   /* if there is no change or we expect RelignLineTable()
      to be called before the line table is necessary */
   if ((start == end && length == 0) || 
@@ -2538,16 +2543,21 @@ SetValues(Widget oldw,
   Boolean need_new_cursorPos = False;
   Boolean need_text_redisplay = False;
   Boolean new_source = (newtw->text.source != old->text.source);
-  XmTextSource cache_source;
+  XmTextSource cache_source = NULL;
 
-  if (newtw->core.being_destroyed) return False;
+  if (newtw->core.being_destroyed) 
+  { 
+      return False;
+  }
 
   _XmTextResetIC(oldw);
   
   newtw->text.in_setvalues = True;
   
   if (newtw->text.cursor_position<0)
-    newtw->text.cursor_position=0;
+  {
+        newtw->text.cursor_position=0;
+    }
 
   /* It is unfortunate that the rest of the Text widget code, particularly the
   ** redisplay code, assumes that the current source is valid; in fact, it may
@@ -3827,7 +3837,7 @@ _XmTextResetIC(Widget widget)
 char * 
 XmTextGetString(Widget widget)
 {
-  char *text_copy;
+  char *text_copy = NULL;
   _XmWidgetToAppContext(widget);
   
   _XmAppLock(app);
@@ -3848,7 +3858,7 @@ XmTextGetString(Widget widget)
 wchar_t *
 XmTextGetStringWcs(Widget widget)
 {
-  wchar_t *text_copy;
+  wchar_t *text_copy = NULL;
   _XmWidgetToAppContext(widget);
   
   _XmAppLock(app);

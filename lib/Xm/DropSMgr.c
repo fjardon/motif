@@ -2115,7 +2115,7 @@ ProcessDrop(
 	Widget	dragContext =
 		XmGetDragContext((Widget)dsm, callback->timeStamp);
 	XmDSInfo	info = NULL;
-	Widget	widget;
+	Widget	widget = NULL;
 	Position x, y, tmpX, tmpY;
 	XmDSInfo savRoot, savInfo;
 	XmDSInfo newRoot = (XmDSInfo) DSMWidgetToInfo(dsm, cd->destShell);
@@ -2160,8 +2160,10 @@ ProcessDrop(
 	if (newRoot != NULL)
 		info = PointToDSInfo(dsm, (XmDSInfo) dsm->dropManager.dsRoot, x, y);
 
-	if (info != NULL) widget = GetDSWidget(info);
-
+	if (info != NULL) 
+        {
+            widget = GetDSWidget(info);
+        }
 	/* Handle error conditions nicely */
 	if ((info == NULL) ||
 	    ! XtIsManaged(widget) || /* CR 5215 */

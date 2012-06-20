@@ -655,11 +655,11 @@ void
   unsigned int    dirLen = strlen(qualifiedDir);
   Boolean         useCache = FALSE;
   Boolean         loadCache = FALSE;
-  unsigned        readCacheIndex;
-  unsigned char   dirFileType;
+  unsigned        readCacheIndex = 0;
+  unsigned char   dirFileType = 0;
 #ifndef NO_REGCOMP
   regex_t         preg;
-  int             comp_status;
+  int             comp_status = 0;
 #elif !defined(NO_REGEX)
 # ifdef USE_LOCAL_REGEX
   XmRegexpRec *   compiledRE = NULL;

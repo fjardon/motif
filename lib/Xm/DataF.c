@@ -23,7 +23,7 @@
  */
 #ifdef REV_INFO
 #ifndef lint
-static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.5 $ $Date: 2002/01/15 17:30:38 $"
+static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.6 $ $Date: 2002/01/30 15:47:17 $"
 #endif
 #endif
 /**  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
@@ -1623,7 +1623,7 @@ PictureVerifyCallback(
 {
     XmTextVerifyCallbackStruct *cbs = 
 	(XmTextVerifyCallbackStruct*) call_d;
-    char *curr, *newptr, *changed;
+    char *curr, *newptr, *changed = NULL;
     int src, dst, i;
     XmPictureState ps;
     Boolean done = False;
@@ -6214,11 +6214,13 @@ df_ExtendScanSelection(
         bal_point = (float)(((float)(right - left) / 2.0) + (float)left);
 
    if (!XmTextF_extending(tf))
+   {
       if ((float)new_position < bal_point) {
          XmTextF_prim_anchor(tf) = XmTextF_orig_right(tf);
       } else if ((float)new_position > bal_point) {
          XmTextF_prim_anchor(tf) = XmTextF_orig_left(tf);
       }
+  }
 
    XmTextF_extending(tf) = True;
 
@@ -6331,10 +6333,12 @@ df_SetScanSelection(
 			     event->xbutton.time);
            XmTextF_pending_off(tf) = False;
    	   if (event->type == ButtonPress)
+           {
               if ((XmTextF_string_length(tf)) / 2 <= new_position)
                  cursorPos = XmTextF_string_length(tf);
               else
                  cursorPos = 0;
+          }
            break;
    }
 
@@ -6536,12 +6540,13 @@ df_DoExtendedSelection(
     position = XmDataFieldXYToPos(w, XmTextF_select_pos_x(tf), 0);
 
    if (!XmTextF_extending(tf))
+   {
       if ((float)position < bal_point) {
          XmTextF_prim_anchor(tf) = XmTextF_orig_right(tf);
       } else if ((float)position > bal_point) {
          XmTextF_prim_anchor(tf) = XmTextF_orig_left(tf);
       }
-
+  }
    XmTextF_extending(tf) = True;
 
     /* Extend selection in same way as ExtendScan would do */
