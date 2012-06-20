@@ -28,12 +28,11 @@
 static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
 #endif
 #endif
+/* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-/* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include "RepTypeI.h"
 #include "MessagesI.h"
@@ -1323,6 +1322,7 @@ XmRepTypeRegister(
     DynamicRepTypeNumRecords++ ;
     reptype_id  = NewRecord->rep_type_id;
     _XmProcessUnlock();
+    /*XmRepTypeAddReverse(reptype_id);*/
     return reptype_id;
 }
 
@@ -1645,7 +1645,31 @@ ReverseConvertRepType(
 
     
     _XmProcessUnlock();
+#if 0
     if (OutValue)  _XM_CONVERTER_DONE (to, String, *OutValue, ;)
+#else
+    if (OutValue)
+    {
+	if (to->addr)
+	{
+	    if (to->size < sizeof(String))
+	    {
+		to->size = sizeof(String);
+	    	return(False);
+	    }
+	    else
+	    {
+		to->addr = (XtPointer)*OutValue;
+	    }
+	}
+	else
+	{
+	    to->addr = (XtPointer)OutValue;
+	}
+	to->size = sizeof(String);
+	return(True);
+    }
+#endif
  
 
 	/** generate a message and display it */
@@ -1691,6 +1715,7 @@ _XmRepTypeInstallConverters( void )
 			 StandardRepTypes[Index].rep_type_name,
 			 ConvertRepType, &convertArg, 1,
 			 XtCacheNone, NULL) ;
+     XmRepTypeAddReverse(Index);
     } 
 }
 
