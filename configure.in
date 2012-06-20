@@ -7,14 +7,14 @@ AM_MAINTAINER_MODE
 
 dnl The version of the OpenMotif libraries
 CURRENT=4
-REVISION=1
+REVISION=2
 AGE=2
 AC_SUBST(CURRENT)
 AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(openMotif,2.2.1)
+AM_INIT_AUTOMAKE(openMotif,2.2.2)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
