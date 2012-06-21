@@ -2860,16 +2860,28 @@ RequestSpatialGrowth(
     if (!CtrSpatialStyleIsNONE(cw)) 
 	{
 	if ((CtrResizeModelIsGROW_MINOR(cw)) && XtIsRealized(wid))
+        {
 	    if (CtrIsHORIZONTAL(cw))
+            {
 		grow_width_allowed = False;
+            }
 	    else
+            {
 		grow_height_allowed = False;
+            }
+        }
 	if ((CtrResizeModelIsGROW_MAJOR(cw)) && XtIsRealized(wid))
+        {
 	    if (CtrIsHORIZONTAL(cw))
+            {
 		grow_height_allowed = False;
+            }
 	    else
+            {
 		grow_width_allowed = False;
+            }
 
+        }
 	if ((!grow_width_allowed) && (!grow_height_allowed))
 	    return(False);
     	}
@@ -3192,6 +3204,7 @@ ConstraintSetValues(
 	InsertNode(nc->node_ptr);
 	}
     if (nc->entry_parent != cc->entry_parent)
+    {
 	if (nc->entry_parent == NULL)
 	    {
 	    nc->depth = 0;
@@ -3212,6 +3225,7 @@ ConstraintSetValues(
 	   	 (!CtrLayoutIsOUTLINE_DETAIL(cw)))
 	    	    HideCwid(ncwid);
 	    }
+    }
 
     if (nc->outline_state != cc->outline_state)
 	OutlineButtonAction(ncwid, nc->outline_state, (XEvent*)NULL);
@@ -7248,10 +7262,12 @@ StartSelect(
 	  SetLocationCursor(cw->container.anchor_cwid);
 
 	if (CtrTechIsTOUCH_OVER(cw))
+        {
 		if (cw->container.anchor_cwid == NULL)
 			cw->container.marquee_mode = True;
 		else
 			cw->container.marquee_mode = False;
+        }
 	if (cw->container.anchor_cwid == NULL)
 		{
 		if (CtrIsAUTO_SELECT(cw))
@@ -7841,10 +7857,12 @@ RecalcMarquee(
 				}
 	case	XmMARQUEE_EXTEND_START:
 			if CtrTechIsMARQUEE_ES(cw)
+                        {
 				if (cw->container.started_in_anchor)
 					cwid = cw->container.anchor_cwid;
 				else
 					cwid = NULL;
+                        }
 			if (cwid)
 				{
 				XtVaGetValues(cwid,XmNx,&cwid_x,

@@ -4181,14 +4181,14 @@ MakeSpiralPixmap (
     Dimension width,
     Dimension height)
 {
-    int rx, ry, rw, rh;         /* rectangle values for binding surface */
-    int sx, sy, sw, sh, sd;     /* spiral values */
-    int a1, a2, a3, a4;         /* spiral angle values */
-    int hx, hy, hd;             /* hole values */
-    int lx1, ly1, lx2, ly2;     /* line values for binding edge */
-    int pw, ph;                 /* pixmap size */
-    int gap;                    /* gap between spirals */
-    int div;                    /* division of binding width */
+    int rx=0, ry=0, rw=0, rh=0;         /* rectangle values for binding surface */
+    int sx=0, sy=0, sw=0, sh=0, sd=0;     /* spiral values */
+    int a1=0, a2=0, a3=0, a4=0;           /* spiral angle values */
+    int hx=0, hy=0, hd=0;                 /* hole values */
+    int lx1=0, ly1=0, lx2=0, ly2=0;       /* line values for binding edge */
+    int pw=0, ph=0;                       /* pixmap size */
+    int gap=0;                            /* gap between spirals */
+    int div;                              /* division of binding width */
     int i;
     Pixmap pixmap;
 
