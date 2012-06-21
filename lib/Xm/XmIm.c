@@ -1684,21 +1684,26 @@ regist_real_callback(Widget w,
   register XmImXICInfo icp;
   XmImDisplayInfo xim_info;
   XmImRefRec refs;
-  int i, target;
+  int i, target = 0;
 
   p = w;
   while (!XtIsShell(p))
+  {
     p = XtParent(p);
+  }
 
   xim_info = get_xim_info(p);
-  if ((icp = get_current_xic(xim_info, w)) == NULL){
+  if ((icp = get_current_xic(xim_info, w)) == NULL)
+  {
     return;
   }
 
   refs = icp->widget_refs;
 
-  for (i = 0; i < refs.num_refs; i++){
-    if (refs.refs[i] == w){
+  for (i = 0; i < refs.num_refs; i++)
+  {
+    if (refs.refs[i] == w)
+    {
       target = i;
       break;
     }
@@ -1736,7 +1741,7 @@ set_callback_values(Widget w,
   XIMProc call = value->callback;
   int s = NameToSwitch(name);
   XmInputPolicy ip = input_policy;
-  Widget p;
+  Widget p =NULL;
 
   if (input_policy == XmINHERIT_POLICY){
     p = w;

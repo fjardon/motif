@@ -41,6 +41,7 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
 #include "CutPasteI.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define XMERROR(key, message)                                            \
     XtErrorMsg (key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
@@ -2049,8 +2050,11 @@ ClipboardDeleteItem(
 
       _XmProcessLock();
       for(i = 0; i < maxCbProcs; i++)
-	if (found = (cbIdTable[i] == deleteid)) break;
-
+      {
+        found = (cbIdTable[i] == deleteid);
+	if (found) 
+            break;
+      }
       if (found) {
 	cbProcTable[i] = NULL;
 	cbIdTable[i] = 0;
@@ -2452,7 +2456,7 @@ ClipboardRequestDataAndWait(
     Window rootwindow;
     ClipboardCutByNameInfoRec cutbynameinfo;
     Boolean timer_expired;
-    XtAppContext app_context;
+    XtAppContext app_context = NULL;
     XtIntervalId timerid;
     Widget wid;
 

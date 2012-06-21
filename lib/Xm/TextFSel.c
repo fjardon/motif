@@ -1104,7 +1104,7 @@ DoStuff(Widget w,
     }
     
     if (replace_res) {
-      XmTextPosition cursorPos;
+      XmTextPosition cursorPos = 0;
       
       if (ds->selection != atoms[XmACLIPBOARD]) { 
 	tf->text.pending_off = FALSE;

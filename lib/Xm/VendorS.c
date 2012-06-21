@@ -551,8 +551,11 @@ BaseProc(
 
    _XmAppLock(app);
 
+    
     if (extData = _XmGetWidgetExtData(widget, XmSHELL_EXTENSION))
+    {
 	secObj = extData->widget;
+    }
 
     _XmAppUnlock(app);
     return secObj;

@@ -1605,8 +1605,8 @@ Sort(XmTraversalNode *list,
       XmTraversalNode node = list[first_free];
       Boolean new_row = True;
       Boolean done = False;
-      Boolean might_overlap;
-      Cardinal row_len;
+      Boolean might_overlap = False ;
+      Cardinal row_len = 0;
 
       row = 0;
       while (!done && (row < num_rows))
@@ -1618,13 +1618,17 @@ Sort(XmTraversalNode *list,
 	      row_len = rows[row].num_items;
 
 	      if (horizontal)
+              {
 		might_overlap = (rows[row].max_hint > node->any.rect.y) &&
 		  (rows[row].min_hint < (node->any.rect.y +
 					 node->any.rect.height));
-	      else
+              }
+              else
+              {
 		might_overlap = (rows[row].max_hint > node->any.rect.x) &&
 		  (rows[row].min_hint < (node->any.rect.x +
 					 node->any.rect.width));
+              }
 	    }
 
 	  /* Append this node if it overlaps the end of the row. */

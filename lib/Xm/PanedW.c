@@ -2560,9 +2560,13 @@ PaneSetValues(
        if (XtIsManaged(new_w) && XtIsRealized((Widget)pw))
        {
 	  if (new_pane->min > MajorChildSize(pw, new_w)) 
+          {
 	      MajorAssign(pw, new_w->core, new_pane->min);
+          }
 	  if (new_pane->max < MajorChildSize(pw, new_w)) 
+          {
 	      MajorAssign(pw, new_w->core, new_pane->max);
+          }
 	  old_pane->min = new_pane->min;
 	  old_pane->max = new_pane->max;
        }

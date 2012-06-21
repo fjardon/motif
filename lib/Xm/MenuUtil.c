@@ -134,7 +134,7 @@ _XmGrabPointer(
 	Cursor cursor, 
 	Time time )
 {
-   register int status, retry;
+   register int status = 0, retry;
 
    for (retry=0; retry < 5; retry++)
    {
@@ -162,7 +162,7 @@ _XmGrabKeyboard(
 	int keyboard_mode, 
 	Time time )
 {
-   register int status, retry;
+   register int status = 0, retry;
 
    for (retry=0; retry < 5; retry++)
    {
@@ -1050,15 +1050,21 @@ _XmMenuGrabKeyboardAndPointer(
       Widget widget,
       Time time )
 {
-   register int status;
 
-   if (status = _XmGrabKeyboard(widget, True, GrabModeSync, GrabModeAsync,
-       time) != GrabSuccess)
+   register int status = 
+           (_XmGrabKeyboard(widget, 
+                            True, 
+                            GrabModeSync, 
+                            GrabModeAsync,
+                            time) != GrabSuccess);
+   if (status)
       return(status);
-
-   if (status = _XmGrabPointer(widget, True, EVENTS, GrabModeSync,
+   
+   status = _XmGrabPointer(widget, True, EVENTS, GrabModeSync,
        GrabModeAsync, None, XmGetMenuCursor(XtDisplay(widget)), time) !=
-         GrabSuccess)
+         GrabSuccess;
+   
+   if (status)
       XtUngrabKeyboard(widget, CurrentTime);
 
    return(status);

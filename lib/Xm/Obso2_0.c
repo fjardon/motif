@@ -2268,7 +2268,7 @@ _XmIsSlowSubclass(
   if (!wcePtr || !(*wcePtr))
     return False;
   
-  if (_XmGetFlagsBit((*wcePtr)->flags, bit) != 0)
+  if ((_XmGetFlagsBit((*wcePtr)->flags, bit)) != 0)
     return True;
   else
     return False;
