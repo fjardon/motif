@@ -2912,19 +2912,19 @@ _XmTextEnableRedisplay(XmTextWidget widget)
     if (XmDirectionMatch(XmPrim_layout_direction(widget),
 			 XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       if (widget->text.output->data->scrollvertical &&
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
+	  XmIsScrolledWindow(XtParent(widget)))
 	_XmRedisplayVBar(widget);
       if (widget->text.output->data->scrollhorizontal &&
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
+	  XmIsScrolledWindow(XtParent(widget)) &&
 	  !widget->text.hsbar_scrolling)
 	_XmChangeHSB(widget);
     } else {
       if (widget->text.output->data->scrollvertical &&
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
+	  XmIsScrolledWindow(XtParent(widget)) &&
 	  !widget->text.vsbar_scrolling)
 	_XmChangeVSB(widget);
       if (widget->text.output->data->scrollhorizontal &&
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
+	  XmIsScrolledWindow(XtParent(widget)))
 	_XmRedisplayHBar(widget);
     }
   }
