@@ -17,6 +17,7 @@ CAdjustLast
 CAdjustMargin
 CAlignment
 CAllowOverlap
+CAllowUnusedSpace
 CAnimationMask
 CAnimationPixmap
 CAnimationPixmapDepth
@@ -339,6 +340,7 @@ NadjustMargin
 Nalignment
 NallowOverlap
 NallowResize
+NallowUnusedSpace
 NanimationMask
 NanimationPixmap
 NanimationPixmapDepth
