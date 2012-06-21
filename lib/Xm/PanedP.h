@@ -221,8 +221,7 @@ XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
 #define XmPaned_num_slots(w) PanedField(w, num_slots, short)
 #define XmPaned_stack(w) PanedField(w, stack, PaneStack*)
 #define XmPaned_managed_children(w) PanedField(w, managed_children, WidgetList)
-#define XmPaned_allow_unused_space(w) PanedField(w, allow_unused_space, Boolea
-n)
+#define XmPaned_allow_unused_space(w) PanedField(w, allow_unused_space, Boolean)
 
 #define PanedCField(w,f,t) XmConstraintField(w, XmPanedC_offsets, \
                                              XmPaned, f, t)
