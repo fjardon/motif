@@ -977,3 +977,5 @@ XmNentryBackground
 XmNpixmapWidth
 XmNpixmapHeight
 XmNpixmapDepth
+XmNallowUnusedSpace
+XmCAllowUnusedSpace
