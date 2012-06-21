@@ -1,6 +1,7 @@
 EXTRA_DIST = Imakefile Amoeba.cf Amoeba.cf apollo.cf bsd.cf bsdi.cf \
    	     bsdLib.rules bsdLib.tmpl cde.rules cde.tmpl convex.cf cray.cf \
-	     DGUX.cf FreeBSD.cf fujitsu.cf generic.cf gnu.cf gnuLib.rules \
+	     darwin.cf darwinLib.rules darwinLib.tmpl DGUX.cf FreeBSD.cf \
+	     fujitsu.cf generic.cf gnu.cf gnuLib.rules \
 	     gnuLib.tmpl host.def hp.cf hpLib.rules hpLib.tmpl ibm.cf \
 	     ibmLib.rules ibmLib.tmpl Imake.cf Imakefile Imake.rules \
 	     Imake.tmpl isc.cf Library.tmpl Amoeba.cf apollo.cf bsd.cf \

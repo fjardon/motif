@@ -1,3 +1,8 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
+#undef CSRG_BASED
+
 /* define to avoid building the message catalog */
 #undef NO_MESSAGE_CATALOG
 

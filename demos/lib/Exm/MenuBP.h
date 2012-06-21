@@ -29,7 +29,7 @@
 #define _ExmMenuBP_h
 
 #include <Exm/MenuB.h>
-#include <Exm/StringP.h>
+#include <Exm/ExmStringP.h>
 
 typedef struct _ExmMenuButtonClassPart
 {

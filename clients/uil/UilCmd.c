@@ -67,7 +67,28 @@ static char rcsid[] = "$XConsortium: UilCmd.c /main/11 1995/07/14 09:32:29 drk $
 **
 **/
 
-externaldef(uil_comp_glbl) cmd_command_line_type Uil_cmd_z_command;
+externaldef(uil_comp_glbl) cmd_command_line_type Uil_cmd_z_command = {
+	NULL, 	/* *ac_source_file */
+	NULL, 	/* *ac_resource_file */
+	NULL, 	/* *ac_listing_file */
+	0, 	/* include_dir_count */
+	NULL, 	/* **ac_include_dir */
+	1, 	/* v_listing_file */
+	1, 	/* v_resource_file */
+	1, 	/* v_show_machine_code */
+	1, 	/* v_report_info_msg */
+	1, 	/* v_report_warn_msg */
+	1, 	/* v_parse_tree */
+	1, 	/* v_issue_summary */
+	0, 	/* status_update_delay */
+	NULL, 	/* (*message_cb)() */
+	NULL, 	/* *message_data */
+	NULL,	/* (*status_cb)() */
+	NULL,	/* *status_data */
+	1,	/* v_use_setlocal */
+	NULL,	/* *ac_database */
+	1	/* v_database */
+};
 
 
 

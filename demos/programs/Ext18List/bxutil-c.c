@@ -41,10 +41,12 @@
  * Include stdlib.h and malloc.h if code is C++, ANSI, or Extended ANSI.
  */
 #if defined(__cplusplus) || defined(__STDC__) || defined(__EXTENSIONS__)
-#include <stdlib.h>
-#if defined(VMS)
+#  include <stdlib.h>
+#  if defined(HAVE_MALLOC_H)
 #  include <malloc.h>
-#endif
+#  elif defined(HAVE_SYS_MALLOC_H)
+#  include <sys/malloc.h>
+#  endif
 #endif
 
 

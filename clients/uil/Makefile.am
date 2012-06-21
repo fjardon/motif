@@ -26,6 +26,10 @@ UilParser.c:
 UilLexPars.c: $(srcdir)/../../tools/wml/Uil.c
 	test -f UilLexPars.c || $(LN_S) $(srcdir)/../../tools/wml/Uil.c UilLexPars.c
 
+BUILT_SOURCES = UilParser.c UilLexPars.c UilDBDef.h
+
+CLEANFILES = UilParser.c UilLexPars.c UilDBDef.h
+
 COMMON_SRC =	UilCmd.c	UilDiags.c	UilKeyTab.c	UilLexAna.c  \
 		UilLexPars.c	UilLstLst.c	UilP2Out.c	UilP2Reslv.c \
 		UilSarComp.c	UilSarExp.c	UilSarInc.c	UilSarMod.c \
@@ -76,5 +80,3 @@ $(CAT_FILES): Uil.msg
 
 endif
 
-clean-local:
-	$(RM) UilLexPars.c UilParser.c
