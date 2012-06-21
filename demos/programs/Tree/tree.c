@@ -390,7 +390,7 @@ void WriteUpHype(Widget parent)
     xmstring = XmStringCreateLtoR(
 "The OpenMotif Tree Widget displays hierarchical data in a tree layout with a Motif\n\
 look and feel. The Tree widget displayed below contains entries corresponding\n\
-to EPak widgets. The nodes are XmPushButtons, but the tree can accept any type of widget.\n\
+to OpenMotif widgets. The nodes are XmPushButtons, but the tree can accept any type of widget.\n\
 \n\
 The Tree Widget uses \"constraints\" to arrange the children with the right layout.\n\
 To see the code to generate the tree below, press \"Show Layout Code...\".\n\
