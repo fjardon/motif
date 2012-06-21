@@ -76,12 +76,12 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include <Xm/PrintSP.h>         /* for XmIsPrintShell */
 
 
-#if defined(__FreeBSD__) || defined(__APPLE__)
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__NetBSD__) || defined(__OpenBSD__)
 /*
  * Modification by Integrated Computer Solutions, Inc.  May 2000
  *
- * FreeBSD or DARWIN does not include the necessary wide character string
- * functions.  Use the internal _Xwc... routines and add the
+ * FreeBSD, DARWIN, NetBSD, and OpenBSD do not include the necessary wide
+ * character string functions.  Use the internal _Xwc... routines and add the
  * other missing functions as _Xmwc... routines.  The new functions
  * are added static to this file.
  */
