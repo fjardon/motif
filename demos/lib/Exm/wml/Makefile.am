@@ -10,6 +10,8 @@ WMLDIR = $(top_srcdir)/tools/wml
 INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/include  ${X_CFLAGS} -I$(srcdir)/../.. -I$(WMLDIR)
 LDADD = $(top_builddir)/lib/Xm/libXm.la
 
+DISTCLEANFILES = motif.wmd
+
 all: Exm.wmd
 
 WMDTABLE = Exm.wmd

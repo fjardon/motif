@@ -44,7 +44,7 @@ extern "C" {
 
 
 /* Include appropriate files. */
-#include <Exm/String.h>  /* public header file for the ExmString widget */
+#include <Exm/ExmString.h>  /* public header file for the ExmString widget */
 
 
 /* Define the widget class and widget record. */

@@ -1,9 +1,14 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
 /* define to avoid building the message catalog */
 #undef NO_MESSAGE_CATALOG
 
 /* Define if libXt was compiled with -DXTHREADS */
 #undef XTHREADS
 #undef XUSE_MTSAFE_API
+
+#undef CSRG_BASED
 
 /* Define if wctype.h is available */
 #undef HAS_WIDECHAR_FUNCTIONS

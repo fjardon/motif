@@ -30,7 +30,7 @@
 #include <Mrm/MrmPublic.h>
 
 #include <Exm/Simple.h>
-#include <Exm/String.h>
+#include <Exm/ExmString.h>
 #include <Exm/StringTrans.h>
 #include <Exm/CommandB.h>
 #include <Exm/MenuB.h>

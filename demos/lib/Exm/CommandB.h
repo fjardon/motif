@@ -39,7 +39,7 @@
 
 
 /* Include appropriate files. */
-#include <Exm/String.h>  /* public header file for the ExmString widget */
+#include <Exm/ExmString.h>  /* public header file for the ExmString widget */
 
 
 /* Allow for C++ compilation. */

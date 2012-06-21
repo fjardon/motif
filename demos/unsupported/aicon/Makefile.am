@@ -1,6 +1,6 @@
 noinst_PROGRAMS = aicon
  
-LDADD = ../../../lib/Xm/libXm.la -L../../lib/Xmd -lXmd
+LDADD = -L../../lib/Xmd -lXmd ../../../lib/Xm/libXm.la 
 
 INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib ${X_CFLAGS} 
 

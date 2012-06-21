@@ -7,7 +7,7 @@ rcdir = @LIBDIR@
 rc_DATA = system.mwmrc
 
 bin_PROGRAMS = mwm
-mwm_LDADD = -LWmWsmLib -lWsm ../../lib/Xm/libXm.la 
+mwm_LDADD = ./WmWsmLib/libWsm.a ../../lib/Xm/libXm.la 
 
 INCLUDES = -DLARGECURSORS -DR2_COMPAT -DUNMAP_ON_RESTART \
            -DCDE_INSTALLATION_TOP=\"@CDE_INSTALLATION_TOP@\" \
