@@ -142,7 +142,6 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h limits.h malloc.h strings.h sys/file.h sys/time.h unistd.h wchar.h)
 AC_CHECK_HEADERS(wctype.h, AC_DEFINE(HAS_WIDECHAR_FUNCTIONS))
-AC_CHECK_HEADER(langinfo.h,,AC_DEFINE(CSRG_BASED))
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
