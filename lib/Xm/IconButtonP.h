@@ -32,13 +32,7 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
-#include <Xm/XmP.h>		/* Need for XmVersion # */
-
-#if (XmVersion == 1002 || XmVersion == 2001)
 #include <Xm/PrimitiveP.h>
-#endif
-
 #include <Xm/IconButton.h>
 
 #ifdef __cplusplus
@@ -193,13 +187,7 @@ extern XmIconButtonClassRec xiIconButtonClassRec;
 #include <X11/apienvrst.h>
 #endif
 
-#if (XmVersion == 2001)
-#ifdef _NO_PROTO
 
-extern void _XmPrimitiveEnter() ;
-extern void _XmPrimitiveLeave() ;
-
-#else
 
 extern void _XmPrimitiveEnter(
                         Widget wid,
@@ -212,6 +200,6 @@ extern void _XmPrimitiveLeave(
                         String *params,
                         Cardinal *num_params) ;
 
-#endif
-#endif /* XmVersion 2001 */
+
+
 #endif /* _XmIconButtonP_h */

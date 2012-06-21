@@ -29,12 +29,7 @@
 #include <X11/apienvset.h>
 #endif
 
-#include <Xm/XmP.h>		/* Need for XmVersion # */
-
-#if (XmVersion == 1002 || XmVersion == 2001)
 #include <Xm/ManagerP.h>
-#endif
-
 #include <Xm/Paned.h>
 
 #ifdef __cplusplus

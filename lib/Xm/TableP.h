@@ -317,7 +317,7 @@ extern XmOffsetPtr XmTableC_offsets;
 #define xmTableClassRec xmXXTableClassRec
 #endif
 
-#if (XmVersion == 2001)
+
 extern void _XmTopShadowColorDefault( 
                         Widget widget,
                         int offset,
@@ -326,7 +326,7 @@ extern void _XmManagerTopShadowPixmapDefault(
                         Widget widget,
                         int offset,
                         XrmValue *value) ;
-#endif
+
 
 extern XmTableClassRec xmTableClassRec;
 

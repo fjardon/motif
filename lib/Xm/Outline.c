@@ -372,9 +372,8 @@ Redisplay(Widget w, XEvent * event, Region region)
     RedispInfo info;
     int lrx, lry;		/* local variables for lower left corner. */
 
-#if (XmVersion > 1001)
+
     XmDropSiteStartUpdate(w);
-#endif
 
     /*
      * Make sure that there are not more expose events pending in the queue
@@ -423,9 +422,9 @@ Redisplay(Widget w, XEvent * event, Region region)
 	XmOutline_lr_point(ow).x = XmOutline_lr_point(ow).y = 0;
     }
 
-#if (XmVersion > 1001)
+
     XmDropSiteEndUpdate(w);
-#endif
+
 }
 
 /*    Function Name: CheckExpose
@@ -1043,9 +1042,8 @@ LayoutChildren(Widget w, Widget assign_child)
     if (!XmHierarchy_refigure_mode(ow))
 	return;
 
-#if (XmVersion > 1001)
     XmDropSiteStartUpdate(w);
-#endif
+
 
     /*
      * Remove the old list, replace it with the new one.
@@ -1134,9 +1132,9 @@ LayoutChildren(Widget w, Widget assign_child)
 			     MoveNodesTimer, (XtPointer) w);
     }
 
-#if (XmVersion > 1001)
+
     XmDropSiteEndUpdate(w);
-#endif
+
 }
     
 /*	Function Name: GetNodeHeightAndWidth

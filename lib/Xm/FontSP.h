@@ -32,13 +32,7 @@
 /************************************************************
  *      INCLUDE FILES
  *************************************************************/
-
-#include <Xm/XmP.h>		/* Need for XmVersion # */
-
-#if (XmVersion == 1002)
 #include <Xm/ManagerP.h>
-#endif
-
 #include <Xm/PanedP.h>
 #include <Xm/FontS.h>
 

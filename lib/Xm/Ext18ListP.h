@@ -32,9 +32,6 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
-#include <Xm/XmP.h>		/* Need for XmVersion # */
-
 #include <Xm/ManagerP.h>
 #include <Xm/PrimitiveP.h>
 
