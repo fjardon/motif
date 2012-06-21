@@ -65,6 +65,7 @@ man_MANS = ApplicationShell.3 \
     XmClipboardUnlock.3 \
     XmClipboardWithdrawFormat.3 \
     XmColorSelector.3 \
+    XmColumn.3 \
     XmComboBox.3 \
     XmComboBoxAddItem.3 \
     XmComboBoxDeletePos.3 \
@@ -162,6 +163,7 @@ man_MANS = ApplicationShell.3 \
     XmCvtXmStringTableToTextProperty.3 \
     XmCvtXmStringToByteStream.3 \
     XmCvtXmStringToCT.3 \
+    XmDataField.3 \
     XmDeactivateProtocol.3 \
     XmDeactivateWMProtocol.3 \
     XmDestroyPixmap.3 \
@@ -558,5 +560,4 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateSimpleRadioBox.3 \
     XmWidgetGetBaselines.3 \
     XmWidgetGetDisplayRect.3 
-
- 
+    
