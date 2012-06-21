@@ -77,4 +77,4 @@ $(CAT_FILES): Uil.msg
 endif
 
 clean-local:
-      $(RM) UilLexPars.c UilParser.c
+	$(RM) UilLexPars.c UilParser.c
