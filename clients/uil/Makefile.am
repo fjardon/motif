@@ -13,12 +13,12 @@ libUil_la_LIBADD = UilParser.lo ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la
 
 uil_LDADD = ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la 
 
-INCLUDES = ${X_CFLAGS} -DINCDIR=\"@INCDIR@\" \
+INCLUDES = -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
            -I$(srcdir)/../../include \
            -I$(srcdir)/../../lib \
            -I$(srcdir)/../../tools/wml \
-           -I../../tools/wml
+           -I../../tools/wml ${X_CFLAGS}
 
 UilParser.c:
 	test -f UilParser.c || $(LN_S) $(srcdir)/UilMain.c UilParser.c
