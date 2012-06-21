@@ -183,6 +183,9 @@ static XmPartResource resources[] = {
     {XmNsashShadowThickness, XmCShadowThickness, XmRHorizontalDimension,
        sizeof(Dimension), offset(sash_shadow_thickness), XmRImmediate,
        (XtPointer) 2},
+
+    {XmNallowUnusedSpace, XmCAllowUnusedSpace, XmRBoolean, sizeof(Boolean),
+       offset(allow_unused_space), XmRImmediate, (XtPointer) TRUE},
 };
 
 /* Definition for resources that need special processing in get values */
@@ -981,6 +984,14 @@ RefigureLocations(XmPanedWidget pw, int paneindex, Direction dir)
 	ASSIGN_MAX(pane->size, (int) pane->min);
 	ASSIGN_MIN(pane->size, (int) pane->max);
 	sizeused += pane->size - old;
+    }
+
+    if (!XmPaned_allow_unused_space(pw))
+    {
+      if (pane_size > sizeused)
+      {
+        PaneInfo(*NthPane(pw, paneindex-1))->size += (pane_size - sizeused);
+      }
     }
     
     /*
