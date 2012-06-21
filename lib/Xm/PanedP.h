@@ -155,6 +155,11 @@ typedef struct {
 
     PaneStack * stack;		           /* The pane stack for this widget.*/
     WidgetList  managed_children;	   /* keep track of managed children */
+ 
+    Boolean     allow_unused_space;      /* should the paned widget allow
+                                          * a pane to be shrunk to the point
+                                          * that there is unused space at
+                                          * the bottom/right of the widget */
 } XmPanedPart;
 
 extern XmOffsetPtr XmPaned_offsets;
@@ -216,6 +221,8 @@ XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
 #define XmPaned_num_slots(w) PanedField(w, num_slots, short)
 #define XmPaned_stack(w) PanedField(w, stack, PaneStack*)
 #define XmPaned_managed_children(w) PanedField(w, managed_children, WidgetList)
+#define XmPaned_allow_unused_space(w) PanedField(w, allow_unused_space, Boolea
+n)
 
 #define PanedCField(w,f,t) XmConstraintField(w, XmPanedC_offsets, \
                                              XmPaned, f, t)
