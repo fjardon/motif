@@ -43,7 +43,7 @@ extern "C" {
 
 /* Include appropriate files. */
 #include <Exm/StringTrans.h> /* public header file for the ExmStringTransfer widget */
-#include <Exm/ExmStringP.h> /* private header file for the ExmString widget */
+#include <Exm/StringP.h> /* private header file for the ExmString widget */
 
 /* No new inheritable methods. */
 

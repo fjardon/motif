@@ -58,7 +58,7 @@ static char rcsid[] = "$TOG: wmldbcreate.c /main/7 1997/04/15 10:20:28 dbl $"
  */
 
 #include <Exm/Simple.h>
-#include <Exm/ExmString.h>
+#include <Exm/String.h>
 #include <Exm/StringTrans.h>
 #include <Exm/CommandB.h>
 #include <Exm/MenuB.h>

@@ -31,7 +31,7 @@
 
 
 /* Include appropriate files. */
-#include <Exm/ExmString.h> /* public header file for immediate superclass */
+#include <Exm/String.h> /* public header file for immediate superclass */
 
 
 /* Allow for C++ compilation. */

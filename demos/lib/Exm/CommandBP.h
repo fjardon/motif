@@ -38,7 +38,7 @@
 
 /* Include appropriate files. */
 #include <Exm/CommandB.h> /* public header file for ExmCommandButton */
-#include <Exm/ExmStringP.h>  /* private header file for ExmSimple */
+#include <Exm/StringP.h>  /* private header file for ExmSimple */
 
 /* Allow for C++ compilation. */
 #ifdef __cplusplus

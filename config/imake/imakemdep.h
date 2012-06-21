@@ -231,9 +231,6 @@
  *     If use cc -E but want a different compiler, define DEFAULT_CC.
  *     If the cpp you need is not in /lib/cpp, define DEFAULT_CPP.
  */
-#if defined(__APPLE__)
-#define DEFAULT_CPP "/usr/bin/cpp"
-#endif
 #ifdef hpux
 #define USE_CC_E
 #endif
@@ -597,17 +594,6 @@ char *cpp_argv[ARGUMENTS] = {
 	"-DMIPS",
 #endif
 #endif
-#if defined(__APPLE__)
-	"-D__APPLE__",
-	"-D__DARWIN__",
-# ifdef __ppc__
-	"-D__ppc__",
-# endif
-# ifdef __i386__
-	"-D__i386__",
-# endif
-#endif
-
 };
 
 
@@ -650,12 +636,6 @@ char *cpp_argv[ARGUMENTS] = {
 # define DEFAULT_OS_MINOR_REV	"v %*d.%1s"
 # define DEFAULT_OS_TEENY_REV	"v %*d.%*c%[.0-9]"
 # define DEFAULT_OS_NAME	"srvm %[^\n]"
-#elif defined(__APPLE__)
-/* uname -v returns "x.yz" or "x.y.z", e.g. "2.02" or "2.1.2". */
-# define DEFAULT_OS_MAJOR_REV "r %[0-9]"
-# define DEFAULT_OS_MINOR_REV "r %*d.%[0-9]"
-# define DEFAULT_OS_TEENY_REV "r %*d.%*d.%[0-9]" /* this will just get 0 */
-# define DEFAULT_OS_NAME      "s %[^\n]"
 #elif defined(__osf__)
 /* uname -r returns "Wx.y", e.g. "V3.2" or "T4.0" */
 # define DEFAULT_OS_MAJOR_REV	"r %*[^0-9]%[0-9]"
@@ -999,15 +979,6 @@ struct symtab	predefs[] = {
 #endif
 #ifdef __EMX__
 	{"__EMX__", "1"},
-#endif
-#if defined(__ppc__)
-	{"__ppc__", "1"},
-#endif
-#if defined(__BIG_ENDIAN__)
-	{"__BIG_ENDIAN__", "1"},
-#endif
-#if defined(__LITTLE_ENDIAN__)
-	{"__LITTLE_ENDIAN__", "1"},
 #endif
 #if defined(__QNX__) && !defined(__QNXNTO__)
 	{"__QNX__", "1"},

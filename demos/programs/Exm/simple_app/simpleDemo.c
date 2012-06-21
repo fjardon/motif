@@ -56,7 +56,7 @@
 #include <Xm/PushB.h>
 #include <Xm/CascadeBG.h>
 #include <Exm/Simple.h>
-#include <Exm/ExmString.h>
+#include <Exm/String.h>
 #include <Exm/Grid.h>
 #include <Exm/MenuB.h>
 

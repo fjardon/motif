@@ -25,8 +25,6 @@
  * HISTORY
  */
 
-#include <config.h>
-
 #include <stdlib.h>
 #include <time.h>
 #ifndef CSRG_BASED
