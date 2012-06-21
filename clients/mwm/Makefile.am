@@ -9,12 +9,11 @@ rc_DATA = system.mwmrc
 bin_PROGRAMS = mwm
 mwm_LDADD = -LWmWsmLib -lWsm ../../lib/Xm/libXm.la 
 
-INCLUDES = ${X_CFLAGS} \
-          -DLARGECURSORS -DR2_COMPAT -DUNMAP_ON_RESTART \
-          -DCDE_INSTALLATION_TOP=\"@CDE_INSTALLATION_TOP@\" \
-          -DCDE_CONFIGURATION_TOP=\"@CD_CONFIGURATION_TOP@\" \
-          -DBITMAPDIR=\"@INCDIR@/bitmaps\" \
-          -I$(srcdir)/../../lib
+INCLUDES = -DLARGECURSORS -DR2_COMPAT -DUNMAP_ON_RESTART \
+           -DCDE_INSTALLATION_TOP=\"@CDE_INSTALLATION_TOP@\" \
+           -DCDE_CONFIGURATION_TOP=\"@CD_CONFIGURATION_TOP@\" \
+           -DBITMAPDIR=\"@INCDIR@/bitmaps\" \
+           -I$(srcdir)/../../lib ${X_CFLAGS}
 
 SRCS1=	WmCDInfo.c	WmCDecor.c	WmCEvent.c\
 	WmCPlace.c	WmColormap.c	WmError.c\
