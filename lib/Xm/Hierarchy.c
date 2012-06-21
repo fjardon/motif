@@ -506,7 +506,7 @@ ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 
     XmHierarchyC_open_close_button(node) = NULL;
 
-    if (XmHierarchyC_state(node) != XiNotInHierarchy) {
+    if (XmHierarchyC_state(node) != XmNotInHierarchy) {
 	(*(hc->hierarchy_class.reset_open_close_button))((Widget) hw, node);
 
 	if (XmHierarchyC_parent(node) == NULL) 
@@ -540,7 +540,7 @@ ConstraintDestroy(Widget w)
     HierarchyConstraints node = GetNodeInfo(w);
     XmHierarchyWidget hw = (XmHierarchyWidget) XtParent(w);
 
-    if (XmHierarchyC_state(node) == XiNotInHierarchy) 
+    if (XmHierarchyC_state(node) == XmNotInHierarchy) 
 	return;
 
     /*
@@ -995,7 +995,7 @@ ResetOpenCloseButton(Widget w, HierarchyConstraints node)
 	 * widget.
 	 */
 
-        XtSetArg(args[num_args], XmNnodeState, XiNotInHierarchy); num_args++;
+        XtSetArg(args[num_args], XmNnodeState, XmNotInHierarchy); num_args++;
 	XtSetArg(args[num_args], XmNiconPlacement, XmIconOnly); num_args++;
 
 	XmHierarchyC_open_close_button(node) = 
@@ -1121,7 +1121,7 @@ CvtStringToNodeState(Display * dpy, XrmValuePtr args, Cardinal *num_args,
     else if (q == XtQEHidden) 
 	type = XmHidden;
     else if (q == XtQENotInHierarchy) 	/* note! shouldn't ever be needed */
-	type = XiNotInHierarchy;
+	type = XmNotInHierarchy;
     else {
 	XtDisplayStringConversionWarning(dpy, fromVal->addr,
 					 XmRXmHierarchyNodeState);

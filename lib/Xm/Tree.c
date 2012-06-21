@@ -706,7 +706,7 @@ ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 
     LineStyle_confirm(set, LineSolid);
     
-    if (XmHierarchyC_state(node) != XiNotInHierarchy)
+    if (XmHierarchyC_state(node) != XmNotInHierarchy)
 	GetNodeGCs(set);
     else
  	XmTreeC_gc(node) = None;
@@ -729,7 +729,7 @@ ConstraintDestroy(Widget w)
     XmListElem *elem, *next;
     XmTreeWidget tw;
 
-    if (XmHierarchyC_state(node) == XiNotInHierarchy) 
+    if (XmHierarchyC_state(node) == XmNotInHierarchy) 
     {
       return;
     }

@@ -47,7 +47,7 @@ typedef struct _XmHierarchyClassRec	*XmHierarchyWidgetClass;
 typedef struct _XmHierarchyRec		*XmHierarchyWidget;
 
 typedef enum {XmAlwaysOpen, XmOpen, XmClosed, XmHidden,
-	      XiNotInHierarchy} XmHierarchyNodeState;
+	      XmNotInHierarchy} XmHierarchyNodeState;
 
 typedef struct _XmHierarchyNodeStateData {
     Widget widget;

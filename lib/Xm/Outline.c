@@ -764,7 +764,7 @@ ConstraintDestroy(Widget w)
     XmListElem *elem, *next;
     XmOutlineWidget ow;
 
-    if (XmHierarchyC_state(node) == XiNotInHierarchy) 
+    if (XmHierarchyC_state(node) == XmNotInHierarchy) 
 	return;
 
     ow = (XmOutlineWidget) XtParent(w);
