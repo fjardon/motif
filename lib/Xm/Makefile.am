@@ -276,9 +276,10 @@ STRING_FILES = XmStrDefs.h XmStrDefsI.h XmStrDefs.c
 
 BUILT_SOURCES = $(STRING_FILES) $(CAT_FILES)
 
-Makefile: $(BUILT_SOURCES)
+$(top_builddir)/config/util/makestrs:
+	( cd $(top_builddir)/config/util && $(MAKE) $(AM_MAKEFLAGS) makestrs )
 
-$(STRING_FILES): xmstring.list
+$(STRING_FILES): Makefile xmstring.list $(top_builddir)/config/util/makestrs
 	$(top_builddir)/config/util/makestrs -f xmstring.list >XmStrDefs.c
 
 if MessageCatalog
