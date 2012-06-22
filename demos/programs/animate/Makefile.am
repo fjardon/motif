@@ -9,7 +9,7 @@ xmanimate_SOURCES = xmanimate.c animate.c
 
 CLEANFILES =  dog.uid plane.uid superman.uid xmanimate.uid
 
-data_DATA = dog.uid plane.uid superman.uid xmanimate.uid $(xanimate_SOURCES) \
+data_DATA = dog.uid plane.uid superman.uid xmanimate.uid $(xmanimate_SOURCES) \
             $(EXTRA_DIST)
 
 bin_PROGRAMS = xmanimate
