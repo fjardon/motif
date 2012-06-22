@@ -31,7 +31,7 @@ wml_LDADD = -L. -lwml
 
 wmldbcreate_LDADD = ../../lib/Xm/libXm.la
 
-INCLUDES = ${X_CFLAGS} -I$(srcdir)/../../lib -I$(srcdir)/../../include
+INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../include ${X_CFLAGS} 
 
 noinst_LIBRARIES = libwml.a
 libwml_a_SOURCES = wmlparse.y wml.c wmloutkey.c wmlouth.c wmloutmm.c wmloutp1.c wmlresolve.c wmlsynbld.c wmlutils.c
