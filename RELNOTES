@@ -1,7 +1,7 @@
 -------------------------------------------------------
 
 
-                               Motif 2.2.1
+                               Motif 2.2.2
 
                               Release Notes
 
@@ -10,8 +10,8 @@
                      Integrated Computer Solutions
 
 
-This document provides Release notes for Motif 2.2.1.
-This contains information on what is new in Motif 2.2.1
+This document provides Release notes for Motif 2.2.2.
+This contains information on what is new in Motif 2.2.2
 Please see the COPYING file included with this release.
 
 
@@ -197,7 +197,7 @@ REAMDE.imake building/installation instructions using imake
 
 Motif 2.2 was built and tested on the following systems:
 
-     Darwin (MacOS X) 1.3.7
+     Darwin (MacOS X) 5.2 (10.1.3)
      FreeBSD 4.4
      Linux 2.4 (Redhat 7.2)
 
@@ -207,7 +207,7 @@ In all cases the vendor's supplied compiler was used.
 
 The following platforms are supported operating systems:
 
-     Darwin (MacOS X) 1.3.7
+     Darwin (MacOS X) 5.2 (10.1.x)
      FreeBSD          4.4
      Linux            2.4  Redhat 7.2
 

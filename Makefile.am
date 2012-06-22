@@ -1,3 +1,8 @@
+datadir = ${prefix}/share/Xm/doc
+
+data_DATA = BUGREPORT CLOSEDBUGS COPYRIGHT.MOTIF LICENSE OPENBUGS \
+            README RELEASE RELNOTES
+
 EXTRA_DIST = BUGREPORT \
              CLOSEDBUGS \
              COPYRIGHT.MOTIF \

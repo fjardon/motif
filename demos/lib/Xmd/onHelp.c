@@ -26,13 +26,11 @@
  * HISTORY
  */
 
+#include <stdlib.h>
 #include <Xm/Xm.h>
 #include "Help.h"
 
-void quitCB( widget, tag, callback_data )
-     Widget	widget;
-     char       *tag;
-     XmAnyCallbackStruct *callback_data;
+void quitCB( Widget widget, char *tag, XmAnyCallbackStruct *callback_data )
 {
   exit(0);
 }
@@ -40,9 +38,7 @@ void quitCB( widget, tag, callback_data )
 /*
  *  Main program
  */
-int main(argc, argv)
-     int    argc;
-     String argv[];
+int main(int argc, String argv[])
 {
   Arg	args[10];
   XtAppContext app_context;
