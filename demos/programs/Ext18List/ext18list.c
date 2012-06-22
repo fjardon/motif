@@ -138,9 +138,8 @@ Widget shell;
  * Returns:       nothing
  *
  */
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     Widget top, demo;
     XtAppContext app;
@@ -158,5 +157,6 @@ char **argv;
     XtRealizeWidget(top);
 
     XtAppMainLoop(app);
+    return(0);
 }
 

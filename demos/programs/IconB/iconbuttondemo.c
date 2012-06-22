@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <Xm/Xm.h>
 #include <Xm/MessageB.h>
@@ -238,10 +239,8 @@ to the displayed text.\n\
     XtManageChild(info);
 }
 
-
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     Arg args[15];
     Cardinal argcnt;
@@ -497,4 +496,5 @@ specify which cell in the Icon Box each child should go.\n\
     XtRealizeWidget(top);
 
     XtAppMainLoop(app);
+    return(0);
 }

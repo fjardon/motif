@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <Xm/Xm.h>
 #include <Xm/MessageB.h>
@@ -86,7 +87,7 @@ void Explain(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;
-    XmString xmstring;
+    XmString xmstring=NULL;
     static Widget info = NULL;
     int explain = (int) client;
 
@@ -220,10 +221,8 @@ void GetColor(Widget w, XtPointer client, XtPointer call)
     XtSetValues(holder.colorBtn, args, argcnt);
 
 }
-
-main(argc, argv)
-int argc;
-char **argv;
+int
+main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;
@@ -403,6 +402,7 @@ char **argv;
     XtRealizeWidget(top);
 
     XtAppMainLoop(app);
+    return(0);
 }
 
 

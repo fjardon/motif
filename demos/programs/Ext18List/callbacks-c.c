@@ -13,6 +13,7 @@
 #include <Xm/Ext18List.h>
 #include "extlist.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 extern PlayerData players[];
 extern Pixmap porsche_pix;
