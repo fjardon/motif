@@ -26,6 +26,7 @@
  * HISTORY
  */
 
+#include <stdlib.h>
 #include <Xm/XmAll.h>
 #include <Xmd/Help.h>   
 #include <Xmd/RegEdit.h>   

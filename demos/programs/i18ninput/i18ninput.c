@@ -66,11 +66,11 @@ static char *base(char *str)
   static char basename[300];
   char *p;
 
-  if (p = strrchr(str, '/'))
+  if ((p = strrchr(str, '/')))
     (void) strcpy(basename, p+1);
   else
     (void) strcpy(basename, str);
-  if (p = strrchr(basename, '.'))
+  if ((p = strrchr(basename, '.')))
     *p ='\0';
   return basename;
 }
