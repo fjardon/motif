@@ -25,7 +25,8 @@
 /*
  * HISTORY
  */
- 
+
+#include <stdlib.h> 
 #include <Xm/XmAll.h>
 #include <Xmd/RegEdit.h>   
 #include <Xmd/AdjView.h>   
