@@ -21,6 +21,9 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
+#ifndef _XmPicture_h
+#define _XmPicture_h
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
