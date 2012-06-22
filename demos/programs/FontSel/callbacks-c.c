@@ -8,6 +8,8 @@
 /**************************************************************
  *		INCLUDES
  **************************************************************/
+#include <stdlib.h>
+#include <stdio.h>
 #include <Xm/Xm.h>
 #include <Xm/ToggleB.h>
 #include <Xm/MessageB.h>
@@ -66,7 +68,7 @@ XtPointer call;
 {
     Arg args[5];
     Cardinal argcnt;
-    XmString xmstring;
+    XmString xmstring=NULL;
     static Widget info = NULL;
     int explain = (int) client;
 
