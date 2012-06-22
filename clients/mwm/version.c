@@ -38,7 +38,7 @@ static char rcsid[] = "$TOG: version.c /main/14 1999/10/12 09:32:45 mgreess $"
 
 #ifndef        lint
 #define        osfversion() \
-   static char _motif_version[] = "@(#)OSF/Motif mwm 2.1.30 Release";
+   static char _motif_version[] = "@(#)Open Motif mwm 2.2.2 Release";
 #else  /* lint */
 #define        osfversion()
 #endif /* lint */
