@@ -87,9 +87,8 @@ static char* externdefstr;
 
 #define X_MAGIC_STRING "<<<STRING_TABLE_GOES_HERE>>>"
 
-static void WriteHeaderProlog (f, phile)
-    FILE* f;
-    File* phile;
+static void
+WriteHeaderProlog (FILE* f, File* phile)
 {
     Table* t;
     TableEnt* te;
@@ -110,9 +109,8 @@ static void WriteHeaderProlog (f, phile)
     (void) fprintf (f, "%s", "#else\n");
 }
 
-static void IntelABIWriteHeader (f, phile)
-    FILE* f;
-    File* phile;
+static void
+IntelABIWriteHeader (FILE* f, File* phile)
 {
     Table* t;
     TableEnt* te;
@@ -131,9 +129,8 @@ static void IntelABIWriteHeader (f, phile)
     (void) fprintf (f, "#endif /* %s */\n", featurestr);
 }
 
-static void SPARCABIWriteHeader (f, phile)
-    FILE* f;
-    File* phile;
+static void
+SPARCABIWriteHeader (FILE* f, File* phile)
 {
     Table* t;
     TableEnt* te;
@@ -144,9 +141,8 @@ static void SPARCABIWriteHeader (f, phile)
 			    prefixstr, te->left, te->right);
 }
 
-static void FunctionWriteHeader (f, phile)
-    FILE* f;
-    File* phile;
+static void
+FunctionWriteHeader (FILE* f, File* phile)
 {
     Table* t;
     TableEnt* te;
@@ -167,9 +163,8 @@ static void FunctionWriteHeader (f, phile)
     (void) fprintf (f, "#endif /* %s */\n", featurestr);
 }
 
-static void ArrayperWriteHeader (f, phile)
-    FILE* f;
-    File* phile;
+static void
+ArrayperWriteHeader (FILE* f, File* phile)
 {
     Table* t;
     TableEnt* te;
@@ -187,9 +182,8 @@ static void ArrayperWriteHeader (f, phile)
     (void) fprintf (f, "#endif /* %s */\n", featurestr);
 }
 
-static void DefaultWriteHeader (f, phile)
-    FILE* f;
-    File* phile;
+static void
+DefaultWriteHeader (FILE* f, File* phile)
 {
     Table* t;
     TableEnt* te;
@@ -210,9 +204,8 @@ static void DefaultWriteHeader (f, phile)
     (void) fprintf (f, "#endif /* %s */\n", featurestr);
 }
 
-static void CopyTmplProlog (tmpl, f)
-    FILE* tmpl;
-    FILE* f;
+static void
+CopyTmplProlog (FILE* tmpl, FILE* f)
 {
     char buf[1024];
     static char* magic_string = X_MAGIC_STRING;
@@ -226,9 +219,8 @@ static void CopyTmplProlog (tmpl, f)
     }
 }
 
-static void CopyTmplEpilog (tmpl, f)
-    FILE* tmpl;
-    FILE* f;
+static void
+CopyTmplEpilog (FILE* tmpl, FILE* f)
 {
     char buf[1024];
 
@@ -237,21 +229,18 @@ static void CopyTmplEpilog (tmpl, f)
 }
 
 static char* abistring[] = {
-    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+   "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
 
-static void WriteHeader (tagline, phile, abi)
-    char* tagline;
-    File* phile;
-    int abi;
+static void
+WriteHeader (char* tagline, File* phile, int abi)
 {
     FILE* f;
     char* tmp;
     Table* t;
     TableEnt* te;
-    static void (*headerproc[])() = { 
-	DefaultWriteHeader, ArrayperWriteHeader,
-	IntelABIWriteHeader, IntelABIWriteHeader,
-	SPARCABIWriteHeader, FunctionWriteHeader };
+    static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+	                                  IntelABIWriteHeader, IntelABIWriteHeader,
+	                                  SPARCABIWriteHeader, FunctionWriteHeader };
 
     if ((f = fopen (phile->name, "w+")) == NULL) exit (1);
 
@@ -287,9 +276,8 @@ static void WriteHeader (tagline, phile, abi)
     (void) fclose (f);
 }
 
-static void WriteSourceLine (te, abi, fudge)
-    TableEnt* te;
-    int abi;
+static void
+WriteSourceLine (TableEnt* te, int abi, int fudge)
 {
     char* c;
 
@@ -301,8 +289,8 @@ static void WriteSourceLine (te, abi, fudge)
 
 static char* const_string = "%s %sConst char %s[] = {\n";
 
-static void IntelABIWriteSource (abi)
-    int abi;
+static void
+IntelABIWriteSource (int abi)
 {
     File* phile;
 
@@ -320,8 +308,8 @@ static void IntelABIWriteSource (abi)
     }
 }
 
-static void IntelABIBCWriteSource (abi)
-    int abi;
+static void
+IntelABIBCWriteSource (int abi)
 {
     File* phile;
 
@@ -348,8 +336,8 @@ static void IntelABIBCWriteSource (abi)
     }
 }
 
-static void FunctionWriteSource (abi)
-    int abi;
+static void
+FunctionWriteSource (int abi)
 {
     File* phile;
 
@@ -362,7 +350,7 @@ static void FunctionWriteSource (abi)
 
 	for (t = phile->table; t; t = t->next) 
 	    for (te = t->tableent; te; te = te->next)
-		WriteSourceLine (te, abi, t->next ? 1 : 0);
+		    WriteSourceLine (te, abi, t->next ? 1 : 0);
 	(void) printf ("%s\n\n", "};");
 
 	(void) printf ("%sConst char* %s(index)\n    int index;\n{\n    return &_%s[index];\n}\n\n",
@@ -371,8 +359,8 @@ static void FunctionWriteSource (abi)
     }
 }
 
-static void ArrayperWriteSource (abi)
-    int abi;
+static void
+ArrayperWriteSource (int abi)
 {
     File* phile;
     static int done_atom;
@@ -394,8 +382,8 @@ static void ArrayperWriteSource (abi)
     }
 }
 
-static void DefaultWriteSource (abi)
-    int abi;
+static void
+DefaultWriteSource (int abi)
 {
     File* phile;
 
@@ -413,9 +401,8 @@ static void DefaultWriteSource (abi)
     }
 }
 
-static void WriteSource(tagline, abi)
-    char* tagline;
-    int abi;
+static void
+WriteSource(char* tagline, int abi)
 {
     static void (*sourceproc[])() = { 
 	DefaultWriteSource, ArrayperWriteSource,
@@ -436,7 +423,6 @@ static void WriteSource(tagline, abi)
     } else
 	tmpl = NULL;
 
-
     (void) printf ("%s\n%s\n/* %s ABI version -- Do not edit */\n", 
 		   "/* $TOG: makestrs.c /main/11 1998/02/06 11:24:15 kaleb $ */",
 		   "/* This file is automatically generated. */",
@@ -449,8 +435,8 @@ static void WriteSource(tagline, abi)
     if (tmpl) CopyTmplEpilog (tmpl, stdout);
 }
 
-static void DoLine(buf)
-    char* buf;
+static void
+DoLine(char* buf)
 {
 #define X_NO_TOKEN 0
 #define X_FILE_TOKEN 1
@@ -581,14 +567,14 @@ static void DoLine(buf)
 	    int rlen;
 	    int len;
 
-	    if (right = index(buf, ' '))
-		*right++ = 0;
+	    if ((right = index(buf, ' ')))
+		    *right++ = 0;
 	    else
-		right = buf + 1;
+		    right = buf + 1;
 	    if (buf[0] == 'H') {
-		strcpy (lbuf, prefixstr);
-		strcat (lbuf, right);
-		right = lbuf;
+		    strcpy (lbuf, prefixstr);
+		    strcat (lbuf, right);
+		    right = lbuf;
 	    }
 
 	    llen = len = strlen(buf) + 1;
@@ -614,8 +600,8 @@ static void DoLine(buf)
     }
 }
 
-static void IntelABIIndexEntries (file)
-    File* file;
+static void
+IntelABIIndexEntries (File* file)
 {
     Table* t;
     TableEnt* te;
@@ -628,8 +614,8 @@ static void IntelABIIndexEntries (file)
     }
 }
 
-static void DefaultIndexEntries (file)
-    File* file;
+static void
+DefaultIndexEntries (File* file)
 {
     Table* t;
     TableEnt* te;
@@ -643,9 +629,8 @@ static void DefaultIndexEntries (file)
     }
 }
 
-static void IndexEntries (file,abi)
-    File* file;
-    int abi;
+static void
+IndexEntries (File* file, int abi)
 {
     switch (abi) {
     case X_SPARC_ABI:
@@ -660,8 +645,8 @@ static void IndexEntries (file,abi)
     }
 }
 
-static char* DoComment (line)
-    char* line;
+static char*
+DoComment (char* line)
 {
     char* tag;
     char* eol;
@@ -679,9 +664,8 @@ static char* DoComment (line)
     return ret;
 }
 
-int main(argc, argv)
-    int argc;
-    char** argv;
+int
+main(int argc, char *argv[])
 {
     int len, i;
     char* tagline = NULL;
@@ -710,7 +694,7 @@ int main(argc, argv)
 		abi = X_INTEL_ABI;
 	    if (strcmp (argv[i], "-functionabi") == 0)
 		abi = X_FUNCTION_ABI;
-	    if (strcmp (argv[i], "-earlyR6bc") == 0 && abi == X_INTEL_ABI)
+	    if (strcmp (argv[i], "-earlyR6bc") == 0 && (abi == X_INTEL_ABI))
 		abi = X_INTEL_ABI_BC;
 	    if (strcmp (argv[i], "-arrayperabi") == 0)
 		abi = X_ARRAYPER_ABI;
@@ -722,7 +706,7 @@ int main(argc, argv)
     }
 
     if (f == NULL) return 1;
-    while (fgets(buf, sizeof buf, f)) {
+    while (fgets(buf, sizeof(buf), f)) {
 	if (!buf[0] || buf[0] == '\n') 
 	    continue;
 	if (buf[0] == '!') {
