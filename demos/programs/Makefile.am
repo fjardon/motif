@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 SUBDIRS = airport \
          animate \
          drag_and_drop \

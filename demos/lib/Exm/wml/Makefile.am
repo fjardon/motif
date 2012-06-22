@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = Exm.wml
 CLEANFILES = Exm.wmd $(REPORT) $(WMLTARGETS) tokens.dat wml-uil.mm
 

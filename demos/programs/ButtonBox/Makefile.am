@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 datadir = ${prefix}/share/Xm/ButtonBox
 
 bin_PROGRAMS = bboxdemo

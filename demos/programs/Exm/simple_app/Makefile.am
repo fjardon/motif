@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 bindir = ${prefix}/share/Xm/Exm/simple_app
 datadir = ${prefix}/share/Xm/Exm/simple_app
 

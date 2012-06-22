@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 datadir = ${prefix}/share/Xm/Icon
 
 EXTRA_DIST = Imakefile small.bm

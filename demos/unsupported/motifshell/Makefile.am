@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 noinst_PROGRAMS = motifshell
 
 SOURCES = motifshell.c

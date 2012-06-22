@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = README
 
 noinst_HEADERS = Editor.h \

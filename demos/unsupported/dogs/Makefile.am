@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = dogs.uil Dog.uil Square.uil bark.bm  down.bm  up.bm \
    Imakefile
 

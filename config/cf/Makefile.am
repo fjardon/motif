@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = Imakefile Amoeba.cf Amoeba.cf apollo.cf bsd.cf bsdi.cf \
    	     bsdLib.rules bsdLib.tmpl cde.rules cde.tmpl convex.cf cray.cf \
 	     darwin.cf darwinLib.rules darwinLib.tmpl DGUX.cf FreeBSD.cf \

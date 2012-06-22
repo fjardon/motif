@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = Uil.msg
 #
 # I don't seem to have all the pieces to make this thing

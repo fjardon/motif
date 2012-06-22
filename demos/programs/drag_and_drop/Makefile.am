@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 bin_PROGRAMS = DNDDemo simpledrop
 
 INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 

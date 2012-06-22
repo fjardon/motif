@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 noinst_PROGRAMS = hellomotif
 
 SOURCES = hellomotif.c

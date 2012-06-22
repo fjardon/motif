@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 noinst_LIBRARIES = libXmd.a
 
 noinst_PROGRAMS = onHelp

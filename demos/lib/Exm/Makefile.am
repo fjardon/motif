@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 SUBDIRS = wml
 
 noinst_LIBRARIES = libExm.a libExmMrm.a

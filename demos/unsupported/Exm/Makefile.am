@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 noinst_LIBRARIES = libExm.a
 
 libExm_a_SOURCES = Container.c

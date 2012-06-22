@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 datadir = ${prefix}/share/Xm/animate
 
 EXTRA_DIST = dog.uil plane.uil superman.uil xmanimate.uil \

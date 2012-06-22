@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 noinst_PROGRAMS = aicon
  
 LDADD = -L../../lib/Xmd -lXmd ../../../lib/Xm/libXm.la 

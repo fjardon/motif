@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 SUBDIRS =   dainput \
             hellomotif \
             xmapdef \

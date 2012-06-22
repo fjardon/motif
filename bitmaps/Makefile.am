@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = $(bm_HEADERS) Imakefile
 
 bmdir = @INCDIR@/bitmaps

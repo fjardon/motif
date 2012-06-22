@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 datadir = ${prefix}/share/Xm/wsm
 
 EXTRA_DIST = Imakefile README wsm.man

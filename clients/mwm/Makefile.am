@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = Mwm.msg $(rc_DATA)
 
 SUBDIRS = WmWsmLib

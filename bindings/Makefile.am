@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 EXTRA_DIST = $(bind_DATA) Imakefile README
 
 binddir = @XMBINDDIR_FALLBACK@

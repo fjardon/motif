@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 noinst_PROGRAMS = dainput
 
 dainput_SOURCES = dainput.c dainput_dlg.c dainput_ui.c
