@@ -471,6 +471,7 @@ XmImSetFocusValues(Widget w,
       im_info->current_widget = w;
       XtVaGetValues(w, XmNbackground, &bg, NULL);
       XtVaSetValues(p, XmNbackground, bg, NULL);
+      ImGeoReq(p);
       draw_separator(p);
     }
   _XmAppUnlock(app);
@@ -1264,6 +1265,7 @@ set_values(Widget w,
       XtAddEventHandler(p, (EventMask)mask, False, null_proc, NULL);
     }
     if (XtIsRealized(p)) {
+        im_info->current_widget = w;
       if (XmIsDialogShell(p)) {
 	for (i = 0; 
 	     i < ((CompositeWidget)p)->composite.num_children; 
@@ -1274,7 +1276,6 @@ set_values(Widget w,
 	  }
       } else
 	ImGeoReq(p);
-      im_info->current_widget = w;
     }
     /* Is this new XIC supposed to be shared? */
     switch (input_policy)
