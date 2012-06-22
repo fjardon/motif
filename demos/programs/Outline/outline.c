@@ -15,6 +15,7 @@
  *		INCLUDE FILES
  **************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <X11/Intrinsic.h>
 
@@ -210,7 +211,7 @@ InitializePanel(Widget pane)
  * Returns:       nothing
  *
  */
-void
+int
 main(int argc, char **argv)
 {
     Widget top, pane;
