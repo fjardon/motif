@@ -35,6 +35,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <Xm/XmAll.h>
 #include <Xmd/RegEdit.h>   
@@ -155,13 +156,12 @@ static void DeleteUnit (Graphic *graph, Position x, Position y);
 **	    Main body
 */
 int
-main(int	argc, 
-     char	**argv)
+main(int argc, char	*argv[])
 {
     XtAppContext app_context;
-    Widget      toplevel ;
+    Widget      toplevel;
     ApplicationData app_data;
-    Graphic legraph ;
+    Graphic legraph;
 
     toplevel = XtAppInitialize(&app_context, APP_CLASS, NULL, 0,
 			       &argc, argv, fallback_resources, NULL, 0);
@@ -192,14 +192,12 @@ main(int	argc,
 **      textfield ids.
 */
 static void 
-CreateApplication (Widget	parent,
-		   Graphic *	graph)
+CreateApplication (Widget parent, Graphic *	graph)
 {
-    Widget main_window, menu_bar, menu_pane, cascade, 
-           button, comw, scale ;
-    Arg args[5];	
-    int	n ;		   
-    XtTranslations          xlations;
+    Widget main_window, menu_bar, menu_pane, cascade, button, comw, scale;
+    Arg args[5];
+    int	n;
+    XtTranslations xlations;
 
     /*	Create automatic MainWindow.
      */
