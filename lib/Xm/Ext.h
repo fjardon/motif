@@ -147,44 +147,15 @@ typedef Widget (*XmWidgetFunc)(Widget);
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
-
-/************************************************************
-*	CALLBACK REASONS
-*************************************************************/
-enum {
-    XiCR_NONE = 200,
-    XiCR_UPDATE_SHELL,
-    XiCR_UPDATE_TEXT,
-    XiCR_VERIFY_TEXT,
-    XiCR_VERIFY_TEXT_FAILED,
-    XiCR_ENTER_CHILD,
-    XiCR_LEAVE_CHILD
-};
 	  
 
-void XmCopyISOLatin1Lowered(
-#ifndef _NO_PROTO
-char *, char *
-#endif
-);
+void XmCopyISOLatin1Lowered(char *, char *);
 
-int XmCompareISOLatin1(
-#ifndef _NO_PROTO
-char*, char*
-#endif
-);
+int XmCompareISOLatin1(char*, char*);
 
-Boolean XmCompareXtWidgetGeometryToWidget(
-#ifndef _NO_PROTO
-XtWidgetGeometry*, Widget
-#endif
-);
+Boolean XmCompareXtWidgetGeometryToWidget(XtWidgetGeometry*, Widget);
 
-Boolean XmCompareXtWidgetGeometry(
-#ifndef _NO_PROTO
-XtWidgetGeometry*, XtWidgetGeometry*
-#endif
-);
+Boolean XmCompareXtWidgetGeometry(XtWidgetGeometry*, XtWidgetGeometry*);
 
 
 #if defined(__cplusplus)

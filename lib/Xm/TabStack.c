@@ -2378,7 +2378,7 @@ ChangeManaged(widget)
     {
 	XmTabStackCallbackStruct	cbdata;
 
-	cbdata.reason = XiCR_TAB_SELECTED;
+	cbdata.reason = XmCR_TAB_SELECTED;
 	cbdata.event = NULL;
 	cbdata.selected_child = XmTabStack__active_child(tab);
 
@@ -3232,7 +3232,7 @@ TabSelectedCallback(widget, client, cbdata)
      */
     if (XmTabStack_do_notify(tab))
     {
-	data.reason = XiCR_TAB_SELECTED;
+	data.reason = XmCR_TAB_SELECTED;
 	data.event = info->event;
 	data.selected_child = active;
 
@@ -4150,12 +4150,12 @@ XmTabStackXYToWidget(widget, x, y)
 	tab_box = XmTabStack_tab_box((XmTabStackWidget)widget);
 
     }
-    else if( XiIsTabBox(widget) )
+    else if( XmIsTabBox(widget) )
     {
 	tab_stack = XtParent(widget);
 	tab_box = widget;
     }
-    else if( XtParent(widget) != NULL && XiIsTabBox(XtParent(widget)) )
+    else if( XtParent(widget) != NULL && XmIsTabBox(XtParent(widget)) )
     {
 	
 	tab_box = XtParent(widget);

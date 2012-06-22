@@ -193,7 +193,7 @@ static XtActionsRec actionsList[] =
     {"XiArmAndActivate",		ArmAndActivate},
     {"XiToggle",			ToggleState},
     {"XmNotify",			Notify},
-    {"XiGetFocus",			_XiGetFocus},
+    {"XiGetFocus",			_XmGetFocus},
     {"XiDoubleNotify",			DoubleNotify}, 
     {"XiButtonUp",			ButtonUp},
     /*

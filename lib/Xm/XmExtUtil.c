@@ -211,7 +211,7 @@ _XmGadgetWarning(Widget w)
     return(True); 
 }
 
-/*	Function Name: _XiGetFocus
+/*	Function Name: _XmGetFocus
  *	Description:   Gets the XmFocus.
  *	Arguments:     w - the icon button widget.
  *                     event - the event that caused this action.
@@ -221,7 +221,7 @@ _XmGadgetWarning(Widget w)
 
 /* ARGSUSED */
 void
-_XiGetFocus(Widget w, XEvent * event, String * params, Cardinal * num_params)
+_XmGetFocus(Widget w, XEvent * event, String * params, Cardinal * num_params)
 {
 #ifdef VMS
     if (XtIsRealized(w))

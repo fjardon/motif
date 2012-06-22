@@ -160,7 +160,7 @@ XmTabbedStackList, XmTabbedStackList
 #endif
 );
 
-void XiTabAttibutesFree(
+void XmTabAttibutesFree(
 #ifndef _NO_PROTO
 XmTabAttributes
 #endif

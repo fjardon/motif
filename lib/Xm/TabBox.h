@@ -44,7 +44,7 @@ typedef enum {XmTAB_EDGE_TOP_LEFT, XmTAB_EDGE_BOTTOM_RIGHT} XmTabEdge;
 typedef enum {XmTAB_ARROWS_ON_RIGHT, XmTAB_ARROWS_ON_LEFT,
 	      XmTAB_ARROWS_SPLIT} XmTabArrowPlacement;
 
-enum {XiCR_TAB_SELECTED, XiCR_TAB_UNSELECTED};
+enum {XmCR_TAB_SELECTED, XmCR_TAB_UNSELECTED};
 
 typedef struct _XmTabBoxCallbackStruct {
     int       reason;
@@ -58,11 +58,11 @@ typedef struct _XmTabBoxClassRec *XmTabBoxWidgetClass;
 
 extern WidgetClass               xiTabBoxWidgetClass;
 
-#ifndef XiIsTabBox
-#define XiIsTabBox(w) XtIsSubclass(w, xiTabBoxWidgetClass)
-#endif /* XiIsTabBox */
+#ifndef XmIsTabBox
+#define XmIsTabBox(w) XtIsSubclass(w, xiTabBoxWidgetClass)
+#endif /* XmIsTabBox */
 
-Widget XiCreateTabBox(Widget, String, ArgList, Cardinal);
+Widget XmCreateTabBox(Widget, String, ArgList, Cardinal);
 int XmTabBoxGetIndex(Widget, int, int);
 int XmTabBoxGetNumRows(Widget);
 int XmTabBoxGetNumColumns(Widget);

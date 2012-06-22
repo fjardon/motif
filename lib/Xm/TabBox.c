@@ -47,13 +47,13 @@
 
 typedef enum {XiQUAD_1, XiQUAD_2, XiQUAD_3, XiQUAD_4} XiQuadrant;
 
-typedef struct _XiTabRect {
+typedef struct _XmTabRect {
     int    x, y;
     int    width, height;
     int    row, column;
 } XiTabRect;
 
-typedef struct _XiCache {
+typedef struct _XmCache {
     XImage *pixmap;
     XImage *label;
     Boolean sensitive;
@@ -5274,13 +5274,13 @@ CallCallbacks(XmTabBoxWidget tab, XEvent *event, int from, int to)
 {
     XmTabBoxCallbackStruct cbdata;
 
-    cbdata.reason    = XiCR_TAB_UNSELECTED;
+    cbdata.reason    = XmCR_TAB_UNSELECTED;
     cbdata.event     = event;
     cbdata.tab_index = from;
     cbdata.old_index = from;
     XtCallCallbackList((Widget)tab, XmTabBox_unselect_callback(tab), (XtPointer)&cbdata);
 
-    cbdata.reason    = XiCR_TAB_SELECTED;
+    cbdata.reason    = XmCR_TAB_SELECTED;
     cbdata.event     = event;
     cbdata.tab_index = to;
     cbdata.old_index = from;
@@ -8504,7 +8504,7 @@ _XmTabBoxSelectTab(Widget widget, int idx)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) || idx < 0 || 
+    if( !XmIsTabBox(widget) || idx < 0 || 
         idx >=_XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return;
 
     SelectTab(tab, NULL, XmTabBox__selected(tab), idx);
@@ -8607,7 +8607,7 @@ XmTabBoxGetNumRows(Widget widget)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) ) return( 0 );
+    if( !XmIsTabBox(widget) ) return( 0 );
 
     return( XmTabBox__num_rows(tab) );
 }
@@ -8617,7 +8617,7 @@ XmTabBoxGetNumColumns(Widget widget)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) ) return( 0 );
+    if( !XmIsTabBox(widget) ) return( 0 );
 
     return( XmTabBox__num_columns(tab) );
 }
@@ -8632,7 +8632,7 @@ _XmTabBoxGetNumRowsColumns(Widget widget, int size, int *num_rows,
 
     *num_rows = 0;
     *num_cols = 0;
-    if( !XiIsTabBox(widget) ||
+    if( !XmIsTabBox(widget) ||
         (cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab))) == 0 ||
         (XmTabBox_tab_mode(tab) != XmTABS_STACKED &&
 	 XmTabBox_tab_mode(tab) != XmTABS_STACKED_STATIC) )
@@ -8681,7 +8681,7 @@ XmTabBoxGetNumTabs(widget)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) ) return( 0 );
+    if( !XmIsTabBox(widget) ) return( 0 );
 
     return( _XmTabbedStackListCount(XmTabBox_tab_list(tab)) );
 }
@@ -8695,7 +8695,7 @@ _XiGetTabIndex(tab, row, column)
     int            row, column;
 #endif
 {
-    if( !XiIsTabBox(tab) ) return( -1 );
+    if( !XmIsTabBox(tab) ) return( -1 );
 
     return( GetTabIndex((XmTabBoxWidget)tab, row, column) );
 }
@@ -8711,7 +8711,7 @@ _XmTabBoxGetTabWidth(widget, idx)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) || idx < 0 ||
+    if( !XmIsTabBox(widget) || idx < 0 ||
         idx > _XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return( -1 );
 
     return( XmTabBox__actual(tab)[idx].width );
@@ -8728,7 +8728,7 @@ _XmTabBoxGetTabHeight(widget, idx)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) || idx < 0 ||
+    if( !XmIsTabBox(widget) || idx < 0 ||
         idx > _XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return( -1 );
 
     return( XmTabBox__actual(tab)[idx].height );
@@ -8762,7 +8762,7 @@ XmTabBoxGetTabRow(widget, idx)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) || idx < 0 ||
+    if( !XmIsTabBox(widget) || idx < 0 ||
         idx > _XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return( -1 );
 
     return( XmTabBox__actual(tab)[idx].row );
@@ -8884,7 +8884,7 @@ _XmTabBoxCanvas(widget)
 {
     XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
-    if( !XiIsTabBox(widget) ) return( NULL );
+    if( !XmIsTabBox(widget) ) return( NULL );
 
     return( XmTabBox__canvas(tab) );
 }
@@ -8896,7 +8896,7 @@ _XmTabBoxGetMaxTabWidth(Widget widget)
     int            i, max = 0, cnt;
     XRectangle     *wanted;
 
-    if( !XiIsTabBox(widget) ) return( 0 );
+    if( !XmIsTabBox(widget) ) return( 0 );
 
     cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab));
     wanted = XmTabBox__wanted(tab);
@@ -8916,7 +8916,7 @@ _XmTabBoxGetMaxTabHeight(Widget widget)
     int            i, max = 0, cnt;
     XRectangle     *wanted;
 
-    if( !XiIsTabBox(widget) ) return( 0 );
+    if( !XmIsTabBox(widget) ) return( 0 );
 
     cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab));
     wanted = XmTabBox__wanted(tab);
@@ -8938,7 +8938,7 @@ XmTabBoxXYToIndex(widget, x, y)
     int    x, y;
 #endif
 {
-    if( !XiIsTabBox(widget) ) return( -1 );
+    if( !XmIsTabBox(widget) ) return( -1 );
 
     return( XiXYtoTab((XmTabBoxWidget)widget, x, y) );
 }

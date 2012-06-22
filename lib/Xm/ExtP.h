@@ -22,12 +22,8 @@
  * 
  */
 
-#ifndef __ExtP_h__
-#define __ExtP_h__
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
+#ifndef _XmExtP_h_
+#define _XmExtP_h_
 
 #include <Xm/Ext.h>
 
@@ -93,71 +89,44 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-    /*
-     * Be sure to add new definitions for BX when adding new functions
-     * so that we do no conflict with the versions of the widgets built
-     * for BX.
-     */
+   
 
-#ifdef _NO_PROTO
-    extern void XmResolveAllPartOffsets64();
-    extern XtGeometryResult _XmRequestNewSize(), _XmHWQuery();
-    extern void _XiGetFocus(), _XmFilterArgs(), _XmSetValuesOnChildren(); 
-    extern void _XmMoveWidget(), _XmResizeWidget(), _XiConfigureObject();
-    extern Boolean _XmGadgetWarning();
-    extern String _XmGetMBStringFromXmString();
+void XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
+void _XmMoveWidget(Widget, Position, Position);
+void _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
+void _XmConfigureWidget(Widget, Position, Position, 
+                        Dimension, Dimension, Dimension);
 
-    /*
-     * Context Managment Routines.
-     */
+XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension,
+                                   Dimension,
+                                   Dimension *, Dimension *);
+
+XtGeometryResult _XmHWQuery(Widget, XtWidgetGeometry*, XtWidgetGeometry *);
+
+void _XmGetFocus(Widget, XEvent *, String *, Cardinal *);
+
+void _XmFilterArgs(ArgList, Cardinal, String *,
+                   ArgList *, Cardinal *);
+
+void _XmSetValuesOnChildren(Widget, ArgList, Cardinal);
+
+Boolean _XmGadgetWarning(Widget);
+
+String _XmGetMBStringFromXmString(XmString);
+
+/*
+ * Context Managment Routines.
+ */
     
-    extern Boolean _XmGetContextData(), _XmUtilIsSubclassByNameQ();
-    extern void _XmSetContextData(), _XmDeleteContextData();
-    extern void _XmInitialIzeConverters();
+void _XmSetContextData(Widget, XContext, XtPointer);
+void _XmDeleteContextData(Widget, XContext);
+Boolean _XmGetContextData(Widget, XContext, XtPointer *);
+Boolean _XmUtilIsSubclassByNameQ(Widget, XrmQuark);
+void _XmInitialIzeConverters(Widget);
 
-    extern void _XmExtHighlightBorder(Widget);
-    extern void _XmExtUnhighlightBorder(Widget);
-#else
-    extern void XmResolveAllPartOffsets64(WidgetClass,
-					  XmOffsetPtr*, XmOffsetPtr*);
-    extern void _XmMoveWidget(Widget, Position, Position);
-    extern void _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
-    extern void _XmConfigureWidget(Widget, Position, Position, 
-			    Dimension, Dimension, Dimension);
+void _XmExtHighlightBorder(Widget);
+void _XmExtUnhighlightBorder(Widget);
 
-    extern XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension,
-					      Dimension,
-					      Dimension *, Dimension *);
-    
-    extern XtGeometryResult _XmHWQuery(Widget, XtWidgetGeometry*,
-				       XtWidgetGeometry *);
-    
-    extern void _XiGetFocus(Widget, XEvent *, String *, Cardinal *);
-    
-    extern void _XmFilterArgs(ArgList, Cardinal, String *,
-			      ArgList *, Cardinal *);
-
-    extern void _XmSetValuesOnChildren(Widget, ArgList, Cardinal);
-    
-    extern Boolean _XmGadgetWarning(Widget);
-
-    extern String _XmGetMBStringFromXmString(XmString);
-
-    /*
-     * Context Managment Routines.
-     */
-    
-    extern void _XmSetContextData(Widget, XContext, XtPointer);
-    extern void _XmDeleteContextData(Widget, XContext);
-    extern Boolean _XmGetContextData(Widget, XContext, XtPointer *);
-    extern Boolean _XmUtilIsSubclassByNameQ(Widget, XrmQuark);
-    extern void _XmInitialIzeConverters(Widget);
-
-    extern void _XmExtHighlightBorder(Widget);
-    extern void _XmExtUnhighlightBorder(Widget);
-#endif /* _NO_PROTO */
-
-#define _XmInitialiIzeConverters(w) _XmInitializeConverters((w), "ICS EnhancementPak 3.0")
 
 /************************************************************
 *	EXTERNAL DECLARATIONS
@@ -167,8 +136,4 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 }
 #endif
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
-#endif /* __ExtP_h__ */
+#endif 

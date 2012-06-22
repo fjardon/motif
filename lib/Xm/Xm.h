@@ -467,6 +467,9 @@ enum{	XmCR_NONE,			XmCR_HELP,
 	XmCR_PDM_START_VXAUTH,		XmCR_PDM_START_PXAUTH, 
 	XmCR_PDM_OK,			XmCR_PDM_CANCEL,
 	XmCR_PDM_EXIT_ERROR,
+        XmCR_UPDATE_SHELL,              XmCR_UPDATE_TEXT,
+        XmCR_VERIFY_TEXT,               XmCR_VERIFY_TEXT_FAILED,
+        XmCR_ENTER_CHILD,               XmCR_LEAVE_CHILD,
 	XmCR_PROTOCOLS = 6666 /* required for BC. See CR 9158 */
 	} ;
 

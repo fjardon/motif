@@ -26,7 +26,7 @@
 static XmPictureNode* _XiGetNewNode(XmPictureRec*);
 static void _XmPictureParseNode(XmPictureRec*, char**, XmPictureNode**,
 				XmPictureNode**, Boolean);
-static XmPictureTransition* _XiGetNewTransition(XiTransType,
+static XmPictureTransition* _XiGetNewTransition(XmTransType,
 						XmPictureNode*,
 						XmPictureNode*);
 static void _XmPictureSetState(unsigned char*, int);
@@ -35,7 +35,7 @@ static void _XmPictureFollowTransitions(XmPictureStateRec*, char, XmPictureNode*
 static XmPictureNode *_XmPictureCopySubGraph(XmPictureRec*, int,
 					     XmPictureNode*, XmPictureNode*);
 static void _XmPictureTagNodes(XmPictureRec*, XmPictureNode**, int);
-static void _XmPictureFillTraverse(XmPictureRec*, int, XiAutoFill*);
+static void _XmPictureFillTraverse(XmPictureRec*, int, XmAutoFill*);
 
 /*
  * Parses the given string into an XmPicture object.  Returns NULL on a
@@ -225,7 +225,7 @@ XmPictureGetCurrentString(XmPictureState s)
 char*
 XmPictureDoAutoFill(XmPictureState state)
 {
-    XiAutoFill fill;
+    XmAutoFill fill;
     int i;
     Boolean finished = False;
 
@@ -485,7 +485,7 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 }
 
 static XmPictureTransition*
-_XiGetNewTransition(XiTransType type,
+_XiGetNewTransition(XmTransType type,
 		    XmPictureNode *src, XmPictureNode *dest)
 {
     XmPictureTransition *t = XtNew(XmPictureTransition);
@@ -744,7 +744,7 @@ _XmPictureCopySubGraph(XmPictureRec *picture, int n,
 }
 
 static void
-_XmPictureFillTraverse(XmPictureRec *picture, int start, XiAutoFill *fill)
+_XmPictureFillTraverse(XmPictureRec *picture, int start, XmAutoFill *fill)
 {
     XmPictureTransition *trans = picture->nodes[start]->transitions;
 

@@ -891,7 +891,7 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	if (!XmComboBox2_customized_combo_box(cbw))	
 	    (void) SetTextFromList((Widget) cbw);
 
-	cbdata.reason = XiCR_UPDATE_TEXT;
+	cbdata.reason = XmCR_UPDATE_TEXT;
 	cbdata.event = (arrow == NULL ? NULL : arrow->event);
 	XtCallCallbackList((Widget) cbw, XmComboBox2_update_text_callback(cbw),
 			   (XtPointer) &cbdata);
@@ -899,7 +899,7 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     else {
 	if (success = PopupList((Widget) cbw))
 	{
-	    cbdata.reason = XiCR_UPDATE_SHELL;
+	    cbdata.reason = XmCR_UPDATE_SHELL;
 	    cbdata.event = (arrow == NULL ? NULL : arrow->event);
 	    XtCallCallbackList((Widget) cbw, XmComboBox2_update_shell_callback(cbw),
 			       (XtPointer) &cbdata);
@@ -1028,7 +1028,7 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	  addition =
 	      CheckExtensions((XmCombinationBox2WidgetClass)XtClass(cbw));
 	  
-	  cbdata.reason = XiCR_VERIFY_TEXT_FAILED;
+	  cbdata.reason = XmCR_VERIFY_TEXT_FAILED;
 	  cbdata.event = (field == NULL ? NULL : field->event);
 	  
 	  XtCallCallbackList((Widget)cbw,
@@ -1075,7 +1075,7 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
   
   if (w != NULL)
   {
-      cbdata.reason = XiCR_VERIFY_TEXT;
+      cbdata.reason = XmCR_VERIFY_TEXT;
       cbdata.event = (field == NULL ? NULL : field->event);
       XtCallCallbackList((Widget) cbw,
 			 XmComboBox2_verify_text_callback(cbw),

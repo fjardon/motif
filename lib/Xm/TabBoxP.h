@@ -84,7 +84,7 @@ typedef struct _XmTabBoxPart {
     Pixmap           _gray_stipple;
     XRectangle       *_wanted;
     int              _num_wanted;
-    struct _XiTabRect *_actual;
+    struct _XmTabRect *_actual;
     int              _num_actual;
     int              _selected;
     int		     _keyboard;
@@ -116,7 +116,7 @@ typedef struct _XmTabBoxPart {
 
     Boolean          _inited;
 
-    struct _XiCache *_cache;
+    struct _XmCache *_cache;
     int              _cache_size;
 } XmTabBoxPart;
 
@@ -158,7 +158,7 @@ extern XmOffsetPtr XmTabBox_offsets;
 #define XmTabBox__gray_stipple(w) XmTabBoxField(w, _gray_stipple, Pixmap)
 #define XmTabBox__wanted(w) XmTabBoxField(w, _wanted, XRectangle*)
 #define XmTabBox__num_wanted(w) XmTabBoxField(w, _num_wanted, int)
-#define XmTabBox__actual(w) XmTabBoxField(w, _actual, struct _XiTabRect*)
+#define XmTabBox__actual(w) XmTabBoxField(w, _actual, struct _XmTabRect*)
 #define XmTabBox__num_actual(w) XmTabBoxField(w, _num_actual, int)
 #define XmTabBox__selected(w) XmTabBoxField(w, _selected, int)
 #define XmTabBox__keyboard(w) XmTabBoxField(w, _keyboard, int)
@@ -177,7 +177,7 @@ extern XmOffsetPtr XmTabBox_offsets;
 #define XmTabBox__left_arrow(w) XmTabBoxField(w, _left_arrow, Widget)
 #define XmTabBox__right_arrow(w) XmTabBoxField(w, _right_arrow, Widget)
 #define XmTabBox__inited(w) XmTabBoxField(w, _inited, Boolean)
-#define XmTabBox__cache(w) XmTabBoxField(w, _cache, struct _XiCache*)
+#define XmTabBox__cache(w) XmTabBoxField(w, _cache, struct _XmCache*)
 #define XmTabBox__cache_size(w) XmTabBoxField(w, _cache_size, int)
 
 typedef struct _XmTabBoxRec {

@@ -50,11 +50,11 @@ typedef enum {
     AnyCharacter,		/* Any printing character */
     UpCaseCharacter,		/* ditto, case transition as above */
     LiteralCharacter		/* Single character */
-} XiTransType;
+} XmTransType;
 
 typedef struct _XmPictureTransition {
     int                 destination;   /* Node to transition to */
-    XiTransType         type;	       /* literal, null, upcasechar, etc... */
+    XmTransType         type;	       /* literal, null, upcasechar, etc... */
     char                c;	       /* key -- used for literals */
 				       /* OR: count for closures */
     struct _XmPictureTransition *next; /* Next transition from our node */
@@ -86,7 +86,7 @@ typedef struct _XmPictureStateRec {
     Boolean        upcase;
 } XmPictureStateRec;
 
-typedef struct _XiAutoFill {
+typedef struct _XmAutoFill {
     char    c;			/* char to fill */
     Boolean reject;		/* literal's didn't match: it's "right out" */
     Boolean digit;		/* isdigit(c) must be true */
@@ -94,4 +94,4 @@ typedef struct _XiAutoFill {
     Boolean letter;		/* isalpha(c) must be true */
     Boolean hexdigit;		/* isxdigit(c) must be true */
     Boolean octaldigit;		/* must be 0-7 */
-} XiAutoFill;
+} XmAutoFill;
