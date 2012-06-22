@@ -2045,10 +2045,18 @@ ImSetGeo(Widget  vw,
 	  rect_preedit.height = icp->sp_height;
         } else if ((use_plist = (icp->input_style & XIMPreeditPosition)) != 0)
         {
-          unsigned int  margin = ((XmPrimitiveWidget)im_info->current_widget)
-                                ->primitive.shadow_thickness
-                            + ((XmPrimitiveWidget)im_info->current_widget)
-                                ->primitive.highlight_thickness;
+        unsigned int  margin;
+        /*
+         * im_info->current_widget eventually contains NULL,
+         * for example, when widget having XIC focus is disposed.
+         * Thus, we should check this and prevent from touching NULL pointer.
+         */
+        if (im_info->current_widget == NULL)
+            break;
+        margin = ((XmPrimitiveWidget)im_info->current_widget)
+            ->primitive.shadow_thickness
+            + ((XmPrimitiveWidget)im_info->current_widget)
+            ->primitive.highlight_thickness;
 
           rect_preedit.width = MIN(icp->preedit_width,
                   XtWidth(im_info->current_widget) - 2*margin);
