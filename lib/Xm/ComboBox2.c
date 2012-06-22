@@ -37,9 +37,7 @@
 
 #include <Xm/Xm.h>
 #include <Xm/XmP.h>
-#if (XmVERSION >= 2)
 #include <Xm/DrawP.h>
-#endif
 
 #include <Xm/ComboBox2P.h>
 
@@ -261,7 +259,7 @@ XmCombinationBox2ClassRec xmCombinationBox2ClassRec = {
     /* set_values_almost	*/	XtInheritSetValuesAlmost,
     /* get_values_hook		*/	GetValuesHook,
     /* accept_focus		*/	NULL,
-    /* version			*/	XtVersionDontCheck,
+    /* version			*/	XtVersion,
     /* callback_private		*/	NULL,
     /* tm_table			*/	XtInheritTranslations,
     /* query_geometry		*/	(XtGeometryHandler) QueryGeometry,

@@ -61,15 +61,15 @@
 #endif
 
 extern int _XiGetTabIndex _ARGS((Widget, int, int));
-extern int _XiTabBoxGetTabWidth _ARGS((Widget, int));
-extern int _XiTabBoxGetTabHeight _ARGS((Widget, int));
-extern Widget _XiTabBoxCanvas _ARGS((Widget));
-extern void _XiTabBoxGetNumRowColumns _ARGS((Widget, int, int*, int*));
-extern int _XiTabBoxGetMaxTabWidth _ARGS((Widget));
-extern int _XiTabBoxGetMaxTabHeight _ARGS((Widget));
-extern void _XiTabBoxSelectTab _ARGS((Widget, int));
-extern void _XiTabBoxGetNumRowsColumns _ARGS((Widget, int, int *, int *));
-extern void _XiTabBoxStackedGeometry _ARGS((Widget, int, XRectangle *));
+extern int _GetTabWidth _ARGS((Widget, int));
+extern int _XmTabBoxGetTabHeight _ARGS((Widget, int));
+extern Widget _XmTabBoxCanvas _ARGS((Widget));
+extern void _XmTabBoxGetNumRowColumns _ARGS((Widget, int, int*, int*));
+extern int _XmTabBoxGetMaxTabWidth _ARGS((Widget));
+extern int _XmTabBoxGetMaxTabHeight _ARGS((Widget));
+extern void _XmTabBoxSelectTab _ARGS((Widget, int));
+extern void _XmTabBoxGetNumRowsColumns _ARGS((Widget, int, int *, int *));
+extern void _XmTabBoxStackedGeometry _ARGS((Widget, int, XRectangle *));
 extern int _XmTabbedStackListCount _ARGS((XmTabbedStackList));
 
 #ifndef _NO_PROTO
@@ -136,7 +136,7 @@ static void XiMoveTabPanel _ARGS((Widget, Widget));
 
 #define ValidPixmap(p) ((p) != (Pixmap)NULL && \
 			(p) != (Pixmap)XmUNSPECIFIED_PIXMAP && \
-			(p) != (Pixmap)XiPIXMAP_DYNAMIC)
+			(p) != (Pixmap)XmPIXMAP_DYNAMIC)
 
 #define SetSolidGC(d,g,p) \
 { \
@@ -155,7 +155,7 @@ static void XiMoveTabPanel _ARGS((Widget, Widget));
 }
 
 #define XiBackgroundSpecified(c) \
-	(XmTabStackC_tab_background(c) != XiCOLOR_DYNAMIC || \
+	(XmTabStackC_tab_background(c) != XmCOLOR_DYNAMIC || \
 	 ValidPixmap(XmTabStackC_tab_background_pixmap(c)))
 
 #define SetChildGC(c,g) \
@@ -171,7 +171,7 @@ static void XiMoveTabPanel _ARGS((Widget, Widget));
 }
 
 #define XiSelectSpecified(t) \
-	(XmTabStack_select_color((t)) != XiCOLOR_DYNAMIC || \
+	(XmTabStack_select_color((t)) != XmCOLOR_DYNAMIC || \
 	 ValidPixmap(XmTabStack_select_pixmap((t))))
 
 #define SetSelectGC(t,g) \
@@ -211,7 +211,7 @@ static XtActionsRec actions[] = {
     { "XmTabBoxDragTab",	  (XtActionProc) XmTabBoxDragTab          },
 };
 static char drag_translations[] = 
-    "<Btn2Down>:   XiTabBoxArmTab() XmTabBoxDragTab()\n\
+    "<Btn2Down>:   XmTabBoxArmTab() XmTabBoxDragTab()\n\
      <Btn3Down>:   XmTabStackMenu()\n\
      <Key>osfMenu: XmTabStackMenu()";
 #endif
@@ -372,7 +372,7 @@ static XmPartResource resources[] = {
 	  XmRImmediate, (XtPointer) True },
     { XmNtabSelectColor, XmCTabSelectColor,
 	  XmRXmPixel, sizeof(Pixel), offset(select_color),
-	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
+	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
     { XmNtabSelectPixmap, XmCTabSelectPixmap,
 	  XmRXmPixmap, sizeof(Pixmap), offset(select_pixmap),
 	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
@@ -442,13 +442,13 @@ static XtResource constraint_resources[] = {
 	  XmRImmediate, (XtPointer) False },
     { XmNtabBackground, XmCBackground,
 	  XmRXmPixel, sizeof(Pixel), offset(tab_background),
-	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
+	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
     { XmNtabBackgroundPixmap, XmCBackgroundPixmap,
 	  XmRXmPixmap, sizeof(Pixmap), offset(tab_background_pixmap),
-	  XmRImmediate, (XtPointer) XiPIXMAP_DYNAMIC },
+	  XmRImmediate, (XtPointer) XmPIXMAP_DYNAMIC },
     { XmNtabForeground, XmCForeground,
 	  XmRXmPixel, sizeof(Pixel), offset(tab_foreground),
-	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
+	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
 #ifdef TEAR_OFF_TABS
     { XmNtabTearOffEnabled, XmCTabTearOffEnabled,
 	  XmRBoolean, sizeof(Boolean), offset(tear_off_enabled),
@@ -508,7 +508,7 @@ XmTabStackClassRec xiTabStackClassRec = {
     /* set values almost  */    XtInheritSetValuesAlmost,
     /* get values hook    */    NULL,
     /* accept_focus	  */	NULL,
-    /* version            */    XtVersionDontCheck,
+    /* version            */    XtVersion,
     /* callback offsetlst */    NULL,
     /* default trans      */    XtInheritTranslations,
     /* query geo proc	  */	QueryGeometry,
@@ -596,7 +596,7 @@ ClassInitialize()
     }
 
     /*
-     * Initialize the XiTabBox class to add its type converters which we
+     * Initialize the XmTabBox class to add its type converters which we
      * also use.
      */
     XtInitializeWidgetClass(xiTabBoxWidgetClass);
@@ -832,7 +832,7 @@ Initialize(request, set, arg_list, arg_cnt)
 	  = XmStringCopy(XmTabStack_tear_off_label(ts));
     }
 
-    canvas = XiTabBox__canvas(XmTabStack_tab_box((XiTabBoxWidget)ts));
+    canvas = XmTabBox__canvas(XmTabStack_tab_box((XmTabBoxWidget)ts));
 
     n = 0;
     XmTabStack__menu(ts) = XmCreatePopupMenu(canvas, "tabMenu", args, n);
@@ -863,7 +863,7 @@ Initialize(request, set, arg_list, arg_cnt)
 #endif
 
     /*
-     * Add a callback to the XiTabBox so that we know when to display
+     * Add a callback to the XmTabBox so that we know when to display
      * the correct child.
      */
     XtAddCallback(XmTabStack_tab_box(ts), XmNselectCallback,
@@ -1411,7 +1411,7 @@ SetValues(current, request, set, arg_list, arg_cnt)
 
     if( need_redraw )
     {
-	Widget canvas = _XiTabBoxCanvas(XmTabStack_tab_box(s_tab));
+	Widget canvas = _XmTabBoxCanvas(XmTabStack_tab_box(s_tab));
 
 	if( XtIsRealized(canvas) )
 	{
@@ -1535,12 +1535,12 @@ QueryGeometry(widget, request, allowed)
 	    {
 	    case XmTABS_ON_TOP:
 	    case XmTABS_ON_BOTTOM:
-		_XiTabBoxStackedGeometry(XmTabStack_tab_box(tab), width,
+		_XmTabBoxStackedGeometry(XmTabStack_tab_box(tab), width,
 					 &tab_rect);
 		break;
 	    case XmTABS_ON_RIGHT:
 	    case XmTABS_ON_LEFT:
-		_XiTabBoxStackedGeometry(XmTabStack_tab_box(tab), height,
+		_XmTabBoxStackedGeometry(XmTabStack_tab_box(tab), height,
 					 &tab_rect);
 		break;
 	    }
@@ -2266,13 +2266,13 @@ ChangeManaged(widget)
 	if( XmTabStackC_tab_label_string(*kid) == NULL )
 	{
 	    xmstr = attr.label_string = XmStringCreateLocalized(XtName(*kid));
-	    attr.value_mode = XiTAB_VALUE_COPY;
+	    attr.value_mode = XmTAB_VALUE_COPY;
 	}
 	else
 	{
 	    xmstr = NULL;
 	    attr.label_string = XmTabStackC_tab_label_string(*kid);
-	    attr.value_mode = XiTAB_VALUE_SHARE;
+	    attr.value_mode = XmTAB_VALUE_SHARE;
 	}
 	attr.string_direction = XmTabStackC_tab_string_direction(*kid);
 	attr.label_pixmap = XmTabStackC_tab_label_pixmap(*kid);
@@ -2282,7 +2282,7 @@ ChangeManaged(widget)
 	attr.background = XmTabStackC_tab_background(*kid);
 	attr.background_pixmap = XmTabStackC_tab_background_pixmap(*kid);
 	attr.sensitive = XtIsSensitive(*kid);
-	XmTabbedStackListAppend(tl, XiTAB_ALL_FLAGS, &attr);
+	XmTabbedStackListAppend(tl, XmTAB_ALL_FLAGS, &attr);
 	if( xmstr != NULL ) XmStringFree(xmstr);
 
 	/*
@@ -2492,13 +2492,13 @@ ConstraintSetValues(current, request, set, arg_list, arg_cnt)
 	    {
 		xmstr = attr.label_string =
 		    XmStringCreateLocalized(XtName(*kid));
-		attr.value_mode = XiTAB_VALUE_COPY;
+		attr.value_mode = XmTAB_VALUE_COPY;
 	    }
 	    else
 	    {
 		xmstr = NULL;
 		attr.label_string = XmTabStackC_tab_label_string(*kid);
-		attr.value_mode = XiTAB_VALUE_SHARE;
+		attr.value_mode = XmTAB_VALUE_SHARE;
 	    }
 	    attr.string_direction = XmTabStackC_tab_string_direction(*kid);
 	    attr.label_pixmap = XmTabStackC_tab_label_pixmap(*kid);
@@ -2508,7 +2508,7 @@ ConstraintSetValues(current, request, set, arg_list, arg_cnt)
 	    attr.background = XmTabStackC_tab_background(*kid);
 	    attr.background_pixmap = XmTabStackC_tab_background_pixmap(*kid);
 	    attr.sensitive = XtIsSensitive(*kid);
-	    XmTabbedStackListAppend(tl, XiTAB_ALL_FLAGS, &attr);
+	    XmTabbedStackListAppend(tl, XmTAB_ALL_FLAGS, &attr);
 	    if( xmstr != NULL ) XmStringFree(xmstr);
 	}
 
@@ -2577,7 +2577,7 @@ CvtStringToXiPixel(dpy, arg_list, arg_cnt, from, to, data)
     XtPointer *data;
 #endif
 {
-    static Pixel result = XiCOLOR_DYNAMIC;
+    static Pixel result = XmCOLOR_DYNAMIC;
     String	 str = (String) from->addr;
     Widget       widget;
 
@@ -2606,7 +2606,7 @@ CvtStringToXiPixmap(dpy, arg_list, arg_cnt, from, to, data)
     XtPointer *data;
 #endif
 {
-    static Pixmap result = XiPIXMAP_DYNAMIC;
+    static Pixmap result = XmPIXMAP_DYNAMIC;
     String	  str = (String) from->addr;
     Widget        widget;
 
@@ -2741,7 +2741,7 @@ DrawShadows(tab, top_GC, bottom_GC, x, y, width, height)
                            shadow = tab->manager.shadow_thickness;
     /*
      * The only bit of redisplaying that we really have to do is draw
-     * the three sides of the shadow that the XiTabBox does not draw.
+     * the three sides of the shadow that the XmTabBox does not draw.
      */
     switch( XmTabStack_tab_side(tab) )
     {
@@ -2859,8 +2859,8 @@ PickSizes(tab, tab_width, tab_height, box, kid)
     /*
      * The first thing that we need to do is find out how much space we
      * will have for our children.  This is the space that is not
-     * taken up by our XiTabBox Child.  We give first priority to the
-     * XiTabBoxChild.
+     * taken up by our XmTabBox Child.  We give first priority to the
+     * XmTabBoxChild.
      */
     switch( XmTabStack_tab_side(tab) )
     {
@@ -2938,8 +2938,8 @@ PickSizes(tab, tab_width, tab_height, box, kid)
     }
 
     /*
-     * Now that we know the size of the XiTabBox we can now layout it and
-     * our other children.  We will start out with the XiTabBox.
+     * Now that we know the size of the XmTabBox we can now layout it and
+     * our other children.  We will start out with the XmTabBox.
      */
     switch( XmTabStack_tab_side(tab) )
     {
@@ -3000,7 +3000,7 @@ PickSizes(tab, tab_width, tab_height, box, kid)
 	case XmTABS_ON_TOP:
 	case XmTABS_ON_BOTTOM:
 	default:
-	    _XiTabBoxGetNumRowsColumns(XmTabStack_tab_box(tab), tab_width,
+	    _XmTabBoxGetNumRowsColumns(XmTabStack_tab_box(tab), tab_width,
 				       &num_rows, &num_cols);
 
 	    if( num_rows <= 1 || num_cols < 1 )
@@ -3020,7 +3020,7 @@ PickSizes(tab, tab_width, tab_height, box, kid)
 	    break;
 	case XmTABS_ON_LEFT:
 	case XmTABS_ON_RIGHT:
-	    _XiTabBoxGetNumRowsColumns(XmTabStack_tab_box(tab), tab_height,
+	    _XmTabBoxGetNumRowsColumns(XmTabStack_tab_box(tab), tab_height,
 				       &num_rows, &num_cols);
 
 	    if( num_rows <= 1 || num_cols < 1 )
@@ -3105,9 +3105,9 @@ Layout(tab)
  *	callback brings the active child to the front and hides the
  *	old active child.
  * Input:
- *	widget : Widget    - the XiTabBox Widget
+ *	widget : Widget    - the XmTabBox Widget
  *	client : XtPointer - unused
- *	cbdata : XtPointer - the callback data from the XiTabBox
+ *	cbdata : XtPointer - the callback data from the XmTabBox
  * Output:
  *	None.
  */
@@ -3121,7 +3121,7 @@ TabSelectedCallback(widget, client, cbdata)
     XtPointer client, cbdata;
 #endif
 {
-    XiTabBoxCallbackStruct   *info = (XiTabBoxCallbackStruct*) cbdata;
+    XmTabBoxCallbackStruct   *info = (XmTabBoxCallbackStruct*) cbdata;
     XmTabStackWidget         tab = (XmTabStackWidget) XtParent(widget);
     XmTabStackCallbackStruct data;
     WidgetList               kid = tab->composite.children;
@@ -3215,8 +3215,8 @@ TabSelectedCallback(widget, client, cbdata)
 	  XmTabStack_tab_mode(tab) == XmTABS_STACKED_STATIC) &&
           XmTabStack_stacked_effect(tab)) &&
         (info->old_index >= 0 && info->tab_index >= 0 &&
-	 XiTabBoxGetTabRow(XmTabStack_tab_box(tab), info->old_index) != 
-	 XiTabBoxGetTabRow(XmTabStack_tab_box(tab), info->tab_index)) )
+	 XmTabBoxGetTabRow(XmTabStack_tab_box(tab), info->old_index) != 
+	 XmTabBoxGetTabRow(XmTabStack_tab_box(tab), info->tab_index)) )
     {
 	DrawStackedShadows(tab, tab->manager.top_shadow_GC,
 			   tab->manager.bottom_shadow_GC,
@@ -3330,14 +3330,14 @@ XmTabStackSelectTab(widget, notify)
     else
     {
 	/* 
-	 * _XiTabBoxSelectTab will call our internal callback routine,
+	 * _XmTabBoxSelectTab will call our internal callback routine,
 	 * TabSelectedCallback() which in turn calls the XmNtabSelectedCallback
 	 * callbacks if the "do_notify" flag is set...  The do_notify flag is
 	 * normally TRUE, but can be switched off through this interface.
 	 */
 	XmTabStack_do_notify(tab) = notify;
 
-	_XiTabBoxSelectTab(XmTabStack_tab_box(tab), TabToIndex(tab, widget));
+	_XmTabBoxSelectTab(XmTabStack_tab_box(tab), TabToIndex(tab, widget));
 
 	XmTabStack_do_notify(tab) = True;
     }
@@ -3364,8 +3364,8 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 
 
     shadow = tab->manager.shadow_thickness;
-    num_rows = XiTabBoxGetNumRows(XmTabStack_tab_box(tab));
-    num_cols = XiTabBoxGetNumColumns(XmTabStack_tab_box(tab));
+    num_rows = XmTabBoxGetNumRows(XmTabStack_tab_box(tab));
+    num_cols = XmTabBoxGetNumColumns(XmTabStack_tab_box(tab));
     XtVaGetValues(XmTabStack_tab_box(tab),
 		  XmNtabOffset, &doffset,
 		  NULL);
@@ -4167,7 +4167,7 @@ XmTabStackXYToWidget(widget, x, y)
     }
 
     return( XmTabStackIndexToWidget(tab_stack,
-				    XiTabBoxXYToIndex(tab_box, x, y)) );
+				    XmTabBoxXYToIndex(tab_box, x, y)) );
 }
 
 #define XiDeleteChild(c) \
@@ -4374,7 +4374,7 @@ XmTabBoxDragTab(widget, event, params, num_params)
     if( !XmTabStack_allow_tear_offs(tab) ||
         event == NULL || event->xany.type != ButtonPress ||
         (child = IndexToTab(tab,
-			    XiTabBoxGetIndex(parent, event->xbutton.x,
+			    XmTabBoxGetIndex(parent, event->xbutton.x,
 					     event->xbutton.y))) == NULL ||
         !XmTabStackC_tear_off_enabled(child) )
     {

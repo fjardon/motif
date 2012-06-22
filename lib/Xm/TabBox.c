@@ -92,43 +92,43 @@ static void Realize _ARGS((Widget, XtValueMask*, XSetWindowAttributes*));
 static void BorderHighlight _ARGS((Widget));
 static void BorderUnhighlight _ARGS((Widget));
 
-static void XiTabBoxArmAndActivate _ARGS((Widget, XEvent*, String*,Cardinal*));
+static void XmTabBoxArmAndActivate _ARGS((Widget, XEvent*, String*,Cardinal*));
 
-static void _XiTabBoxTraverseRight _ARGS((Widget, XEvent*, String*,Cardinal*));
-static void _XiTabBoxTraverseLeft _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void _XiTabBoxTraverseUp _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void _XiTabBoxTraverseDown _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void _XmTabBoxTraverseRight _ARGS((Widget, XEvent*, String*,Cardinal*));
+static void _XmTabBoxTraverseLeft _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void _XmTabBoxTraverseUp _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void _XmTabBoxTraverseDown _ARGS((Widget, XEvent*, String*, Cardinal*));
 
-static void XiTabBoxArmTab _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void XiTabBoxSelectTab _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void XiTabBoxTraverseRight _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void XiTabBoxTraverseLeft _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void XiTabBoxTraverseUp _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void XiTabBoxTraverseDown _ARGS((Widget, XEvent*, String*, Cardinal*));
-static void XiTabBoxTraversePrevious _ARGS((Widget, XEvent*, String*,
+static void XmTabBoxArmTab _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxSelectTab _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxTraverseRight _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxTraverseLeft _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxTraverseUp _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxTraverseDown _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxTraversePrevious _ARGS((Widget, XEvent*, String*,
 					    Cardinal*));
-static void XiTabBoxTraverseNext _ARGS((Widget, XEvent*, String*, Cardinal*));
+static void XmTabBoxTraverseNext _ARGS((Widget, XEvent*, String*, Cardinal*));
 
-static void CalcTabSize _ARGS((XiTabBoxWidget, XmTabAttributes,
+static void CalcTabSize _ARGS((XmTabBoxWidget, XmTabAttributes,
 			       XmTabOrientation, XmFontList, int, int, int,
 			       int, int, int, Dimension*, Dimension*));
 
-static void CalcStackedGeometry _ARGS((XiTabBoxWidget, XRectangle*));
-static void HorizontalStackedLayout _ARGS((XiTabBoxWidget, _XiBoolean));
-static void HorizontalStackedRedisplay _ARGS((XiTabBoxWidget));
-static void VerticalStackedRedisplay _ARGS((XiTabBoxWidget));
-static void VerticalStackedLayout _ARGS((XiTabBoxWidget, _XiBoolean));
+static void CalcStackedGeometry _ARGS((XmTabBoxWidget, XRectangle*));
+static void HorizontalStackedLayout _ARGS((XmTabBoxWidget, _XiBoolean));
+static void HorizontalStackedRedisplay _ARGS((XmTabBoxWidget));
+static void VerticalStackedRedisplay _ARGS((XmTabBoxWidget));
+static void VerticalStackedLayout _ARGS((XmTabBoxWidget, _XiBoolean));
 
-static void CalcUnlimitedGeometry _ARGS((XiTabBoxWidget, XRectangle*));
-static void CalcGeometry _ARGS((XiTabBoxWidget, XRectangle*));
+static void CalcUnlimitedGeometry _ARGS((XmTabBoxWidget, XRectangle*));
+static void CalcGeometry _ARGS((XmTabBoxWidget, XRectangle*));
 
-static void HorizontalBasicLayout _ARGS((XiTabBoxWidget));
-static void VerticalBasicLayout _ARGS((XiTabBoxWidget));
-static void Layout _ARGS((XiTabBoxWidget));
+static void HorizontalBasicLayout _ARGS((XmTabBoxWidget));
+static void VerticalBasicLayout _ARGS((XmTabBoxWidget));
+static void Layout _ARGS((XmTabBoxWidget));
 static void Redisplay _ARGS((Widget, XEvent*, Region));
-static void RedisplayTabs _ARGS((XiTabBoxWidget, Region));
+static void RedisplayTabs _ARGS((XmTabBoxWidget, Region));
 
-static void DrawTab _ARGS((XiTabBoxWidget, XmTabAttributes, XiTabRect*,
+static void DrawTab _ARGS((XmTabBoxWidget, XmTabAttributes, XiTabRect*,
 			   _XiBoolean, _XiBoolean));
 
 static Boolean CvtStringToTabOrientation _ARGS((Display*, XrmValue*, Cardinal*,
@@ -159,48 +159,48 @@ static void XiDrawCorner _ARGS((Display*, Drawable, GC, GC, int, int,
 				XiQuadrant));
 
 
-static void HorizontalBasicRedisplay _ARGS((XiTabBoxWidget));
-static void VerticalBasicRedisplay _ARGS((XiTabBoxWidget));
+static void HorizontalBasicRedisplay _ARGS((XmTabBoxWidget));
+static void VerticalBasicRedisplay _ARGS((XmTabBoxWidget));
 
-static XImage *XiRotateImage _ARGS((XiTabBoxWidget, XImage*, int));
+static XImage *XiRotateImage _ARGS((XmTabBoxWidget, XImage*, int));
 
-static void CalcCornerSize _ARGS((XiTabBoxWidget));
-static int XiXYtoTab _ARGS((XiTabBoxWidget, int, int));
+static void CalcCornerSize _ARGS((XmTabBoxWidget));
+static int XiXYtoTab _ARGS((XmTabBoxWidget, int, int));
 
-static void CalcTabGeometry _ARGS((XiTabBoxWidget));
-static int CalcGeometryMinor _ARGS((XiTabBoxWidget, int));
-static int CalcGeometryMajor _ARGS((XiTabBoxWidget, int));
+static void CalcTabGeometry _ARGS((XmTabBoxWidget));
+static int CalcGeometryMinor _ARGS((XmTabBoxWidget, int));
+static int CalcGeometryMajor _ARGS((XmTabBoxWidget, int));
 
-static void CallCallbacks _ARGS((XiTabBoxWidget, XEvent*, int, int));
+static void CallCallbacks _ARGS((XmTabBoxWidget, XEvent*, int, int));
 
-static void DrawVerticalTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
+static void DrawVerticalTab _ARGS((XmTabBoxWidget, XmTabAttributes, GC,
 				   _XiBoolean, int, int, int, _XiBoolean, int,
 				   int, XRectangle*, _XiBoolean, _XiBoolean));
-static void DrawLeftToRightTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
+static void DrawLeftToRightTab _ARGS((XmTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*));
-static void DrawRightToLeftTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
+static void DrawRightToLeftTab _ARGS((XmTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*, _XiBoolean));
-static void DrawTopToBottomTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
+static void DrawTopToBottomTab _ARGS((XmTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*, _XiBoolean));
-static void DrawBottomToTopTab _ARGS((XiTabBoxWidget, XmTabAttributes, GC,
+static void DrawBottomToTopTab _ARGS((XmTabBoxWidget, XmTabAttributes, GC,
 				      _XiBoolean, int, int, int, _XiBoolean,
 				      int, int, XRectangle*, _XiBoolean));
 
-static void FillRoundedTab _ARGS((XiTabBoxWidget, GC, XiTabRect*, XiTabEdge));
-static void FillBeveledTab _ARGS((XiTabBoxWidget, GC, XiTabRect*, XiTabEdge));
+static void FillRoundedTab _ARGS((XmTabBoxWidget, GC, XiTabRect*, XmTabEdge));
+static void FillBeveledTab _ARGS((XmTabBoxWidget, GC, XiTabRect*, XmTabEdge));
 
-static XmTabAttributes GetTabInfo _ARGS((XiTabBoxWidget, int, int));
-static int GetTabIndex _ARGS((XiTabBoxWidget, int, int));
-static void SelectTab _ARGS((XiTabBoxWidget, XEvent*, int, int));
-static Boolean IsTabSensitive _ARGS((XiTabBoxWidget, int));
-static Widget XiGCParent _ARGS((XiTabBoxWidget));
+static XmTabAttributes GetTabInfo _ARGS((XmTabBoxWidget, int, int));
+static int GetTabIndex _ARGS((XmTabBoxWidget, int, int));
+static void SelectTab _ARGS((XmTabBoxWidget, XEvent*, int, int));
+static Boolean IsTabSensitive _ARGS((XmTabBoxWidget, int));
+static Widget XiGCParent _ARGS((XmTabBoxWidget));
 
-static void ResetImageCache _ARGS((XiTabBoxWidget));
-static void FreeImageCache _ARGS((XiTabBoxWidget));
-static int InfoToIndex _ARGS((XiTabBoxWidget, XmTabAttributes));
+static void ResetImageCache _ARGS((XmTabBoxWidget));
+static void FreeImageCache _ARGS((XmTabBoxWidget));
+static int InfoToIndex _ARGS((XmTabBoxWidget, XmTabAttributes));
 
 static Visual* GetShellVisual _ARGS((Widget));
 
@@ -221,7 +221,7 @@ static Visual* GetShellVisual _ARGS((Widget));
 #define XiRectInRegion(r,x,y,w,h) ((r) == False ? RectangleIn : \
 				   XRectInRegion(r,x,y,w,h))
 #define XiCanvas(x) (XtWindow(XmTabBox__canvas((x))))
-#define XiTabParent(x) ((XiTabBoxWidget) XtParent(x))
+#define XiTabParent(x) ((XmTabBoxWidget) XtParent(x))
 #define XImageWidth(i) (i)->width
 #define XImageHeight(i) (i)->height
 #define XImageDepth(i) (i)->depth;
@@ -231,7 +231,7 @@ static Visual* GetShellVisual _ARGS((Widget));
 
 #define ValidPixmap(p) ((p) != (Pixmap)NULL && \
 			(p) != (Pixmap)XmUNSPECIFIED_PIXMAP && \
-			(p) != XiPIXMAP_DYNAMIC )
+			(p) != XmPIXMAP_DYNAMIC )
 #define XiCalcTabSize(t,i,w,h) \
 	CalcTabSize((t),(i), XmTabBox_tab_orientation((t)), \
 		    XmTabBox_font_list((t)), (t)->manager.shadow_thickness, \
@@ -291,7 +291,7 @@ static Visual* GetShellVisual _ARGS((Widget));
 }
 
 #define XiBackgroundSpecified(i) \
-	((i)->background != XiCOLOR_DYNAMIC || \
+	((i)->background != XmCOLOR_DYNAMIC || \
 	 ValidPixmap((i)->background_pixmap))
 
 #define SetBackgroundGC(t,i,g) \
@@ -307,7 +307,7 @@ static Visual* GetShellVisual _ARGS((Widget));
 }
 
 #define XiSelectSpecified(t) \
-	(XmTabBox_select_color((t)) != XiCOLOR_DYNAMIC || \
+	(XmTabBox_select_color((t)) != XmCOLOR_DYNAMIC || \
 	 ValidPixmap(XmTabBox_select_pixmap((t))))
 
 #define SetSelectGC(t,g) \
@@ -323,30 +323,30 @@ static Visual* GetShellVisual _ARGS((Widget));
 }
 
 #define XiChildSpecified(c) \
-	(XmTabStackC_tab_background(c) != XiCOLOR_DYNAMIC || \
+	(XmTabStackC_tab_background(c) != XmCOLOR_DYNAMIC || \
 	 ValidPixmap(XmTabStackC_tab_background_pixmap(c)))
 
 #define RemoveStipple(d,g) XSetFillStyle((d),(g), FillSolid)
 
 static XtActionsRec actions[] = {
-    { "XiTabBoxArmAndActivate",	  (XtActionProc) XiTabBoxArmAndActivate   },
-    { "XiTabBoxArmTab",           (XtActionProc) XiTabBoxArmTab           },
-    { "XiTabBoxSelectTab",        (XtActionProc) XiTabBoxSelectTab        },
-    { "XiTabBoxTraverseRight",    (XtActionProc) XiTabBoxTraverseRight    },
-    { "XiTabBoxTraverseLeft",     (XtActionProc) XiTabBoxTraverseLeft     },
-    { "XiTabBoxTraverseUp",       (XtActionProc) XiTabBoxTraverseUp       },
-    { "XiTabBoxTraverseDown",     (XtActionProc) XiTabBoxTraverseDown     },
-    { "XiTabBoxTraversePrevious", (XtActionProc) XiTabBoxTraversePrevious },
-    { "XiTabBoxTraverseNext",     (XtActionProc) XiTabBoxTraverseNext     },
+    { "XmTabBoxArmAndActivate",	  (XtActionProc) XmTabBoxArmAndActivate   },
+    { "XmTabBoxArmTab",           (XtActionProc) XmTabBoxArmTab           },
+    { "XmTabBoxSelectTab",        (XtActionProc) XmTabBoxSelectTab        },
+    { "XmTabBoxTraverseRight",    (XtActionProc) XmTabBoxTraverseRight    },
+    { "XmTabBoxTraverseLeft",     (XtActionProc) XmTabBoxTraverseLeft     },
+    { "XmTabBoxTraverseUp",       (XtActionProc) XmTabBoxTraverseUp       },
+    { "XmTabBoxTraverseDown",     (XtActionProc) XmTabBoxTraverseDown     },
+    { "XmTabBoxTraversePrevious", (XtActionProc) XmTabBoxTraversePrevious },
+    { "XmTabBoxTraverseNext",     (XtActionProc) XmTabBoxTraverseNext     },
 };
 
 static char traversal_translations[] =
-    "<Key>osfRight:    XiTabBoxTraverseRight()\n\
-     <Key>osfLeft:     XiTabBoxTraverseLeft()\n\
-     <Key>osfUp:       XiTabBoxTraverseUp()\n\
-     <Key>osfDown:     XiTabBoxTraverseDown()\n\
-     ~c s <Key>Tab:    XiTabBoxTraversePrevious()\n\
-     ~c ~s <Key>Tab:   XiTabBoxTraverseNext()\n\
+    "<Key>osfRight:    XmTabBoxTraverseRight()\n\
+     <Key>osfLeft:     XmTabBoxTraverseLeft()\n\
+     <Key>osfUp:       XmTabBoxTraverseUp()\n\
+     <Key>osfDown:     XmTabBoxTraverseDown()\n\
+     ~c s <Key>Tab:    XmTabBoxTraversePrevious()\n\
+     ~c ~s <Key>Tab:   XmTabBoxTraverseNext()\n\
      c s <Key>Tab:     PrimitivePrevTabGroup()\n\
      c ~s <Key>Tab:    PrimitivePrevTabGroup()\n\
      <Key>osfHelp:     PrimitiveHelp()\n\
@@ -357,15 +357,15 @@ static char traversal_translations[] =
      <Unmap>:          PrimitiveUnmap()";
 
 static char canvas_translations[] = 
-    "<Btn1Down>:       XiTabBoxArmTab()\n\
-     <Btn1Up>:         XiTabBoxSelectTab()\n\
-     <Key>osfActivate: XiTabBoxArmAndActivate()\n\
-     <Key>space:       XiTabBoxArmAndActivate()";
+    "<Btn1Down>:       XmTabBoxArmTab()\n\
+     <Btn1Up>:         XmTabBoxSelectTab()\n\
+     <Key>osfActivate: XmTabBoxArmAndActivate()\n\
+     <Key>space:       XmTabBoxArmAndActivate()";
 
 #ifdef offset
 #undef offset
 #endif
-#define offset(field) XmPartOffset(XiTabBox, field)
+#define offset(field) XmPartOffset(XmTabBox, field)
 
 /* because this is a private widget for the TabStack, the resources are
 ** assumed already to be in pixels
@@ -402,7 +402,7 @@ static XtResource resources[] = {
 	  XmRImmediate, (XtPointer) True },
     { XmNtabSelectColor, XmCTabSelectColor,
 	  XmRXmPixel, sizeof(Pixel), offset(select_color),
-	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
+	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
     { XmNtabSelectPixmap, XmCTabSelectPixmap,
 	  XmRXmPixmap, sizeof(Pixel), offset(select_pixmap),
 	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
@@ -424,10 +424,10 @@ static XtResource resources[] = {
 #ifdef SCROLLED_LAYOUT
     { XmNtabArrowPlacement, XmCTabArrowPlacement,
 	  XmRTabArrowPlacement, sizeof(int), offset(arrow_placement),
-	  XmRImmediate, (XtPointer) XiTAB_ARROWS_ON_LEFT },
+	  XmRImmediate, (XtPointer) XmTAB_ARROWS_ON_LEFT },
 #endif
     { XmNtabEdge, XmCTabEdge,
-	  XmRTabEdge, sizeof(XiTabEdge), offset(tab_edge),
+	  XmRTabEdge, sizeof(XmTabEdge), offset(tab_edge),
 	  XmRImmediate, (XtPointer) XmTAB_EDGE_BOTTOM_RIGHT },
     { XmNtabOffset, XmCTabOffset,
 	  XmRDimension, sizeof(Dimension), offset(tab_offset),
@@ -507,7 +507,7 @@ XiTabCanvasClassRec xiTabCanvasClassRec = {
     /* set values almost  */    XtInheritSetValuesAlmost,
     /* get values hook    */    NULL,
     /* accept_focus	  */	NULL,
-    /* version            */    XtVersionDontCheck,
+    /* version            */    XtVersion,
     /* callback offsetlst */    NULL,
     /* default trans      */    canvas_translations,
     /* query geo proc	  */	QueryGeometry,
@@ -527,11 +527,11 @@ XiTabCanvasClassRec xiTabCanvasClassRec = {
   }
 };
 
-XiTabBoxClassRec xiTabBoxClassRec = {
+XmTabBoxClassRec xiTabBoxClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmManagerClassRec,
-    /* class_name	  */	"XiTabBox",
-    /* widget_size	  */	sizeof(XiTabBoxPart),
+    /* class_name	  */	"XmTabBox",
+    /* widget_size	  */	sizeof(XmTabBoxPart),
     /* class_initialize   */    ClassInitialize,
     /* class_part_initial */	NULL,
     /* class_inited       */	False,
@@ -555,7 +555,7 @@ XiTabBoxClassRec xiTabBoxClassRec = {
     /* set values almost  */    XtInheritSetValuesAlmost,
     /* get values hook    */    NULL,
     /* accept_focus	  */	NULL,
-    /* version            */    XtVersionDontCheck,
+    /* version            */    XtVersion,
     /* callback offsetlst */    NULL,
     /* default trans      */    XtInheritTranslations,
     /* query geo proc	  */	QueryGeometry,
@@ -591,7 +591,7 @@ WidgetClass xiTabCanvasWidgetClass = (WidgetClass) &xiTabCanvasClassRec;
 WidgetClass xiTabBoxWidgetClass = (WidgetClass) &xiTabBoxClassRec;
 
 XmOffsetPtr XmTabBox_offsets;
-XmOffsetPtr XiTabBoxC_offsets;
+XmOffsetPtr XmTabBoxC_offsets;
 
 XmOffsetPtr XiTabCanvas_offsets;
 
@@ -616,7 +616,7 @@ ClassInitialize()
 {
     XmResolveAllPartOffsets(xiTabBoxWidgetClass,
 			    &XmTabBox_offsets,
-			    &XiTabBoxC_offsets);
+			    &XmTabBoxC_offsets);
 
     XtSetTypeConverter(XmRString, XmRTabOrientation,
 		       CvtStringToTabOrientation, NULL, 0, XtCacheNone, NULL);
@@ -647,7 +647,7 @@ Initialize(request, set, arg_list, arg_cnt)
     Cardinal *arg_cnt;
 #endif
 {
-    XiTabBoxWidget   st = (XiTabBoxWidget) set;
+    XmTabBoxWidget   st = (XmTabBoxWidget) set;
     XRectangle       want;
     ArgList          filtered_args;
     Cardinal	     num_filtered_args;
@@ -737,7 +737,7 @@ static void
 Realize(Widget widget, XtValueMask *value_mask,
 	XSetWindowAttributes *attributes)
 {
-    XiTabBoxWidget   tb = (XiTabBoxWidget) widget;
+    XmTabBoxWidget   tb = (XmTabBoxWidget) widget;
     XGCValues        gcValues;
     XFontStruct      *font;
 
@@ -763,7 +763,7 @@ Destroy(widget)
     Widget widget;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     XmTabbedStackListFree(XmTabBox_tab_list(tab));
     XmFontListFree(XmTabBox_font_list(tab));
@@ -802,7 +802,7 @@ Resize(widget)
     Widget widget;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     Layout(tab);
 
@@ -827,7 +827,7 @@ Redisplay(widget, event, region)
 #endif
 {
     Widget           parent;
-    XiTabBoxWidget   tab = (XiTabBoxWidget) XtParent(widget);
+    XmTabBoxWidget   tab = (XmTabBoxWidget) XtParent(widget);
     XmTabbedStackList        list = XmTabBox_tab_list(tab);
     int              count = _XmTabbedStackListCount(list),
                      shadow = tab->manager.shadow_thickness;
@@ -1088,9 +1088,9 @@ Redisplay(widget, event, region)
 	case XmTABS_STACKED_STATIC:
 	    HorizontalStackedRedisplay(tab);
 	    break;
-	case XiTABS_OVERLAYED:
+	case XmTABS_OVERLAYED:
 	    break;
-	case XiTABS_SCROLLED:
+	case XmTABS_SCROLLED:
 	    break;
 	}
     }
@@ -1105,9 +1105,9 @@ Redisplay(widget, event, region)
 	case XmTABS_STACKED_STATIC:
 	    VerticalStackedRedisplay(tab);
 	    break;
-	case XiTABS_OVERLAYED:
+	case XmTABS_OVERLAYED:
 	    break;
-	case XiTABS_SCROLLED:
+	case XmTABS_SCROLLED:
 	    break;
 	}
     }
@@ -1139,8 +1139,8 @@ SetValues(current, request, set, arg_list, arg_cnt)
     Cardinal *arg_cnt;
 #endif
 {
-    XiTabBoxWidget c_tab = (XiTabBoxWidget) current,
-                   s_tab = (XiTabBoxWidget) set;
+    XmTabBoxWidget c_tab = (XmTabBoxWidget) current,
+                   s_tab = (XmTabBoxWidget) set;
         
     Boolean        need_layout = False, need_resize = False,
                    clear_cache = False;
@@ -1167,7 +1167,7 @@ SetValues(current, request, set, arg_list, arg_cnt)
     if( XmTabBox_tab_list(c_tab) != XmTabBox_tab_list(s_tab) )
     {
 	if( XmTabbedStackListCompare(XmTabBox_tab_list(s_tab),
-			     XmTabBox_tab_list(c_tab)) == XiTAB_CMP_SIZE )
+			     XmTabBox_tab_list(c_tab)) == XmTAB_CMP_SIZE )
 	{
 	    clear_cache = True;
 	    need_resize = True;
@@ -1312,7 +1312,7 @@ QueryGeometry(widget, request, allowed)
     XtWidgetGeometry *request, *allowed;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
     XRectangle     rect;
 
     /*
@@ -1401,15 +1401,15 @@ QueryGeometry(widget, request, allowed)
     return( XtGeometryAlmost );
 }
 
-#define XiTAB_HIGHLIGHT_RECT 0
-#define XiTAB_TEXT_RECT 1
+#define XmTAB_HIGHLIGHT_RECT 0
+#define XmTAB_TEXT_RECT 1
 
 static XRectangle*
 #ifndef _NO_PROTO
-GetTabRectangle(XiTabBoxWidget tab, int type, XiTabRect *draw)
+GetTabRectangle(XmTabBoxWidget tab, int type, XiTabRect *draw)
 #else
 GetTabRectangle(tab, type, draw)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     int            type;
     XiTabRect      *draw;
 #endif
@@ -1447,7 +1447,7 @@ GetTabRectangle(tab, type, draw)
 
     margin_width += shadow;
     margin_height += shadow;
-    if( type == XiTAB_HIGHLIGHT_RECT )
+    if( type == XmTAB_HIGHLIGHT_RECT )
     {
 	horiz = Max(size, margin_width);
 	vert = Max(size, margin_height);
@@ -1484,10 +1484,10 @@ GetTabRectangle(tab, type, draw)
 
 static void
 #ifndef _NO_PROTO
-DrawBorder(XiTabBoxWidget tab, GC gc, int idx)
+DrawBorder(XmTabBoxWidget tab, GC gc, int idx)
 #else
 DrawBorder(tab, gc, idx)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     GC             gc;
     int            idx;
 #endif
@@ -1524,7 +1524,7 @@ DrawBorder(tab, gc, idx)
 	}
     }
 
-    draw = GetTabRectangle(tab, XiTAB_HIGHLIGHT_RECT, geometry);
+    draw = GetTabRectangle(tab, XmTAB_HIGHLIGHT_RECT, geometry);
 
     rect[0].x = draw->x;
     rect[0].y = draw->y;
@@ -1557,7 +1557,7 @@ BorderHighlight(widget)
     Widget widget;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
 
     DrawBorder(tab, tab->manager.highlight_GC, -1);
 }
@@ -1570,14 +1570,14 @@ BorderUnhighlight(widget)
     Widget widget;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
 
     DrawBorder(tab, tab->manager.background_GC, -1);
 }
 
 /*
  * Function:
- *	XiTabBoxArmAndActivate(widget, event, params, num_params)
+ *	XmTabBoxArmAndActivate(widget, event, params, num_params)
  * Description:
  *	This action is activate when keyboard traversal is used to
  *	select a tab.  This action selects the tabs and calls the
@@ -1593,17 +1593,17 @@ BorderUnhighlight(widget)
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-XiTabBoxArmAndActivate(Widget widget, XEvent *event, String *params,
+XmTabBoxArmAndActivate(Widget widget, XEvent *event, String *params,
 		       Cardinal *num_params)
 #else
-XiTabBoxArmAndActivate(widget, event, params, num_params)
+XmTabBoxArmAndActivate(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget         tab = XiTabParent(widget);
+    XmTabBoxWidget         tab = XiTabParent(widget);
     int                    old = XmTabBox__selected(tab),
                            idx = XmTabBox__keyboard(tab);
 
@@ -1613,17 +1613,17 @@ XiTabBoxArmAndActivate(widget, event, params, num_params)
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-XiTabBoxArmTab(Widget widget, XEvent *event, String *params,
+XmTabBoxArmTab(Widget widget, XEvent *event, String *params,
 	       Cardinal *num_params)
 #else
-XiTabBoxArmTab(widget, event, params, num_params)
+XmTabBoxArmTab(widget, event, params, num_params)
     Widget    widget;
     XEvent    *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            old, idx;
 
     XmProcessTraversal(widget, XmTRAVERSE_CURRENT);
@@ -1648,7 +1648,7 @@ XiTabBoxArmTab(widget, event, params, num_params)
 
 /*
  * Function:
- *	XiTabBoxSelected(widget, event, params, num_params)
+ *	XmTabBoxSelected(widget, event, params, num_params)
  * Description:
  *	This action selects a tab and calls the select and unselect
  *	callbacks.
@@ -1663,17 +1663,17 @@ XiTabBoxArmTab(widget, event, params, num_params)
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-XiTabBoxSelectTab(Widget widget, XEvent *event, String *params,
+XmTabBoxSelectTab(Widget widget, XEvent *event, String *params,
 		  Cardinal *num_params)
 #else
-XiTabBoxSelectTab(widget, event, params, num_params)
+XmTabBoxSelectTab(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget         tab = XiTabParent(widget);
+    XmTabBoxWidget         tab = XiTabParent(widget);
     int                    idx;
 
     /*
@@ -1707,26 +1707,26 @@ XiTabBoxSelectTab(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-_XiTabBoxTraverseRight(Widget widget, XEvent *event, String *params,
+_XmTabBoxTraverseRight(Widget widget, XEvent *event, String *params,
 		       Cardinal *num_params)
 #else
-_XiTabBoxTraverseRight(widget, event, params, num_params)
+_XmTabBoxTraverseRight(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            old, old_selected, set, col;
 
     switch( XmTabBox_tab_mode(tab) )
     {
     case XmTABS_BASIC:
-    case XiTABS_SCROLLED:
-    case XiTABS_OVERLAYED:
+    case XmTABS_SCROLLED:
+    case XmTABS_OVERLAYED:
     default:
-	XiTabBoxTraverseNext(widget, event, params, num_params);
+	XmTabBoxTraverseNext(widget, event, params, num_params);
 	return;
 	break;
     case XmTABS_STACKED:
@@ -1762,50 +1762,50 @@ _XiTabBoxTraverseRight(widget, event, params, num_params)
 /* argsused */
 static void
 #ifndef _NO_PROTO
-XiTabBoxTraverseRight(Widget widget, XEvent *event, String *params,
+XmTabBoxTraverseRight(Widget widget, XEvent *event, String *params,
 		      Cardinal *num_params)
 #else
-XiTabBoxTraverseRight(widget, event, params, num_params)
+XmTabBoxTraverseRight(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
 
     if( XmTabBox_orientation(tab) == XmVERTICAL )
     {
-	_XiTabBoxTraverseDown(widget, event, params, num_params);
+	_XmTabBoxTraverseDown(widget, event, params, num_params);
     }
     else
     {
-	_XiTabBoxTraverseRight(widget, event, params, num_params);
+	_XmTabBoxTraverseRight(widget, event, params, num_params);
     }
 }
 
 static void
 #ifndef _NO_PROTO
-_XiTabBoxTraverseLeft(Widget widget, XEvent *event, String *params,
+_XmTabBoxTraverseLeft(Widget widget, XEvent *event, String *params,
 		      Cardinal *num_params)
 #else
-_XiTabBoxTraverseLeft(widget, event, params, num_params)
+_XmTabBoxTraverseLeft(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            old, old_selected, set, col;
 
     switch( XmTabBox_tab_mode(tab) )
     {
     case XmTABS_BASIC:
-    case XiTABS_SCROLLED:
-    case XiTABS_OVERLAYED:
+    case XmTABS_SCROLLED:
+    case XmTABS_OVERLAYED:
     default:
-	XiTabBoxTraversePrevious(widget, event, params, num_params);
+	XmTabBoxTraversePrevious(widget, event, params, num_params);
 	return;
 	break;
     case XmTABS_STACKED:
@@ -1838,50 +1838,50 @@ _XiTabBoxTraverseLeft(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-XiTabBoxTraverseLeft(Widget widget, XEvent *event, String *params,
+XmTabBoxTraverseLeft(Widget widget, XEvent *event, String *params,
 		     Cardinal *num_params)
 #else
-XiTabBoxTraverseLeft(widget, event, params, num_params)
+XmTabBoxTraverseLeft(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
 
     if( XmTabBox_orientation(tab) == XmVERTICAL )
     {
-	_XiTabBoxTraverseUp(widget, event, params, num_params);
+	_XmTabBoxTraverseUp(widget, event, params, num_params);
     }
     else
     {
-	_XiTabBoxTraverseLeft(widget, event, params, num_params);
+	_XmTabBoxTraverseLeft(widget, event, params, num_params);
     }
 }
 
 static void
 #ifndef _NO_PROTO
-_XiTabBoxTraverseUp(Widget widget, XEvent *event, String *params,
+_XmTabBoxTraverseUp(Widget widget, XEvent *event, String *params,
 		    Cardinal *num_params)
 #else
-_XiTabBoxTraverseUp(widget, event, params, num_params)
+_XmTabBoxTraverseUp(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            old, old_selected, set, old_row, new_row;
 
     switch( XmTabBox_tab_mode(tab) )
     {
     case XmTABS_BASIC:
-    case XiTABS_SCROLLED:
-    case XiTABS_OVERLAYED:
+    case XmTABS_SCROLLED:
+    case XmTABS_OVERLAYED:
     default:
-	XiTabBoxTraversePrevious(widget, event, params, num_params);
+	XmTabBoxTraversePrevious(widget, event, params, num_params);
 	return;
 	break;
     case XmTABS_STACKED:
@@ -1952,50 +1952,50 @@ _XiTabBoxTraverseUp(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-XiTabBoxTraverseUp(Widget widget, XEvent *event, String *params,
+XmTabBoxTraverseUp(Widget widget, XEvent *event, String *params,
 		   Cardinal *num_params)
 #else
-XiTabBoxTraverseUp(widget, event, params, num_params)
+XmTabBoxTraverseUp(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
 
     if( XmTabBox_orientation(tab) == XmVERTICAL )
     {
-	_XiTabBoxTraverseLeft(widget, event, params, num_params);
+	_XmTabBoxTraverseLeft(widget, event, params, num_params);
     }
     else
     {
-	_XiTabBoxTraverseUp(widget, event, params, num_params);
+	_XmTabBoxTraverseUp(widget, event, params, num_params);
     }
 }
 
 static void
 #ifndef _NO_PROTO
-_XiTabBoxTraverseDown(Widget widget, XEvent *event, String *params,
+_XmTabBoxTraverseDown(Widget widget, XEvent *event, String *params,
 		      Cardinal *num_params)
 #else
-_XiTabBoxTraverseDown(widget, event, params, num_params)
+_XmTabBoxTraverseDown(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            old, old_selected, set, new_row, old_row;
 
     switch( XmTabBox_tab_mode(tab) )
     {
     case XmTABS_BASIC:
-    case XiTABS_SCROLLED:
-    case XiTABS_OVERLAYED:
+    case XmTABS_SCROLLED:
+    case XmTABS_OVERLAYED:
     default:
-	XiTabBoxTraverseNext(widget, event, params, num_params);
+	XmTabBoxTraverseNext(widget, event, params, num_params);
 	return;
 	break;
     case XmTABS_STACKED:
@@ -2065,42 +2065,42 @@ _XiTabBoxTraverseDown(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-XiTabBoxTraverseDown(Widget widget, XEvent *event, String *params,
+XmTabBoxTraverseDown(Widget widget, XEvent *event, String *params,
 		     Cardinal *num_params)
 #else
-XiTabBoxTraverseDown(widget, event, params, num_params)
+XmTabBoxTraverseDown(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
 
     if( XmTabBox_orientation(tab) == XmVERTICAL )
     {
-	_XiTabBoxTraverseRight(widget, event, params, num_params);
+	_XmTabBoxTraverseRight(widget, event, params, num_params);
     }
     else
     {
-	_XiTabBoxTraverseDown(widget, event, params, num_params);
+	_XmTabBoxTraverseDown(widget, event, params, num_params);
     }
 }
 
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-XiTabBoxTraversePrevious(Widget widget, XEvent *event, String *params,
+XmTabBoxTraversePrevious(Widget widget, XEvent *event, String *params,
 			 Cardinal *num_params)
 #else
-XiTabBoxTraversePrevious(widget, event, params, num_params)
+XmTabBoxTraversePrevious(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab)), idx, old, tmp,
                    old_selected;
 
@@ -2161,17 +2161,17 @@ XiTabBoxTraversePrevious(widget, event, params, num_params)
 /* ARGSUSED */
 static void
 #ifndef _NO_PROTO
-XiTabBoxTraverseNext(Widget widget, XEvent *event, String *params,
+XmTabBoxTraverseNext(Widget widget, XEvent *event, String *params,
 		     Cardinal *num_params)
 #else
-XiTabBoxTraverseNext(widget, event, params, num_params)
+XmTabBoxTraverseNext(widget, event, params, num_params)
     Widget   widget;
     XEvent   *event;
     String   *params;
     Cardinal *num_params;
 #endif
 {
-    XiTabBoxWidget tab = XiTabParent(widget);
+    XmTabBoxWidget tab = XiTabParent(widget);
     int            cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab)), idx, old, tmp,
                    old_selected;
 
@@ -2221,7 +2221,7 @@ XiTabBoxTraverseNext(widget, event, params, num_params)
 
 static void
 #ifndef _NO_PROTO
-CalcTabSize(XiTabBoxWidget tab, XmTabAttributes info,
+CalcTabSize(XmTabBoxWidget tab, XmTabAttributes info,
 	    XmTabOrientation orientation, XmFontList font_list,
 	    int shadow_thickness, int highlight_thickness,
 	    int margin_width, int margin_height,
@@ -2231,7 +2231,7 @@ CalcTabSize(XiTabBoxWidget tab, XmTabAttributes info,
 CalcTabSize(tab, info, orientation, font_list, shadow_thickness,
 	    highlight_thickness, margin_width, margin_height, spacing,
 	    corner_size, width, height)
-    XiTabBoxWidget   tab;
+    XmTabBoxWidget   tab;
     XmTabAttributes  info;
     XmTabOrientation orientation;
     XmFontList       font_list;
@@ -2394,10 +2394,10 @@ CalcTabSize(tab, info, orientation, font_list, shadow_thickness,
 
 static void
 #ifndef _NO_PROTO
-CalcUnlimitedGeometry(XiTabBoxWidget tab, XRectangle *geometry)
+CalcUnlimitedGeometry(XmTabBoxWidget tab, XRectangle *geometry)
 #else
 CalcUnlimitedGeometry(tab, geometry)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     XRectangle     *geometry;
 #endif
 {
@@ -2504,17 +2504,17 @@ CalcUnlimitedGeometry(tab, geometry)
  * Description:
  *	Calculates the desired geometry given no size constraints.
  * Input:
- *	tab      : XiTabBoxWidget - the tab box to work with
+ *	tab      : XmTabBoxWidget - the tab box to work with
  *	geometry : XRectangle*    - returns the desired geometry
  * Output:
  *	None.
  */
 static void
 #ifndef _NO_PROTO
-CalcGeometry(XiTabBoxWidget tab, XRectangle *geometry)
+CalcGeometry(XmTabBoxWidget tab, XRectangle *geometry)
 #else
 CalcGeometry(tab, geometry)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     XRectangle     *geometry;
 #endif
 {
@@ -2579,8 +2579,8 @@ CalcGeometry(tab, geometry)
 	CalcStackedGeometry(tab, geometry);
 	break;
     case XmTABS_BASIC:
-    case XiTABS_SCROLLED:
-    case XiTABS_OVERLAYED:
+    case XmTABS_SCROLLED:
+    case XmTABS_OVERLAYED:
     default:
 	CalcUnlimitedGeometry(tab, geometry);
 	break;
@@ -2593,14 +2593,14 @@ CalcGeometry(tab, geometry)
 
 static void
 #ifndef _NO_PROTO
-DrawSegments(XiTabBoxWidget tab, XmTabAttributes info, XiTabRect *geometry,
-	     XiTabEdge edge, int corner_size, int shadow, int selected)
+DrawSegments(XmTabBoxWidget tab, XmTabAttributes info, XiTabRect *geometry,
+	     XmTabEdge edge, int corner_size, int shadow, int selected)
 #else
 DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
-    XiTabBoxWidget  tab;
+    XmTabBoxWidget  tab;
     XmTabAttributes info;
     XiTabRect       *geometry;
-    XiTabEdge       edge;
+    XmTabEdge       edge;
     int             corner_size, shadow, selected;
 #endif
 {
@@ -2905,16 +2905,16 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 
 static void
 #ifndef _NO_PROTO
-DrawSquareShadows(XiTabBoxWidget tab, XmTabAttributes info,
+DrawSquareShadows(XmTabBoxWidget tab, XmTabAttributes info,
 		  XiTabRect *geometry,
-		  Boolean selected, XiTabEdge edge, Dimension shadow)
+		  Boolean selected, XmTabEdge edge, Dimension shadow)
 #else
 DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
-    XiTabBoxWidget  tab;
+    XmTabBoxWidget  tab;
     XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected;
-    XiTabEdge       edge;
+    XmTabEdge       edge;
     Dimension       shadow;
 #endif
 {
@@ -3245,17 +3245,17 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 
 static void
 #ifndef _NO_PROTO
-DrawRoundedShadows(XiTabBoxWidget tab, XmTabAttributes info,
+DrawRoundedShadows(XmTabBoxWidget tab, XmTabAttributes info,
 		   XiTabRect *geometry,
-		   Boolean selected, XiTabEdge edge,
+		   Boolean selected, XmTabEdge edge,
 		   int shadow)
 #else
 DrawRoundedShadows(tab, info, geometry, selected, edge, shadow)
-    XiTabBoxWidget  tab;
+    XmTabBoxWidget  tab;
     XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected;
-    XiTabEdge       edge;
+    XmTabEdge       edge;
     int             shadow;
 #endif
 {
@@ -3350,17 +3350,17 @@ DrawRoundedShadows(tab, info, geometry, selected, edge, shadow)
 
 static void
 #ifndef _NO_PROTO
-DrawBeveledShadows(XiTabBoxWidget tab, XmTabAttributes info,
+DrawBeveledShadows(XmTabBoxWidget tab, XmTabAttributes info,
 		   XiTabRect *geometry,
-		   Boolean selected, XiTabEdge edge,
+		   Boolean selected, XmTabEdge edge,
 		   int shadow)
 #else
 DrawBeveledShadows(tab, info, geometry, selected, edge, shadow)
-    XiTabBoxWidget  tab;
+    XmTabBoxWidget  tab;
     XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected;
-    XiTabEdge       edge;
+    XmTabEdge       edge;
     int             shadow;
 #endif
 {
@@ -3495,17 +3495,17 @@ DrawBeveledShadows(tab, info, geometry, selected, edge, shadow)
 
 static void
 #ifndef _NO_PROTO
-DrawTab(XiTabBoxWidget tab, XmTabAttributes info, XiTabRect *geometry,
+DrawTab(XmTabBoxWidget tab, XmTabAttributes info, XiTabRect *geometry,
 	Boolean selected, Boolean keyboard)
 #else
 DrawTab(tab, info, geometry, selected, keyboard)
-    XiTabBoxWidget  tab;
+    XmTabBoxWidget  tab;
     XmTabAttributes info;
     XiTabRect       *geometry;
     Boolean         selected, keyboard;
 #endif
 {
-    XiTabEdge        edge = XmTabBox_tab_edge(tab);
+    XmTabEdge        edge = XmTabBox_tab_edge(tab);
     Widget           canvas = XmTabBox__canvas(tab);
     XmFontList       font_list = XmTabBox_font_list(tab);
     Dimension        shadow_thickness = tab->manager.shadow_thickness,
@@ -3820,7 +3820,7 @@ DrawTab(tab, info, geometry, selected, keyboard)
     }
 
     SetSolidGC(XtDisplay(tab), gc,
-	       (info->foreground == XiCOLOR_DYNAMIC
+	       (info->foreground == XmCOLOR_DYNAMIC
 		? tab->manager.foreground
 		: info->foreground));
 
@@ -3835,7 +3835,7 @@ DrawTab(tab, info, geometry, selected, keyboard)
      * to draw is text and images lets assign this rectangle as the
      * cliping area for our drawing GC.
      */
-    clip = GetTabRectangle(tab, XiTAB_TEXT_RECT, geometry);
+    clip = GetTabRectangle(tab, XmTAB_TEXT_RECT, geometry);
     XSetClipRectangles(XtDisplay(tab), gc, 0, 0, clip, 1, YXBanded);
 
     switch( XmTabBox_tab_orientation(tab) )
@@ -4069,16 +4069,16 @@ CvtStringToTabMode(dpy, arg_list, arg_cnt, from, to, data)
     }
 #ifdef SCROLLED_LAYOUT
     else if( XmCompareISOLatin1(str, "SCROLLED") == 0 ||
-	     XmCompareISOLatin1(str, "XiTABS_SCROLLED") == 0 )
+	     XmCompareISOLatin1(str, "XmTABS_SCROLLED") == 0 )
     {
-	result = XiTABS_SCROLLED;
+	result = XmTABS_SCROLLED;
     }
 #endif
 #ifdef OVERLAYED_LAYOUT
     else if( XmCompareISOLatin1(str, "OVERLAYED") == 0 ||
-	     XmCompareISOLatin1(str, "XiTABS_OVERLAYED") == 0 )
+	     XmCompareISOLatin1(str, "XmTABS_OVERLAYED") == 0 )
     {
-	result = XiTABS_OVERLAYED;
+	result = XmTABS_OVERLAYED;
     }
 #endif
     else
@@ -4148,23 +4148,23 @@ CvtStringToArrowPlacement(dpy, arg_list, arg_cnt, from, to, data)
     XtPointer *data;
 #endif
 {
-    static int result = XiTAB_ARROWS_ON_LEFT;
+    static int result = XmTAB_ARROWS_ON_LEFT;
     String     str = (String) (from->addr);
 
     if( XmCompareISOLatin1(str, "left") == 0 ||
         XmCompareISOLatin1(str, "tab_arrows_on_left") == 0 )
     {
-	result = XiTAB_ARROWS_ON_LEFT;
+	result = XmTAB_ARROWS_ON_LEFT;
     }
     else if( XmCompareISOLatin1(str, "right") == 0 ||
              XmCompareISOLatin1(str, "tab_arrows_on_right") == 0 )
     {
-	result = XiTAB_ARROWS_ON_RIGHT;
+	result = XmTAB_ARROWS_ON_RIGHT;
     }
     else if( XmCompareISOLatin1(str, "split") == 0 ||
              XmCompareISOLatin1(str, "tab_arrows_split") == 0 )
     {
-	result = XiTAB_ARROWS_SPLIT;
+	result = XmTAB_ARROWS_SPLIT;
     }
     else
     {
@@ -4403,10 +4403,10 @@ XiFillCorner(dpy, d, gc, x, y, width, height, quadrant)
 
 static void
 #ifndef _NO_PROTO
-HorizontalBasicLayout(XiTabBoxWidget tab)
+HorizontalBasicLayout(XmTabBoxWidget tab)
 #else
 HorizontalBasicLayout(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     int        i, x, height, cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab));
@@ -4431,10 +4431,10 @@ HorizontalBasicLayout(tab)
 
 static void
 #ifndef _NO_PROTO
-VerticalBasicLayout(XiTabBoxWidget tab)
+VerticalBasicLayout(XmTabBoxWidget tab)
 #else
 VerticalBasicLayout(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     int        i, y, width, cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab));
@@ -4459,10 +4459,10 @@ VerticalBasicLayout(tab)
 
 static void
 #ifndef _NO_PROTO
-Layout(XiTabBoxWidget tab)
+Layout(XmTabBoxWidget tab)
 #else
 Layout(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     XmTabbedStackList  list = XmTabBox_tab_list(tab);
@@ -4517,9 +4517,9 @@ Layout(tab)
 	    VerticalStackedLayout(tab, True);
 	}
 	break;
-    case XiTABS_SCROLLED:
+    case XmTABS_SCROLLED:
 	break;
-    case XiTABS_OVERLAYED:
+    case XmTABS_OVERLAYED:
 	break;
     }
 }
@@ -4537,10 +4537,10 @@ Layout(tab)
  */
 static void
 #ifndef _NO_PROTO
-HorizontalBasicRedisplay(XiTabBoxWidget tab)
+HorizontalBasicRedisplay(XmTabBoxWidget tab)
 #else
 HorizontalBasicRedisplay(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     XiTabRect       *geom;
@@ -4588,10 +4588,10 @@ HorizontalBasicRedisplay(tab)
  */
 static void
 #ifndef _NO_PROTO
-VerticalBasicRedisplay(XiTabBoxWidget tab)
+VerticalBasicRedisplay(XmTabBoxWidget tab)
 #else
 VerticalBasicRedisplay(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     XiTabRect       *geom;
@@ -4631,7 +4631,7 @@ VerticalBasicRedisplay(tab)
  *	Returns a new XImage which is the given image rotate by either
  *	0 (a strait copy), 90, 180, or 270 degrees.
  * Input:
- *	tab    : XiTabBoxWidget - used for reference
+ *	tab    : XmTabBoxWidget - used for reference
  *	src    : XImage*        - the image to rotate
  *	degree : int            - how many degrees to rotate "floored"
  *			          to the nearest 90
@@ -4640,10 +4640,10 @@ VerticalBasicRedisplay(tab)
  */
 static XImage*
 #ifndef _NO_PROTO
-XiRotateImage(XiTabBoxWidget tab, XImage *src, int degree)
+XiRotateImage(XmTabBoxWidget tab, XImage *src, int degree)
 #else
 XiRotateImage(tab, src, degree)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     XImage         *src;
     int            degree;
 #endif
@@ -4745,10 +4745,10 @@ XiRotateImage(tab, src, degree)
 
 static void
 #ifndef _NO_PROTO
-CalcCornerSize(XiTabBoxWidget tab)
+CalcCornerSize(XmTabBoxWidget tab)
 #else
 CalcCornerSize(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     XmFontContext   fc;
@@ -4788,10 +4788,10 @@ CalcCornerSize(tab)
 
 static int
 #ifndef _NO_PROTO
-XiXYtoTab(XiTabBoxWidget tab, int x, int y)
+XiXYtoTab(XmTabBoxWidget tab, int x, int y)
 #else
 XiXYtoTab(tab, x, y)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     int            x, y;
 #endif
 {
@@ -4911,22 +4911,22 @@ XiXYtoTab(tab, x, y)
 
 /*
  * Function:
- *	CalcTabGeometry(XiTabBoxWidget tab)
+ *	CalcTabGeometry(XmTabBoxWidget tab)
  * Description:
  *	This function calculates and caches the geometry for all the tabs,
  *	taking into account the XmNuniformTabSize resource.
  * Input:
- *	tab : XiTabBoxWidget - the tab box who needs the geometries
+ *	tab : XmTabBoxWidget - the tab box who needs the geometries
  *                             calculated.
  * Output:
  *	None.
  */
 static void
 #ifndef _NO_PROTO
-CalcTabGeometry(XiTabBoxWidget tab)
+CalcTabGeometry(XmTabBoxWidget tab)
 #else
 CalcTabGeometry(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
@@ -5005,17 +5005,17 @@ CalcTabGeometry(tab)
  *	Given the major Dimension calculates the needed minor dimension to
  *	display correctly.
  * Input:
- *	tab     : XiTabBoxWidget - the tab box to work with
+ *	tab     : XmTabBoxWidget - the tab box to work with
  *	major_d : int            - the major dimension
  * Output:
  *	int - the desired minor dimension given the major dimension
  */
 static int
 #ifndef _NO_PROTO
-CalcGeometryMinor(XiTabBoxWidget tab, int major_d)
+CalcGeometryMinor(XmTabBoxWidget tab, int major_d)
 #else
 CalcGeometryMinor(tab, major_d)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     int            major_d;
 #endif
 {
@@ -5052,8 +5052,8 @@ CalcGeometryMinor(tab, major_d)
 	switch( XmTabBox_tab_mode(tab) )
 	{
 	case XmTABS_BASIC:
-	case XiTABS_OVERLAYED:
-	case XiTABS_SCROLLED:
+	case XmTABS_OVERLAYED:
+	case XmTABS_SCROLLED:
 	default:
 	    /*
 	     * This is the simple layout case where all the tabs are in 
@@ -5095,8 +5095,8 @@ CalcGeometryMinor(tab, major_d)
     switch( XmTabBox_tab_mode(tab) )
     {
     case XmTABS_BASIC:
-    case XiTABS_OVERLAYED:
-    case XiTABS_SCROLLED:
+    case XmTABS_OVERLAYED:
+    case XmTABS_SCROLLED:
     default:
 	for( i = 0, max = 0, geom = XmTabBox__wanted(tab); i < count; ++i )
 	{
@@ -5129,13 +5129,7 @@ CalcGeometryMinor(tab, major_d)
 }
 
 static int
-#ifndef _NO_PROTO
-CalcGeometryMajor(XiTabBoxWidget tab, int minor_d)
-#else
-CalcGeometryMajor(tab, minor_d)
-    XiTabBoxWidget tab;
-    int            minor_d;
-#endif
+CalcGeometryMajor(XmTabBoxWidget tab, int minor_d)
 {
     XmTabbedStackList  list = XmTabBox_tab_list(tab);
     int        count = _XmTabbedStackListCount(list), i, max, total, num_rows, tmp,
@@ -5161,8 +5155,8 @@ CalcGeometryMajor(tab, minor_d)
 	switch( XmTabBox_tab_mode(tab) )
 	{
 	case XmTABS_BASIC:
-	case XiTABS_OVERLAYED:	
-	case XiTABS_SCROLLED:
+	case XmTABS_OVERLAYED:	
+	case XmTABS_SCROLLED:
 	default:
 	    /*
 	     * For this case the major dimension is simply the length
@@ -5214,8 +5208,8 @@ CalcGeometryMajor(tab, minor_d)
     switch( XmTabBox_tab_mode(tab) )
     {
     case XmTABS_BASIC:
-    case XiTABS_OVERLAYED:	
-    case XiTABS_SCROLLED:
+    case XmTABS_OVERLAYED:	
+    case XmTABS_SCROLLED:
     default:
 	/*
 	 * For this case the major dimension is simply the length
@@ -5266,9 +5260,9 @@ CalcGeometryMajor(tab, minor_d)
  * Function:
  *	CallCallbacks(tab, event, from, to)
  * Description:
- *	Calls the unselect and select callbacks for the XiTabBox
+ *	Calls the unselect and select callbacks for the XmTabBox
  * Input:
- *	tab   : XiTabBoxWidget - the tab box widget
+ *	tab   : XmTabBoxWidget - the tab box widget
  *	event : XEvent*        - passed through
  *	from  : int            - the old selected tab
  *	to    : int	       - the new selected tab
@@ -5276,16 +5270,9 @@ CalcGeometryMajor(tab, minor_d)
  *	None.
  */
 static void
-#ifndef _NO_PROTO
-CallCallbacks(XiTabBoxWidget tab, XEvent *event, int from, int to)
-#else
-CallCallbacks(tab, event, from, to)
-    XiTabBoxWidget tab;
-    XEvent         *event;
-    int            from, to;
-#endif
+CallCallbacks(XmTabBoxWidget tab, XEvent *event, int from, int to)
 {
-    XiTabBoxCallbackStruct cbdata;
+    XmTabBoxCallbackStruct cbdata;
 
     cbdata.reason    = XiCR_TAB_UNSELECTED;
     cbdata.event     = event;
@@ -5302,23 +5289,10 @@ CallCallbacks(tab, event, from, to)
 
 /* ARGSUSED */
 static void
-#ifndef _NO_PROTO
-DrawLeftToRightTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
+DrawLeftToRightTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip)
-#else
-DrawLeftToRightTab(tab, info, gc, have_pixmap, pix_width, pix_height,
-		   pix_depth, have_label, label_width, label_height, clip)
-    XiTabBoxWidget  tab;
-    XmTabAttributes info;
-    GC              gc;
-    Boolean         have_pixmap;
-    int             pix_width, pix_height, pix_depth;
-    Boolean         have_label;
-    int             label_width, label_height;
-    XRectangle      *clip;
-#endif
 {
     XRectangle draw;
     XmFontList font_list = XmTabBox_font_list(tab);
@@ -5562,7 +5536,7 @@ DrawLeftToRightTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  *	Draw the pixmap and text for a tab withing the clipping rectangle
  *	passed in as "clip".
  * Input:
- *	tab          : XiTabBoxWidget - the tab box that drawing
+ *	tab          : XmTabBoxWidget - the tab box that drawing
  *	gc           : GC             - the GC to draw with
  *	have_pixmap  : Boolean        - do we need to draw a pixmap ?
  *	pix_width,
@@ -5577,25 +5551,10 @@ DrawLeftToRightTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  */
 /* ARGSUSED */
 static void
-#ifndef _NO_PROTO
-DrawRightToLeftTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
+DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip, Boolean selected)
-#else
-DrawRightToLeftTab(tab, info, gc, have_pixmap, pix_width, pix_height,
-		   pix_depth, have_label, label_width, label_height, clip,
-		   selected)
-    XiTabBoxWidget  tab;
-    XmTabAttributes info;
-    GC              gc;
-    Boolean         have_pixmap;
-    int             pix_width, pix_height, pix_depth;
-    Boolean         have_label;
-    int             label_width, label_height;
-    XRectangle      *clip;
-    Boolean         selected;
-#endif
 {
     XRectangle draw;
     XmFontList font_list = XmTabBox_font_list(tab);
@@ -6044,7 +6003,7 @@ DrawRightToLeftTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  *	Draw the pixmap and text for a tab withing the clipping rectangle
  *	passed in as "clip".
  * Input:
- *	tab          : XiTabBoxWidget - the tab box that drawing
+ *	tab          : XmTabBoxWidget - the tab box that drawing
  *	gc           : GC             - the GC to draw with
  *	have_pixmap  : Boolean        - do we need to draw a pixmap ?
  *	pix_width,
@@ -6058,25 +6017,10 @@ DrawRightToLeftTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  *	None.
  */
 static void
-#ifndef _NO_PROTO
-DrawBottomToTopTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
+DrawBottomToTopTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip, Boolean selected)
-#else
-DrawBottomToTopTab(tab, info, gc, have_pixmap, pix_width, pix_height,
-		   pix_depth, have_label, label_width, label_height, clip,
-		   selected)
-    XiTabBoxWidget  tab;
-    XmTabAttributes info;
-    GC              gc;
-    Boolean         have_pixmap;
-    int             pix_width, pix_height, pix_depth;
-    Boolean         have_label;
-    int             label_width, label_height;
-    XRectangle      *clip;
-    Boolean         selected;
-#endif
 {
     DrawVerticalTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 		    pix_depth, have_label, label_width, label_height, clip,
@@ -6092,7 +6036,7 @@ DrawBottomToTopTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  *	Draw the pixmap and text for a tab withing the clipping rectangle
  *	passed in as "clip".
  * Input:
- *	tab          : XiTabBoxWidget - the tab box that drawing
+ *	tab          : XmTabBoxWidget - the tab box that drawing
  *	gc           : GC             - the GC to draw with
  *	have_pixmap  : Boolean        - do we need to draw a pixmap ?
  *	pix_width,
@@ -6106,25 +6050,11 @@ DrawBottomToTopTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  *	None.
  */
 static void
-#ifndef _NO_PROTO
-DrawTopToBottomTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
+
+DrawTopToBottomTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		   Boolean have_pixmap, int pix_width, int pix_height,
 		   int pix_depth, Boolean have_label, int label_width,
 		   int label_height, XRectangle *clip, Boolean selected)
-#else
-DrawTopToBottomTab(tab, info, gc, have_pixmap, pix_width, pix_height, 
-		   pix_depth, have_label, label_width, label_height, clip, 
-		   selected)
-    XiTabBoxWidget  tab;
-    XmTabAttributes info;
-    GC              gc;
-    Boolean         have_pixmap;
-    int             pix_width, pix_height, pix_depth;
-    Boolean         have_label;
-    int             label_width, label_height;
-    XRectangle      *clip;
-    Boolean         selected;
-#endif
 {
     DrawVerticalTab(tab, info, gc, have_pixmap, pix_width, pix_height,
 		    pix_depth, have_label, label_width, label_height, clip,
@@ -6140,7 +6070,7 @@ DrawTopToBottomTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  *	Draw the pixmap and text for a tab withing the clipping rectangle
  *	passed in as "clip".
  * Input:
- *	tab          : XiTabBoxWidget - the tab box that drawing
+ *	tab          : XmTabBoxWidget - the tab box that drawing
  *	gc           : GC             - the GC to draw with
  *	have_pixmap  : Boolean        - do we need to draw a pixmap ?
  *	pix_width,
@@ -6157,26 +6087,11 @@ DrawTopToBottomTab(tab, info, gc, have_pixmap, pix_width, pix_height,
  */
 /* ARGSUSED */
 static void
-#ifndef _NO_PROTO
-DrawVerticalTab(XiTabBoxWidget tab, XmTabAttributes info, GC gc,
+DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		Boolean have_pixmap, int pix_width, int pix_height,
 		int pix_depth, Boolean have_label, int label_width,
 		int label_height, XRectangle *clip, Boolean top_to_bottom,
 		Boolean selected)
-#else
-DrawVerticalTab(tab, info, gc, have_pixmap, pix_width, pix_height, pix_depth, 
-		have_label, label_width, label_height, clip, top_to_bottom, 
-		selected)
-    XiTabBoxWidget  tab;
-    XmTabAttributes info;
-    GC              gc;
-    Boolean         have_pixmap;
-    int             pix_width, pix_height, pix_depth;
-    Boolean         have_label;
-    int             label_width, label_height;
-    XRectangle      *clip;
-    Boolean         top_to_bottom, selected;
-#endif
 {
     XRectangle draw;
     XmFontList font_list = XmTabBox_font_list(tab);
@@ -6676,15 +6591,8 @@ DrawVerticalTab(tab, info, gc, have_pixmap, pix_width, pix_height, pix_depth,
 }
 
 static void
-#ifndef _NO_PROTO
-FillRoundedTab(XiTabBoxWidget tab, GC gc, XiTabRect *geometry, XiTabEdge edge)
-#else
-FillRoundedTab(tab, gc, geometry, edge)
-    XiTabBoxWidget tab;
-    GC             gc;
-    XiTabRect      *geometry;
-    XiTabEdge      edge;
-#endif
+
+FillRoundedTab(XmTabBoxWidget tab, GC gc, XiTabRect *geometry, XmTabEdge edge)
 {
     XRectangle rect[2];
     int        x = geometry->x, y = geometry->y,
@@ -6781,15 +6689,7 @@ FillRoundedTab(tab, gc, geometry, edge)
 }
 
 static void
-#ifndef _NO_PROTO
-FillBeveledTab(XiTabBoxWidget tab, GC gc, XiTabRect *geometry, XiTabEdge edge)
-#else
-FillBeveledTab(tab, gc, geometry, edge)
-    XiTabBoxWidget tab;
-    GC             gc;
-    XiTabRect      *geometry;
-    XiTabEdge      edge;
-#endif
+FillBeveledTab(XmTabBoxWidget tab, GC gc, XiTabRect *geometry, XmTabEdge edge)
 {
     XPoint pt[6];
     int    x = geometry->x, y = geometry->y,
@@ -6878,25 +6778,13 @@ FillBeveledTab(tab, gc, geometry, edge)
 }
 
 int
-#ifndef _NO_PROTO
-XiTabBoxGetIndex(Widget widget, int x, int y)
-#else
-XiTabBoxGetIndex(widget, x, y)
-    Widget widget;
-    int    x, y;
-#endif
+XmTabBoxGetIndex(Widget widget, int x, int y)
 {
-    return( XiXYtoTab((XiTabBoxWidget)widget, x, y) );
+    return( XiXYtoTab((XmTabBoxWidget)widget, x, y) );
 }
 
 static void
-#ifndef _NO_PROTO
-CalcStackedGeometry(XiTabBoxWidget tab, XRectangle *rect)
-#else
-CalcStackedGeometry(tab, rect)
-    XiTabBoxWidget tab;
-    XRectangle     *rect;
-#endif
+CalcStackedGeometry(XmTabBoxWidget tab, XRectangle *rect)
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     XmTabAttributes info;
@@ -6955,13 +6843,7 @@ CalcStackedGeometry(tab, rect)
 }
 
 static void
-#ifndef _NO_PROTO
-HorizontalStackedLayout(XiTabBoxWidget tab, Boolean is_static)
-#else
-HorizontalStackedLayout(tab, is_static)
-    XiTabBoxWidget tab;
-    Boolean        is_static;
-#endif
+HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 {
     int        i, x, y, width, per_line, num_rows, tab_width, tab_height,
                tmp, on_line, start_x, offset, row, idx,
@@ -7149,13 +7031,7 @@ HorizontalStackedLayout(tab, is_static)
 }
 
 static void
-#ifndef _NO_PROTO
-VerticalStackedLayout(XiTabBoxWidget tab, Boolean is_static)
-#else
-VerticalStackedLayout(tab, is_static)
-    XiTabBoxWidget tab;
-    Boolean        is_static;
-#endif
+VerticalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 {
     int        i, x, y, height, per_line, num_rows, tab_width, tab_height,
                tmp, on_line, start_y, offset, row, idx,
@@ -7346,19 +7222,13 @@ VerticalStackedLayout(tab, is_static)
  *	the given region. If the region specified is "False" then all tabs
  *	are exposed (see macro XiRectInRegion).
  * Input:
- *	tab    : XiTabBoxWidget - tab box, whose tabs need redisplayed
+ *	tab    : XmTabBoxWidget - tab box, whose tabs need redisplayed
  *	region : Region         - the region to expose or False for all
  * Output:
  *	None.
  */
 static void
-#ifndef _NO_PROTO
-RedisplayTabs(XiTabBoxWidget tab, Region region)
-#else
-RedisplayTabs(tab, region)
-    XiTabBoxWidget tab;
-    Region         region;
-#endif
+RedisplayTabs(XmTabBoxWidget tab, Region region)
 {
     XiTabRect       *geom;
     int             i, count = _XmTabbedStackListCount(XmTabBox_tab_list(tab));
@@ -7384,12 +7254,7 @@ RedisplayTabs(tab, region)
 }
 
 static void
-#ifndef _NO_PROTO
-HorizontalStackedBottomEdgeRedisplay(XiTabBoxWidget tab)
-#else
-HorizontalStackedBottomEdgeRedisplay(tab)
-    XiTabBoxWidget tab;
-#endif
+HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     int             i, count = _XmTabbedStackListCount(list), row = 0, col,
@@ -7689,12 +7554,7 @@ HorizontalStackedBottomEdgeRedisplay(tab)
 }
 
 static void
-#ifndef _NO_PROTO
-HorizontalStackedTopEdgeRedisplay(XiTabBoxWidget tab)
-#else
-HorizontalStackedTopEdgeRedisplay(tab)
-    XiTabBoxWidget tab;
-#endif
+HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     int             i, count = _XmTabbedStackListCount(list), row = 0, col,
@@ -7975,12 +7835,7 @@ HorizontalStackedTopEdgeRedisplay(tab)
 }
 
 static void
-#ifndef _NO_PROTO
-HorizontalStackedRedisplay(XiTabBoxWidget tab)
-#else
-HorizontalStackedRedisplay(tab)
-    XiTabBoxWidget tab;
-#endif
+HorizontalStackedRedisplay(XmTabBoxWidget tab)
 {
     if( XmTabBox_tab_edge(tab) == XmTAB_EDGE_BOTTOM_RIGHT )
     {
@@ -7993,12 +7848,7 @@ HorizontalStackedRedisplay(tab)
 }
 
 static void
-#ifndef _NO_PROTO
-VerticalStackedRightEdgeRedisplay(XiTabBoxWidget tab)
-#else
-VerticalStackedRightEdgeRedisplay(tab)
-    XiTabBoxWidget tab;
-#endif
+VerticalStackedRightEdgeRedisplay(XmTabBoxWidget tab)
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     int             i, count = _XmTabbedStackListCount(list), row = 0, col,
@@ -8297,12 +8147,7 @@ VerticalStackedRightEdgeRedisplay(tab)
 }
 
 static void
-#ifndef _NO_PROTO
-VerticalStackedLeftEdgeRedisplay(XiTabBoxWidget tab)
-#else
-VerticalStackedLeftEdgeRedisplay(tab)
-    XiTabBoxWidget tab;
-#endif
+VerticalStackedLeftEdgeRedisplay(XmTabBoxWidget tab)
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     int             i, count = _XmTabbedStackListCount(list), row = 0, col,
@@ -8579,12 +8424,7 @@ VerticalStackedLeftEdgeRedisplay(tab)
 }
 
 static void
-#ifndef _NO_PROTO
-VerticalStackedRedisplay(XiTabBoxWidget tab)
-#else
-VerticalStackedRedisplay(tab)
-    XiTabBoxWidget tab;
-#endif
+VerticalStackedRedisplay(XmTabBoxWidget tab)
 {
     if( XmTabBox_tab_edge(tab) == XmTAB_EDGE_BOTTOM_RIGHT )
     {
@@ -8597,13 +8437,7 @@ VerticalStackedRedisplay(tab)
 }
 
 static XmTabAttributes
-#ifndef _NO_PROTO
-GetTabInfo(XiTabBoxWidget tab, int row, int column)
-#else
-GetTabInfo(tab, row, column)
-    XiTabBoxWidget tab;
-    int            row, column;
-#endif
+GetTabInfo(XmTabBoxWidget tab, int row, int column)
 {
     int idx = GetTabIndex(tab, row, column);
 
@@ -8613,13 +8447,7 @@ GetTabInfo(tab, row, column)
 }
 
 static int
-#ifndef _NO_PROTO
-GetTabIndex(XiTabBoxWidget tab, int row, int column)
-#else
-GetTabIndex(tab, row, column)
-    XiTabBoxWidget tab;
-    int            row, column;
-#endif
+GetTabIndex(XmTabBoxWidget tab, int row, int column)
 {
     XmTabbedStackList list = XmTabBox_tab_list(tab);
     int       i, count = _XmTabbedStackListCount(list);
@@ -8638,14 +8466,7 @@ GetTabIndex(tab, row, column)
 }
 
 static void
-#ifndef _NO_PROTO
-SelectTab(XiTabBoxWidget tab, XEvent *event, int old, int set)
-#else
-SelectTab(tab, event, old, set)
-    XiTabBoxWidget tab;
-    XEvent         *event;
-    int            old, set;
-#endif
+SelectTab(XmTabBoxWidget tab, XEvent *event, int old, int set)
 {
     int old_row, set_row;
 
@@ -8679,15 +8500,9 @@ SelectTab(tab, event, old, set)
 }
 
 void
-#ifndef _NO_PROTO
-_XiTabBoxSelectTab(Widget widget, int idx)
-#else
-_XiTabBoxSelectTab(widget, idx)
-    Widget widget;
-    int    idx;
-#endif
+_XmTabBoxSelectTab(Widget widget, int idx)
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) || idx < 0 || 
         idx >=_XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return;
@@ -8696,13 +8511,7 @@ _XiTabBoxSelectTab(widget, idx)
 }
 
 static Boolean
-#ifndef _NO_PROTO
-IsTabSensitive(XiTabBoxWidget tab, int idx)
-#else
-IsTabSensitive(tab, idx)
-    XiTabBoxWidget tab;
-    int            idx;
-#endif
+IsTabSensitive(XmTabBoxWidget tab, int idx)
 {
     XmTabAttributes info = _XmTabbedStackListGet(XmTabBox_tab_list(tab), idx);
 
@@ -8712,15 +8521,8 @@ IsTabSensitive(tab, idx)
 }
 
 void
-#ifndef _NO_PROTO
-_XiTabBoxStackedGeometry(XiTabBoxWidget tab, Dimension size,
+_XmTabBoxStackedGeometry(XmTabBoxWidget tab, Dimension size,
 			 XRectangle *rect)
-#else
-_XiTabBoxStackedGeometry(tab, size, rect)
-    XiTabBoxWidget tab;
-    XRectangle     *rect;
-    Dimension      size;
-#endif
 {
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     XmTabAttributes info;
@@ -8801,14 +8603,9 @@ _XiTabBoxStackedGeometry(tab, size, rect)
 }
 
 int
-#ifndef _NO_PROTO
-XiTabBoxGetNumRows(Widget widget)
-#else
-XiTabBoxGetNumRows(widget)
-    Widget widget;
-#endif
+XmTabBoxGetNumRows(Widget widget)
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) ) return( 0 );
 
@@ -8816,14 +8613,9 @@ XiTabBoxGetNumRows(widget)
 }
 
 int
-#ifndef _NO_PROTO
-XiTabBoxGetNumColumns(Widget widget)
-#else
-XiTabBoxGetNumColumns(widget)
-    Widget widget;
-#endif
+XmTabBoxGetNumColumns(Widget widget)
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) ) return( 0 );
 
@@ -8831,16 +8623,10 @@ XiTabBoxGetNumColumns(widget)
 }
 
 void
-#ifndef _NO_PROTO
-_XiTabBoxGetNumRowsColumns(Widget widget, int size, int *num_rows,
+_XmTabBoxGetNumRowsColumns(Widget widget, int size, int *num_rows,
 			   int *num_cols)
-#else
-_XiTabBoxGetNumRowsColumns(widget, size, num_rows, num_cols)
-    Widget widget;
-    int    size, *num_rows, *num_cols;
-#endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
     int            i, max, _num_rows, _num_cols, tmp, offset, cnt;
     XRectangle     *wanted = XmTabBox__wanted(tab);
 
@@ -8887,13 +8673,13 @@ _XiTabBoxGetNumRowsColumns(widget, size, num_rows, num_cols)
 
 int
 #ifndef _NO_PROTO
-XiTabBoxGetNumTabs(Widget widget)
+XmTabBoxGetNumTabs(Widget widget)
 #else
-XiTabBoxGetNumTabs(widget)
+XmTabBoxGetNumTabs(widget)
     Widget widget;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) ) return( 0 );
 
@@ -8905,25 +8691,25 @@ int
 _XiGetTabIndex(Widget tab, int row, int column)
 #else
 _XiGetTabIndex(tab, row, column)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
     int            row, column;
 #endif
 {
     if( !XiIsTabBox(tab) ) return( -1 );
 
-    return( GetTabIndex((XiTabBoxWidget)tab, row, column) );
+    return( GetTabIndex((XmTabBoxWidget)tab, row, column) );
 }
 
 int
 #ifndef _NO_PROTO
-_XiTabBoxGetTabWidth(Widget widget, int idx)
+_XmTabBoxGetTabWidth(Widget widget, int idx)
 #else
-_XiTabBoxGetTabWidth(widget, idx)
+_XmTabBoxGetTabWidth(widget, idx)
     Widget widget;
     int    idx;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) || idx < 0 ||
         idx > _XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return( -1 );
@@ -8933,14 +8719,14 @@ _XiTabBoxGetTabWidth(widget, idx)
 
 int
 #ifndef _NO_PROTO
-_XiTabBoxGetTabHeight(Widget widget, int idx)
+_XmTabBoxGetTabHeight(Widget widget, int idx)
 #else
-_XiTabBoxGetTabHeight(widget, idx)
+_XmTabBoxGetTabHeight(widget, idx)
     Widget widget;
     int    idx;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) || idx < 0 ||
         idx > _XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return( -1 );
@@ -8950,10 +8736,10 @@ _XiTabBoxGetTabHeight(widget, idx)
 
 static Widget
 #ifndef _NO_PROTO
-XiGCParent(XiTabBoxWidget tab)
+XiGCParent(XmTabBoxWidget tab)
 #else
 XiGCParent(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     Widget parent = XtParent(tab);
@@ -8967,14 +8753,14 @@ XiGCParent(tab)
 
 int
 #ifndef _NO_PROTO
-XiTabBoxGetTabRow(Widget widget, int idx)
+XmTabBoxGetTabRow(Widget widget, int idx)
 #else
-XiTabBoxGetTabRow(widget, idx)
+XmTabBoxGetTabRow(widget, idx)
     Widget widget;
     int    idx;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) || idx < 0 ||
         idx > _XmTabbedStackListCount(XmTabBox_tab_list(tab)) ) return( -1 );
@@ -8984,10 +8770,10 @@ XiTabBoxGetTabRow(widget, idx)
 
 static void
 #ifndef _NO_PROTO
-ResetImageCache(XiTabBoxWidget tab)
+ResetImageCache(XmTabBoxWidget tab)
 #else
 ResetImageCache(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     int i, cnt = _XmTabbedStackListCount(XmTabBox_tab_list(tab));
@@ -9045,10 +8831,10 @@ ResetImageCache(tab)
 
 static void
 #ifndef _NO_PROTO
-FreeImageCache(XiTabBoxWidget tab)
+FreeImageCache(XmTabBoxWidget tab)
 #else
 FreeImageCache(tab)
-    XiTabBoxWidget tab;
+    XmTabBoxWidget tab;
 #endif
 {
     int i;
@@ -9078,10 +8864,10 @@ FreeImageCache(tab)
 
 static int
 #ifndef _NO_PROTO
-InfoToIndex(XiTabBoxWidget tab, XmTabAttributes info)
+InfoToIndex(XmTabBoxWidget tab, XmTabAttributes info)
 #else
 InfoToIndex(tab, info)
-    XiTabBoxWidget  tab;
+    XmTabBoxWidget  tab;
     XmTabAttributes info;
 #endif
 {
@@ -9090,13 +8876,13 @@ InfoToIndex(tab, info)
 
 Widget
 #ifndef _NO_PROTO
-_XiTabBoxCanvas(Widget widget)
+_XmTabBoxCanvas(Widget widget)
 #else
-_XiTabBoxCanvas(widget)
+_XmTabBoxCanvas(widget)
     Widget widget;
 #endif
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
 
     if( !XiIsTabBox(widget) ) return( NULL );
 
@@ -9104,9 +8890,9 @@ _XiTabBoxCanvas(widget)
 }
 
 int
-_XiTabBoxGetMaxTabWidth(Widget widget)
+_XmTabBoxGetMaxTabWidth(Widget widget)
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
     int            i, max = 0, cnt;
     XRectangle     *wanted;
 
@@ -9124,9 +8910,9 @@ _XiTabBoxGetMaxTabWidth(Widget widget)
 }
 
 int
-_XiTabBoxGetMaxTabHeight(Widget widget)
+_XmTabBoxGetMaxTabHeight(Widget widget)
 {
-    XiTabBoxWidget tab = (XiTabBoxWidget) widget;
+    XmTabBoxWidget tab = (XmTabBoxWidget) widget;
     int            i, max = 0, cnt;
     XRectangle     *wanted;
 
@@ -9145,16 +8931,16 @@ _XiTabBoxGetMaxTabHeight(Widget widget)
 
 int
 #ifndef _NO_PROTO
-XiTabBoxXYToIndex(Widget widget, int x, int y)
+XmTabBoxXYToIndex(Widget widget, int x, int y)
 #else
-XiTabBoxXYToIndex(widget, x, y)
+XmTabBoxXYToIndex(widget, x, y)
     Widget widget;
     int    x, y;
 #endif
 {
     if( !XiIsTabBox(widget) ) return( -1 );
 
-    return( XiXYtoTab((XiTabBoxWidget)widget, x, y) );
+    return( XiXYtoTab((XmTabBoxWidget)widget, x, y) );
 }
 
 static Visual*

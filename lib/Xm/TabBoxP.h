@@ -39,26 +39,26 @@ extern "C" {
 #endif
 
 
-typedef struct _XiTabBoxClassPart {
+typedef struct _XmTabBoxClassPart {
     XtPointer extension;
-} XiTabBoxClassPart;
+} XmTabBoxClassPart;
 
 typedef struct _XmTabBoxClassRec {
     CoreClassPart        core_class;
     CompositeClassPart	 composite_class;
     ConstraintClassPart  constraint_class;
     XmManagerClassPart   manager_class;
-    XiTabBoxClassPart    tab_box_class;
-} XiTabBoxClassRec;
+    XmTabBoxClassPart    tab_box_class;
+} XmTabBoxClassRec;
 
-typedef struct _XiTabBoxPart {
+typedef struct _XmTabBoxPart {
     XmFontList          font_list;
     XmTabStyle          tab_style;
     XmTabMode           tab_mode;
     XmTabbedStackList           tab_list;
     XmTabOrientation    tab_orientation;
-    XiTabEdge           tab_edge;
-    XiTabArrowPlacement arrow_placement;
+    XmTabEdge           tab_edge;
+    XmTabArrowPlacement arrow_placement;
     unsigned char       orientation;
     Dimension           tab_margin_width;
     Dimension           tab_margin_height;
@@ -122,23 +122,23 @@ typedef struct _XiTabBoxPart {
 
     struct _XiCache *_cache;
     int              _cache_size;
-} XiTabBoxPart;
+} XmTabBoxPart;
 
 /*
  * Access macros for instance variables
  */
-#define XiTabBoxIndex (XmManagerIndex + 1)
+#define XmTabBoxIndex (XmManagerIndex + 1)
 extern XmOffsetPtr XmTabBox_offsets;
 
-#define XmTabBoxField(w,f,t) XmField(w, XmTabBox_offsets, XiTabBox, f, t)
+#define XmTabBoxField(w,f,t) XmField(w, XmTabBox_offsets, XmTabBox, f, t)
 
 #define XmTabBox_font_list(w) XmTabBoxField(w, font_list, XmFontList)
 #define XmTabBox_tab_style(w) XmTabBoxField(w, tab_style, XmTabStyle)
 #define XmTabBox_tab_mode(w) XmTabBoxField(w, tab_mode, XmTabMode)
 #define XmTabBox_tab_list(w) XmTabBoxField(w, tab_list, XmTabbedStackList)
 #define XmTabBox_tab_orientation(w) XmTabBoxField(w, tab_orientation, XmTabOrientation)
-#define XmTabBox_tab_edge(w) XmTabBoxField(w, tab_edge, XiTabEdge)
-#define XmTabBox_arrow_placement(w) XmTabBoxField(w, arrow_placement, XiTabArrowPlacement)
+#define XmTabBox_tab_edge(w) XmTabBoxField(w, tab_edge, XmTabEdge)
+#define XmTabBox_arrow_placement(w) XmTabBoxField(w, arrow_placement, XmTabArrowPlacement)
 #define XmTabBox_orientation(w) XmTabBoxField(w, orientation, unsigned char)
 #define XmTabBox_tab_margin_width(w) XmTabBoxField(w, tab_margin_width, Dimension)
 #define XmTabBox_tab_margin_height(w) XmTabBoxField(w, tab_margin_height, Dimension)
@@ -184,13 +184,13 @@ extern XmOffsetPtr XmTabBox_offsets;
 #define XmTabBox__cache(w) XmTabBoxField(w, _cache, struct _XiCache*)
 #define XmTabBox__cache_size(w) XmTabBoxField(w, _cache_size, int)
 
-typedef struct _XiTabBoxRec {
+typedef struct _XmTabBoxRec {
     CorePart        core;
     CompositePart   composite;
     ConstraintPart  constraint;
     XmManagerPart   manager;
-    XiTabBoxPart    tab_box;
-} XiTabBoxRec;
+    XmTabBoxPart    tab_box;
+} XmTabBoxRec;
 
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */

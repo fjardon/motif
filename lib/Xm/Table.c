@@ -740,7 +740,7 @@ XmTableClipClassRec xiTableClipClassRec = {
 	XtInheritSetValuesAlmost,	/* set_values_almost		    */
 	(XtArgsProc) NULL,		/* get_values_hook		    */
 	NULL,				/* accept_focus			    */
-	XtVersionDontCheck,             /* version			    */
+	XtVersion,             /* version			    */
 	(XtPointer) NULL,		/* callback_private		    */
 	XtInheritTranslations,		/* tm_table			    */
 	XtInheritQueryGeometry,		/* query_geometry		    */
@@ -805,7 +805,7 @@ XmTableClassRec xmTableClassRec = {
 	XtInheritSetValuesAlmost,	/* set_values_almost		    */
 	(XtArgsProc) NULL,		/* get_values_hook		    */
 	NULL,				/* accept_focus			    */
-	XtVersionDontCheck,		/* version			    */
+	XtVersion,		/* version			    */
 	(XtPointer) NULL,		/* callback_private		    */
 	"",				/* tm_table			    */
 	QueryGeometry,			/* query_geometry		    */

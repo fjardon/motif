@@ -138,7 +138,7 @@ XmTabbedStackListCopy(tab_list)
 	    newList->tabs[i].background_pixmap =
 		tab_list->tabs[i].background_pixmap;
 	    newList->tabs[i].sensitive = tab_list->tabs[i].sensitive;
-            newList->tabs[i].value_mode = XiTAB_VALUE_COPY;
+            newList->tabs[i].value_mode = XmTAB_VALUE_COPY;
         }
     }
 
@@ -179,7 +179,7 @@ XmTabbedStackListFree(tab_list)
     {
         for( i = 0; i < tab_list->used; ++i )
         {
-            if( tab_list->tabs[i].value_mode == XiTAB_VALUE_SHARE ) continue;
+            if( tab_list->tabs[i].value_mode == XmTAB_VALUE_SHARE ) continue;
             
             XiXmStringFree(tab_list->tabs[i].label_string);
         }
@@ -230,7 +230,10 @@ XmTabbedStackListRemove(tab_list, position)
     /*
      * Now deallocate the data associated with this tab, if needed.
      */
-    if( to->value_mode == XiTAB_VALUE_COPY ) XiXmStringFree(to->label_string);
+    if( to->value_mode == XmTAB_VALUE_COPY ) 
+    {
+        XmStringFree(to->label_string);
+    }
 
     /*
      * Now decrement the number of used slots and shift down any slots
@@ -280,8 +283,8 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
      * First let's see if they gave us a valid XmTabbedStackList and position
      * and if not let's just leave.
      */
-    if( tab_list == NULL || position < XiTAB_LAST_POSITION ||
-        (position > 0 && position >= tab_list->used) ) return XiTAB_NOT_FOUND;
+    if( tab_list == NULL || position < XmTAB_LAST_POSITION ||
+        (position > 0 && position >= tab_list->used) ) return XmTAB_NOT_FOUND;
 
     /*
      * Now lets add our new tab to the list in the correct position.
@@ -305,7 +308,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
      * item so now lets move any existing items up to make room for our
      * new kiddie.
      */
-    if( position == XiTAB_LAST_POSITION )
+    if( position == XmTAB_LAST_POSITION )
     {
 	newTab = &(tab_list->tabs[tab_list->used]);
 	position = tab_list->used;
@@ -332,20 +335,20 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
     newTab->label_pixmap = XmUNSPECIFIED_PIXMAP;
     newTab->label_alignment = XmALIGNMENT_CENTER;
     newTab->pixmap_placement = XmPIXMAP_RIGHT;
-    newTab->foreground = XiCOLOR_DYNAMIC;
-    newTab->background = XiCOLOR_DYNAMIC;
-    newTab->background_pixmap = XiPIXMAP_DYNAMIC;
+    newTab->foreground = XmCOLOR_DYNAMIC;
+    newTab->background = XmCOLOR_DYNAMIC;
+    newTab->background_pixmap = XmPIXMAP_DYNAMIC;
     newTab->sensitive = True;
-    newTab->value_mode = XiTAB_VALUE_COPY;
+    newTab->value_mode = XmTAB_VALUE_COPY;
 
-    if( mask & XiTAB_VALUE_MODE )
+    if( mask & XmTAB_VALUE_MODE )
     {
 	newTab->value_mode = attributes->value_mode;
     }
 
-    if( mask & XiTAB_LABEL_STRING )
+    if( mask & XmTAB_LABEL_STRING )
     {
-	if( newTab->value_mode == XiTAB_VALUE_COPY )
+	if( newTab->value_mode == XmTAB_VALUE_COPY )
 	{
 	    newTab->label_string = XiXmStringCopy(attributes->label_string);
 	}
@@ -355,42 +358,42 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 	}
     }
     
-    if( mask & XiTAB_STRING_DIRECTION )
+    if( mask & XmTAB_STRING_DIRECTION )
     {
 	newTab->string_direction = attributes->string_direction;
     }
 
-    if( mask & XiTAB_LABEL_PIXMAP )
+    if( mask & XmTAB_LABEL_PIXMAP )
     {
 	newTab->label_pixmap = attributes->label_pixmap;
     }
 
-    if( mask & XiTAB_PIXMAP_PLACEMENT )
+    if( mask & XmTAB_PIXMAP_PLACEMENT )
     {
 	newTab->pixmap_placement = attributes->pixmap_placement;
     }
 
-    if( mask & XiTAB_BACKGROUND )
+    if( mask & XmTAB_BACKGROUND )
     {
 	newTab->background = attributes->background;
     }
 
-    if( mask & XiTAB_BACKGROUND_PIXMAP )
+    if( mask & XmTAB_BACKGROUND_PIXMAP )
     {
 	newTab->background_pixmap = attributes->background_pixmap;
     }
 
-    if( mask * XiTAB_SENSITIVE )
+    if( mask * XmTAB_SENSITIVE )
     {
 	newTab->sensitive = attributes->sensitive;
     }
 
-    if( mask & XiTAB_FOREGROUND )
+    if( mask & XmTAB_FOREGROUND )
     {
 	newTab->foreground = attributes->foreground;
     }
     
-    if( mask & XiTAB_LABEL_ALIGNMENT )
+    if( mask & XmTAB_LABEL_ALIGNMENT )
     {
 	newTab->label_alignment = attributes->label_alignment;
     }
@@ -427,7 +430,7 @@ XmTabbedStackListAppend(tab_list, mask, attributes)
      * So we cheat a little here.  All we need to do is call insert and
      * lets that function know that we want it at the end of the list.
      */
-    return( XmTabbedStackListInsert(tab_list, XiTAB_LAST_POSITION, mask, attributes) );
+    return( XmTabbedStackListInsert(tab_list, XmTAB_LAST_POSITION, mask, attributes) );
 }
 
 /*
@@ -474,8 +477,8 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
      * Now lets check the various flags and see what we need to 
      * change.
      */
-    if( mask & XiTAB_VALUE_MODE && tab->value_mode != attributes->value_mode &&
-        attributes->value_mode == XiTAB_VALUE_COPY )
+    if( mask & XmTAB_VALUE_MODE && tab->value_mode != attributes->value_mode &&
+        attributes->value_mode == XmTAB_VALUE_COPY )
     {
 	/*
 	 * Can only change this mode from share to copy, NOT from copy
@@ -485,9 +488,9 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
 	tab->label_string = XiXmStringCopy(attributes->label_string);
     }
     
-    if( mask & XiTAB_LABEL_STRING )
+    if( mask & XmTAB_LABEL_STRING )
     {
-	if( tab->value_mode == XiTAB_VALUE_COPY )
+	if( tab->value_mode == XmTAB_VALUE_COPY )
 	{
 	    XiXmStringFree(tab->label_string);
 	    tab->label_string = XiXmStringCopy(attributes->label_string);
@@ -498,42 +501,42 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
 	}
     }
 
-    if( mask & XiTAB_STRING_DIRECTION )
+    if( mask & XmTAB_STRING_DIRECTION )
     {
 	tab->string_direction = attributes->string_direction;
     }
 
-    if( mask & XiTAB_LABEL_PIXMAP )
+    if( mask & XmTAB_LABEL_PIXMAP )
     {
 	tab->label_pixmap = attributes->label_pixmap;
     }
 
-    if( mask & XiTAB_PIXMAP_PLACEMENT )
+    if( mask & XmTAB_PIXMAP_PLACEMENT )
     {
 	tab->pixmap_placement = attributes->pixmap_placement;
     }
 
-    if( mask & XiTAB_BACKGROUND )
+    if( mask & XmTAB_BACKGROUND )
     {
 	tab->background = attributes->background;
     }
 
-    if( mask & XiTAB_BACKGROUND_PIXMAP )
+    if( mask & XmTAB_BACKGROUND_PIXMAP )
     {
 	tab->background_pixmap = attributes->background_pixmap;
     }
 
-    if( mask & XiTAB_SENSITIVE )
+    if( mask & XmTAB_SENSITIVE )
     {
 	tab->sensitive = attributes->sensitive;
     }
 
-    if( mask & XiTAB_FOREGROUND )
+    if( mask & XmTAB_FOREGROUND )
     {
 	tab->foreground = attributes->foreground;
     }
 
-    if( mask & XiTAB_LABEL_ALIGNMENT )
+    if( mask & XmTAB_LABEL_ALIGNMENT )
     {
 	tab->label_alignment = attributes->label_alignment;
     }
@@ -576,7 +579,7 @@ XmTabbedStackListQuery(tab_list, position, attributes)
 
     tab = &(tab_list->tabs[position]);
 
-    if( tab->value_mode == XiTAB_VALUE_COPY )
+    if( tab->value_mode == XmTAB_VALUE_COPY )
     {
 	attributes->label_string = XiXmStringCopy(tab->label_string);
     }
@@ -606,7 +609,7 @@ XmTabbedStackListQuery(tab_list, position, attributes)
  *	tab_list     : XmTabbedStackList - the XmTabbedStackList to search
  *	label_string : XmString  - the label_string to search for
  * Output:
- *	int - the index of the tab found, or XiTAB_NOT_FOUND if 
+ *	int - the index of the tab found, or XmTAB_NOT_FOUND if 
  *	      a match is not found.
  */
 int
@@ -620,7 +623,7 @@ XmTabbedStackListFind(tab_list, label_string)
 {
     int i;
 
-    if( tab_list == NULL ) return( XiTAB_NOT_FOUND );
+    if( tab_list == NULL ) return( XmTAB_NOT_FOUND );
 
     for( i = 0; i < tab_list->used; ++i )
     {
@@ -630,7 +633,7 @@ XmTabbedStackListFind(tab_list, label_string)
 	}
     }
     
-    return( XiTAB_NOT_FOUND );
+    return( XmTAB_NOT_FOUND );
 }
 
 /*
@@ -656,7 +659,7 @@ XmTabbedStackListSimpleRemove(tab_list, label_string)
 {
     int position = XmTabbedStackListFind(tab_list, label_string);
 
-    if( position != XiTAB_NOT_FOUND ) XmTabbedStackListRemove(tab_list, position);
+    if( position != XmTAB_NOT_FOUND ) XmTabbedStackListRemove(tab_list, position);
 }
 
 /*
@@ -686,7 +689,7 @@ XmTabbedStackListSimpleInsert(tab_list, position, label_string)
 
     attributes.label_string = label_string;
     
-    return( XmTabbedStackListInsert(tab_list, position, XiTAB_LABEL_STRING,
+    return( XmTabbedStackListInsert(tab_list, position, XmTAB_LABEL_STRING,
 			    &attributes) );
 }
 
@@ -715,7 +718,7 @@ XmTabbedStackListSimpleAppend(tab_list, label_string)
 
     attributes.label_string = label_string;
     
-    return( XmTabbedStackListAppend(tab_list, XiTAB_LABEL_STRING,
+    return( XmTabbedStackListAppend(tab_list, XmTAB_LABEL_STRING,
 			    &attributes) );
 }
 
@@ -745,7 +748,7 @@ XmTabbedStackListSimpleModify(tab_list, position, label_string)
 {
     XmTabAttributeRec attributes;
 
-    XmTabbedStackListModify(tab_list, position, XiTAB_LABEL_STRING, &attributes);
+    XmTabbedStackListModify(tab_list, position, XmTAB_LABEL_STRING, &attributes);
 }
 
 /*
@@ -773,7 +776,7 @@ XmTabbedStackListSimpleQuery(tab_list, position)
 
     XmTabbedStackListQuery(tab_list, position, &attributes);
 
-    if( attributes.value_mode != XiTAB_VALUE_COPY )
+    if( attributes.value_mode != XmTAB_VALUE_COPY )
     {
 	attributes.label_string = XiXmStringCopy(attributes.label_string);
     }
@@ -801,7 +804,7 @@ XmTabAttributesFree(attributes)
     XmTabAttributes attributes;
 #endif
 {
-    if( attributes->value_mode == XiTAB_VALUE_COPY )
+    if( attributes->value_mode == XmTAB_VALUE_COPY )
     {
 	XiXmStringFree(attributes->label_string);
     }
@@ -907,12 +910,12 @@ XmTabbedStackListCompare(list1, list2)
     XmTabbedStackList list1, list2;
 #endif
 {
-    XmTabResult result = XiTAB_CMP_EQUAL;
+    XmTabResult result = XmTAB_CMP_EQUAL;
     int         i;
 
     if( list1 == NULL && list2 != NULL ||
         list1 != NULL && list2 == NULL ||
-        list1->used != list2->used ) return( XiTAB_CMP_SIZE );
+        list1->used != list2->used ) return( XmTAB_CMP_SIZE );
 
     for( i = 0; i < list1->used; ++i )
     {
@@ -922,7 +925,7 @@ XmTabbedStackListCompare(list1, list2)
  	    list1->tabs[i].pixmap_placement !=
 	    list2->tabs[i].pixmap_placement )
 	{
-	    return( XiTAB_CMP_SIZE );
+	    return( XmTAB_CMP_SIZE );
 	}
 	if( list1->tabs[i].string_direction !=
 	    list2->tabs[i].string_direction ||
@@ -933,7 +936,7 @@ XmTabbedStackListCompare(list1, list2)
 	    list1->tabs[i].background_pixmap != 
 	    list2->tabs[i].background_pixmap )
 	{
-	    result = XiTAB_CMP_VISUAL;
+	    result = XmTAB_CMP_VISUAL;
 	}
     }
     return( result );

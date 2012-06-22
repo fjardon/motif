@@ -210,7 +210,7 @@ XmColorSelectorClassRec xiColorSelectorClassRec = {
     /* set_values_almost        */      XtInheritSetValuesAlmost,
     /* get_values_hook          */      NULL,
     /* accept_focus             */      NULL,
-    /* version                  */      XtVersionDontCheck,
+    /* version                  */      XtVersion,
     /* callback_private         */      NULL,
     /* tm_table                 */      XtInheritTranslations,
     /* query_geometry           */      (XtGeometryHandler) QueryGeometry,

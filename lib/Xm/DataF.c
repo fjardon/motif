@@ -23,7 +23,7 @@
  */
 #ifdef REV_INFO
 #ifndef lint
-static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.6 $ $Date: 2002/01/30 15:47:17 $"
+static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.7 $ $Date: 2002/02/14 16:33:45 $"
 #endif
 #endif
 /**  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
@@ -1509,7 +1509,7 @@ externaldef(xmdatafieldclassrec) XmDataFieldClassRec xmDataFieldClassRec =
       (XtAcceptFocusProc)NULL,			/* accept_focus       */
 #endif /* sco */
 
-      XtVersionDontCheck,			/* version            */
+      XtVersion,			/* version            */
       NULL,					/* callback_private   */
       NULL,					/* tm_table           */
       df_QueryGeometry,				/* query_geometry     */

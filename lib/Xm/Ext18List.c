@@ -159,7 +159,7 @@ XmExt18ListClassRec xmExt18ListClassRec = {
     /* set_values_almost	*/	XtInheritSetValuesAlmost,
     /* get_values_hook		*/	GetValuesHook,
     /* accept_focus		*/	NULL,
-    /* version			*/	XtVersionDontCheck,
+    /* version			*/	XtVersion,
     /* callback_private		*/	NULL,
     /* tm_table			*/	XtInheritTranslations,
     /* query_geometry		*/	XtInheritQueryGeometry,

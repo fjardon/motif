@@ -34,30 +34,30 @@ extern "C" {
 
 typedef enum {XmPIXMAP_TOP, XmPIXMAP_BOTTOM, XmPIXMAP_RIGHT, XmPIXMAP_LEFT,
 	      XmPIXMAP_NONE, XmPIXMAP_ONLY} XmPixmapPlacement;
-typedef enum {XiTAB_VALUE_COPY, XiTAB_VALUE_SHARE} XiTabValueMode;
+typedef enum {XmTAB_VALUE_COPY, XmTAB_VALUE_SHARE} XmTabValueMode;
 
-typedef enum {XiTAB_CMP_VISUAL, XiTAB_CMP_SIZE, XiTAB_CMP_EQUAL} XmTabResult;
+typedef enum {XmTAB_CMP_VISUAL, XmTAB_CMP_SIZE, XmTAB_CMP_EQUAL} XmTabResult;
 
-#define XiCOLOR_DYNAMIC ((Pixel)-1)
-#define XiPIXMAP_DYNAMIC ((Pixmap) 3)
-#define XiTAB_LAST_POSITION -1
-#define XiTAB_NOT_FOUND -1
+#define XmCOLOR_DYNAMIC ((Pixel)-1)
+#define XmPIXMAP_DYNAMIC ((Pixmap) 3)
+#define XmTAB_LAST_POSITION -1
+#define XmTAB_NOT_FOUND -1
 
-#define XiTAB_LABEL_STRING      (1L<<0)
-#define XiTAB_LABEL_PIXMAP      (1L<<1)
-#define XiTAB_PIXMAP_PLACEMENT  (1L<<2)
-#define XiTAB_BACKGROUND        (1L<<3)
-#define XiTAB_FOREGROUND        (1L<<4)
-#define XiTAB_VALUE_MODE        (1L<<5)
-#define XiTAB_LABEL_ALIGNMENT   (1L<<6)
-#define XiTAB_STRING_DIRECTION  (1L<<7)
-#define XiTAB_BACKGROUND_PIXMAP	(1L<<8)
-#define XiTAB_SENSITIVE         (1L<<9)
-#define XiTAB_ALL_FLAGS         (XiTAB_LABEL_STRING|XiTAB_LABEL_PIXMAP|\
-				 XiTAB_PIXMAP_PLACEMENT|XiTAB_BACKGROUND|\
-				 XiTAB_FOREGROUND|XiTAB_VALUE_MODE|\
-				 XiTAB_LABEL_ALIGNMENT|XiTAB_STRING_DIRECTION|\
-				 XiTAB_BACKGROUND_PIXMAP|XiTAB_SENSITIVE)
+#define XmTAB_LABEL_STRING      (1L<<0)
+#define XmTAB_LABEL_PIXMAP      (1L<<1)
+#define XmTAB_PIXMAP_PLACEMENT  (1L<<2)
+#define XmTAB_BACKGROUND        (1L<<3)
+#define XmTAB_FOREGROUND        (1L<<4)
+#define XmTAB_VALUE_MODE        (1L<<5)
+#define XmTAB_LABEL_ALIGNMENT   (1L<<6)
+#define XmTAB_STRING_DIRECTION  (1L<<7)
+#define XmTAB_BACKGROUND_PIXMAP	(1L<<8)
+#define XmTAB_SENSITIVE         (1L<<9)
+#define XmTAB_ALL_FLAGS         (XmTAB_LABEL_STRING|XmTAB_LABEL_PIXMAP|\
+				 XmTAB_PIXMAP_PLACEMENT|XmTAB_BACKGROUND|\
+				 XmTAB_FOREGROUND|XmTAB_VALUE_MODE|\
+				 XmTAB_LABEL_ALIGNMENT|XmTAB_STRING_DIRECTION|\
+				 XmTAB_BACKGROUND_PIXMAP|XmTAB_SENSITIVE)
 
 typedef struct _XmTabAttributeRec {
     XmString          label_string;	/* default: NULL                     */
@@ -65,11 +65,11 @@ typedef struct _XmTabAttributeRec {
     Pixmap            label_pixmap;	/* default: XmUNSPECIFIED_PIXMAP     */
     int               label_alignment;  /* default: XmALIGNEMENT_CENTER      */
     XmPixmapPlacement pixmap_placement; /* default: XmPIXMAP_RIGHT           */
-    Pixel             foreground;       /* default: XiCOLOR_DYNAMIC          */
-    Pixel             background;       /* default: XiCOLOR_DYNAMIC          */
-    Pixmap            background_pixmap;/* default: XiPIXMAP_DYNAMIC         */
+    Pixel             foreground;       /* default: XmCOLOR_DYNAMIC          */
+    Pixel             background;       /* default: XmCOLOR_DYNAMIC          */
+    Pixmap            background_pixmap;/* default: XmPIXMAP_DYNAMIC         */
     Boolean	      sensitive;        /* default: True                     */
-    XiTabValueMode    value_mode;       /* default: XiTAB_VALUE_COPY         */
+    XmTabValueMode    value_mode;       /* default: XmTAB_VALUE_COPY         */
 } XmTabAttributeRec, * XmTabAttributes;
 
 typedef struct _XmTabbedStackListRec *XmTabbedStackList;
@@ -174,8 +174,5 @@ XmTabAttributes
 }	/* Closes scope of 'extern "C"' declaration */
 #endif
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
 
-#endif /* __Xi_TabList_h__ */
+#endif 

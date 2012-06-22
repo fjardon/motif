@@ -26,10 +26,7 @@
 *	INCLUDE FILES
 *************************************************************/
 #include <Xm/XmP.h>
-#if (XmVERSION >= 2)
 #include <Xm/DrawP.h>
-#endif
-
 #include <stdio.h>
 #include <Xm/IconButtonP.h>
 #ifdef VMS
@@ -308,7 +305,7 @@ XmIconButtonClassRec xiIconButtonClassRec = {
     /* set_values_almost	*/	SetValuesAlmost,
     /* get_values_hook		*/	NULL,
     /* accept_focus		*/	NULL,
-    /* version			*/	XtVersionDontCheck,
+    /* version			*/	XtVersion,
     /* callback_private		*/	NULL,
     /* tm_table			*/	defaultTranslations,
     /* query_geometry		*/	(XtGeometryHandler) QueryGeometry,
