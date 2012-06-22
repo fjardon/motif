@@ -22,6 +22,10 @@
  * 
  */
 /*
+ * COPYRIGHT NOTICE
+ * Copyright (c) 1995 Integrated Computer Solutions
+ */
+/*
  * SYMBOLS
  * =======
  *
@@ -980,7 +984,7 @@ Redisplay(widget, event, region)
 			       tab->manager.top_shadow_GC,
 			       0, (int)XtHeight(widget) - shadow,
 			       XtWidth(widget), shadow);
-		XiDrawBevel(XtDisplay(widget), XtWindow(widget),
+		XmDrawBevel(XtDisplay(widget), XtWindow(widget),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    (int)XtWidth(widget) - shadow,
@@ -997,7 +1001,7 @@ Redisplay(widget, event, region)
 			       tab->manager.top_shadow_GC,
 			       (int)XtWidth(widget) - shadow, 0,
 			       shadow, XtHeight(widget));
-		XiDrawBevel(XtDisplay(widget), XtWindow(widget),
+		XmDrawBevel(XtDisplay(widget), XtWindow(widget),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    (int)XtWidth(widget) - shadow,
@@ -1021,7 +1025,7 @@ Redisplay(widget, event, region)
 		XFillRectangle(XtDisplay(widget), XtWindow(widget),
 			       tab->manager.bottom_shadow_GC,
 			       0, 0, XtWidth(widget), shadow);
-		XiDrawBevel(XtDisplay(widget), XtWindow(widget),
+		XmDrawBevel(XtDisplay(widget), XtWindow(widget),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    0, 0, shadow, XmBEVEL_BOTH);
@@ -1035,7 +1039,7 @@ Redisplay(widget, event, region)
 		XFillRectangle(XtDisplay(widget), XtWindow(widget),
 			       tab->manager.bottom_shadow_GC,
 			       0, 0, shadow, XtHeight(widget));
-		XiDrawBevel(XtDisplay(widget), XtWindow(widget),
+		XmDrawBevel(XtDisplay(widget), XtWindow(widget),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    0, 0, shadow, XmBEVEL_BOTH);
@@ -1393,7 +1397,7 @@ QueryGeometry(widget, request, allowed)
     {
 	return( XtGeometryNo );
     }
-    if( XiCompareXtWidgetGeometry(request, allowed) ) return( XtGeometryYes );
+    if( XmCompareXtWidgetGeometry(request, allowed) ) return( XtGeometryYes );
     return( XtGeometryAlmost );
 }
 
@@ -2686,7 +2690,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 			       
 		if( geometry->row == 0 && geometry->column > 0)
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x, geometry->y, shadow,
@@ -2695,7 +2699,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 	    }
 	    else if( geometry->row == 0 && geometry->column == 0 )
 	    {
-		XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    geometry->x, geometry->y, shadow,
@@ -2747,7 +2751,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 			       (int)geometry->height - 2*shadow);
 		if( geometry->column != 0 )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x, geometry->y, shadow,
@@ -2756,7 +2760,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 	    }
 	    else if( geometry->row == 0 && geometry->column == 0 )
 	    {
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				geometry->x, geometry->y, shadow,
@@ -2809,7 +2813,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 		      XmTabBox__num_rows(tab) == 1 ||
 		      !XmTabBox_stacked_effect(tab))) )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
@@ -2822,7 +2826,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 		     geometry->row == 0 && 
 		     geometry->column == XmTabBox__num_columns(tab) - 1 )
 	    {
-		XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    geometry->x + (int)geometry->width - shadow,
@@ -2874,7 +2878,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 		      XmTabBox__num_rows(tab) == 1 ||
 		      !XmTabBox_stacked_effect(tab))) )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
@@ -2887,7 +2891,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 		     geometry->row == 0 &&
 		     geometry->column == XmTabBox__num_columns(tab) - 1 )
 	    {
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
@@ -2988,7 +2992,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 	    XFillRectangles(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.bottom_shadow_GC, rt, cnt);
 
-	    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			tab->manager.top_shadow_GC,
 			tab->manager.bottom_shadow_GC,
 			geometry->x, geometry->y +
@@ -3005,7 +3009,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 			       
 		if( geometry->column == 0 && geometry->column > 0 )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x, geometry->y, shadow,
@@ -3014,7 +3018,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 	    }
 	    else if( geometry->row == 0 && geometry->column == 0 )
 	    {
-		XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    geometry->x, geometry->y, shadow,
@@ -3058,7 +3062,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 	    XFillRectangles(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.bottom_shadow_GC, rt, cnt);
 
-	    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			tab->manager.top_shadow_GC,
 			tab->manager.bottom_shadow_GC,
 			geometry->x + (int)geometry->width - shadow,
@@ -3072,7 +3076,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 			       (int)geometry->height - 2*shadow);
 		if( geometry->column != 0 )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x, geometry->y, shadow,
@@ -3081,7 +3085,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 	    }
 	    else if( geometry->row == 0 && geometry->column == 0 )
 	    {
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				geometry->x, geometry->y, shadow,
@@ -3122,7 +3126,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 	    XFillRectangles(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC, rt, cnt);
 
-	    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			tab->manager.top_shadow_GC,
 			tab->manager.bottom_shadow_GC,
 			geometry->x + (int)geometry->width - shadow,
@@ -3142,7 +3146,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 		      XmTabBox__num_rows(tab) == 1 ||
 		      !XmTabBox_stacked_effect(tab))) )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
@@ -3155,7 +3159,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 		     geometry->row == 0 &&
 		     geometry->column == XmTabBox__num_columns(tab) - 1 )
 	    {
-		XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    geometry->x + (int)geometry->width - shadow,
@@ -3193,7 +3197,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 	    XFillRectangles(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC, rt, cnt);
 
-	    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			tab->manager.top_shadow_GC,
 			tab->manager.bottom_shadow_GC,
 			geometry->x,
@@ -3214,7 +3218,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 		      XmTabBox__num_rows(tab) == 1 ||
 		      !XmTabBox_stacked_effect(tab))) )
 		{
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
@@ -3227,7 +3231,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 		     geometry->row == 0 &&
 		     geometry->column == XmTabBox__num_columns(tab) - 1 )
 	    {
-		    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
@@ -3912,28 +3916,28 @@ CvtStringToTabOrientation(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XmTABS_TOP_TO_BOTTOM;
     String     str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "ORIENTATION_DYNAMIC") == 0 ||
-        XiCompareISOLatin1(str, "XiTABS_ORIENTATION_DYNAMIC") == 0 )
+    if( XmCompareISOLatin1(str, "ORIENTATION_DYNAMIC") == 0 ||
+        XmCompareISOLatin1(str, "XiTABS_ORIENTATION_DYNAMIC") == 0 )
     {
 	result = XmTAB_ORIENTATION_DYNAMIC;
     }
-    else if( XiCompareISOLatin1(str, "TOP_TO_BOTTOM") == 0 ||
-        XiCompareISOLatin1(str, "XmTABS_TOP_TO_BOTTOM") == 0 )
+    else if( XmCompareISOLatin1(str, "TOP_TO_BOTTOM") == 0 ||
+        XmCompareISOLatin1(str, "XmTABS_TOP_TO_BOTTOM") == 0 )
     {
 	result = XmTABS_TOP_TO_BOTTOM;
     }
-    else if( XiCompareISOLatin1(str, "BOTTOM_TO_TOP") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_BOTTOM_TO_TOP") == 0 )
+    else if( XmCompareISOLatin1(str, "BOTTOM_TO_TOP") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_BOTTOM_TO_TOP") == 0 )
     {
 	result = XmTABS_BOTTOM_TO_TOP;
     }
-    else if( XiCompareISOLatin1(str, "LEFT_TO_RIGHT") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_LEFT_TO_RIGHT") == 0 )
+    else if( XmCompareISOLatin1(str, "LEFT_TO_RIGHT") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_LEFT_TO_RIGHT") == 0 )
     {
 	result = XmTABS_LEFT_TO_RIGHT;
     }
-    else if( XiCompareISOLatin1(str, "RIGHT_TO_LEFT") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_RIGHT_TO_LEFT") == 0 )
+    else if( XmCompareISOLatin1(str, "RIGHT_TO_LEFT") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_RIGHT_TO_LEFT") == 0 )
     {
 	result = XmTABS_RIGHT_TO_LEFT;
     }
@@ -3962,23 +3966,23 @@ CvtStringToTabSide(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XmTABS_ON_TOP;
     String     str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "ON_TOP") == 0 ||
-        XiCompareISOLatin1(str, "XmTABS_ON_TOP") == 0 )
+    if( XmCompareISOLatin1(str, "ON_TOP") == 0 ||
+        XmCompareISOLatin1(str, "XmTABS_ON_TOP") == 0 )
     {
 	result = XmTABS_ON_TOP;
     }
-    else if( XiCompareISOLatin1(str, "ON_BOTTOM") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ON_BOTTOM") == 0 )
+    else if( XmCompareISOLatin1(str, "ON_BOTTOM") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ON_BOTTOM") == 0 )
     {
 	result = XmTABS_ON_BOTTOM;
     }
-    else if( XiCompareISOLatin1(str, "ON_LEFT") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ON_LEFT") == 0 )
+    else if( XmCompareISOLatin1(str, "ON_LEFT") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ON_LEFT") == 0 )
     {
 	result = XmTABS_ON_LEFT;
     }
-    else if( XiCompareISOLatin1(str, "ON_RIGHT") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ON_RIGHT") == 0 )
+    else if( XmCompareISOLatin1(str, "ON_RIGHT") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ON_RIGHT") == 0 )
     {
 	result = XmTABS_ON_RIGHT;
     }
@@ -4008,18 +4012,18 @@ CvtStringToTabStyle(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XmTABS_BEVELED;
     String     str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "SQUARED") == 0 ||
-        XiCompareISOLatin1(str, "XmTABS_SQUARED") == 0 )
+    if( XmCompareISOLatin1(str, "SQUARED") == 0 ||
+        XmCompareISOLatin1(str, "XmTABS_SQUARED") == 0 )
     {
 	result = XmTABS_SQUARED;
     }
-    else if( XiCompareISOLatin1(str, "ROUNDED") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ROUNDED") == 0 )
+    else if( XmCompareISOLatin1(str, "ROUNDED") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ROUNDED") == 0 )
     {
 	result = XmTABS_ROUNDED;
     }
-    else if( XiCompareISOLatin1(str, "BEVELED") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_BEVELED") == 0 )
+    else if( XmCompareISOLatin1(str, "BEVELED") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_BEVELED") == 0 )
     {
 	result = XmTABS_BEVELED;
     }
@@ -4049,30 +4053,30 @@ CvtStringToTabMode(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XmTABS_BASIC;
     String     str = (String) from->addr;
 
-    if( XiCompareISOLatin1(str, "BASIC") == 0 ||
-        XiCompareISOLatin1(str, "XmTABS_BASIC") == 0 )
+    if( XmCompareISOLatin1(str, "BASIC") == 0 ||
+        XmCompareISOLatin1(str, "XmTABS_BASIC") == 0 )
     {
     }
-    else if( XiCompareISOLatin1(str, "STACKED") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_STACKED") == 0 )
+    else if( XmCompareISOLatin1(str, "STACKED") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_STACKED") == 0 )
     {
 	result = XmTABS_STACKED;
     }
-    else if( XiCompareISOLatin1(str, "STACKED_STATIC") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_STACKED_STATIC") == 0 )
+    else if( XmCompareISOLatin1(str, "STACKED_STATIC") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_STACKED_STATIC") == 0 )
     {
 	result = XmTABS_STACKED_STATIC;
     }
 #ifdef SCROLLED_LAYOUT
-    else if( XiCompareISOLatin1(str, "SCROLLED") == 0 ||
-	     XiCompareISOLatin1(str, "XiTABS_SCROLLED") == 0 )
+    else if( XmCompareISOLatin1(str, "SCROLLED") == 0 ||
+	     XmCompareISOLatin1(str, "XiTABS_SCROLLED") == 0 )
     {
 	result = XiTABS_SCROLLED;
     }
 #endif
 #ifdef OVERLAYED_LAYOUT
-    else if( XiCompareISOLatin1(str, "OVERLAYED") == 0 ||
-	     XiCompareISOLatin1(str, "XiTABS_OVERLAYED") == 0 )
+    else if( XmCompareISOLatin1(str, "OVERLAYED") == 0 ||
+	     XmCompareISOLatin1(str, "XiTABS_OVERLAYED") == 0 )
     {
 	result = XiTABS_OVERLAYED;
     }
@@ -4103,21 +4107,21 @@ CvtStringToTabEdge(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XmTAB_EDGE_BOTTOM_RIGHT;
     String     str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "EDGE_TOP_LEFT") == 0 ||
-        XiCompareISOLatin1(str, "XmTAB_EDGE_TOP_LEFT") == 0 )
+    if( XmCompareISOLatin1(str, "EDGE_TOP_LEFT") == 0 ||
+        XmCompareISOLatin1(str, "XmTAB_EDGE_TOP_LEFT") == 0 )
     {
 	result = XmTAB_EDGE_TOP_LEFT;
     }
-    else if( XiCompareISOLatin1(str, "EDGE_BOTTOM_RIGHT") == 0 ||
-        XiCompareISOLatin1(str, "XiTABS_EDGE_BOTTOM_RIGHT") == 0 )
+    else if( XmCompareISOLatin1(str, "EDGE_BOTTOM_RIGHT") == 0 ||
+        XmCompareISOLatin1(str, "XiTABS_EDGE_BOTTOM_RIGHT") == 0 )
     {
 	result = XmTAB_EDGE_BOTTOM_RIGHT;
     }
-    else if( XiCompareISOLatin1(str, "bottom") == 0 )
+    else if( XmCompareISOLatin1(str, "bottom") == 0 )
     {
 	result = XmTAB_EDGE_TOP_LEFT;
     }
-    else if( XiCompareISOLatin1(str, "right") == 0 )
+    else if( XmCompareISOLatin1(str, "right") == 0 )
     {
 	result = XmTAB_EDGE_BOTTOM_RIGHT;
     }
@@ -4147,18 +4151,18 @@ CvtStringToArrowPlacement(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XiTAB_ARROWS_ON_LEFT;
     String     str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "left") == 0 ||
-        XiCompareISOLatin1(str, "tab_arrows_on_left") == 0 )
+    if( XmCompareISOLatin1(str, "left") == 0 ||
+        XmCompareISOLatin1(str, "tab_arrows_on_left") == 0 )
     {
 	result = XiTAB_ARROWS_ON_LEFT;
     }
-    else if( XiCompareISOLatin1(str, "right") == 0 ||
-             XiCompareISOLatin1(str, "tab_arrows_on_right") == 0 )
+    else if( XmCompareISOLatin1(str, "right") == 0 ||
+             XmCompareISOLatin1(str, "tab_arrows_on_right") == 0 )
     {
 	result = XiTAB_ARROWS_ON_RIGHT;
     }
-    else if( XiCompareISOLatin1(str, "split") == 0 ||
-             XiCompareISOLatin1(str, "tab_arrows_split") == 0 )
+    else if( XmCompareISOLatin1(str, "split") == 0 ||
+             XmCompareISOLatin1(str, "tab_arrows_split") == 0 )
     {
 	result = XiTAB_ARROWS_SPLIT;
     }
@@ -4556,7 +4560,7 @@ HorizontalBasicRedisplay(tab)
 		       tab->manager.top_shadow_GC,
 		       x, (int)XtHeight(tab) - shadow,
 		       (int)XtWidth(tab) - x, shadow);
-	XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
 		    (int)XtWidth(tab) - shadow,
@@ -4607,7 +4611,7 @@ VerticalBasicRedisplay(tab)
 		       tab->manager.top_shadow_GC,
 		       (int)XtWidth(tab) - shadow, y, shadow,
 		       (int)XtHeight(tab) - y);
-	XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		    tab->manager.top_shadow_GC, tab->manager.bottom_shadow_GC,
 		    (int)XtWidth(tab) - shadow, (int)XtHeight(tab) - shadow,
 		    shadow, XmBEVEL_BOTTOM);
@@ -7439,7 +7443,7 @@ HorizontalStackedBottomEdgeRedisplay(tab)
 	XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 		       gc, x, 0, (int)XtWidth(tab) - x,
 		       (int)XtHeight(tab) - shadow);
-	XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
 		    (int)XtWidth(tab) - shadow,
@@ -7677,7 +7681,7 @@ HorizontalStackedBottomEdgeRedisplay(tab)
 		   tab->manager.top_shadow_GC,
 		   x1, (int)XtHeight(tab) - shadow,
 		   x2 - x1, shadow);
-    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		tab->manager.top_shadow_GC,
 		tab->manager.bottom_shadow_GC,
 		x2 - shadow, (int)XtHeight(tab) - shadow,
@@ -8048,7 +8052,7 @@ VerticalStackedRightEdgeRedisplay(tab)
 	XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 		       gc, 0, y, (int)XtWidth(tab) - shadow,
 		       (int)XtHeight(tab) - y);
-	XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+	XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
 		    (int)XtWidth(tab) - shadow,
@@ -8285,7 +8289,7 @@ VerticalStackedRightEdgeRedisplay(tab)
 		   tab->manager.top_shadow_GC,
 		   (int)XtWidth(tab) - shadow, y1,
 		   shadow, y2 - y1);
-    XiDrawBevel(XtDisplay(tab), XiCanvas(tab),
+    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		tab->manager.top_shadow_GC,
 		tab->manager.bottom_shadow_GC,
 		(int)XtWidth(tab) - shadow, y2 - shadow,

@@ -27,10 +27,10 @@
 *************************************************************/
 #include <stdio.h>
 #include <X11/IntrinsicP.h>
+
 #include <Xm/XmP.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/GadgetP.h>
-
 #include <Xm/ExtP.h>
 
 /************************************************************
@@ -54,7 +54,7 @@ typedef struct _PixmapCache {
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-char _XiVersionString[] = XiVERSION_STRING;
+
 
 String xm_std_filter[] = { XmNx, XmNy, XmNwidth, XmNheight,
 			   XmNdestroyCallback, XmNsensitive, XmNuserData, 
@@ -360,9 +360,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
         switch( type )
 	{
     	case XmSTRING_COMPONENT_TEXT:
-#if (XmVersion >= 1002)
 	case XmSTRING_COMPONENT_LOCALE_TEXT:
-#endif
 	    length += strlen( newText );
 	    break;
  	case XmSTRING_COMPONENT_SEPARATOR:
@@ -440,9 +438,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
         switch( type )
 	{
     	case XmSTRING_COMPONENT_TEXT:
-#if (XmVersion >= 1002)
 	case XmSTRING_COMPONENT_LOCALE_TEXT:
-#endif
 	    strcat(text, newText); 
 	    break;
  	case XmSTRING_COMPONENT_SEPARATOR:
@@ -498,13 +494,9 @@ _XmMoveWidget(Widget w, Position x, Position y)
 void 
 _XmResizeWidget(Widget w, Dimension width, Dimension height, Dimension bw)
 {
-#if (XmVersion > 1001)
     XmDropSiteStartUpdate(w);
     XtResizeWidget(w, width, height, bw);
     XmDropSiteEndUpdate(w);
-#else
-    XtResizeWidget(w, width, height, bw);
-#endif
 }
 
 /*	Function Name: _XmConfigureWidget
@@ -524,13 +516,10 @@ _XmConfigureWidget(Widget w, Position x, Position y,
     if (height < 1) height = 1;
     if (width < 1) width = 1;
 
-#if (XmVersion > 1001)
     XmDropSiteStartUpdate(w);
     XtConfigureWidget(w, x, y, width, height, bw);
     XmDropSiteEndUpdate(w);
-#else
-    XtConfigureWidget(w, x, y, width, height, bw);
-#endif
+
 }
 
 #ifdef notdef
@@ -630,7 +619,7 @@ _XmDeleteContextData(Widget w, XContext context)
 
 /*
  * Function:
- *	XiCompareISOLatin1(first, second)
+ *	XmCompareISOLatin1(first, second)
  * Description:
  *	Compares two ISO Latin 1 strings to determine if they are equivalent.
  *	Case is not considered for the comparison.
@@ -644,9 +633,9 @@ _XmDeleteContextData(Widget w, XContext context)
  */
 int
 #ifndef _NO_PROTO
-XiCompareISOLatin1(char *first, char *second)
+XmCompareISOLatin1(char *first, char *second)
 #else
-XiCompareISOLatin1(first, second)
+XmCompareISOLatin1(first, second)
     char *first, *second;
 #endif
 {
@@ -797,7 +786,7 @@ XmCompareXtWidgetGeometryToWidget(geom, widget)
 
 /*
  * Function:
- *	XiCompareXtWidgetGeometry(geom1, geom2)
+ *	XmCompareXtWidgetGeometry(geom1, geom2)
  * Description:
  *	Compares to XtWidgetGeometry structures to check for equality.
  * Input:
@@ -808,9 +797,9 @@ XmCompareXtWidgetGeometryToWidget(geom, widget)
  */
 Boolean
 #ifndef _NO_PROTO
-XiCompareXtWidgetGeometry(XtWidgetGeometry *geom1, XtWidgetGeometry *geom2)
+XmCompareXtWidgetGeometry(XtWidgetGeometry *geom1, XtWidgetGeometry *geom2)
 #else
-XiCompareXtWidgetGeometry(geom1, geom2)
+XmCompareXtWidgetGeometry(geom1, geom2)
     XtWidgetGeometry *geom1, *geom2;
 #endif
 {
@@ -1098,23 +1087,6 @@ XmResolveAllPartOffsets64(
 
 /* -------------------------------------------------------------------------- */
  
-/* more public functions */
-
-XiVersionInfo *XiGetVersionInfo(
-#ifdef _NO_PROTO
-#else
-void
-#endif
-)
-{
-	static XiVersionInfo versionInfo;
-	versionInfo.identifier = XiVersion;
-	versionInfo.version = XiVERSION;
-	versionInfo.revision = XiREVISION;
-	versionInfo.update_level = XiUPDATE_LEVEL;
-	versionInfo.information = XiVERSION_STRING;
-	return &versionInfo;
-}
 
 
 

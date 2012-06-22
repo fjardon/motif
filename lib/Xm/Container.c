@@ -9182,7 +9182,7 @@ MoveItemCallback(
     if (CtrSpatialStyleIsGRID(wid) || CtrSpatialStyleIsCELLS(wid)) {
       int pos;
       int dw, dh;
-      int trial_x, trial_y;
+      int trial_x = 0, trial_y =0 ;
 
       if (CtrViewIsLARGE_ICON(wid) || CtrViewIsANY_ICON(wid)) {
 	dw = cw -> container.real_large_cellw;

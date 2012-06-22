@@ -44,20 +44,6 @@
 extern "C" {
 #endif
 
-/* note: see corresponding usages in XiUtil.c */
-#define XiVERSION 	3
-#define XiREVISION	0
-#define XiUPDATE_LEVEL	5
-#define XiVersion (XiVERSION * 1000 + XiREVISION)
-#define XiVERSION_STRING "@(#)ICS/EnhancementPak Version 3.0.5 (06/21/01)"
-
-typedef struct {
-	int identifier;
-	int version;
-	int revision;
-	int update_level;
-	char *information;
-} XiVersionInfo;
 
 #if NeedFunctionPrototypes
 typedef Widget (*XmWidgetFunc)(Widget);
@@ -203,7 +189,7 @@ char *, char *
 #endif
 );
 
-int XiCompareISOLatin1(
+int XmCompareISOLatin1(
 #ifndef _NO_PROTO
 char*, char*
 #endif
@@ -215,23 +201,12 @@ XtWidgetGeometry*, Widget
 #endif
 );
 
-Boolean XiCompareXtWidgetGeometry(
+Boolean XmCompareXtWidgetGeometry(
 #ifndef _NO_PROTO
 XtWidgetGeometry*, XtWidgetGeometry*
 #endif
 );
 
-void XiBXRegisterWidgets(
-#ifndef _NO_PROTO
-void
-#endif
-);
-
-XiVersionInfo *XiGetVersionInfo(
-#ifndef _NO_PROTO
-void
-#endif
-);
 
 #if defined(__cplusplus)
 }

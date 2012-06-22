@@ -38,9 +38,7 @@
 #include <stdio.h>
 
 #include <Xm/XmP.h>
-#if (XmVERSION >= 2)
 #include <Xm/DrawP.h>
-#endif
 #include <Xm/ExtP.h>
 #include <Xm/TableP.h>
 #include <X11/cursorfont.h>
@@ -54,8 +52,6 @@
 extern "C" {
 #endif
 
-#if (XmVERSION >= 2)
-
 #if NeedWidePrototypes
 #define WIDE_PROTO_TYPE	unsigned int
 #else
@@ -66,7 +62,7 @@ Pixel 		_XmAccessColorData(XmColorData *, WIDE_PROTO_TYPE);
 XmColorData 	*_XmGetColors(Screen *, Colormap, Pixel);
 void 		_XmForegroundColorDefault(Widget, int, XrmValue *);
 
-#endif
+
 
 #ifndef Min
 #define Min(a,b) (((int)(a)<(int)(b))?a:b)
@@ -1431,9 +1427,11 @@ SetValues(current, request, widget, arg_list, arg_cnt)
 		XmTable_cell_y(tw) = -1;
 		XmTable_active_cell(tw) = NULL;
 
-		if( XmTable_x_origin(tw) != 0 || XmTable_y_origin(tw) != 0 &&
-		    XmTable_title_backing(tw) != NULL &&
-		    XmTable_hscroll(tw) != NULL && XmTable_vscroll(tw) != NULL )
+		if( (XmTable_x_origin(tw) != 0) || 
+                    ((XmTable_y_origin(tw) != 0) &&
+		    (XmTable_title_backing(tw) != NULL) &&
+		    (XmTable_hscroll(tw) != NULL) && 
+                    (XmTable_vscroll(tw) != NULL)))
 		{
 		    int tmp, slider, inc, page_inc;
 
@@ -5185,7 +5183,7 @@ TableVScrollCB(widget, client, cbdata)
 {
     XmTableWidget            tw = (XmTableWidget) XtParent(widget);
     XmScrollBarCallbackStruct *scroll = (XmScrollBarCallbackStruct*) cbdata;
-    int			      i, y, row, slider_size, max_value, min, height,
+    int			      i, y, row, slider_size, max_value, min =0, height,
                               old_x, old_y;
 
     old_x = XmTable_x_origin(tw);
@@ -5350,7 +5348,7 @@ TableHScrollCB(widget, client, cbdata)
     XmTableWidget            tw = (XmTableWidget) XtParent(widget);
     XmScrollBarCallbackStruct *scroll = (XmScrollBarCallbackStruct*) cbdata;
     WidgetList                kid;
-    Cardinal                  kidCnt, min;
+    Cardinal                  kidCnt, min = 0;
     Widget		      child;
     int			      i, x, slider_size, max_value, width,
                               old_x, old_y;

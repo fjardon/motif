@@ -1635,7 +1635,7 @@ QueryGeometry(widget, request, allowed)
 	    return( XtGeometryNo );
 	}
 
-	if( XiCompareXtWidgetGeometry(request, allowed) )
+	if( XmCompareXtWidgetGeometry(request, allowed) )
 	{
 	    return( XtGeometryYes );
 	}
@@ -1802,7 +1802,7 @@ QueryGeometry(widget, request, allowed)
     {
 	return( XtGeometryNo );
     }
-    else if( XiCompareXtWidgetGeometry(request, allowed) )
+    else if( XmCompareXtWidgetGeometry(request, allowed) )
     {
 	return( XtGeometryYes );
     }
@@ -1893,7 +1893,7 @@ GeometryNo(tab, widget, request, allowed)
     {
 	return( XtGeometryNo );
     }
-    if( XiCompareXtWidgetGeometry(request, allowed) )
+    if( XmCompareXtWidgetGeometry(request, allowed) )
     {
 	if( !(request->request_mode & XtCWQueryOnly) )
 	{
@@ -2566,8 +2566,8 @@ CvtStringToXiPixel(dpy, arg_list, arg_cnt, from, to, data)
 
     widget = *((Widget*) arg_list[0].addr);
 
-    if( XiCompareISOLatin1(str, "color_dynamic") == 0 ||
-        XiCompareISOLatin1(str, "dynamic") == 0 )
+    if( XmCompareISOLatin1(str, "color_dynamic") == 0 ||
+        XmCompareISOLatin1(str, "dynamic") == 0 )
     {
 	XiCvtDone(Pixel, result);
     }
@@ -2595,8 +2595,8 @@ CvtStringToXiPixmap(dpy, arg_list, arg_cnt, from, to, data)
 
     widget = *((Widget*) arg_list[0].addr);
 
-    if( XiCompareISOLatin1(str, "pixmap_dynamic") == 0 ||
-        XiCompareISOLatin1(str, "dynamic") == 0 )
+    if( XmCompareISOLatin1(str, "pixmap_dynamic") == 0 ||
+        XmCompareISOLatin1(str, "dynamic") == 0 )
     {
 	XiCvtDone(Pixel, result);
     }
@@ -2621,23 +2621,23 @@ CvtStringToXmTabSide(dpy, arg_list, arg_cnt, from, to, data)
     static int result = XmTABS_ON_TOP;
     String     str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "TOP") == 0 ||
-        XiCompareISOLatin1(str, "XmTABS_ON_TOP") == 0 )
+    if( XmCompareISOLatin1(str, "TOP") == 0 ||
+        XmCompareISOLatin1(str, "XmTABS_ON_TOP") == 0 )
     {
 	result = XmTABS_ON_TOP;
     }
-    else if( XiCompareISOLatin1(str, "BOTTOM") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ON_BOTTOM") == 0 )
+    else if( XmCompareISOLatin1(str, "BOTTOM") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ON_BOTTOM") == 0 )
     {
 	result = XmTABS_ON_BOTTOM;
     }
-    else if( XiCompareISOLatin1(str, "LEFT") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ON_LEFT") == 0 )
+    else if( XmCompareISOLatin1(str, "LEFT") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ON_LEFT") == 0 )
     {
 	result = XmTABS_ON_LEFT;
     }
-    else if( XiCompareISOLatin1(str, "RIGHT") == 0 ||
-	     XiCompareISOLatin1(str, "XmTABS_ON_RIGHT") == 0 )
+    else if( XmCompareISOLatin1(str, "RIGHT") == 0 ||
+	     XmCompareISOLatin1(str, "XmTABS_ON_RIGHT") == 0 )
     {
 	result = XmTABS_ON_RIGHT;
     }
@@ -2668,33 +2668,33 @@ CvtStringToXmPixmapPlacement(dpy, arg_list, arg_cnt, from, to, data)
     static XmPixmapPlacement result = XmPIXMAP_RIGHT;
     String                   str = (String) (from->addr);
 
-    if( XiCompareISOLatin1(str, "TOP") == 0 ||
-        XiCompareISOLatin1(str, "XmPIXMAP_TOP") == 0 )
+    if( XmCompareISOLatin1(str, "TOP") == 0 ||
+        XmCompareISOLatin1(str, "XmPIXMAP_TOP") == 0 )
     {
 	result = XmPIXMAP_TOP;
     }
-    else if( XiCompareISOLatin1(str, "BOTTOM") == 0 ||
-	     XiCompareISOLatin1(str, "XmPIXMAP_BOTTOM") == 0 )
+    else if( XmCompareISOLatin1(str, "BOTTOM") == 0 ||
+	     XmCompareISOLatin1(str, "XmPIXMAP_BOTTOM") == 0 )
     {
 	result = XmPIXMAP_BOTTOM;
     }
-    else if( XiCompareISOLatin1(str, "RIGHT") == 0 ||
-	     XiCompareISOLatin1(str, "XmPIXMAP_RIGHT") == 0 )
+    else if( XmCompareISOLatin1(str, "RIGHT") == 0 ||
+	     XmCompareISOLatin1(str, "XmPIXMAP_RIGHT") == 0 )
     {
 	result = XmPIXMAP_RIGHT;
     }
-    else if( XiCompareISOLatin1(str, "LEFT") == 0 ||
-	     XiCompareISOLatin1(str, "XmPIXMAP_LEFT") == 0 )
+    else if( XmCompareISOLatin1(str, "LEFT") == 0 ||
+	     XmCompareISOLatin1(str, "XmPIXMAP_LEFT") == 0 )
     {
 	result = XmPIXMAP_LEFT;
     }
-    else if( XiCompareISOLatin1(str, "NONE") == 0 ||
-	     XiCompareISOLatin1(str, "XmPIXMAP_NONE") == 0 )
+    else if( XmCompareISOLatin1(str, "NONE") == 0 ||
+	     XmCompareISOLatin1(str, "XmPIXMAP_NONE") == 0 )
     {
 	result = XmPIXMAP_NONE;
     }
-    else if( XiCompareISOLatin1(str, "ONLY") == 0 ||
-	     XiCompareISOLatin1(str, "XmPIXMAP_ONLY") == 0 )
+    else if( XmCompareISOLatin1(str, "ONLY") == 0 ||
+	     XmCompareISOLatin1(str, "XmPIXMAP_ONLY") == 0 )
     {
 	result = XmPIXMAP_ONLY;
     }
@@ -2819,7 +2819,7 @@ DrawShadows(tab, top_GC, bottom_GC, x, y, width, height)
 		    num_top_rects);
     XFillRectangles(XtDisplay(tab), XtWindow(tab), bottom_GC, bottom_rects,
 		    num_bottom_rects);
-    XiDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
+    XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
 		bevel.x, bevel.y, shadow, XmBEVEL_BOTH);
 }
 
@@ -3374,7 +3374,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 	XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
 		       x + shadow, y + base_height, base_width + shadow,
 		       shadow);
-	XiDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
+	XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
 		    x, y + base_height, shadow, XmBEVEL_BOTTOM);
 
 	x += base_width + shadow;
@@ -3477,7 +3477,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 	XFillRectangles(XtDisplay(tab), XtWindow(tab), top_GC, rts, 2);
 	x += base_width + shadow;
 
-	XiDrawBevel(XtDisplay(tab), XtWindow(tab),
+	XmDrawBevel(XtDisplay(tab), XtWindow(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
 		    x, 0, shadow, XmBEVEL_BOTTOM);
@@ -3541,7 +3541,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
 				   tab->manager.top_shadow_GC,
 				   x, y, x2 - x, shadow);
-		    XiDrawBevel(XtDisplay(tab), XtWindow(tab),
+		    XmDrawBevel(XtDisplay(tab), XtWindow(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				x2 - shadow, y, shadow, XmBEVEL_BOTTOM);
@@ -3586,7 +3586,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 	XFillRectangles(XtDisplay(tab), XtWindow(tab), top_GC, rts, 2);
 	y += base_height + shadow;
 	
-	XiDrawBevel(XtDisplay(tab), XtWindow(tab),
+	XmDrawBevel(XtDisplay(tab), XtWindow(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
 		    0, y, shadow, XmBEVEL_BOTTOM);
@@ -3647,7 +3647,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 		    XFillRectangle(XtDisplay(tab), XtWindow(tab), 
 				   tab->manager.top_shadow_GC,
 				   x, y, shadow, y2 - y);
-		    XiDrawBevel(XtDisplay(tab), XtWindow(tab),
+		    XmDrawBevel(XtDisplay(tab), XtWindow(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				x, y2 - shadow, shadow, XmBEVEL_BOTTOM);
@@ -3688,7 +3688,7 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
 	XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
 		       x + base_width, y + shadow, shadow,
 		       base_height + shadow);
-	XiDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
+	XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
 		    x + base_width, y, shadow, XmBEVEL_BOTTOM);
 
 	y += base_height + shadow;

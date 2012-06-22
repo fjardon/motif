@@ -27,7 +27,7 @@
 #define STATIC_RECTS 20
 /*
  * Function:
- *	XiDrawBevel(dpy, d, top_GC, bottom_GC, x, y, size, option)
+ *	XmDrawBevel(dpy, d, top_GC, bottom_GC, x, y, size, option)
  * Description:
  *	Draws a shadow corner (beveled) at the given location and size.
  * Input:
@@ -47,10 +47,10 @@
  */
 void
 #ifndef _NO_PROTO
-XiDrawBevel(Display *dpy, Drawable d, GC top_gc, GC bottom_gc,
+XmDrawBevel(Display *dpy, Drawable d, GC top_gc, GC bottom_gc,
 	    int x, int y, unsigned int size, XmBevelOption option)
 #else
-XiDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
+XmDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
     Display       *dpy;
     Drawable      d;
     GC            top_gc, bottom_gc;

@@ -34,7 +34,7 @@ extern "C" {
 
 typedef enum {XmBEVEL_BOTTOM, XmBEVEL_TOP, XmBEVEL_BOTH} XmBevelOption;
 
-void XiDrawBevel(
+void XmDrawBevel(
 #ifndef _NO_PROTO
 Display*, Drawable, GC, GC, int, int, unsigned int, XmBevelOption
 #endif
