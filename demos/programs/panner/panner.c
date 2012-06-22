@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xmd.h>
+#include <Xm/TransferP.h>
+#include <Xm/AtomMgr.h>
 #include <Xm/CascadeB.h>
 #include <Xm/DrawingA.h>
 #include <Xm/Frame.h>
@@ -173,7 +175,7 @@ static void      HandleInitialExpose (Widget, XtPointer, XEvent *, Boolean *);
 /*----------------------------------------------------------------*
  |                             main                               |
  *----------------------------------------------------------------*/
-void
+int
 main (int argc, char** argv)
 {
   Widget mainWin, frame;
