@@ -1932,6 +1932,7 @@ GeometryManager(widget, request, allowed)
 {
     XmTabStackWidget tab = (XmTabStackWidget) XtParent(widget);
     int              save_width, save_height, save_border;
+    Dimension        child_save_width, child_save_height;
     XtWidgetGeometry want, got;
     XRectangle       box, kids;
 
@@ -2007,20 +2008,29 @@ GeometryManager(widget, request, allowed)
     if( allowed->request_mode & CWWidth )
     {
 	widget->core.width = allowed->width;
+	XiTabStackC_width(widget) = allowed->width;
     }
     if( allowed->request_mode & CWHeight )
     {
 	widget->core.height = allowed->height;
+        XiTabStackC_height(widget) = allowed->height;
     }
     if( allowed->request_mode & CWBorderWidth )
     {
 	widget->core.border_width = allowed->border_width;
     }
+
+    child_save_width = widget->core.width;
+    child_save_height = widget->core.height;
+
     want.request_mode = 0;
     QueryGeometry((Widget)tab, &want, &got);
     widget->core.width = save_width;
     widget->core.height = save_height;
     widget->core.border_width = save_border;
+
+    XiTabStackC_width(widget) = save_width;
+    XiTabStackC_height(widget) = save_height;
 
     /*
      * Lets store away the width and height we want.
@@ -2097,6 +2107,10 @@ GeometryManager(widget, request, allowed)
 	     */
 	    XtMakeResizeRequest((Widget)tab, save_width, save_height,
 				NULL, NULL);
+
+	    XiTabStackC_width(widget) = child_save_width;
+	    XiTabStackC_height(widget) = child_save_height;
+
 	    Resize((Widget)tab);
 	    if( XtIsRealized((Widget)tab) ) Redisplay((Widget)tab,NULL,False);
 	}
@@ -2114,6 +2128,9 @@ GeometryManager(widget, request, allowed)
 	 */
 	break;
     case XtGeometryDone:
+	XiTabStackC_width(widget) = child_save_width;
+	XiTabStackC_height(widget) = child_save_height;
+
 	XiReturn( 99, XtGeometryDone );
 	break;
     }
