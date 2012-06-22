@@ -766,13 +766,7 @@ XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
  *	Boolean - True if the geometry fits the specified widget, else False
  */
 Boolean
-#ifndef _NO_PROTO
 XmCompareXtWidgetGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
-#else
-XmCompareXtWidgetGeometryToWidget(geom, widget)
-    XtWidgetGeometry *geom;
-    Widget           widget;
-#endif
 {
     if( (geom->request_mode & CWX && geom->x != widget->core.x) ||
         (geom->request_mode & CWY && geom->y != widget->core.y) ||
@@ -796,12 +790,7 @@ XmCompareXtWidgetGeometryToWidget(geom, widget)
  *	Boolean - True if both the request_mode and values match, else False
  */
 Boolean
-#ifndef _NO_PROTO
 XmCompareXtWidgetGeometry(XtWidgetGeometry *geom1, XtWidgetGeometry *geom2)
-#else
-XmCompareXtWidgetGeometry(geom1, geom2)
-    XtWidgetGeometry *geom1, *geom2;
-#endif
 {
     if( geom1->request_mode != geom2->request_mode ) return( False );
 
@@ -868,15 +857,9 @@ _XmInitialIzeConverters(Widget w)
  *  FIX for 5178: remove dependency on Xt private data 
  */
 static Boolean
-#ifdef _NO_PROTO
-IsSubclassOf( wc, sc )
-	WidgetClass wc;
-	WidgetClass sc;
-#else
 IsSubclassOf(
 	WidgetClass wc,
 	WidgetClass sc)
-#endif /* _NO_PROTO */
 {
 	WidgetClass p = wc;
 
@@ -891,19 +874,11 @@ IsSubclassOf(
  */
 
 void 
-#ifdef _NO_PROTO
-_XiResolveAllPartOffsets( w_class, offset, constraint_offset, align64 )
-        WidgetClass w_class ;
-        XmOffsetPtr *offset ;
-        XmOffsetPtr *constraint_offset ;
-	Boolean align64;
-#else
 _XiResolveAllPartOffsets(
         WidgetClass w_class,
         XmOffsetPtr *offset,
         XmOffsetPtr *constraint_offset,
 	Boolean     align64)
-#endif /* _NO_PROTO */
 {
     WidgetClass c, super = w_class->core_class.superclass;
     ConstraintWidgetClass cc = NULL, scc = NULL;
@@ -1049,33 +1024,19 @@ _XiResolveAllPartOffsets(
 }
 
 void 
-#ifdef _NO_PROTO
-XiResolveAllPartOffsets( w_class, offset, constraint_offset )
-        WidgetClass w_class ;
-        XmOffsetPtr *offset ;
-        XmOffsetPtr *constraint_offset ;
-#else
 XiResolveAllPartOffsets(
         WidgetClass w_class,
         XmOffsetPtr *offset,
         XmOffsetPtr *constraint_offset )
-#endif /* _NO_PROTO */
 {
     _XiResolveAllPartOffsets( w_class, offset, constraint_offset, False );
 }
 
 void 
-#ifdef _NO_PROTO
-XmResolveAllPartOffsets64( w_class, offset, constraint_offset )
-        WidgetClass w_class ;
-        XmOffsetPtr *offset ;
-        XmOffsetPtr *constraint_offset ;
-#else
 XmResolveAllPartOffsets64(
         WidgetClass w_class,
         XmOffsetPtr *offset,
         XmOffsetPtr *constraint_offset )
-#endif /* _NO_PROTO */
 {
 #ifdef XM_ALIGN_64
     _XiResolveAllPartOffsets( w_class, offset, constraint_offset, True );
@@ -1099,13 +1060,8 @@ XmResolveAllPartOffsets64(
  ************************************************************************/
 
 void 
-#ifdef _NO_PROTO
-_XmExtHighlightBorder( w )
-        Widget w ;
-#else
 _XmExtHighlightBorder(
         Widget w )
-#endif /* _NO_PROTO */
 {
     if(    XmIsPrimitive( w)    ) {   
         (*(xmPrimitiveClassRec.primitive_class.border_highlight))( w) ;
@@ -1118,13 +1074,8 @@ _XmExtHighlightBorder(
 } 
 
 void 
-#ifdef _NO_PROTO
-_XmExtUnhighlightBorder( w )
-        Widget w ;
-#else
 _XmExtUnhighlightBorder(
         Widget w )
-#endif /* _NO_PROTO */
 {
     if(    XmIsPrimitive( w)    )
     {   
