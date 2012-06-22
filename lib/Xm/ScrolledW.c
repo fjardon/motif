@@ -94,157 +94,190 @@ typedef struct _AutoDragRects
 /********    Static Function Declarations    ********/
 
 static void ScrollBarPlacementDefault (
-Widget w,
-int offset,
-XrmValue *value);
+    Widget w,
+    int offset,
+    XrmValue *value);
+
 static void VisualPolicyDefault(
-Widget widget,
-int offset,
-XrmValue *value) ;
+    Widget widget,
+    int offset,
+    XrmValue *value) ;
+
 static void SliderMove(
-Widget w,
-XtPointer closure,
-XtPointer cd) ;
+    Widget w,
+    XtPointer closure,
+    XtPointer cd) ;
+
 static void MoveWindow(
-XmScrolledWindowWidget sw,
-int value,
-unsigned char direction) ;
+    XmScrolledWindowWidget sw,
+    int value,
+    unsigned char direction) ;
+
 static void LeftEdge(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void RightEdge(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void TopEdge(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void BottomEdge(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void PageLeft(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void PageRight(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void PageUp(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
+
 static void PageDown(
-Widget wid,
-XEvent *event,
-String *params,
-Cardinal *num_params) ;
+    Widget wid,
+    XEvent *event,
+    String *params,
+    Cardinal *num_params) ;
 
 static void ClassPartInitialize(
-WidgetClass wc) ;
+    WidgetClass wc) ;
+
 static void Initialize(
-Widget rw,
-Widget nw,
-ArgList args,
-Cardinal *num_args) ;
+    Widget rw,
+    Widget nw,
+    ArgList args,
+    Cardinal *num_args) ;
+
 static void Redisplay(
-Widget wid,
-XEvent *event,
-Region region) ;
+    Widget wid,
+    XEvent *event,
+    Region region) ;
+
 static void ComputeLocations(
-XmScrolledWindowWidget sw,
-Dimension HSBht, Dimension VSBht,
-Boolean HasHSB, Boolean HasVSB,
-Position * newx, Position * newy,
-Position * hsbX, Position * hsbY,
-Position * vsbX, Position * vsbY);
+    XmScrolledWindowWidget sw,
+    Dimension HSBht, Dimension VSBht,
+    Boolean HasHSB, Boolean HasVSB,
+    Position * newx, Position * newy,
+    Position * hsbX, Position * hsbY,
+    Position * vsbX, Position * vsbY);
+
 static void VariableLayout(
-XmScrolledWindowWidget sw) ;
+    XmScrolledWindowWidget sw) ;
+
 static void ConstantLayout(
-XmScrolledWindowWidget sw) ;
+    XmScrolledWindowWidget sw) ;
+
 static void Resize(
-Widget wid) ;
+    Widget wid) ;
+
 static void Destroy(
-Widget wid) ;
+    Widget wid) ;
+
 static void GetVariableSize(
-XmScrolledWindowWidget sw,
-Dimension *pwidth,
-Dimension *pheight) ;
+    XmScrolledWindowWidget sw,
+    Dimension *pwidth,
+    Dimension *pheight) ;
+
 static XtGeometryResult GeometryManager(
-Widget w,
-XtWidgetGeometry *request,
-XtWidgetGeometry *reply) ;
+    Widget w,
+    XtWidgetGeometry *request,
+    XtWidgetGeometry *reply) ;
+
 static void ChangeManaged(
-Widget wid) ;
+    Widget wid) ;
+
 static void InsertChild(
-Widget w) ;
+    Widget w) ;
+
 static void DeleteChild(
-Widget w) ;
+    Widget w) ;
+
 static XtGeometryResult QueryGeometry(
-Widget wid,
-XtWidgetGeometry *request,
-XtWidgetGeometry *ret) ;
+    Widget wid,
+    XtWidgetGeometry *request,
+    XtWidgetGeometry *ret) ;
+
 static Boolean SetValues(
-Widget cw,
-Widget rw,
-Widget nw,
-ArgList args,
-Cardinal *num_args) ;
+    Widget cw,
+    Widget rw,
+    Widget nw,
+    ArgList args,
+    Cardinal *num_args) ;
+
 static void ConstraintInitialize(
-Widget rw,
-Widget nw,
-ArgList args,
-Cardinal *num_args) ;
+    Widget rw,
+    Widget nw,
+    ArgList args,
+    Cardinal *num_args) ;
+
 static void GetHorRects(
-Widget sw,
-XRectangle ** hrect,
-Cardinal * num_hrect);
+    Widget sw,
+    XRectangle ** hrect,
+    Cardinal * num_hrect);
+
 static void GetVertRects(
-Widget sw,
-XRectangle ** vrect,
-Cardinal * num_vrect);
+    Widget sw,
+    XRectangle ** vrect,
+    Cardinal * num_vrect);
 
 static void HandleDrop(
-Widget       w,
-XtPointer    client_data,
-XtPointer    call_data);
+    Widget       w,
+    XtPointer    client_data,
+    XtPointer    call_data);
+
 static void HandleDrag(
-Widget       w,
-XtPointer    client_data,
-XtPointer    call_data);
+    Widget       w,
+    XtPointer    client_data,
+    XtPointer    call_data);
 
 static void ScrollFrameInit (
-Widget sf,
-XtCallbackProc moveCB,
-Widget scrollable);
+    Widget sf,
+    XtCallbackProc moveCB,
+    Widget scrollable);
+
 static Boolean  GetInfo(
-Widget sf,
-Cardinal * dimension,
-Widget ** nav_list,
-Cardinal * num_nav_list) ;
+    Widget sf,
+    Cardinal * dimension,
+    Widget ** nav_list,
+    Cardinal * num_nav_list) ;
+
 static void AddNavigator(
-Widget sf,
-Widget nav,
-Mask dimMask);
+    Widget sf,
+    Widget nav,
+    Mask dimMask);
+
 static void RemoveNavigator(
-Widget sf,
-Widget nav);
+    Widget sf,
+    Widget nav);
+
 static void UpdateOrigGeom(Widget sf,
-Widget child,
-XtWidgetGeometry *geom);
+    Widget child,
+    XtWidgetGeometry *geom);
 
 static void CheckKids(
-XmScrolledWindowWidget sw);
+    XmScrolledWindowWidget sw);
 
 /********    End Static Function Declarations    ********/
 
@@ -842,8 +875,13 @@ Cardinal *num_params )
     if (sw->swindow.hScrollBar)
         value = sw->swindow.hOrigin -
             (sw->swindow.hScrollBar)->scrollBar.page_increment;
-    else
-        value = sw->swindow.hOrigin - sw->swindow.WorkWindow->core.width;
+    else {
+        if (sw->swindow.WorkWindow)
+            value = sw->swindow.hOrigin -
+            sw->swindow.WorkWindow->core.width;
+        else
+            return;
+    }
 
     MoveWindow (sw, MAX(value, sw->swindow.hmin), XmHORIZONTAL);
 }
@@ -868,8 +906,12 @@ Cardinal *num_params )
     if (sw->swindow.hScrollBar)
         value = sw->swindow.hOrigin +
             (sw->swindow.hScrollBar)->scrollBar.page_increment;
-    else
-        value = sw->swindow.hOrigin + sw->swindow.WorkWindow->core.width;
+    else {
+        if (sw->swindow.WorkWindow)
+            value = sw->swindow.hOrigin + sw->swindow.WorkWindow->core.width;
+        else
+            return;
+    }
 
     MoveWindow (sw, MIN(value, (sw->swindow.hmax - sw->swindow.hExtent)),
         XmHORIZONTAL);
@@ -895,8 +937,12 @@ Cardinal *num_params )
     if (sw->swindow.vScrollBar)
         value = sw->swindow.vOrigin -
             (sw->swindow.vScrollBar)->scrollBar.page_increment;
-    else
-        value = sw->swindow.vOrigin - sw->swindow.WorkWindow->core.height;
+    else {
+        if (sw->swindow.WorkWindow)
+            value = sw->swindow.vOrigin - sw->swindow.WorkWindow->core.height;
+        else
+            return;
+    }
 
     MoveWindow (sw, MAX(value, sw->swindow.vmin), XmVERTICAL);
 }
@@ -921,8 +967,12 @@ Cardinal *num_params )
     if (sw->swindow.vScrollBar)
         value = sw->swindow.vOrigin +
             (sw->swindow.vScrollBar)->scrollBar.page_increment;
-    else
-        value = sw->swindow.vOrigin + sw->swindow.WorkWindow->core.height;
+    else {
+        if (sw->swindow.WorkWindow)
+            value = sw->swindow.vOrigin + sw->swindow.WorkWindow->core.height;
+        else
+            return;
+    }
 
     MoveWindow (sw, MIN(value, (sw->swindow.vmax - sw->swindow.vExtent)),
         XmVERTICAL);
