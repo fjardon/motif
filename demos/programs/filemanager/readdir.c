@@ -227,7 +227,7 @@ read_directory(Widget parent, char* dirname)
     ltm = buf.st_ctime;    
   }
 
-  while(info = readdir(thisdir)) {
+  while((info = readdir(thisdir))) {
     Boolean is_dot, is_dotdot;
 
     is_dot = strcmp(info -> d_name, ".") == 0;
