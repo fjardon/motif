@@ -1643,7 +1643,7 @@ ManageAndUnmanageSashs(XmPanedWidget pw)
    Widget *managedS, *unmanagedS;
    Widget *childP;
    Cardinal alloc_size;
-   Boolean last_child_has_sash;
+   Boolean last_child_has_sash = False;
 
    alloc_size = (Cardinal) sizeof(Widget) * pw->composite.num_children / 2;
    managedP = managed_sashs = (WidgetList) XtMalloc(alloc_size);
@@ -2135,11 +2135,16 @@ GeometryManager(Widget w, XtWidgetGeometry *request, XtWidgetGeometry *reply)
  */
 
     if ( !((vert ? CWWidth : CWHeight) & mask))
+    {
         if (vert) 
+        {
 	    request->width = w->core.width;
-	else
+        }
+        else
+        {
 	    request->height = w->core.height;
-
+        }
+    }
     almost = (mask & ~(CWWidth | CWHeight | XtCWQueryOnly));
     almost |= GetRequestInfo(request, !vert) != GetRequestInfo(reply, !vert);
     almost |= GetRequestInfo(request, vert) != GetRequestInfo(reply, vert);

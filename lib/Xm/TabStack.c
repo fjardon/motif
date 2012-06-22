@@ -371,10 +371,10 @@ static XmPartResource resources[] = {
 	  XmRBoolean, sizeof(Boolean), offset(uniform_tab_size),
 	  XmRImmediate, (XtPointer) True },
     { XmNtabSelectColor, XmCTabSelectColor,
-	  XmRXiPixel, sizeof(Pixel), offset(select_color),
+	  XmRXmPixel, sizeof(Pixel), offset(select_color),
 	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
     { XmNtabSelectPixmap, XmCTabSelectPixmap,
-	  XmRXiPixmap, sizeof(Pixmap), offset(select_pixmap),
+	  XmRXmPixmap, sizeof(Pixmap), offset(select_pixmap),
 	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
     { XmNstackedEffect, XmCStackedEffect,
 	  XmRBoolean, sizeof(Boolean), offset(stacked_effect),
@@ -441,13 +441,13 @@ static XtResource constraint_resources[] = {
 	  XmRBoolean, sizeof(Boolean), offset(free_tab_pixmap),
 	  XmRImmediate, (XtPointer) False },
     { XmNtabBackground, XmCBackground,
-	  XmRXiPixel, sizeof(Pixel), offset(tab_background),
+	  XmRXmPixel, sizeof(Pixel), offset(tab_background),
 	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
     { XmNtabBackgroundPixmap, XmCBackgroundPixmap,
-	  XmRXiPixmap, sizeof(Pixmap), offset(tab_background_pixmap),
+	  XmRXmPixmap, sizeof(Pixmap), offset(tab_background_pixmap),
 	  XmRImmediate, (XtPointer) XiPIXMAP_DYNAMIC },
     { XmNtabForeground, XmCForeground,
-	  XmRXiPixel, sizeof(Pixel), offset(tab_foreground),
+	  XmRXmPixel, sizeof(Pixel), offset(tab_foreground),
 	  XmRImmediate, (XtPointer) XiCOLOR_DYNAMIC },
 #ifdef TEAR_OFF_TABS
     { XmNtabTearOffEnabled, XmCTabTearOffEnabled,
@@ -605,11 +605,11 @@ ClassInitialize()
     XtSetTypeConverter(XmRString, XmRXmPixmapPlacement,
 		       CvtStringToXmPixmapPlacement, NULL, 0, XtCacheNone,
 		       NULL);
-    XtSetTypeConverter(XmRString, XmRXiPixel,
+    XtSetTypeConverter(XmRString, XmRXmPixel,
 		       CvtStringToXiPixel,
 		       XmColorConvertArgs, XtNumber(XmColorConvertArgs),
 		       XtCacheNone, NULL);
-    XtSetTypeConverter(XmRString, XmRXiPixmap,
+    XtSetTypeConverter(XmRString, XmRXmPixmap,
 		       CvtStringToXiPixmap,
 		       XmColorConvertArgs, XtNumber(XmColorConvertArgs),
 		       XtCacheNone, NULL);
@@ -772,8 +772,8 @@ Initialize(request, set, arg_list, arg_cnt)
 	 */
 	XmTabStack_uniform_tab_size(ts) = True;
 	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XiNillegalResourceValue, XiNillegalResourceValue,
-			XiCICSEnhancementPakResourceError,
+			XmNillegalResourceValue, XmNillegalResourceValue,
+			XmCICSEnhancementPakResourceError,
 			XmNillegalUniformTabSizeMsg, NULL, NULL);
 	XtSetArg(args[n], XmNuniformTabSize, True); ++n;
     }
@@ -1356,8 +1356,8 @@ SetValues(current, request, set, arg_list, arg_cnt)
 	 XmTabStack_tab_mode(s_tab) == XmTABS_STACKED_STATIC) )
     {
 	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XiNillegalResourceValue, XiNillegalResourceValue,
-			XiCICSEnhancementPakResourceError,
+			XmNillegalResourceValue, XmNillegalResourceValue,
+			XmCICSEnhancementPakResourceError,
 			XmNillegalUniformTabSizeMsg, NULL, NULL);
 	XtSetArg(args[n], XmNuniformTabSize, True); ++n;
     }
@@ -1368,8 +1368,8 @@ SetValues(current, request, set, arg_list, arg_cnt)
         !sfield(uniform_tab_size) )
     {
 	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XiNillegalResourceValue, XiNillegalResourceValue,
-			XiCICSEnhancementPakResourceError,
+			XmNillegalResourceValue, XmNillegalResourceValue,
+			XmCICSEnhancementPakResourceError,
 			XmNillegalUniformTabSizeMsg, NULL, NULL);
 	XtSetArg(args[n], XmNuniformTabSize, True); ++n;
     }

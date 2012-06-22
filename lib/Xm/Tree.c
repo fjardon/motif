@@ -139,12 +139,12 @@ static void LineStyle_confirm (Widget w, int value);
 #define offset(field) XmPartOffset(XmTree, field)
 
 static XmPartResource resources[] = {
-  {XmNconnectStyle, XmCConnectStyle, XmRXiConnectStyle, 
+  {XmNconnectStyle, XmCConnectStyle, XmRXmConnectStyle, 
        sizeof(XmTreeConnectStyle), offset(connect_style),
        XmRImmediate, (XtPointer) XmTreeDirect},
   {XmNorientation, XmCOrientation, XmROrientation, 
        sizeof(unsigned char), offset(orientation), XmRImmediate, (XtPointer) XmHORIZONTAL},
-  {XmNcompressStyle, XmCCompressStyle, XmRXiCompressStyle, 
+  {XmNcompressStyle, XmCCompressStyle, XmRXmCompressStyle, 
        sizeof(XmTreeCompressStyle), offset(compress_style),
        XmRImmediate, (XtPointer) XmTreeCompressLeaves},
   {XmNverticalDelta, XmCVerticalDelta, XmRVerticalDimension, 
@@ -187,7 +187,7 @@ static XmPartResource constraints[] = {
        offset(background_color), XmRCallProc, (XtPointer) LineBackgroundColorDefault},
   {XmNlineWidth, XmCLineWidth, XmRInt, sizeof(int),
        offset(line_width), XmRImmediate, (XtPointer) 0},
-  {XmNlineStyle, XmCLineStyle, XmRXiLineStyle, sizeof(int),
+  {XmNlineStyle, XmCLineStyle, XmRXmLineStyle, sizeof(int),
        offset(line_style), XmRImmediate, (XtPointer) LineSolid}
 };
 
@@ -313,13 +313,13 @@ ClassInit(void)
 			    &XmTreeC_offsets);
     }
 
-    XtSetTypeConverter(XmRString, XmRXiConnectStyle,
+    XtSetTypeConverter(XmRString, XmRXmConnectStyle,
 		       (XtTypeConverter) CvtStringToConnectStyle,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);
-    XtSetTypeConverter(XmRString, XmRXiCompressStyle,
+    XtSetTypeConverter(XmRString, XmRXmCompressStyle,
 		       (XtTypeConverter) CvtStringToCompressStyle,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);
-    XtSetTypeConverter(XmRString, XmRXiLineStyle,
+    XtSetTypeConverter(XmRString, XmRXmLineStyle,
 		       (XtTypeConverter) CvtStringToLineStyle,
 		       NULL, (Cardinal) 0, XtCacheNone, (XtDestructor) NULL);
 }
@@ -958,7 +958,7 @@ CvtStringToConnectStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
     else if ( (q == XtQEDirect) || streq(lowerName,"treedirect") )
 	connect = XmTreeDirect;
     else {
-	XtDisplayStringConversionWarning(dpy,fromVal->addr, XmRXiConnectStyle);
+	XtDisplayStringConversionWarning(dpy,fromVal->addr, XmRXmConnectStyle);
 	return(FALSE);		/* Conversion failed. */
     }
     
@@ -1018,7 +1018,7 @@ CvtStringToCompressStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
     else if ((q == XtQECompressAll) || streq(lowerName,"all") || streq(lowerName,"treecompressall") )
         compress = XmTreeCompressAll;
     else {
-        XtDisplayStringConversionWarning(dpy,fromVal->addr, XmRXiCompressStyle);
+        XtDisplayStringConversionWarning(dpy,fromVal->addr, XmRXmCompressStyle);
         return(FALSE);          /* Conversion failed. */
     }
 
@@ -1056,7 +1056,7 @@ CvtStringToLineStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
     else if ( streq(lowerName, "linedoubledash") || streq(lowerName,"doubledash") )
 	lineStyle = LineDoubleDash;
     else {
-	XtDisplayStringConversionWarning(dpy,fromVal->addr, XmRXiLineStyle);
+	XtDisplayStringConversionWarning(dpy,fromVal->addr, XmRXmLineStyle);
 	return(FALSE);		/* Conversion failed. */
     }
     

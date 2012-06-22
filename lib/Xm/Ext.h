@@ -38,7 +38,7 @@
 *************************************************************/
 
 #include <Xm/Xm.h>
-#include <Xm/ExtDefs.h>
+#include <Xm/XmStrDefsI.h>
 
 #if defined(__cplusplus)
 extern "C" {

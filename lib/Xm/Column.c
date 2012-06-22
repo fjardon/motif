@@ -227,7 +227,7 @@ static XmPartResource resources[] = {
 	  XmPartOffset(XmBulletinBoard, label_font_list),
 	  XmRImmediate, (XtPointer) NULL },
     { XmNdefaultEntryLabelAlignment, XmCAlignment,
-	  XmRXiAlignment, sizeof(unsigned char),
+	  XmRXmAlignment, sizeof(unsigned char),
 	  offset(default_label_alignment), 
 	  XmRImmediate, (XtPointer) DEFAULT_ALIGNMENT },
 #if 0	/* POSITION HANDLING */
@@ -273,7 +273,7 @@ static XmPartResource constraint_resources[] = {
 	  offset(label_font_list),
 	  XmRImmediate, (XtPointer) NULL },
     { XmNentryLabelAlignment, XmCAlignment,
-	  XmRXiAlignment, sizeof(unsigned char),
+	  XmRXmAlignment, sizeof(unsigned char),
 	  offset(label_alignment),
 	  XmRImmediate, (XtPointer) XmALIGNMENT_UNSPECIFIED },
 #if 0	/* POSITION HANDLING */
@@ -451,7 +451,7 @@ ClassInitialize()
 		       (XtTypeConverter) CvtStringToLabelPosition,
 		       NULL, 0, XtCacheAll, NULL);
 #endif
-    XtSetTypeConverter(XmRString, XmRXiAlignment,
+    XtSetTypeConverter(XmRString, XmRXmAlignment,
 		       (XtTypeConverter) CvtStringToXiAlignment,
 		       NULL, 0, XtCacheAll, NULL);
     XtSetTypeConverter(XmRString, XmRFillStyle,
@@ -1552,7 +1552,7 @@ CvtStringToLabelPosition(dpy, args, arg_cnt, from, to, data)
  *	CvtStringToXiAlignment(dpy, args, arg_cnt, from, to, data)
  * Description:
  *	This function converts a string representation of the representation
- *	type XmRXiAlignment to an actual value.
+ *	type XmRXnAlignment to an actual value.
  * Input:
  *	dpy     : Display   - unused
  *	args    : XrmValue* - unused
@@ -1602,7 +1602,7 @@ CvtStringToXiAlignment(dpy, args, arg_cnt, from, to, data)
     }
     else
     {
-	XtDisplayStringConversionWarning(dpy, from->addr, XmRXiAlignment);
+	XtDisplayStringConversionWarning(dpy, from->addr, XmRXmAlignment);
 	return( False );
     }
 

@@ -31,7 +31,6 @@ extern "C" {
 
 #include <Xm/Xm.h>
 #include <Xm/Ext.h>
-#include <Xm/XmExtDefs.h>
 
 extern WidgetClass xmColumnWidgetClass;
 

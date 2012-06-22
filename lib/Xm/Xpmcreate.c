@@ -2115,6 +2115,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
      * parse extensions
      */
     if (info && (info->valuemask & XpmReturnExtensions))
+    {
 	if (extensions) {
 	    ErrorStatus = xpmParseExtensions(data, &info->extensions,
 					     &info->nextensions);
@@ -2124,6 +2125,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	    info->extensions = NULL;
 	    info->nextensions = 0;
 	}
+    }
 
     /*
      * store found informations in the XpmImage structure
