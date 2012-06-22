@@ -42,6 +42,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <Xm/XmP.h>
 #include <Xm/Xm.h>
 #include <X11/Shell.h>
@@ -1539,7 +1540,7 @@ Pixmap GetNoteImagePixmap(Widget w, NoteType note)
    Display *dsp = XtDisplay(w);
    Window   win = RootWindowOfScreen(XtScreen(w));
    int      d   = DefaultDepthOfScreen(XtScreen(w));
-   unsigned char    *data;
+   unsigned char    *data = NULL;
 
 
    XtVaGetValues(w, XmNforeground, &fg, XmNbackground, &bg, NULL);
@@ -1560,6 +1561,7 @@ Pixmap GetNoteImagePixmap(Widget w, NoteType note)
      case HALFDOTSHARP:    data = half_dot_sharp_bits;	 break;
      case REST:            data = rest_bits;		 break;
      case RESTDOT:         data = rest_dot_bits;	 break;
+     default: ;
      }
 
    return(XCreatePixmapFromBitmapData(dsp, win, (char*)data,
@@ -1577,7 +1579,7 @@ Pixmap GetNoteMaskPixmap(Widget w, NoteType note)
    Display *dsp = XtDisplay(w);
    Window   win = RootWindowOfScreen(XtScreen(w));
    int      d   = DefaultDepthOfScreen(XtScreen(w));
-   unsigned char    *data;
+   unsigned char    *data = NULL;
 
 
    XtVaGetValues(w, XmNforeground, &fg, XmNbackground, &bg, NULL);
@@ -1598,6 +1600,7 @@ Pixmap GetNoteMaskPixmap(Widget w, NoteType note)
      case HALFDOTSHARP:    data = half_dot_sharp_bits;	 break;
      case REST:            data = rest_bits;		 break;
      case RESTDOT:         data = rest_dot_bits;	 break;
+     default: ;
      }
 
    return (XCreatePixmapFromBitmapData(dsp, win, (char*)data,
