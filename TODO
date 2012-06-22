@@ -1,0 +1,31 @@
+TODO list for 2.2.2 release
+----------------------------------------------------------------
+
+-Make new widgets thread safe
+
+-Make new widgets conform to Motif 2.1 model by supporting:
+    *Traits 
+    *Render Tables 
+    *Xme draw routines 
+    *Uniform Transfer Model (UTM) 
+    *Fast Subclassing 
+
+- Update from use of deprecated and obsolete features:
+    *FontSelector
+    *XmFontList 
+
+- Validate backwards compatibility
+    *Fix ToolTips Vendor-Shell extension that broke Motif 2.1
+    compatibility.
+    *May want to use traits instead of adding a new resource.
+
+- Fix to avoid low level incompatibility messages:
+    Get rid of need for 
+        XtVersionDontCheck
+        XmResolveAllPartOffsets
+
+- Get rid of non-TOG artifacts
+    *Copyright notices to ICS and others throughout code
+    *Avoid references to "Xi" in variables/functions.
+
+- WML specification needs to include new components to work with UIL
