@@ -32,6 +32,7 @@ static char *rcsid = "$XConsortium: todo.c /main/6 1995/07/14 09:46:43 drk $";
 
 #include <pwd.h>
 #include <unistd.h>
+#include <stdlib.h>
 /* X include files */
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -298,8 +299,8 @@ void
 Save(Widget w, char *i, XmFileSelectionBoxCallbackStruct *i2) 
 {
   char *str;
-  if (str = XmStringUnparse(i2->value, NULL, XmCHARSET_TEXT, 
-			    XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL)) {
+  if ((str = XmStringUnparse(i2->value, NULL, XmCHARSET_TEXT, 
+			    XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL))) {
     SaveDB(str);
     XtFree(options.todoFile);
     options.todoFile = str;
@@ -312,8 +313,8 @@ void
 Open(Widget w, char *i, XmFileSelectionBoxCallbackStruct *i2) 
 {
   char *str;
-  if (str = XmStringUnparse(i2->value, NULL, XmCHARSET_TEXT, 
-			    XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL)) {
+  if ((str = XmStringUnparse(i2->value, NULL, XmCHARSET_TEXT, 
+			    XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL))) {
     ReadDB(str);
     XtFree(options.todoFile);
     options.todoFile = str;

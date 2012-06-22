@@ -59,6 +59,7 @@ void FixPages();
 void PageChange(Widget w, XtPointer i, XmNotebookCallbackStruct *cs);
 Page AllocPage();
 char* Trim(char*);
+extern void SaveDB(char*);
 
 extern Widget shell, textw, labelw, notebook;
 extern int maxpages, currentPage, modified;
