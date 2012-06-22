@@ -39,6 +39,7 @@ static char rcsid[] = "$XConsortium: earth.c /main/5 1995/07/14 09:41:16 drk $"
 #define APP_CLASS "XmdEarth"   
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <Xm/XmAll.h>
 #include <X11/extensions/shape.h> /* R4 header required */
