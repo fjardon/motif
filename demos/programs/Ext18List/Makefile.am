@@ -1,15 +1,11 @@
-bindir = ${prefix}/share/Xm/Ext18list
 datadir = ${prefix}/share/Xm/Ext18list
 
-EXTRA_DIST = Imakefile
-
 bin_PROGRAMS = ext18list
-ext18list_SOURCES = bxutil-c.c  \
-         callbacks-c.c  \
-         creation.c  \
-         ext18list.c \
+SUBDIRS = pixmaps
+ext18list_SOURCES = bxutil-c.c callbacks-c.c creation.c ext18list.c \
          extlist.h
-         
+EXTRA_DIST = Imakefile
+data_DATA = $(EXTRA_DIST) $(ext18list_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 

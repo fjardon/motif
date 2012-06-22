@@ -1,19 +1,16 @@
-bindir = ${prefix}/share/Xm/animate
 datadir = ${prefix}/share/Xm/animate
 
-
 EXTRA_DIST = dog.uil plane.uil superman.uil xmanimate.uil \
-    superman1.xbm \
-    superman2.xbm \
-    superman3.xbm \
-    superman4.xbm \
-    superman5.xbm \
-    superman6.xbm \
-    Imakefile
+    superman1.xbm superman2.xbm superman3.xbm superman4.xbm \
+    superman5.xbm superman6.xbm Imakefile XmdAnimate.ad \
+    README animate.help animate.man xmanimate.man
+
+animate_SOURCES = xmanimate.c animate.c
 
 CLEANFILES =  dog.uid plane.uid superman.uid xmanimate.uid
 
-data_DATA = dog.uid plane.uid superman.uid xmanimate.uid
+data_DATA = dog.uid plane.uid superman.uid xmanimate.uid $(animate_SOURCES) \
+            $(EXTRA_DIST)
 
 bin_PROGRAMS = xmanimate
 

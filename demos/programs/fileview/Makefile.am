@@ -1,22 +1,11 @@
-bindir = ${prefix}/share/Xm/fileview
 datadir = ${prefix}/share/Xm/fileview
 
-data_DATA = French.uid German.uid English.uid \
-            English.df French.df German.df 
-         
-
 bin_PROGRAMS = fileview
-fileview_SOURCES = main.c text.c file.c
+fileview_SOURCES = main.c text.c file.c file.h fileE.h fileview.h main.h \
+                   mainE.h text.h textE.h
+EXTRA_DIST = $(UILS) English.df French.df German.df README Fileview.ad
+data_DATA = French.uid German.uid English.uid $(fileview_SOURCES) $(EXTRA_DIST)
 
-EXTRA_DIST = $(UILS) English.df French.df German.df \
-        file.h \
-        fileE.h \
-        fileview.h \
-        main.h \
-        mainE.h \
-        text.h \
-        textE.h Imakefile
-        
 UILS= French.uil German.uil English.uil
 
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la

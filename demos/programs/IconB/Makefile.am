@@ -1,13 +1,9 @@
-bindir = ${prefix}/share/Xm/Icon
 datadir = ${prefix}/share/Xm/Icon
 
-EXTRA_DIST = Imakefile
-
-data_DATA = small.bm
-
+EXTRA_DIST = Imakefile small.bm
 bin_PROGRAMS = iconbuttondemo
-iconbuttondemo_SOURCES = bxutil-c.c  iconbuttondemo.c small.bm
-
+iconbuttondemo_SOURCES = bxutil-c.c  iconbuttondemo.c
+data_DATA = $(iconbuttondemo_SOURCES) $(EXTRA_DIST)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 

@@ -1,12 +1,9 @@
-
-bindir = ${prefix}/share/Xm/periodic
 datadir = ${prefix}/share/Xm/periodic
 
 bin_PROGRAMS = periodic
-data_DATA = periodic.uid XmdPeriodic.ad README
-
-EXTRA_DIST = periodic.uil periodic_l.uil XmdPeriodic.ad \
-             Imakefile
+EXTRA_DIST = periodic.uil periodic_l.uil XmdPeriodic.ad Imakefile README
+periodic_SOURCES = periodic.c
+data_DATA = $(EXTRA_DIST) $(periodic_SOURCES)
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
 
 INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 

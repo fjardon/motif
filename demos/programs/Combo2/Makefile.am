@@ -1,12 +1,9 @@
-bindir = ${prefix}/share/Xm/combo2
 datadir = ${prefix}/share/Xm/combo2
 
 bin_PROGRAMS = combo
-data_DATA = Combo.ad
-
 EXTRA_DIST = Combo.ad Imakefile
-SOURCES = combo.c
+combo2_SOURCES = combo.c
+data_DATA = $(EXTRA_DIST) $(combo2_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
-
 INCLUDES = -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
