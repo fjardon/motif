@@ -7,4 +7,3 @@ EXTRA_DIST = Imakefile XmdAirport.ad README
 data_DATA = $(airport_SOURCES) $(EXTRA_DIST)
 LDADD = ../../../lib/Xm/libXm.la
 INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
-
