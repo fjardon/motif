@@ -223,10 +223,10 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNhorizontalMargin, sizeof(Dimension), offset(h_space),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNverticalMargin, sizeof(Dimension), offset(v_space),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
 };
 #undef offset
@@ -792,7 +792,7 @@ ChangeManaged(Widget w)
     else
 	PlaceChildren(w, False, NULL);
 	
-    _XmNavigChangeManaged(w);	/* for Motif navigation */
+    XmeNavigChangeManaged(w);	/* for Motif navigation */
 }
 
 /*
@@ -1890,9 +1890,9 @@ PopdownList(Widget w)
     }
     else {
 	XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			XiNnoComboShell, XiNnoComboShell,
+			XmNnoComboShell, XmNnoComboShell,
 			XmCICSWidgetSetError,
-			XiNnoComboShellMsg, NULL, NULL);
+			XmNnoComboShellMsg, NULL, NULL);
     }
 }
 
@@ -1947,8 +1947,8 @@ PopupList(Widget w)
 
     if (shell == NULL) {
 	XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			XiNnoComboShell, XiNnoComboShell, XmCICSWidgetSetError,
-			XiNnoComboShellMsg, NULL, NULL);
+			XmNnoComboShell, XmNnoComboShell, XmCICSWidgetSetError,
+			XmNnoComboShellMsg, NULL, NULL);
 	return(False);
     }
 
@@ -2246,9 +2246,9 @@ SetTextFromList(Widget w)
 	    static String strs[] = {"Combination Box", NULL};
 	    Cardinal num = 1;
 	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget) cbw),
-			    XiNstringGetFailed, XiNstringGetFailed,
+			    XmNstringGetFailed, XmNstringGetFailed,
 			    XmCICSWidgetSetError,
-			    XiNstringGetFailedMsg, strs, &num);
+			    XmNstringGetFailedMsg, strs, &num);
 
 	    i++;
 	    continue;

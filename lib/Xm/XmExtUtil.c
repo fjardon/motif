@@ -204,9 +204,9 @@ _XmGadgetWarning(Widget w)
     num = 1;
     
     XtAppWarningMsg(XtWidgetToApplicationContext(w),
-		    XiNnoGadgetSupport, XiNnoGadgetSupport, 
+		    XmNnoGadgetSupport, XmNnoGadgetSupport, 
 		    XmCICSWidgetSetError,
-		    XiNnoGadgetSupportMsg, params, &num);
+		    XmNnoGadgetSupportMsg, params, &num);
     
     return(True); 
 }
@@ -549,9 +549,9 @@ _XmSetContextData(Widget w, XContext context, XtPointer data)
 
     if (ret != XCSUCCESS) {
 	XtAppErrorMsg(XtWidgetToApplicationContext(w),
-		      XiNcontextSaveFailed, XiNcontextSaveFailed, 
+		      XmNcontextSaveFailed, XmNcontextSaveFailed, 
 		      XmCICSWidgetSetError,
-		      XiNcontextSaveFailedMsg, NULL, NULL);
+		      XmNcontextSaveFailedMsg, NULL, NULL);
     }
 }
 

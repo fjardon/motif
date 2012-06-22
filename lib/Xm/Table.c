@@ -296,7 +296,7 @@ static Boolean XiValidInputChild();
 #define MIN_CELL_SIZE		 10
 
 #define MOVE_THRESHOLD 5
-#define XiNO_MOVE      0
+#define XmNO_MOVE      0
 #define XiSTART_MOVE   1
 #define XiDOING_MOVE   2
 
@@ -1036,7 +1036,7 @@ Initialize(request, widget, arg_list, arg_cnt)
     XmTable_cell_y(tw) = -1;
     XmTable_active_cell(tw) = NULL;
 
-    XmTable_move_status(tw) = XiNO_MOVE;
+    XmTable_move_status(tw) = XmNO_MOVE;
     XmTable_move_widget(tw) = NULL;
     XmTable_move_start_x(tw) = 0;
     XmTable_move_cur_x(tw) = 0;
@@ -1184,7 +1184,7 @@ Initialize(request, widget, arg_list, arg_cnt)
     if( XmTable_font_list(tw) == NULL )
     {
 	XmTable_font_list(tw) =
-	    XmFontListCopy(_XmGetDefaultFontList(widget, XmLABEL_FONTLIST));
+	    XmFontListCopy(XmeGetDefaultRenderTable(widget, XmLABEL_FONTLIST));
     }
     else
     {
@@ -1333,7 +1333,7 @@ Redisplay(widget, event, region)
     /*
      * Now lets draw the actual shadow around our clip window.
      */
-    _XmDrawShadows(XtDisplay(widget), XtWindow(widget),
+    XmeDrawShadows(XtDisplay(widget), XtWindow(widget),
 		   tw->manager.top_shadow_GC,
 		   tw->manager.bottom_shadow_GC,
 		   XmTable_save_size(tw).x, XmTable_save_size(tw).y,
@@ -1498,7 +1498,7 @@ SetValues(current, request, widget, arg_list, arg_cnt)
 	if( XmTable_font_list(tw) == NULL )
 	{
 	    XmTable_font_list(tw) =
-		XmFontListCopy(_XmGetDefaultFontList(widget,
+		XmFontListCopy(XmeGetDefaultRenderTable(widget,
 						     XmLABEL_FONTLIST));
 	}
 	else
@@ -4180,7 +4180,7 @@ TitleLabelExposeEH(label, client, event, continue_dispatch)
 {
     XmTableWidget tw = (XmTableWidget) client;
 
-    _XmDrawShadows(XtDisplay(label), XtWindow(label),
+    XmeDrawShadows(XtDisplay(label), XtWindow(label),
 		   XmTable_title_top_shadow_GC(tw),
 		   XmTable_title_bottom_shadow_GC(tw),
 		   0, 0, XtWidth(label), XtHeight(label),
@@ -4279,7 +4279,7 @@ TitleButtonPressEH(widget, client, event, continue_dispatch)
 	    Layout(tw);
 	}
 
-	XmTable_move_status(tw) = XiNO_MOVE;
+	XmTable_move_status(tw) = XmNO_MOVE;
 	XmTable_move_widget(tw) = NULL;
     }
 }
@@ -4304,7 +4304,7 @@ TitleMotionEH(widget, client, event, continue_dispatch)
     int            dx;
 
     if( event->xany.type != MotionNotify ||
-        (XmTable_move_status(tw) != XiNO_MOVE &&
+        (XmTable_move_status(tw) != XmNO_MOVE &&
 	 XmTable_move_widget(tw) == NULL) )
     {
 	return;
@@ -4360,7 +4360,7 @@ TitleMotionEH(widget, client, event, continue_dispatch)
 	}
 	XmTable_move_cur_x(tw) = x;
 	break;
-    case XiNO_MOVE:
+    case XmNO_MOVE:
     default:
 	if( XtClass(widget) == xmLabelWidgetClass )
 	{

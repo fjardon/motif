@@ -99,9 +99,9 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNmarginHeight, sizeof(Dimension), offset(margin_height),
-      _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels },
+      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
     { XmNmarginWidth, sizeof(Dimension), offset(margin_width),
-      _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels },
+      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
 };
 #undef offset
 	    
@@ -497,7 +497,7 @@ ChangeManaged(Widget w)
     * for Motif navigation
     */
 
-   _XmNavigChangeManaged(w);
+   XmeNavigChangeManaged(w);
 }
 
 

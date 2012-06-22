@@ -62,7 +62,7 @@
  *       GLOBAL DECLARATIONS
  ************************************************************/
 
-extern void 		_XmNavigChangeManaged(Widget);
+extern void 		XmeNavigChangeManaged(Widget);
 
 /************************************************************
  *       STATIC FUNCTION DECLARATIONS
@@ -159,9 +159,9 @@ static XmPartResource resources[] = {
 
 static XmSyntheticResource get_resources[] = {
     { XmNmarginWidth, sizeof(Dimension), offset(margin_width),
-      _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels },
+      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
     { XmNmarginHeight, sizeof(Dimension), offset(margin_height),
-      _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels },
+      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
 
     { XmNredSliderLabel, sizeof(XmString), offset(strings.slider_labels[0]), 
 	GetValues_XmNredSliderLabel, NULL},
@@ -600,7 +600,7 @@ ChangeManaged(Widget w)
 {
     compute_size((XmColorSelectorWidget) w);
 
-    _XmNavigChangeManaged(w);
+    XmeNavigChangeManaged(w);
 }
 
 /************************************************************

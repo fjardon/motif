@@ -25,16 +25,12 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
+
 #include <Xm/XmP.h>
 #include <Xm/DrawP.h>
 #include <stdio.h>
 #include <Xm/IconButtonP.h>
-#ifdef VMS
-#include <bitmaps/gray.xbm>
-#else
 #include <X11/bitmaps/gray>
-#endif
-
 #include <Xm/ExtP.h>
 #include "xmlist.h"
 
@@ -164,7 +160,7 @@ typedef struct _StippleInfo {
 static StippleInfo *stipple_cache; /* Only one of these for each app. */
 
 static char defaultTranslations[] =
-    "<Btn1Down>,<Btn1Up>:		XiToggle() XiNotify() XiButtonUp()\n\
+    "<Btn1Down>,<Btn1Up>:		XiToggle() XmNotify() XiButtonUp()\n\
      <Btn1Down>:			XiGetFocus() XiToggle() \n\
      <Key>osfSelect:  			XiArmAndActivate()\n\
      <Key>osfActivate:  		XiArmAndActivate()\n\
@@ -196,7 +192,7 @@ static XtActionsRec actionsList[] =
 {
     {"XiArmAndActivate",		ArmAndActivate},
     {"XiToggle",			ToggleState},
-    {"XiNotify",			Notify},
+    {"XmNotify",			Notify},
     {"XiGetFocus",			_XiGetFocus},
     {"XiDoubleNotify",			DoubleNotify}, 
     {"XiButtonUp",			ButtonUp},
@@ -245,13 +241,6 @@ static XmPartResource resources[] = {
      offset(activate_callback), XmRPointer, (XtPointer) NULL},
   {XmNdoubleClickCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
      offset(double_click_callback), XmRPointer, (XtPointer) NULL},
-
-     /* These three are added for BX 5.0 and are not (yet) public
-     ** until it is determined how they interact. For now, usage
-     ** policy is very simple: set them all, or none. This is done
-     ** particularly for Initialize code to avoid GetDesiredSize's call
-     ** to XGetGeometry.
-     */
   {XmNpixmapWidth, XmCDimension, XmRDimension, sizeof(Dimension),
      offset(pix_width), XmRImmediate, (XtPointer) 0},
   {XmNpixmapHeight, XmCDimension, XmRDimension, sizeof(Dimension),
@@ -263,10 +252,10 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNhorizontalMargin, sizeof(Dimension), offset(h_space),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNverticalMargin, sizeof(Dimension), offset(v_space),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
     { XmNiconTextPadding, sizeof(Dimension), offset(icon_text_padding),
 	  FromPaddingPixels, (XmImportProc) ToPaddingPixels
@@ -439,7 +428,7 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 
     if (XmIconButton_font_list(iw) == NULL)
     {
-        XmIconButton_font_list(iw) = _XmGetDefaultFontList((Widget) iw,
+        XmIconButton_font_list(iw) = XmeGetDefaultRenderTable((Widget) iw,
 						   XmBUTTON_FONTLIST);
     }
 
@@ -542,7 +531,7 @@ Redisplay(Widget w, XEvent * event, Region region)
 
     DrawTextAndImage(w, text_gc, icon_gc, icon_stippled_gc);
 
-    _XmDrawShadows(XtDisplay(w), XtWindow(w), topgc, bottomgc,
+    XmeDrawShadows(XtDisplay(w), XtWindow(w), topgc, bottomgc,
 		   dx, dy, width, height, iw->primitive.shadow_thickness, 
 		   XmSHADOW_OUT);
 
@@ -700,7 +689,7 @@ SetValues(Widget current, Widget request, Widget set,
 	}
 	if( XmIconButton_font_list(set_iw) == NULL )
 	{
-	    XmIconButton_font_list(set_iw) = _XmGetDefaultFontList(set,
+	    XmIconButton_font_list(set_iw) = XmeGetDefaultRenderTable(set,
 							   XmBUTTON_FONTLIST);
 	}
 	XmIconButton_font_list(set_iw) = XmFontListCopy(XmIconButton_font_list(set_iw));
@@ -1261,10 +1250,10 @@ FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
     switch(XmIconButton_icon_placement(iw)) {
     case XmIconTop:
     case XmIconBottom:
-	_XmFromVerticalPixels(widget, offset, value);
+	XmeFromVerticalPixels(widget, offset, value);
 	break;
     default:			/* everything else is horiz. */
-	_XmFromHorizontalPixels(widget, offset, value);
+	XmeFromHorizontalPixels(widget, offset, value);
 	break;
     }
 }
@@ -1286,9 +1275,9 @@ ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
     switch(XmIconButton_icon_placement(iw)) {
     case XmIconTop:
     case XmIconBottom:
-	return(_XmToVerticalPixels(widget, offset, value));
+	return(XmeToVerticalPixels(widget, offset, value));
     default:
-	return(_XmToHorizontalPixels(widget, offset, value));
+	return(XmeToHorizontalPixels(widget, offset, value));
     }
 }
 

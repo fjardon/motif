@@ -130,7 +130,7 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNindentSpace, sizeof(Dimension), offset(indent_space),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     }
 };
 
@@ -566,7 +566,7 @@ ChangeManaged(Widget w)
 	}
     }
 
-   _XmNavigChangeManaged(w);	/* for Motif navigation */
+   XmeNavigChangeManaged(w);	/* for Motif navigation */
 }
 
 /*	Function Name: GeometryManager

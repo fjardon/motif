@@ -23,7 +23,7 @@
  */
 #ifdef REV_INFO
 #ifndef lint
-static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.7 $ $Date: 2002/02/14 16:33:45 $"
+static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.8 $ $Date: 2002/02/14 17:25:21 $"
 #endif
 #endif
 /**  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
@@ -6951,7 +6951,7 @@ df_StartSecondary(
 			  event->xbutton.time);
 
   if (status != GrabSuccess)
-     _XmWarning(w, GRABKBDERROR);
+     XmeWarning(w, GRABKBDERROR);
 }
 
 
@@ -8460,12 +8460,12 @@ df_Validates(
     XtPointer temp_ptr;
 
     if (XmTextF_cursor_position(tf) < 0) {
-	  _XmWarning ((Widget)tf, MSG1);
+	  XmeWarning ((Widget)tf, MSG1);
           XmTextF_cursor_position(tf) = 0;
     }
 
     if (XmTextF_columns(tf) <= 0) {
-	  _XmWarning ((Widget)tf, MSG2);
+	  XmeWarning ((Widget)tf, MSG2);
 	  XmTextF_columns(tf) = 20;
     }
 
@@ -8512,7 +8512,7 @@ df_LoadFontMetrics(
     Boolean return_val = 1; /* non-zero == success */
 
     if (!XmFontListInitFontContext(&context, XmTextF_font_list(tf)))
-       _XmWarning ((Widget)tf, MSG3);
+       XmeWarning ((Widget)tf, MSG3);
 
     do {
        next_entry = XmFontListNextEntry(context);
@@ -8548,10 +8548,10 @@ df_LoadFontMetrics(
     } while(next_entry != NULL);
 
     if (!have_font_struct && !have_font_set)
-          _XmWarning ((Widget)tf, MSG4);
+          XmeWarning ((Widget)tf, MSG4);
 
     if (XmTextF_max_char_size(tf) > 1 && !have_font_set){
-     /*_XmWarning((Widget)tf, MSGnnn); */
+     /*XmeWarning((Widget)tf, MSGnnn); */
      /* printf ("You've got the wrong font baby, Uh-Huh!\n"); */
      /* Must have a font set, as text will be rendered only with new R5 calls 
       * If df_LoadFontMetrics is called from df_SetValues and set
@@ -8638,7 +8638,7 @@ df_ValidateString(
             } else {
                char warn_str[52];
                sprintf(warn_str, MSG5, *curr_str);
-               _XmWarning ((Widget)tf, warn_str);
+               XmeWarning ((Widget)tf, warn_str);
             }
 	    curr_str++;
 	    i++;
@@ -8656,7 +8656,7 @@ df_ValidateString(
             } else {
                char warn_str[52];
                sprintf(warn_str, MSG5, *curr_str);
-               _XmWarning ((Widget)tf, warn_str);
+               XmeWarning ((Widget)tf, warn_str);
 	       curr_str++;
 	       i++;
             }
@@ -8712,7 +8712,7 @@ df_ValidateString(
 	       char warn_str[52];
 	       scratch[csize]= '\0';
 	       sprintf(warn_str, WC_MSG1, scratch);
-	       _XmWarning ((Widget)tf, warn_str);
+	       XmeWarning ((Widget)tf, warn_str);
 	    }
 	 } else {
 	    if (df_FindPixelLength(tf, (char*)wcs_curr_str, 1)) {
@@ -8727,7 +8727,7 @@ df_ValidateString(
 	       else
 		  scratch[0] = '\0';
                sprintf(warn_str, WC_MSG1, scratch);
-               _XmWarning ((Widget)tf, warn_str);
+               XmeWarning ((Widget)tf, warn_str);
 	    }
 	 }
       } 
@@ -10105,7 +10105,7 @@ DataFieldExpose(
 
   if (XtIsRealized((Widget)tf)) {
      if (tf->primitive.shadow_thickness > 0)
-       _XmDrawShadows(XtDisplay(tf), XtWindow(tf),
+       XmeDrawShadows(XtDisplay(tf), XtWindow(tf),
              tf->primitive.bottom_shadow_GC, 
              tf->primitive.top_shadow_GC,
              (int) tf->primitive.highlight_thickness,
@@ -10319,7 +10319,7 @@ df_SetValues(
    /* Make sure the new_tf cursor position is a valid value.
     */
     if (XmTextF_cursor_position(new_tf) < 0) {
-       _XmWarning (new_w, MSG1);
+       XmeWarning (new_w, MSG1);
        XmTextF_cursor_position(new_tf) = XmTextF_cursor_position(old_tf);
        cursor_pos_set = False;
     }
@@ -10539,7 +10539,7 @@ df_SetValues(
     
 
     if (XmTextF_columns(new_tf) < 0) {
-       _XmWarning (new_w, MSG7);
+       XmeWarning (new_w, MSG7);
        XmTextF_columns(new_tf) = XmTextF_columns(old_tf);
     }
 

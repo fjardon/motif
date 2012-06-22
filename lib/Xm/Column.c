@@ -260,9 +260,9 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNlabelSpacing, sizeof(Dimension), offset(label_spacing),
-      _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels },
+      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
     { XmNitemSpacing, sizeof(Dimension), offset(item_spacing),
-      _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels },
+      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
 };
 #undef offset
 

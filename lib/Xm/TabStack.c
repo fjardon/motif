@@ -404,13 +404,13 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNtabMarginWidth, sizeof(Dimension), offset(tab_margin_width),
-      _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels },
+      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
     { XmNtabMarginHeight, sizeof(Dimension), offset(tab_margin_height),
-      _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels },
+      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
     { XmNtabLabelSpacing, sizeof(Dimension), offset(tab_label_spacing),
-      _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels },
+      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
     { XmNtabOffset, sizeof(Dimension), offset(tab_offset),
-      _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels },
+      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
 };
 
 #undef offset
@@ -690,7 +690,7 @@ Initialize(request, set, arg_list, arg_cnt)
      */
     if( XmTabStack_font_list(ts) == NULL )
     {
-	XmTabStack_font_list(ts) = _XmGetDefaultFontList(set, XmLABEL_FONTLIST);
+	XmTabStack_font_list(ts) = XmeGetDefaultRenderTable(set, XmLABEL_FONTLIST);
     }
     XmTabStack_font_list(ts) = XmFontListCopy(XmTabStack_font_list(ts));
     XmTabStack__gc(ts) = NULL;
@@ -1188,7 +1188,7 @@ Redisplay(widget, event, region)
      * next if we have any gadget children lets be sure to 
      * redisplay them.
      */
-    _XmRedisplayGadgets(widget, event, region);
+    XmeRedisplayGadgets(widget, event, region);
 
     /*
      * Now lets redray our shadows.
@@ -1281,7 +1281,7 @@ SetValues(current, request, set, arg_list, arg_cnt)
 	XmFontListFree(cfield(font_list));
 	if( sfield(font_list) == NULL )
 	{
-	    sfield(font_list) = _XmGetDefaultFontList(set, XmLABEL_FONTLIST);
+	    sfield(font_list) = XmeGetDefaultRenderTable(set, XmLABEL_FONTLIST);
 	}
 	sfield(font_list) = XmFontListCopy(sfield(font_list));
     }

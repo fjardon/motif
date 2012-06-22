@@ -356,7 +356,7 @@ static void
 ChangeManaged(Widget w)
 {
     LayoutChildren(w);
-   _XmNavigChangeManaged((Widget)w);   /* for Motif navigation */
+   XmeNavigChangeManaged((Widget)w);   /* for Motif navigation */
 }
 
 /*	Function Name: GetValuesHook

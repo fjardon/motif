@@ -670,7 +670,7 @@ Initialize(request, set, arg_list, arg_cnt)
      */
     if( XmTabBox_font_list(st) == NULL )
     {
-	XmTabBox_font_list(st) = _XmGetDefaultFontList((Widget) st, 
+	XmTabBox_font_list(st) = XmeGetDefaultRenderTable((Widget) st, 
 						      XmLABEL_FONTLIST);
     }
     XmTabBox_font_list(st) = XmFontListCopy(XmTabBox_font_list(st));
@@ -748,7 +748,7 @@ Realize(Widget widget, XtValueMask *value_mask,
      * this GC as opposed to share it because we will be changing 
      * attributes of it a, what seems like, random.
      */
-    _XmFontListGetDefaultFont(XmTabBox_font_list(tb), &font);
+    XmeRenderTableGetDefaultFont(XmTabBox_font_list(tb), &font);
     gcValues.font = font->fid;
     gcValues.background = tb->core.background_pixel;
     /* CR03128 */
@@ -849,7 +849,7 @@ Redisplay(widget, event, region)
     if (getNewGC)
     {
       XFontStruct *font;
-      _XmFontListGetDefaultFont(XmTabBox_font_list(tab), &font);
+      XmeRenderTableGetDefaultFont(XmTabBox_font_list(tab), &font);
       gcValues.font = font->fid;
       gcValues.background = tab->core.background_pixel;
       XmTabBox__tab_GC(tab) = XmTabBox__text_GC(tab) = XtGetGC((Widget)tab, GCFont | GCBackground, &gcValues);
@@ -1218,7 +1218,7 @@ SetValues(current, request, set, arg_list, arg_cnt)
 	cfield(font_list) = (XmFontList) NULL;
 	if( sfield(font_list) == NULL )
 	{
-	    sfield(font_list) = _XmGetDefaultFontList(set, XmLABEL_FONTLIST);
+	    sfield(font_list) = XmeGetDefaultRenderTable(set, XmLABEL_FONTLIST);
 	}
 	sfield(font_list) == XmFontListCopy(sfield(font_list));
 	need_layout = True;
@@ -5845,7 +5845,7 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 					      GCForeground | GCBackground,
 					      &gcValues);
 	    
-	    _XmFontListGetDefaultFont(font_list, &font);
+	    XmeRenderTableGetDefaultFont(font_list, &font);
 	    gcValues.foreground = 1;
 	    gcValues.background = 0;
 	    gcValues.font = font->fid;
@@ -6427,7 +6427,7 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 					      GCForeground | GCBackground,
 					      &gcValues);
 	    
-	    _XmFontListGetDefaultFont(font_list, &font);
+	    XmeRenderTableGetDefaultFont(font_list, &font);
 	    gcValues.foreground = 1;
 	    gcValues.background = 0;
 	    gcValues.font = font->fid;

@@ -113,16 +113,16 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNhorizontalMargin, sizeof(Dimension), offset(h_margin),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNverticalMargin, sizeof(Dimension), offset(v_margin),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
     { XmNminimumCellWidth, sizeof(Dimension), offset(min_cell_width),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNminimumCellHeight, sizeof(Dimension), offset(min_cell_height),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
 };
 #undef offset
@@ -536,7 +536,7 @@ ChangeManaged(Widget w)
 	    sprintf(buf, "(%d, %d)", info->cell_x, info->cell_y);
 	    
 	    XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			    XiNcellNotEmpty, XiNcellNotEmpty, 
+			    XmNcellNotEmpty, XmNcellNotEmpty, 
 			    XmCICSWidgetSetError,
 			    XmNcellNotEmptyMsg, params, &num);
 	    /*
@@ -571,7 +571,7 @@ ChangeManaged(Widget w)
 	     */
 	    else if (!SetToEmptyCell(*childp)) {
 		XtAppWarningMsg(XtWidgetToApplicationContext(w),
-				XiNnoEmptyCells, XiNnoEmptyCells,
+				XmNnoEmptyCells, XmNnoEmptyCells,
 				XmCICSWidgetSetError,
 				XmNnoEmptyCellsMsg, NULL, NULL);
 	    }
@@ -583,7 +583,7 @@ ChangeManaged(Widget w)
 
     PlaceChildren(w, NULL);
 
-   _XmNavigChangeManaged(w);	/* For Motif navigation */
+   XmeNavigChangeManaged(w);	/* For Motif navigation */
 }
 
 /*	Function Name: ConstraintInitialize
@@ -646,7 +646,7 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	    sprintf(buf, "(%d, %d)", set_info->cell_x, set_info->cell_y);
 
 	    XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			    XiNcellNotEmpty, XiNcellNotEmpty, 
+			    XmNcellNotEmpty, XmNcellNotEmpty, 
 			    XmCICSWidgetSetError,
 			    XmNcellNotEmptyMsg, params, &num);
 

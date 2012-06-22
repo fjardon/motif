@@ -159,10 +159,10 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNhorizontalMargin, sizeof(Dimension), offset(h_margin),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNverticalMargin, sizeof(Dimension), offset(v_margin),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
 };
 #undef offset
@@ -484,10 +484,10 @@ ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 	Cardinal num = 1;
 	
 	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-	 		XiNnodeParentIsSelf,
-			XiNnodeParentIsSelf,
+	 		XmNnodeParentIsSelf,
+			XmNnodeParentIsSelf,
 			XmCICSWidgetSetError,
-			XiNnodeParentIsSelfMsg, msg, &num);
+			XmNnodeParentIsSelfMsg, msg, &num);
 	
 	XmHierarchyC_parent(node) = NULL;
     }
@@ -700,10 +700,10 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	    Cardinal num = 1;
 
 	    XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			    XiNnodeParentIsSelf,
-			    XiNnodeParentIsSelf,
+			    XmNnodeParentIsSelf,
+			    XmNnodeParentIsSelf,
 			    XmCICSWidgetSetError,
-			    XiNnodeParentIsSelfMsg, msg, &num);
+			    XmNnodeParentIsSelfMsg, msg, &num);
 	    
 	    XmHierarchyC_parent(new_node) = XmHierarchyC_parent(old_node);
 	}
@@ -1297,8 +1297,8 @@ AddChildToList(HierarchyConstraints ** list, Cardinal * num, Cardinal * alloc,
 
 	params[0] = XtName(XmHierarchyC_widget(child));
 	XtAppWarningMsg(XtWidgetToApplicationContext(XmHierarchyC_widget(child)),
-			XiNinsertBeforeNotSibling, XiNinsertBeforeNotSibling, 
-			XmCICSWidgetSetError, XiNinsertBeforeNotSiblingMsg,
+			XmNinsertBeforeNotSibling, XmNinsertBeforeNotSibling, 
+			XmCICSWidgetSetError, XmNinsertBeforeNotSiblingMsg,
 			params, &num);
     }
     

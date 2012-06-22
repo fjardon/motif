@@ -21,12 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-#ifndef __Xi_TabList_h__
-#define __Xi_TabList_h__
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
+#ifndef _Xm_TabList_h_
+#define _Xm_TabList_h_
 
 #ifdef __cplusplus
 extern "C" {

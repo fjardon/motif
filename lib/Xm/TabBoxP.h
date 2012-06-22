@@ -21,12 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-#ifndef __TabBoxP_h__
-#define __TabBoxP_h__
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
+#ifndef _XmTabBoxP_h_
+#define _XmTabBoxP_h_
 
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>

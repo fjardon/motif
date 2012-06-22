@@ -22,16 +22,9 @@
  * 
  */
 
-#ifndef __Ext_h__
-#define __Ext_h__
+#ifndef _XmExt_h_
+#define _XmExt_h_
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
-#ifdef XmRENAME_WIDGETS
-#include <Xm/BX.h>
-#endif
 
 /************************************************************
 *	INCLUDE FILES
@@ -45,20 +38,9 @@ extern "C" {
 #endif
 
 
-#if NeedFunctionPrototypes
-typedef Widget (*XmWidgetFunc)(Widget);
-#else
-typedef Widget (*XmWidgetFunc)();
-#endif
 
-#ifdef VMS
-#ifndef bzero
-#define bzero(b,len) memset(b, 0, (size_t)(len))
-#endif
-#ifndef bcopy
-#define bcopy(b1,b2,len) memmove(b2, b1, (size_t)(len))
-#endif
-#endif
+typedef Widget (*XmWidgetFunc)(Widget);
+
 
 /************************************************************
 *	TYPEDEFS AND DEFINES
@@ -68,92 +50,89 @@ typedef Widget (*XmWidgetFunc)();
  * General name definitions.
  */
 
-/*
- * Ics Widget set ERROR identifiers.
- */
 
-#define XiNbadActionParameters "badActionParameters"
-#define XiNbadActionParametersMsg \
+#define XmNbadActionParameters "badActionParameters"
+#define XmNbadActionParametersMsg \
     "Bad parameters passed to an action routine of widget '%s'."
 
-#define XiNbadMotionParams "badMotionParams"
-#define XiNbadMotionParamsMsg \
+#define XmNbadMotionParams "badMotionParams"
+#define XmNbadMotionParamsMsg \
 "%s - Motion Action : must have exactly 1 parameter, either '%s' or '%s'."
 
-#define XiNbadRowPixmap "badRowPixmap"
-#define XiNbadRowPixmapMsg "Extended List: Row pixmaps must have depth of 1."
+#define XmNbadRowPixmap "badRowPixmap"
+#define XmNbadRowPixmapMsg "Extended List: Row pixmaps must have depth of 1."
 
 #define XmNbadXlfdFont "badXlfdFont"
 #define XmNbadXlfdFontMsg \
 "%s: All Xlfd fonts must contain 14 hyphens\n'%s' is not valid."
 
-#define XiNcellNotEmpty "cellNotEmpty"
+#define XmNcellNotEmpty "cellNotEmpty"
 #define XmNcellNotEmptyMsg "XmIconBox: Cell %s is not empty"
 
 #define XmNcolorNameTooLong "colorNameTooLong"
 #define XmNcolorNameTooLongMsg \
   "%s: Color name '%s' is too long, truncated to '%s'."
 
-#define XiNcontextSaveFailed "contextSaveFailed"
-#define XiNcontextSaveFailedMsg "Internal Error: Could not save context data."
+#define XmNcontextSaveFailed "contextSaveFailed"
+#define XmNcontextSaveFailedMsg "Internal Error: Could not save context data."
 
-#define XiNconversionFailure "conversionFailure"
-#define XiNconversionFailureMsg \
+#define XmNconversionFailure "conversionFailure"
+#define XmNconversionFailureMsg \
 	"%s: Unable to perform string to %s conversion."
 
 #define XmNcouldNotFindFamilyData "couldNotFindFamilyData"
 #define XmNcouldNotFindFamilyDataMsg \
   "%s: Could not find family data for family '%s'."
 
-#define XiNforceGreaterThanZero "forceGreaterThanZero"
-#define XiNforceGreaterThanZeroMsg \
+#define XmNforceGreaterThanZero "forceGreaterThanZero"
+#define XmNforceGreaterThanZeroMsg \
 "%s : %s must be greater than zero being reset to one (1)."
     
-#define XiNinsertBeforeNotSibling "insertBeforeNotSibling"
-#define XiNinsertBeforeNotSiblingMsg "XmHierarchy: InsertBefore Widget\
+#define XmNinsertBeforeNotSibling "insertBeforeNotSibling"
+#define XmNinsertBeforeNotSiblingMsg "XmHierarchy: InsertBefore Widget\
  is not a sibling of '%s'.\nInserting child at end of list."
     
-#define XiNnoComboShell "noComboShell"
-#define XiNnoComboShellMsg \
+#define XmNnoComboShell "noComboShell"
+#define XmNnoComboShellMsg \
     "Combination Box: When using a custom combo box a shell must be provided."
 
-#define XiNnoEmptyCells "noEmptyCells"
+#define XmNnoEmptyCells "noEmptyCells"
 #define XmNnoEmptyCellsMsg "XmIconBox: Could not find any empty cells."
 
-#define XiNnoGadgetSupport "noGadgetSupport"
-#define XiNnoGadgetSupportMsg "Widget %s does not support gadget children."
+#define XmNnoGadgetSupport "noGadgetSupport"
+#define XmNnoGadgetSupportMsg "Widget %s does not support gadget children."
     
-#define XiNpixEditBadImageCreate "pixEditBadImageCreate"
-#define XiNpixEditBadImageCreateMsg "Pixmap Editor: Can't allocate image data"
+#define XmNpixEditBadImageCreate "pixEditBadImageCreate"
+#define XmNpixEditBadImageCreateMsg "Pixmap Editor: Can't allocate image data"
 
-#define XiNsameAsImageOrPix "sameAsImageOrPix"
-#define XiNsameAsImageOrPixMsg \
+#define XmNsameAsImageOrPix "sameAsImageOrPix"
+#define XmNsameAsImageOrPixMsg \
 "%s : The bitmapMode resource can only be changed at the same time as the pixmap or image"
 
-#define XiNselfOrOutsideOfApplicationDrop "selfOrOutsideOfApplicationDrop"
-#define XiNselfOrOutsideOfApplicationDropMsg \
+#define XmNselfOrOutsideOfApplicationDrop "selfOrOutsideOfApplicationDrop"
+#define XmNselfOrOutsideOfApplicationDropMsg \
     "Attempt to drop into illegal object."
 
-#define XiNstaticResource "staticResource"
-#define XiNstaticResourceMsg \
+#define XmNstaticResource "staticResource"
+#define XmNstaticResourceMsg \
     "The resource '%s' may not be changed dynamically."
 
-#define XiNtextVerifyFailed "textVerifyFailed"
-#define XiNtextVerifyFailedMsg "Combination Box: Text item validation failed."
+#define XmNtextVerifyFailed "textVerifyFailed"
+#define XmNtextVerifyFailedMsg "Combination Box: Text item validation failed."
 
-#define XiNunexpectedEvent "unexpectedEvent"
-#define XiNunexpectedEventMsg "%s: Unexpected Event Type %s.\n"
+#define XmNunexpectedEvent "unexpectedEvent"
+#define XmNunexpectedEventMsg "%s: Unexpected Event Type %s.\n"
 
 #define XmNunparsableColor "unparsableColor"
 #define XmNunparsableColorMsg \
   "%s: Could not parse the color name '%s'."
 
-#define XiNnodeParentIsSelf "nodeParentIsSelf"
-#define XiNnodeParentIsSelfMsg \
+#define XmNnodeParentIsSelf "nodeParentIsSelf"
+#define XmNnodeParentIsSelfMsg \
   "%s: The node parent cannot be self referential."
 
-#define XiNstringGetFailed "stringGetFailed"
-#define XiNstringGetFailedMsg "%s: XmGetStringLToR Failed."
+#define XmNstringGetFailed "stringGetFailed"
+#define XmNstringGetFailedMsg "%s: XmGetStringLToR Failed."
 
 #define XmCICSWidgetSetError "ICSWidgetSetError"
 

@@ -193,10 +193,10 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNmarginWidth, sizeof(Dimension), offset(margin_width),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNmarginHeight, sizeof(Dimension), offset(margin_height),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
     { XmNspacing, sizeof(Dimension), offset(internal_bw), 
 	  _XmFromPanedPixels, (XmImportProc) _XmToPanedPixels
@@ -205,13 +205,13 @@ static XmSyntheticResource get_resources[] =
 	  FromPanedOppositePixels, (XmImportProc) ToPanedOppositePixels
     },
     { XmNsashWidth, sizeof(Dimension), offset(sash_width),
-          _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+          XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNsashHeight, sizeof(Dimension), offset(sash_height),
-          _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+          XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
     { XmNsashShadowThickness, sizeof(Dimension), offset(sash_shadow_thickness),
-          _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+          XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
 };
 #undef offset
@@ -489,9 +489,9 @@ _XmFromPanedPixels(Widget widget, int offset, XtArgVal *value)
     XmPanedWidget pw = (XmPanedWidget) widget;    
 
     if (IsVert(pw)) 
-	_XmFromVerticalPixels(widget, offset, value);
+	XmeFromVerticalPixels(widget, offset, value);
     else
-	_XmFromHorizontalPixels(widget, offset, value);
+	XmeFromHorizontalPixels(widget, offset, value);
 }
 
 /*	Function Name: FromPanedChildPixels
@@ -510,9 +510,9 @@ FromPanedChildPixels(Widget widget, int offset, XtArgVal *value)
     XmPanedWidget pw = (XmPanedWidget) XtParent(widget);    
 
     if (IsVert(pw)) 
-	_XmFromVerticalPixels(widget, offset, value);
+	XmeFromVerticalPixels(widget, offset, value);
     else
-	_XmFromHorizontalPixels(widget, offset, value);
+	XmeFromHorizontalPixels(widget, offset, value);
 }
 
 /*	Function Name: ToPanedPixels
@@ -530,9 +530,9 @@ _XmToPanedPixels(Widget widget, int offset, XtArgVal *value)
     XmPanedWidget pw = (XmPanedWidget) widget;    
 
     if (IsVert(pw)) 
-	return(_XmToVerticalPixels(widget, offset, value));
+	return(XmeToVerticalPixels(widget, offset, value));
     else
-	return(_XmToHorizontalPixels(widget, offset, value));
+	return(XmeToHorizontalPixels(widget, offset, value));
 }
 
 /*	Function Name: ToPanedChildPixels
@@ -551,9 +551,9 @@ ToPanedChildPixels(Widget widget, int offset, XtArgVal *value)
     XmPanedWidget pw = (XmPanedWidget) XtParent(widget);    
 
     if (IsVert(pw)) 
-	return(_XmToVerticalPixels(widget, offset, value));
+	return(XmeToVerticalPixels(widget, offset, value));
     else
-	return(_XmToHorizontalPixels(widget, offset, value));
+	return(XmeToHorizontalPixels(widget, offset, value));
 }
 
 /*	Function Name: FromPanedOppositePixels
@@ -571,9 +571,9 @@ FromPanedOppositePixels(Widget widget, int offset, XtArgVal *value)
     XmPanedWidget pw = (XmPanedWidget) widget;    
 
     if (IsVert(pw)) 
-	_XmFromHorizontalPixels(widget, offset, value);
+	XmeFromHorizontalPixels(widget, offset, value);
     else
-	_XmFromVerticalPixels(widget, offset, value);
+	XmeFromVerticalPixels(widget, offset, value);
 }
 
 /*	Function Name: ToPanedOppositePixels
@@ -591,9 +591,9 @@ ToPanedOppositePixels(Widget widget, int offset, XtArgVal *value)
     XmPanedWidget pw = (XmPanedWidget) widget;    
 
     if (IsVert(pw)) 
-	return(_XmToHorizontalPixels(widget, offset, value));
+	return(XmeToHorizontalPixels(widget, offset, value));
     else
-	return(_XmToVerticalPixels(widget, offset, value));
+	return(XmeToVerticalPixels(widget, offset, value));
 }
 
 /*	Function Name: PaneSize
@@ -1521,8 +1521,8 @@ HandleSash(Widget sash, XtPointer junk, XtPointer callData)
 	(action_type == 'S' && call_data->num_params != 1)) 
     {
 	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) pw),
-			XiNbadActionParameters, XiNbadActionParameters,
-			XmCICSWidgetSetError, XiNbadActionParametersMsg, 
+			XmNbadActionParameters, XmNbadActionParameters,
+			XmCICSWidgetSetError, XmNbadActionParametersMsg, 
 			params, &num);
 
 	return;
@@ -1618,9 +1618,9 @@ HandleSash(Widget sash, XtPointer junk, XtPointer callData)
     default:
         {
 	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget) pw),
-			    XiNbadActionParameters, XiNbadActionParameters,
+			    XmNbadActionParameters, XmNbadActionParameters,
 			    XmCICSWidgetSetError,
-			    XiNbadActionParametersMsg, params, &num);
+			    XmNbadActionParametersMsg, params, &num);
 	    
 	    return;
 	}
@@ -2436,7 +2436,7 @@ ChangeManaged(Widget w)
    ResetSize(pw, PaneSize(w, IsVert(pw)) <= 1);
    
    /* for Motif navigation */
-   _XmNavigChangeManaged((Widget)pw);
+   XmeNavigChangeManaged((Widget)pw);
 } /* ChangeManaged */
 
 /*	Function Name: ResetSize
@@ -2662,9 +2662,9 @@ SetValues(Widget old, Widget request, Widget set,
 	Cardinal num = 1;
 
 	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XiNstaticResource, XiNstaticResource,
+			XmNstaticResource, XmNstaticResource,
 			XmCICSWidgetSetError,
-			XiNstaticResourceMsg, params, &num);
+			XmNstaticResourceMsg, params, &num);
 
 	XmPaned_sash_translations(set_pw) = XmPaned_sash_translations(old_pw);
     }

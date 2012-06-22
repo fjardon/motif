@@ -74,11 +74,11 @@
 #define NoTimeout ((XtIntervalId) 0)
 
 /*
- * DANGER:  _XmFontListGetDefaultFont is an undocumented 
+ * DANGER:  XmeRenderTableGetDefaultFont is an undocumented 
  *          internal MOTIF(tm) function.
  */
     
-#define GetDefaultFont _XmFontListGetDefaultFont
+#define GetDefaultFont XmeRenderTableGetDefaultFont
 
 /************************************************************
 *	MACROS
@@ -91,7 +91,7 @@
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-extern Boolean _XmFontListGetDefaultFont (XmFontList, XFontStruct **);
+extern Boolean XmeRenderTableGetDefaultFont (XmFontList, XFontStruct **);
 
 static Widget global_current_widget;		/* static global to hold
 						   widget id for qsort. */
@@ -388,7 +388,7 @@ static void Initialize(Widget req, Widget set,
     XmI18List_search_column(ilist) = -1;
 
     if (XmI18List_font_list(ilist) == NULL)
-        XmI18List_font_list(ilist) = _XmGetDefaultFontList(set, XmTEXT_FONTLIST);
+        XmI18List_font_list(ilist) = XmeGetDefaultRenderTable(set, XmTEXT_FONTLIST);
 
     CopyColumnTitles(ilist);
 
@@ -533,8 +533,8 @@ static Boolean SetValues(Widget current, Widget request, Widget set,
 	XmI18List_h_bar(i_set) = XmI18List_h_bar(i_old);
       
 	XtAppWarningMsg(XtWidgetToApplicationContext(current),
-			XiNstaticResource, XiNstaticResource,
-			XmCICSWidgetSetError, XiNstaticResourceMsg,
+			XmNstaticResource, XmNstaticResource,
+			XmCICSWidgetSetError, XmNstaticResourceMsg,
 			params, &num);
     }
   
@@ -571,8 +571,8 @@ static Boolean SetValues(Widget current, Widget request, Widget set,
 	    XmI18List_visible_rows(i_set) = 1;	/* reset value to 1 */
 
 	    XtAppWarningMsg(XtWidgetToApplicationContext(current),
-			    XiNforceGreaterThanZero, XiNforceGreaterThanZero,
-			    XmCICSWidgetSetError, XiNforceGreaterThanZeroMsg,
+			    XmNforceGreaterThanZero, XmNforceGreaterThanZero,
+			    XmCICSWidgetSetError, XmNforceGreaterThanZeroMsg,
 			    params, &num);
 	}
 
@@ -772,8 +772,8 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
         static String params[] = { "Extended List", "NoButton", "BtnDown" };
 
         XtAppWarningMsg(XtWidgetToApplicationContext(w),
-                        XiNbadMotionParams, XiNbadMotionParams,
-                        XmCICSWidgetSetError, XiNbadMotionParamsMsg,
+                        XmNbadMotionParams, XmNbadMotionParams,
+                        XmCICSWidgetSetError, XmNbadMotionParamsMsg,
                         params, &num);
         return;
     }
@@ -795,10 +795,10 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
 	        {
 		    Cardinal num = 1;
 		    XtAppWarningMsg(XtWidgetToApplicationContext(w),
-				    XiNbadActionParameters,
-				    XiNbadActionParameters,
+				    XmNbadActionParameters,
+				    XmNbadActionParameters,
 				    XmCICSWidgetSetError,
-				    XiNbadActionParametersMsg,
+				    XmNbadActionParametersMsg,
 				    params, &num);
                 }
 	    }
@@ -810,8 +810,8 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
         static String params[] = { "Extended List", "BtnDown" };
 
         XtAppWarningMsg(XtWidgetToApplicationContext(w),
-                        XiNunexpectedEvent, XiNunexpectedEvent,
-                        XmCICSWidgetSetError, XiNunexpectedEventMsg,
+                        XmNunexpectedEvent, XmNunexpectedEvent,
+                        XmCICSWidgetSetError, XmNunexpectedEventMsg,
                         params, &num);
 
 	return;
@@ -879,8 +879,8 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
 	static String params[] = { "Extended List", "BtnUp or BtnLeave" };
 	
 	XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			XiNunexpectedEvent, XiNunexpectedEvent,
-			XmCICSWidgetSetError, XiNunexpectedEventMsg,
+			XmNunexpectedEvent, XmNunexpectedEvent,
+			XmCICSWidgetSetError, XmNunexpectedEventMsg,
 			params, &num);
 	
 	return;
@@ -1851,7 +1851,7 @@ DrawSeparator(Widget w)
     GC gc;
     if (!XmI18List_num_columns(ilist) || !XmI18List_column_titles(ilist)) return; /* CR03506 */
     if(XmI18List_new_visual_style(ilist)) {
-	_XmDrawShadows(XtDisplay(w), XtWindow(w),
+	XmeDrawShadows(XtDisplay(w), XtWindow(w),
 		       ilist->primitive.top_shadow_GC,
 		       ilist->primitive.bottom_shadow_GC,
 		       0, 0, width,
@@ -1909,7 +1909,7 @@ CreateGCs(Widget w)
     XtSetArg(args[num_args], XmNbackground, &(values.background)); num_args++;
     XtGetValues(w, args, num_args);
 
-    _XmFontListGetDefaultFont (XmI18List_font_list(ilist), &font);
+    XmeRenderTableGetDefaultFont (XmI18List_font_list(ilist), &font);
 
     values.font = font->fid;
     values.stipple = stipple;
@@ -2107,7 +2107,7 @@ SetVisibleSize(Widget w, Boolean set_width)
     {
 	XFontStruct	*font = (XFontStruct *) NULL;
 
-	_XmFontListGetDefaultFont(XmI18List_font_list(ilist), &font);
+	XmeRenderTableGetDefaultFont(XmI18List_font_list(ilist), &font);
 
 	if (font)
 	    height = (font->ascent + font->descent + VERTICAL_SPACE) * 

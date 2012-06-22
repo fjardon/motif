@@ -287,7 +287,7 @@ static XmSyntheticResource syn_resources[] =
 	  _XmFromPanedPixels, (XmImportProc) _XmToPanedPixels
     },
     { XmNmarginHeight, sizeof(Dimension), poffset(margin_height),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     }
 };
 

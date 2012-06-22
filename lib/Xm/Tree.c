@@ -162,16 +162,16 @@ static XmPartResource resources[] = {
 static XmSyntheticResource get_resources[] =
 {
     { XmNhorizontalNodeSpace, sizeof(Dimension), offset(h_node_space),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
     { XmNverticalNodeSpace, sizeof(Dimension), offset(v_node_space),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
     { XmNverticalDelta, sizeof(Dimension), offset(vertical_delta),
-	  _XmFromVerticalPixels, (XmImportProc) _XmToVerticalPixels
+	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
     },
     { XmNhorizontalDelta, sizeof(Dimension), offset(horizontal_delta),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
 };
 
@@ -194,7 +194,7 @@ static XmPartResource constraints[] = {
 static XmSyntheticResource get_cons_resources[] =
 {
     { XmNopenClosePadding, sizeof(int), offset(open_close_padding),
-	  _XmFromHorizontalPixels, (XmImportProc) _XmToHorizontalPixels
+	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
     },
 };
 
@@ -610,7 +610,7 @@ ChangeManaged(Widget w)
 	}
     }
 
-   _XmNavigChangeManaged(w);	/* for Motif navigation */
+   XmeNavigChangeManaged(w);	/* for Motif navigation */
 }
 
 /*	Function Name: GeometryManager
