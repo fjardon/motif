@@ -312,6 +312,7 @@ demos/programs/ColorSel/Makefile \
 demos/programs/Column/Makefile \
 demos/programs/Combo2/Makefile \
 demos/programs/Ext18List/Makefile \
+demos/programs/Ext18List/pixmaps/Makefile \
 demos/programs/IconB/Makefile \
 demos/programs/Outline/Makefile \
 demos/programs/Paned/Makefile \
