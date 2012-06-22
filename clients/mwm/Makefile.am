@@ -13,7 +13,7 @@ mwm_LDADD = ./WmWsmLib/libWsm.a ../../lib/Xm/libXm.la
 
 INCLUDES = -DLARGECURSORS -DR2_COMPAT -DUNMAP_ON_RESTART \
            -DCDE_INSTALLATION_TOP=\"@CDE_INSTALLATION_TOP@\" \
-           -DCDE_CONFIGURATION_TOP=\"@CD_CONFIGURATION_TOP@\" \
+           -DCDE_CONFIGURATION_TOP=\"@CDE_CONFIGURATION_TOP@\" \
            -DBITMAPDIR=\"@INCDIR@/bitmaps\" \
            -I$(srcdir)/../../lib ${X_CFLAGS}
 
