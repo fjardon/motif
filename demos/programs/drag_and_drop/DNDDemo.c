@@ -828,8 +828,8 @@ DragProcCallback(Widget w, XtPointer client, XtPointer call)
              * Display appropriate drag under visuals.  Only highlight
              * the rectangle if we are changing rectangle attributes.
              */
-            if (rect && bgFound || pixFound &&
-                cb->dropSiteStatus == XmVALID_DROP_SITE)
+            if ((rect && bgFound) ||
+                (pixFound && cb->dropSiteStatus == XmVALID_DROP_SITE))
                 RectHighlight(w, rect);
             break;
 
@@ -926,8 +926,8 @@ DragProcCallback(Widget w, XtPointer client, XtPointer call)
              * Display appropriate drag under visuals.  Only highlight
              * the rectangle if we are changing rectangle attributes.
              */
-            if (rect && bgFound || pixFound &&
-                cb->dropSiteStatus == XmVALID_DROP_SITE)
+            if ((rect && bgFound) ||
+                (pixFound && cb->dropSiteStatus == XmVALID_DROP_SITE))
                 RectHighlight(w, rect);
             break;
 
@@ -1140,8 +1140,8 @@ ChangeOperation(Widget widget,
 static void
 HandleHelp(Widget w, XtPointer call, XtPointer ignore)
 {
-  XmDestinationCallbackStruct *cs = (XmDestinationCallbackStruct *) call;
-  XmDropProcCallbackStruct *ds = 
+    XmDestinationCallbackStruct *cs = (XmDestinationCallbackStruct *) call;
+    XmDropProcCallbackStruct *ds = 
     (XmDropProcCallbackStruct *) cs -> destination_data;
   Boolean                         rectFound, bgFound, pixFound;
   XmString                        helpStr;
@@ -1151,7 +1151,7 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
   int                             n = 0;
 
   savedCB = cs;
-
+  
   /* if we haven't created a help dialog, create one now */
   if (helpDialog == NULL) {
     XtSetArg(args[n], XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL); n++;
@@ -1184,7 +1184,7 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
 
   /* determine the appropriate help message */
   if (rectFound) {
-    if (ds->operations == XmDROP_MOVE | XmDROP_COPY) {
+    if (ds->operations == (XmDROP_MOVE | XmDROP_COPY)) {
       XtManageChild(helpMenu);
       helpStr = XmStringCreateLtoR(HELP_MSG4, XmFONTLIST_DEFAULT_TAG);
       XtManageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
@@ -1197,7 +1197,7 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
       helpStr = XmStringCreateLtoR(HELP_MSG3, XmFONTLIST_DEFAULT_TAG);
       XtManageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
     }
-  } else if (bgFound || pixFound && ds->operation == XmDROP_COPY) {
+  } else if ((bgFound || (pixFound && ds->operation)) == XmDROP_COPY) {
     XtUnmanageChild(helpMenu);
     rect = RectFind(ds->x, ds->y);
     if (rect) {
