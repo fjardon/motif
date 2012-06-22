@@ -1,5 +1,6 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
+@TOP@
 
 #undef CSRG_BASED
 
@@ -33,3 +34,6 @@
 #undef NO_PUTENV
 
 #undef NO_REGCOMP
+
+@BOTTOM@
+#endif
