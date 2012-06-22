@@ -5,11 +5,11 @@ EXTRA_DIST = dog.uil plane.uil superman.uil xmanimate.uil \
     superman5.xbm superman6.xbm Imakefile XmdAnimate.ad \
     README animate.help animate.man xmanimate.man
 
-animate_SOURCES = xmanimate.c animate.c
+xanimate_SOURCES = xmanimate.c animate.c
 
 CLEANFILES =  dog.uid plane.uid superman.uid xmanimate.uid
 
-data_DATA = dog.uid plane.uid superman.uid xmanimate.uid $(animate_SOURCES) \
+data_DATA = dog.uid plane.uid superman.uid xmanimate.uid $(xanimate_SOURCES) \
             $(EXTRA_DIST)
 
 bin_PROGRAMS = xmanimate
