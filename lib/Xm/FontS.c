@@ -3349,7 +3349,7 @@ ClassPartInitialize(w_class)
 ClassPartInitialize(WidgetClass w_class)
 #endif /* _NO_PROTO */
 {
-    _XmFastSubclassInit (w_class, XmFONTS_BIT);
+    _XmFastSubclassInit (w_class, XmFONTSELECTOR_BIT);
 }
 
 
