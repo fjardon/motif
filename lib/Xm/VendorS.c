@@ -645,12 +645,12 @@ ClassInitialize( void )
    merged_list[j] =
         xmVendorShellExtClassRec.object_class.resources[i];
   }
-  _XmProcessunlock();
+  _XmProcessUnlock();
 
   _XmProcessLock();
   xmVendorShellExtClassRec.object_class.resources = merged_list;
   xmVendorShellExtClassRec.object_class.num_resources = wc_num_res + sc_num_res ;
-  _XmProcessunlock();
+  _XmProcessUnlock();
 
   _XmRegisterConverters();
   _XmRegisterPixmapConverters();

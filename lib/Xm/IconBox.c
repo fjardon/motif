@@ -233,11 +233,13 @@ ClassInitialize()
 			    &XmIconBox_offsets,
 			    &XmIconBoxC_offsets);
     
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmIconBox_offsets);
     }
+    _XmProcessUnlock();
 
 }
 
@@ -500,7 +502,15 @@ InsertChild(Widget w)
    if (_XmGadgetWarning(w))
        return;
 
-   (*((CompositeWidgetClass) SUPERCLASS)->composite_class.insert_child)(w);
+   {
+      XtWidgetProc insert_child;
+
+      _XmProcessLock();
+      insert_child = ( (CompositeWidgetClass) SUPERCLASS)->composite_class.insert_child;
+      _XmProcessUnlock();
+
+      (*insert_child)(w);
+   }
 }
 
 /*	Function Name: ChangeManaged

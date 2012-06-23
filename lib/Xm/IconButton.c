@@ -340,11 +340,13 @@ ClassInit()
 			    &XmIconButton_offsets,
 			    NULL);
 
+    _XmProcessLock();
     for(i=0; i<wc->primitive_class.num_syn_resources; i++) {
 	(wc->primitive_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->primitive_class.syn_resources + i,
 			    &XmIconButton_offsets);
     }
+    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmIconPlacement,
 		       (XtTypeConverter) CvtStringToIconPlacement,

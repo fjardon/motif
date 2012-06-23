@@ -755,8 +755,14 @@ Realize(Widget widget, XtValueMask *value_mask,
     XGCValues        gcValues;
     XFontStruct      *font;
 
-    (*xmTabBoxWidgetClass->core_class.superclass->core_class.realize)
-	(widget, value_mask, attributes);
+    XtRealizeProc realize;
+
+    _XmProcessLock();
+    realize = xmTabBoxWidgetClass->core_class.superclass->core_class.realize;
+    _XmProcessUnlock();
+    
+    (*realize) (widget, value_mask, attributes);
+
     /*
      * Now lets create a GC that we will use for drawing.  We create
      * this GC as opposed to share it because we will be changing 
