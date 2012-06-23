@@ -1,4 +1,4 @@
-MAINTAINERCLEANFILES = Makefile.in
+MAINTAINERCLEANFILES = Makefile.in Uil.cat UilMsgCatI.h
 
 EXTRA_DIST = Uil.msg
 #
@@ -72,6 +72,8 @@ UilDBDef.h:
 uil_SOURCES = $(SRCS2)
 
 if MessageCatalog
+
+$(COMMON_SRC): $(CAT_FILES)
 
 CAT_FILES = Uil.cat UilMsgCatI.h
 
