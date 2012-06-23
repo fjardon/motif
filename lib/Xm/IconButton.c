@@ -80,6 +80,7 @@ static XmList pix_cache_list = NULL;
 *************************************************************/
 
 static void Resize(Widget), Destroy(Widget), ClassInit(void);
+static void ClassPartInitialize(WidgetClass w_class);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void Redisplay(Widget, XEvent *, Region);
 static XtGeometryResult QueryGeometry(Widget,
@@ -349,6 +350,21 @@ ClassInit()
 		       (XtTypeConverter) CvtStringToIconPlacement,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmICONBUTTON_BIT );
+}
+
 
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific

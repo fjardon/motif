@@ -75,8 +75,10 @@ extern int             _XmTabbedStackListCount _ARGS((XmTabbedStackList));
 
 #ifndef _NO_PROTO
 static void ClassInitialize (void);
+static void ClassPartInitialize(WidgetClass w_class);
 static void TabCanvasClassInitialize (void);
 #else
+static void ClassPartInitialize();
 static void ClassInitialize ();
 static void TabCanvasClassInitialize ();
 #endif
@@ -485,7 +487,7 @@ XiTabCanvasClassRec xmTabCanvasClassRec = {
     /* class_name	  */	"XiTabCanvas",
     /* widget_size	  */	sizeof(XiTabCanvasPart),
     /* class_initialize   */    TabCanvasClassInitialize,
-    /* chained class init */	NULL,
+    /* chained class init */	ClassPartInitialize,
     /* class_inited       */	False,
     /* initialize	  */	NULL,
     /* initialize hook    */    NULL,
@@ -606,6 +608,22 @@ TabCanvasClassInitialize()
 			    &XiTabCanvas_offsets,
 			    NULL);
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmTABBOX_BIT);
+}
+
+
 
 static void
 #ifndef _NO_PROTO

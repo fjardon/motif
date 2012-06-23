@@ -295,7 +295,7 @@ ClassPartInitialize(w_class)
 ClassPartInitialize(WidgetClass w_class)
 #endif /* _NO_PROTO */
 {
-    _XmFastSubclassInit (w_class, XmCOLORS_BIT);
+    _XmFastSubclassInit (w_class, XmCOLORSELECTOR_BIT);
 }
 
 

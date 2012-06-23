@@ -627,6 +627,8 @@ ClassPartInitialize(widget_class)
 {
     XmTabStackWidgetClass tab = (XmTabStackWidgetClass) widget_class;
 
+    _XmFastSubclassInit (w_class, XmTABSTACK_BIT);
+
     if( XmTabStack_class(tab).drag_translations != NULL )
     {
 	if( (String)XmTabStack_class(tab).drag_translations ==

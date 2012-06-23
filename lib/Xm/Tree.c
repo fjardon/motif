@@ -59,6 +59,7 @@ typedef struct {
 static void Resize(Widget), ClassInit(void);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Redisplay(Widget, XEvent *, Region);
+static void ClassPartInitialize(WidgetClass w_class);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void ConstraintInitialize(Widget, Widget, ArgList, Cardinal *);
 static void ConstraintDestroy(Widget);
@@ -206,7 +207,7 @@ XmTreeClassRec xmTreeClassRec = {
     /* class_name		*/	"XmTree",
     /* widget_size		*/	sizeof(XmTreePart),
     /* class_initialize		*/	ClassInit,
-    /* class_part_initialize	*/	NULL,
+    /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
     /* initialize		*/	Initialize,
     /* initialize_hook		*/	NULL,
@@ -323,6 +324,21 @@ ClassInit(void)
 		       (XtTypeConverter) CvtStringToLineStyle,
 		       NULL, (Cardinal) 0, XtCacheNone, (XtDestructor) NULL);
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmTREE_BIT);
+}
+
 
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific

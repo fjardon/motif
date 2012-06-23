@@ -924,8 +924,10 @@ ClassPartInitialize(widget_class)
 {
     XmTableWidgetClass twc = (XmTableWidgetClass) widget_class;
 
+    _XmFastSubclassInit (w_class, XmTABLE_BIT );
+
     /*
-     * Sine the translations were entered as strings we need to
+     * Since the translations were entered as strings we need to
      * convert them to XtTranslationTables.
      */
     if( twc->table_class.traversal_translations != NULL )

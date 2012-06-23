@@ -53,6 +53,7 @@
 *************************************************************/
 
 static void ClassInitialize();
+static void ClassPartInitialize(WidgetClass w_class);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Resize(Widget), ChangeManaged(Widget), InsertChild(Widget);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
@@ -145,7 +146,7 @@ XmIconBoxClassRec xmIconBoxClassRec = {
     /* class_name		*/	"XmIconBox",
     /* widget_size		*/	sizeof(XmIconBoxPart),
     /* class_initialize		*/	ClassInitialize,
-    /* class_part_initialize	*/	NULL,
+    /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
     /* initialize		*/	Initialize,
     /* initialize_hook		*/	NULL,
@@ -586,6 +587,21 @@ ChangeManaged(Widget w)
 
    XmeNavigChangeManaged(w);	/* For Motif navigation */
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmICONBOX_BIT);
+}
+
 
 /*	Function Name: ConstraintInitialize
  *	Description:   Called when a childs constriaints need initializing.

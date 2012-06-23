@@ -184,6 +184,7 @@ static void GetValuesHook(Widget, ArgList, Cardinal *);
 
 static void Destroy(Widget);
 static void Initialize(Widget, Widget, ArgList, Cardinal*);
+static void ClassPartInitialize(WidgetClass w_class);
 static void ClassInitialize();
 
 /*  Resource definitions for Subclasses of Primitive */
@@ -312,7 +313,7 @@ XmFontSelectorClassRec xmFontSelectorClassRec = {
     /* class name         */   "XmFontSelector",
     /* size               */   sizeof(XmFontSelectorPart),
     /* class_initialize   */   ClassInitialize,
-    /* class_part init    */   NULL,
+    /* class_part init    */   ClassPartInitialize,
     /* class_inited       */   FALSE,
     /* initialize         */   Initialize,
     /* initialize_hook    */   NULL,
@@ -3334,6 +3335,21 @@ ClassInitialize()
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmFontS_offsets);
     }
+}
+
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, xxxxx );
 }
 
 

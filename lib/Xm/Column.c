@@ -36,6 +36,7 @@
 static void ClassInitialize(void);
 
 static void Initialize(Widget, Widget, ArgList, Cardinal*);
+static void ClassPartInitialize(WidgetClass w_class);
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal*);
 static void Destroy(Widget);
 static void Resize(Widget);
@@ -289,7 +290,7 @@ XmColumnClassRec xmColumnClassRec = {
     /* class_name         */	"XmColumn",                            
     /* widget_size        */	sizeof(XmColumnPart),                 
     /* class_initialize   */	ClassInitialize,
-    /* class_part_init    */	NULL,
+    /* class_part_init    */	ClassPartInitialize,
     /* class_inited       */	False,                            	
     /* initialize         */	Initialize, 
     /* initialize_hook    */	NULL,                             	
@@ -414,6 +415,22 @@ ClassInitialize()
 		       (XtTypeConverter) CvtStringToDistribution,
 		       NULL, 0, XtCacheAll, NULL);
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmCOLUMN_BIT);
+}
+
+
 
 /*
  * Function:
