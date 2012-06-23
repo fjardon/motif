@@ -126,6 +126,7 @@ int rx, ry, x, y;
 unsigned int key;
 Window root, child;
 XtWidgetGeometry geo;
+Position destX, destY;
 
     /*
     printf("%s:%s(%d) - %s\n", __FILE__, __FUNCTION__, __LINE__,
@@ -167,26 +168,42 @@ XtWidgetGeometry geo;
 	XmStringFree(string);
     }
     XtQueryGeometry(TipData->label, NULL, &geo);
+#if 1
+    /* rws 25 Feb 2001
+       Fix for Bug #1153
+       Don't let the tip be off the right/bottom of the screen
+     */
+    destX = rx + (XmIsGadget(w) ? XtX(w) : 0) - x + XtWidth(w) / 2;
+    if (destX + geo.width > WidthOfScreen(XtScreen(w)))
+    {
+    	destX = WidthOfScreen(XtScreen(w)) - geo.width;
+    }
+    destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y + XtHeight(w);
+    if (destY + geo.height > HeightOfScreen(XtScreen(w)))
+    {
+	destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y - geo.height;
+    }
+#endif
 #ifdef HAVE_SLIDEC_H
     XtVaSetValues(XtParent(TipData->label),
-	XmNx, rx + 1 /*- x + XtWidth(w) / 2*/,
-	XmNy, ry + 1 /*- y + XtHeight(w)*/,
+	XmNx, rx + 1,
+	XmNy, ry + 1,
 	XmNwidth, 1,
 	XmNheight, 1,
 	NULL);
     TipData->slider = XtVaCreateWidget("ToolTipSlider", xmSlideContextWidgetClass,
 	XmGetXmDisplay(XtDisplay(w)),
 	XmNslideWidget, XtParent(TipData->label),
-	XmNslideDestX, rx + (XmIsGadget(w) ? XtX(w) : 0) - x + XtWidth(w) / 2,
-	XmNslideDestY, ry + (XmIsGadget(w) ? XtY(w) : 0) - y + XtHeight(w),
+	XmNslideDestX, destX,
+	XmNslideDestY, destY,
 	XmNslideDestWidth, geo.width,
 	XmNslideDestHeight, geo.height,
 	NULL);
     XtAddCallback(TipData->slider, XmNslideFinishCallback, (XtCallbackProc)ToolTipPostFinish, TipData);
 #else
     XtVaSetValues(XtParent(TipData->label),
-	XmNx, rx + (XmIsGadget(w) ? XtX(w) : 0) - x + XtWidth(w) / 2,
-	XmNy, ry + (XmIsGadget(w) ? XtY(w) : 0) - y + XtHeight(w),
+	XmNx, destX,
+	XmNy, destY,
 	XmNwidth, geo.width,
 	XmNheight, geo.height,
 	NULL);
