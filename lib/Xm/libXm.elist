@@ -494,6 +494,8 @@ public XmTransferValue
 public XmTranslateKey
 public XmUninstallImage
 public XmUpdateDisplay
+public XmVaCreateManagedPushButton
+public XmVaCreatePushButton
 public XmVaCreateSimpleCheckBox
 public XmVaCreateSimpleMenuBar
 public XmVaCreateSimpleOptionMenu
@@ -647,6 +649,7 @@ public XmeClipboardSink
 public XmeClipboardSource
 public XmeConfigureObject
 public XmeConvertMerge
+public XmeCountVaListSimple
 public XmeCreateClassDialog
 public XmeDragSource
 public XmeDrawArrow
@@ -706,6 +709,7 @@ public XmeTraitSet
 public XmeTransferAddDoneProc
 public XmeUseColorObj
 public XmeVirtualToActualKeysyms
+public XmeVLCreateWidget
 public XmeWarning
 
 #ifdef AIXV4
