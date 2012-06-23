@@ -653,10 +653,17 @@ Idb__HDR_ReturnItem (IDBFile		file_id,
 			 file_id, NULL, MrmBAD_DATA_INDEX);
   if (( recptr->RID_pointers[resndx].internal_id.rec_no == 0) &&
       ( recptr->RID_pointers[resndx].internal_id.item_offs == 0))
+  {
     if ( signal_null )
+    {
       return Urm__UT_Error("Idb__HDR_ReturnItem", _MrmMMsg_0014,
 			   file_id, NULL, MrmNULL_DATA);
-    else return MrmNULL_DATA;
+    }
+    else 
+    {
+        return MrmNULL_DATA;
+    }
+  }
   entry_return->rec_no = recptr->RID_pointers[resndx].internal_id.rec_no;
   entry_return->item_offs = recptr->RID_pointers[resndx].internal_id.item_offs;
 
