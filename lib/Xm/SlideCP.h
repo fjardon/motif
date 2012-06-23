@@ -24,7 +24,7 @@
 #ifndef _SLIDECP_H
 #define _SLIDECP_H
 
-#include <SlideC.h>
+#include <Xm/SlideC.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ObjectP.h>
 #include <Xm/XmP.h>

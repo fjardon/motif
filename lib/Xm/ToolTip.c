@@ -28,8 +28,8 @@
 #include <Xm/LabelP.h>
 #include <Xm/VendorSEP.h>
 #include <Xm/GadgetP.h>
-#include <BaseClassI.h>
 #include <Xm/SlideC.h>
+#include "BaseClassI.h"
 
 typedef XmVendorShellExtPart XmToolTipDataStruct;
 
