@@ -327,9 +327,9 @@ demos/doc/Makefile \
 demos/doc/programGuide/Makefile \
 demos/doc/programGuide/ch05/Makefile \
 demos/doc/programGuide/ch05/Scale/Makefile \
-dnl demos/doc/programGuide/ch06/Makefile \
-dnl demos/doc/programGuide/ch06/spin_box/Makefile \
-dnl demos/doc/programGuide/ch06/combo_box/Makefile \
+demos/doc/programGuide/ch06/Makefile \
+demos/doc/programGuide/ch06/spin_box/Makefile \
+demos/doc/programGuide/ch06/combo_box/Makefile \
 dnl demos/doc/programGuide/ch08/Makefile \
 dnl demos/doc/programGuide/ch08/Notebook/Makefile \
 dnl demos/doc/programGuide/ch08/Container/Makefile \
