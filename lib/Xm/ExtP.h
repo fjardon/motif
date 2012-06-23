@@ -89,10 +89,6 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-   
-Widget XmVLCreateWidget(char *, WidgetClass, Widget, Boolean, va_list, int);
-
-int   XmCountVaList(va_list);
 void   XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
 void  _XmMoveWidget(Widget, Position, Position);
 void  _XmResizeWidget(Widget, Dimension, Dimension, Dimension);

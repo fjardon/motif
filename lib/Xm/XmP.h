@@ -41,6 +41,7 @@
 #ifndef _XmP_h
 #define _XmP_h
 
+#include <stdarg.h>
 #include <Xm/Xm.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ObjectP.h>
@@ -1213,6 +1214,15 @@ extern Boolean XmeGetPixmapData(
 extern Pixmap XmeGetMask(
                         Screen *screen,
                         char *image_name) ;
+    /* VaSimple.c */
+extern int XmeCountVaListSimple(va_list al);
+extern Widget XmeVLCreateWidget(
+                        char *name, 
+                        WidgetClass wc, 
+                        Widget parent, 
+                        Boolean managed,
+                        va_list al, 
+                        int count);
     /* VirtKeys.c */
 extern int XmeVirtualToActualKeysyms(
                          Display *dpy,

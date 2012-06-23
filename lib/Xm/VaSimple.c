@@ -145,6 +145,30 @@ _XmCountNestedList(
 }
 
 /*
+ * Function: XmeCountVaList
+ *
+ * Description: Takes a variable list and returns the number of total
+ *              items in it. This is a much simplified version of 
+ *              _XmCountVaList. It is intended to be used in convience 
+ *              creation routines for widgets both inside and outside the 
+ *              toolkit. 
+ *
+ * Input: al - a variable lenth list, at the beginning of the list.
+ *
+ * Output:  the number of items in it before the last NULL
+ *
+ */
+int
+XmeCountVaListSimple(va_list al)
+{
+   int d1, d2, d3, count;
+   
+   _XmCountVaList(al, &d1, &d2, &d3, &count);
+  
+   return count;
+}
+
+/*
  *    Given a variable length attribute-value list, _XmCountVaList()
  *    returns counts of the total number of attribute-value pairs,
  *    and the count of the number of those attributes that are typed.
@@ -929,4 +953,71 @@ XmVaCreateSimpleCheckBox(Widget parent, String name, XtCallbackProc callback, ..
 
     _XmAppUnlock(app);
     return (widget);
+}
+
+/*
+ * Function: XmeVLCreateWidget
+ *     
+ * Description:  Creates a widget of WidgetClass wc using a va_list of 
+ *               arguments. Intended for generic use in Widget convience 
+ *               functions. Intended for use by future widget writers 
+ *               subclassing widgets. 
+ *     
+ * Input: name - The widget name 
+ *        WidgetClass - The class of the widget
+ *        parent  - a widget that is a parent
+ *        managed - if True the widget will be managed, if false it will not
+ *        al - a variable argument list of type va_list from stdarg.h
+ *        count - an integer value indicating the number of things in al
+ * Output:
+ *       a returned widget if one can be created, NULL on error. 
+ */
+Widget
+XmeVLCreateWidget(
+        char *name, 
+        WidgetClass wc, 
+        Widget parent, 
+        Boolean managed,
+        va_list al, 
+        int count)
+{
+    Widget w;
+    ArgList args;
+    int n;
+    String attr;
+
+    _XmWidgetToAppContext(parent);
+    _XmAppLock(app);
+    
+    /* The size as specified from count */
+    args = (ArgList)XtMalloc(count * sizeof(Arg));
+    
+    /*
+     * go through each element and copy the name and the value
+     * (remember the value might be a pointer) to the value field
+     */
+    for (attr = va_arg(al, String), n = 0; 
+         attr != NULL; 
+         attr = va_arg(al, String), n++)
+    {
+    	args[n].name = attr;
+    	args[n].value = va_arg(al, XtArgVal);
+    }
+    
+    va_end(al);
+    
+    /* Create the widget managed or not */
+    if (managed)w = XtCreateManagedWidget(name, wc, parent, args, n); 
+    else w = XtCreateWidget(name, wc, parent, args, n);
+
+    /* 
+     * Just free the arg list, not the values in it, that is taken care 
+     * of elseware
+     */
+    XtFree((char *)args);
+    
+    _XmAppUnlock(app);
+    
+    return(w);
+
 }

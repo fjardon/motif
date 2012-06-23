@@ -39,7 +39,6 @@ static char rcsid[] = "$TOG: PushB.c /main/29 1999/01/27 16:08:33 mgreess $"
 /* (c) Copyright 1988 MICROSOFT CORPORATION */
 
 #include <stdio.h>
-#include <stdarg.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
 #include <Xm/ActivatableT.h>
@@ -54,6 +53,7 @@ static char rcsid[] = "$TOG: PushB.c /main/29 1999/01/27 16:08:33 mgreess $"
 #include <Xm/TearOffBP.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransltnsP.h>
+#include <Xm/VaSimpleP.h>
 #include "ColorI.h"
 #include "LabelI.h"
 #include "MenuProcI.h"
@@ -64,6 +64,7 @@ static char rcsid[] = "$TOG: PushB.c /main/29 1999/01/27 16:08:33 mgreess $"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
 #include "XmI.h"
+#include "VaSimpleI.h"
 #include "ExtP.h"
 
 #define XmINVALID_MULTICLICK	255
@@ -3103,16 +3104,17 @@ XmVaCreatePushButton(
         char *name,
         ...)
 {
-    Widget w = NULL;
+    register Widget w;
     va_list var;
     int count;
     
-    va_start(var, name);
-    count = XmCountVaList(var);
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
     va_end(var);
+
     
-    va_start(var, name);
-    w = XmVLCreateWidget(name, 
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
                          xmPushButtonWidgetClass, 
                          parent, False, 
                          var, count);
@@ -3130,12 +3132,12 @@ XmVaCreateManagedPushButton(
     va_list var;
     int count;
     
-    va_start(var, name);
-    count = XmCountVaList(var);
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
     va_end(var);
     
-    va_start(var, name);
-    w = XmVLCreateWidget(name, 
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
                          xmPushButtonWidgetClass, 
                          parent, True, 
                          var, count);
