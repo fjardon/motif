@@ -1004,7 +1004,13 @@ Realize(w, mask, attr)
     XmTabStackWidget tab = (XmTabStackWidget) w;
     
     /* Call superclass realize method... */
-    (xmTabStackWidgetClass->core_class.superclass)->core_class.realize(w, mask, attr);
+    XtRealizeProc realize;
+
+    _XmProcessLock();
+    realize = xmTabStackWidgetClass->core_class.superclass->core_class.realize;
+    _XmProcessUnlock();
+
+    (*realize) (w, mask, attr);
 
     /* Now that we are realized, let's select that tab, finally... */
     if ((XmTabStack__selected_tab(tab) != NULL) &&
@@ -4199,16 +4205,22 @@ XmTabStackXYToWidget(widget, x, y)
 
 #define XiDeleteChild(c) \
 { \
+     _XmProcessLock(); \
      (*((CompositeWidgetClass)((c)->core.parent->core.widget_class))-> \
       composite_class.delete_child)(c); \
+    _XmProcessUnlock(); \
 }
+
 
 #define XiInsertChild(p,c) \
 { \
      (c)->core.parent = (p); \
+     _XmProcessLock(); \
      (*((CompositeWidgetClass)(p)->core.widget_class)-> \
       composite_class.insert_child)(c); \
+     _XmProcessUnlock(); \
 }
+
 
 static void
 #ifndef _NO_PROTO

@@ -35,6 +35,7 @@
  *
  */
 #include <stdlib.h>
+#include <Xm/XmI.h>
 #include <Xm/TabBoxP.h>
 #ifdef SCROLLED_LAYOUT
 #include <Xm/ArrowB.h>
