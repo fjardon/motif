@@ -369,16 +369,21 @@ ClassInitialize()
 			    &XmPaned_offsets,
 			    &XmPanedC_offsets);
 
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmPaned_offsets);
     }
+    _XmProcessUnlock();
+    
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
         (wc->manager_class.syn_constraint_resources)[i].resource_offset =
             XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
                             &XmPanedC_offsets);
     }
+    _XmProcessUnlock();
 }
 
 /*	Function Name: AdjustPanedSize
@@ -2290,7 +2295,15 @@ InsertChild(register Widget w)
     * superclass insert_child routine.                                
     */
 
-   (*SuperClass->composite_class.insert_child)(w);
+    {
+        XtWidgetProc insert_child;
+        
+        _XmProcessLock();
+        insert_child = SuperClass->composite_class.insert_child;
+        _XmProcessUnlock();
+
+        (*insert_child)(w);
+    }
 
    /* These should be in Constraint init... */
 
