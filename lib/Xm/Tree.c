@@ -27,6 +27,7 @@
 *************************************************************/
 
 #include <stdio.h>
+#include "XmI.h"
 #include "xmlist.h"
 #include <Xm/TreeP.h>
 #include <X11/Xutil.h>
@@ -303,16 +304,21 @@ ClassInit(void)
 			    &XmTree_offsets,
 			    &XmTreeC_offsets);
 
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmTree_offsets);
     }
+    _XmProcessUnlock();
+    
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
 	(wc->manager_class.syn_constraint_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
 			    &XmTreeC_offsets);
     }
+    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmConnectStyle,
 		       (XtTypeConverter) CvtStringToConnectStyle,
@@ -908,8 +914,13 @@ static void
 ToggleNodeState(Widget w, XtPointer node_ptr, XtPointer call_data)
 {
     Widget tw = XtParent(w);
+    XtCallbackProc toggle_node_state;
+    
+    _XmProcessLock();
+    toggle_node_state = (SUPERCLASS->hierarchy_class.toggle_node_state);
+    _XmProcessUnlock();
 
-    (*(SUPERCLASS->hierarchy_class.toggle_node_state))(w, node_ptr, call_data);
+    (*toggle_node_state)(w, node_ptr, call_data);
     
     CalcLocations(tw, True);
     LayoutChildren(tw, NULL);
@@ -1515,9 +1526,13 @@ CalcLocations(Widget w, Boolean resize_it)
 			  &(XmHierarchy_num_nodes(tw)), 0);
 
     current_index = 0;
-    (*(tc->hierarchy_class.build_node_table)) (w, XmHierarchy_top_node(tw),
-					       &current_index);
-
+    {
+        XmHierarchyBuildTableProc build_node_table;
+        _XmProcessLock();
+        build_node_table = tc->hierarchy_class.build_node_table;
+        _XmProcessUnlock();
+        (*build_node_table)) (w, XmHierarchy_top_node(tw), &current_index);
+    }
     CalcMaxSize(w);
     FindNodeLocations(w);		/* Finds the location for each node. */
 
@@ -1607,8 +1622,14 @@ LayoutChildren(Widget w, Widget assign_child)
      * Unmap all nodes that no longer are visible.
      */
 
-    (*tc->hierarchy_class.unmap_all_extra_nodes) (w, XmHierarchy_top_node(tw));
+    {
+        XmHierarchyExtraNodeProc unmap_all_extra_nodes;
 
+        _XmProcessLock();
+        unmap_all_extra_nodes = tc->hierarchy_class.unmap_all_extra_nodes;
+        _XmProcessUnlock();
+        (*unmap_all_extra_nodes) (w, XmHierarchy_top_node(tw));
+    }
     /*
      * Go through all nodes that can possibly be displayed, putting those
      * that will be visible on the screen and unmapping all others.
@@ -2326,12 +2347,24 @@ ProcessNode(TreeConstraints node)
     }
     
     if (XmTreeC_map(node)) {
-	(*tc->hierarchy_class.map_node)((HierarchyConstraints) node); 
-	XmTreeC_map(node) = False;
+        XmHierarchyNodeProc map_node;
+
+        _XmProcessLock();
+        map_node = tc->hierarchy_class.map_node;
+        _XmProcessUnlock();
+
+	    (*map_node)((HierarchyConstraints) node); 
+    	XmTreeC_map(node) = False;
     }
     
     if (XmTreeC_unmap(node)) {
-	(*tc->hierarchy_class.unmap_node)((HierarchyConstraints) node); 
+    XmHierarchyNodeProc unmap_node;
+
+    _XmProcessLock();
+    unmap_node = tc->hierarchy_class.unmap_node;
+    _XmProcessUnlock();
+
+	(*unmap_node)((HierarchyConstraints) node); 
 	XmTreeC_unmap(node) = False;
     }
 }
