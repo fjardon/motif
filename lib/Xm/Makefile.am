@@ -1,4 +1,4 @@
-MAINTAINERCLEANFILES = Makefile.in XmStrDefs.h XmStrDefsI.h XmStrDefs.c
+MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = xmstring.list Xm.msg Imakefile $(SLIDE_DIST) $(XMTHEME_DIST) \
              XmStrDefs.ct
@@ -215,7 +215,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
         ${SLIDE_HDRS}	${XMTHEME_HDRS} ${EXTRA_HDRS}
 
-SRCS1 = ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
+SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
         CascadeB.c      CascadeBG.c     Command.c       CutPaste.c \
         Dest.c          DialogS.c       DialogSE.c      DragBS.c \
         DragC.c         DragOverS.c     DragICC.c       DragIcon.c \
@@ -232,7 +232,7 @@ SRCS1 = ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
         TextIn.c        TextOut.c       TextStrSo.c     TextSel.c \
         ToggleB.c       ToggleBG.c      TrackLoc.c      UniqueEvnt.c \
         VaSimple.c      VirtKeys.c      XmString.c      ResEncod.c\
-        XmStrDefs.c     TextF.c         TextFSel.c      AtomMgr.c \
+        TextF.c         TextFSel.c      AtomMgr.c \
         Cache.c         Protocols.c     Primitive.c     Manager.c \
         Traversal.c     TravAct.c       TraversalI.c    BaseClass.c
 
