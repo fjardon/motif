@@ -71,6 +71,11 @@ extern Widget XmVaCreatePushButtonGadget(
 			char *name, 
 			...);
 
+extern Widget XmVaCreateManagedPushButtonGadget(
+			Widget parent, 
+			char *name, 
+			...);
+
 /********    End Public Function Declarations    ********/
 
 

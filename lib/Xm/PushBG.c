@@ -40,7 +40,6 @@ static char rcsid[] = "$TOG: PushBG.c /main/29 1999/05/27 14:18:33 mgreess $"
 
 #include <stdio.h>
 #include <string.h>
-#include <stdarg.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
 #include <Xm/ActivatableT.h>
@@ -53,6 +52,7 @@ static char rcsid[] = "$TOG: PushBG.c /main/29 1999/05/27 14:18:33 mgreess $"
 #include <Xm/ScreenP.h>
 #include <Xm/TakesDefT.h>
 #include <Xm/TraitP.h>
+#include <Xm/VaSimpleP.h>
 #include "BaseClassI.h"
 #include "CacheI.h"
 #include "ColorI.h"
@@ -3493,31 +3493,39 @@ XmCreatePushButtonGadget(
 Widget
 XmVaCreatePushButtonGadget(Widget parent, char *name, ...)
 {
-    va_list var;
-    Widget w;
-    ArgList args;
-    int n;
-    String attr;
+Widget w = NULL;
+va_list var;
+int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmPushButtonGadgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
-    va_start(var, name);
-    for (attr = va_arg(var, String), n = 0; 
-         attr != NULL; 
-         attr = va_arg(var, String), n++)
-    {
-    	(void)va_arg(var, XtArgVal);
-    }
+Widget
+XmVaCreateManagedPushButtonGadget(Widget parent, char *name, ...)
+{
+Widget w = NULL;
+va_list var;
+int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
     va_end(var);
-    args = (ArgList)XtMalloc(n * sizeof(Arg));
-    va_start(var, name);
-    for (attr = va_arg(var, String), n = 0; 
-         attr != NULL; 
-         attr = va_arg(var, String), n++)
-    {
-    	args[n].name = attr;
-    	args[n].value = va_arg(var, XtArgVal);
-    }
-    va_end(var);
-    w = XtCreateWidget(name, xmPushButtonGadgetClass, parent, args, n);
-    XtFree((char *)args);
-    return(w);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmPushButtonGadgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }
