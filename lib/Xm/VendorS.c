@@ -620,6 +620,7 @@ ClassInitialize( void )
          need to be created differently.
 ****************************************************************************/
 
+  _XmProcessLock();
   wc_num_res = xmVendorShellExtClassRec.object_class.num_resources;
 
   sc_num_res = xmShellExtClassRec.object_class.num_resources;
@@ -636,16 +637,20 @@ ClassInitialize( void )
   merged_list[i] = uncompiled[i];
 
   }
+  _XmProcessUnlock();
 
+  _XmProcessLock();
   for (i = 0, j = num; i < wc_num_res; i++, j++)
   {
    merged_list[j] =
         xmVendorShellExtClassRec.object_class.resources[i];
   }
+  _XmProcessunlock();
 
+  _XmProcessLock();
   xmVendorShellExtClassRec.object_class.resources = merged_list;
-  xmVendorShellExtClassRec.object_class.num_resources =
-                wc_num_res + sc_num_res ;
+  xmVendorShellExtClassRec.object_class.num_resources = wc_num_res + sc_num_res ;
+  _XmProcessunlock();
 
   _XmRegisterConverters();
   _XmRegisterPixmapConverters();
@@ -653,10 +658,19 @@ ClassInitialize( void )
   _XmInitializeExtensions();
   _XmInitializeTraits();
 
-   xmVendorShellExtObjectClass->core_class.class_initialize();
+{
+   XtProc class_initialize;
+   _XmProcessLock();
+   class_initialize = xmVendorShellExtObjectClass->core_class.class_initialize;
+   _XmProcessUnlock();
+   
+   (*class_initialize) ();
+}
    baseClassExtRec.record_type = XmQmotif;
 
    _XmBuildExtResources((WidgetClass) baseClassExtRec.secondaryObjectClass);
+
+    _XmProcessLock();
 
    if (((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->desktop_class.insert_child ==
           XtInheritInsertChild)
@@ -678,6 +692,9 @@ ClassInitialize( void )
        ((XmVendorShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->vendor_class.offset_handler =
         ((XmVendorShellExtObjectClass) xmVendorShellExtObjectClass)->vendor_class.offset_handler;
 
+    _XmProcessUnlock();
+
+
    XtFree((char *)uncompiled);
 
 #ifndef NO_MESSAGE_CATALOG
@@ -698,14 +715,22 @@ ClassPartInitialize(
         WidgetClass wc )
 {
     CompositeWidgetClass	compWc = (CompositeWidgetClass)wc;
-    CompositeWidgetClass	superWc = 
-	(CompositeWidgetClass)wc->core_class.superclass;
+
     CompositeClassExtensionRec 	**compExtPtr;
     XmBaseClassExt		*wcePtr, *scePtr;
     XmVendorShellWidgetClass    vc = (XmVendorShellWidgetClass) wc; 
+
+    CompositeWidgetClass	superWc;
+    _XmProcessLock();
+    superWc = (CompositeWidgetClass)wc->core_class.superclass;
+    _XmProcessUnlock();
     
     wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
+
+    _XmProcessLock();
     scePtr = _XmGetBaseClassExtPtr(wc->core_class.superclass, XmQmotif);
+    _XmProcessUnlock();
+
 
     if ( (vc != (XmVendorShellWidgetClass)vendorShellWidgetClass) && 
 	scePtr && *scePtr && 
@@ -718,6 +743,8 @@ ClassPartInitialize(
 	sceClass = (XmVendorShellExtObjectClass)(*scePtr)->
 	    secondaryObjectClass;
 	_XmBuildExtResources((WidgetClass) (*wcePtr)->secondaryObjectClass);
+
+    _XmProcessLock();
 	
 	if (wceClass->desktop_class.insert_child == XtInheritInsertChild)
 	    wceClass->desktop_class.insert_child = 
@@ -740,17 +767,22 @@ ClassPartInitialize(
     compExtPtr = (CompositeClassExtensionRec **) 
 	&(compWc->composite_class.extension);
 
+    _XmProcessUnlock();
+
     compExtPtr = (CompositeClassExtensionRec **)
 	_XmGetClassExtensionPtr( (XmGenericClassExt *) compExtPtr, NULLQUARK);
 
     if (*compExtPtr == NULL) {
 	CompositeClassExtensionRec 	**superExtPtr;
 	
-	superExtPtr = (CompositeClassExtensionRec **) 
-	    &(superWc->composite_class.extension);
+    _XmProcessLock();
+	superExtPtr = (CompositeClassExtensionRec **) &(superWc->composite_class.extension);
+    _XmProcessUnlock();
+
 	superExtPtr = (CompositeClassExtensionRec **)
-	    _XmGetClassExtensionPtr( (XmGenericClassExt *) superExtPtr, 
-				    NULLQUARK);
+                  _XmGetClassExtensionPtr(
+                      (XmGenericClassExt *) superExtPtr,
+                      NULLQUARK);
 
 	*compExtPtr = XtNew(CompositeClassExtensionRec);
 	memcpy((char*)*compExtPtr, (char*)*superExtPtr, 
@@ -758,8 +790,10 @@ ClassPartInitialize(
     }
 
     /* Do this here because of bug in Xt */
+    _XmProcessLock();
     wc->core_class.expose = Redisplay;
-   
+    _XmProcessUnlock();
+
    /* Install the render table trait for all subclasses as well. */
     XmeTraitSet((XtPointer)wc, XmQTspecifyRenderTable, (XtPointer)&vsSRT);
 
@@ -1423,7 +1457,10 @@ SecondaryObjectCreate(
 	_XmProcessLock();
 	pePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
 	vec = (*pePtr)->secondaryObjectClass;
+
+    _XmProcessLock();
 	size = vec->core_class.widget_size;
+    _XmProcessUnlock();
 
 	newSec = XtMalloc(size);
 	reqSec = _XmExtObjAlloc(size);
@@ -1439,7 +1476,10 @@ SecondaryObjectCreate(
 	((XmVendorShellExtObject)newSec)->desktop.parent = 
 	    (Widget) desktopParent;
 
+    _XmProcessLock();
 	((XmVendorShellExtObject)newSec)->object.widget_class = vec; 
+    _XmProcessUnlock();
+
 	((XmVendorShellExtObject)newSec)->object.parent = new_w;
 
 	_XmPushWidgetExtData(new_w, extData,
@@ -1448,13 +1488,14 @@ SecondaryObjectCreate(
 	/*
 	 * fetch the resources in superclass to subclass order
 	 */
-
+	_XmProcessLock();
 	XtGetSubresources(new_w,
 			  newSec,
 			  NULL, NULL,
 			  vec->core_class.resources,
 			  vec->core_class.num_resources,
 			  args, *num_args );
+    _XmProcessUnlock();
 
 	memcpy(reqSec, newSec, size);
    
@@ -1537,7 +1578,10 @@ VendorExtInitialize(
 			 (XtPointer)new_w,
 			 XtListHead);
 
+    _XmProcessLock();
     handler = sec->shell_class.structureNotifyHandler;
+    _XmProcessUnlock();
+
     if (handler)
       {
 	  XtInsertEventHandler(extParent, 
@@ -1591,12 +1635,13 @@ VendorExtInitialize(
 		   atoms[XmA_MOTIF_WM_MESSAGES],
 		   &atoms[XmA_MOTIF_WM_OFFSET], 1);
 
+    _XmProcessLock();
     XmAddProtocolCallback( extParent,
 			  atoms[XmA_MOTIF_WM_MESSAGES], 
 			  atoms[XmA_MOTIF_WM_OFFSET],
 			  vec->vendor_class.offset_handler,
 			  (XtPointer) ve);
-    
+    _XmProcessUnlock();
     /*
      * add deleteWindow stuff
      */
@@ -1604,7 +1649,9 @@ VendorExtInitialize(
 
     /* add a post hook for delete response */
 
+    _XmProcessLock();
     delete_window_handler = vec->vendor_class.delete_window_handler;
+    _XmProcessUnlock();
 
     XmSetWMProtocolHooks( extParent, 
 			 atoms[XmAWM_DELETE_WINDOW], NULL, NULL, 
@@ -1834,7 +1881,10 @@ SetValuesPrehook(
 
     cePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
+
+    _XmProcessLock();
     extSize = ec->core_class.widget_size;
+    _XmProcessUnlock();
 
     oldExtData = _XmGetWidgetExtData(new_w, XmSHELL_EXTENSION);
     newExtData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
@@ -1849,10 +1899,12 @@ SetValuesPrehook(
     memcpy((char *)newExtData->oldWidget, (char *)oldExtData->widget, extSize);
     _XmProcessUnlock();
 
+    _XmProcessLock();
     XtSetSubvalues(oldExtData->widget,
 		    ec->core_class.resources,
 		    ec->core_class.num_resources,
 		    args, *num_args);
+    _XmProcessUnlock();
 
     _XmProcessLock();
     newExtData->reqWidget = (Widget) _XmExtObjAlloc(extSize);
@@ -1860,7 +1912,9 @@ SetValuesPrehook(
     _XmProcessUnlock();
 
     /*  Convert the necessary fields from unit values to pixel values  */
+     _XmProcessLock();
      oldExtData->widget->core.widget_class = ec;
+     _XmProcessUnlock();
     _XmExtImportArgs(oldExtData->widget, args, num_args);
 
     }
@@ -2092,10 +2146,12 @@ GetValuesHook(
 
     if ((ext = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) != NULL)
     {
+      _XmProcessLock();
       XtGetSubvalues(ext->widget,
 		      ec->core_class.resources,
 		      ec->core_class.num_resources,
 		      args, *num_args);
+      _XmProcessUnlock();
       _XmExtGetValuesHook( ext->widget, args, num_args );
     }
 
@@ -2475,9 +2531,13 @@ RootGeometryManager(
       XtError("no extension object");
 #endif /* DEBUG */
 
+    _XmProcessLock();
     scExtPtr = (ShellClassExtensionRec **)
-      _XmGetClassExtensionPtr( (XmGenericClassExt *) &(swc->shell_class.extension),
-			       NULLQUARK);
+                    _XmGetClassExtensionPtr(
+                        (XmGenericClassExt *) &(swc->shell_class.extension),
+                        NULLQUARK);
+    _XmProcessUnlock();    
+
     if (request->request_mode & XtCWQueryOnly)
       {
 	   if (!(wmShell->shell.allow_shell_resize) &&
@@ -2717,7 +2777,13 @@ Destroy(
 	     _XmRemoveAllCallbacks((InternalCallbackList *)
 				 &(ve->vendor.focus_moved_callback));
 
-	     xmDesktopClass->core_class.destroy((Widget) ve);
+         {
+         XtWidgetProc destroy;
+         _XmProcessLock();
+         destroy = xmDesktopClass->core_class.destroy;
+         _XmProcessUnlock();
+	     (*destroy) ((Widget) ve);
+         }
 	     XtFree((char *) ve);
 	 }
 	 XtFree((char *) ext);
