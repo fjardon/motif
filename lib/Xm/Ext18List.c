@@ -84,6 +84,8 @@ static void   PositionFindAndFindText(Widget);
 
 static void ClassInitialize();
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
+static void ClassPartInitialize(WidgetClass w_class);
+
 static void Resize(Widget), Destroy(Widget w);
 
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
@@ -138,7 +140,7 @@ XmExt18ListClassRec xmExt18ListClassRec = {
     /* class_name		*/	XM_EXT_18_LIST_CLASS_NAME,
     /* widget_size		*/	sizeof(XmExt18ListPart),
     /* class_initialize		*/	ClassInitialize,
-    /* class_part_initialize	*/      NULL,	
+    /* class_part_initialize */ ClassPartInitialize,	
     /* class_inited		*/	FALSE,
     /* initialize		*/	Initialize,
     /* initialize_hook		*/	NULL,
@@ -317,6 +319,25 @@ static void Initialize(Widget req, Widget set,
     
     XtFree((XtPointer) f_args);
 }
+
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmEXT18LIST_BIT);
+}
+
+
+
+
 
 /*	Function Name: Destroy
  *	Description:   Cleans up after the widget.
