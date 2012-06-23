@@ -44,7 +44,12 @@
 
 #include <stdio.h>
 #include <X11/Xlocale.h>
-#include <X11/Xos.h>
+
+#define X_INCLUDE_DIRENT_H
+#define XOS_USE_XT_LOCKING
+#include <X11/Xos_r.h> /* Must precede XmI.h to avoid possible redefinitions
+			  of MIN() and MAX(). Xos_r.h includes Xos.h */
+
 #include <Xm/IconFileP.h>
 #include <Xm/ColorObjP.h>
 #include "XmI.h"
@@ -62,12 +67,7 @@
 #include <unistd.h>
 #endif
 
-
 #include <sys/types.h>
-
-#define X_INCLUDE_DIRENT_H
-#define XOS_USE_XT_LOCKING
-#include <X11/Xos_r.h>
 
 #include <fcntl.h>
 #include <sys/stat.h>
