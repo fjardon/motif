@@ -8,8 +8,18 @@
 #undef NO_MESSAGE_CATALOG
 
 /* Define if libXt was compiled with -DXTHREADS */
+/*
 #undef XTHREADS
 #undef XUSE_MTSAFE_API
+*/
+#ifndef XTHREADS
+#define XTHREADS
+#endif
+
+#ifndef XUSE_MTSAFE_API
+#define XUSE_MTSAFE_API
+#endif
+
 
 /* Define if wctype.h is available */
 #undef HAS_WIDECHAR_FUNCTIONS
