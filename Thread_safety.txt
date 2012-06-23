@@ -46,9 +46,9 @@ Typically, we might see them in:
 Files to check for thread safety:
 done - ButtonBox.c
 done - ColorS.c
-Column.c
-ComboBox2.c
-DataF.c
+done - Column.c
+done - ComboBox2.c
+done - DataF.c
 Ext18List.c
 ExtP.h
 FontS.c
