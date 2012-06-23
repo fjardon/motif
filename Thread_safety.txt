@@ -41,9 +41,30 @@ Typically, we might see them in:
     SetValues()
 
 
+Files to check for thread safety:
+ButtonBox.c
+ColorS.c
+Column.c
+ComboBox2.c
+DataF.c
+Ext18List.c
+ExtP.h
+FontS.c
+Hierarchy.c
+I18List.c
+IconBox.c
+IconButton.c
+Paned.c
+TabBox.c
+TabStack.c
+Tree.c
+XmExtUtil.c
+VendorS.c
+ToolTip.c
+
 
 If you do not have SourceNavigator, and to save you the hassle of grep'ing
-the sources, I have included abbreviated versions of the functions as I
+the sources, I have included abbreviated versions of typical functions as I
 have come across them.
 
 
