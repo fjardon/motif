@@ -228,18 +228,13 @@ For postscript and pdf documentation (users guides
 and reference manuals), see URL
 http://www.opengroup.org/openmotif/docs/
 
-7. User Widget Compatibility Note
+7. Compatibility Notice
 
-Some structures in existing widgets have been changed in 
-Motif 2.2. This can cause compatibility problems that require
-a recompile if your application accesses any of the internal data
-structures of Motif Widgets and does not use the correct XmField 
-Macros. The most common situation for this problem is when your
-application uses internally developed widgets or widgets acquired
-from a third party. In this situation, please confirm that the 
-widgets use the XmField widgets. See the Motif 2.1 Widget Writer's 
-Guide (Section 14.2) for details.
-
+Some structures in existing widgets have been changed in
+Motif 2.2. This can cause binary incompatibility problems which require
+a recompile of your application. One recommended solution is to install
+the runtime libraries from Motif 2.1.x. Link all your new applications to
+the current Motif Shared Library.
 
 8. Change Log
 

@@ -18,17 +18,13 @@ Typical things to watch for in most of the following widgets:
 
 - uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution independent conversion of synthetic resources
 
-- use Xme sub-system, and get rid of deprecated methods
+- use Xme sub-system
 
-- elimenate use of XtVersionDontCheck/XmResolveAllPartOffsets (done?)
-
-- parts of header should be in Xm.h
+- elimenate use of XmResolveAllPartOffsets
 
 - elimenate use of XtAppWarningMsg where the standard interface is XmeWarning.
 
 - elimenate use of XmRepType handlers in the ClassInitialize method
-
-- parts of header should be in Xm.h
 
 - uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution independent conversion of synthetic resources
 
@@ -115,7 +111,7 @@ Font Selector
 
 - uses XtAppWarningMsg instead of XmeWarning
 
-- elimenate use of XtVersionDontCheck/XmResolveAllPartOffsets (done?)
+- elimenate use of XmResolveAllPartOffsets
 
 
 
