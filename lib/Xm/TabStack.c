@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <Xm/XmI.h>
 #include <Xm/XmP.h>
 #include <Xm/DialogS.h>
 #include <Xm/BulletinBP.h>
@@ -471,7 +472,7 @@ static void Get_tabLabelString (Widget widget, int offset, XtArgVal *value)
 
 #undef offset
 
-XmTabStackClassRec xiTabStackClassRec = {
+XmTabStackClassRec xmTabStackClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmBulletinBoardClassRec,
     /* class_name	  */	"XmTabStack",
@@ -550,7 +551,7 @@ XmTabStackClassRec xiTabStackClassRec = {
     /* extension          */    (XtPointer) NULL }
 };
 
-WidgetClass xmTabStackWidgetClass = (WidgetClass) &xiTabStackClassRec;
+WidgetClass xmTabStackWidgetClass = (WidgetClass) &xmTabStackClassRec;
 
 /*
  * Note these aren't static, even though they should be.  TabBox.c
@@ -577,7 +578,7 @@ ClassInitialize(void)
 ClassInitialize()
 #endif
 {
-    XmTabStackClassRec* wc = &xiTabStackClassRec;
+    XmTabStackClassRec* wc = &xmTabStackClassRec;
     int i;
 
     XmResolveAllPartOffsets(xmTabStackWidgetClass,
@@ -599,7 +600,7 @@ ClassInitialize()
      * Initialize the XmTabBox class to add its type converters which we
      * also use.
      */
-    XtInitializeWidgetClass(xiTabBoxWidgetClass);
+    XtInitializeWidgetClass(xmTabBoxWidgetClass);
     XtSetTypeConverter(XmRString, XmRXmTabSide,
 		       CvtStringToXmTabSide, NULL, 0, XtCacheNone, NULL);
     XtSetTypeConverter(XmRString, XmRXmPixmapPlacement,
@@ -816,7 +817,7 @@ Initialize(request, set, arg_list, arg_cnt)
     if( XmTabStack_tab_box(ts) == NULL )
     {
 	XmTabStack_tab_box(ts) =
-	    XtCreateManagedWidget("tabBox", xiTabBoxWidgetClass, set,
+	    XtCreateManagedWidget("tabBox", xmTabBoxWidgetClass, set,
 				  merged_args, n + num_filtered_args);
     }
     else
@@ -3319,7 +3320,14 @@ XmTabStackSelectTab(widget, notify)
 {
     XmTabStackWidget tab = (XmTabStackWidget) XtParent(widget);
 
-    if (!XmIsTabStack((Widget)tab)) return;
+    _XmWidgetToAppContext(widget);
+    _XmAppLock(app);
+
+    if (!XmIsTabStack((Widget)tab)) 
+      {
+	_XmAppUnlock(app); 
+	return;
+      }
 
     if (!XtIsRealized((Widget)tab))
     {
@@ -3341,6 +3349,8 @@ XmTabStackSelectTab(widget, notify)
 
 	XmTabStack_do_notify(tab) = True;
     }
+
+    _XmAppUnlock(app);  
 }
 
 static void
@@ -3814,15 +3824,22 @@ XmTabStackIndexToWidget(widget, idx)
     Cardinal         i, cnt;
     WidgetList       kid;
 
+    _XmWidgetToAppContext(widget);
+    _XmAppLock(app);
+
     if( !XmIsTabStack(widget) || idx < 0 ) return( NULL );
 
     for( i = 0, cnt = 0, kid = tab->composite.children;
 	 i < tab->composite.num_children; ++i, ++kid )
     {
 	if( IsTabBox(tab, *kid) || !XtIsManaged(*kid) ) continue;
-	if( cnt++ == idx ) return( *kid );
+	if( cnt++ == idx ) 
+	  {
+	    _XmAppUnlock(app); 
+	    return( *kid );
+	  }
     }
-
+    _XmAppUnlock(app); 
     return( NULL );
 }
 
@@ -3836,11 +3853,18 @@ XmTabStackGetSelectedTab(widget)
 {
     XmTabStackWidget tab = (XmTabStackWidget) widget;
 
+    _XmWidgetToAppContext(widget);
+    _XmAppLock(app);
+
     if (!XmIsTabStack(widget)) return(NULL);
 
     if (!XtIsRealized((Widget)tab) && XmTabStack__selected_tab(tab))
+      {
+	_XmAppUnlock(app); 
 	return (XmTabStack__selected_tab(tab));
-    
+      }
+
+    _XmAppUnlock(app);    
     return (XmTabStack__active_child(tab));
 }
 
@@ -4144,6 +4168,9 @@ XmTabStackXYToWidget(widget, x, y)
 {
     Widget tab_stack, tab_box;
 
+    _XmWidgetToAppContext(widget);
+    _XmAppLock(app);
+
     if( XmIsTabStack(widget) )
     {
 	tab_stack = widget;
@@ -4163,9 +4190,11 @@ XmTabStackXYToWidget(widget, x, y)
     }
     else
     {
-	return( NULL );
+      _XmAppUnlock(app); 
+      return( NULL );
     }
 
+    _XmAppUnlock(app); 
     return( XmTabStackIndexToWidget(tab_stack,
 				    XmTabBoxXYToIndex(tab_box, x, y)) );
 }

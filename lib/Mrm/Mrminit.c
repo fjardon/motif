@@ -88,8 +88,6 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/LabelG.h>
 #include <Xm/LabelGP.h>
 #include <Xm/LabelP.h>
-#include <Xm/BulletinB.h>
-#include <Xm/BulletinBP.h>
 #include <Xm/RowColumn.h>
 #include <Xm/RowColumnP.h>
 #include <Xm/ArrowB.h>
@@ -97,27 +95,41 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/ArrowBGP.h>
 #include <Xm/ArrowBP.h>
 #include <Xm/AtomMgr.h>
+#include <Xm/BulletinB.h>
+#include <Xm/BulletinBP.h>
+#include <Xm/ButtonBox.h>
+#include <Xm/ButtonBoxP.h>
 #include <Xm/CascadeB.h>
 #include <Xm/CascadeBG.h>
 #include <Xm/CascadeBGP.h>
 #include <Xm/CascadeBP.h>
-#include <Xm/SelectioBP.h>
-#include <Xm/SelectioB.h>
 #include <Xm/Command.h>
 #include <Xm/CommandP.h>
+#include <Xm/ColorS.h>
+#include <Xm/ColorSP.h>
 #include <Xm/CutPaste.h>
+#include <Xm/DataF.h>
+#include <Xm/DataFP.h>
 #include <Xm/DialogS.h>
 #include <Xm/DialogSP.h>
 #include <Xm/DrawingA.h>
 #include <Xm/DrawingAP.h>
 #include <Xm/DrawnB.h>
 #include <Xm/DrawnBP.h>
+#include <Xm/Ext18List.h>
+#include <Xm/Ext18ListP.h>
 #include <Xm/FileSB.h>
 #include <Xm/FileSBP.h>
+#include <Xm/FontS.h>
+#include <Xm/FontSP.h>
 #include <Xm/Form.h>
 #include <Xm/FormP.h>
 #include <Xm/Frame.h>
 #include <Xm/FrameP.h>
+#include <Xm/IconButton.h>
+#include <Xm/IconButtonP.h>
+#include <Xm/IconBox.h>
+#include <Xm/IconBoxP.h>
 #include <Xm/List.h>
 #include <Xm/ListP.h>
 #include <Xm/MainW.h>
@@ -126,6 +138,10 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/MenuShellP.h>
 #include <Xm/MessageB.h>
 #include <Xm/MessageBP.h>
+#include <Xm/Outline.h>
+#include <Xm/OutlineP.h>
+#include <Xm/Paned.h>
+#include <Xm/PanedP.h>
 #include <Xm/PanedW.h>
 #include <Xm/PanedWP.h>
 #include <Xm/PushB.h>
@@ -139,10 +155,16 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/ScrollBarP.h>
 #include <Xm/ScrolledW.h>
 #include <Xm/ScrolledWP.h>
+#include <Xm/SelectioBP.h>
+#include <Xm/SelectioB.h>
 #include <Xm/SeparatoG.h>
 #include <Xm/SeparatoGP.h>
 #include <Xm/Separator.h>
 #include <Xm/SeparatorP.h>
+#include <Xm/TabBox.h>
+#include <Xm/TabBoxP.h>
+#include <Xm/TabStack.h>
+#include <Xm/TabStackP.h>
 #include <Xm/Text.h>
 #include <Xm/TextFP.h>
 #include <Xm/TextP.h>
@@ -151,12 +173,17 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/ToggleBG.h>
 #include <Xm/ToggleBGP.h>
 #include <Xm/ToggleBP.h>
+#include <Xm/TreeP.h>
+#include <Xm/Tree.h>
 #include <Xm/ComboBoxP.h>
 #include <Xm/ContainerP.h>
 #include <Xm/NotebookP.h>
 #include <Xm/SpinBP.h>
 #include <Xm/SSpinBP.h>
 #include <Xm/IconGP.h>
+
+#include <Xm/Column.h>
+#include <Xm/ColumnP.h>
 
 #include <Xm/XmRenderTI.h>
 #include <Xm/XmTabListI.h>
@@ -253,13 +280,21 @@ void MrmInitialize (void)
      (WidgetClass)&xmBulletinBoardClassRec);
 
   MrmRegisterClass
+    (0, NULL, "XmCreateButtonBox", XmCreateButtonBox,
+     (WidgetClass)&xmButtonBoxClassRec);
+  
+  MrmRegisterClass
     (0, NULL, "XmCreateCascadeButton", XmCreateCascadeButton,
      (WidgetClass)&xmCascadeButtonClassRec);
 
   MrmRegisterClass
     (0, NULL, "XmCreateCascadeButtonGadget", XmCreateCascadeButtonGadget,
      (WidgetClass)&xmCascadeButtonGadgetClassRec);
-
+ 
+  MrmRegisterClass
+    (0, NULL, "XmCreateColumn", XmCreateColumn,
+     (WidgetClass)&xmColumnClassRec);
+  
   MrmRegisterClass
     (0, NULL, "XmCreateCommand", XmCreateCommand,
      (WidgetClass)&xmCommandClassRec);
@@ -267,6 +302,14 @@ void MrmInitialize (void)
   MrmRegisterClass
     (0, NULL, "XmCreateCommandDialog", XmCreateCommandDialog,
      (WidgetClass)&xmCommandClassRec);
+
+  MrmRegisterClass
+    (0, NULL, "XmCreateColorSelector", XmCreateColorSelector,
+     (WidgetClass)&xmColorSelectorClassRec);
+ 
+  MrmRegisterClass
+    (0, NULL, "XmCreateDataField", XmCreateDataField,
+     (WidgetClass)&xmDataFieldClassRec);
 
   MrmRegisterClass
     (0, NULL, "XmCreateDialogShell", XmCreateDialogShell,
@@ -277,10 +320,14 @@ void MrmInitialize (void)
      (WidgetClass)&xmDrawingAreaClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateDrawnButton", XmCreateDrawnButton,
-     (WidgetClass)&xmDrawnButtonClassRec);
+    (0, NULL, "XmCreateExtended18List", XmCreateExtended18List,
+     (WidgetClass)&xmExt18ListClassRec);
 
   MrmRegisterClass
+    (0, NULL, "XmCreateDrawnButton", XmCreateDrawnButton,
+     (WidgetClass)&xmDrawnButtonClassRec);
+ 
+   MrmRegisterClass
     (0, NULL, "XmCreateFileSelectionBox", XmCreateFileSelectionBox,
      (WidgetClass)&xmFileSelectionBoxClassRec);
 
@@ -291,7 +338,11 @@ void MrmInitialize (void)
   MrmRegisterClass
     (0, NULL, "XmCreateForm", XmCreateForm,
      (WidgetClass)&xmFormClassRec);
-
+ 
+  MrmRegisterClass
+    (0, NULL, "XmCreateFontSelector", XmCreateFontSelector,
+     (WidgetClass)&xmFontSelectorClassRec);
+  
   MrmRegisterClass
     (0, NULL, "XmCreateFormDialog", XmCreateFormDialog,
      (WidgetClass)&xmFormClassRec);
@@ -300,6 +351,14 @@ void MrmInitialize (void)
     (0, NULL, "XmCreateFrame", XmCreateFrame,
      (WidgetClass)&xmFrameClassRec);
 
+  MrmRegisterClass
+    (0, NULL, "XmCreateIconButton", XmCreateIconButton,
+     (WidgetClass)&xmIconButtonClassRec);
+  
+  MrmRegisterClass
+    (0, NULL, "XmCreateIconBox", XmCreateIconBox,
+     (WidgetClass)&xmIconBoxClassRec);
+  
   MrmRegisterClass
     (0, NULL, "XmCreateLabel", XmCreateLabel,
      (WidgetClass)&xmLabelClassRec);
@@ -327,7 +386,11 @@ void MrmInitialize (void)
   MrmRegisterClass
     (0, NULL, "XmCreateMessageBox", XmCreateMessageBox,
      (WidgetClass)&xmMessageBoxClassRec);
-
+ 
+  MrmRegisterClass
+    (0, NULL, "XmCreateOutline", XmCreateOutline,
+     (WidgetClass)&xmOutlineClassRec);
+  
   MrmRegisterClass
     (0, NULL, "XmCreateMessageDialog", XmCreateMessageDialog,
      (WidgetClass)&xmMessageBoxClassRec);
@@ -427,6 +490,14 @@ void MrmInitialize (void)
   MrmRegisterClass
     (0, NULL, "XmCreateSeparatorGadget", XmCreateSeparatorGadget,
      (WidgetClass)&xmSeparatorGadgetClassRec);
+ 
+  MrmRegisterClass
+    (0, NULL, "XmCreateTabBox", XmCreateTabBox,
+     (WidgetClass)&xmTabBoxClassRec);
+  
+  MrmRegisterClass
+    (0, NULL, "XmCreateTabStack", XmCreateTabStack,
+     (WidgetClass)&xmTabStackClassRec);
 
   MrmRegisterClass
     (0, NULL, "XmCreateText", XmCreateText,
@@ -447,6 +518,14 @@ void MrmInitialize (void)
   MrmRegisterClass
     (0, NULL, "XmCreateToggleButtonGadget", XmCreateToggleButtonGadget,
      (WidgetClass)&xmToggleButtonGadgetClassRec);
+
+  MrmRegisterClass
+    (0, NULL, "XmCreateTree", XmCreateTree,
+     (WidgetClass)&xmTreeClassRec);
+  
+    MrmRegisterClass
+    (0, NULL, "XmCreatePaned", XmCreatePaned,
+     (WidgetClass)&xmPanedClassRec);
 
   MrmRegisterClass
     (0, NULL, "XmCreatePanedWindow", XmCreatePanedWindow,

@@ -45,6 +45,7 @@ static char rcsid[] = "$TOG: SeparatoG.c /main/18 1999/01/26 15:32:56 mgreess $"
 #include <Xm/MenuT.h>
 #include <Xm/RowColumnP.h>
 #include <Xm/TraitP.h>
+#include <Xm/VaSimpleP.h>
 #include "BaseClassI.h"
 #include "CacheI.h"
 #include "ColorI.h"
@@ -1614,7 +1615,53 @@ XmCreateSeparatorGadget(
    return (XtCreateWidget (name, xmSeparatorGadgetClass, 
                            parent, arglist, argcount));
 }
+Widget 
+XmVaCreateSeparatorGadget(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSeparatorGadgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedSeparatorGadget(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSeparatorGadgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
 
 /****************************************************
  *   Functions for manipulating Secondary Resources.

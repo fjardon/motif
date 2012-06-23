@@ -38,7 +38,6 @@ extern "C" {
 typedef struct _XmColorSelectorClassRec *XmColorSelectorWidgetClass;
 typedef struct _XmColorSelectorRec *XmColorSelectorWidget;
 
-typedef enum {XmListMode = 0, XmScaleMode = 1} XmColorMode;
 
 /*	Function Name: XmCreateColorSelector
  *	Description: Creation Routine for UIL and ADA.

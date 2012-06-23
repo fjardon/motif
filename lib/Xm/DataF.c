@@ -21,12 +21,10 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-#ifdef REV_INFO
-#ifndef lint
-static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.8 $ $Date: 2002/02/14 17:25:21 $"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
 #endif
-#endif
-/**  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -37,6 +35,7 @@ static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.8 $ $Date: 2002/02/14 
 #include <X11/VendorP.h>
 #include <X11/keysym.h>
 #include <X11/Xresource.h>
+#include <Xm/XmI.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/CutPaste.h>
 #include <Xm/DragC.h>
@@ -53,6 +52,14 @@ static char rcsid[] = "$RCSfile: DataF.c,v $ $Revision: 1.8 $ $Date: 2002/02/14 
 #include <Xm/Ext.h>
 #include <Xm/DataFSelP.h>
 #include <Xm/DataFP.h>
+
+#include <Xm/TraitP.h>
+#include <Xm/AccTextT.h>
+#include <Xm/SpecRenderT.h>
+
+#include "TextFI.h"
+#include "TextFSelI.h"
+#include "XmStringI.h"
 
 /*
  * Stuff from various internal motif headers that we need to declare
@@ -1150,6 +1157,15 @@ static Boolean DataFieldGetDisplayRect(
 static void DataFieldMarginsProc( 
                         Widget w,
                         XmBaselineMargins *margins_rec) ;
+static XtPointer DataFieldGetValue(Widget w, 
+				   int format);
+
+static void DataFieldSetValue(Widget w, 
+			      XtPointer s, 
+			      int format);
+
+static int DataFieldPreferredValue(Widget w);
+
 static Boolean DataFieldRemove(Widget w,
 			       XEvent *event);
 static void PictureVerifyCallback(Widget w,
@@ -1533,8 +1549,15 @@ externaldef(xmdatafieldclassrec) XmDataFieldClassRec xmDataFieldClassRec =
 
 externaldef(xmdatafieldwidgetclass) WidgetClass xmDataFieldWidgetClass =
 					 (WidgetClass) &xmDataFieldClassRec;
-
 XmOffsetPtr XmDataField_offsets;
+
+/* AccessXmString Trait record for DataField */
+static XmConst XmAccessTextualTraitRec dataFieldCS = {
+  0,  				  /* version */
+  DataFieldGetValue,
+  DataFieldSetValue,
+  DataFieldPreferredValue,
+};
 
 static void
 #ifdef _NO_PROTO
@@ -1550,11 +1573,17 @@ ClassInit(void)
 			    &XmDataField_offsets,
 			    NULL);
 
-    for(i=0; i<wc->primitive_class.num_syn_resources; i++) {
-        (wc->primitive_class.syn_resources)[i].resource_offset =
-            XmGetPartOffset(wc->primitive_class.syn_resources + i,
-                            &XmDataField_offsets);
-    }
+    for(i=0; i<wc->primitive_class.num_syn_resources; i++)
+      {
+	(wc->primitive_class.syn_resources)[i].resource_offset =
+	  XmGetPartOffset(wc->primitive_class.syn_resources + i,
+			  &XmDataField_offsets);
+      }
+    
+    _XmTextFieldInstallTransferTrait();
+    XmeTraitSet((XtPointer)xmDataFieldWidgetClass, 
+		XmQTaccessTextual, 
+		(XtPointer) &dataFieldCS);   
 }
 
 /* ARGSUSED */
@@ -6324,6 +6353,7 @@ df_SetScanSelection(
               cursorPos = left;
            break;
        case XmSELECT_LINE:
+       case XmSELECT_OUT_LINE:
        case XmSELECT_PARAGRAPH:
        case XmSELECT_ALL:
       	   if (XmTextF_has_primary(tf))
@@ -9256,14 +9286,14 @@ df_MakeAddModeCursor(
       Display *dpy = XtDisplay(tf);
       Pixmap stipple;
       XImage *image;
-      Pixmap pixmap = NULL;
+      Pixmap pixmap;
       int unused_origin;
       Window	root;
       
       pixmap =  XmGetPixmapByDepth(screen, "50_foreground",
 				   1, 0, 1);
       
-      if (pixmap != NULL) {
+      if (pixmap != XmUNSPECIFIED_PIXMAP) {
       	XGetGeometry(XtDisplay(tf), pixmap, &root, &unused_origin, 
 		     &unused_origin, &pix_width, &pix_height, 
 		     &unused, &unused);
@@ -10146,6 +10176,7 @@ DataFieldExpose(
 /*
  *
  * df_SetValues
+ *
  *    Checks the new text data and ensures that the data is valid.
  * Invalid values will be rejected and changed back to the old
  * values.
@@ -10681,6 +10712,58 @@ DataFieldRemove(
    return True;
 }
 
+/********************************************
+ * AccessTextual trait method implementation 
+ ********************************************/
+
+static XtPointer
+DataFieldGetValue(Widget w, int format) 
+{
+  char *str;
+  XmString tmp;
+  
+  switch(format) {
+  case XmFORMAT_XmSTRING:
+    str = XmDataFieldGetString(w);
+    tmp = XmStringCreateLocalized(str);
+    if (str != NULL) XtFree(str);
+    return((XtPointer) tmp);
+  case XmFORMAT_MBYTE:
+    return((XtPointer) XmDataFieldGetString(w));
+  case XmFORMAT_WCS:
+    return((XtPointer) XmDataFieldGetStringWcs(w));
+  }
+
+  return(NULL);
+}
+
+static void 
+DataFieldSetValue(Widget w, XtPointer s, int format)
+{
+  char *str;
+  
+  switch(format) 
+    {
+    case XmFORMAT_XmSTRING:
+      str = _XmStringGetTextConcat((XmString) s);
+      XmDataFieldSetString(w, str);
+      if (str != NULL) XtFree(str);
+      break;
+    case XmFORMAT_MBYTE:
+      XmDataFieldSetString(w, (char*) s);
+      break;
+    case XmFORMAT_WCS:
+      XmDataFieldSetStringWcs(w, (wchar_t *) s);
+    }
+}
+
+/*ARGSUSED*/
+static int
+DataFieldPreferredValue(Widget w) /* unused */
+{
+  return(XmFORMAT_MBYTE);
+}
+
 /***********************************<->***************************************
 
  *                              Public Functions                             *
@@ -10699,11 +10782,15 @@ XmDataFieldGetString(
     char *temp_str;
     int ret_val = 0;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+
     if (XmTextF_string_length(tf) > 0) 
     {
 	if (XmTextF_max_char_size(tf) == 1) 
 	{
 	    temp_str = XtNewString(XmTextF_value(tf));
+	    _XmAppUnlock(app); 
 	    return(temp_str);
 	} 
 	else 
@@ -10717,10 +10804,13 @@ XmDataFieldGetString(
 	    {
 		temp_str[0] = '\0';
 	    }
+
+	    _XmAppUnlock(app);
 	    return temp_str;
 	}
     } else 
     {
+      _XmAppUnlock(app);
       return(XtNewString(""));
     }
 }
@@ -10747,6 +10837,9 @@ XmDataFieldGetSubstring(
     int n_bytes = 0;
     int wcs_ret = 0;
 
+    _XmWidgetToAppContext(widget);    
+    _XmAppLock(app);
+
     if (XmTextF_max_char_size(tf) != 1)
     {
 	n_bytes = _XmDataFieldCountBytes(tf, XmTextF_wc_value(tf)+start, num_chars);
@@ -10758,7 +10851,8 @@ XmDataFieldGetSubstring(
 
     if (buf_size < n_bytes + 1 )
     {
-	return XmCOPY_FAILED;
+      _XmAppUnlock(app);
+      return XmCOPY_FAILED;
     }
 
     if (start + num_chars > XmTextF_string_length(tf)) 
@@ -10794,6 +10888,7 @@ XmDataFieldGetSubstring(
 	ret_value = XmCOPY_FAILED;
     }
 
+    _XmAppUnlock(app);
     return (ret_value);
 }
 
@@ -10811,6 +10906,9 @@ XmDataFieldGetStringWcs(
     wchar_t *temp_wcs;
     int num_wcs = 0;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+
     if (XmTextF_string_length(tf) > 0) 
     {
 	temp_wcs = (wchar_t*) XtMalloc((unsigned) sizeof(wchar_t) *
@@ -10825,14 +10923,18 @@ XmDataFieldGetStringWcs(
 	    num_wcs = mbstowcs(temp_wcs, XmTextF_value(tf),
 			       XmTextF_string_length(tf) + 1);
 	}
+
+	_XmAppUnlock(app);
 	return temp_wcs;
     } 
     else 
-    {
+      {
 	temp_wcs = (wchar_t*) XtMalloc((unsigned) sizeof(wchar_t));
 	temp_wcs[0] = (wchar_t)0L; /* put a wchar_t NULL in position 0 */
+	
+	_XmAppUnlock(app);
 	return temp_wcs;
-    }
+      }
 }
 
 int 
@@ -10856,6 +10958,9 @@ XmDataFieldGetSubstringWcs(
     int ret_value = XmCOPY_SUCCEEDED;
     int num_wcs = 0;
 
+    _XmWidgetToAppContext(widget);    
+    _XmAppLock(app);
+    
     if (start + num_chars > XmTextF_string_length(tf)) 
     {
 	num_chars = (int) (XmTextF_string_length(tf) - start);
@@ -10864,7 +10969,8 @@ XmDataFieldGetSubstringWcs(
       
     if (buf_size < num_chars + 1 ) 
     {
-	return XmCOPY_FAILED;
+      _XmAppUnlock(app);
+      return XmCOPY_FAILED;
     }
 
     if (num_chars > 0) 
@@ -10888,7 +10994,8 @@ XmDataFieldGetSubstringWcs(
       ret_value = XmCOPY_FAILED;
     }
 
-   return (ret_value);
+    _XmAppUnlock(app);
+    return (ret_value);
 }
 
 
@@ -10904,9 +11011,13 @@ XmDataFieldGetLastPosition(
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     XmTextPosition ret_val;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+
     ret_val = XmTextF_string_length(tf);
 
-   return(ret_val);
+    _XmAppUnlock(app);
+    return(ret_val);
 }
 
 void 
@@ -10928,6 +11039,9 @@ XmDataFieldSetString(
     int ret_val = 0;
     char * tmp_ptr;
     char * mod_value = NULL;
+
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
 
     fromPos = 0;
 
@@ -10961,6 +11075,7 @@ XmDataFieldSetString(
 	{
 	    if (XmTextF_verify_bell(tf)) XBell(XtDisplay(w), 0);
 	    if (free_insert) XtFree(value);
+	    _XmAppUnlock(app);
 	    return;
 	}
     }
@@ -11017,13 +11132,15 @@ XmDataFieldSetString(
     
     _XmDataFieldDrawInsertionPoint(tf, True);
     if (free_insert) XtFree(value);
+
+    _XmAppUnlock(app);
 }
 
 void 
 #ifdef _NO_PROTO
 XmDataFieldSetStringWcs( w, wc_value )
-        Widget w ;
-        wchar_t *wc_value ;
+        Widget w;
+        wchar_t *wc_value;
 #else
 XmDataFieldSetStringWcs(
         Widget w,
@@ -11037,6 +11154,9 @@ XmDataFieldSetStringWcs(
    int num_chars = 0;
    int result;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
     for (num_chars = 0, tmp_wc = wc_value; *tmp_wc != (wchar_t)0L; num_chars++)
         tmp_wc++;  /* count number of wchar_t's */
 
@@ -11049,6 +11169,7 @@ XmDataFieldSetStringWcs(
    XmDataFieldSetString(w, tmp);
    
    XtFree(tmp);
+   _XmAppUnlock(app);   
 }
 
 
@@ -11077,23 +11198,26 @@ XmDataFieldReplace(
     int length = 0;
     XmAnyCallbackStruct cb;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);   
+
     if (value == NULL) value = "";
 
     df_VerifyBounds(tf, &from_pos, &to_pos);
 
     if (XmTextF_has_primary(tf)) {
        if ((XmTextF_prim_pos_left(tf) > from_pos && 
-              XmTextF_prim_pos_left(tf) < to_pos) || 
+	    XmTextF_prim_pos_left(tf) < to_pos) || 
            (XmTextF_prim_pos_right(tf) >from_pos && 
-              XmTextF_prim_pos_right(tf) < to_pos) ||
+	    XmTextF_prim_pos_right(tf) < to_pos) ||
            (XmTextF_prim_pos_left(tf) <= from_pos && 
-              XmTextF_prim_pos_right(tf) >= to_pos)) {
-                _XmDataFieldDeselectSelection(w, False,
-			                XtLastTimestampProcessed(XtDisplay(w)));
-		deselected = True;
+	    XmTextF_prim_pos_right(tf) >= to_pos)) {
+	 _XmDataFieldDeselectSelection(w, False,
+				       XtLastTimestampProcessed(XtDisplay(w)));
+	 deselected = True;
        }
     }
-
+    
     XmTextF_editable(tf) = True;
     XmTextF_max_length(tf) = INT_MAX;
     if (XmTextF_max_char_size(tf) == 1) {
@@ -11142,6 +11266,8 @@ XmDataFieldReplace(
        XtCallCallbackList((Widget) tf, XmTextF_value_changed_callback(tf),
 		          (XtPointer) &cb);
     }
+
+    _XmAppUnlock(app);  
 }
 
 /* TOM - XmDataFieldReplaceWcs not converted */
@@ -11169,6 +11295,9 @@ XmDataFieldReplaceWcs(
     char *tmp;
     int wc_length = 0;
     XmAnyCallbackStruct cb;
+
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
 
     if (wc_value == NULL) wc_value = (wchar_t*)"";
 
@@ -11248,6 +11377,8 @@ XmDataFieldReplaceWcs(
        XtCallCallbackList((Widget) tf, XmTextF_value_changed_callback(tf),
 		          (XtPointer) &cb);
     }
+
+    _XmAppUnlock(app); 
 }
 
 
@@ -11264,8 +11395,13 @@ XmDataFieldInsert(
         char *value )
 #endif /* _NO_PROTO */
 {
-    /* XmDataFieldReplace takes care of converting to wchar_t* if needed */
-    XmDataFieldReplace(w, position, position, value);
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);  
+
+  /* XmDataFieldReplace takes care of converting to wchar_t* if needed */
+  XmDataFieldReplace(w, position, position, value);
+
+  _XmAppUnlock(app); 
 }
 
 void 
@@ -11281,8 +11417,13 @@ XmDataFieldInsertWcs(
         wchar_t *wcstring )
 #endif /* _NO_PROTO */
 {
-    /* XmDataFieldReplaceWcs takes care of converting to wchar_t* if needed */
-    XmDataFieldReplaceWcs(w, position, position, wcstring);
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);    
+
+  /* XmDataFieldReplaceWcs takes care of converting to wchar_t* if needed */
+  XmDataFieldReplaceWcs(w, position, position, wcstring);
+
+  _XmAppUnlock(app);
 }
 
 void 
@@ -11298,15 +11439,21 @@ XmDataFieldSetAddMode(
 {
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);    
+
    if (XmTextF_add_mode(tf) == state) 
    {
-       return;
+     _XmAppUnlock(app);
+     return;
    }
 
    _XmDataFieldDrawInsertionPoint(tf, False);
    XmTextF_add_mode(tf) = state;
    _XmDataFToggleCursorGC(w);
    _XmDataFieldDrawInsertionPoint(tf, True);
+
+   _XmAppUnlock(app);
 }
 
 Boolean 
@@ -11321,8 +11468,12 @@ XmDataFieldGetAddMode(
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
    Boolean ret_val;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);   
+   
    ret_val = XmTextF_add_mode(tf);
-    
+   
+   _XmAppUnlock(app);
    return (ret_val);
 }
 
@@ -11338,10 +11489,13 @@ XmDataFieldGetEditable(
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
    Boolean ret_val;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);   
+
    ret_val = XmTextF_editable(tf);    
 
+   _XmAppUnlock(app);
    return ret_val;
-
 }
 
 void 
@@ -11360,35 +11514,38 @@ XmDataFieldSetEditable(
     Arg args[6];  /* To set initial values to input method */
     Cardinal n = 0;
 
-    /* if widget previously wasn't editable, no input method has yet been */
-    /* registered.  So, if we're making it editable now, register the IM  */
-    /* give the IM the relevent values.                                   */
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);   
 
-    if (!XmTextF_editable(tf) && editable)
-    { 
+   /* if widget previously wasn't editable, no input method has yet been */
+   /* registered.  So, if we're making it editable now, register the IM  */
+   /* give the IM the relevent values.                                   */
+   
+   if (!XmTextF_editable(tf) && editable)
+     { 
 #if defined(__sgi)
-	/* CR03685 */
-	SGI_hack_XmImRegister((Widget)tf);
+       /* CR03685 */
+       SGI_hack_XmImRegister((Widget)tf);
 #else
-	XmImRegister((Widget)tf, (unsigned int) NULL);
+       XmImRegister((Widget)tf, (unsigned int) NULL);
 #endif
-	df_GetXYFromPos(tf, XmTextF_cursor_position(tf), &xmim_point.x, 
-		   &xmim_point.y);
-	n = 0;
-	XtSetArg(args[n], XmNfontList, XmTextF_font_list(tf)); n++;
-	XtSetArg(args[n], XmNbackground, tf->core.background_pixel); n++;
-	XtSetArg(args[n], XmNforeground, tf->primitive.foreground); n++;
-	XtSetArg(args[n], XmNbackgroundPixmap,tf->core.background_pixmap);n++;
-	XtSetArg(args[n], XmNspotLocation, &xmim_point); n++;
-	XtSetArg(args[n], XmNlineSpace,
+       df_GetXYFromPos(tf, XmTextF_cursor_position(tf), &xmim_point.x, 
+		       &xmim_point.y);
+       n = 0;
+       XtSetArg(args[n], XmNfontList, XmTextF_font_list(tf)); n++;
+       XtSetArg(args[n], XmNbackground, tf->core.background_pixel); n++;
+       XtSetArg(args[n], XmNforeground, tf->primitive.foreground); n++;
+       XtSetArg(args[n], XmNbackgroundPixmap,tf->core.background_pixmap);n++;
+       XtSetArg(args[n], XmNspotLocation, &xmim_point); n++;
+       XtSetArg(args[n], XmNlineSpace,
 		 XmTextF_font_ascent(tf)+ XmTextF_font_descent(tf)); n++;
 	XmImSetValues((Widget)tf, args, n);
-    } else if (XmTextF_editable(tf) && !editable){
-	XmImUnregister(w);
+     } else if (XmTextF_editable(tf) && !editable){
+       XmImUnregister(w);
     }
 
     XmTextF_editable(tf) = editable;
-
+    
     n = 0;
     if (editable) {
 	XtSetArg(args[n], XmNdropSiteActivity, XmDROP_SITE_ACTIVE); n++;
@@ -11397,6 +11554,7 @@ XmDataFieldSetEditable(
     }	
 
     XmDropSiteUpdate((Widget)tf, args, n);
+    _XmAppUnlock(app);
 }
 
 int 
@@ -11410,9 +11568,13 @@ XmDataFieldGetMaxLength(
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     int ret_val;
-    
+
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);   
+   
     ret_val = XmTextF_max_length(tf);
     
+    _XmAppUnlock(app);
     return ret_val;
 }
 
@@ -11429,7 +11591,12 @@ XmDataFieldSetMaxLength(
 {
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);   
+
    XmTextF_max_length(tf) = max_length;
+
+   _XmAppUnlock(app);
 }
 
 XmTextPosition 
@@ -11444,8 +11611,12 @@ XmDataFieldGetCursorPosition(
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
    XmTextPosition ret_val;
    
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
    ret_val = XmTextF_cursor_position(tf);
 
+   _XmAppUnlock(app);
    return ret_val;
 }
 
@@ -11460,8 +11631,12 @@ XmDataFieldGetInsertionPosition(
 {
     XmTextPosition ret_val;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
     ret_val = XmDataFieldGetCursorPosition(w);
-   
+
+    _XmAppUnlock(app);
     return ret_val;
 }
 
@@ -11479,7 +11654,11 @@ XmDataFielddf_SetCursorPosition(
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
     df_SetCursorPosition(tf, NULL, position, True, False, False);
+    _XmAppUnlock(app);
 }
 
 void 
@@ -11495,7 +11674,12 @@ XmDataFieldSetInsertionPosition(
 {
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
    df_SetCursorPosition(tf, NULL, position, True, True, False);
+
+   _XmAppUnlock(app);
 }
 
 Boolean 
@@ -11513,13 +11697,18 @@ XmDataFieldGetSelectionPosition(
 {
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
    if (!XmTextF_has_primary(tf)) {
+     _XmAppUnlock(app); 
        return False;
    }
 
    *left = XmTextF_prim_pos_left(tf);
    *right = XmTextF_prim_pos_right(tf);
 
+   _XmAppUnlock(app); 
    return True;
 }
 
@@ -11536,9 +11725,13 @@ XmDataFieldGetSelection(
    size_t length, num_chars;
    char *value;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
     if (XmTextF_prim_pos_left(tf) == XmTextF_prim_pos_right(tf))
     {
-	return NULL;
+      _XmAppUnlock(app);
+      return NULL;
     }
 
     num_chars = (size_t) (XmTextF_prim_pos_right(tf) \
@@ -11571,6 +11764,7 @@ XmDataFieldGetSelection(
     }
     value[length] = (char)'\0';
 
+    _XmAppUnlock(app);
     return value;
 }
 
@@ -11588,9 +11782,13 @@ XmDataFieldGetSelectionWcs(
    wchar_t *wc_value;
    int return_val;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+
    if (XmTextF_prim_pos_left(tf) == XmTextF_prim_pos_right(tf))
    {
-       return NULL;
+     _XmAppUnlock(app);
+     return NULL;
    }
 
    length = (size_t)(XmTextF_prim_pos_right(tf) - 
@@ -11612,6 +11810,7 @@ XmDataFieldGetSelectionWcs(
    }
    wc_value[length] = (wchar_t)0L;
 
+   _XmAppUnlock(app);
    return (wc_value);
 }
 
@@ -11626,9 +11825,13 @@ XmDataFieldRemove(
 #endif /* _NO_PROTO */
 {
     Boolean ret_val;
+
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
     
     ret_val = DataFieldRemove(w, NULL);
-    
+
+    _XmAppUnlock(app);
     return ret_val;
 }
 
@@ -11656,6 +11859,9 @@ XmDataFieldCopy(
     Window window = XtWindow(w);
     char *atom_name;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+    
     /* using the clipboard facilities, copy the selected text to the clipboard */
     if (selected_string != NULL) 
     {
@@ -11670,6 +11876,7 @@ XmDataFieldCopy(
 	{
 	    XtFree(selected_string);
 	    XmStringFree(clip_label);
+	    _XmAppUnlock(app);
 	    return False;
 	}
 
@@ -11682,6 +11889,7 @@ XmDataFieldCopy(
 	    XmClipboardCancelCopy(display, window, item_id);
 	    XtFree(selected_string);
 	    XmStringFree(clip_label);
+	    _XmAppUnlock(app);
 	    return False;
 	}
 
@@ -11699,6 +11907,7 @@ XmDataFieldCopy(
 	    XmClipboardCancelCopy(XtDisplay(w), XtWindow(w), item_id);
 	    XtFree(selected_string);
 	    XmStringFree(clip_label);
+	    _XmAppUnlock(app);
 	    return False;
 	}
 
@@ -11711,21 +11920,23 @@ XmDataFieldCopy(
 	if (status != ClipboardSuccess) 
 	{
 	    XtFree (selected_string);
-
+	    _XmAppUnlock(app);
 	    return False;
 	}
 	
     }	 
     else
-    {
+      {
+	_XmAppUnlock(app);
 	return False;
-    }
+      }
 
     if (selected_string != NULL)
     {
 	XtFree (selected_string);
     }
 
+    _XmAppUnlock(app);
     return True;
 }
 
@@ -11743,9 +11954,13 @@ XmDataFieldCut(
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     Boolean success = False;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+    
     if (XmTextF_editable(tf) == False)
     {
-	return False;
+      _XmAppUnlock(app);
+      return False;
     }
 
     if (XmDataFieldCopy(w, clip_time))
@@ -11756,6 +11971,7 @@ XmDataFieldCut(
 	}
     }
 
+    _XmAppUnlock(app);
     return success;
 }
 
@@ -11794,9 +12010,13 @@ XmDataFieldPaste(
     int i;
     XmAnyCallbackStruct cb;
 
+   _XmWidgetToAppContext(w);    
+   _XmAppLock(app);
+    
     if (XmTextF_editable(tf) == False) 
     {
-	return False;
+      _XmAppUnlock(app);
+      return False;
     }
 
     paste_pos_left = paste_pos_right = XmTextF_cursor_position(tf);
@@ -11810,7 +12030,8 @@ XmDataFieldPaste(
 					  &length);
 	if (status == ClipboardNoData || length == 0) 
 	{
-	    return False;
+	  _XmAppUnlock(app);
+	  return False;
 	}
 	get_ct = True;
    }
@@ -11833,6 +12054,7 @@ XmDataFieldPaste(
    {
        XmClipboardEndRetrieve(display, window);
        XtFree(buffer);
+       _XmAppUnlock(app);
        return False;
    }
 
@@ -11929,6 +12151,8 @@ XmDataFieldPaste(
      		          (XtPointer) &cb);
    }
    XtFree(buffer);
+
+   _XmAppUnlock(app);
    return True;
 }
 
@@ -11942,8 +12166,13 @@ XmDataFielddf_ClearSelection(
         Widget w,
         Time sel_time )
 #endif /* _NO_PROTO */
-{
-    _XmDataFieldDeselectSelection(w, False, sel_time);
+{  
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);
+
+  _XmDataFieldDeselectSelection(w, False, sel_time);
+
+  _XmAppUnlock(app);
 }
 
 void 
@@ -11961,11 +12190,16 @@ XmDataFieldSetSelection(
         Time sel_time )
 #endif /* _NO_PROTO */
 {
-    XmDataFieldWidget tf = (XmDataFieldWidget) w;
+  XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
-    _XmDataFieldStartSelection(tf, first, last, sel_time);
-    XmTextF_pending_off(tf) = False;
-    df_SetCursorPosition(tf, NULL, last, True, True, False);
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);
+
+  _XmDataFieldStartSelection(tf, first, last, sel_time);
+  XmTextF_pending_off(tf) = False;
+  df_SetCursorPosition(tf, NULL, last, True, True, False);
+
+  _XmAppUnlock(app);
 }
 
 /* ARGSUSED */
@@ -11985,8 +12219,12 @@ XmDataFieldXYToPos(
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     XmTextPosition ret_val;
 
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);
+
     ret_val = df_GetPosFromX(tf, x);
 
+    _XmAppUnlock(app);
     return(ret_val);
 }
 
@@ -12005,12 +12243,16 @@ XmDataFieldPosToXY(
 		   Position *y )
 #endif /* _NO_PROTO */
 {
-    XmDataFieldWidget tf = (XmDataFieldWidget) w;
-    Boolean ret_val;
+  XmDataFieldWidget tf = (XmDataFieldWidget) w;
+  Boolean ret_val;
 
-    ret_val = df_GetXYFromPos(tf, position, x, y);
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);
 
-    return(ret_val);
+  ret_val = df_GetXYFromPos(tf, position, x, y);
+
+  _XmAppUnlock(app);
+  return(ret_val);
 }
 
 /*
@@ -12028,13 +12270,19 @@ XmDataFieldShowPosition(
         XmTextPosition position )
 #endif /* _NO_PROTO */
 {
-    XmDataFieldWidget tf = (XmDataFieldWidget) w;
+  XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
-    if (position < 0) {
-	return;
-    }
+  _XmWidgetToAppContext(w);    
+  _XmAppLock(app);
+    
+  if (position < 0) {
+    _XmAppUnlock(app); 
+    return;
+  }
 
-    df_AdjustText(tf, position, True);
+  df_AdjustText(tf, position, True);
+
+  _XmAppUnlock(app);
 }
 
 /* ARGSUSED */
@@ -12055,9 +12303,12 @@ XmDataFieldSetHighlight(
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+ 
     if (left >= right || right <= 0) {
-
-	return;
+      _XmAppUnlock(app);
+      return;
     }
 
     if (left < 0) left = 0;
@@ -12070,7 +12321,7 @@ XmDataFieldSetHighlight(
     DataFieldSetHighlight(tf, left, right, mode);
 
     df_RedisplayText(tf, left, right);
-
+    _XmAppUnlock(app);
 }
 
 /* ARGSUSED */
@@ -12090,6 +12341,9 @@ DataFieldGetBaselines(
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     Dimension *base_array;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+ 
     *line_count = 1;
     base_array = (Dimension *) XtMalloc(sizeof(Dimension));
     base_array[0] = XmTextF_margin_top(tf) + tf->primitive.shadow_thickness +
@@ -12097,6 +12351,7 @@ DataFieldGetBaselines(
 
     *baselines = base_array;
 
+    _XmAppUnlock(app);
     return (TRUE);
 }
 
@@ -12113,12 +12368,16 @@ XmDataFieldGetBaseline(
     Dimension margin_top;
     int ret_val;
 
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+ 
     margin_top = XmTextF_margin_top(tf) +
 	tf->primitive.shadow_thickness +
 	tf->primitive.highlight_thickness;
 
     ret_val = (int) margin_top + (int) XmTextF_font_ascent(tf);
-    
+
+    _XmAppUnlock(app);
     return(ret_val);
 }
 
@@ -12134,6 +12393,7 @@ DataFieldGetDisplayRect(
 #endif /* _NO_PROTO */
 {
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
+
    Position margin_width = XmTextF_margin_width(tf) +
 	               	   tf->primitive.shadow_thickness +
 		       	   tf->primitive.highlight_thickness;

@@ -479,7 +479,7 @@ typedef struct _XiTabCanvasRec {
     XiTabCanvasPart canvas;
 } XiTabCanvasRec;
 
-XiTabCanvasClassRec xiTabCanvasClassRec = {
+XiTabCanvasClassRec xmTabCanvasClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmPrimitiveClassRec,
     /* class_name	  */	"XiTabCanvas",
@@ -527,7 +527,7 @@ XiTabCanvasClassRec xiTabCanvasClassRec = {
   }
 };
 
-XmTabBoxClassRec xiTabBoxClassRec = {
+XmTabBoxClassRec xmTabBoxClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmManagerClassRec,
     /* class_name	  */	"XmTabBox",
@@ -587,8 +587,8 @@ XmTabBoxClassRec xiTabBoxClassRec = {
     /* extension          */    (XtPointer) NULL }
 };
 
-WidgetClass xiTabCanvasWidgetClass = (WidgetClass) &xiTabCanvasClassRec;
-WidgetClass xiTabBoxWidgetClass = (WidgetClass) &xiTabBoxClassRec;
+WidgetClass xmTabCanvasWidgetClass = (WidgetClass) &xmTabCanvasClassRec;
+WidgetClass xmTabBoxWidgetClass = (WidgetClass) &xmTabBoxClassRec;
 
 XmOffsetPtr XmTabBox_offsets;
 XmOffsetPtr XmTabBoxC_offsets;
@@ -602,7 +602,7 @@ TabCanvasClassInitialize(void)
 TabCanvasClassInitialize()
 #endif
 {
-    XmResolveAllPartOffsets(xiTabCanvasWidgetClass,
+    XmResolveAllPartOffsets(xmTabCanvasWidgetClass,
 			    &XiTabCanvas_offsets,
 			    NULL);
 }
@@ -614,7 +614,7 @@ ClassInitialize(void)
 ClassInitialize()
 #endif
 {
-    XmResolveAllPartOffsets(xiTabBoxWidgetClass,
+    XmResolveAllPartOffsets(xmTabBoxWidgetClass,
 			    &XmTabBox_offsets,
 			    &XmTabBoxC_offsets);
 
@@ -679,7 +679,7 @@ Initialize(request, set, arg_list, arg_cnt)
     _XmFilterArgs(arg_list, *arg_cnt, xm_std_filter,
 		  &filtered_args, &num_filtered_args);
     XmTabBox__canvas(st) =
-	XtCreateManagedWidget("canvas", xiTabCanvasWidgetClass, set,
+	XtCreateManagedWidget("canvas", xmTabCanvasWidgetClass, set,
 			      filtered_args, num_filtered_args);
 
 #ifdef SCROLLED_LAYOUT
@@ -741,7 +741,7 @@ Realize(Widget widget, XtValueMask *value_mask,
     XGCValues        gcValues;
     XFontStruct      *font;
 
-    (*xiTabBoxWidgetClass->core_class.superclass->core_class.realize)
+    (*xmTabBoxWidgetClass->core_class.superclass->core_class.realize)
 	(widget, value_mask, attributes);
     /*
      * Now lets create a GC that we will use for drawing.  We create
@@ -8969,4 +8969,12 @@ GetShellVisual(Widget widget)
 	return( DefaultVisualOfScreen(XtScreen(widget)) );
     }
     return( visual );
+}
+
+Widget
+XmCreateTabBox(Widget parent, String name, ArgList arg_list,
+		 Cardinal arg_cnt)
+{
+    return( XtCreateWidget(name, xmTabBoxWidgetClass, parent, arg_list,
+			   arg_cnt) );
 }

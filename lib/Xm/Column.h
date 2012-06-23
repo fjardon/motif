@@ -37,10 +37,6 @@ extern WidgetClass xmColumnWidgetClass;
 typedef struct _XmColumnClassRec * XmColumnWidgetClass;
 typedef struct _XmColumnRec      * XmColumnWidget;
 
-enum { XmFILL_UNSPECIFIED, XmFILL_FLUSH, XmFILL_RAGGED };
-
-enum { XmDISTRIBUTE_TIGHT, XmDISTRIBUTE_SPREAD };
-
 #ifndef XmIsColumn
 #define XmIsColumn(w) (XtIsSubclass(w, xmColumnWidgetClass))
 #endif

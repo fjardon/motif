@@ -47,6 +47,8 @@ typedef struct _XmTabBoxClassRec {
     XmTabBoxClassPart    tab_box_class;
 } XmTabBoxClassRec;
 
+externalref XmTabBoxClassRec xmTabBoxClassRec;
+
 typedef struct _XmTabBoxPart {
     XmFontList          font_list;
     XmTabStyle          tab_style;

@@ -37,6 +37,7 @@
 #include <Xm/BulletinB.h>
 #include <Xm/CascadeB.h>
 #include <Xm/CascadeBG.h>
+#include <Xm/Column.h>
 #include <Xm/ComboBox.h>
 #include <Xm/Command.h>
 #include <Xm/Container.h>
@@ -85,6 +86,7 @@
 #include <Xm/SeparatoG.h>
 #include <Xm/Separator.h>
 #include <Xm/SpinB.h>
+#include <Xm/TabStack.h>
 #include <Xm/Text.h>
 #include <Xm/TextF.h>
 #include <Xm/ToggleB.h>

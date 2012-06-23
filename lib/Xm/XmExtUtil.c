@@ -77,11 +77,6 @@ String xm_std_constraint_filter[] = { XmNx, XmNy, XmNwidth, XmNheight,
 			   XmNdFieldPrefWidth, XmNdFieldMaxWidth,
                            XmNdFieldMinHeight, XmNdFieldMinWidth,
 			   /* CR03683 */ XmNpixmapWidth, XmNpixmapHeight,
-#ifdef BXDB
-			   XmNexclusive, XmNmapType, XmNmap, XmNdataSource,
-                           XmNexpression, XmNquery, XmNdataType, XmNsearchable,
-                           XmNreceivesData, XmNstorage,
-#endif		
 			   NULL };
 
 /************************************************************
@@ -475,13 +470,9 @@ _XmGetMBStringFromXmString(XmString xmstr)
 void 
 _XmMoveWidget(Widget w, Position x, Position y)
 {
-#if (XmVersion > 1001)
     XmDropSiteStartUpdate(w);
     XtMoveWidget(w, x, y);
     XmDropSiteEndUpdate(w);
-#else
-    XtMoveWidget(w, x, y);
-#endif
 }
 
 /*	Function Name: _XmResizeWidget

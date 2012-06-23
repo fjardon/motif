@@ -64,6 +64,7 @@
 #include <Xm/TextF.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransltnsP.h>
+#include <Xm/VaSimpleP.h>
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
 #include "MessagesI.h"
@@ -2779,7 +2780,9 @@ CvtStringToPositionValue(
  */
 
 /************************************************************************
- *  XmCreateSpinBox
+ *  XmCreateSpinBox()
+ *  XmVaCreateSpinBox()
+ *  XmVaCreateManagedSpinBox()
  *	Create an instance of a Spin widget and return the widget id.
  ************************************************************************/
 Widget 
@@ -2789,7 +2792,53 @@ XmCreateSpinBox(Widget parent, String name,
   return(XtCreateWidget(name, xmSpinBoxWidgetClass, parent,
 			arglist, argcount));
 }
+Widget 
+XmVaCreateSpinBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSpinBoxWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedSpinBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSpinBoxWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
 /************************************************************************
  *  XmSpinBoxValidatePosition
  *	Validate the position value specified in string.

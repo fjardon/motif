@@ -117,6 +117,8 @@ typedef struct _XmOutlineClassRec {
     OutlineClassPart    	outline_class;
 } XmOutlineClassRec;
 
+externalref XmOutlineClassRec xmOutlineClassRec;
+
 typedef struct _OutlineNodeInfo {
     /*
      * Public (Resource) data.

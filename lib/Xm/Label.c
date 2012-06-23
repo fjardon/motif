@@ -56,6 +56,7 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #include <Xm/TraitP.h>
 #include <Xm/TransferT.h>
 #include <Xm/TransltnsP.h>
+#include <Xm/VaSimpleP.h>
 #include "GadgetUtiI.h"
 #include "GMUtilsI.h"
 #include "LabelGI.h"
@@ -2002,7 +2003,9 @@ GetAcceleratorText(Widget wid,
 
 /************************************************************************
  *
- *  XmCreateLabelWidget
+ *  XmCreateLabel()
+ *  XmVaCreateLabel()
+ *  XmVaCreateManagedLabel()
  *      Externally accessable function for creating a label gadget.
  *
  ************************************************************************/
@@ -2015,6 +2018,56 @@ XmCreateLabel(Widget parent,
 {
   return XtCreateWidget(name,xmLabelWidgetClass,parent,arglist,argCount);
 }
+
+Widget 
+XmVaCreateLabel(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmLabelWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+
+Widget 
+XmVaCreateManagedLabel(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmLabelWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+
 
 static XmStringCharSet 
 _XmStringCharSetCreate(XmStringCharSet stringcharset)
@@ -2543,8 +2596,12 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
     *flag = (ret_status == Success);
   } else {
     /* Locale encoding */
+    /* Fix for Bug 1117 - if str is null then a SEGVIOLATION occures
+     * in strlen.
+     */
     rval = _XmTextToLocaleText(w, (XtPointer) str,
-			       COMPOUND_TEXT, 8, strlen(str),
+			       COMPOUND_TEXT, 8, 
+			       (str)?strlen(str):0,
 			       flag);
   }
 

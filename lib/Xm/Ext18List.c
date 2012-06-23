@@ -32,6 +32,7 @@
 
 #include <stdio.h>
 
+#include <Xm/XmI.h>
 #include <Xm/Ext18ListP.h>
 #include <Xm/Frame.h>
 #include <Xm/Label.h>
@@ -1046,8 +1047,16 @@ Xm18RowInfo **
 XmExt18ListGetSelectedRows(Widget w)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
+    Xm18RowInfo **ret_rows = NULL;
 
-    return(XmI18ListGetSelectedRows(XmExt18List_ilist(elist)));
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
+    ret_rows = (Xm18RowInfo **) XtMalloc(sizeof(Xm18RowInfo *) + 1);
+    ret_rows = XmI18ListGetSelectedRows(XmExt18List_ilist(elist));
+
+    _XmAppUnlock(app); 
+    return ret_rows;
 }
 
 /*	Function Name: XmCreateExtended18List
@@ -1086,7 +1095,12 @@ XmExt18ListUnselectAllItems( Widget w )
 {
   XmExt18ListWidget elist = (XmExt18ListWidget)w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
   Xm18IListUnselectAllItems( XmExt18List_ilist(elist) );
+
+  _XmAppUnlock(app); 
 }
 
 
@@ -1100,8 +1114,13 @@ void
 XmExt18ListUnselectItem( Widget w, Xm18RowInfo *row_info )
 {
   XmExt18ListWidget elist = (XmExt18ListWidget) w;
+
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
   
   Xm18IListUnselectItem( XmExt18List_ilist(elist), row_info );
+
+    _XmAppUnlock(app); 
 }
 
 
@@ -1115,7 +1134,12 @@ XmExt18ListToggleRow(Widget w, short row)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     XmI18ListToggleRow(XmExt18List_ilist(elist), row);
+
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18ListSelectItems
@@ -1130,9 +1154,14 @@ void XmExt18ListSelectItems(Widget w, XmString item,
 			    int column, Boolean notify)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
+
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
     
     XmI18ListSelectItems((XmI18ListWidget)XmExt18List_ilist(elist),
 			 item, column, notify);
+
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18ListDeselectItems
@@ -1147,8 +1176,12 @@ XmExt18ListDeselectItems(Widget w, XmString item, int column)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     XmI18ListDeselectItems((XmI18ListWidget)XmExt18List_ilist(elist),
 			   item, column);
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18ListSelectAllItems
@@ -1160,8 +1193,12 @@ XmExt18ListDeselectItems(Widget w, XmString item, int column)
 void XmExt18ListSelectAllItems(Widget w, Boolean notify)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
+
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
     
     XmI18ListSelectAllItems((XmI18ListWidget)XmExt18List_ilist(elist), notify);
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18ListSelectRow
@@ -1176,7 +1213,11 @@ XmExt18ListSelectRow(Widget w, int row, Boolean notify)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     XmI18ListSelectRow((XmI18ListWidget)XmExt18List_ilist(elist), row, notify);
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18ListDeselectRow
@@ -1190,7 +1231,11 @@ XmExt18ListDeselectRow(Widget w, int row)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     XmI18ListDeselectRow((XmI18ListWidget)XmExt18List_ilist(elist), row);
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18GetSelectedRowArray
@@ -1204,9 +1249,14 @@ int *
 XmExt18ListGetSelectedRowArray(Widget w, int *num_rows)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
+    int ret_val;
 
-    return XmI18ListGetSelectedRowArray((XmI18ListWidget)XmExt18List_ilist(elist),
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
+    ret_val = XmI18ListGetSelectedRowArray((XmI18ListWidget)XmExt18List_ilist(elist),
 					num_rows);
+    _XmAppUnlock(app); 
 }
 
 /*  Function Name: XmExt18ListMakeRowVisible
@@ -1220,7 +1270,12 @@ XmExt18ListMakeRowVisible(Widget w, int row)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     XmI18ListMakeRowVisible((XmI18ListWidget)XmExt18List_ilist(elist), row);
+
+    _XmAppUnlock(app); 
 }
 
 

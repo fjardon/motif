@@ -53,25 +53,33 @@ typedef struct _XmScaleRec      * XmScaleWidget;
 
 /********    Public Function Declarations    ********/
 
-extern void XmScaleSetValue( 
-                        Widget w,
-                        int value) ;
-extern void XmScaleGetValue( 
-                        Widget w,
-                        int *value) ;
-extern Widget XmCreateScale( 
-                        Widget parent,
-                        char *name,
-                        ArgList arglist,
-                        Cardinal argcount) ;
-extern void XmScaleSetTicks(
-			    Widget scale,
-			    int big_every,
-			    Cardinal num_med,
-			    Cardinal num_small, 
-			    Dimension  size_big,
-			    Dimension  size_med,
-			    Dimension  size_small);
+void XmScaleSetValue( 
+                 Widget w,
+                 int value) ;
+void XmScaleGetValue( 
+                 Widget w,
+                 int *value) ;
+Widget XmCreateScale( 
+                 Widget parent,
+                 char *name,
+                 ArgList arglist,
+                 Cardinal argcount) ;
+Widget XmVaCreateScale(
+                 Widget parent,
+                 char *name,
+                 ...);
+Widget XmVaCreateManagedScale(
+                 Widget parent,
+                 char *name,
+                 ...);
+void XmScaleSetTicks(
+                     Widget scale,
+                     int big_every,
+		     Cardinal num_med,
+		     Cardinal num_small, 
+		     Dimension  size_big,
+		     Dimension  size_med,
+		     Dimension  size_small);
 /********    End Public Function Declarations    ********/
 
 

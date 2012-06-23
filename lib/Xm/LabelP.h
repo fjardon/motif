@@ -26,8 +26,8 @@
 /* $XConsortium: LabelP.h /main/13 1995/10/25 20:08:32 cde-sun $ */
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-#ifndef _XmLabelP_h
-#define _XmLabelP_h
+#ifndef _XmLabelP_h_
+#define _XmLabelP_h_
 
 #include <Xm/Label.h>
 #include <Xm/PrimitiveP.h>

@@ -73,6 +73,7 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 #include <sys/file.h>
 #endif
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /*

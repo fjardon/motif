@@ -46,9 +46,6 @@ extern "C" {
 typedef struct _XmHierarchyClassRec	*XmHierarchyWidgetClass;
 typedef struct _XmHierarchyRec		*XmHierarchyWidget;
 
-typedef enum {XmAlwaysOpen, XmOpen, XmClosed, XmHidden,
-	      XmNotInHierarchy} XmHierarchyNodeState;
-
 typedef struct _XmHierarchyNodeStateData {
     Widget widget;
     XmHierarchyNodeState state;
@@ -68,26 +65,14 @@ typedef struct _XmHierarchyNodeStateData {
  *	Returns: none
  */
 
-void XmHierarchyOpenAllAncestors(
-#ifndef _NO_PROTO
-Widget
-#endif
-);
+void XmHierarchyOpenAllAncestors(Widget);
 
-WidgetList XmHierarchyGetChildNodes(
-#ifndef _NO_PROTO
-Widget
-#endif
-);
+WidgetList XmHierarchyGetChildNodes(Widget);
 
-extern WidgetClass xiHierarchyWidgetClass;
+extern WidgetClass xmHierarchyWidgetClass;
 
 #if defined(__cplusplus)
 }
-#endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
 #endif
 
 #endif /* _Hierarchy_h */

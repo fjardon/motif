@@ -49,6 +49,7 @@ static char rcsid[] = "$TOG: ToggleB.c /main/43 1999/12/06 18:09:38 samborn $"
 #include <Xm/ToggleBP.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransltnsP.h>
+#include <Xm/VaSimpleP.h>
 #include "ColorI.h"
 #include "LabelI.h"
 #include "MenuProcI.h"
@@ -3374,7 +3375,9 @@ XmToggleButtonSetValue(
   
 /***********************************************************************
  *
- * XmCreateToggleButton
+ * XmCreateToggleButton()
+ * XmVaCreateToggleButton()
+ * XmVaCreateManagedToggleButton()
  *   Creates an instance of a togglebutton and returns the widget id.
  *
  ************************************************************************/
@@ -3388,6 +3391,60 @@ XmCreateToggleButton(
   return XtCreateWidget(name, xmToggleButtonWidgetClass, parent,
 			arglist, argCount);
 }
+
+
+Widget 
+XmVaCreateToggleButton(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmToggleButtonWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedToggleButton(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmToggleButtonWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+
+
+
+
+
 
 /*
  * DrawToggleShadow (tb)

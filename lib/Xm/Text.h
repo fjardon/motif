@@ -76,175 +76,183 @@ extern void XmTextSetHighlight(
                         Widget w,
                         XmTextPosition left,
                         XmTextPosition right,
-                        XmHighlightMode mode) ;
+                        XmHighlightMode mode);
 extern Widget XmCreateScrolledText( 
                         Widget parent,
                         char *name,
                         ArgList arglist,
-                        Cardinal argcount) ;
+                        Cardinal argcount);
 extern Widget XmCreateText( 
                         Widget parent,
                         char *name,
                         ArgList arglist,
-                        Cardinal argcount) ;
+                        Cardinal argcount);
+extern Widget XmVaCreateText(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedText(
+                        Widget parent,
+                        char *name,
+                        ...);
 extern int XmTextGetSubstring( 
                         Widget widget,
                         XmTextPosition start,
                         int num_chars,
                         int buf_size,
-                        char *buffer) ;
+                        char *buffer);
 extern int XmTextGetSubstringWcs( 
                         Widget widget,
                         XmTextPosition start,
                         int num_chars,
                         int buf_size,
-                        wchar_t *buffer) ;
+                        wchar_t *buffer);
 extern char * XmTextGetString( 
-                        Widget widget) ;
+                        Widget widget);
 extern wchar_t * XmTextGetStringWcs( 
-                        Widget widget) ;
+                        Widget widget);
 extern XmTextPosition XmTextGetLastPosition( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetString( 
                         Widget widget,
-                        char *value) ;
+                        char *value);
 extern void XmTextSetStringWcs( 
                         Widget widget,
-                        wchar_t *wc_value) ;
+                        wchar_t *wc_value);
 extern void XmTextReplace( 
                         Widget widget,
                         XmTextPosition frompos,
                         XmTextPosition topos,
-                        char *value) ;
+                        char *value);
 extern void XmTextReplaceWcs( 
                         Widget widget,
                         XmTextPosition frompos,
                         XmTextPosition topos,
-                        wchar_t *value) ;
+                        wchar_t *value);
 extern void XmTextInsert( 
                         Widget widget,
                         XmTextPosition position,
-                        char *value) ;
+                        char *value);
 extern void XmTextInsertWcs( 
                         Widget widget,
                         XmTextPosition position,
-                        wchar_t *wc_value) ;
+                        wchar_t *wc_value);
 extern void XmTextSetAddMode( 
                         Widget widget,
 #if NeedWidePrototypes
-                        int state) ;
+                        int state);
 #else
-                        Boolean state) ;
+                        Boolean state);
 #endif /* NeedWidePrototypes */
 extern Boolean XmTextGetAddMode( 
-                        Widget widget) ;
+                        Widget widget);
 extern Boolean XmTextGetEditable( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetEditable( 
                         Widget widget,
 #if NeedWidePrototypes
-                        int editable) ;
+                        int editable);
 #else
-                        Boolean editable) ;
+                        Boolean editable);
 #endif /* NeedWidePrototypes */
 extern int XmTextGetMaxLength( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetMaxLength( 
                         Widget widget,
-                        int max_length) ;
+                        int max_length);
 extern XmTextPosition XmTextGetTopCharacter( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetTopCharacter( 
                         Widget widget,
-                        XmTextPosition top_character) ;
+                        XmTextPosition top_character);
 extern XmTextPosition XmTextGetCursorPosition( 
-                        Widget widget) ;
+                        Widget widget);
 extern XmTextPosition XmTextGetInsertionPosition( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetInsertionPosition( 
                         Widget widget,
-                        XmTextPosition position) ;
+                        XmTextPosition position);
 extern void XmTextSetCursorPosition( 
                         Widget widget,
-                        XmTextPosition position) ;
+                        XmTextPosition position);
 extern Boolean XmTextRemove( 
-                        Widget widget) ;
+                        Widget widget);
 extern Boolean XmTextCopy( 
                         Widget widget,
-                        Time copy_time) ;
+                        Time copy_time);
 extern Boolean XmTextCopyLink( 
                         Widget widget,
-                        Time copy_time) ;
+                        Time copy_time);
 extern Boolean XmTextCut( 
                         Widget widget,
-                        Time cut_time) ;
+                        Time cut_time);
 extern Boolean XmTextPaste( 
-                        Widget widget) ;
+                        Widget widget);
 extern Boolean XmTextPasteLink( 
-                        Widget widget) ;
+                        Widget widget);
 extern char * XmTextGetSelection( 
-                        Widget widget) ;
+                        Widget widget);
 extern wchar_t * XmTextGetSelectionWcs( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetSelection( 
                         Widget widget,
                         XmTextPosition first,
                         XmTextPosition last,
-                        Time set_time) ;
+                        Time set_time);
 extern void XmTextClearSelection( 
                         Widget widget,
-                        Time clear_time) ;
+                        Time clear_time);
 extern Boolean XmTextGetSelectionPosition( 
                         Widget widget,
                         XmTextPosition *left,
-                        XmTextPosition *right) ;
+                        XmTextPosition *right);
 extern XmTextPosition XmTextXYToPos( 
                         Widget widget,
 #if NeedWidePrototypes
                         int x,
-                        int y) ;
+                        int y);
 #else
                         Position x,
-                        Position y) ;
+                        Position y);
 #endif /* NeedWidePrototypes */
 extern Boolean XmTextPosToXY( 
                         Widget widget,
                         XmTextPosition position,
                         Position *x,
-                        Position *y) ;
+                        Position *y);
 extern XmTextSource XmTextGetSource( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextSetSource( 
                         Widget widget,
                         XmTextSource source,
                         XmTextPosition top_character,
-                        XmTextPosition cursor_position) ;
+                        XmTextPosition cursor_position);
 extern void XmTextShowPosition( 
                         Widget widget,
-                        XmTextPosition position) ;
+                        XmTextPosition position);
 extern void XmTextScroll( 
                         Widget widget,
-                        int n) ;
+                        int n);
 extern int XmTextGetBaseline( 
-                        Widget widget) ;
+                        Widget widget);
 extern int XmTextGetCenterline( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextDisableRedisplay( 
-                        Widget widget) ;
+                        Widget widget);
 extern void XmTextEnableRedisplay( 
-                        Widget widget) ;
+                        Widget widget);
 extern Boolean XmTextFindString( 
                         Widget w,
                         XmTextPosition start,
                         char *search_string,
                         XmTextDirection direction,
-                        XmTextPosition *position) ;
+                        XmTextPosition *position);
 extern Boolean XmTextFindStringWcs( 
                         Widget w,
                         XmTextPosition start,
                         wchar_t *wc_string,
                         XmTextDirection direction,
-                        XmTextPosition *position) ;
+                        XmTextPosition *position);
 
 /********    End Public Function Declarations    ********/
 

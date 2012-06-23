@@ -664,8 +664,8 @@ static XmTableDefaultProcRec default_procs[] = {
 };
 
 #ifdef XmRENAME_WIDGETS
-#define xiTableClipWidgetClass  xiXXTableClipWidgetClass
-#define xiTableClipClassRec xiXXTableClipClassRec
+#define xmTableClipWidgetClass  xmXXTableClipWidgetClass
+#define xmTableClipClassRec xmXXTableClipClassRec
 #endif
 
 /*
@@ -710,7 +710,7 @@ typedef struct _XmTableClipRec {
     XmTableClipPart        clip;
 } XmTableClipRec, * XmTableClipWidget;
 
-XmTableClipClassRec xiTableClipClassRec = {
+XmTableClipClassRec xmTableClipClassRec = {
     { /* Core Class Part */
 	(WidgetClass)&xmDrawingAreaClassRec, /* superclass		    */
 	"XmTableClip",			/* class_name			    */
@@ -841,7 +841,7 @@ XmTableClassRec xmTableClassRec = {
 	(XtPointer) NULL },		/* extension			    */
 };
 
-WidgetClass xiTableClipWidgetClass = (WidgetClass) &xiTableClipClassRec;
+WidgetClass xiTableClipWidgetClass = (WidgetClass) &xmTableClipClassRec;
 WidgetClass xmTableWidgetClass = (WidgetClass) &xmTableClassRec;
 
 XmOffsetPtr XmTable_offsets;

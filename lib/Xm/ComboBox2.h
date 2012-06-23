@@ -47,6 +47,9 @@
 extern "C" {
 #endif
 
+enum { XiCOMBINATIONBOX2_LABEL, XiCOMBINATIONBOX2_TEXT,
+       XiCOMBINATIONBOX2_ARROW_BUTTON, XiCOMBINATIONBOX2_LIST };
+
 typedef struct _XmCombinationBox2ClassRec	*XmCombinationBox2WidgetClass;
 typedef struct _XmCombinationBox2Rec		*XmCombinationBox2Widget;
 
@@ -132,6 +135,17 @@ Widget
 #endif
 );
 
+/*      Function Name:  XmCombinationBox2GetChild
+ *      Description:    Returns the child widget id of the XmCombinationBox2
+ *      Arguments:      w - The XmCombinationBox2 Widget
+ *      Returns:        The specified child of the XmCombinationBox2
+ */
+Widget XmCombinationBox2GetChild(
+#ifndef _NO_PROTO
+Widget,
+int
+#endif
+);
 
 /************************************************************
  *	EXTERNAL DECLARATIONS

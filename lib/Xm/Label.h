@@ -57,7 +57,14 @@ extern Widget XmCreateLabel(
                         char *name,
                         Arg *arglist,
                         Cardinal argCount) ;
-
+extern Widget XmVaCreateLabel(
+        Widget parent,
+        char *name,
+        ...);
+extern Widget XmVaCreateManagedLabel(
+        Widget parent,
+        char *name,
+        ...);
 /********    End Public Function Declarations    ********/
 
 

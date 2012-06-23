@@ -31,21 +31,6 @@
 extern "C" {
 #endif
 
-typedef enum {XmTABS_SQUARED, XmTABS_ROUNDED, XmTABS_BEVELED} XmTabStyle;
-typedef enum {XmTABS_BASIC, XmTABS_STACKED, XmTABS_STACKED_STATIC,
-	      XmTABS_SCROLLED, XmTABS_OVERLAYED} XmTabMode;
-
-typedef enum {XmTAB_ORIENTATION_DYNAMIC, XmTABS_RIGHT_TO_LEFT,
-	      XmTABS_LEFT_TO_RIGHT, XmTABS_TOP_TO_BOTTOM,
-	      XmTABS_BOTTOM_TO_TOP} XmTabOrientation;
-
-typedef enum {XmTAB_EDGE_TOP_LEFT, XmTAB_EDGE_BOTTOM_RIGHT} XmTabEdge;
-
-typedef enum {XmTAB_ARROWS_ON_RIGHT, XmTAB_ARROWS_ON_LEFT,
-	      XmTAB_ARROWS_SPLIT} XmTabArrowPlacement;
-
-enum {XmCR_TAB_SELECTED, XmCR_TAB_UNSELECTED};
-
 typedef struct _XmTabBoxCallbackStruct {
     int       reason;
     XEvent    *event;
@@ -56,10 +41,10 @@ typedef struct _XmTabBoxCallbackStruct {
 typedef struct _XmTabBoxRec      *XmTabBoxWidget;
 typedef struct _XmTabBoxClassRec *XmTabBoxWidgetClass;
 
-extern WidgetClass               xiTabBoxWidgetClass;
+extern WidgetClass               xmTabBoxWidgetClass;
 
 #ifndef XmIsTabBox
-#define XmIsTabBox(w) XtIsSubclass(w, xiTabBoxWidgetClass)
+#define XmIsTabBox(w) XtIsSubclass(w, xmTabBoxWidgetClass)
 #endif /* XmIsTabBox */
 
 Widget XmCreateTabBox(Widget, String, ArgList, Cardinal);

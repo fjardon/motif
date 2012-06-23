@@ -35,7 +35,7 @@
 *	TYPEDEFS AND DEFINES
 *************************************************************/
 
-#define SUPERCLASS (&xiHierarchyClassRec)
+#define SUPERCLASS (&xmHierarchyClassRec)
 
 #define INDENT_SPACE 30
 
@@ -406,9 +406,7 @@ Redisplay(Widget w, XEvent * event, Region region)
     RedispInfo info;
     int lrx, lry;		/* local variables fro lower left corner. */
 
-#if (XmVersion > 1001)
     XmDropSiteStartUpdate(w);
-#endif
 
     /*
      * Make sure that there are not more expose events pending in the queue
@@ -457,9 +455,7 @@ Redisplay(Widget w, XEvent * event, Region region)
 	XmTree_lr_point(tw).x = XmTree_lr_point(tw).y = 0;
     }
 
-#if (XmVersion > 1001)
     XmDropSiteEndUpdate(w);
-#endif
 }
 
 /*	Function Name: CheckExpose
@@ -1578,9 +1574,7 @@ LayoutChildren(Widget w, Widget assign_child)
     register int i, extra_space;
     Boolean register_workproc = True;
 
-#if (XmVersion > 1001)
     XmDropSiteStartUpdate(w);
-#endif
 
     /*
      * Remove the old list, replace it with the new one.
@@ -1677,9 +1671,7 @@ LayoutChildren(Widget w, Widget assign_child)
 			     MoveNodesTimer, (XtPointer) w);
     }
 
-#if (XmVersion > 1001)
     XmDropSiteEndUpdate(w);
-#endif
 }
 
 /*	Function Name: GetExtraVertSpace

@@ -43,6 +43,7 @@ static char rcsid[] = "$TOG: ArrowBG.c /main/20 1999/01/26 15:30:15 mgreess $"
 #include <Xm/AccColorT.h>
 #include <Xm/ActivatableT.h>
 #include <Xm/CareVisualT.h>
+#include <Xm/VaSimpleP.h>
 #include "ColorI.h"
 #include "PixConvI.h"
 #include "PrimitiveI.h"
@@ -1338,6 +1339,54 @@ XmCreateArrowButtonGadget(
 {
   return XtCreateWidget(name, xmArrowButtonGadgetClass, parent, 
 			arglist, argcount);
+}
+
+Widget 
+XmVaCreateArrowButtonGadget(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmArrowButtonGadgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedArrowButtonGadget(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmArrowButtonGadgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
 }
 
 /* ARGSUSED */

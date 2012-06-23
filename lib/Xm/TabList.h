@@ -28,12 +28,6 @@
 extern "C" {
 #endif
 
-typedef enum {XmPIXMAP_TOP, XmPIXMAP_BOTTOM, XmPIXMAP_RIGHT, XmPIXMAP_LEFT,
-	      XmPIXMAP_NONE, XmPIXMAP_ONLY} XmPixmapPlacement;
-typedef enum {XmTAB_VALUE_COPY, XmTAB_VALUE_SHARE} XmTabValueMode;
-
-typedef enum {XmTAB_CMP_VISUAL, XmTAB_CMP_SIZE, XmTAB_CMP_EQUAL} XmTabResult;
-
 #define XmCOLOR_DYNAMIC ((Pixel)-1)
 #define XmPIXMAP_DYNAMIC ((Pixmap) 3)
 #define XmTAB_LAST_POSITION -1

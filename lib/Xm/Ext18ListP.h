@@ -146,6 +146,7 @@ typedef struct _XmI18ListClassRec {
     XmPrimitiveClassPart	primitive;
     I18ListClassPart		ilist_class;
 } XmI18ListClassRec;
+externalref XmI18ListClassRec xmI18ListClassRec;
 
 typedef struct _XmI18ListPart {
     /*

@@ -27,6 +27,7 @@
 *************************************************************/
 #include <stdio.h>
 
+#include <Xm/XmI.h>
 #include <Xm/IconBoxP.h>
 #include <Xm/ExtP.h>
 
@@ -973,6 +974,9 @@ XmIconBoxIsCellEmpty(Widget w, Position x, Position y, Widget ignore)
     XmIconBoxWidget ibw = (XmIconBoxWidget) w;
     Widget * childp;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     ForAllChildren(ibw, childp) {   
 	IconInfo * info;
 
@@ -984,8 +988,13 @@ XmIconBoxIsCellEmpty(Widget w, Position x, Position y, Widget ignore)
 
 	info = GetIconInfo(*childp);
 	if ((x == info->cell_x) && (y == info->cell_y))
+	  {
+	    _XmAppUnlock(app);
 	    return(False);
+	  }
     }
+
+    _XmAppUnlock(app);
     return(True);
 }
 

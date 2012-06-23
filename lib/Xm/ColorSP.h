@@ -72,6 +72,8 @@ typedef struct _XmColorSelectorClassRec
     ColorSelectorClassPart	color_selector_class;
 } XmColorSelectorClassRec;
 
+externalref XmColorSelectorClassRec xmColorSelectorClassRec;
+
 typedef struct _XmColorSelectorPart
 {
     /* resources */

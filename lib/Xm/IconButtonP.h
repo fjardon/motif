@@ -25,9 +25,6 @@
 #ifndef _XmIconButtonP_h
 #define _XmIconButtonP_h
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
 
 /************************************************************
 *	INCLUDE FILES
@@ -173,7 +170,7 @@ typedef struct _XmIconButtonRec {
 *	EXTERNAL DECLARATIONS
 *************************************************************/
 
-extern XmIconButtonClassRec xiIconButtonClassRec;
+extern XmIconButtonClassRec xmIconButtonClassRec;
 
 /************************************************************
 *	STATIC DECLARATIONS
@@ -183,18 +180,14 @@ extern XmIconButtonClassRec xiIconButtonClassRec;
 }	/* Closes scope of 'extern "C"' declaration */
 #endif
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
 
 
-
-extern void _XmPrimitiveEnter(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
-extern void _XmPrimitiveLeave(
+void _XmPrimitiveEnter(
+                 Widget wid,
+                 XEvent *event,
+                 String *params,
+                 Cardinal *num_params) ;
+void _XmPrimitiveLeave(
                         Widget wid,
                         XEvent *event,
                         String *params,

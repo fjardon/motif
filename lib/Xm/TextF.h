@@ -61,141 +61,149 @@ externalref WidgetClass       xmTextFieldWidgetClass;
 
 /********    Public Function Declarations    ********/
 
-extern char * XmTextFieldGetString( 
-                        Widget w) ;
-extern int XmTextFieldGetSubstring( 
-                        Widget widget,
-                        XmTextPosition start,
-                        int num_chars,
-                        int buf_size,
-                        char *buffer) ;
-extern wchar_t * XmTextFieldGetStringWcs( 
-                        Widget w) ;
-extern int XmTextFieldGetSubstringWcs( 
-                        Widget widget,
-                        XmTextPosition start,
-                        int num_chars,
-                        int buf_size,
-                        wchar_t *buffer) ;
-extern XmTextPosition XmTextFieldGetLastPosition( 
-                        Widget w) ;
-extern void XmTextFieldSetString( 
-                        Widget w,
-                        char *value) ;
-extern void XmTextFieldSetStringWcs( 
-                        Widget w,
-                        wchar_t *wc_value) ;
-extern void XmTextFieldReplace( 
-                        Widget w,
-                        XmTextPosition from_pos,
-                        XmTextPosition to_pos,
-                        char *value) ;
-extern void XmTextFieldReplaceWcs( 
-                        Widget w,
-                        XmTextPosition from_pos,
-                        XmTextPosition to_pos,
-                        wchar_t *wc_value) ;
-extern void XmTextFieldInsert( 
-                        Widget w,
-                        XmTextPosition position,
-                        char *value) ;
-extern void XmTextFieldInsertWcs( 
-                        Widget w,
-                        XmTextPosition position,
-                        wchar_t *wcstring) ;
-extern void XmTextFieldSetAddMode( 
-                        Widget w,
-#if NeedWidePrototypes
-                        int state) ;
-#else
-                        Boolean state) ;
-#endif /* NeedWidePrototypes */
-extern Boolean XmTextFieldGetAddMode( 
-                        Widget w) ;
-extern Boolean XmTextFieldGetEditable( 
-                        Widget w) ;
-extern void XmTextFieldSetEditable( 
+char * XmTextFieldGetString( 
+                 Widget w);
+int XmTextFieldGetSubstring( 
+                 Widget widget,
+                 XmTextPosition start,
+                 int num_chars,
+                 int buf_size,
+                 char *buffer);
+wchar_t * XmTextFieldGetStringWcs( 
+                 Widget w);
+int XmTextFieldGetSubstringWcs( 
+                 Widget widget,
+                 XmTextPosition start,
+                 int num_chars,
+                 int buf_size,
+                 wchar_t *buffer);
+XmTextPosition XmTextFieldGetLastPosition( 
+                 Widget w);
+void XmTextFieldSetString( 
+                 Widget w,
+                 char *value);
+void XmTextFieldSetStringWcs( 
+                 Widget w,
+                 wchar_t *wc_value);
+void XmTextFieldReplace( 
+                 Widget w,
+                 XmTextPosition from_pos,
+                 XmTextPosition to_pos,
+                 char *value);
+void XmTextFieldReplaceWcs( 
+                 Widget w,
+                 XmTextPosition from_pos,
+                 XmTextPosition to_pos,
+                 wchar_t *wc_value);
+void XmTextFieldInsert( 
+                 Widget w,
+                 XmTextPosition position,
+                 char *value);
+void XmTextFieldInsertWcs( 
+                 Widget w,
+                 XmTextPosition position,
+                 wchar_t *wcstring);
+void XmTextFieldSetAddMode( 
                         Widget w,
 #if NeedWidePrototypes
-                        int editable) ;
+                        int state);
 #else
-                        Boolean editable) ;
+                        Boolean state);
 #endif /* NeedWidePrototypes */
-extern int XmTextFieldGetMaxLength( 
-                        Widget w) ;
-extern void XmTextFieldSetMaxLength( 
+Boolean XmTextFieldGetAddMode( 
+                 Widget w);
+Boolean XmTextFieldGetEditable( 
+                 Widget w);
+void XmTextFieldSetEditable( 
                         Widget w,
-                        int max_length) ;
-extern XmTextPosition XmTextFieldGetCursorPosition( 
-                        Widget w) ;
-extern XmTextPosition XmTextFieldGetInsertionPosition( 
-                        Widget w) ;
-extern void XmTextFieldSetCursorPosition( 
-                        Widget w,
-                        XmTextPosition position) ;
-extern void XmTextFieldSetInsertionPosition( 
-                        Widget w,
-                        XmTextPosition position) ;
-extern Boolean XmTextFieldGetSelectionPosition( 
-                        Widget w,
-                        XmTextPosition *left,
-                        XmTextPosition *right) ;
-extern char * XmTextFieldGetSelection( 
-                        Widget w) ;
-extern wchar_t * XmTextFieldGetSelectionWcs( 
-                        Widget w) ;
-extern Boolean XmTextFieldRemove( 
-                        Widget w) ;
-extern Boolean XmTextFieldCopy( 
-                        Widget w,
-                        Time clip_time) ;
-extern Boolean XmTextFieldCopyLink( 
-                        Widget w,
-                        Time clip_time) ;
-extern Boolean XmTextFieldCut( 
-                        Widget w,
-                        Time clip_time) ;
-extern Boolean XmTextFieldPaste( 
-                        Widget w) ;
-extern Boolean XmTextFieldPasteLink( 
-                        Widget w) ;
-extern void XmTextFieldClearSelection( 
-                        Widget w,
-                        Time sel_time) ;
-extern void XmTextFieldSetSelection( 
-                        Widget w,
-                        XmTextPosition first,
-                        XmTextPosition last,
-                        Time sel_time) ;
-extern XmTextPosition XmTextFieldXYToPos( 
+#if NeedWidePrototypes
+                        int editable);
+#else
+                        Boolean editable);
+#endif /* NeedWidePrototypes */
+int XmTextFieldGetMaxLength( 
+                 Widget w);
+void XmTextFieldSetMaxLength( 
+                 Widget w,
+                 int max_length);
+XmTextPosition XmTextFieldGetCursorPosition( 
+                 Widget w);
+XmTextPosition XmTextFieldGetInsertionPosition( 
+                 Widget w);
+void XmTextFieldSetCursorPosition( 
+                 Widget w,
+                 XmTextPosition position);
+void XmTextFieldSetInsertionPosition( 
+                 Widget w,
+                 XmTextPosition position);
+Boolean XmTextFieldGetSelectionPosition( 
+                 Widget w,
+                 XmTextPosition *left,
+                 XmTextPosition *right);
+char * XmTextFieldGetSelection( 
+                 Widget w);
+wchar_t * XmTextFieldGetSelectionWcs( 
+                 Widget w);
+Boolean XmTextFieldRemove( 
+                 Widget w);
+Boolean XmTextFieldCopy( 
+                 Widget w,
+                 Time clip_time);
+Boolean XmTextFieldCopyLink( 
+                 Widget w,
+                 Time clip_time);
+Boolean XmTextFieldCut( 
+                 Widget w,
+                 Time clip_time);
+Boolean XmTextFieldPaste( 
+                 Widget w);
+Boolean XmTextFieldPasteLink( 
+                 Widget w);
+void XmTextFieldClearSelection( 
+                 Widget w,
+                 Time sel_time);
+void XmTextFieldSetSelection( 
+                 Widget w,
+                 XmTextPosition first,
+                 XmTextPosition last,
+                 Time sel_time);
+XmTextPosition XmTextFieldXYToPos( 
                         Widget w,
 #if NeedWidePrototypes
                         int x,
-                        int y) ;
+                        int y);
 #else
                         Position x,
-                        Position y) ;
+                        Position y);
 #endif /* NeedWidePrototypes */
-extern Boolean XmTextFieldPosToXY( 
-                        Widget w,
-                        XmTextPosition position,
-                        Position *x,
-                        Position *y) ;
-extern void XmTextFieldShowPosition( 
-                        Widget w,
-                        XmTextPosition position) ;
-extern void XmTextFieldSetHighlight( 
-                        Widget w,
-                        XmTextPosition left,
-                        XmTextPosition right,
-                        XmHighlightMode mode) ;
-extern int XmTextFieldGetBaseline( 
-                        Widget w) ;
-extern Widget XmCreateTextField( 
+Boolean XmTextFieldPosToXY( 
+                 Widget w,
+                 XmTextPosition position,
+                 Position *x,
+                 Position *y);
+void XmTextFieldShowPosition( 
+                 Widget w,
+                 XmTextPosition position);
+void XmTextFieldSetHighlight( 
+                 Widget w,
+                 XmTextPosition left,
+                 XmTextPosition right,
+                 XmHighlightMode mode);
+int XmTextFieldGetBaseline( 
+                 Widget w);
+Widget XmCreateTextField( 
                         Widget parent,
                         char *name,
                         ArgList arglist,
-                        Cardinal argcount) ;
+                        Cardinal argcount);
+Widget XmVaCreateTextField(
+                        Widget parent,
+                        char *name,
+                        ...);
+Widget XmVaCreateManagedTextField(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

@@ -88,6 +88,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include <Xm/TraitP.h>
 #include <Xm/TransferT.h>
 #include <Xm/XmosP.h>
+#include <Xm/VaSimpleP.h>
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
 #include "MessagesI.h"
@@ -3283,4 +3284,50 @@ XmCreateScale(
 			  parent, arglist, argcount));
 }
 
+Widget 
+XmVaCreateScale(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmScaleWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedScale(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmScaleWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}

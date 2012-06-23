@@ -46,8 +46,6 @@ extern "C" {
 typedef struct _XmIconButtonClassRec	*XmIconButtonWidgetClass;
 typedef struct _XmIconButtonRec	        *XmIconButtonWidget;
 
-typedef enum { XmIconTop, XmIconLeft, XmIconRight, XmIconBottom,
-	       XmIconOnly, XmIconNone } XmIconPlacement;
 
 /************************************************************
 *	MACROS

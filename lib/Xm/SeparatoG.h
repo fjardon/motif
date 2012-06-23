@@ -49,12 +49,20 @@ typedef struct _XmSeparatorGCacheObjRec   * XmSeparatorGCacheObject;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateSeparatorGadget( 
+Widget XmCreateSeparatorGadget( 
                         Widget parent,
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
+Widget XmVaCreateSeparatorGadget(
+                        Widget parent,
+                        char *name,
+                        ...);
 
+Widget XmVaCreateManagedSeparatorGadget(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

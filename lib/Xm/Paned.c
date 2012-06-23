@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include <Xm/XmI.h>
 #include <Xm/PanedP.h>
 #include <Xm/SashP.h>
 #include <Xm/Separator.h>
@@ -1181,15 +1182,12 @@ CommitNewLocations(XmPanedWidget pw, Widget no_resize_child)
 	    changes.stack_mode = Above;	/* assures sash is always above sep. */
 
 	    if (XtIsRealized(sash)) {
-#if (XmVersion > 1001)
 		XmDropSiteStartUpdate((Widget) pw);
-#endif
+
 	        XConfigureWindow(XtDisplay(sash), XtWindow(sash),
 				 CWX | CWY | CWStackMode, &changes );
 
-#if (XmVersion > 1001)
 		XmDropSiteEndUpdate((Widget) pw);
-#endif
 	    }
 	}
     }
@@ -2798,8 +2796,14 @@ XmPanedGetPanes(Widget w, WidgetList *panes, int *num)
 {
     XmPanedWidget pw = (XmPanedWidget) w;
 
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
     *num = XmPaned_num_panes(pw);
     *panes = XmPaned_managed_children(pw);
+
+    _XmAppUnlock(app); 
+
     return(*num);
 }
 

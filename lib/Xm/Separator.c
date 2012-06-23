@@ -47,6 +47,7 @@ static char rcsid[] = "$XConsortium: Separator.c /main/14 1996/03/25 17:53:11 ba
 #include <Xm/TraitP.h>
 #include <Xm/MenuT.h>
 #include <Xm/DrawP.h>
+#include <Xm/VaSimpleP.h>
 
 
 /********    Static Function Declarations    ********/
@@ -565,7 +566,9 @@ SetValues(
 
 /************************************************************************
  *
- *  XmCreateSeparator
+ *  XmCreateSeparator()
+ *  XmVaCreateSeparator()
+ *  XmVaCreateManagedSeparator()
  *	Create an instance of a separator and return the widget id.
  *
  ************************************************************************/
@@ -578,4 +581,51 @@ XmCreateSeparator(
 {
    return (XtCreateWidget (name, xmSeparatorWidgetClass, 
                            parent, arglist, argcount));
+}
+Widget 
+XmVaCreateSeparator(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSeparatorWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedSeparator(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSeparatorWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
 }

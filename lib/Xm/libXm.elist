@@ -500,7 +500,6 @@ public XmUpdateDisplay
 * when the VA version is added please remove the name from this list
 * and add the correct name below, in order. 
 *
-*public XmCreateArrowButtonGadget
 *public XmCreateBulletinBoard
 *public XmCreateBulletinBoardDialog
 *public XmCreateCascadeButton
@@ -525,8 +524,6 @@ public XmUpdateDisplay
 *public XmCreateIconGadget
 *public XmCreateIconHeader
 *public XmCreateInformationDialog
-*public XmCreateLabel
-*public XmCreateLabelGadget
 *public XmCreateList
 *public XmCreateMainWindow
 *public XmCreateMenuBar
@@ -542,34 +539,48 @@ public XmUpdateDisplay
 *public XmCreateQuestionDialog
 *public XmCreateRadioBox
 *public XmCreateRowColumn
-*public XmCreateScale
 *public XmCreateScrollBar
 *public XmCreateScrolledList
 *public XmCreateScrolledText
 *public XmCreateScrolledWindow
 *public XmCreateSelectionBox
 *public XmCreateSelectionDialog
-*public XmCreateSeparator
 *public XmCreateSeparatorGadget
-*public XmCreateSpinBox
 *public XmCreateTemplateDialog
-*public XmCreateText
-*public XmCreateTextField
-*public XmCreateToggleButton
-*public XmCreateToggleButtonGadget
 *public XmCreateWarningDialog
 *public XmCreateWorkArea
 *public XmCreateWorkingDialog
 */
 
 
-
+public XmCreateArrowButtonGadget
+public XmCreateManagedArrowButtonGadget
 public XmVaCreateArrowButton
+public XmVaCreateLabel
+public XmVaCreateLabelGadget
 public XmVaCreateManagedArrowButton
+public XmVaCreateManagedLabel
+public XmVaCreateManagedLabelGadget
 public XmVaCreateManagedPushButton
 public XmVaCreateManagedPushButtonGadget
+public XmVaCreateManagedScale
+public XmVaCreateManagedSeparator
+public XmVaCreateManagedSeparatorGadget
+public XmVaCreateManagedSpinBox
+public XmVaCreateManagedText
+public XmVaCreateManagedTextField
+public XmVaCreateManagedToggleButton
+public XmVaCreateManagedToggleButtonGadget
 public XmVaCreatePushButton
 public XmVaCreatePushButtonGadget
+public XmVaCreateScale
+public XmVaCreateSeparator
+public XmVaCreateSeparatorGadget
+public XmVaCreateSpinBox
+public XmVaCreateText
+public XmVaCreateTextField
+public XmVaCreateToggleButton
+public XmVaCreateToggleButtonGadget
 
 public XmVaCreateSimpleCheckBox
 public XmVaCreateSimpleMenuBar

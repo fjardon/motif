@@ -26,6 +26,8 @@
 *	INCLUDE FILES
 *************************************************************/
 #include <stdio.h>
+
+#include <Xm/XmI.h>
 #include <Xm/HierarchyP.h>
 #include <Xm/PushB.h>
 #include <Xm/IconButton.h>
@@ -184,7 +186,7 @@ static XmPartResource constraints[] = {
 #undef offset
 };
 
-XmHierarchyClassRec xiHierarchyClassRec = {
+XmHierarchyClassRec xmHierarchyClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	"XmHierarchy",
@@ -256,7 +258,7 @@ XmHierarchyClassRec xiHierarchyClassRec = {
   }
 };
 
-WidgetClass xiHierarchyWidgetClass = (WidgetClass) &xiHierarchyClassRec;
+WidgetClass xmHierarchyWidgetClass = (WidgetClass) &xmHierarchyClassRec;
 
 XmOffsetPtr XmHierarchy_offsets;
 XmOffsetPtr XmHierarchyC_offsets;
@@ -276,10 +278,10 @@ XmOffsetPtr XmHierarchyC_offsets;
 static void 
 ClassInit()
 {
-    XmHierarchyClassRec* wc = &xiHierarchyClassRec;
+    XmHierarchyClassRec* wc = &xmHierarchyClassRec;
     int i;
 
-    XmResolveAllPartOffsets(xiHierarchyWidgetClass,
+    XmResolveAllPartOffsets(xmHierarchyWidgetClass,
 			    &XmHierarchy_offsets,
 			    &XmHierarchyC_offsets);
 
@@ -1390,8 +1392,14 @@ XmHierarchyOpenAllAncestors(Widget nw)
 	{ XmNnodeState, (XtArgVal) XmOpen }
     };
 
-    if (!XtParent(nw) || !XtIsSubclass(XtParent(nw), xiHierarchyWidgetClass))
-		return;
+    _XmWidgetToAppContext(nw);
+    _XmAppLock(app);
+
+    if (!XtParent(nw) || !XtIsSubclass(XtParent(nw), xmHierarchyWidgetClass))
+      {
+	_XmAppUnlock(app);
+	return;
+      }
 
     node = GetNodeInfo(nw);
 
@@ -1401,6 +1409,8 @@ XmHierarchyOpenAllAncestors(Widget nw)
 	if (XmHierarchyC_state(node) == XmClosed) 
 	    XtSetValues(XmHierarchyC_widget(node), args, XtNumber(args));
     }
+
+    _XmAppUnlock(app);
 }
 
 /*	Function Name: XmHierarchyGetChildNodes
@@ -1414,13 +1424,22 @@ WidgetList XmHierarchyGetChildNodes(Widget nw)
     WidgetList retval = (WidgetList)NULL;
     int i;
 
-    if (!XtParent(nw) || !XtIsSubclass(XtParent(nw), xiHierarchyWidgetClass))
-		return retval;
+    _XmWidgetToAppContext(nw);
+    _XmAppLock(app);
+
+    if (!XtParent(nw) || !XtIsSubclass(XtParent(nw), xmHierarchyWidgetClass))
+      {
+	_XmAppUnlock(app);
+	return retval;
+      }
 
     node = GetNodeInfo(nw);
 
     if (0 == XmHierarchyC_num_children(node))
+      {
+	_XmAppUnlock(app);
 	return retval;
+      }
 
     retval = (WidgetList)XtMalloc((XmHierarchyC_num_children(node) + 1) * sizeof(Widget));
 
@@ -1428,6 +1447,7 @@ WidgetList XmHierarchyGetChildNodes(Widget nw)
 	retval[i] = XmHierarchyC_widget(XmHierarchyC_children(node)[i]);
     retval[i] = (Widget)NULL;
 
+    _XmAppUnlock(app);
     return retval;
 }
 

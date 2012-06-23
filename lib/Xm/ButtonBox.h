@@ -61,7 +61,6 @@ extern "C" {
 typedef struct _XmButtonBoxClassRec    *XmButtonBoxWidgetClass;
 typedef struct _XmButtonBoxRec	       *XmButtonBoxWidget;
 
-typedef enum { XmFillNone, XmFillMajor, XmFillMinor, XmFillAll } XmFillOption;
 
 /************************************************************
  *       MACROS

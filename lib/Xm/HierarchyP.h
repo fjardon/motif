@@ -119,6 +119,8 @@ typedef struct _XmHierarchyClassRec {
     HierarchyClassPart          hierarchy_class;
 } XmHierarchyClassRec;
 
+externalref XmHierarchyClassRec xmHierarchyClassRec;
+
 typedef struct _HierarchyPart {
     /* resources */
 
@@ -218,7 +220,7 @@ typedef HierNodeInfo  XmHierarchyConstraintPart;
 *	EXTERNAL DECLARATIONS
 *************************************************************/
 
-extern XmHierarchyClassRec xiHierarchyClassRec;
+
 extern XmOffsetPtr XmHierarchy_offsets;
 extern XmOffsetPtr XmHierarchyC_offsets;
 

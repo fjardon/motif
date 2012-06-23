@@ -47,10 +47,6 @@ extern "C" {
 typedef struct _XmTreeClassRec		*XmTreeWidgetClass;
 typedef struct _XmTreeRec		*XmTreeWidget;
 
-typedef enum { XmTreeLadder, XmTreeDirect } XmTreeConnectStyle;
-
-typedef enum { XmTreeCompressNone=0, XmTreeCompressLeaves=1, 
-               XmTreeCompressAll=2 } XmTreeCompressStyle;
 
 /*	Function Name: XmCreateTree
  *	Description: Creation Routine for UIL and ADA.

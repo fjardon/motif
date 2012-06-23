@@ -59,7 +59,14 @@ extern Widget XmCreateLabelGadget(
                         char *name,
                         Arg *arglist,
                         Cardinal argCount) ;
-
+extern Widget XmVaCreateLabelGadget(
+        Widget parent,
+        char *name,
+        ...);
+extern Widget XmVaCreateManagedLabelGadget(
+        Widget parent,
+        char *name,
+        ...);
 /********    End Public Function Declarations    ********/
 
 

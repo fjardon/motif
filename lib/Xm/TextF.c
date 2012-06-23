@@ -60,6 +60,7 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include <Xm/TransferP.h>
 #include <Xm/TransltnsP.h>
 #include <Xm/XmosP.h>
+#include <Xm/VaSimpleP.h>
 #include "DestI.h"
 #include "DisplayI.h"
 #include "GMUtilsI.h"
@@ -10377,9 +10378,14 @@ XmTextFieldGetBaseline(Widget w)
 
   return(ret_val);
 }
-
 /*
- * Text Field w creation convienence routine.
+ * Function:
+ *    XmCreateTextField()
+ *    XmVaCreateTextField()
+ *    XmVaCreateManagedTextField()
+ * 
+ *  Description:
+ *      Basic creation routines for the motif TextField Widget Class.    
  */
 
 Widget 
@@ -10392,5 +10398,51 @@ XmCreateTextField(Widget parent,
 			 parent, arglist, argcount));
 }
 
-/****************************************************************/
-/****************************************************************/
+Widget 
+XmVaCreateTextField(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmTextFieldWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+
+Widget 
+XmVaCreateManagedTextField(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmTextFieldWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}

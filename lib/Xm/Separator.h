@@ -48,12 +48,19 @@ typedef struct _XmSeparatorRec      * XmSeparatorWidget;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateSeparator( 
+Widget XmCreateSeparator( 
                         Widget parent,
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
-
+Widget XmVaCreateSeparator(
+                        Widget parent,
+                        char *name,
+                        ...);
+Widget XmVaCreateManagedSeparator(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

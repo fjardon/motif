@@ -21,12 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-#ifndef __TabStackP_h__
-#define __TabStackP_h__
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
+#ifndef _TabStackP_h_
+#define _TabStackP_h_
 
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
@@ -45,6 +41,7 @@ typedef struct _XmTabStackClassPart {
     XtPointer extension;
 } XmTabStackClassPart;
 
+
 typedef struct _XmTabStackClassRec {
     CoreClassPart            core_class;
     CompositeClassPart	     composite_class;
@@ -53,6 +50,7 @@ typedef struct _XmTabStackClassRec {
     XmBulletinBoardClassPart bulletin_board_class;
     XmTabStackClassPart      tab_stack_class;
 } XmTabStackClassRec;
+externalref XmTabStackClassRec xmTabStackClassRec;
 
 typedef struct _XmTabStackPart {
     /* Resources for the Tab Stack */
@@ -220,8 +218,5 @@ XmTABS_STACKED_STATIC."
 } /* Close scope of 'extern "C"' declaration */
 #endif
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
 
-#endif /* __TabStackP_h__ */
+#endif /* _TabStackP_h_ */

@@ -34,12 +34,19 @@ typedef struct _XmSpinBoxRec      *XmSpinBoxWidget;
  * Spin externs for application accessible functions
  */
 
-extern Widget	XmCreateSpinBox(Widget	parent,
+Widget	XmCreateSpinBox(Widget	parent,
 				char	*name,
 				ArgList	arglist,
 				Cardinal argcount);
-
-extern int	XmSpinBoxValidatePosition(
+Widget XmVaCreateSpinBox(
+                                Widget parent,
+                                char *name,
+                                ...);
+Widget XmVaCreateManagedSpinBox(
+                                Widget parent,
+                                char *name,
+                                ...);
+int	XmSpinBoxValidatePosition(
 				Widget	text_field,
 				int	*position_value);
 

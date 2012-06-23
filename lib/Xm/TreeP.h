@@ -22,12 +22,9 @@
  * 
  */
 
-#ifndef _TreeP_h
-#define _TreeP_h
+#ifndef _TreeP_h_
+#define _TreeP_h_
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
 
 /************************************************************
 *	INCLUDE FILES
@@ -118,6 +115,7 @@ typedef struct _XmTreeClassRec {
     HierarchyClassPart          hierarchy_class;
     TreeClassPart    		tree_class;
 } XmTreeClassRec;
+externalref  XmTreeClassRec xmTreeClassRec;
 
 typedef struct _TreeNodeInfo {
     /*

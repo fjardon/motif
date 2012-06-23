@@ -32,73 +32,26 @@
 #define XK_LATIN1
 #include <X11/keysymdef.h>
 
-#if NeedFunctionPrototypes
+
 static void ClassInitialize(void);
-#else
-static void ClassInitialize();
-#endif
-static void Initialize(
-#if NeedFunctionPrototypes
-	Widget, Widget, ArgList, Cardinal*
-#endif
-);
-static Boolean SetValues(
-#if NeedFunctionPrototypes
-	Widget, Widget, Widget, ArgList, Cardinal*
-#endif
-);
-static void Destroy(
-#if NeedFunctionPrototypes
-	Widget
-#endif
-);
-static void Resize(
-#if NeedFunctionPrototypes
-	Widget
-#endif
-);
-static XtGeometryResult QueryGeometry(
-#if NeedFunctionPrototypes
-	Widget, XtWidgetGeometry*, XtWidgetGeometry*
-#endif
-);
-static XtGeometryResult GeometryManager(
-#if NeedFunctionPrototypes
-	Widget, XtWidgetGeometry*, XtWidgetGeometry*
-#endif
-);
-static void ChangeManaged(
-#if NeedFunctionPrototypes
-	Widget
-#endif
-);
-static void ConstraintInitialize(
-#if NeedFunctionPrototypes
-	Widget, Widget, ArgList, Cardinal*
-#endif
-);
-static Boolean ConstraintSetValues(
-#if NeedFunctionPrototypes
-	Widget, Widget, Widget, ArgList, Cardinal*
-#endif
-);
-static void ConstraintDestroy(
-#if NeedFunctionPrototypes
-	Widget
-#endif
-);
-static void ConstraintGetValues(
-#if NeedFunctionPrototypes
-        Widget, ArgList, Cardinal*
-#endif
-);
+
+static void Initialize(Widget, Widget, ArgList, Cardinal*);
+static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal*);
+static void Destroy(Widget);
+static void Resize(Widget);
+static XtGeometryResult QueryGeometry(Widget, 
+        XtWidgetGeometry*, XtWidgetGeometry*);
+static XtGeometryResult GeometryManager(Widget, 
+        XtWidgetGeometry*, XtWidgetGeometry*);
+static void ChangeManaged(Widget);
+static void ConstraintInitialize(Widget, Widget, ArgList, Cardinal*);
+static Boolean ConstraintSetValues(Widget, Widget, Widget, ArgList, Cardinal*);
+static void ConstraintDestroy(Widget);
+static void ConstraintGetValues(Widget, ArgList, Cardinal*);
 
 #if 0	/* POSITION HANDLING */
 static Boolean CvtStringToLabelPosition(
-#if NeedFunctionPrototypes
-	Display*, XrmValue*, Cardinal*, XrmValue*, XrmValue*, XtPointer
-#endif
-);
+        Display*, XrmValue*, Cardinal*, XrmValue*, XrmValue*, XtPointer);
 #endif
 static Boolean CvtStringToXiAlignment(
 #if NeedFunctionPrototypes
@@ -321,7 +274,7 @@ static XmSyntheticResource cont_get_resources[] =
 };
 #undef offset
 
-ConstraintClassExtensionRec xiColumnConstraintExtension = {
+ConstraintClassExtensionRec xmColumnConstraintExtension = {
     NULL,			         /* next_extension  */
     NULLQUARK,			         /* record_type     */
     XtConstraintExtensionVersion,        /* version         */
@@ -329,7 +282,7 @@ ConstraintClassExtensionRec xiColumnConstraintExtension = {
     ConstraintGetValues		         /* get_values_hook */
 };
 
-XmColumnClassRec xiColumnClassRec = {
+XmColumnClassRec xmColumnClassRec = {
   {
     /* core_class members      */
     /* superclass         */	(WidgetClass) &xmBulletinBoardClassRec,
@@ -380,7 +333,7 @@ XmColumnClassRec xiColumnClassRec = {
     /* init proc          */ 	ConstraintInitialize,
     /* destroy proc       */ 	ConstraintDestroy,
     /* set values proc    */ 	ConstraintSetValues,
-    /* extension          */ 	&xiColumnConstraintExtension,
+    /* extension          */ 	&xmColumnConstraintExtension,
   },
   { /* manager_class fields */
     /* default translations */ 	XtInheritTranslations,
@@ -403,7 +356,7 @@ XmColumnClassRec xiColumnClassRec = {
   }
 };
 
-WidgetClass xmColumnWidgetClass = (WidgetClass) &xiColumnClassRec;
+WidgetClass xmColumnWidgetClass = (WidgetClass) &xmColumnClassRec;
 
 XmOffsetPtr XmColumn_offsets;
 XmOffsetPtr XmColumnC_offsets;
@@ -427,7 +380,7 @@ ClassInitialize(void)
 ClassInitialize()
 #endif
 {
-    XmColumnClassRec* wc = &xiColumnClassRec;
+    XmColumnClassRec* wc = &xmColumnClassRec;
     int i;
 
     XmResolveAllPartOffsets(xmColumnWidgetClass,

@@ -55,20 +55,19 @@ typedef struct _XmToggleButtonRec      *XmToggleButtonWidget;
 
 /********    Public Function Declarations    ********/
 
-extern Boolean XmToggleButtonGetState( 
-                        Widget w) ;
-extern void XmToggleButtonSetState( 
+Boolean XmToggleButtonGetState( 
+                        Widget w);
+void XmToggleButtonSetState( 
                         Widget w,
 #if NeedWidePrototypes
                         int newstate,
-                        int notify) ;
+                        int notify);
 #else
                         Boolean newstate,
-                        Boolean notify) ;
+                        Boolean notify);
 #endif /* NeedWidePrototypes */
 
-extern Boolean
-XmToggleButtonSetValue(
+Boolean XmToggleButtonSetValue(
         Widget w,
 #if NeedWidePrototypes
         int newstate,
@@ -77,12 +76,19 @@ XmToggleButtonSetValue(
         XmToggleButtonState newstate,
         Boolean notify );
 #endif /* NeedWidePrototypes */
-extern Widget XmCreateToggleButton( 
+Widget XmCreateToggleButton( 
                         Widget parent,
                         char *name,
                         Arg *arglist,
-                        Cardinal argCount) ;
-
+                        Cardinal argCount);
+Widget XmVaCreateToggleButton(
+                        Widget parent,
+                        char *name,
+                        ...);
+Widget XmVaCreateManagedToggleButton(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

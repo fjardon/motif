@@ -33,7 +33,7 @@
 *	TYPEDEFS AND DEFINES
 *************************************************************/
 
-#define SUPERCLASS (&xiHierarchyClassRec)
+#define SUPERCLASS (&xmHierarchyClassRec)
 #define DEF_INDENT_SPACE 30
 
 #define MOVE_TIME    200

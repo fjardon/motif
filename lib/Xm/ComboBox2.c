@@ -37,6 +37,7 @@
 
 #include <Xm/Xm.h>
 #include <Xm/XmP.h>
+#include <Xm/XmI.h>
 #include <Xm/DrawP.h>
 
 #include <Xm/ComboBox2P.h>
@@ -2291,8 +2292,15 @@ String
 XmCombinationBox2GetValue(Widget w)
 {
     XmCombinationBox2Widget cbw = (XmCombinationBox2Widget) w;
+    String ptr;
 
-    return(XmTextFieldGetString(XmComboBox2_text(cbw)));
+    _XmWidgetToAppContext(w);
+    _XmAppLock(app);
+
+    ptr = XmTextFieldGetString(XmComboBox2_text(cbw));
+
+    _XmAppUnlock(app);    
+    return ptr;
 }
 
 /*	Function Name: XmCreateCombinationBox2
@@ -2370,3 +2378,40 @@ Widget XmCombinationBox2GetList(Widget w)
 }
 
 
+/*      Function Name:  XmCombinationBox2GetChild
+ *      Description:    Returns the child widget id of the XiCombinationBox2
+ *      Arguments:      w - The XmCombinationBox2 Widget
+ *      Returns:        The specified child of the XiCombinationBox2
+ */
+
+Widget XmCombinationBox2GetChild(Widget w, int num)
+{
+    XmCombinationBox2Widget cbw = (XmCombinationBox2Widget) w;
+    Widget child;
+
+    _XmWidgetToAppContext(w);    
+    _XmAppLock(app);
+
+    if(!XtIsSubclass(w, xmCombinationBox2WidgetClass))
+      {
+	_XmAppUnlock(app); 
+	return NULL;
+      }
+
+    switch (num) 
+    {
+        XmCOMBINATIONBOX2_LABEL:
+	    child = XmComboBox2_label(w);
+        XmCOMBINATIONBOX2_TEXT:
+	    child = XmComboBox2_text(w);
+        XmCOMBINATIONBOX2_ARROW_BUTTON:
+	    child = XmComboBox2_arrow(w);
+        XmCOMBINATIONBOX2_LIST:
+	    child = XmComboBox2_list(w);
+        default:
+	    child = NULL;
+    }
+
+    _XmAppUnlock(app);    
+    return child;
+}
