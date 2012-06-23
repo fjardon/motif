@@ -43,25 +43,25 @@ Typically, we might see them in:
     SetValues()
 
 
-Files to check for thread safety:
+Files to check and update for thread safety:
 done - ButtonBox.c
 done - ColorS.c
 done - Column.c
 done - ComboBox2.c
 done - DataF.c
-Ext18List.c
-ExtP.h
-FontS.c
-Hierarchy.c
+done - Ext18List.c
+done - FontS.c
+done - Hierarchy.c
+VendorS.c
+Tree.c
 I18List.c
 IconBox.c
 IconButton.c
-Paned.c
 TabBox.c
 TabStack.c
-Tree.c
+
+Paned.c
 XmExtUtil.c
-VendorS.c
 ToolTip.c
 
 
