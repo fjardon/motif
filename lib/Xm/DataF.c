@@ -8450,9 +8450,11 @@ df_ClassPartInitialize(
 {
     char *event_bindings;
 
-    /*
-     *    _XmFastSubclassInit (w_class, XmTEXT_FIELD_BIT);
-     */
+    _XmFastSubclassInit (w_class, XmDATAFIELD_BIT);
+
+  /* Install traits */
+  XmeTraitSet((XtPointer) w_class, XmQTaccessTextual, (XtPointer) &dataFieldCS);
+
     event_bindings = (char *)XtMalloc((unsigned) (strlen(EventBindings1) +
                                       strlen(EventBindings2) +
                                       strlen(EventBindings3) + strlen("\n") +
@@ -12459,6 +12461,3 @@ XmCreateDataField(
     return (XtCreateWidget(name, xmDataFieldWidgetClass,
                            parent, arglist, argcount));
 }
-
-/****************************************************************/
-/****************************************************************/
