@@ -364,11 +364,13 @@ ClassInitialize()
 			    &XmCombinationBox2_offsets,
 			    &XmCombinationBox2C_offsets);
 
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmCombinationBox2_offsets);
     }
+    _XmProcessUnlock();
 }
 
 /*	Function Name: Initialize
@@ -953,8 +955,9 @@ CheckExtensions( XmCombinationBox2WidgetClass combo )
 {
   XmCombinationBox2ClassPartExtension *ret_extension=NULL, *extension;
 
-  extension=
-    (XmCombinationBox2ClassPartExtension *)(combo->combo_class.extension);
+  _XmProcessLock(); 
+  extension= (XmCombinationBox2ClassPartExtension *)(combo->combo_class.extension);
+  _XmProcessUnlock();
 
   while ((ret_extension == NULL) && (extension != NULL)){
     if ((extension->record_type == NULLQUARK) && 
@@ -2001,7 +2004,18 @@ PopupList(Widget w)
      * proc ourselves.
      */
 
-    (*(XtClass(shell)->core_class.resize))(shell);
+    {
+        /* THIS WAS -
+            (*(XtClass(shell)->core_class.resize))(shell);
+        */
+        XtWidgetProc resize;
+
+        _XmProcessLock();
+        resize = *(XtClass(shell)->core_class.resize);
+        _XmProcessUnlock();
+
+        (*resize) (shell);
+    }
 
     XGetInputFocus(XtDisplay(shell), 
 		   &(XmComboBox2_focus_owner(cbw)), &(XmComboBox2_focus_state(cbw)));
