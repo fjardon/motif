@@ -157,6 +157,7 @@ XmTabListI.h \
 XmosI.h \
 XpmI.h \
 regexpI.h \
+EditresComI.h \
 $(TIP_HDRS)
 
 xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \

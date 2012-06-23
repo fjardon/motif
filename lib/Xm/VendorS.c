@@ -52,11 +52,6 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include <Xm/UnitTypeT.h>
 #include <Xm/VendorSEP.h>
 #include <Xm/VendorSP.h>
-
-#ifdef HAVE_X11_XMU_EDITRES_H
-#include <X11/Xmu/Editres.h>
-#endif
-
 #include <Xm/XmosP.h>		/* for bzero */
 #include "BaseClassI.h"
 #include "CallbackI.h"
@@ -72,6 +67,7 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include "TraversalI.h"
 #include "XmImI.h"
 #include "VendorSI.h"
+#include "EditresComI.h"
 
 #ifndef NO_MESSAGE_CATALOG
 #if !defined(NL_CAT_LOCALE)
@@ -552,7 +548,7 @@ BaseProc(
    _XmAppLock(app);
 
     
-    if (extData = _XmGetWidgetExtData(widget, XmSHELL_EXTENSION))
+    if ((extData = _XmGetWidgetExtData(widget, XmSHELL_EXTENSION)))
     {
 	secObj = extData->widget;
     }
@@ -1776,7 +1772,7 @@ Initialize(
 	 xmDisplay->display.shellCount += 1;
 
 #ifdef HAVE_LIBXMU
-	XtAddEventHandler(new_w, (EventMask)0, True, _XEditResCheckMessages, NULL);
+	XtAddEventHandler(new_w, (EventMask)0, True, (XtEventHandler)_XmEditResCheckMessages, NULL);
 #endif
 
     }

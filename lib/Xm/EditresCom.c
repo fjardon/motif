@@ -158,7 +158,7 @@ static void DumpChildren();
 static char *DumpWidgets(), *DoSetValues(), *DoFindChild();
 static char *DoGetGeometry(), *DoGetResources(), *DumpValues();
 
-#if 1
+#if 0
 /* From Lower.c
 */
 #if NeedFunctionPrototypes
@@ -211,7 +211,7 @@ void _XmuNCopyISOLatin1Lowered(dst, src, size)
 
 /* ARGSUSED */
 void
-_XEditResCheckMessages(w, data, event, cont)
+_XmEditResCheckMessages(w, data, event, cont)
 Widget w;
 XtPointer data;
 XEvent *event;
@@ -2109,7 +2109,7 @@ XtPointer * converter_data;
     char ptr[BUFSIZ];
     static EditresBlock block;
 
-    _XmuNCopyISOLatin1Lowered(ptr, from_val->addr, sizeof(ptr));
+    XmuNCopyISOLatin1Lowered(ptr, from_val->addr, sizeof(ptr));
 
     if (streq(ptr, "none")) 
 	block = BlockNone;
