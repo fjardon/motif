@@ -68,8 +68,8 @@ static char rcsid[] = "$TOG: UilData.c /main/14 1999/04/16 10:41:44 mgreess $"
 #include <Dt/TermPrim.h>
 #include <Dt/Term.h>
 
-#include <Mrm/MrmAppl.h>
-#include <Mrm/Mrm.h>
+
+
 #include <Xm/MwmUtil.h> /* For MWM_*_* defines. */
 
 #include "UilDefI.h"
