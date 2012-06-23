@@ -336,9 +336,12 @@ Initialize(Widget request, Widget set, ArgList args, Cardinal *num_args)
 	params[1] = temp;
 
 	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XmNunparsableColor, XmNunparsableColor,
-			XmCICSWidgetSetError, XmNunparsableColorMsg, 
-			params, &num);
+			XmNunparsableColor, 
+			XmNunparsableColor,
+			XmCICSWidgetSetError, 
+			XmNunparsableColorMsg, 
+			params, 
+			&num);
 
 	(void) color_name_changed(csw, "White");
     }
@@ -984,16 +987,16 @@ UpdateColorWindow(XmColorSelectorWidget csw, Boolean use_name)
 static void
 list_selected(Widget w, XtPointer csw_ptr, XtPointer list_ptr)
 {
-    XmColorSelectorWidget csw = (XmColorSelectorWidget) csw_ptr;
-    XmListCallbackStruct *list = (XmListCallbackStruct *) list_ptr;
+  XmColorSelectorWidget csw = (XmColorSelectorWidget) csw_ptr;
+  XmListCallbackStruct *list = (XmListCallbackStruct *) list_ptr;
 
-    XtFree(XmColorS_color_name(csw));
-    XmColorS_color_name(csw) = NULL;
+  XtFree(XmColorS_color_name(csw));
+  XmColorS_color_name(csw) = NULL;
+  
+  XmStringGetLtoR(list->item, XmFONTLIST_DEFAULT_TAG, 
+		  &(XmColorS_color_name(csw))); 
 
-    XmStringGetLtoR(list->item, XmFONTLIST_DEFAULT_TAG, 
-		    &(XmColorS_color_name(csw)));
-
-    UpdateColorWindow(csw, True);
+  UpdateColorWindow(csw, True);
 }
 
 /*      Function Name: 	change_mode
@@ -1008,29 +1011,29 @@ list_selected(Widget w, XtPointer csw_ptr, XtPointer list_ptr)
 static void
 change_mode(Widget w, XtPointer csw_ptr, XtPointer tp)
 {
-    XmColorSelectorWidget csw = (XmColorSelectorWidget) csw_ptr;
-    XmToggleButtonCallbackStruct *toggle = (XmToggleButtonCallbackStruct *) tp;
-
+  XmColorSelectorWidget csw = (XmColorSelectorWidget) csw_ptr;
+  XmToggleButtonCallbackStruct *toggle = (XmToggleButtonCallbackStruct *) tp;
+  
+  /*
+   * Ignore unsets.
+   */
+  
+  if (toggle->reason == XmCR_VALUE_CHANGED && toggle->set) {
     /*
-     * Ignore unsets.
+     * Change the mode if it is different.
      */
     
-    if (toggle->reason == XmCR_VALUE_CHANGED && toggle->set) {
-	/*
-	 * Change the mode if it is different.
-	 */
-	
-	if ((w == XmColorS_chose_mode(csw)[XmListMode]) && 
-	    (XmColorS_color_mode(csw) != XmListMode))
-	{
-	    new_mode(csw, XmListMode);
-	}
-	else if ((w == XmColorS_chose_mode(csw)[XmScaleMode]) && 
-		 (XmColorS_color_mode(csw) != XmScaleMode))
-	{
-	    new_mode(csw, XmScaleMode);
-	}
-    }
+    if ((w == XmColorS_chose_mode(csw)[XmListMode]) && 
+	(XmColorS_color_mode(csw) != XmListMode))
+      {
+	new_mode(csw, XmListMode);
+      }
+    else if ((w == XmColorS_chose_mode(csw)[XmScaleMode]) && 
+	     (XmColorS_color_mode(csw) != XmScaleMode))
+      {
+	new_mode(csw, XmScaleMode);
+      }
+  }
 }
 
 /*      Function Name: 	new_mode
@@ -1044,20 +1047,20 @@ change_mode(Widget w, XtPointer csw_ptr, XtPointer tp)
 static void
 new_mode(XmColorSelectorWidget csw, XmColorMode mode)
 {
-    XmColorS_color_mode(csw) = mode;
+  XmColorS_color_mode(csw) = mode;
+  
+  if (mode == XmScaleMode) {
+    SetSliders(csw);
+    
+    XtUnmanageChild(XmColorS_scrolled_list(csw));
+    XtManageChild(XmColorS_bb(csw));
+  }
+  else {
+      SelectColor(csw);	/* Select the current color in the list. */
 
-    if (mode == XmScaleMode) {
-	SetSliders(csw);
-
-	XtUnmanageChild(XmColorS_scrolled_list(csw));
-	XtManageChild(XmColorS_bb(csw));
-    }
-    else {
-	SelectColor(csw);	/* Select the current color in the list. */
-
-	XtUnmanageChild(XmColorS_bb(csw));
-	XtManageChild(XmColorS_scrolled_list(csw));
-    }
+      XtUnmanageChild(XmColorS_bb(csw));
+      XtManageChild(XmColorS_scrolled_list(csw));
+  }
 }
 
 /*      Function Name: 	compute_size
@@ -1619,8 +1622,7 @@ NoPrivateColormaps(XmColorSelectorWidget csw, Pixel foreground,
 	else 
 	{
 	    XmString out;
-	    out = XmStringConcat(xm_str, XmColorS_strings(csw).no_cell_error);
-	    XmStringFree(xm_str);
+	    out = XmStringConcatAndFree(xm_str, XmColorS_strings(csw).no_cell_error);
 	    xm_str = out;    
 	}
     }
@@ -1669,8 +1671,7 @@ PrivateColormaps(XmColorSelectorWidget csw, Pixel foreground, XColor color, char
         else {
             XmString out;
 
-            out = XmStringConcat(xm_str, XmColorS_strings(csw).no_cell_error);
-            XmStringFree(xm_str);
+	    out = XmStringConcatAndFree(xm_str, XmColorS_strings(csw).no_cell_error);
             xm_str = out;
         }
     }
