@@ -1,4 +1,9 @@
-dnl Process this file with autoconf to produce a configure script.
+dnl 
+dnl  This SCRIPT is provided exclusivly for backward compatability 
+dnl  with autoconf. the current autoconf script is configure.ac
+dnl
+dnl  Any changes to this file will be ignored or removed in the future.
+dnl
 AC_INIT(lib/Xm/Form.c)
 AC_PREREQ(2.13)
 AC_CONFIG_AUX_DIR(.)
