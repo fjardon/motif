@@ -53,6 +53,9 @@ extern Widget XmCreateArrowButton(
                         ArgList arglist,
                         Cardinal argcount) ;
 
+extern Widget XmVaCreateManagedArrowButton( Widget parent, char *name, ...);
+extern Widget XmVaCreateArrowButton( Widget parent, char *name, ...);
+
 /********    End Public Function Declarations    ********/
 
 

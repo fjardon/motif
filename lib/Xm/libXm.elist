@@ -500,7 +500,6 @@ public XmUpdateDisplay
 * when the VA version is added please remove the name from this list
 * and add the correct name below, in order. 
 *
-*public XmCreateArrowButton
 *public XmCreateArrowButtonGadget
 *public XmCreateBulletinBoard
 *public XmCreateBulletinBoardDialog
@@ -565,6 +564,8 @@ public XmUpdateDisplay
 
 
 
+public XmVaCreateArrowButton
+public XmVaCreateManagedArrowButton
 public XmVaCreateManagedPushButton
 public XmVaCreateManagedPushButtonGadget
 public XmVaCreatePushButton

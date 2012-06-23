@@ -41,6 +41,7 @@ static char rcsid[] = "$XConsortium: ArrowB.c /main/16 1995/10/25 19:50:57 cde-s
 #include <Xm/DrawP.h>
 #include <Xm/ActivatableT.h>
 #include <Xm/TraitP.h>
+#include <Xm/VaSimpleP.h>
 #include "PrimitiveI.h"
 #include "RepTypeI.h"
 #include "ScreenI.h"
@@ -815,6 +816,54 @@ XmCreateArrowButton(
 {
   return XtCreateWidget(name, xmArrowButtonWidgetClass, parent, 
 			arglist, argcount);
+}
+
+Widget 
+XmVaCreateArrowButton(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmArrowButtonWidgetClass, 
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
+}
+Widget 
+XmVaCreateManagedArrowButton(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmArrowButtonWidgetClass, 
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+    
 }
 
 /* Wrapper around XmeDrawArrow to calculate sizes. */
