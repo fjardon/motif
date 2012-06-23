@@ -52,17 +52,15 @@ done - DataF.c
 done - Ext18List.c
 done - FontS.c
 done - Hierarchy.c
-VendorS.c
-Tree.c
-I18List.c
-IconBox.c
-IconButton.c
-TabBox.c
-TabStack.c
-
-Paned.c
-XmExtUtil.c
-ToolTip.c
+done - VendorS.c
+done - Tree.c
+done - I18List.c
+done - IconBox.c
+done - IconButton.c
+done - TabBox.c
+done - TabStack.c
+done - Paned.c
+done - XmExtUtil.c
 
 
 If you do not have SourceNavigator, and to save you the hassle of grep'ing
