@@ -29,9 +29,10 @@
 #include <Xm/ColumnP.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Label.h>
+#include "XmI.h"
+
 #define XK_LATIN1
 #include <X11/keysymdef.h>
-
 
 static void ClassInitialize(void);
 
@@ -321,7 +322,7 @@ XmColumnClassRec xmColumnClassRec = {
   },
   {
     /* composite_class members */
-    /* geometry_manager   */	GeometryManager,                  
+    /* geometry_manager   */	GeometryManager,
     /* change_managed     */	ChangeManaged,                    
     /* insert_child       */	XtInheritInsertChild,
     /* delete_child       */	XtInheritDeleteChild,
@@ -388,17 +389,21 @@ ClassInitialize()
 			    &XmColumn_offsets,
 			    &XmColumnC_offsets);
 
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmColumn_offsets);
     }
+    _XmProcessUnlock();
+
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
         (wc->manager_class.syn_constraint_resources)[i].resource_offset =
             XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
                             &XmColumnC_offsets);
     }
-			    
+    _XmProcessUnlock();
 
 #if 0	/* POSITION HANDLING */
     XtSetTypeConverter(XmRString, XmRLabelPosition,
@@ -522,7 +527,12 @@ Resize(widget)
     WidgetClass    sc = XtSuperclass(widget);
     XmColumnWidget cw = (XmColumnWidget) widget;
 
-    (*sc->core_class.resize)(widget);
+    XtWidgetProc resize;
+    
+    _XmProcessLock(); 
+    resize = *sc->core_class.resize;
+    _XmProcessUnlock();
+    (* resize) (widget);
 
     Layout(cw, NULL, NULL, -1, -1);
 
