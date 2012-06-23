@@ -25,11 +25,11 @@
 static void PlayerOptionMenu( Widget, DemoInfo );
 
 /*
- * Function: BxRegisterConverters()
+ * Function: RegisterConverters()
  *     Registers all the converters for all widgets.
  */
 static void
-BxRegisterConverters()
+RegisterConverters()
 {
     XtInitializeWidgetClass(xmPushButtonWidgetClass);
     XtInitializeWidgetClass(xmToggleButtonWidgetClass);
@@ -94,7 +94,7 @@ Widget
 
     argok = False;
 
-    BxRegisterConverters();
+    RegisterConverters();
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNorientation, XmHORIZONTAL); argcnt++;
