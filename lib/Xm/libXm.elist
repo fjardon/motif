@@ -494,8 +494,82 @@ public XmTransferValue
 public XmTranslateKey
 public XmUninstallImage
 public XmUpdateDisplay
+
+/*
+* Public functions with out VA versions
+* when the VA version is added please remove the name from this list
+* and add the correct name below, in order. 
+*
+*public XmCreateArrowButton
+*public XmCreateArrowButtonGadget
+*public XmCreateBulletinBoard
+*public XmCreateBulletinBoardDialog
+*public XmCreateCascadeButton
+*public XmCreateCascadeButtonGadget
+*public XmCreateComboBox
+*public XmCreateCommand
+*public XmCreateCommandDialog
+*public XmCreateContainer
+*public XmCreateDialogShell
+*public XmCreateDragIcon
+*public XmCreateDrawingArea
+*public XmCreateDrawnButton
+*public XmCreateDropDownComboBox
+*public XmCreateDropDownList
+*public XmCreateErrorDialog
+*public XmCreateFileSelectionBox
+*public XmCreateFileSelectionDialog
+*public XmCreateForm
+*public XmCreateFormDialog
+*public XmCreateFrame
+*public XmCreateGrabShell
+*public XmCreateIconGadget
+*public XmCreateIconHeader
+*public XmCreateInformationDialog
+*public XmCreateLabel
+*public XmCreateLabelGadget
+*public XmCreateList
+*public XmCreateMainWindow
+*public XmCreateMenuBar
+*public XmCreateMenuShell
+*public XmCreateMessageBox
+*public XmCreateMessageDialog
+*public XmCreateNotebook
+*public XmCreateOptionMenu
+*public XmCreatePanedWindow
+*public XmCreatePopupMenu
+*public XmCreatePromptDialog
+*public XmCreatePulldownMenu
+*public XmCreateQuestionDialog
+*public XmCreateRadioBox
+*public XmCreateRowColumn
+*public XmCreateScale
+*public XmCreateScrollBar
+*public XmCreateScrolledList
+*public XmCreateScrolledText
+*public XmCreateScrolledWindow
+*public XmCreateSelectionBox
+*public XmCreateSelectionDialog
+*public XmCreateSeparator
+*public XmCreateSeparatorGadget
+*public XmCreateSpinBox
+*public XmCreateTemplateDialog
+*public XmCreateText
+*public XmCreateTextField
+*public XmCreateToggleButton
+*public XmCreateToggleButtonGadget
+*public XmCreateWarningDialog
+*public XmCreateWorkArea
+*public XmCreateWorkingDialog
+*/
+
+
+
 public XmVaCreateManagedPushButton
+public XmVaCreateManagedPushButtonGadget
 public XmVaCreatePushButton
+public XmVaCreatePushButtonGadget
+
 public XmVaCreateSimpleCheckBox
 public XmVaCreateSimpleMenuBar
 public XmVaCreateSimpleOptionMenu
