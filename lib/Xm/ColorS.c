@@ -991,10 +991,15 @@ list_selected(Widget w, XtPointer csw_ptr, XtPointer list_ptr)
   XmListCallbackStruct *list = (XmListCallbackStruct *) list_ptr;
 
   XtFree(XmColorS_color_name(csw));
-  XmColorS_color_name(csw) = NULL;
+
+  XmColorS_color_name(csw) =
+    XmStringUnparse(list->item,
+        NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
   
+/* deprecated
   XmStringGetLtoR(list->item, XmFONTLIST_DEFAULT_TAG, 
 		  &(XmColorS_color_name(csw))); 
+*/
 
   UpdateColorWindow(csw, True);
 }
