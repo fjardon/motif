@@ -72,7 +72,10 @@ ToolTipUnpostFinish(Widget slide, XtPointer client_data, XtPointer call_data)
 {
 XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
 
-    XtPopdown(XtParent(TipData->label));
+    if ( ! XtParent(TipData->label)->core.being_destroyed)
+    {
+	XtPopdown(XtParent(TipData->label));
+    }
 }
 
 static void
