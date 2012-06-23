@@ -20,65 +20,6 @@ static char * values[] = {
 	"Pluto",
 };
 
-static Widget toggles[XtNumber(values)];
-
-static void upSCB(Widget w, XtPointer client, XtPointer call) 
-{
-	/* get the text from the box; if it matches a toggle, set that
-	** toggle and exit
-	*/
-	String text = XmCombinationBox2GetValue(w);
-	int i;
-	for (i=0;i<XtNumber(values); i++)
-		if (0 == strcmp(text, XtName(toggles[i])))
-			{
-			XmToggleButtonSetState(toggles[i], True, True);
-			break;
-			}
-	XtFree((char*)text);
-}
-
-static void upTCB(Widget w, XtPointer client, XtPointer call) 
-{
-	/* find out which toggle is set, and set its value into the 
-	** text area
-	*/
-	int i;
-	for (i=0;i<XtNumber(values); i++)
-		{
-		Boolean set = False;
-		XtVaGetValues(toggles[i], XmNset, &set, NULL);
-		if (set)
-			{
-			XtVaSetValues(w, XmNvalue, XtName(toggles[i]), NULL);
-			return;
-			}
-		}
-	XtVaSetValues(w, XmNvalue, "", NULL); /* erase it */
-}
-
-static void vCB(Widget w, XtPointer client, XtPointer call) 
-{
-	/* confirm the sanity of the value in the text area against the 
-	** list of toggles
-	*/
-	int i;
-	String text = XmCombinationBox2GetValue(w);
-	if (!text) return;
-	if (0 == strcmp(text,""))
-		{
-		XtFree((char*)text);
-		return;
-		}
-	for (i=0;i<XtNumber(values); i++)
-		if (0 == strcmp(text, XtName(toggles[i])))
-			return;
-	/* printf ("Hey! got a value (%s) that doesn't match a valid value.\n", text); */
-	XtVaSetValues(w, XmNvalue, "", NULL); /* erase it */
-	XtFree((char*)text);
-}
-
-
 static void createQuit(Widget quit_parent)
 {
 	Widget button = XmCreatePushButton(quit_parent, "quit", NULL, 0);
@@ -95,39 +36,20 @@ static void createScreen(Widget parent)
 	XtManageChild(XmCreateScrolledText(tab,"explanation",NULL,0));
 	
 	{
+	XmStringTable    tmp0;
 	Arg args[10];
-	int n;
+	int n, i = XtNumber(values);
 	Widget combo;
-	Widget popup;
 	Widget rc = XmCreateRowColumn(tab, "rc", NULL,0);
 	XtManageChild(rc);
 
+	tmp0 = (XmStringTable) XtMalloc(i * sizeof(XmString));
+	for(n = 0; n < i; n++)
+		tmp0[n] = XmStringCreateLocalized(values[n]);
 	n=0;
-	XtSetArg(args[n], XmNverify, True); n++;
-	XtSetArg(args[n], XmNcustomizedCombinationBox, True); n++;
+	XtSetArg(args[n], XmNitems, tmp0); n++;
+	XtSetArg(args[n], XmNitemCount, i); n++;
 	combo = XmCreateCombinationBox2(rc, "combo", args, n);
-
-	n=0;
-	XtSetArg(args[n], XmNoverrideRedirect, True); n++;
-	XtSetArg(args[n], XmNallowShellResize, True); n++;
-	XtSetArg(args[n], XmNsaveUnder, True); n++;
-	popup = XtCreatePopupShell("popup", topLevelShellWidgetClass, combo,
-		args, n);
-
-		{
-		Widget radio = XmCreateRadioBox(popup, "radio", NULL, 0);
-		int i;
-		for (i=0; i<XtNumber(values); i++)
-			XtManageChild(toggles[i] = XmCreateToggleButton(radio,values[i], NULL, 0));
-		XtManageChild(radio);
-		}
-	
-	XtVaSetValues(combo, XmNpopupShellWidget, popup, NULL);
-
-	XtAddCallback(combo, XmNupdateShellCallback, upSCB, NULL);
-	XtAddCallback(combo, XmNupdateTextCallback, upTCB, NULL);
-	XtAddCallback(combo, XmNverifyTextCallback, vCB, NULL);
-
 	
 	XtManageChild(combo);
 	}	
