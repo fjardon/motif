@@ -1,5 +1,4 @@
-Wednesday May  1 06:49:39 EDT 2002
-
+Fri May  3 13:54:44 EDT 2002
 
 We will be adding to this as necessary.
 
@@ -38,7 +37,6 @@ XmeWarning.
 independent conversion of synthetic resources
 
 - support Motif 2.1 render table and layout direction functionality.
-
 
 
 Buttonbox
@@ -287,4 +285,3 @@ DONE - enable fast subleasing.
 currently is String
 
 - default labeling of parts is hard coded English
-
