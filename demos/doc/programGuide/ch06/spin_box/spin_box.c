@@ -26,6 +26,7 @@
  * HISTORY
  */
 #include <stdio.h>
+#include <stdlib.h>
 /* #include <X11/Xos.h>  */
 #include <Xm/XmAll.h>
 #include <Xmd/RegEdit.h>
@@ -36,6 +37,13 @@
 
 #define SPIN1_MIN	 0
 #define SPIN1_MAX	 6
+
+/* 
+ * Externaly declared functions
+ */
+void CreateMenus(Widget);
+
+
 
 void setMonths(void);
 void setLetters(void);
@@ -741,10 +749,12 @@ int			saveYY;
 	saveYY = thisYY;
 
 	if (user->crossed_boundary)
+        {
 	    if (user->reason == XmCR_SPIN_NEXT)
 		thisYY++;
 	    else
 		thisYY--;
+        }
 
 	if (thisYY != saveYY)
 	    {
@@ -773,10 +783,12 @@ int			saveYY;
         saveYY = thisYY;
 
         if (user->crossed_boundary)
+        {
             if (user->reason == XmCR_SPIN_NEXT)
                 thisMM++;
             else
                 thisMM--;
+        }
 
         if (thisMM != saveMM)
             {
