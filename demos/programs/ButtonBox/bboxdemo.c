@@ -300,12 +300,23 @@ main(int argc, char **argv)
     XtAppContext app;
 
     XmString xmstring;
+    
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Button Box Demo"); argcnt++;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
-    top = XtAppInitialize(&app, "Buttonbox", NULL, 0,
-                          &argc, argv, fallbacks, args, argcnt);
+    top = XtOpenApplication(
+            &app, 
+            "Buttonbox", 
+            NULL, 
+            0, 
+            &argc, 
+            argv, 
+            fallbacks, 
+            sessionShellWidgetClass,
+            args, 
+            argcnt);
 
     bform = XtVaCreateManagedWidget("bform", xmFormWidgetClass, top, 
                           XmNresizePolicy, XmRESIZE_GROW, NULL);
@@ -659,4 +670,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
     XtRealizeWidget(top);
 
     XtAppMainLoop(app);
+    
+    /* appease compiler warning god */
+    return (0); 
 }

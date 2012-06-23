@@ -185,12 +185,22 @@ main(int argc, char **argv)
     XtAppContext app_con;
     Widget scrolled, right_pane;
     
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
     num_args = 0;
     XtSetArg(args[num_args], XmNtitle, "Tree Demo"); num_args++;
     XtSetArg(args[num_args], XmNallowShellResize, True); num_args++;
-    top = XtAppInitialize(&app_con, "Treedemo", 
-			  NULL, 0, &argc, argv,
-			  fallbacks, args, num_args);
+    top = XtOpenApplication(
+            &app_con, 
+            "Treedemo", 
+            NULL, 
+            0, 
+            &argc, 
+            argv,
+            fallbacks, 
+            sessionShellWidgetClass, 
+            args, 
+            num_args);
 
     num_args = 0;
     big_pane = XtVaCreateManagedWidget("bigPane", xmPanedWidgetClass, 

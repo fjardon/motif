@@ -140,8 +140,10 @@ int main(argc, argv)
 
     MrmInitialize ();
     XtSetLanguageProc(NULL, NULL, NULL);
-    toplevel = XtVaAppInitialize(&app_context, APP_CLASS,
-				 NULL , 0, &argc, argv, fallbacks, NULL);
+    toplevel = XtVaOpenApplication(&app_context, APP_CLASS,
+				 NULL , 0, &argc, argv, fallbacks, 
+                                 sessionShellWidgetClass, 
+                                 NULL);
 
     /**  Plug in Editres protocol  */
     XmdRegisterEditres(toplevel);

@@ -145,8 +145,19 @@ main(int argc, char **argv)
     XtAppContext app;
     DemoInfo demo_info = (DemoInfo)XtMalloc( sizeof(DemoStruct));
 
-    top = XtAppInitialize(&app, "Ext18List", NULL, 0,
-			  &argc, argv, fallbacks, NULL, 0);
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
+    
+    top = XtOpenApplication(
+            &app, 
+            "Ext18List", 
+            NULL, 
+            0,
+            &argc, 
+            argv, 
+            fallbacks,
+            sessionShellWidgetClass,
+            NULL, 0);
 
     demo = Createform(top, demo_info);
 

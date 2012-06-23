@@ -210,28 +210,25 @@ static Widget shell;
 static unsigned setting_toggle = 0;
 
 int
-main(
-    int argc,
-    char *argv[] )
+main(int argc, char *argv[] )
 {
     Widget appMain;
-    Display *display;
-    Arg args[2];
 
-    XtToolkitInitialize();
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
     MrmInitialize ();
-    appContext = XtCreateApplicationContext();
-    XtAppSetFallbackResources (appContext, fallbackResources);
-    display = XtOpenDisplay(appContext, NULL, APP_NAME, APP_CLASS,
-			    NULL, 0, &argc, argv);
-    if (display == NULL) {
-	fprintf(stderr, "%s:  Can't open display\n", argv[0]);
-	exit(1);
-    }
-    XtSetArg (args[0], XmNargc, argc);
-    XtSetArg (args[1], XmNargv, argv);
-    shell = XtAppCreateShell(APP_NAME, APP_CLASS, applicationShellWidgetClass,
-			     display, args, 2);
+    
+    shell = XtVaOpenApplication( &appContext, 
+                                 APP_CLASS, 
+                                 NULL, 
+                                 0, 
+                                 &argc, 
+                                 argv, 
+                                 fallbackResources, 
+                                 sessionShellWidgetClass, 
+                                 NULL );
+
+  
     if (MrmOpenHierarchy (1, mrmFile, NULL, &mrmId) != MrmSUCCESS) exit(0);
     MrmRegisterNames(mrmNames, XtNumber(mrmNames));
     MrmFetchWidget (mrmId, "appMain", shell, &appMain, &mrmClass);

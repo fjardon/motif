@@ -39,7 +39,6 @@
 module periodic 
     version = 'v2.0'
     names = case_sensitive
-    character_set=iso_latin1
     objects = {
 	XmLabel = widget;
 	XmPushButton = widget;

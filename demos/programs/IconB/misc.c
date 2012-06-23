@@ -2069,9 +2069,7 @@ LFUNC(atoui, unsigned int, (char *p, unsigned int l, unsigned int *ui_return));
 #endif
 
 Pixmap XPM_PIXMAP
-ARGLIST((w, pixmapName))
-ARG(Widget, w)
-GRA(char **, pixmapName)
+(Widget w,char ** pixmapName)
 {
     XpmAttributes	attributes;
     int			argcnt;

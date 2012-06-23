@@ -75,18 +75,15 @@ int main( int argc, char **argv)
      * _X_Window_System_Toolkit_ p. 677.
      */
     
-    parent = XtVaAppInitialize ( &app, BX_APP_CLASS, NULL, 0, 
-#ifndef XlibSpecificationRelease
-    (Cardinal *) &argc, 
-#else
-#if (XlibSpecificationRelease>=5)
-    &argc, 
-#else
-    (Cardinal *) &argc, 
-#endif
-#endif
-    argv, NULL, 
-    NULL );
+    parent = XtVaOpenApplication (  &app, 
+                                    BX_APP_CLASS, 
+                                    NULL, 
+                                    0, 
+                                    &argc, 
+                                    argv, 
+                                    NULL, 
+                                    sessionShellWidgetClass,
+                                    NULL );
     
     RegisterBxConverters(app);
 #if (XmVersion >= 1002) 

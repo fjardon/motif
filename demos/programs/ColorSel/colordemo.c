@@ -238,12 +238,22 @@ main(int argc, char **argv)
     unsigned long mask;
     
     holderStruct holder;
+    
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Color Selector Demo"); argcnt++;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
-    top = XtAppInitialize(&app, "ColorSelector", NULL, 0,
-                          &argc, argv, fallbacks, args, argcnt);
+    top = XtOpenApplication(
+            &app, 
+            "ColorSelector", 
+            NULL, 
+            0,
+            &argc, 
+            argv, 
+            fallbacks,  
+            sessionShellWidgetClass, 
+            args, argcnt);
 
     default_map = DefaultColormapOfScreen(XtScreen(top));
 

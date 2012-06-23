@@ -362,12 +362,16 @@ main(int argc, char **argv)
     Cardinal argcnt;
     Widget top, paned_top, w;
     XtAppContext app;
+    
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
     XtSetArg(args[argcnt], XmNtitle, "OpenMotif Paned Widget Demo"); argcnt++;
-    top = XtAppInitialize(&app, "Paned", NULL, 0,
-			  &argc, argv, fallbacks, args, argcnt);
+    top = XtOpenApplication(&app, "Paned", NULL, 0,
+			    &argc, argv, fallbacks, 
+                            sessionShellWidgetClass, 
+                            args, argcnt);
 
     G_form = Createform(top);
     XtManageChild(G_form);

@@ -3,6 +3,7 @@
 #include <Xm/Xm.h>
 #include <Xm/ComboBox2.h>
 #include <Xm/XmAll.h>
+#include <stdio.h>
 
 static int done = 0;
 
@@ -62,26 +63,25 @@ static void createScreen(Widget parent)
 
 #define CLASS "Combo"
 
-int main (argc,argv)
-int  argc;
-char *argv[];
+int 
+main (int argc,char *argv[])
 {
 	XtAppContext app_context;
 	Widget app_shell;
 	Display *display;
 
-	XtToolkitInitialize ();
-	app_context = XtCreateApplicationContext();
-	display = XtOpenDisplay (app_context, NULL, argv[0], CLASS,
-			NULL, 0, &argc, argv);
-	if (!display)
-	{
-		XtWarning ("can't open display, exiting...");
-		exit (0);
-	}
+        XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+ 
+        app_shell = XtVaOpenApplication ( &app_context, 
+                                   CLASS, 
+                                   NULL, 
+                                   0, 
+                                   &argc, 
+                                   argv, 
+                                   NULL, 
+                                   sessionShellWidgetClass, 
+                                   NULL );
 
-	app_shell = XtAppCreateShell (NULL, CLASS,
-			applicationShellWidgetClass, display, NULL, 0);
 	XtVaSetValues(app_shell,XmNallowShellResize, True, NULL);
 
 	/* create application */

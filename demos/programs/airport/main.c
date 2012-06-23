@@ -64,7 +64,8 @@ static void Warning(Airport this, XmString s1, XmString s2);
  *    Main loop
  */
 
-int main(int argc, char *argv[])
+int 
+main(int argc, char *argv[])
 {
 #define MAIN_CHILDREN		3
 #define FORM_CHILDREN		3
@@ -97,10 +98,14 @@ int main(int argc, char *argv[])
  */
    this = (Airport) XtCalloc(sizeof(AirportRec), 1);
 
-   theWidgetRoot = XtVaAppInitialize(&this->context, myClass, 
+   XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
+   theWidgetRoot = XtVaOpenApplication(&this->context, myClass, 
 				     NULL, 0, &argc, argv, NULL, NULL,
 				     XmNallowShellResize, True,
+                                     sessionShellWidgetClass, 
 				     NULL);
+   
    this->display = XtDisplay(theWidgetRoot);
    FlightAtom = XmInternAtom(this->display, "FLIGHT", False);
    DeleteAtom = XmInternAtom(this->display, "DELETE", False);

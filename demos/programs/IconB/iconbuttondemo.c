@@ -21,10 +21,10 @@
 #include <pixmaps/porsche.xpm>
 #include <pixmaps/stopsign.xpm>
 
-void Exit(Widget w, XtPointer client, XtPointer call);
-void Explain(Widget w, XtPointer client, XtPointer call);
+void Exit(Widget , XtPointer , XtPointer );
+void Explain(Widget , XtPointer client, XtPointer );
 void ShowThisButton(Widget, XtPointer, XtPointer);
-void CreateLabel(Widget w, XtPointer client, XtPointer call);
+void CreateLabel(Widget , XtPointer , XtPointer );
 
 /*
  *
@@ -42,7 +42,8 @@ It was created using the following resource settings:\n\
 \n\
 iconPlacement = %s\n\
 cellX         = %d\n\
-cellY         = %d"
+cellY         = %d\n\
+name          = %s"
 
 /*
  *
@@ -101,7 +102,7 @@ ShowThisButton(Widget w, XtPointer client, XtPointer call)
     XmString xmstring;
     short x, y;
     char message_string[BUFSIZ];
-    String class_name;
+    String class_name = 0;
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNiconPlacement, &place); argcnt++;
@@ -180,7 +181,7 @@ void Explain(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;
-    XmString xmstring;
+    XmString xmstring =0 ;
     static Widget info = NULL;
     int explain = (int) client;
 
@@ -258,11 +259,22 @@ main(int argc, char **argv)
 
     XmString xmstring;
 
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Icon Box/Button Demo"); argcnt++;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
-    top = XtAppInitialize(&app, "IconBox", NULL, 0,
-                          &argc, argv, fallbacks, args, argcnt);
+    top = XtOpenApplication(
+            &app, 
+            "IconBox", 
+            NULL, 
+            0,
+            &argc, 
+            argv, 
+            fallbacks,
+            sessionShellWidgetClass,
+            args,
+            argcnt);
 
     /* big pane */
     argcnt = 0;
