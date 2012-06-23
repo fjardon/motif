@@ -47,6 +47,7 @@
 #include <Xm/Label.h>
 
 #include <Xm/ExtP.h>
+#include "XmI.h"
 
 /************************************************************
  *       TYPEDEFS AND DEFINES
