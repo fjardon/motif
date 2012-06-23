@@ -9,4 +9,4 @@ data_DATA = $(EXTRA_DIST) $(tree_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 
-INCLUDES = -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

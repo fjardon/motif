@@ -45,8 +45,8 @@ $(srcdir)/wmldbcreate.c: $(WMLTARGETS) UilLexPars.h
 UilLexPars.h: UilLexPars.c
 
 UilLexPars.c: Uil.c
-	$(LN_S) $(srcdir)/Uil.h UilLexPars.h
-	$(LN_S) $(srcdir)/Uil.c UilLexPars.c
+	$(LN_S) Uil.h UilLexPars.h
+	$(LN_S) Uil.c UilLexPars.c
 
 $(WMLTARGETS): wmluiltok wml UilLexPars.c $(TABLE)
 	$(RM) $(WMLTARGETS) wml.report wml-uil.mm

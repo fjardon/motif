@@ -8,4 +8,4 @@ EXTRA_DIST = Imakefile
 data_DATA = $(EXTRA_DIST) $(fontsel_SOURCES)
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 TOPDIR = ../../..
-INCLUDES = -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

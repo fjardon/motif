@@ -11,4 +11,4 @@ data_DATA = $(EXTRA_DIST) $(ext18list_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 
-INCLUDES = -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+INCLUDES = -I$(TOPDIR)/lib -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

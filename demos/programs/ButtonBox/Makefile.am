@@ -9,4 +9,4 @@ data_DATA = $(EXTRA_DIST) $(bboxdemo_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 
-INCLUDES = -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

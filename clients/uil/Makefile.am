@@ -25,8 +25,8 @@ INCLUDES = -DINCDIR=\"@INCDIR@\" \
 UilParser.c:
 	test -f UilParser.c || $(LN_S) $(srcdir)/UilMain.c UilParser.c
 
-UilLexPars.c: $(srcdir)/../../tools/wml/Uil.c
-	test -f UilLexPars.c || $(LN_S) $(srcdir)/../../tools/wml/Uil.c UilLexPars.c
+UilLexPars.c: $(top_builddir)/tools/wml/Uil.c
+	test -f UilLexPars.c || $(LN_S) $(top_builddir)/tools/wml/Uil.c UilLexPars.c
 
 BUILT_SOURCES = UilParser.c UilLexPars.c UilDBDef.h
 

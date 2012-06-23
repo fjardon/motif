@@ -8,4 +8,4 @@ combo_SOURCES = combo.c
 data_DATA = $(EXTRA_DIST) $(combo_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
-INCLUDES = -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

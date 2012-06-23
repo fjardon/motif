@@ -9,7 +9,7 @@ noinst_PROGRAMS = wmldbcreate
 
 WMLDIR = $(top_srcdir)/tools/wml
 
-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/include  ${X_CFLAGS} -I$(srcdir)/../.. -I$(WMLDIR)
+INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/include -I$(srcdir)/../.. -I$(top_srcdir)/tools/wml -I$(top_builddir)/tools/wml -I$(top_builddir)/clients/uil ${X_CFLAGS} 
 LDADD = $(top_builddir)/lib/Xm/libXm.la
 
 DISTCLEANFILES = motif.wmd
