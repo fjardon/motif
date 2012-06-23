@@ -29,6 +29,9 @@
 #include <stdio.h>
 #include <Xm/ButtonBoxP.h>
 #include <Xm/ExtP.h>
+#include <Xm/TraitP.h>
+#include <Xm/TakesDefT.h>
+#include "XmI.h"
 
 /************************************************************
  *       TYPEDEFS AND DEFINES
@@ -55,7 +58,11 @@
  ************************************************************/
 
 static void 	Initialize(Widget, Widget, ArgList, Cardinal *);
-static void	ClassInitialize(void), InsertChild(Widget);
+static void	    ClassInitialize(void);
+
+static void     ClassPartInitialize(WidgetClass w_class) ;
+
+static void	    InsertChild(Widget);
 static void     Resize(Widget), ChangeManaged(Widget);
 static void 	ConstraintInitialize(Widget, Widget, ArgList, Cardinal *);
 
@@ -78,6 +85,9 @@ static void	 	CalcChildSize(XmButtonBoxWidget, Widget, Dimension,
 				      Dimension, Dimension, Cardinal,
 				      Dimension *, Dimension *);
 
+static void ButtonBoxSetDefaultShadow(Widget button) ;
+
+
 /************************************************************
  *       STATIC DECLARATIONS
  ************************************************************/
@@ -94,6 +104,10 @@ static XmPartResource resources[] = {
      offset(margin_width), XmRImmediate, (XtPointer) 0 },
   { XmNorientation, XmCOrientation, XmROrientation, sizeof(unsigned char),
      offset(orientation), XmRImmediate, (XtPointer)XmHORIZONTAL },
+
+  {	XmNdefaultButton, XmCWidget, XmRWidget, sizeof (Widget), 
+		offset(default_button), XmRImmediate, (XtPointer) NULL },
+
 };
 
 static XmSyntheticResource get_resources[] =
@@ -111,8 +125,8 @@ XmButtonBoxClassRec xmButtonBoxClassRec = {
     /* superclass         */	(WidgetClass)SUPERCLASS,
     /* class_name         */	"XmButtonBox",                            
     /* widget_size        */	sizeof(XmButtonBoxPart),                 
-    /* class_initialize   */	ClassInitialize,                             
-    /* class_part_init    */	NULL,                             	
+    /* class_initialize   */	ClassInitialize,
+    /* class_part_init    */	ClassPartInitialize, 	
     /* class_inited       */	False,                            	
     /* initialize         */	Initialize, 
     /* initialize_hook    */	NULL,                             	
@@ -200,7 +214,7 @@ ClassInitialize()
 			    &XmButtonBox_offsets,
 			    &XmButtonBoxC_offsets);
 
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
+    for(i=0; i < wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmButtonBox_offsets);
@@ -210,6 +224,32 @@ ClassInitialize()
 		       (XtTypeConverter) CvtStringToFillOption,
                        NULL, (Cardinal)0, XtCacheAll, (XtDestructor)NULL);
 }
+
+
+/****************************************************************/
+static void 
+ClassPartInitialize(WidgetClass w_class )
+{
+    XmButtonBoxWidgetClass bbClass
+        = (XmButtonBoxWidgetClass) w_class ;
+
+    XmButtonBoxWidgetClass bbSuper
+	    = (XmButtonBoxWidgetClass) w_class->core_class.superclass ;
+
+    _XmFastSubclassInit (w_class, XmBULLETIN_BOARD_BIT);
+
+    
+    /* Install the specifyrendertable trait for all subclasses */
+    /*
+    XmeTraitSet((XtPointer)w_class, XmQTspecifyRenderTable, 
+		(XtPointer) &bulletinbSRT);
+    */
+    return ;
+}
+
+
+/****************************************************************/
+
 
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific
@@ -509,15 +549,17 @@ ChangeManaged(Widget w)
 
 /* ARGSUSED */
 static void
-InsertChild(register Widget w)
+InsertChild(register Widget child)
 {
+Boolean         is_button = False ;
+XmButtonBoxWidget bb = (XmButtonBoxWidget) XtParent( child) ;
     /*
-     * Check for non-widgets - ButtonBox doesn't support gadgets.
+     * Check for non-widgets - ButtonBox doesn't support gadgets, for now ...
      */
 
-    if (_XmGadgetWarning(w))
+    if (_XmGadgetWarning(child))
     {
-	return;
+    	return;
     }
     
     /*
@@ -525,7 +567,32 @@ InsertChild(register Widget w)
      * superclass insert_child routine.
      */
 
-    (*SUPERCLASS->composite_class.insert_child)(w);
+    /* (*SUPERCLASS->composite_class.insert_child)(w); */
+
+    /* Another process may be updating the superclass's data */
+    /* (This was missed for some reason... - scorch)
+     * use composite class insert proc to do all the dirty work
+     */
+    {
+       XtWidgetProc insert_child;
+       _XmProcessLock();
+       insert_child = ((XmManagerWidgetClass)xmManagerWidgetClass)->
+				composite_class.insert_child; 
+       _XmProcessUnlock();
+       (*insert_child)(child);
+    }
+
+    if(XmeTraitGet((XtPointer)XtClass(child), XmQTtakesDefault))
+    {
+        is_button = TRUE ;
+
+        if( XmButtonBox_default_button( bb) )
+        {   
+            /* Notify child that it has to be ready for default visual */
+            ButtonBoxSetDefaultShadow( child) ;
+        }
+    }
+
 }
 
     
@@ -1032,3 +1099,17 @@ XmCreateButtonBox(Widget parent, String name, ArgList args, Cardinal num_args)
 			  xmButtonBoxWidgetClass, parent, args, num_args));
 }
 
+
+
+/****************************************************************/
+static void 
+ButtonBoxSetDefaultShadow(Widget button)
+{   
+    XmTakesDefaultTrait trait_default ;
+    
+    trait_default = (XmTakesDefaultTrait) XmeTraitGet((XtPointer)
+						      XtClass(button), 
+						      XmQTtakesDefault) ;
+    if (trait_default) 
+	trait_default->showAsDefault  (button, XmDEFAULT_READY);
+}
