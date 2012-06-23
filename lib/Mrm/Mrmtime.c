@@ -56,12 +56,13 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
  *
  */
 
-#include <Mrm/MrmAppl.h>
-#include <Mrm/Mrm.h>
-
 #define X_INCLUDE_TIME_H
 #define XOS_USE_XT_LOCKING
-#include <X11/Xos_r.h>
+#include <X11/Xos_r.h> /* Must precede Mrm/MrmAppl.h and Mrm/Mrm.h to avoid
+			  possible redefinitions of MIN() and MAX(). */
+
+#include <Mrm/MrmAppl.h>
+#include <Mrm/Mrm.h>
 
 
 /*
