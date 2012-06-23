@@ -187,9 +187,14 @@ main (int argc, char** argv)
   for (DSP = 0;  DSP < MAX_DISPLAY_COUNT;  DSP++)
     pInfoList[DSP].display = NULL;
   DSP = LOCAL;
+    
+  XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+    
 
-  pInfoList[LOCAL].shell   = XtVaAppInitialize(&app, "Panner", NULL, 0,
-					       &argc, argv, fallback, NULL);
+  pInfoList[LOCAL].shell   = XtVaOpenApplication(&app, "Panner", NULL, 0,
+					       &argc, argv, 
+                                               fallback,
+                                               sessionShellWidgetClass, NULL);
   pInfoList[LOCAL].display = XtDisplay(pInfoList[LOCAL].shell);
 
 
