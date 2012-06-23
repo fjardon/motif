@@ -66,7 +66,17 @@ extern Widget XmCreatePushButton(
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
-
+/*
+ * Variable argument list functions
+ */
+extern Widget XmVaCreatePushButton(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedPushButton(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

@@ -90,12 +90,14 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 *************************************************************/
 
    
+Widget XmVLCreateWidget(char *, WidgetClass, Widget, Boolean, va_list, int);
 
-void XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
-void _XmMoveWidget(Widget, Position, Position);
-void _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
-void _XmConfigureWidget(Widget, Position, Position, 
-                        Dimension, Dimension, Dimension);
+int   XmCountVaList(va_list);
+void   XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
+void  _XmMoveWidget(Widget, Position, Position);
+void  _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
+void  _XmConfigureWidget(Widget, Position, Position, 
+                         Dimension, Dimension, Dimension);
 
 XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension,
                                    Dimension,

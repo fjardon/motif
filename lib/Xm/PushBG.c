@@ -3493,21 +3493,25 @@ XmCreatePushButtonGadget(
 Widget
 XmVaCreatePushButtonGadget(Widget parent, char *name, ...)
 {
-va_list var;
-Widget w;
-ArgList args;
-int n;
-String attr;
+    va_list var;
+    Widget w;
+    ArgList args;
+    int n;
+    String attr;
 
     va_start(var, name);
-    for (attr = va_arg(var, String), n = 0; attr != NULL; attr = va_arg(var, String), n++)
+    for (attr = va_arg(var, String), n = 0; 
+         attr != NULL; 
+         attr = va_arg(var, String), n++)
     {
     	(void)va_arg(var, XtArgVal);
     }
     va_end(var);
     args = (ArgList)XtMalloc(n * sizeof(Arg));
     va_start(var, name);
-    for (attr = va_arg(var, String), n = 0; attr != NULL; attr = va_arg(var, String), n++)
+    for (attr = va_arg(var, String), n = 0; 
+         attr != NULL; 
+         attr = va_arg(var, String), n++)
     {
     	args[n].name = attr;
     	args[n].value = va_arg(var, XtArgVal);
