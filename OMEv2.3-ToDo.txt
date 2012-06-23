@@ -1,0 +1,211 @@
+I will be adding to this as necessary.  Please do not hesitate to alert me or any of the others on the OpenMotif developers list.
+
+Robert Hartley
+rhartley@ics.com
+Mon Mar  4 18:15:17 EST 2002
+
+
+To Do for future releases of Open Motif:
+
+The Motif v1.2 widgets that were formerly part of EPak, and now contributed by ICS to OpenMotif for all to use freely, have some further enhancements that will help make them better integrated into the Motif v2.x way of doing things:
+
+- The ComboBox2 and Paned widgets are redundant. The Fontselector will be worked on so we can drop them.
+
+- Sridhar has already completed trait usage and resolved the thread saftey issues.  We will be merging diffs of his code into CVS.  All of the following widgets need to have it verified as working.
+
+
+Typical things to watch for in most of the following widgets:
+
+- uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution independent conversion of synthetic resources
+
+- use Xme sub-system, and get rid of deprecated methods
+
+- elimenate use of XtVersionDontCheck/XmResolveAllPartOffsets (done?)
+
+- parts of header should be in Xm.h
+
+- elimenate use of XtAppWarningMsg where the standard interface is XmeWarning.
+
+- elimenate use of XmRepType handlers in the ClassInitialize method
+
+- parts of header should be in Xm.h
+
+- uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution independent conversion of synthetic resources
+
+- support Motif 2.1 render table and layout direction functionality.
+
+
+
+Buttonbox
+=========
+- support Gadgets.
+
+- need to support the Trait XmQTtakesDefault so that default button highlight emphasis is supported in the standard manner.
+
+- elimenate use of XmRepType handlers in the ClassInitialize method
+
+
+
+ColorSelector
+=============
+- enable color, saturation, brightness controls.
+
+- enable a graphical representation of cubic color space
+
+- use the Motif 2.1 Trait mechanisms, perhaps using XmQTaccessColors
+
+- use XmStringUnparse instead of deprecated XmStringGetLtoR utilities to fetch the selected item from the Color namespace List.
+
+- use XmStringConcatAndFree instead of XmStringConcat/ XmStringFree combinations.
+
+- only one cell is deallocated in the Destroy method of the widget, but more could be allocated.
+
+
+
+Column
+======
+- make the label widget it dynamically constructs publicly available.
+
+- do not use the deprecated XmFontList, consider using the Motif 2.1 RenderTable type.
+
+
+
+ComboBox2
+=========
+Deprecate it.  Only needed for widgets like the FontSelector
+
+
+
+DataField
+=========
+- manual pages missing?
+
+- consider using Motif 2.1 utilities instead of:
+    XmString and XmFontList handling throughout
+    drop-site handling which does not use the XmTransfer UTM
+
+- should support XmQTaccessTextual trait
+
+- in the Xt class record it inherits from the Primitive class, but declares its size as the sum of TextField and DataField records.
+
+- Messages which should be defined in the central XmString repository are defined locally to the sources.
+
+- callback type definitions should be placed into the Xm.h public header.
+
+
+Ext18List
+=========
+- support the XmQTscrollFrame and XmQTtransfer traits and UTM
+
+- internationalized environments require public interface to be XmString, but currently is String
+
+- default labelling of parts is hard-coded English
+
+
+
+Font Selector
+=============
+- _XmGetMBStringFromXmString() replicates standard Motif functions.
+
+- XmFontList is deprecated in Motif 2.1.
+
+- Render tables?
+
+- consider Xme standard interface?
+
+- uses XtAppWarningMsg instead of XmeWarning
+
+- elimenate use of XtVersionDontCheck/XmResolveAllPartOffsets (done?)
+
+
+
+I18List
+=======
+- support multiple and extended selection.
+
+
+
+IconBox
+=======
+
+- Consider using XmQTtransfer and XmQTtraversalControl Traits.
+
+- support UTM
+
+- XmIconBoxDropData structure type in the header file is unused
+
+
+IconButton
+==========
+- uses deprecated methods to deduce the default font.
+
+- support XmQTactivatable and XmQTcareParentVisual traits.
+
+
+
+Paned
+=====
+Deprecate it.  Only needed for widgets like the FontSelector
+
+
+
+TabBox & TabCanvas
+==================
+- use Xme drawing utilities.
+
+- uses deprecated methods to deduce the default font.
+
+
+
+Table
+=====
+- use Xbae/Matrix as a reference implementation? check license first.
+
+- needs documentation
+
+- support both XmQTtraversalControl, XmQTtransfer and XmQTaccessTextual Traits
+
+- use XmClipWindow and XmQTclipWindow Trait
+
+- Callback and enumerated types should be defined in the XmP.h header.
+
+- representation types should be installed through the central XmRepType manager, not the ClassInitialize method
+
+
+
+TabStack
+========
+- support the XmQTnavigator trait to allow alternative SpinBox page control
+
+- support the XmQTscrollFrame, XmQTtraversalControl traits
+
+
+
+ToolTip
+=======
+- be care of Vendor shell extensions
+- consider using with Managers
+
+- allow per-target rendition specification
+
+- allow per-target enable/disable controls
+
+- allow specific default rendition characteristics, instead of inheriting default VendorShell font
+
+- widget instance structures referenced without locking application context
+
+- no public header file
+
+- take into account the edges of the screen
+
+- feature request: optionally allow display of text on status line
+
+
+Tree/Hierarchy
+==============
+- support gadgets
+
+- consider using XmQTtraversalControl trait
+
+- use UTM, not Drag n Drop
+
