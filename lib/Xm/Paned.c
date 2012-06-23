@@ -2181,10 +2181,6 @@ Initialize(Widget request, Widget set, ArgList args, Cardinal * num_args)
 {
     XmPanedWidget pw = (XmPanedWidget)set;
 
-#ifdef DEMO
-    _XmInitialIzeConverters(request);
-#endif
-
     GetGCs( (Widget) pw);
 
     XmPaned_recursively_called(pw) = False;

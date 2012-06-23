@@ -3372,10 +3372,6 @@ Initialize(Widget request, Widget set, ArgList args, Cardinal * num_args)
     ArgList f_args;
     Cardinal f_num_args;
 
-#ifdef DEMO
-    _XmInitialIzeConverters( request );
-#endif
-
     XmFontS_user_state(fsw) = 0;	/* Initialize user state to 0. */
     XmFontS_xlfd_mode(fsw) = True;	/* We start in Xlfd Mode. */
     XmFontS_font_info(fsw) = LoadFontInfo(fsw);

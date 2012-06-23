@@ -670,10 +670,6 @@ Initialize(request, set, arg_list, arg_cnt)
     ArgList          filtered_args;
     Cardinal	     num_filtered_args;
 
-#ifdef DEMO
-    _XmInitialIzeConverters(set);
-#endif
-
     XmTabBox__inited(st) = False;
 
     /*

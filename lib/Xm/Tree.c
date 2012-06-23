@@ -358,10 +358,6 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     XmTreeWidget tw = (XmTreeWidget) set;
     TreeConstraints top_node;
 
-#ifdef DEMO
-    _XmInitialIzeConverters(req);
-#endif
-
     top_node = ((TreeConstraints) 
 		XtRealloc((XtPointer) XmHierarchy_top_node(tw),
 			  sizeof(TreeConstraintRec)));

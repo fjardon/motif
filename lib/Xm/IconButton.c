@@ -460,10 +460,6 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 
     CalcLocations(set);
     CreateGCs(set);
-
-#ifdef DEMO
-    _XmInitialIzeConverters(req);
-#endif
 }
 
 /*	Function Name: Resize

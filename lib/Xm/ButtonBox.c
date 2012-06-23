@@ -130,8 +130,10 @@ XmButtonBoxClassRec xmButtonBoxClassRec = {
     /* class_inited       */	False,                            	
     /* initialize         */	Initialize, 
     /* initialize_hook    */	NULL,                             	
-    /* realize            */	XtInheritRealize,                 
-    /* actions            */	NULL,                             
+    /* realize            */	XtInheritRealize, 
+    /* actions            */	NULL,                     
+
+        
     /* num_actions        */	0,                                	
     /* resources          */	(XtResource*)resources,                     
     /* num_resources      */	XtNumber(resources), 
@@ -160,8 +162,8 @@ XmButtonBoxClassRec xmButtonBoxClassRec = {
     /* geometry_manager   */	GeometryManager,                  
     /* change_managed     */	ChangeManaged,                    
     /* insert_child       */	InsertChild,
-    /* delete_child       */	XtInheritDeleteChild,             	
-    /* extension          */	NULL,                             
+    /* delete_child       */	XtInheritDeleteChild,
+    /* extension          */	NULL,
   },
   { /* constraint_class fields */
     /* resource list      */    NULL,
@@ -214,11 +216,13 @@ ClassInitialize()
 			    &XmButtonBox_offsets,
 			    &XmButtonBoxC_offsets);
 
+    _XmProcessLock();
     for(i=0; i < wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmButtonBox_offsets);
     }
+    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmFillOption, 
 		       (XtTypeConverter) CvtStringToFillOption,
@@ -233,9 +237,10 @@ ClassPartInitialize(WidgetClass w_class )
     XmButtonBoxWidgetClass bbClass
         = (XmButtonBoxWidgetClass) w_class ;
 
+/* this seems to do nothing.... why is it here? -rh
     XmButtonBoxWidgetClass bbSuper
 	    = (XmButtonBoxWidgetClass) w_class->core_class.superclass ;
-
+*/
     _XmFastSubclassInit (w_class, XmBUTTONBOX_BIT);
 
     
@@ -276,13 +281,6 @@ static void Initialize(Widget req, Widget set,
 
     if (req->core.height == 0)
 	set->core.height = 1;
-
-    /* put up the guilt screen, if this is a demo version */
-
-#ifdef DEMO
-    _XmInitialIzeConverters( req );
-#endif
-
 }
 
 /*	Function Name: ConstraintInitialize

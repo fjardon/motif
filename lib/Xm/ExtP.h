@@ -120,8 +120,6 @@ void _XmSetContextData(Widget, XContext, XtPointer);
 void _XmDeleteContextData(Widget, XContext);
 Boolean _XmGetContextData(Widget, XContext, XtPointer *);
 Boolean _XmUtilIsSubclassByNameQ(Widget, XrmQuark);
-void _XmInitialIzeConverters(Widget);
-
 void _XmExtHighlightBorder(Widget);
 void _XmExtUnhighlightBorder(Widget);
 

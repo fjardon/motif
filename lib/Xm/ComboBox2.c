@@ -391,10 +391,6 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     Cardinal f_num_args;
     Dimension desired_height, desired_width;
 
-#ifdef DEMO
-    _XmInitialIzeConverters( req );
-#endif
-
     XmComboBox2_list_state(cbw) = XmCombinationBox2_POSTED;
     XmComboBox2_old_text(cbw) = NULL;
     XmComboBox2_doActivate(cbw) = False;

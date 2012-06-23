@@ -391,10 +391,6 @@ static void Initialize(Widget req, Widget set,
 {
     XmI18ListWidget ilist = (XmI18ListWidget) set;
 
-#ifdef DEMO
-    _XmInitialIzeConverters(req);
-#endif
-
     XmI18List_column_widths(ilist) = NULL;
     XmI18List_left_loc(ilist) = 0;    
     XmI18List_state(ilist) = 0;

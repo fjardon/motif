@@ -369,10 +369,6 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     HierarchyConstraints top_node;
     Window root = RootWindowOfScreen(XtScreen(set));
 
-#ifdef DEMO
-    _XmInitialIzeConverters(req);
-#endif
-
     top_node = ((HierarchyConstraints) 
 		XtMalloc(sizeof(HierarchyConstraintRec)));
 

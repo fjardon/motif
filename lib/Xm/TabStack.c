@@ -678,10 +678,6 @@ Initialize(request, set, arg_list, arg_cnt)
     Cardinal          n = 0, num_filtered_args;
     XmTabOrientation  orientation = XmTabStack_tab_orientation(ts);
 
-#ifdef DEMO
-    _XmInitialIzeConverters(set);
-#endif
-
     XmTabStack__inited(ts) = False;
 
     /* By default call XmNtabSelectedCallback callbacks when tab is selected */

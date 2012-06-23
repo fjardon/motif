@@ -240,10 +240,6 @@ static void Initialize(Widget req, Widget set,
     Cardinal f_num_args;
     XmExt18ListWidget elist = (XmExt18ListWidget) set;
 
-#ifdef DEMO
-    _XmInitialIzeConverters( req );
-#endif
-
     /*
      * Pass filtered setvalues requests down to all children.
      */

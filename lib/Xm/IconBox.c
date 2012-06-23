@@ -252,10 +252,6 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
      * created w/o any children.
      */
 
-#ifdef DEMO
-    _XmInitialIzeConverters(req);
-#endif 
-
     CalcCellSizes(set, NULL, FALSE, FALSE, 
 		  &(XmIconBox_cell_width(ibw)), &(XmIconBox_cell_height(ibw)));
 }

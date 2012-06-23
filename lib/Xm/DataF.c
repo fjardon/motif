@@ -9935,11 +9935,6 @@ df_Initialize(
       else
 	XmTextF_verify_bell(new_tf) = False;
     }
-
-#ifdef DEMO
-    /* put up the guilt screen, if this is a demo version */
-    _XmInitialIzeConverters( request );
-#endif
 }
 
 static void 

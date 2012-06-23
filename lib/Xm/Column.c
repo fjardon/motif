@@ -473,12 +473,6 @@ Initialize(request, set, arg_list, arg_cnt)
 	sc->core.height = 2 * (rc->manager.shadow_thickness +
 			       BBPart(rc)->margin_height);
     }
-
-#ifdef DEMO
-    /* put up the guilt screen, if this is a demo version */
-    _XmInitialIzeConverters( request );
-#endif
-
 }
 
 /*

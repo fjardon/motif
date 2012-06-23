@@ -322,10 +322,6 @@ Initialize(Widget request, Widget set, ArgList args, Cardinal *num_args)
     Cardinal 			f_num_args;
     Widget			button;
 
-#ifdef DEMO
-    _XmInitialIzeConverters( request );
-#endif
-
     _XmFilterArgs(args, *num_args, xm_std_filter, &f_args, &f_num_args);
 
     /*

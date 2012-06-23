@@ -296,14 +296,22 @@ _XmUtilIsSubclassByNameQ(Widget w, XrmQuark nameq)
 {
     WidgetClass class;
 
+    Boolean returnValue = False;
+
+    _XmProcessLock();
     for (class = XtClass(w) ;
-         class != NULL ; class = class->core_class.superclass)
+         class != NULL ;
+         class = class->core_class.superclass)
     {
         if (nameq == XrmStringToQuark(class->core_class.class_name))
-            return(True);
+        {
+            returnValue = True;
+            break;
+        }
     }
-
-    return(False);
+    _XmProcessUnlock();
+    
+    return(returnValue);
 }
 
 /*	Function Name: _XmGetMBStringFromXmString
@@ -720,9 +728,11 @@ XiCreateStippledPixmap(Screen *screen,
     cachePtr->depth = depth;
     cachePtr->pixmap = stippled_pixmap;
     cachePtr->ref_count = 1;
+
+    _XmProcessLock();
     cachePtr->next = pixmapCache;
     pixmapCache = cachePtr;
-
+    _XmProcessUnlock();
     return( stippled_pixmap );
 }
 
@@ -731,18 +741,24 @@ XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
 {
     register Display *display = DisplayOfScreen(screen);
     CacheEntry *cachePtr, **prevP;
-    for (prevP = &pixmapCache, cachePtr = pixmapCache; cachePtr;) {
-	if (cachePtr->screen == screen && cachePtr->pixmap == pixmap) {
-	    if (--cachePtr->ref_count == 0) {
-		XFreePixmap( display, pixmap );
-		*prevP = cachePtr->next;
-		XtFree( (char*)cachePtr );
-		break;
+
+    _XmProcessLock();
+    for (prevP = &pixmapCache, cachePtr = pixmapCache; cachePtr;)
+    {
+        if (cachePtr->screen == screen && cachePtr->pixmap == pixmap)
+        {
+	        if (--cachePtr->ref_count == 0)
+            {
+		        XFreePixmap( display, pixmap );
+		        *prevP = cachePtr->next;
+		        XtFree( (char*)cachePtr );
+		        break;
+	        }
 	    }
-	}
-	prevP = &cachePtr->next;
-	cachePtr = *prevP;
+	    prevP = &cachePtr->next;
+	    cachePtr = *prevP;
     }
+    _XmProcessUnlock();
 }
 
 /*
@@ -760,14 +776,19 @@ XiReleaseStippledPixmap(Screen *screen, Pixmap pixmap)
 Boolean
 XmCompareXtWidgetGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
 {
+    Boolean returnValue = True;
+
+    _XmProcessLock();
     if( (geom->request_mode & CWX && geom->x != widget->core.x) ||
         (geom->request_mode & CWY && geom->y != widget->core.y) ||
         (geom->request_mode & CWWidth && geom->width != XtHeight(widget)) ||
         (geom->request_mode & CWHeight && geom->height != XtHeight(widget)) ||
-        (geom->request_mode & CWBorderWidth && geom->border_width !=
-	 widget->core.border_width) ) return( False );
-
-    return( True );
+        (geom->request_mode & CWBorderWidth && geom->border_width != widget->core.border_width) )
+    {
+        returnValue = False;
+    }
+    _XmProcessUnlock();
+    return( returnValue );
 }
 
 /*
@@ -784,18 +805,17 @@ XmCompareXtWidgetGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
 Boolean
 XmCompareXtWidgetGeometry(XtWidgetGeometry *geom1, XtWidgetGeometry *geom2)
 {
-    if( geom1->request_mode != geom2->request_mode ) return( False );
+    if( geom1->request_mode != geom2->request_mode )
+        return( False );
 
-    if( (geom1->request_mode & CWX && (geom1->x != geom2->x)) ||
-        (geom1->request_mode & CWY && (geom1->y != geom2->y)) ||
-        (geom1->request_mode & CWWidth && (geom1->width != geom2->width)) ||
-        (geom1->request_mode & CWHeight && (geom1->height != geom2->height)) ||
-        (geom1->request_mode & CWBorderWidth &&
-	 (geom1->border_width != geom2->border_width)) ||
-        (geom1->request_mode & CWSibling &&
-	 (geom1->sibling != geom2->sibling)) ||
-        (geom1->request_mode & CWStackMode &&
-	 (geom1->stack_mode != geom2->stack_mode)) ) return( False );
+    if( (geom1->request_mode & CWX              && (geom1->x != geom2->x)) ||
+        (geom1->request_mode & CWY              && (geom1->y != geom2->y)) ||
+        (geom1->request_mode & CWWidth          && (geom1->width != geom2->width)) ||
+        (geom1->request_mode & CWHeight         && (geom1->height != geom2->height)) ||
+        (geom1->request_mode & CWBorderWidth    && (geom1->border_width != geom2->border_width)) ||
+        (geom1->request_mode & CWSibling        && (geom1->sibling != geom2->sibling)) ||
+        (geom1->request_mode & CWStackMode      && (geom1->stack_mode != geom2->stack_mode)) )
+        return( False );
 
     return( True );
 }
@@ -805,14 +825,6 @@ XmCompareXtWidgetGeometry(XtWidgetGeometry *geom1, XtWidgetGeometry *geom2)
  *  Static functions
  *
  ************************************************************/
-
-void
-_XmInitialIzeConverters(Widget w)
-{
-    fprintf(stderr,
-    "What does this next line do?  - rhartley\nfilename: %s, line: %d",  __FILE__, __LINE__);
-/*    _XiPostInitialIzeConverters(w, "ICS Enhancement Pak 4.0"); */
-}
 
 #include <Xm/XmP.h>
 
@@ -879,6 +891,7 @@ _XiResolveAllPartOffsets(
     
     Boolean do_align = False;
     
+    _XmProcessLock();
     if (sizeof(int) != sizeof(void*))
 	do_align = True;
     
@@ -1013,6 +1026,7 @@ _XiResolveAllPartOffsets(
 	    cc->constraint_class.resources[i].resource_offset =
 		XmGetPartOffset(pr, constraint_offset);
 	}
+    _XmProcessUnlock();
 }
 
 void 
