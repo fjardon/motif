@@ -29,6 +29,7 @@
 #include <stdarg.h>
 #include <X11/IntrinsicP.h>
 
+#include <Xm/XmI.h>
 #include <Xm/XmP.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/GadgetP.h>
@@ -867,7 +868,10 @@ IsSubclassOf(
 {
 	WidgetClass p = wc;
 
+    _XmProcessLock();
 	for(; (p) && (p != sc); p = p->core_class.superclass);
+    _XmProcessUnlock();
+
 	return (p == sc);
 }
 
@@ -1066,35 +1070,53 @@ XmResolveAllPartOffsets64(
  ************************************************************************/
 
 void 
-_XmExtHighlightBorder(
-        Widget w )
+_XmExtHighlightBorder(Widget w )
 {
-    if(    XmIsPrimitive( w)    ) {   
-        (*(xmPrimitiveClassRec.primitive_class.border_highlight))( w) ;
-    }  else  {   
-	if(    XmIsGadget( w)    ) {   
-	    (*(xmGadgetClassRec.gadget_class.border_highlight))( w) ;
-	} 
+XtWidgetProc border_highlight;
+    if(XmIsPrimitive(w))
+    {
+        _XmProcessLock();
+        border_highlight = xmPrimitiveClassRec.primitive_class.border_highlight;
+        _XmProcessUnlock();
+
+        (*border_highlight) (w);
+    }
+    else
+    {
+	    if(XmIsGadget(w))
+        {
+            _XmProcessLock();
+            border_highlight = xmGadgetClassRec.gadget_class.border_highlight;
+            _XmProcessUnlock();
+
+            (*border_highlight) (w);
+	    }
     } 
     return ;
 } 
 
+
 void 
-_XmExtUnhighlightBorder(
-        Widget w )
+_XmExtUnhighlightBorder(Widget w)
 {
-    if(    XmIsPrimitive( w)    )
+XtWidgetProc border_unhighlight;
+
+    if( XmIsPrimitive(w))
     {   
-        (*(xmPrimitiveClassRec.primitive_class.border_unhighlight))( w) ;
-        } 
+        _XmProcessLock();
+        border_unhighlight = xmPrimitiveClassRec.primitive_class.border_unhighlight;
+        _XmProcessUnlock();
+        (*border_unhighlight)(w) ;
+    } 
     else
-    {   if(    XmIsGadget( w)    )
+    {
+        if(XmIsGadget(w))
         {   
-            (*(xmGadgetClassRec.gadget_class.border_unhighlight))( w) ;
-            } 
+            _XmProcessLock();
+            border_unhighlight = xmGadgetClassRec.gadget_class.border_unhighlight;
+            _XmProcessUnlock();
+            (*border_unhighlight)(w);
         } 
+    } 
     return ;
-    }
-
-
-
+}
