@@ -70,6 +70,7 @@ extern void 		XmeNavigChangeManaged(Widget);
 
 static void ChangeManaged(Widget w);
 static void ClassInitialize(void), Destroy(Widget), Resize(Widget);
+static void ClassPartInitialize(WidgetClass w_class);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
 static XtGeometryResult GeometryHandler(Widget, XtWidgetGeometry *, 
@@ -188,7 +189,7 @@ XmColorSelectorClassRec xmColorSelectorClassRec = {
     /* class_name               */      "XmColorSelector",
     /* widget_size              */      sizeof(XmColorSelectorPart),
     /* class_initialize         */      ClassInitialize,
-    /* class_part_initialize    */      NULL,
+    /* class_part_initialize    */      ClassPartInitialize,
     /* class_inited             */      False,
     /* initialize               */      Initialize,
     /* initialize_hook          */      NULL,
@@ -282,6 +283,22 @@ ClassInitialize(void)
 		       (XtTypeConverter) CvtStringToColorMode, 
 		       NULL, (Cardinal) 0, XtCacheAll, NULL);
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmCOLORS_BIT);
+}
+
+
 
 /*      Function Name: Initialize
  *      Description:   Called to initialize information specific

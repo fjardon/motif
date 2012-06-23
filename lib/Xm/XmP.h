@@ -684,6 +684,7 @@ enum{	XmCASCADE_BUTTON_BIT = 1,	XmCASCADE_BUTTON_GADGET_BIT,
     XmDATAFIELD_BIT,
     XmI18LIST_BIT,
     XmEXT18LIST_BIT,
+    XmCOLORS_BIT,
     
 	XmFAST_SUBCLASS_TAIL_BIT /* New entries precede this. */
 	} ;
