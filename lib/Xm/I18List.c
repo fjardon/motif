@@ -109,6 +109,7 @@ Xm18RowInfo *XmI18ListFindRow(Widget w, String str, int *found_column,
 			      Boolean reset, Boolean do_visual);
 
 static void ClassInitialize();
+static void ClassPartInitialize(WidgetClass w_class);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void Realize(Widget, Mask *, XSetWindowAttributes *);
 static void Resize(Widget), Redisplay(Widget, XEvent *, Region);
@@ -276,7 +277,7 @@ XmI18ListClassRec xmI18ListClassRec = {
     /* class_name		*/	XM_I18LIST_CLASS_NAME,
     /* widget_size		*/	sizeof(XmI18ListPart),
     /* class_initialize		*/	ClassInitialize,
-    /* class_part_initialize	*/	NULL,
+    /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
     /* initialize		*/	Initialize,
     /* initialize_hook		*/	NULL,
@@ -355,6 +356,23 @@ ClassInitialize()
 			    &XmI18List_offsets,
 			    NULL);
 }
+
+/*
+ * ClassPartInitialize sets up the fast subclassing for the widget.
+ */
+static void 
+#ifdef _NO_PROTO
+ClassPartInitialize(w_class)
+        WidgetClass w_class ;
+#else
+ClassPartInitialize(WidgetClass w_class)
+#endif /* _NO_PROTO */
+{
+    _XmFastSubclassInit (w_class, XmI18LIST_BIT);
+}
+
+
+
 
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific
