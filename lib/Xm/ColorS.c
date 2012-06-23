@@ -272,13 +272,13 @@ ClassInitialize(void)
     XmResolveAllPartOffsets(xmColorSelectorWidgetClass,
 			    &XmColorS_offsets,
 			    &XmColorSC_offsets);
-
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
         (wc->manager_class.syn_resources)[i].resource_offset =
             XmGetPartOffset(wc->manager_class.syn_resources + i,
                             &XmColorS_offsets);
     }
-
+    _XmProcessUnlock();
     XtSetTypeConverter(XmRString, XmRXmColorMode, 
 		       (XtTypeConverter) CvtStringToColorMode, 
 		       NULL, (Cardinal) 0, XtCacheAll, NULL);
