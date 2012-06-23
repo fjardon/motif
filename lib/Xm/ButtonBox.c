@@ -236,7 +236,7 @@ ClassPartInitialize(WidgetClass w_class )
     XmButtonBoxWidgetClass bbSuper
 	    = (XmButtonBoxWidgetClass) w_class->core_class.superclass ;
 
-    _XmFastSubclassInit (w_class, XmBULLETIN_BOARD_BIT);
+    _XmFastSubclassInit (w_class, XmBUTTONBOX_BIT);
 
     
     /* Install the specifyrendertable trait for all subclasses */
