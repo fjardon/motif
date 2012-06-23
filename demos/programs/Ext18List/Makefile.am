@@ -4,7 +4,7 @@ datadir = ${prefix}/share/Xm/Ext18list
 
 bin_PROGRAMS = ext18list
 SUBDIRS = pixmaps
-ext18list_SOURCES = bxutil-c.c callbacks-c.c creation.c ext18list.c \
+ext18list_SOURCES = util-c.c callbacks-c.c creation.c ext18list.c \
          extlist.h
 EXTRA_DIST = Imakefile
 data_DATA = $(EXTRA_DIST) $(ext18list_SOURCES)
