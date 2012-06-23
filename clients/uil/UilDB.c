@@ -66,8 +66,8 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
 #include <unistd.h>
 #endif
 
-#include <Mrm/MrmAppl.h>
-#include <Mrm/Mrm.h>
+
+
 
 #include "UilDefI.h"
 
