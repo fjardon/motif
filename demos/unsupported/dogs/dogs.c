@@ -36,6 +36,7 @@ static char rcsid[] = "$XConsortium: dogs.c /main/5 1995/07/14 10:07:19 drk $"
 ******************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <Xm/Xm.h>
 #include <Xm/MessageB.h>
 #include <Mrm/MrmPublic.h>
@@ -145,7 +146,7 @@ static void tb_cb (w, tag, cb)
     XmToggleButtonCallbackStruct *cb;
 {
     Arg args[1];
-    Widget dog;
+    Widget dog=NULL;
 
     switch (*tag) {
 	case(1) : dog = dog1_id; break;
@@ -162,7 +163,7 @@ static void scale_cb(w, tag, cb)
     XmScaleCallbackStruct *cb;
 {
     Arg args[1];
-    Widget dog;
+    Widget dog = NULL;
 
     switch (*tag) {
 	case(1) : dog = dog1_id; break;

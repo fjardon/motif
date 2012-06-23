@@ -34,6 +34,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <Xm/XmAll.h>
 
 /*-------------------------------------------------------------
@@ -369,7 +370,7 @@ Use the Open button in the File menu to load a new file.\n\n\
 Use the ScrollBar to scroll and the window manager to resize the main\n\
 window and see the slider size change.\n\n\
 You can specify which font to display the test using the\n\
-XmNfont screen resource.\0");
+XmNfont screen resource.");
 
 	message_string = XmStringCreateLtoR (message, 
 					     XmSTRING_DEFAULT_CHARSET);

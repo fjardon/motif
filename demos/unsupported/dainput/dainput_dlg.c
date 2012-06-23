@@ -27,6 +27,7 @@
  */
 #include <Xm/XmP.h> /* for XmeGetDefaultRenderTable */
 #include <Xm/XmIm.h>
+#include <stdlib.h>
 #include "dainput.h"
 
 typedef struct _DaTextDataRec {

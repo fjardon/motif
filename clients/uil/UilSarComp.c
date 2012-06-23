@@ -841,11 +841,12 @@ yystype	    *prior_value_frame;
 	**  accordingly.
 	*/
 	if (value_entry->b_type == sym_k_bool_value)
+        {
 	    if (value_entry->value.l_integer == TRUE)
 		target_frame->b_direction = XmSTRING_DIRECTION_R_TO_L;
 	    else
 		target_frame->b_direction = XmSTRING_DIRECTION_L_TO_R;
-
+        }
 	break;
     }
 
@@ -861,11 +862,12 @@ yystype	    *prior_value_frame;
 	**  accordingly.
 	*/
 	if (value_entry->b_type == sym_k_bool_value)
+        {
 	    if (value_entry->value.l_integer == TRUE)
 		target_frame->b_type |= sym_m_sixteen_bit; 
 	    else
 		target_frame->b_type &= ~sym_m_sixteen_bit; 
-
+        }
 	break;
     }
 

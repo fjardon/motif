@@ -508,11 +508,10 @@ object workArea : XmForm {
 	XmFrame scaleFrame;
 	XmFrame radioFrame;
 	XmFrame textFrame;
-	XmFrame commandFrame;
+        XmFrame tabFrame;
 	XmFrame notebookFrame;
 	XmFrame scrollFrame;
 	XmFrame listFrame;
-	XmFrame paneFrame;
 	XmFrame popupFrame;
 	XmFrame drawFrame;
 	XmFrame drawBtnFrame;
@@ -770,7 +769,7 @@ object optionFrame : XmFrame {
 object scaleFrame : XmFrame {
     arguments {
 	arguments formArgs;
-	XmNleftPosition = x6; XmNrightPosition = x7;
+	XmNleftPosition = x5; XmNrightPosition = x6;
 	XmNtopPosition = y1; XmNbottomPosition = y2;
 	XmNmarginWidth = boxMarginWidth;
 	XmNmarginHeight = boxMarginHeight;
@@ -805,6 +804,44 @@ object valueScale : XmScale {
 };
 
 object radioFrame : XmFrame {
+    arguments {
+	arguments formArgs;
+	XmNleftPosition = x6; XmNrightPosition = x7;
+	XmNtopPosition = y1; XmNbottomPosition = y2;
+    };
+    controls {
+	XmLabel  { arguments {
+	    arguments titleArgs;
+	    XmNlabelString = radioFrameText;
+	}; }; 
+	XmRadioBox { 
+	    arguments { XmNradioAlwaysOne = true; XmNspacing = 0; };
+	    controls {
+		XmToggleButton {
+		    arguments {
+			XmNlabelString = radio1Text; XmNset = true;
+		    };
+		    callbacks { XmNvalueChangedCallback = procedure
+				SetScaleCb(radio1Value);
+		    };
+		};
+		XmToggleButton {
+		    arguments { XmNlabelString = radio2Text; };
+		    callbacks { XmNvalueChangedCallback = procedure
+				SetScaleCb(radio2Value);
+		    };
+		};
+		XmToggleButton {
+		    arguments { XmNlabelString = radio3Text; };
+		    callbacks { XmNvalueChangedCallback = procedure
+				SetScaleCb(radio3Value);
+		    };
+		};
+	    };
+	};
+    };
+};
+object treeFrame : XmFrame {
     arguments {
 	arguments formArgs;
 	XmNleftPosition = x7; XmNrightPosition = x8;
@@ -842,7 +879,6 @@ object radioFrame : XmFrame {
 	};
     };
 };
-
 object textFrame : XmFrame {
     arguments {
 	arguments formArgs;
@@ -949,13 +985,6 @@ object comboBoxFrame : XmFrame {
 };
 
 object paneFrame : XmFrame {
-    arguments {
-	arguments formArgs;
-	XmNleftPosition = x6; XmNrightPosition = x8;
-	XmNtopPosition = y3; XmNbottomPosition = y5;
-	XmNmarginWidth = boxMarginWidth;
-	XmNmarginHeight = boxMarginHeight;
-    };
     controls {
 	XmLabel  { arguments {
 	    arguments titleArgs;
@@ -1057,7 +1086,7 @@ object popupMenu : XmPopupMenu {
 object drawFrame : XmFrame {
     arguments {
 	arguments formArgs;
-	XmNleftPosition = x5; XmNrightPosition = x6;
+	XmNleftPosition = x4; XmNrightPosition = x5;
 	XmNtopPosition = y1; XmNbottomPosition = y2;
 	XmNmarginWidth = boxMarginWidth;
 	XmNmarginHeight = boxMarginHeight;
@@ -1156,9 +1185,7 @@ object spinBoxFrame : XmFrame {
 
 object commandFrame : XmFrame {
     arguments {
-	arguments formArgs;
-	XmNleftPosition = x0; XmNrightPosition = x2;
-	XmNtopPosition = y3; XmNbottomPosition = y5;
+        XmNtabLabelString = "XmCommand";    
     };
     controls {
 	XmLabel { arguments {
@@ -1176,10 +1203,153 @@ object commandFrame : XmFrame {
     };
 };
 
+object tabFrame: XmFrame {
+    arguments {
+    arguments formArgs;
+    XmNleftPosition = x0; XmNrightPosition = x4;
+    XmNtopPosition = y3; XmNbottomPosition = y5;
+    XmNmarginWidth = boxMarginWidth;
+    XmNmarginHeight = boxMarginHeight;
+    };
+    controls {
+       XmLabel { arguments {
+	    arguments titleArgs;
+	    XmNlabelString = "TabStack";
+	}; }; 
+       XmTabStack tabstack;
+    };
+};
+
+object tabstack: XmTabStack{
+   controls {
+	XmTree tree;
+        XmFrame commandFrame;
+        XmFrame paneFrame;
+        XmColumn column;
+
+  };
+};
+object tree: XmTree{
+    arguments {
+        XmNtabLabelString = "XmTree";
+    };
+    controls {
+        XmPushButton Germanic;
+        XmPushButton TEast;
+        XmPushButton TWest;
+        XmPushButton TNorth;
+        XmPushButton Burgundian;
+        XmPushButton Gothic;
+        XmPushButton Lombardic ;
+        XmPushButton Vandalic;
+        XmPushButton Ingaevonic;
+        XmPushButton High;
+    };
+
+};
+!
+! Nodes for our tree
+!
+object Germanic :XmPushButton { arguments {
+            XmNlabelString = "Germanic";
+            XmNnodeState = XmAlwaysOpen;
+	}; };
+object TEast :XmPushButton
+{ arguments {
+            XmNlabelString = "East";
+            XmNparentNode = Germanic;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object TWest :XmPushButton
+{ arguments {
+            XmNlabelString = "West";
+            XmNparentNode = Germanic;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object TNorth :XmPushButton
+{ arguments {
+            XmNlabelString = "North";
+            XmNparentNode = Germanic;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object Burgundian :XmPushButton
+{ arguments {
+            XmNlabelString = "Burgundian";
+            XmNparentNode = TEast;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object Gothic :XmPushButton
+{ arguments {
+            XmNlabelString = "Gothic";
+            XmNparentNode = TEast;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object Lombardic :XmPushButton
+{ arguments {
+            XmNlabelString = "Lombardic";
+            XmNparentNode = TEast;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object Vandalic :XmPushButton
+{ arguments {
+            XmNlabelString = "Vandalic";
+            XmNparentNode = TEast;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object Ingaevonic :XmPushButton
+{ arguments {
+            XmNlabelString = "Ingaevonic";
+            XmNparentNode = TWest;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+object High :XmPushButton
+{ arguments {
+            XmNlabelString = "High German";
+            XmNparentNode = TWest;
+            XmNnodeState = XmAlwaysOpen;
+}; };
+
+
+
+
+
+
+!
+! End of tree nodes
+!
+object column: XmColumn {
+    arguments {
+        XmNtabLabelString = "XmColumn";
+    
+    };
+    controls {
+        XmText { arguments {
+	    XmNvalue = "617-621-0020";
+            XmNwidth = 100;
+            XmNentryLabelString = "Phone Number";
+	}; };
+        XmText { arguments {
+	    XmNvalue = "201 Broadway";
+            XmNwidth = 100;
+            XmNentryLabelString = "Address";
+	}; };
+        XmText { arguments {
+	    XmNvalue = "Cambridge";
+            XmNwidth = 100;
+            XmNentryLabelString = "City";
+	}; };
+        XmText { arguments {
+	    XmNvalue = "Mass";
+            XmNwidth = 100;
+            XmNentryLabelString = "State";
+	}; };
+        
+    };
+};
 object notebookFrame : XmFrame {
     arguments {
 	arguments formArgs;
-	XmNleftPosition = x2; XmNrightPosition = x6;
+	XmNleftPosition = x4; XmNrightPosition = x8;
 	XmNtopPosition = y3; XmNbottomPosition = y5;
 	XmNmarginWidth = boxMarginWidth;
 	XmNmarginHeight = boxMarginHeight;
@@ -2015,10 +2185,10 @@ object cancelButton : XmPushButton {
 };
 object showDialog : XmInformationDialog {
     arguments {
-	XmNdialogTitle = "Motif Release 2.1";
+	XmNdialogTitle = "Motif Release 2.2";
 	XmNcancelLabelString = "Enjoy!";
 	XmNmessageString =
-		compound_string("Motif Release 2.1", separate = true) &
+		compound_string("Motif Release 2.2", separate = true) &
 		compound_string("", separate = true) &
 		compound_string("June 1994", separate = true) &
 		compound_string("", separate = true) &

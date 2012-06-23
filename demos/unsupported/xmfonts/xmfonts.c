@@ -45,6 +45,7 @@ Xmfonts.ad:
 
 ***-------------------------------------------------------------------*/
 #include <stdio.h>
+#include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
 #include <Xm/MainW.h>
@@ -314,13 +315,13 @@ Widget		parent;		/*  parent widget	*/
 	if (name)
 		font = XLoadQueryFont (XtDisplay (XtParent (parent)), name);
 	if  (!font)
-		sprintf (message, "Unable to load font: %s\0", name);
+		sprintf (message, "Unable to load font: %s", name);
 	else
 	{
 		fontlist = XmFontListCreate (font, charset);
 		sprintf (message, "\
 This is font %s.\n\
-The quick brown fox jumps over the lazy dog.\0", name);
+The quick brown fox jumps over the lazy dog.", name);
 	}
 	message_string = XmStringCreateLtoR (message, charset);
 	button_string = XmStringCreateLtoR ("Close", charset);

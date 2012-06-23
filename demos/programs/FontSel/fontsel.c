@@ -13,6 +13,7 @@
  *		INCLUDE FILES
  **************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "fontsel.h"
@@ -68,6 +69,7 @@ static String fallbacks[] = {
  * Returns:       nothing
  *
  */
+void 
 InitializeDemoForm(Widget form)
 {
     Widget w;
@@ -95,6 +97,7 @@ InitializeDemoForm(Widget form)
  * Returns:       nothing
  *
  */
+int
 main(argc, argv)
 int argc;
 char **argv;
