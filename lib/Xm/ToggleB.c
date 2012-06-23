@@ -1090,7 +1090,7 @@ Select(
         Cardinal *num_params )
 {
   XmToggleButtonWidget tb = (XmToggleButtonWidget) wid ;
-  static XmToggleButtonWidget prev = NULL; 
+/*  static XmToggleButtonWidget prev = NULL;  */
   XmToggleButtonCallbackStruct call_value;
   Boolean hit;
   XmMenuSystemTrait menuSTrait;
@@ -1099,11 +1099,26 @@ Select(
     return;
   
   tb->toggle.Armed = FALSE;
-  
+
+#define CR1154
+#ifdef CR1154
+  /* Skip processing if 1) the toggle type (ind_type)
+   * is one of the ONE_OF_MANY*, and 2) if the toggle
+   * button is still set. (Hint this allows for the
+   * XmNvalueChangedCallback to use XmToggleButtonSetState
+   * to reset a different button to be the active one) */
+  if ((tb->toggle.set == XmSET) &&
+      ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
+       (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
+       (tb->toggle.ind_type == XmONE_OF_MANY)))
+#else
   if ((prev == tb) && ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
                      (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
                      (tb->toggle.ind_type == XmONE_OF_MANY)))
+#endif
        return;
+
+
 
   /* CR 8068: Verify that this is in fact a button event. */
   /* CR 9181: Consider clipping when testing visibility. */
@@ -1157,7 +1172,9 @@ Select(
 	}
 
     }
+#ifndef CR1154
 prev = tb;
+#endif
 }
 
 /**********************************************************************
