@@ -203,14 +203,6 @@ then
     fi
 fi
 
-if test -f $srcdir/lib/Xm/SlideC.h
-then
-    AC_DEFINE(HAVE_SLIDEC_H)
-    SLIDE_DIST="SlideC.c SlideC.h SlideCP.h"
-fi
-AC_SUBST(SLIDE_DIST)
-AM_CONDITIONAL(OM_SLIDEC, test -f $srcdir/lib/Xm/SlideC.h)
-
 if test x$GCC = xyes
 then
     CFLAGS="$CFLAGS -Wall -Wno-unused -Wno-comment"

@@ -29,9 +29,7 @@
 #include <Xm/VendorSEP.h>
 #include <Xm/GadgetP.h>
 #include <BaseClassI.h>
-#ifdef HAVE_SLIDEC_H
 #include <Xm/SlideC.h>
-#endif
 
 typedef XmVendorShellExtPart XmToolTipDataStruct;
 
@@ -91,14 +89,11 @@ XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
 	}
 	TipData->duration_timer = (XtIntervalId)NULL;
     }
-#ifdef HAVE_SLIDEC_H
     if (TipData->slider)
     {
     	XtDestroyWidget(TipData->slider);
     	TipData->slider = NULL;
     }
-#else
-#endif
     ToolTipUnpostFinish(NULL, TipData, NULL);
 }
 
@@ -184,7 +179,6 @@ Position destX, destY;
 	destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y - geo.height;
     }
 #endif
-#ifdef HAVE_SLIDEC_H
     XtVaSetValues(XtParent(TipData->label),
 	XmNx, rx + 1,
 	XmNy, ry + 1,
@@ -200,19 +194,7 @@ Position destX, destY;
 	XmNslideDestHeight, geo.height,
 	NULL);
     XtAddCallback(TipData->slider, XmNslideFinishCallback, (XtCallbackProc)ToolTipPostFinish, TipData);
-#else
-    XtVaSetValues(XtParent(TipData->label),
-	XmNx, destX,
-	XmNy, destY,
-	XmNwidth, geo.width,
-	XmNheight, geo.height,
-	NULL);
-#endif
     XtPopup(XtParent(TipData->label), XtGrabNone);
-#ifdef HAVE_SLIDEC_H
-#else
-    ToolTipPostFinish(NULL, TipData, NULL);
-#endif
 }
 
 void 

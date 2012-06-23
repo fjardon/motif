@@ -23,8 +23,6 @@
 
 #undef HAVE_LIBXMU
 
-#undef HAVE_SLIDEC_H
-
 #undef NEED_STRCASECMP
 
 #undef NEED_STRDUP

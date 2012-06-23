@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = xmstring.list Xm.msg Imakefile $(SLIDE_DIST) $(XMTHEME_DIST) \
+EXTRA_DIST = xmstring.list Xm.msg Imakefile $(XMTHEME_DIST) \
              XmStrDefs.ct
 
 INCLUDES = -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
@@ -35,17 +35,8 @@ EXTRA_SRCS = XmExtUtil.c \
              Hierarchy.c Outline.c Table.c TabBox.c TabList.c TabStack.c \
              DrawUtils.c Tree.c ComboBox2.c XmStrDefs.ht  XmStrDefsI.ht
 
-if OM_SLIDEC
-
 SLIDE_HDRS = SlideC.h SlideCP.h
 SLIDE_SRCS = SlideC.c
-
-else
-
-SLIDE_HDRS =
-SLIDE_SRCS =
-
-endif
 
 if OM_XMTHEMES
 
