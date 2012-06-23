@@ -1531,7 +1531,7 @@ CalcLocations(Widget w, Boolean resize_it)
         _XmProcessLock();
         build_node_table = tc->hierarchy_class.build_node_table;
         _XmProcessUnlock();
-        (*build_node_table)) (w, XmHierarchy_top_node(tw), &current_index);
+        (*build_node_table) (w, XmHierarchy_top_node(tw), &current_index);
     }
     CalcMaxSize(w);
     FindNodeLocations(w);		/* Finds the location for each node. */

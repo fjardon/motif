@@ -31,7 +31,7 @@
 #endif
 
 #include <stdio.h>
-
+#include <Xm/XmI.h>
 #include <Xm/XmP.h>
 #if (XmVERSION >= 2)
 #include <Xm/DrawP.h>
@@ -463,10 +463,21 @@ Realize(Widget w, Mask *valueMask, XSetWindowAttributes * attributes)
 
     AdjustFirstRowAndCol( ilist );
 
-    (*xmI18ListWidgetClass->core_class.superclass->core_class.realize)
-	(w, valueMask, attributes);
+    {
+        XtRealizeProc realize;
+        _XmProcessLock();
+        realize = xmI18ListWidgetClass->core_class.superclass->core_class.realize;
+        _XmProcessUnlock();
+        (*realize) (w, valueMask, attributes);
+    }
 
-    (*xmI18ListWidgetClass->core_class.resize)(w);
+    {
+        XtWidgetProc resize;
+        _XmProcessLock();
+        resize = xmI18ListWidgetClass->core_class.resize;
+        _XmProcessUnlock();
+        (*resize)(w);
+    }
 }
 
 /*	Function Name: SetValues
