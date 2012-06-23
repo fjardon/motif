@@ -27,6 +27,7 @@
 #include <config.h>
 #endif
 
+#define CR1152
 
 #ifdef REV_INFO
 #ifndef lint
@@ -1448,6 +1449,9 @@ CopyFromArg(XtArgVal src, char *dst, unsigned int size)
   else {
     union {
       long	longval;
+#ifdef CR1152
+      int   intval;
+#endif
       short	shortval;
       char	charval;
       char*	charptr;
@@ -1455,6 +1459,9 @@ CopyFromArg(XtArgVal src, char *dst, unsigned int size)
     } u;
     char *p = (char*)&u;
     if      (size == sizeof(long))	    u.longval = (long)src;
+#ifdef CR1152
+    else if (size ==  sizeof(int))          u.intval = (int) src;
+#endif
     else if (size == sizeof(short))	    u.shortval = (short)src;
     else if (size == sizeof(char))	    u.charval = (char)src;
     else if (size == sizeof(XtPointer))	    u.ptr = (XtPointer)src;
@@ -1473,6 +1480,9 @@ CopyToArg(char *src, XtArgVal *dst, unsigned int size)
      * but preserve for compatibility as long as arglist contains NULL.
      */
     if	    (size == sizeof(long))	   *dst = (XtArgVal)*(long*)src;
+#ifdef CR1152
+    else if (size == sizeof(int))    *dst = (XtArgVal)*(int*)src;
+#endif;
     else if (size == sizeof(short))    *dst = (XtArgVal)*(short*)src;
     else if (size == sizeof(char))	   *dst = (XtArgVal)*(char*)src;
     else if (size == sizeof(XtPointer)) *dst = (XtArgVal)*(XtPointer*)src;
@@ -1483,6 +1493,9 @@ CopyToArg(char *src, XtArgVal *dst, unsigned int size)
   else {
     /* proper GetValues semantics: argval is pointer to destination */
     if	(size == sizeof(long))	   *((long*)*dst) = *(long*)src;
+#ifdef CR1152
+    else if (size == sizeof(int))    *((int*)*dst) = *(int*)src;
+#endif
     else if (size == sizeof(short))    *((short*)*dst) = *(short*)src;
     else if (size == sizeof(char))	   *((char*)*dst) = *(char*)src;
     else if (size == sizeof(XtPointer)) *((XtPointer*)*dst) = *(XtPointer*)src;
