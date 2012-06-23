@@ -44,7 +44,11 @@ static char rcsid[] = "$XConsortium: DropTrans.c /main/15 1996/05/02 13:50:19 pa
 #include <Xm/AtomMgr.h>
 #include <stdio.h>
 
+#define CR1146
 
+#ifdef CR1146
+static int isValidStartDropTimerId = 0;
+#endif
 /********    Static Function Declarations    ********/
 
 static void ClassPartInit( 
@@ -475,6 +479,11 @@ StartDropTimer(
 	Arg my_args[1];
 	int i;
 	Atom selection;
+
+#ifdef CR1146
+    isValidStartDropTimerId = 0;
+#endif
+
 	
 	dtp = (XmDropTransferPart *) &(dt->dropTransfer);
 
@@ -500,6 +509,9 @@ DragContextDestroyCB(
         XtPointer call)
 {
         XtIntervalId timer = (XtIntervalId) client;
+#ifdef CR1146
+        if (!isValidStartDropTimerId) return;
+#endif
         XtRemoveTimeOut(timer);
 }
 
@@ -542,6 +554,12 @@ StartDropTransfer(
 
 	timer = XtAppAddTimeOut(XtWidgetToApplicationContext( (Widget)dt),
 				0, StartDropTimer, (XtPointer)dt);
+#ifdef CR1146
+    if (isValidStartDropTimerId) {
+        printf("Motif Error in file %s at line %d: A DropTimer is already active,\n", __FILE__, __LINE__);
+    }
+    isValidStartDropTimerId = 1;
+#endif
 	XtAddCallback(refWidget, XmNdestroyCallback, DragContextDestroyCB, 
 		      (XtPointer)timer);
 
