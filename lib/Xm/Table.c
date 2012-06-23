@@ -924,7 +924,7 @@ ClassPartInitialize(widget_class)
 {
     XmTableWidgetClass twc = (XmTableWidgetClass) widget_class;
 
-    _XmFastSubclassInit (w_class, XmTABLE_BIT );
+    _XmFastSubclassInit (widget_class, XmTABLE_BIT );
 
     /*
      * Since the translations were entered as strings we need to
