@@ -1,31 +1,41 @@
-Tue Apr 30 11:40:49 EDT 2002
+Wednesday May  1 06:49:39 EDT 2002
+
 
 We will be adding to this as necessary.
 
-Please do not hesitate to alert any of the others on the OpenMotif developers list.
+Please do not hesitate to alert us on the Open Motif developers list.
 
 To Do for future releases of Open Motif:
 
-The Motif v1.2 widgets that were formerly part of EPak, and now contributed by ICS to OpenMotif for all to use freely, have some further enhancements that will help make them better integrated into the Motif v2.x way of doing things:
+The Motif v1.2 widgets that were formerly part of EPak, and now
+contributed by ICS to eMotif for all to use freely, have some
+further enhancements that will help make them better integrated
+into the Motif v2.x way of doing things:
 
-- The ComboBox2 and Paned widgets are redundant. The Fontselector will be worked on so we can drop them.
+- The ComboBox2 and Paned widgets are redundant. The Font selector
+will be worked on so we can drop them.
 
-- Sridhar has already completed trait usage and resolved the thread saftey issues.  We will be merging diffs of his code into CVS.  All of the following widgets need to have it verified as working.
+- Sridhar has already completed trait usage and resolved the thread
+safety issues.  We will be merging diffs of his code into CVS.  All
+of the following widgets need to have it verified as working.
 
 
 Typical things to watch for in most of the following widgets:
 
-- uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution independent conversion of synthetic resources
+- uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution
+independent conversion of synthetic resources
 
 - use Xme sub-system
 
-- elimenate use of XmResolveAllPartOffsets
+- eliminate use of XmResolveAllPartOffsets
 
-- elimenate use of XtAppWarningMsg where the standard interface is XmeWarning.
+- eliminate use of XtAppWarningMsg where the standard interface is
+XmeWarning.
 
-- elimenate use of XmRepType handlers in the ClassInitialize method
+- eliminate use of XmRepType handlers in the ClassInitialize method
 
-- uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution independent conversion of synthetic resources
+- uses XmeToVerticalPixels/XmeToHorizontalPixels to perform resolution
+independent conversion of synthetic resources
 
 - support Motif 2.1 render table and layout direction functionality.
 
@@ -33,26 +43,31 @@ Typical things to watch for in most of the following widgets:
 
 Buttonbox
 =========
-DONE/COMMITTED - enable fast sub-classing.
+COMMITTED - enable fast sub classing.
 
-DONE/COMMITTED - need to support the Trait XmQTtakesDefault so that default button highlight emphasis is supported in the standard manner.
+COMMITTED - need to support the Trait XmQTtakesDefault so that
+default button highlight emphasis is supported in the standard manner.
 
 - support Gadgets.
-    This will require handling events for the Gadget children, and then passing them on to them.
+    This will require handling events for the Gadget children, and then
+    passing them on to them.
 
-- elimenate use of XmRepType handlers in the ClassInitialize method
+- eliminate use of XmRepType handlers in the Class Initialize method
 
 
 
-ColorSelector
+Color Selector
 =============
-COMMITTED/DONE - Enable fast sub-classing
+DONE - Enable fast subleasing
 
-COMMITTED/DONE - use XmStringUnparse instead of deprecated XmStringGetLtoR utilities to fetch the selected item from the Color namespace List.
+DONE - use XmStringUnparse instead of deprecated XmStringGetLtoR
+utilities to fetch the selected item from the Color name space List.
 
-COMITTED/DONE- use XmStringConcatAndFree instead of XmStringConcat/ XmStringFree combinations.
+DONE- use XmStringConcatAndFree instead of XmStringConcat/ XmStringFree
+combinations.
 
-- only one cell is deallocated in the Destroy method of the widget, but more could be allocated.
+- only one cell is deallocated in the Destroy method of the widget, but more
+could be allocated.
 
 - enable color, saturation, brightness controls.
 
@@ -88,33 +103,36 @@ typedef struct _XmAccessColorDataRec {
     Pixel select_color ; 
 } XmAccessColorDataRec, *XmAccessColorData;
 
-This trait is for setting standard widget attributes, not as a general purpose color fetching mechanism.
+This trait is for setting standard widget attributes, not as a general purpose
+color fetching mechanism.
 ]
 
 
-DataField
+Data Field
 =========
-COMMITTED/DONE - enable fast sub-classing.
+DONE - enable fast subleasing.
 
-COMMITTED/REDONE - should support XmQTaccessTextual trait
+REDONE - should support XmQTaccessTextual trait
 
 - consider using Motif 2.1 utilities instead of:
     a) XmString and XmFontList handling throughout
-    b) drop-site handling which does not use the XmTransfer UTM
+    b) drop site handling which does not use the XmTransfer UTM
 
 
 - manual pages missing?
 
-- in the Xt class record it inherits from the Primitive class, but declares its size as the sum of TextField and DataField records.
+- in the Xt class record it inherits from the Primitive class, but declares
+its size as the sum of Text Field and detailed records.
 
-- Messages which should be defined in the central XmString repository are defined locally to the sources.
+- Messages which should be defined in the central XmString repository are
+defined locally to the sources.
 
 - callback type definitions should be placed into the Xm.h public header.
 
 
-IconBox
+Icon Box
 =======
-COMMITTED/DONE - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - Consider using XmQTtransfer and XmQTtraversalControl Traits.
 
@@ -123,9 +141,9 @@ COMMITTED/DONE - enable fast sub-classing.
 - XmIconBoxDropData structure type in the header file is unused
 
 
-IconButton
+Icon Button
 ==========
-COMMITTED/DONE - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - uses deprecated methods to deduce the default font.
 
@@ -134,7 +152,7 @@ COMMITTED/DONE - enable fast sub-classing.
 
 Table
 =====
-COMMITTED/DONE - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - support both XmQTtraversalControl, XmQTtransfer and XmQTaccessTextual Traits
 
@@ -146,12 +164,13 @@ COMMITTED/DONE - enable fast sub-classing.
 
 - Callback and enumerated types should be defined in the XmP.h header.
 
-- representation types should be installed through the central XmRepType manager, not the ClassInitialize method
+- representation types should be installed through the central XmRepType
+manager, not the ClassInitialize method
 
 
 Tree/Hierarchy
 ==============
-DONE/COMMITTED - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - consider using XmQTtraversalControl trait
 
@@ -161,17 +180,18 @@ DONE/COMMITTED - enable fast sub-classing.
 
 
 
-ToolTip
+Tool Tip
 =======
 - be careful of Vendor shell extensions
 
 - consider using with Managers
 
-- allow per-target rendition specification
+- allow per target rendition specification
 
-- allow per-target enable/disable controls
+- allow preterite enable/disable controls
 
-- allow specific default rendition characteristics, instead of inheriting default VendorShell font
+- allow specific default rendition characteristics, instead of inheriting
+default Vendor Shell font
 
 - widget instance structures referenced without locking application context
 
@@ -185,47 +205,48 @@ ToolTip
 
 Paned
 =====
-Deprecate it.  Only needed for widgets like the FontSelector
+Deprecate it.  Only needed for widgets like the Font Selector
 
 
 
-TabBox & TabCanvas
+Tab Box & Tab Canvas
 ==================
-DONE/COMMITTED - enable fast sub-classing on TabBox
+DONE - enable fast subleasing on taboo
 
 - use Xme drawing utilities.
 
 - uses deprecated methods to deduce the default font.
 
 
-TabStack
+Tab Stack
 ========
-DONE/COMMITTED - enable fast sub-classing.
+DONE - enable fast subleasing.
 
-- support the XmQTnavigator trait to allow alternative SpinBox page control
+- support the XmQTnavigator trait to allow alternative Spin Box page control
 
 - support the XmQTscrollFrame, XmQTtraversalControl traits
 
 
 Column
 ======
-DONE/COMMITTED - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - make the label widget it dynamically constructs publicly available.
 
-- do not use the deprecated XmFontList, consider using the Motif 2.1 RenderTable type.
+- do not use the deprecated XmFontList, consider using the Motif 2.1
+Render Table type.
 
 
 
 ComboBox2
 =========
-Deprecate it.  Only needed for widgets like the FontSelector
+Deprecate it.  Only needed for widgets like the Font Selector
 
 
 
 Font Selector
 =============
-DONE/COMMITTED - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - _XmGetMBStringFromXmString() replicates standard Motif functions.
 
@@ -237,18 +258,19 @@ DONE/COMMITTED - enable fast sub-classing.
 
 - uses XtAppWarningMsg instead of XmeWarning
 
-- elimenate use of XmResolveAllPartOffsets
+- eliminate use of XmResolveAllPartOffsets
 
 
 
 I18List
 =======
-DONE/COMMITTED - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - support multiple and extended selection.
 
 - support the XmQTtransfer traits on I18List.
-This widget has no infrastructure for Drag & Drop upon which to build this capability.
+This widget has no infrastructure for Drag & Drop upon which to build this
+capability.
 
 - support UTM
 same as above.
@@ -257,10 +279,12 @@ same as above.
 
 Ext18List
 =========
-DONE/COMMITTED - enable fast sub-classing.
+DONE - enable fast subleasing.
 
 - support the XmQTscrollFrame (See page 462 of Widget Writer's Guide)
 
-- internationalized environments require public interface to be XmString, but currently is String
+- internationalized environments require public interface to be XmString, but
+currently is String
 
-- default labelling of parts is hard-coded English
+- default labeling of parts is hard coded English
+
