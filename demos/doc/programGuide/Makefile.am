@@ -1,1 +1,3 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 SUBDIRS = ch05 ch06 ch08 ch16 ch17

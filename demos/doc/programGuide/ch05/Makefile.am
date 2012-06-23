@@ -1,1 +1,3 @@
+MAINTAINERCLEANFILES = Makefile.in
+
 SUBDIRS = Scale
