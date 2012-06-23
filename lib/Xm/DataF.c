@@ -35,7 +35,7 @@
 #include <X11/VendorP.h>
 #include <X11/keysym.h>
 #include <X11/Xresource.h>
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/AtomMgr.h>
 #include <Xm/CutPaste.h>
 #include <Xm/DragC.h>
@@ -1577,12 +1577,14 @@ ClassInit(void)
 			    &XmDataField_offsets,
 			    NULL);
 
+    _XmProcessLock(); 
     for(i=0; i<wc->primitive_class.num_syn_resources; i++)
-      {
-	(wc->primitive_class.syn_resources)[i].resource_offset =
-	  XmGetPartOffset(wc->primitive_class.syn_resources + i,
-			  &XmDataField_offsets);
-      }
+    {
+	    (wc->primitive_class.syn_resources)[i].resource_offset = 
+            XmGetPartOffset(wc->primitive_class.syn_resources + i,
+            &XmDataField_offsets);
+    }
+    _XmProcessUnlock();
     
     _XmTextFieldInstallTransferTrait();
     XmeTraitSet((XtPointer)xmDataFieldWidgetClass, 
@@ -3287,9 +3289,16 @@ df_AdjustSize(
      }
     /* Attempt to resize.  If it doesn't succeed, do scrolling.  */
      result = df_TryResize(tf, tf->core.width + diff, tf->core.height);
-     if (result == XtGeometryYes) {
-        (* (tf->core.widget_class->core_class.resize))((Widget)tf);
-	return;
+     if (result == XtGeometryYes)
+     {
+        XtWidgetProc resize;
+           
+        _XmProcessLock(); 
+        resize = tf->core.widget_class->core_class.resize;
+        _XmProcessUnlock();
+
+        (*resize)((Widget)tf);
+        return;
      } else
 	 /* We need to scroll the string to the left. */
 	 if (XmDataField_alignment(tf) == XmALIGNMENT_END)
@@ -3310,8 +3319,15 @@ df_AdjustSize(
 	   return;
         }
         result = df_TryResize(tf, width, tf->core.height);
-        if (result == XtGeometryYes) {
-           (* (tf->core.widget_class->core_class.resize))((Widget)tf);
+        if (result == XtGeometryYes)
+        {
+           XtWidgetProc resize;
+           
+           _XmProcessLock(); 
+           resize = tf->core.widget_class->core_class.resize;
+           _XmProcessUnlock();
+
+           (*resize)((Widget)tf);
            return;
         }
      }
@@ -6102,7 +6118,8 @@ df_TextFocusIn(
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
    XmAnyCallbackStruct cb;
    XPoint xmim_point;
-
+   XtWidgetProc bhl;
+   
    if (event->xfocus.send_event && !(XmTextF_has_focus(tf))) {
       if (!XmTextF_has_rect(tf)) _XmDataFieldSetClipRect(tf);
       XmTextF_has_focus(tf) = True;
@@ -6111,16 +6128,24 @@ df_TextFocusIn(
       XmTextF_blink_on(tf) = False;
 
       XmTextF_refresh_ibeam_off(tf) = True;
-      if (_XmGetFocusPolicy(w) == XmEXPLICIT) {
-         if (((XmDataFieldWidgetClass)
-		XtClass(w))->primitive_class.border_highlight) {   
-            (*((XmDataFieldWidgetClass)
-		      XtClass(w))->primitive_class.border_highlight)(w);
+
+      if (_XmGetFocusPolicy(w) == XmEXPLICIT)
+      {
+         _XmProcessLock(); 
+         bhl = ((XmDataFieldWidgetClass)XtClass(w))->primitive_class.border_highlight;
+         _XmProcessUnlock();
+
+         if (bhl)
+         {   
+            (*bhl)(w);
          } 
-	 if (!XmTextF_has_destination(tf))
-            (void) df_SetDestination(w, XmTextF_cursor_position(tf), False,
-				  XtLastTimestampProcessed(XtDisplay(w)));
+
+         if (!XmTextF_has_destination(tf))
+         {
+            (void) df_SetDestination(w, XmTextF_cursor_position(tf), False, XtLastTimestampProcessed(XtDisplay(w)));
+         }
       }
+
       if (tf->core.sensitive) df_ChangeBlinkBehavior(tf, True);
       _XmDataFieldDrawInsertionPoint(tf, True);
       (void) df_GetXYFromPos(tf, XmTextF_cursor_position(tf),
@@ -6153,7 +6178,8 @@ df_TextFocusOut(
 #endif /* _NO_PROTO */
 {
    XmDataFieldWidget tf = (XmDataFieldWidget) w;
-
+   XtWidgetProc buhl;
+   
    if (event->xfocus.send_event && XmTextF_has_focus(tf)) {
       XmTextF_has_focus(tf) = False;
       df_ChangeBlinkBehavior(tf, False);
@@ -6161,11 +6187,15 @@ df_TextFocusOut(
       _XmDataFToggleCursorGC(w);
       XmTextF_blink_on(tf) = True;
       _XmDataFieldDrawInsertionPoint(tf, True);
-      if(    ((XmDataFieldWidgetClass) XtClass(tf))
-                                      ->primitive_class.border_unhighlight    )
-         {   (*((XmDataFieldWidgetClass) XtClass(tf))
-                          ->primitive_class.border_unhighlight)( (Widget) tf) ;
-             } 
+
+      _XmProcessLock();
+      buhl = ((XmDataFieldWidgetClass) XtClass(tf))->primitive_class.border_unhighlight;
+      _XmProcessUnlock();
+
+      if(buhl)
+      {
+          (*buhl)( (Widget) tf) ;
+      } 
       XmImUnsetFocus(w);
    }
 
@@ -8469,8 +8499,11 @@ df_ClassPartInitialize(
     strcat(event_bindings, EventBindings1);
     strcat(event_bindings, EventBindings2);
     strcat(event_bindings, EventBindings3);
-    w_class->core_class.tm_table = 
-			      (String) XtParseTranslationTable(event_bindings);
+
+    _XmProcessLock(); 
+    w_class->core_class.tm_table = (String) XtParseTranslationTable(event_bindings);
+    _XmProcessUnlock();
+
     XtFree(event_bindings);
 }
 
@@ -8803,9 +8836,15 @@ SGI_hack_XmImRegister(
   Widget w )
 #endif /* _NO_PROTO */
 {
+  _XmProcessLock();
   w->core.widget_class = xmTextFieldWidgetClass;
+  _XmProcessUnlock();
+
   XmImRegister(w, NULL);
+
+  _XmProcessLock();
   w->core.widget_class = xmDataFieldWidgetClass;
+  _XmProcessUnlock();
 }  
 #endif
 /*
@@ -10148,21 +10187,31 @@ DataFieldExpose(
 
 
      if (tf->primitive.highlighted)
-     {   
-         if(    ((XmDataFieldWidgetClass) XtClass(tf))
-                                        ->primitive_class.border_highlight    )
+     {
+         XtWidgetProc bhl;
+
+         _XmProcessLock();
+         bhl = ((XmDataFieldWidgetClass) XtClass(tf))->primitive_class.border_highlight;
+         _XmProcessUnlock();
+         
+         if(bhl)
          {   
-             (*((XmDataFieldWidgetClass) XtClass(tf))
-                            ->primitive_class.border_highlight)( (Widget) tf) ;
-             } 
+             (*bhl)( (Widget) tf) ;
          } 
+     } 
      else
-     {   if(    ((XmDataFieldWidgetClass) XtClass(tf))
-                                      ->primitive_class.border_unhighlight    )
-         {   (*((XmDataFieldWidgetClass) XtClass(tf))
-                          ->primitive_class.border_unhighlight)( (Widget) tf) ;
-             } 
+     {
+         XtWidgetProc buhl;
+
+         _XmProcessLock();
+         buhl = ((XmDataFieldWidgetClass) XtClass(tf))->primitive_class.border_unhighlight;
+         _XmProcessUnlock();
+
+         if(buhl)
+         {
+            (*buhl)( (Widget) tf) ;
          } 
+     } 
 
      df_RedisplayText(tf, 0, XmTextF_string_length(tf));
   }
