@@ -34,9 +34,11 @@ Typical things to watch for in most of the following widgets:
 
 Buttonbox
 =========
-- support Gadgets.
 
-- need to support the Trait XmQTtakesDefault so that default button highlight emphasis is supported in the standard manner.
+COMMITTED/DONE - need to support the Trait XmQTtakesDefault so that default button highlight emphasis is supported in the standard manner.
+
+- support Gadgets.
+    This will require handling events for the Gadget children, and then passing them on to them.
 
 - elimenate use of XmRepType handlers in the ClassInitialize method
 
@@ -48,13 +50,151 @@ ColorSelector
 
 - enable a graphical representation of cubic color space
 
-- use the Motif 2.1 Trait mechanisms, perhaps using XmQTaccessColors
+DENIED - use the Motif 2.1 Trait mechanisms, perhaps using XmQTaccessColors
+[NOTE:
+Only reference to using XmAccessColorsTrait is from IconG.c, line 705
+FetchPixmap(...)
+{
+    ...
+   XmAccessColorDataRec acc_color_rec;
+   XmAccessColorsTrait access_colors_trait 
 
-- use XmStringUnparse instead of deprecated XmStringGetLtoR utilities to fetch the selected item from the Color namespace List.
+   /* always called when the cache is valid and the colors
+      can be returned */
 
-- use XmStringConcatAndFree instead of XmStringConcat/ XmStringFree combinations.
+   access_colors_trait = (XmAccessColorsTrait) 
+       XmeTraitGet((XtPointer)XtClass(widget), XmQTaccessColors) ;
+
+   access_colors_trait->getColors(widget, &acc_color_rec);
+   ...
+}
+
+in file AccColorT.h at line 55 we have this structure:
+typedef struct _XmAccessColorDataRec {
+      Mask  valueMask ;
+    Pixel foreground  ;
+    Pixel background  ;
+    Pixel highlight_color  ;
+    Pixel top_shadow_color  ;
+    Pixel bottom_shadow_color ;
+    Pixel select_color ; 
+} XmAccessColorDataRec, *XmAccessColorData;
+
+This trait is for setting standard widget attributes, not as a general purpose color fetching mechanism.
+]
+
+
+
+COMMITTED/DONE - use XmStringUnparse instead of deprecated XmStringGetLtoR utilities to fetch the selected item from the Color namespace List.
+
+COMITTED/DONE- use XmStringConcatAndFree instead of XmStringConcat/ XmStringFree combinations.
 
 - only one cell is deallocated in the Destroy method of the widget, but more could be allocated.
+
+
+
+DataField
+=========
+
+REDONE - should support XmQTaccessTextual trait
+
+- consider using Motif 2.1 utilities instead of:
+    a) XmString and XmFontList handling throughout
+    b) drop-site handling which does not use the XmTransfer UTM
+
+
+- manual pages missing?
+
+- in the Xt class record it inherits from the Primitive class, but declares its size as the sum of TextField and DataField records.
+
+- Messages which should be defined in the central XmString repository are defined locally to the sources.
+
+- callback type definitions should be placed into the Xm.h public header.
+
+
+IconBox
+=======
+
+- Consider using XmQTtransfer and XmQTtraversalControl Traits.
+
+- support UTM
+
+- XmIconBoxDropData structure type in the header file is unused
+
+
+IconButton
+==========
+- uses deprecated methods to deduce the default font.
+
+- support XmQTactivatable and XmQTcareParentVisual traits.
+
+
+Table
+=====
+- support both XmQTtraversalControl, XmQTtransfer and XmQTaccessTextual Traits
+
+- use XmClipWindow and XmQTclipWindow Trait
+
+- use Xbae/Matrix as a reference implementation? check license first.
+
+- needs documentation
+
+- Callback and enumerated types should be defined in the XmP.h header.
+
+- representation types should be installed through the central XmRepType manager, not the ClassInitialize method
+
+
+
+TabStack
+========
+- support the XmQTnavigator trait to allow alternative SpinBox page control
+
+- support the XmQTscrollFrame, XmQTtraversalControl traits
+
+
+Tree/Hierarchy
+==============
+- consider using XmQTtraversalControl trait
+
+- use UTM, not Drag n Drop
+
+- support gadgets
+
+
+
+ToolTip
+=======
+- be careful of Vendor shell extensions
+
+- consider using with Managers
+
+- allow per-target rendition specification
+
+- allow per-target enable/disable controls
+
+- allow specific default rendition characteristics, instead of inheriting default VendorShell font
+
+- widget instance structures referenced without locking application context
+
+- no public header file
+
+- take into account the edges of the screen
+
+- feature request: optionally allow display of text on status line
+
+
+
+Paned
+=====
+Deprecate it.  Only needed for widgets like the FontSelector
+
+
+
+TabBox & TabCanvas
+==================
+- use Xme drawing utilities.
+
+- uses deprecated methods to deduce the default font.
 
 
 
@@ -69,33 +209,6 @@ Column
 ComboBox2
 =========
 Deprecate it.  Only needed for widgets like the FontSelector
-
-
-
-DataField
-=========
-- manual pages missing?
-
-- consider using Motif 2.1 utilities instead of:
-    XmString and XmFontList handling throughout
-    drop-site handling which does not use the XmTransfer UTM
-
-- should support XmQTaccessTextual trait
-
-- in the Xt class record it inherits from the Primitive class, but declares its size as the sum of TextField and DataField records.
-
-- Messages which should be defined in the central XmString repository are defined locally to the sources.
-
-- callback type definitions should be placed into the Xm.h public header.
-
-
-Ext18List
-=========
-- support the XmQTscrollFrame and XmQTtransfer traits and UTM
-
-- internationalized environments require public interface to be XmString, but currently is String
-
-- default labelling of parts is hard-coded English
 
 
 
@@ -119,89 +232,20 @@ I18List
 =======
 - support multiple and extended selection.
 
-
-
-IconBox
-=======
-
-- Consider using XmQTtransfer and XmQTtraversalControl Traits.
+- support the XmQTtransfer traits on I18List.
+This widget has no infrastructure for Drag & Drop upon which to build this capability.
 
 - support UTM
-
-- XmIconBoxDropData structure type in the header file is unused
-
-
-IconButton
-==========
-- uses deprecated methods to deduce the default font.
-
-- support XmQTactivatable and XmQTcareParentVisual traits.
+same as above.
 
 
 
-Paned
-=====
-Deprecate it.  Only needed for widgets like the FontSelector
+Ext18List
+=========
+- support the XmQTscrollFrame (See page 462 of Widget Writer's Guide)
 
+- internationalized environments require public interface to be XmString, but currently is String
 
+- default labelling of parts is hard-coded English
 
-TabBox & TabCanvas
-==================
-- use Xme drawing utilities.
-
-- uses deprecated methods to deduce the default font.
-
-
-
-Table
-=====
-- use Xbae/Matrix as a reference implementation? check license first.
-
-- needs documentation
-
-- support both XmQTtraversalControl, XmQTtransfer and XmQTaccessTextual Traits
-
-- use XmClipWindow and XmQTclipWindow Trait
-
-- Callback and enumerated types should be defined in the XmP.h header.
-
-- representation types should be installed through the central XmRepType manager, not the ClassInitialize method
-
-
-
-TabStack
-========
-- support the XmQTnavigator trait to allow alternative SpinBox page control
-
-- support the XmQTscrollFrame, XmQTtraversalControl traits
-
-
-
-ToolTip
-=======
-- be care of Vendor shell extensions
-- consider using with Managers
-
-- allow per-target rendition specification
-
-- allow per-target enable/disable controls
-
-- allow specific default rendition characteristics, instead of inheriting default VendorShell font
-
-- widget instance structures referenced without locking application context
-
-- no public header file
-
-- take into account the edges of the screen
-
-- feature request: optionally allow display of text on status line
-
-
-Tree/Hierarchy
-==============
-- support gadgets
-
-- consider using XmQTtraversalControl trait
-
-- use UTM, not Drag n Drop
 
