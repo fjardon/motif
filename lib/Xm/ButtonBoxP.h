@@ -56,6 +56,7 @@ extern XmOffsetPtr XmButtonBoxC_offsets;
 #define XmButtonBox_margin_height(w) BBoxField(w, margin_height, Dimension)
 #define XmButtonBox_spacing(w) BBoxField(w, spacing, Dimension)
 #define XmButtonBox_orientation(w) BBoxField(w, orientation, unsigned char)
+#define XmButtonBox_default_button(w) BBoxField(w, default_button, Widget)
 
 #define BBoxCField(w,f,t) XmConstraintField(w, XmButtonBoxC_offsets, XmButtonBox, f, t)
 #define XmButtonBoxC_pref_width(w) BBoxCField(w, pref_width, Dimension)
@@ -107,7 +108,8 @@ typedef struct
     Dimension		margin_width, margin_height;
     Dimension		spacing;
     unsigned char	orientation;
-
+    Widget          default_button;
+    
 } XmButtonBoxPart;
 
 typedef struct _XmButtonBoxRec
