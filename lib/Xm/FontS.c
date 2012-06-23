@@ -39,6 +39,7 @@
 #include <Xm/ComboBox2.h>
 #include <Xm/ButtonBox.h>
 #include <Xm/ExtP.h>
+#include "Xm/XmI.h"
 
 #define NUM_XLFD_DASHES 14
 /* max number of fonts that can be returned (CARD16) */
@@ -3330,11 +3331,13 @@ ClassInitialize()
     XmResolveAllPartOffsets(xmFontSelectorWidgetClass,
 			    &XmFontS_offsets,
 			    &XmFontSC_offsets);
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
 	(wc->manager_class.syn_resources)[i].resource_offset =
 	    XmGetPartOffset(wc->manager_class.syn_resources + i,
 			    &XmFontS_offsets);
     }
+    _XmProcessUnlock();
 }
 
 

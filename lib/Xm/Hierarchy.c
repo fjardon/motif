@@ -285,11 +285,13 @@ ClassInit()
 			    &XmHierarchy_offsets,
 			    &XmHierarchyC_offsets);
 
+    _XmProcessLock();
     for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmHierarchy_offsets);
+    	(wc->manager_class.syn_resources)[i].resource_offset =
+	        XmGetPartOffset(wc->manager_class.syn_resources + i,
+			&XmHierarchy_offsets);
     }
+    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmHierarchyNodeState,CvtStringToNodeState,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);
@@ -306,6 +308,7 @@ ClassPartInitialize(WidgetClass class)
 {
     XmHierarchyWidgetClass superC, wc = (XmHierarchyWidgetClass) class;
     
+    _XmProcessLock();
     superC = (XmHierarchyWidgetClass)wc->core_class.superclass;
 
 /* 
@@ -345,9 +348,11 @@ ClassPartInitialize(WidgetClass class)
     }
 
     if (wc->hierarchy_class.toggle_node_state == XtInheritToggleNodeState) {
+
 	wc->hierarchy_class.toggle_node_state = 
 	                            superC->hierarchy_class.toggle_node_state;
     }
+    _XmProcessUnlock();
 }
 
 /*	Function Name: Initialize
@@ -449,10 +454,16 @@ Destroy(Widget w)
 static void 
 InsertChild(Widget w)
 {
+
+XtWidgetProc insert_child;
    if (_XmGadgetWarning(w))
        return;
 
-   (*((CompositeWidgetClass) SUPERCLASS)->composite_class.insert_child)(w);
+    _XmProcessLock();
+    insert_child = ((CompositeWidgetClass) SUPERCLASS)->composite_class.insert_child;
+    _XmProcessUnlock();
+    
+   (*insert_child)(w);
 }
 
 /************************************************************
@@ -505,7 +516,13 @@ ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     XmHierarchyC_open_close_button(node) = NULL;
 
     if (XmHierarchyC_state(node) != XmNotInHierarchy) {
-	(*(hc->hierarchy_class.reset_open_close_button))((Widget) hw, node);
+        XmHierarchyResetButtonProc reset_open_close_button;
+
+        _XmProcessLock();
+        reset_open_close_button = hc->hierarchy_class.reset_open_close_button;
+        _XmProcessUnlock();
+
+        (*reset_open_close_button)((Widget) hw, node);
 
 	if (XmHierarchyC_parent(node) == NULL) 
 	    AddChild(XmHierarchy_top_node(hw), node);
@@ -559,8 +576,15 @@ ConstraintDestroy(Widget w)
 	    XtDestroyWidget(XmHierarchyC_open_close_button(node));
 
 	current = 0;
-	(*(hc->hierarchy_class.build_node_table))
-	    ((Widget)hw, XmHierarchy_top_node(hw), &current);
+    {
+        XmHierarchyBuildTableProc build_node_table;
+
+        _XmProcessLock();
+        build_node_table = hc->hierarchy_class.build_node_table;
+        _XmProcessUnlock();
+
+    	(*build_node_table) ((Widget)hw, XmHierarchy_top_node(hw), &current);
+    }
 
 	XmHierarchy_num_nodes(hw) = current;
     }
@@ -731,7 +755,19 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	XtCallCallbackList((Widget) hw,
 			   XmHierarchy_node_state_beg_end_callback(hw),
 			   (XtPointer) True);
-	(*(hc->hierarchy_class.change_node_state))(new_node);
+
+    {
+        XmHierarchyNodeProc change_node_state;
+
+        _XmProcessLock();
+        change_node_state = hc->hierarchy_class.change_node_state;
+        _XmProcessUnlock();
+        
+    	(*change_node_state)(new_node);
+    }
+
+
+
 	XtCallCallbackList((Widget) hw,
 			   XmHierarchy_node_state_beg_end_callback(hw),
 			   (XtPointer) False);
@@ -762,9 +798,17 @@ ChangeNodeState(HierarchyConstraints node)
 	                   XtParent(XmHierarchyC_widget(node));
     XmHierarchyWidgetClass hc = (XmHierarchyWidgetClass) XtClass(hw);
     XmHierarchyNodeStateData node_data;
+    
+    XmHierarchyNodeProc change_node_state;
+    XmHierarchyResetButtonProc reset_open_close_button;
 
-    (*hc->hierarchy_class.reset_open_close_button)
-   	        (XtParent(XmHierarchyC_widget(node)), node);
+    _XmProcessLock();
+    change_node_state = hc->hierarchy_class.change_node_state;
+    reset_open_close_button = hc->hierarchy_class.reset_open_close_button;
+    _XmProcessUnlock();
+    
+
+    (*reset_open_close_button) (XtParent(XmHierarchyC_widget(node)), node);
 
     node_data.widget = XmHierarchyC_widget(node);
     node_data.state = XmHierarchyC_state(node);
@@ -781,7 +825,7 @@ ChangeNodeState(HierarchyConstraints node)
 		if (XmHierarchyC_state(*childp) == XmOpen) {
 		    XmHierarchyC_state(*childp) = XmClosed;
 		}
-		(*hc->hierarchy_class.change_node_state)(*childp);
+		(*change_node_state)(*childp);
 	    }
 	}
     }
@@ -819,13 +863,19 @@ UnmapAllExtraNodes(Widget w, HierarchyConstraints node)
 {
     register int i;
     XmHierarchyWidgetClass hc = (XmHierarchyWidgetClass) (XtClass(w));
-    register void (*unmap_extra)(Widget, HierarchyConstraints) =
-	hc->hierarchy_class.unmap_all_extra_nodes;
     register int num;
     register HierarchyConstraints * ptr;
 
+    void (*unmap_extra)(Widget, HierarchyConstraints);
+    XmHierarchyNodeProc unmap_node;
+
+    _XmProcessLock();
+    unmap_extra = hc->hierarchy_class.unmap_all_extra_nodes;
+    unmap_node = hc->hierarchy_class.unmap_node;
+    _XmProcessUnlock();
+
     if (XmHierarchyC_status(node) & IS_COMPRESSED)
-	(*(hc->hierarchy_class.unmap_node))(node);
+	(*unmap_node)(node);
 	
     ptr = XmHierarchyC_children(node);
     for (num = XmHierarchyC_num_children(node), i = 0; i < num; i++, ptr++) 
@@ -1008,9 +1058,11 @@ ResetOpenCloseButton(Widget w, HierarchyConstraints node)
 	XtSetMappedWhenManaged(XmHierarchyC_open_close_button(node),
 		((XmHierarchyC_status(node) & IS_MAPPED) ? True: False));
 
+    _XmProcessLock();
 	XtAddCallback(XmHierarchyC_open_close_button(node),
 		      XmNactivateCallback,
 		      hc->hierarchy_class.toggle_node_state, (XtPointer) node);
+    _XmProcessUnlock();
     }
     else {
 	XtSetValues(XmHierarchyC_open_close_button(node), args, num_args);
@@ -1025,50 +1077,69 @@ ResetOpenCloseButton(Widget w, HierarchyConstraints node)
  *	Returns:       none.
  */
 
-/*ARGSUSED*/
 static void
-ToggleNodeState(Widget w, XtPointer node_ptr, XtPointer call_data)
+ToggleNodeState ( Widget w,
+				  XtPointer node_ptr,
+				  XtPointer call_data )
 {
-    Arg args[1];
-    XmHierarchyWidget hw = (XmHierarchyWidget) XtParent(w);
-    HierarchyConstraints node = (HierarchyConstraints) node_ptr;
-    XmHierarchyWidgetClass hc = (XmHierarchyWidgetClass) XtClass((Widget) hw);
-    XmHierarchyNodeStateData node_data;
+	Arg args[1];
+	XmHierarchyWidget hw = ( XmHierarchyWidget ) XtParent ( w );
+	HierarchyConstraints node = ( HierarchyConstraints ) node_ptr;
 
-    /*
-     * Unset the icon button.
-     */
+	XmHierarchyWidgetClass hc = (XmHierarchyWidgetClass) XtClass ((Widget) hw );
+	XmHierarchyNodeStateData node_data;
 
-    XtSetArg(args[0], XmNset, False);
-    XtSetValues(w, args, (Cardinal) 1);
-    
-    if (XmHierarchyC_state(node) == XmOpen) {
-	XtCallCallbackList((Widget) hw,
-			   XmHierarchy_node_state_beg_end_callback(hw),
-			   (XtPointer) True);
-	XmHierarchyC_state(node) = XmClosed;
-	(*(hc->hierarchy_class.change_node_state))((HierarchyConstraints)node);
-    }
-    else if (XmHierarchyC_state(node) == XmClosed) {
-	XtCallCallbackList((Widget) hw,
-			   XmHierarchy_node_state_beg_end_callback(hw),
-			   (XtPointer) True);
-	XmHierarchyC_state(node) = XmOpen;
-	(*(hc->hierarchy_class.change_node_state))((HierarchyConstraints)node);
-    }
-    else
-	return;
+    XmHierarchyNodeProc change_node_state;
 
-    node_data.widget = XmHierarchyC_widget(node);
-    node_data.state = XmHierarchyC_state(node);
+    _XmProcessLock();    
+    change_node_state = hc->hierarchy_class.change_node_state;
+    _XmProcessUnlock();
+	/*
+	 * Unset the icon button.
+	 */
 
-    XtCallCallbackList((Widget) hw, XmHierarchy_node_state_callback(hw),
-		       &node_data);
+	XtSetArg ( args[0], XmNset, False );
+	XtSetValues ( w, args, ( Cardinal ) 1 );
 
-    XtCallCallbackList((Widget) hw,
-		       XmHierarchy_node_state_beg_end_callback(hw),
-		       (XtPointer) False);
+	if (XmHierarchyC_state(node) == XmOpen )
+	{
+		XtCallCallbackList( (Widget) hw,
+		    XmHierarchy_node_state_beg_end_callback ( hw ),
+			(XtPointer) True );
+
+		XmHierarchyC_state ( node ) = XmClosed;
+
+		(*change_node_state) ( (HierarchyConstraints) node );
+
+	}
+	else
+    if ( XmHierarchyC_state ( node ) == XmClosed )
+	{
+		XtCallCallbackList ( ( Widget ) hw,
+			XmHierarchy_node_state_beg_end_callback ( hw ),
+			( XtPointer ) True );
+
+		XmHierarchyC_state ( node ) = XmOpen;
+
+		(*change_node_state) ( (HierarchyConstraints) node );
+        
+	}
+	else
+		return;
+
+	node_data.widget = XmHierarchyC_widget ( node );
+	node_data.state = XmHierarchyC_state ( node );
+
+	XtCallCallbackList ( ( Widget ) hw,
+        XmHierarchy_node_state_callback ( hw ),
+		&node_data );
+
+	XtCallCallbackList ( ( Widget ) hw,
+        XmHierarchy_node_state_beg_end_callback ( hw ),
+		( XtPointer ) False );
 }
+
+
 
 /************************************************************
  *
