@@ -272,8 +272,7 @@ main(int argc, char *argv[])
 	XtManageChild(toolTipPostDuration);
     }
 
-    exitButton = XmCreatePushButtonGadget(helloworld_main, "Exit", NULL, 0);
-    XtVaSetValues(exitButton,
+    exitButton = XmVaCreatePushButtonGadget(helloworld_main, "Exit",
     	XmNtopAttachment, XmATTACH_WIDGET,
     	XmNtopWidget, toolTipPostDuration,
     	XmNleftAttachment, XmATTACH_FORM,

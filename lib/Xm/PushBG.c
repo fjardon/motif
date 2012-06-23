@@ -40,6 +40,7 @@ static char rcsid[] = "$TOG: PushBG.c /main/29 1999/05/27 14:18:33 mgreess $"
 
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
 #include <Xm/ActivatableT.h>
@@ -3487,4 +3488,32 @@ XmCreatePushButtonGadget(
 {
   return XtCreateWidget (name, xmPushButtonGadgetClass, 
 			 parent, arglist, argcount);
+}
+
+Widget
+XmVaCreatePushButtonGadget(Widget parent, char *name, ...)
+{
+va_list var;
+Widget w;
+ArgList args;
+int n;
+String attr;
+
+    va_start(var, name);
+    for (attr = va_arg(var, String), n = 0; attr != NULL; attr = va_arg(var, String), n++)
+    {
+    	(void)va_arg(var, XtArgVal);
+    }
+    va_end(var);
+    args = (ArgList)XtMalloc(n * sizeof(Arg));
+    va_start(var, name);
+    for (attr = va_arg(var, String), n = 0; attr != NULL; attr = va_arg(var, String), n++)
+    {
+    	args[n].name = attr;
+    	args[n].value = va_arg(var, XtArgVal);
+    }
+    va_end(var);
+    w = XtCreateWidget(name, xmPushButtonGadgetClass, parent, args, n);
+    XtFree((char *)args);
+    return(w);
 }
