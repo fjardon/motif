@@ -233,24 +233,33 @@ extern Display *_XmGetDefaultDisplay(void);
 
 # define _XmAppLock(app)	XtAppLock(app)
 # define _XmAppUnlock(app)	XtAppUnlock(app)
+/*
 # define _XmProcessLock()	XtProcessLock()
 # define _XmProcessUnlock()	XtProcessUnlock()
-
+*/
 /* Remove use of _XtProcessLock when Xt provides API to query its MT-status */
 extern void (*_XtProcessLock)();
 # define _XmIsThreadInitialized() (_XtProcessLock)
 
 #else
-
+/********    We do not have thread_safe Motif ******/
 # define _XmWidgetToAppContext(w)
 # define _XmDisplayToAppContext(d)
 # define _XmAppLock(app)
 # define _XmAppUnlock(app)
+/*
 # define _XmProcessLock()
 # define _XmProcessUnlock()
+*/
 # define _XmIsThreadInitialized()	(FALSE)
 
 #endif /* XTHREADS && XUSE_MTSAFE_API */
+
+/* leaving these as functions for debugging
+purposes while we have this in progress. */
+void _XmProcessLock();
+void _XmProcessUnlock();
+
 
 
 #ifdef __cplusplus
