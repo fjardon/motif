@@ -1,0 +1,251 @@
+Thu May  2 11:24:28 EDT 2002
+
+Thread_safety.txt
+
+******************************************************************
+Note: Comments, suggestions, and corrections are always welcomed,
+so please do not hesitate to drop a line if something here can be
+made better.
+
+Thank you,
+
+scorch@ics.com
+******************************************************************
+
+The aim of the this brief document is to help illustrate the use of the
+_XmProcessLock() and _XmProcessUnlock() functions in providing thread
+safety for widgets.
+
+Their intermittant use has been appearing in the OME v2.2.2 sources. It is
+time we see where they were used and to share that information with whomsoever
+might want to enhance the thread safety of OME, especially with regards to the
+latest additions.
+
+Typically we need to lock access when we are dereferencing a pointer to a super
+class's function just before we call it.  Another typical case would be when
+accessing selections.
+
+Typically, we might see them in:
+    InsertChild()
+    DeleteChild()
+
+    Resize()
+    Redisplay() calling expose of super class
+
+    GeometryManager()    
+    BorderHighlight()/BorderUnhighlight()
+    
+    InitializePrehook() - while juggling the translations.
+    Initialize() - more translations
+    
+    SetValues()
+
+
+
+If you do not have SourceNavigator, and to save you the hassle of grep'ing
+the sources, I have included abbreviated versions of the functions as I
+have come across them.
+
+
+/**************************************
+ * InsertChild()
+ **************************************/
+static void
+InsertChild(register Widget child)
+{
+    ...
+
+    /* Another process may be updating the superclass's data 
+     * use composite class insert proc to do all the dirty work
+     */
+    {
+       XtWidgetProc insert_child;
+       _XmProcessLock();
+       insert_child = ((XmManagerWidgetClass)xmManagerWidgetClass)->
+				composite_class.insert_child; 
+       _XmProcessUnlock();
+       (*insert_child)(child);
+    }
+
+    ...
+}
+
+
+
+/**************************************
+ * DeleteChild()
+ **************************************/
+ /* may just inherit the XtInheritDeleteChild */
+static void DeleteChild(Widget child )
+{   
+  XmBulletinBoardWidget bb ;
+  XtWidgetProc      delete_child;
+    ...
+  _XmProcessLock();
+  delete_child = ((XmManagerWidgetClass) xmManagerWidgetClass)
+	     			->composite_class.delete_child;
+  _XmProcessUnlock();
+  (*delete_child)(child);
+
+  return ;
+}
+
+/**************************************
+ * Redisplay()
+ **************************************/
+Redisplay(
+        Widget wid,
+        XEvent *event,
+        Region region )
+{
+ ...
+  XtExposeProc expose;
+ ...
+ 
+  /* Envelop our superclass expose method */
+  _XmProcessLock();
+  expose = xmPrimitiveClassRec.core_class.expose;
+  _XmProcessUnlock(); 
+  (*(expose)) ((Widget) aw, event, region);
+}
+
+
+/**************************************
+ * Resize()
+ **************************************/
+static void 
+Resize(
+        Widget cb )
+{
+    ...
+        XtWidgetProc resize;
+        /* Label class does it's work */
+        _XmProcessLock();
+        resize = xmLabelClassRec.core_class.resize;
+        _XmProcessUnlock();
+        (* resize) (cb);
+    ...
+}
+
+
+
+/**************************************
+ * GeometryManager()
+ **************************************/
+static XtGeometryResult
+GeometryManager(Widget		  mychild,
+		XtWidgetGeometry *request,
+		XtWidgetGeometry *reply)
+{
+    ...
+	    XtWidgetProc resize;
+
+	    _XmProcessLock();
+	    resize = XtCoreProc(cb, resize);
+	    _XmProcessUnlock();
+	    (*resize)((Widget) cb) ;
+    ...
+}
+
+/**************************************
+ * BorderHighlight()
+ **************************************/
+static void BorderHighlight(Widget wid)
+{
+    XtWidgetProc border_highlight;
+    ...
+    _XmProcessLock();
+    border_highlight = xmLabelClassRec.primitive_class.border_highlight;
+    _XmProcessUnlock();
+    (*border_highlight)(wid);
+    ...
+}
+
+
+
+/**************************************
+ * XmIsMotifWMRunning()
+ * IsMwmRun.c
+ **************************************/
+Boolean 
+XmIsMotifWMRunning(
+	 Widget shell )
+{
+    ...
+    _XmAppLock(app);
+    motif_wm_info_atom = XInternAtom( ... );
+    ...
+
+    _XmProcessLock();
+    XGetWindowProperty ( ... );
+    _XmProcessUnlock();
+
+    if ( XQueryTree( ... ) )
+    {
+        ...
+    }
+    else returnVal = FALSE;
+    ...
+    _XmAppUnlock(app);
+    ...
+}
+
+
+/**************************************
+ * Initialize()
+ **************************************/
+Initialize( ... )
+{
+    ...
+    if(...)
+    {
+      _XmProcessLock();
+      trans = (XtTranslations) 
+	  ((XmLabelClassRec *)XtClass(lw))->label_class.translations;
+      _XmProcessUnlock();
+     
+      XtOverrideTranslations((Widget) lw, trans);
+    }
+    else
+    {
+      _XmProcessLock();
+      trans = (XtTranslations)
+	  ((XmPrimitiveClassRec *) XtClass(lw))->primitive_class.translations;
+      _XmProcessUnlock();
+     
+      /* Otherwise override with primitive traversal translations */
+      XtOverrideTranslations((Widget) lw, trans);
+    }
+}
+
+/**************************************
+ * SetValues()
+ **************************************/
+SetValues(...)
+{
+    ...
+        XtWidgetProc resize;
+	_XmProcessLock();
+	resize = XtCoreProc(nw, resize);
+	_XmProcessUnlock();
+	(*resize) (nw) ;
+    ...
+
+// or even, as in the case of the PushButton:
+    ...
+      _XmProcessLock();
+      resize = xmLabelClassRec.core_class.resize;
+      _XmProcessUnlock();
+      (* resize) ((Widget) new_w);
+    ...
+}
+
+Arm(...)
+{
+...
+  _XmProcessLock();
+  expose = XtClass(pb)->core_class.expose;
+  _XmProcessUnlock();
+  (* expose)(wid, event, (Region) NULL);
+...
+}
