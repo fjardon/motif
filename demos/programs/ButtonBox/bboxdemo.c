@@ -351,24 +351,15 @@ main(int argc, char **argv)
  *
  */
 
-    bbox_PB1 = XtCreateManagedWidget("FirstButton",
-                xmPushButtonWidgetClass,
-                bbox,
-                NULL,
-                0);
+    bbox_PB1 = XmVaCreateManagedPushButton(bbox, "FirstButton",
+                NULL);
 
-    bbox_PB2 = XtCreateManagedWidget("SecondButton",
-                xmPushButtonWidgetClass,
-                bbox,
-                NULL,
-                0);
-
-    bbox_PB3 = XtCreateManagedWidget("ThirdButton",
-                xmPushButtonWidgetClass,
-                bbox,
-                NULL,
-                0);
-
+    bbox_PB2 = XmVaCreateManagedPushButton(bbox, "SecondButton",
+                NULL);
+ 
+    bbox_PB3 = XmVaCreateManagedPushButton(bbox, "ThirdButton",
+                NULL);
+ 
     bbox_PB4 = XtCreateManagedWidget("LastButton",
                 xmPushButtonWidgetClass,
                 bbox,
@@ -413,17 +404,17 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNleftWidget, infoframe,
                                NULL);
 
-    quitPB = XtVaCreateManagedWidget("quitPB", xmPushButtonWidgetClass, bform,
-                               XmNtopAttachment, XmATTACH_NONE,
-                               XmNleftAttachment, XmATTACH_WIDGET,
-                               XmNleftWidget, bboxframe,
+    quitPB = XmVaCreatePushButton(bform, "quitPB",
+                               XmNtopAttachment,     XmATTACH_NONE,
+                               XmNleftAttachment,   XmATTACH_WIDGET,
+                               XmNleftWidget,       bboxframe,
                                XmNbottomAttachment, XmATTACH_FORM,
-                               XmNrightAttachment,  XmATTACH_FORM,
                                XmNtopOffset,         0,
                                XmNbottomOffset,     10,
                                XmNleftOffset,      300,
-                               XmNrightOffset,     200,
+                               XmNwidth, 100,
                                NULL);
+    XtManageChild(quitPB);
 
     infolabel = XtVaCreateManagedWidget("infolabel", xmLabelWidgetClass,
                                infoframe,
