@@ -28,6 +28,11 @@
 static char rcsid[] = "$XConsortium: wmlsynbld.c /main/9 1995/08/29 11:11:12 drk $"
 #endif
 #endif
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 

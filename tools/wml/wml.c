@@ -28,6 +28,12 @@
 static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 #endif
 #endif
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 
@@ -67,7 +73,7 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 
 #include "wml.h"
 
-#if defined(SYSV) || defined(SVR4)
+#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
 #else
 #include <sys/file.h>

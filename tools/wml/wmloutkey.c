@@ -28,6 +28,12 @@
 static char rcsid[] = "$TOG: wmloutkey.c /main/8 1997/04/14 12:55:51 dbl $"
 #endif
 #endif
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 /*
 *  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 
