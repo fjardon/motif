@@ -17,7 +17,6 @@ MAINTAINERCLEANFILES = Makefile.in \
              config.guess \
              config.sub \
              config.log \
-             config.status \
              ltconfig ltmain.sh \
              aclocal.m4 \
              config.h.in \
