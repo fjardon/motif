@@ -428,6 +428,7 @@ static void DataFieldMarginsProc() ;
 static Boolean DataFieldRemove();
 static void PictureVerifyCallback();
 static void ClassInit();
+static void XmDataFieldSetStringWcs();
 #else
 static void df_ValidateAndMove(
 			       Widget w,
@@ -1171,6 +1172,9 @@ static Boolean DataFieldRemove(Widget w,
 static void PictureVerifyCallback(Widget w,
     XtPointer call_d, XtPointer client_d);
 static void ClassInit(void);
+
+
+static void XmDataFieldSetStringWcs(Widget w, wchar_t *wc_value);
 
 #endif /* _NO_PROTO */
 
@@ -11133,7 +11137,7 @@ XmDataFieldSetString(
     _XmAppUnlock(app);
 }
 
-void 
+static void 
 #ifdef _NO_PROTO
 XmDataFieldSetStringWcs( w, wc_value )
         Widget w;
