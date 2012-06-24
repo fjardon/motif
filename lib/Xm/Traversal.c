@@ -371,6 +371,7 @@ XmeNavigChangeManaged(
 		{
 		  new_focus = focus_data->focus_item ;
 		}
+        if(new_focus)
 	      _XmMgrTraversal( new_focus, XmTRAVERSE_CURRENT) ;
 	    }
 	} 
@@ -467,6 +468,7 @@ _XmNavigResize(
 			{
 			  new_focus = focus_data->focus_item ;
 			}
+            if(new_focus)
 		      _XmMgrTraversal( new_focus, XmTRAVERSE_CURRENT) ;
 		    }
 		}
