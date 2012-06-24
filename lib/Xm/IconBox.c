@@ -27,7 +27,7 @@
 *************************************************************/
 #include <stdio.h>
 
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/IconBoxP.h>
 #include <Xm/ExtP.h>
 

@@ -29,7 +29,7 @@
 #include <stdarg.h>
 #include <X11/IntrinsicP.h>
 
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/XmP.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/GadgetP.h>

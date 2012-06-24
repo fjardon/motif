@@ -31,7 +31,7 @@
 #endif
 
 #include <stdio.h>
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/XmP.h>
 #if (XmVERSION >= 2)
 #include <Xm/DrawP.h>

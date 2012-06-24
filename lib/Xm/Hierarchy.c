@@ -27,7 +27,7 @@
 *************************************************************/
 #include <stdio.h>
 
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/HierarchyP.h>
 #include <Xm/PushB.h>
 #include <Xm/IconButton.h>

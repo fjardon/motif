@@ -20,6 +20,8 @@ INCLUDES = -DINCDIR=\"@INCDIR@\" \
            -I$(srcdir)/../../include \
            -I$(srcdir)/../../lib \
            -I$(srcdir)/../../tools/wml \
+           -I../../include \
+           -I../../lib \
            -I../../tools/wml ${X_CFLAGS}
 
 UilParser.c:

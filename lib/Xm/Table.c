@@ -48,6 +48,8 @@
 #include <Xm/TextFP.h>
 #include <Xm/ScrollBar.h>
 
+#include "XmStrDefsI.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

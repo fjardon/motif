@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/PanedP.h>
 #include <Xm/SashP.h>
 #include <Xm/Separator.h>

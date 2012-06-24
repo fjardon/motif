@@ -32,6 +32,7 @@
 #include <Xm/IconButtonP.h>
 #include <X11/bitmaps/gray>
 #include <Xm/ExtP.h>
+#include "XmStrDefsI.h"
 #include "xmlist.h"
 
 /************************************************************

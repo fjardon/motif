@@ -32,7 +32,7 @@
 
 #include <stdio.h>
 
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/Ext18ListP.h>
 #include <Xm/Frame.h>
 #include <Xm/Label.h>

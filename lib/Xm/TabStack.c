@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/XmP.h>
 #include <Xm/DialogS.h>
 #include <Xm/BulletinBP.h>

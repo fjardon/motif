@@ -37,7 +37,7 @@
 
 #include <Xm/Xm.h>
 #include <Xm/XmP.h>
-#include <Xm/XmI.h>
+#include "XmI.h"
 #include <Xm/DrawP.h>
 
 #include <Xm/ComboBox2P.h>
