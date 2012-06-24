@@ -398,6 +398,8 @@ Initialize(
 {
     XmColorObj new_obj = (XmColorObj) nw ;
     int      i, nscreens;
+    /* BUG FIX 1181 */ 
+    Boolean  init_first_time = False;
     Atom     tmpAtom = 0;
     unsigned long savetimeout = (unsigned long)-1 ;
     /* window id of the selection owner */
@@ -566,7 +568,11 @@ Initialize(
 		       */
 
 		      /* certain thing we have to do only once for all screens */
-		      if (i == 0) {
+                      /* Bug Fix 1181, initialize for first available screen
+                       * found, not screen 0 */
+		      if (init_first_time == False) {
+                          init_first_time = True;
+                          
 			  if(!XtIsRealized((Widget) new_obj))
 			      XtRealizeWidget((Widget) new_obj);
 	
