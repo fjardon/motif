@@ -906,11 +906,6 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
 
     Notify(w, notify_type);
 
-    printf("old time: %d, new time: %d, diff: %d, tolerance: %d, dclick: %d\n",
-          XmI18List_time(ilist), event->xbutton.time,
-          (event->xbutton.time - XmI18List_time(ilist)), 
-          XtGetMultiClickTime(XtDisplay(w)), notify_type);
-
     XmI18List_time(ilist) = event->xbutton.time;
 #endif /* CR1166 */
 }
