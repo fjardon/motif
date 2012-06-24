@@ -1200,8 +1200,10 @@ Disarm(
 
   /* CR 7803:  Suppress redundant redraws. */
   if (tb->toggle.set != tb->toggle.visual_set)
+{
+    tb->toggle.visual_set = tb->toggle.set;
     Redisplay((Widget) tb, event, (Region) NULL);
-
+}
 /* END OSF Fix pir 2826 */
 }
 
