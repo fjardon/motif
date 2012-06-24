@@ -915,7 +915,6 @@ rm -f /usr/include/Xm
 /usr/X11R6/include/Xm/XmStrDefs.h
 /usr/X11R6/include/Xm/Xmfuncs.h
 /usr/X11R6/include/Xm/XmosP.h
-/usr/X11R6/include/Xm/Xmos_p.h
 /usr/X11R6/include/Xm/Xmpoll.h
 /usr/X11R6/include/Xm/XpmP.h
 /usr/X11R6/include/Xm/xmlist.h
@@ -955,7 +954,6 @@ rm -f /usr/include/Xm
 /usr/X11R6/share/Xm/ButtonBox/Imakefile
 /usr/X11R6/share/Xm/ButtonBox/bboxdemo.c
 /usr/X11R6/share/Xm/Color/Imakefile
-/usr/X11R6/share/Xm/Color/bxutil-c.c
 /usr/X11R6/share/Xm/Color/colordemo.c
 /usr/X11R6/share/Xm/Column/Column.ad
 /usr/X11R6/share/Xm/Column/Imakefile
@@ -964,7 +962,6 @@ rm -f /usr/include/Xm
 /usr/X11R6/share/Xm/Exm/simple_app/README
 /usr/X11R6/share/Xm/Exm/simple_app/simpleDemo
 /usr/X11R6/share/Xm/Ext18list/Imakefile
-/usr/X11R6/share/Xm/Ext18list/bxutil-c.c
 /usr/X11R6/share/Xm/Ext18list/callbacks-c.c
 /usr/X11R6/share/Xm/Ext18list/creation.c
 /usr/X11R6/share/Xm/Ext18list/ext18list.c
