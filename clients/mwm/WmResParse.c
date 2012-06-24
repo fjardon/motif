@@ -5312,6 +5312,12 @@ GetNextLine (void)
     {
 	string = line;
 #ifndef NO_MULTIBYTE
+/* bug fix for #1127 */
+        /* check for chlen==-1. in the case we must set string to NULL 2001.06.14 XXXX */
+        chlen = mblen((char *)parseP, MB_CUR_MAX); /* 2001.06.14 XXXXX */
+        if(chlen==-1) string = NULL; /* 2001.06.14 XXXX */
+
+
 	while ((*parseP != '\0') &&
                ((chlen = mblen ((char *)parseP, MB_CUR_MAX)) > 0) &&
 	       (*parseP != '\n'))
@@ -5327,9 +5333,10 @@ GetNextLine (void)
 	/* copy all but end-of-line and newlines to line buffer */
 	{
 	    *(string++) = *(parseP++);
-        }
+    }
 #endif
-	*string = '\0';
+    /* fix for bug 1127 */
+    if(string) *string = '\0';  	/* *string = '\0'; */
 	if (*parseP == '\n')
 	{
 	    parseP++;
