@@ -100,11 +100,16 @@ main(int argc, char *argv[])
 
    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
-   theWidgetRoot = XtVaOpenApplication(&this->context, myClass, 
-				     NULL, 0, &argc, argv, NULL, NULL,
-				     XmNallowShellResize, True,
-                                     sessionShellWidgetClass, 
-				     NULL);
+   theWidgetRoot = XtVaOpenApplication( &this->context, 
+                                        myClass, 
+				        NULL, 
+                                        0, 
+                                        &argc, 
+                                        argv, 
+                                        NULL,
+                                        sessionShellWidgetClass, 
+				        XmNallowShellResize, True,
+                                        NULL);
    
    this->display = XtDisplay(theWidgetRoot);
    FlightAtom = XmInternAtom(this->display, "FLIGHT", False);
