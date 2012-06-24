@@ -401,6 +401,14 @@ SetValues(Widget old,
   Widget	  resParent = ne->ext.logicalParent;
   XmWidgetExtData ext = _XmGetWidgetExtData(resParent, ne->ext.extensionType);
   Cardinal	  extSize;
+
+    if(ext == NULL)
+    {
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif    
+        return FALSE;
+    }
   
   if (resParent)
     {
@@ -441,6 +449,13 @@ GetValuesHook(Widget new_w,
   if (resParent)
     {
       ext = _XmGetWidgetExtData(resParent, ne->ext.extensionType);
+    if(ext == NULL)
+    {
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif    
+        return;
+    }
       
       ext->widget = new_w;
       

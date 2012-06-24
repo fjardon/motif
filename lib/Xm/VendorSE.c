@@ -803,6 +803,15 @@ CheckSetRenderTables(Widget wid,
 #define IS_SET_TFL(state) (state & 0x04)
   
   extData = _XmGetWidgetExtData(wid, XmSHELL_EXTENSION);
+
+if(extData == NULL)
+{
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+        return;
+}
+
   ve = (XmVendorShellExtObject)(extData->widget);
 
   if (((char *)ve + offset) == (char *) &(ve->vendor.button_font_list)) {
@@ -851,6 +860,16 @@ _XmGetAudibleWarning(Widget w)
     if (XmIsVendorShell (w))
       {
 	extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION); 
+
+  if(extData == NULL)
+  {
+#ifdef DEBUG
+    XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+    return;
+  }
+
+
 	vendorExt = (XmVendorShellExtObject) extData->widget;
 	return vendorExt->vendor.audible_warning;
       }
@@ -923,6 +942,16 @@ XmeAddFocusChangeCallback(Widget w,
   }
 
   extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION); 
+
+  if(extData == NULL)
+  {
+#ifdef DEBUG
+    XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+    _XmAppUnlock(app);
+    return;
+  }
+
   vendorExt = (XmVendorShellExtObject) extData->widget;
 
   _XmAddCallback((InternalCallbackList *) 
@@ -948,6 +977,16 @@ XmeRemoveFocusChangeCallback(Widget w,
   }
 
   extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION); 
+
+  if(extData == NULL)
+  {
+#ifdef DEBUG
+    XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+    _XmAppUnlock(app);
+    return;
+  }
+
   vendorExt = (XmVendorShellExtObject) extData->widget;
 
   _XmRemoveCallback((InternalCallbackList *) 

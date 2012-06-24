@@ -1487,6 +1487,14 @@ _XmRootGeometryManager(
     XtGeometryResult	returnVal = XtGeometryNo;
     WMShellWidget	wmShell = (WMShellWidget)w;
 
+    if(extData == NULL)
+    {
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+        return XtGeometryNo;
+    }    
+
     if (se)
       {
 	   se->shell.lastConfigureRequest = NextRequest(XtDisplay(w));
@@ -1707,8 +1715,18 @@ _XmGetWorldObject(
 
           ext = _XmGetWidgetExtData(worldObject->ext.logicalParent,
                                     worldObject->ext.extensionType);
-          _XmExtObjFree((XtPointer) ext->reqWidget);
-          ext->reqWidget = NULL;
+
+          if(ext != NULL)
+          {
+            _XmExtObjFree((XtPointer) ext->reqWidget);
+            ext->reqWidget = NULL;
+          }
+#ifdef DEBUG
+          else
+          {
+            XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+          }
+#endif
 	  
 	  XSaveContext(display,
 		       (Window) NULL,

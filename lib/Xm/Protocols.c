@@ -243,6 +243,14 @@ Initialize(
      */
     extData = _XmGetWidgetExtData(ne->ext.logicalParent,
 				  ne->ext.extensionType);
+if(extData == NULL)
+{
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+        return;
+}
+
     _XmProcessLock();
     _XmExtObjFree((XtPointer) extData->reqWidget);
     _XmProcessUnlock();

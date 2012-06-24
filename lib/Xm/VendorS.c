@@ -1382,9 +1382,18 @@ GetShellDesktopParent(
 
 		if (XmIsVendorShell(transientParent))
 		{
-			extData = _XmGetWidgetExtData(transientParent,
-				XmSHELL_EXTENSION);
-			desktopParent = (XmDesktopObject)extData->widget;
+			extData = _XmGetWidgetExtData(transientParent, XmSHELL_EXTENSION);
+            if(extData == NULL)
+            {
+#ifdef DEBUG
+                XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+                return desktopParent;
+            }
+            else
+            {
+    			desktopParent = (XmDesktopObject)extData->widget;
+            }
 		}
 	}
 	else if (!XmIsDisplay((Widget)vw))
@@ -2256,6 +2265,12 @@ Resize(
     XmWidgetExtData	extData;
 
     extData = _XmGetWidgetExtData((Widget)sw, XmSHELL_EXTENSION);
+if(extData == NULL)
+{
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+}
     vendorExt = (XmVendorShellExtObject) extData->widget;
 
     _XmImResize((Widget)sw);
@@ -2289,6 +2304,14 @@ ChangeManaged(
     XtWidgetProc 	change_managed;
 
     extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
+
+if(extData == NULL)
+{
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+}
+
     vendorExt = (XmVendorShellExtObject) extData->widget;
 
     for (i= 0; i < vw->composite.num_children; i++)
@@ -2514,13 +2537,25 @@ RootGeometryManager(
 	 XtWidgetGeometry *request,
 	 XtWidgetGeometry *reply )
 {
-    XmWidgetExtData	extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
-    XmShellExtObject	se = (XmShellExtObject)extData->widget;
     XtGeometryHandler	wmGeoHandler;
     ShellWidgetClass	swc = (ShellWidgetClass)wmShellWidgetClass;
     ShellClassExtensionRec **scExtPtr;
     XtGeometryResult	returnVal = XtGeometryNo;
     WMShellWidget	wmShell = (WMShellWidget)w;
+    XmShellExtObject	se;
+
+    XmWidgetExtData	extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
+
+    if(extData == NULL)
+    {
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+        return XtGeometryNo;
+    }
+
+    se = (XmShellExtObject)extData->widget;
+
 
     if (se)
       {
@@ -2854,6 +2889,15 @@ GetDirection(Widget w)
   XmVendorShellExtObject vendorExt;
 
   extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
+
+  if(extData == NULL)
+  {
+#ifdef DEBUG
+    XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+    return XmRIGHT_TO_LEFT;
+  }
+
   vendorExt = (XmVendorShellExtObject) extData->widget;
   return vendorExt->vendor.layout_direction;
 }

@@ -452,9 +452,18 @@ ChangeManaged(
     Widget	 child;
     XmWidgetExtData		extData = 
 	_XmGetWidgetExtData((Widget) shell, XmSHELL_EXTENSION);
-    XmVendorShellExtObject ve = (XmVendorShellExtObject)extData->widget;
+    XmVendorShellExtObject ve;
     XmDialogSavvyTrait trait ;
 
+    if(extData==NULL)
+    {
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+#endif
+        return;
+    }
+
+    ve = (XmVendorShellExtObject)extData->widget;
 
     if (((child = GetRectObjKid((CompositeWidget) shell)) == NULL) ||
 	(child->core.being_destroyed))
@@ -685,6 +694,14 @@ GeometryManager(
     XmWidgetExtData   extData;
 
     extData = _XmGetWidgetExtData((Widget)shell, XmSHELL_EXTENSION);
+    if(extData==NULL)
+    {
+#ifdef DEBUG
+        XmeWarning(NULL, "_XmGetWidgetExtData() returning NULL pointer.");
+#endif
+        return XtGeometryNo;
+    }
+
     ve = (XmVendorShellExtObject) extData->widget;
 
     if(!(shell->shell.allow_shell_resize) && XtIsRealized(wid) &&
