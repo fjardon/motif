@@ -47,7 +47,11 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #endif /* __cplusplus */
 
 #include <X11/Xos.h>
+#ifndef NEED_XPOLL_H
 #include <X11/Xpoll.h>
+#else
+#include <Xm/Xmpoll.h>
+#endif
 
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
@@ -81,7 +85,12 @@ extern int regex();
 #define X_INCLUDE_PWD_H
 #define X_INCLUDE_DIRENT_H
 #define XOS_USE_XT_LOCKING
+
+#ifndef NEED_XOS_R_H
 #include <X11/Xos_r.h>
+#else
+#include <Xm/Xmos_r.h>
+#endif
 
 #include "XmosI.h"
 #include "XmI.h"

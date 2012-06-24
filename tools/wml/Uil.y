@@ -43,7 +43,9 @@
 
 
 	/* Begin user declarations section */
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include "UilDefI.h"
 #include "UilCompGl.h"
 

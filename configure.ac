@@ -80,7 +80,8 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/malloc.h strings.h sys/file.h sys/time.h unistd.h wchar.h)
 AC_CHECK_HEADERS(wctype.h, AC_DEFINE(HAS_WIDECHAR_FUNCTIONS,1,System supports wchar))
 AC_CHECK_HEADER(langinfo.h,,AC_DEFINE(CSRG_BASED,1,System Has langinfo.h))
-
+AC_CHECK_HEADER(X11/Xos_r.h,,AC_DEFINE(NEED_XOS_R_H,1,System Missing Xos_r.h))
+AC_CHECK_HEADER(X11/Xpoll.h,,AC_DEFINE(NEED_XPOLL_H,1,system Missing X11/Xpoll.h))
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_MODE_T

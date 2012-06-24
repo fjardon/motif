@@ -47,14 +47,21 @@
 
 #define X_INCLUDE_DIRENT_H
 #define XOS_USE_XT_LOCKING
+
+#ifndef NEED_XOS_R_H
 #include <X11/Xos_r.h> /* Must precede XmI.h to avoid possible redefinitions
 			  of MIN() and MAX(). Xos_r.h includes Xos.h */
+#else
+#include <Xm/Xmos_r.h>
+#endif
+
+#include "XmosI.h"
 
 #include <Xm/IconFileP.h>
 #include <Xm/ColorObjP.h>
 #include "XmI.h"
 #include "HashI.h"
-#include "XmosI.h"
+
 #include "ImageCachI.h"
 
 /**************** vendor dependant defaults ********/

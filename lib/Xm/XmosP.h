@@ -89,12 +89,17 @@
 /**********************************************************************/
 /* here we duplicate Xtos.h, since we can't include this private file */
 
-#ifdef INCLUDE_ALLOCA_H
+#if defined(INCLUDE_ALLOCA_H) || defined(HAVE_ALLOCA_H)
 #include <alloca.h>
 #endif
 
 #ifdef CRAY
 #define WORD64
+#endif
+
+/* Don't Use Alloca On Solaris */
+#if defined(sun)
+#define NO_ALLOCA
 #endif
 
 /* stolen from server/include/os.h */
@@ -205,6 +210,7 @@ extern XmOSMethodStatus XmOSGetMethod(Widget w,
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
+
 
 #endif /* _XmosP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

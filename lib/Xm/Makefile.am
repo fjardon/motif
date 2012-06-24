@@ -188,7 +188,8 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         ScreenP.h       ShellEP.h       VendorS.h       VendorSP.h \
         VendorSEP.h     DesktopP.h      AtomMgr.h \
         Protocols.h     ProtocolsP.h    MwmUtil.h       TransltnsP.h \
-        RepType.h       XmosP.h         DrawP.h         TearOffP.h \
+        RepType.h       XmosP.h         Xmos_r.h       DrawP.h   \
+        Xmpoll.h        TearOffP.h \
         TearOffBP.h     MenuUtilP.h     MenuT.h         XmAll.h \
         TraitP.h        SpinB.h         SpinBP.h        SSpinB.h \
         SSpinBP.h \
