@@ -25,8 +25,8 @@
  * HISTORY
  */
 
-#ifndef _ColorP_h
-#define _ColorP_h
+#ifndef _XmColorP_h
+#define _XmColorP_h
 
 #ifdef __cplusplus
 extern "C" {

@@ -22,8 +22,8 @@
  * 
  */
 
-#ifndef _TreeP_h_
-#define _TreeP_h_
+#ifndef _XmTreeP_h_
+#define _XmTreeP_h_
 
 
 /************************************************************

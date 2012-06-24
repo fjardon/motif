@@ -22,8 +22,8 @@
  * 
  */
 
-#ifndef ButtonBoxP_h
-#define ButtonBoxP_h
+#ifndef XmButtonBoxP_h
+#define XmButtonBoxP_h
 
 #if defined(VMS) || defined(__VMS)
 #include <X11/apienvset.h>

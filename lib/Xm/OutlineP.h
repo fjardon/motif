@@ -22,8 +22,8 @@
  * 
  */
 
-#ifndef _OutlineP_h
-#define _Outlinels -P_h
+#ifndef _XmOutlineP_h
+#define _XmOutlineP_h
 
 #if defined(VMS) || defined(__VMS)
 #include <X11/apienvset.h>

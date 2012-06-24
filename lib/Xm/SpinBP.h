@@ -25,8 +25,8 @@
  * HISTORY
  */
 
-#ifndef _SpinBP_h
-#define _SpinBP_h
+#ifndef _XmSpinBP_h
+#define _XmSpinBP_h
 
 #include <Xm/LabelP.h>
 #include <Xm/ManagerP.h>

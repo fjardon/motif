@@ -22,8 +22,8 @@
  * 
  */
 
-#ifndef _Tree_h
-#define _Tree_h
+#ifndef _XmTree_h
+#define _XmTree_h
 
 #if defined(VMS) || defined(__VMS)
 #include <X11/apienvset.h>

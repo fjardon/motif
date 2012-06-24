@@ -20,8 +20,8 @@
  *
  ******************************************************************************/
 
-#ifndef _SSpinBP_h
-#define _SSpinBP_h
+#ifndef _XmSSpinBP_h
+#define _XmSSpinBP_h
 
 #include <Xm/SpinBP.h>
 #include <Xm/SSpinB.h>

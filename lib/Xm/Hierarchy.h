@@ -22,8 +22,8 @@
  * 
  */
 
-#ifndef _Hierarchy_h
-#define _Hierarchy_h
+#ifndef _XmHierarchy_h
+#define _XmHierarchy_h
 
 #if defined(VMS) || defined(__VMS)
 #include <X11/apienvset.h>

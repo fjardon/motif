@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef __columnp_h__
-#define __columnp_h__
+#ifndef __Xmcolumnp_h__
+#define __Xmcolumnp_h__
 
 #ifdef __cplusplus
 extern "C" {

@@ -12,8 +12,8 @@
  * HISTORY
  */
 
-#ifndef _SpinB_h
-#define _SpinB_h
+#ifndef _XmSpinB_h
+#define _XmSpinB_h
 
 #include <Xm/Xm.h>
 

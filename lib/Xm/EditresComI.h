@@ -1,6 +1,6 @@
 
-#ifndef _EditresComI_h
-#define _EditresComI_h
+#ifndef _XmEditresComI_h
+#define _XmEditresComI_h
 
 #include <X11/Intrinsic.h>
 
