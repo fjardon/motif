@@ -63,9 +63,12 @@ main(int argc, char **argv)
  static Widget  MainWindow; 
  XtAppContext   app_context;
  Widget         Frame1;
+ 
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
-   toplevel = XtAppInitialize(&app_context, "Test", NULL, 0,
-                               &argc, argv, NULL, NULL, 0);
+    toplevel = XtOpenApplication(&app_context, "Test", NULL, 0,
+                                 &argc, argv, NULL,sessionShellWidgetClass,
+                                 NULL, 0);
 
    MainWindow = XtVaCreateManagedWidget("MainWindow1", 
                                     xmMainWindowWidgetClass, toplevel,

@@ -53,34 +53,36 @@ main:
 int 
 main(int argc, char **argv)
 {
- static Widget  MainWindow; 
- XtAppContext   app_context;
- Widget         Frame1, RC1;
- Widget         Text1, ScrollBar1; 
- char    dragTranslations[] = "#override <Btn2Down>: StartDrag()"; 
- static  XtActionsRec  dragActions[] = 
-   {  
-    {"StartDrag", (XtActionProc)StartDrag} 
-   };
- XtTranslations            parsed_xlations;
+    static Widget  MainWindow; 
+    XtAppContext   app_context;
+    Widget         Frame1, RC1;
+    Widget         Text1, ScrollBar1; 
+    char    dragTranslations[] = "#override <Btn2Down>: StartDrag()"; 
+    static  XtActionsRec  dragActions[] = 
+    {  
+        {"StartDrag", (XtActionProc)StartDrag} 
+    };
+    XtTranslations            parsed_xlations;
 
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
-   toplevel = XtAppInitialize(&app_context, "Test", NULL, 0,
-                               &argc, argv, NULL, NULL, 0);
+    toplevel = XtOpenApplication(&app_context, "Test", NULL, 0,
+                                &argc, argv, NULL, sessionShellWidgetClass,
+                                NULL, 0);
 
-   MainWindow = XtVaCreateManagedWidget("MainWindow1", 
+    MainWindow = XtVaCreateManagedWidget("MainWindow1", 
                                     xmMainWindowWidgetClass, toplevel,
                                         NULL);
                      
-   CreateMenus(MainWindow);
+    CreateMenus(MainWindow);
 
 
- /* Create a RowColumn to contain the ScrollBar and Text widgets. */
+    /* Create a RowColumn to contain the ScrollBar and Text widgets. */
     RC1 = XtVaCreateManagedWidget("RC1", 
                                     xmRowColumnWidgetClass, MainWindow, 
                                     NULL);
 
-   /* Create a ScrollBar. */ 
+    /* Create a ScrollBar. */ 
     parsed_xlations = XtParseTranslationTable(dragTranslations);
     XtAppAddActions(app_context, dragActions, XtNumber(dragActions));
     ScrollBar1 = XtVaCreateManagedWidget("SB1", 

@@ -62,28 +62,33 @@ main:
 int 
 main(int argc, char **argv)
 {
- static Widget  MainWindow; 
- XtAppContext   app_context;
- Widget         Frame1, RC1, Label1, DrawingArea1;
- Pixmap         pixmap;
- GC             gc;
+    static Widget  MainWindow; 
+    XtAppContext   app_context;
+    Widget         Frame1, RC1, Label1, DrawingArea1;
+    Pixmap         pixmap;
+    GC             gc;
 
-   toplevel = XtAppInitialize(&app_context, "Test", NULL, 0,
-                               &argc, argv, NULL, NULL, 0);
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
 
-   MainWindow = XtVaCreateManagedWidget("MainWindow1", 
+ 
+    toplevel = XtOpenApplication(&app_context, "Test", NULL, 0,
+                                &argc, argv, NULL, 
+                                sessionShellWidgetClass,
+                                NULL, 0);
+
+    MainWindow = XtVaCreateManagedWidget("MainWindow1", 
                                     xmMainWindowWidgetClass, toplevel,
                                         NULL);
                      
-   CreateMenus(MainWindow);
+    CreateMenus(MainWindow);
 
-   RC1 = XtVaCreateManagedWidget("RC1", xmRowColumnWidgetClass, 
+    RC1 = XtVaCreateManagedWidget("RC1", xmRowColumnWidgetClass, 
                                  MainWindow, NULL);
 
-   if (!argv[1]) {
+    if (!argv[1]) {
         printf("usage: %s bitmap-file\n", *argv);
         exit(1);
-   }
+    }
 
    /* Load bitmap given in argv[1] */
     pixmap = XmGetPixmap(XtScreen(toplevel), argv[1],

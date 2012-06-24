@@ -45,9 +45,11 @@ main(int    argc,
  Widget       main_window;
 
    XtSetLanguageProc(NULL, NULL, NULL);
-   top_level = XtVaAppInitialize(&app_context, APP_CLASS, 
+   top_level = XtVaOpenApplication(&app_context, APP_CLASS, 
                                 NULL, 0, &argc, argv, 
-                                NULL, NULL);
+                                NULL,
+                                sessionShellWidgetClass, 
+                                NULL);
    XmdRegisterEditres(top_level);
    main_window = XtVaCreateManagedWidget("main_window", 
                                 xmMainWindowWidgetClass, top_level,
