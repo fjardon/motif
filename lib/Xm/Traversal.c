@@ -601,6 +601,7 @@ CallFocusMoved(Widget		    old,
       XmVendorShellExtObject	vendorExt;
       
       extData	= _XmGetWidgetExtData(topShell, XmSHELL_EXTENSION);
+      if(extData==NULL) return (contin);
       
       if ((vendorExt = (XmVendorShellExtObject) extData->widget) != NULL)
 	{
@@ -917,9 +918,13 @@ _XmGetFocusPolicy(
   topmost_shell = _XmFindTopMostShell( w) ;
   
   if(    XtIsVendorShell( topmost_shell)    )
-    {   
+    {
+      XmWidgetExtData xwed = _XmGetWidgetExtData(topmost_shell, XmSHELL_EXTENSION);
+
+      if(xwed == NULL) return(XmPOINTER);
+      
       return (((XmVendorShellExtObject)
-	       (_XmGetWidgetExtData(topmost_shell, XmSHELL_EXTENSION))->widget)
+	       (xwed)->widget)
 	      ->vendor.focus_policy) ;
     } 
   else
@@ -999,43 +1004,48 @@ _XmFocusModelChanged(
     }
 }
 
-XmFocusData 
-_XmGetFocusData(
-        Widget wid )
-{   
-  /* This function returns a pointer to the focus data associated with the
-   * topmost shell.  This allows us to treat the location opaquely.
-   */
-  while(    wid && !XtIsShell( wid)    )
-    {
-      wid = XtParent( wid) ;
-    } 
-  if(    wid  &&  !(wid->core.being_destroyed)    )
-    {
-      if(    XmIsVendorShell( wid)    )
-	{   
-	  XmVendorShellExtObject vse = (XmVendorShellExtObject)
-	                 _XmGetWidgetExtData( wid, XmSHELL_EXTENSION)->widget ;
-	  if(    vse  &&  vse->vendor.focus_data    )
-	    {
-	      vse->vendor.focus_data->focus_policy = vse->vendor.focus_policy ;
-	      return vse->vendor.focus_data ;
-	    }
-	}
+
+XmFocusData
+_XmGetFocusData (Widget wid)
+{
+   /* This function returns a pointer to the focus data associated with the
+    * topmost shell.  This allows us to treat the location opaquely.
+    */
+   while (wid && !XtIsShell (wid))
+   {
+      wid = XtParent (wid);
+   }
+   if (wid && !(wid->core.being_destroyed))
+   {
+      if (XmIsVendorShell (wid))
+      {
+         XmWidgetExtData xwed = _XmGetWidgetExtData (wid, XmSHELL_EXTENSION);
+         XmVendorShellExtObject vse;
+
+         if (xwed == NULL)
+            return NULL;
+         vse = (XmVendorShellExtObject) xwed->widget;
+         if (vse && vse->vendor.focus_data)
+         {
+            vse->vendor.focus_data->focus_policy = vse->vendor.focus_policy;
+            return vse->vendor.focus_data;
+         }
+      }
       else
-	{
-	  if(    XmIsMenuShell( wid)
-	     &&  ((XmMenuShellWidget) wid)->menu_shell.focus_data    )
-	    {   
-	      ((XmMenuShellWidget) wid)->menu_shell.focus_data->
-		                    focus_policy = ((XmMenuShellWidget) wid)
-		                                    ->menu_shell.focus_policy ;
-	      return ((XmMenuShellWidget) wid)->menu_shell.focus_data ;  
-	    }
-	}
-    }
-  return NULL ;
+      {
+         if (XmIsMenuShell (wid)
+             && ((XmMenuShellWidget) wid)->menu_shell.focus_data)
+         {
+            ((XmMenuShellWidget) wid)->menu_shell.focus_data->
+               focus_policy =
+               ((XmMenuShellWidget) wid)->menu_shell.focus_policy;
+            return ((XmMenuShellWidget) wid)->menu_shell.focus_data;
+         }
+      }
+   }
+   return NULL;
 }
+
 
 Boolean 
 _XmComputeVisibilityRect(Widget      w,
