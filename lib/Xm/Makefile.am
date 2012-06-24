@@ -183,7 +183,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         TextP.h         TextStrSoP.h    ToggleB.h       ToggleBG.h \
         ToggleBGP.h     ToggleBP.h      Xm.h            XmP.h \
         BaseClassP.h    ManagerP.h      PrimitiveP.h    GadgetP.h \
-        XmStrDefs.h     XmStrDefsI.h    VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
+        XmStrDefs.h     VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
         ExtObjectP.h    Display.h       DisplayP.h      Screen.h \
         ScreenP.h       ShellEP.h       VendorS.h       VendorSP.h \
         VendorSEP.h     DesktopP.h      AtomMgr.h \
@@ -256,9 +256,9 @@ XPM_SRCS = \
         XpmCrDatFrP.c  XpmCrPFrI.c    XpmRdFToP.c    Xpmdata.c \
         XpmCrIFrBuf.c  XpmImage.c     XpmWrFFrBuf.c  Xpmhashtab.c
 
-NEW_WID_SRCS =             IconH.c         Container.c     IconG.c  \
-        Notebook.c      ComboBox.c      GrabShell.c     SpinB.c  \
-        SSpinB.c        TxtPropCv.c     XmStringSeg.c   TranslNew.c
+NEW_WID_SRCS =         IconH.c        Container.c     IconG.c  \
+        Notebook.c     ComboBox.c     GrabShell.c     SpinB.c  \
+        SSpinB.c       TxtPropCv.c    XmStringSeg.c   TranslNew.c
 
 libXm_la_SOURCES = $(SRCS1) $(SRCS2) $(OBSO_SRCS) $(XPM_SRCS) $(NEW_WID_SRCS) $(SLIDE_SRCS) \
         $(XMTHEME_SRCS) $(TIP_SRCS) $(EDITRES_SRCS) $(EXTRA_SRCS)
