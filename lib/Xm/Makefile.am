@@ -183,7 +183,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         TextP.h         TextStrSoP.h    ToggleB.h       ToggleBG.h \
         ToggleBGP.h     ToggleBP.h      Xm.h            XmP.h \
         BaseClassP.h    ManagerP.h      PrimitiveP.h    GadgetP.h \
-        XmStrDefs.h     VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
+        XmStrDefs.h     XmStrDefsI.h    VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
         ExtObjectP.h    Display.h       DisplayP.h      Screen.h \
         ScreenP.h       ShellEP.h       VendorS.h       VendorSP.h \
         VendorSEP.h     DesktopP.h      AtomMgr.h \
