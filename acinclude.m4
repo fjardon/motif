@@ -36,12 +36,12 @@ LIBS="$lt_save_LIBS"
 ])
 if test $lt_cv_xthreads = dunno; then
   AC_MSG_WARN(Can't check for XTHREADS if cross-compiling. Assume XTHREADS)
-  AC_DEFINE(XTHREADS)
-  AC_DEFINE(XUSE_MTSAFE_API)
+  AC_DEFINE(XTHREADS,1,"Has XThreads")
+  AC_DEFINE(XUSE_MTSAFE_API,1,"API is MTSAFE")
 fi
 if test $lt_cv_xthreads = yes; then
-  AC_DEFINE(XTHREADS)
-  AC_DEFINE(XUSE_MTSAFE_API)
+  AC_DEFINE(XTHREADS,1,"Has XThreads")
+  AC_DEFINE(XUSE_MTSAFE_API,1,"API is MTSAFE")
 fi
 ])
 

@@ -158,16 +158,8 @@ static void DumpChildren();
 static char *DumpWidgets(), *DoSetValues(), *DoFindChild();
 static char *DoGetGeometry(), *DoGetResources(), *DumpValues();
 
-#if 0
-/* From Lower.c
-*/
-#if NeedFunctionPrototypes
-void _XmuNCopyISOLatin1Lowered(char *dst, _Xconst char *src, int size)
-#else
-void _XmuNCopyISOLatin1Lowered(dst, src, size)
-    char *dst, *src;
-    int size;
-#endif
+#ifndef HAVE_XMU_N_COPY_ISO
+void _XmNCopyISOLatin1Lowered(char *dst, char *src, int size)
 {
     register unsigned char *dest, *source;
     int bytes;
@@ -2108,9 +2100,11 @@ XtPointer * converter_data;
 {
     char ptr[BUFSIZ];
     static EditresBlock block;
-
+#ifndef HAVE_XMU_N_COPY_ISO
+     _XmNCopyISOLatin1Lowered(ptr, from_val->addr, sizeof(ptr));
+#else
     XmuNCopyISOLatin1Lowered(ptr, from_val->addr, sizeof(ptr));
-
+#endif
     if (streq(ptr, "none")) 
 	block = BlockNone;
     else if (streq(ptr, "setvalues")) 

@@ -58,92 +58,28 @@ CFLAGS="$X_CFLAGS $CFLAGS"
 AC_CHECK_HEADERS(X11/Xmu/Editres.h,
 AC_CHECK_LIB(Xmu, _XEditResCheckMessages,
 X_XMU=-lXmu
-AC_DEFINE(HAVE_LIBXMU)
+AC_DEFINE(HAVE_LIBXMU, 1, This System has libXmu)
 , X_XMU="", -lXt -lX11)
+AC_CHECK_LIB(Xmu,XmuNCopyISOLatin1Lowered ,
+AC_DEFINE(HAVE_XMU_N_COPY_ISO,1,Have XmuNCopyISOLatin1Lowered)
+, , -lXt -lX11)
 )
+
+
 AC_SUBST(X_XMU)
 LIBS="$save_LIBS"
 CFLAGS="$save_CFLAGS"
 AM_CONDITIONAL(OM_XMU, test x$X_XMU != x)
 
-dnl Replace `main' with a function in -lFS:
-dnl AC_CHECK_LIB(FS, main)
-dnl Replace `main' with a function in -lICE:
-dnl AC_CHECK_LIB(ICE, IceAcceptConnection)
-dnl Replace `main' with a function in -lMCommon:
-dnl AC_CHECK_LIB(MCommon, main)
-dnl Replace `main' with a function in -lMrm:
-dnl AC_CHECK_LIB(Mrm, main)
-dnl Replace `main' with a function in -lPEX5:
-dnl AC_CHECK_LIB(PEX5, main)
-dnl Replace `main' with a function in -lSM:
-dnl AC_CHECK_LIB(SM, SmcOpenConnectin)
-dnl Replace `main' with a function in -lUil:
-dnl AC_CHECK_LIB(Uil, main)
-dnl Replace `main' with a function in -lX11:
-dnl AC_CHECK_LIB(X11, XOpenDisplay)
-dnl Replace `main' with a function in -lXIE:
-dnl AC_CHECK_LIB(XIE, main)
-dnl Replace `main' with a function in -lXa:
-dnl AC_CHECK_LIB(Xa, main)
-dnl Replace `main' with a function in -lXau:
-dnl AC_CHECK_LIB(Xau, main)
-dnl Replace `main' with a function in -lXaw:
-dnl AC_CHECK_LIB(Xaw, main)
-dnl Replace `main' with a function in -lXbsd:
-dnl AC_CHECK_LIB(Xbsd, main)
-dnl Replace `main' with a function in -lXdmcp:
-dnl AC_CHECK_LIB(Xdmcp, main)
-dnl Replace `main' with a function in -lXdpms:
-dnl AC_CHECK_LIB(Xdpms, main)
-dnl Replace `main' with a function in -lXext:
-dnl AC_CHECK_LIB(Xext, main)
-dnl Replace `main' with a function in -lXi:
-dnl AC_CHECK_LIB(Xi, main)
-dnl Replace `main' with a function in -lXkey:
-dnl AC_CHECK_LIB(Xkey, main)
-dnl Replace `main' with a function in -lXmu:
-dnl AC_CHECK_LIB(Xmu, main)
-dnl Replace `main' with a function in -lXp:
-dnl AC_CHECK_LIB(Xp, XpSelectInput)
-dnl Replace `main' with a function in -lXpm:
-dnl AC_CHECK_LIB(Xpm, main)
-dnl Replace `main' with a function in -lXss:
-dnl AC_CHECK_LIB(Xss, main)
-dnl Replace `main' with a function in -lXt:
-dnl AC_CHECK_LIB(Xt, XtAppInitialize)
-dnl Replace `main' with a function in -lXtst:
-dnl AC_CHECK_LIB(Xtst, main)
-dnl Replace `main' with a function in -lXxf86dga:
-dnl AC_CHECK_LIB(Xxf86dga, main)
-dnl Replace `main' with a function in -lXxf86misc:
-dnl AC_CHECK_LIB(Xxf86misc, main)
-dnl Replace `main' with a function in -lXxf86vm:
-dnl AC_CHECK_LIB(Xxf86vm, main)
-dnl Replace `main' with a function in -lc:
-dnl AC_CHECK_LIB(c, main)
-dnl Replace `main' with a function in -lfl:
-dnl AC_CHECK_LIB(fl, main)
-dnl Replace `main' with a function in -lfont:
-dnl AC_CHECK_LIB(font, main)
-dnl Replace `main' with a function in -lm:
-dnl AC_CHECK_LIB(m, main)
-dnl Replace `main' with a function in -loldX:
-dnl AC_CHECK_LIB(oldX, main)
-dnl Replace `main' with a function in -lphigs:
-dnl AC_CHECK_LIB(phigs, main)
-dnl Replace `main' with a function in -lxkbfile:
-dnl AC_CHECK_LIB(xkbfile, main)
-dnl Replace `main' with a function in -lxkbui:
-dnl AC_CHECK_LIB(xkbui, main)
+
 
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/malloc.h strings.h sys/file.h sys/time.h unistd.h wchar.h)
-AC_CHECK_HEADERS(wctype.h, AC_DEFINE(HAS_WIDECHAR_FUNCTIONS))
-AC_CHECK_HEADER(langinfo.h,,AC_DEFINE(CSRG_BASED))
+AC_CHECK_HEADERS(wctype.h, AC_DEFINE(HAS_WIDECHAR_FUNCTIONS,1,System supports wchar))
+AC_CHECK_HEADER(langinfo.h,,AC_DEFINE(CSRG_BASED,1,System Has langinfo.h))
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -166,17 +102,18 @@ AC_FUNC_FORK([])
 AC_FUNC_VPRINTF
 AM_FUNC_VOID_SPRINTF
 AC_CHECK_FUNCS(wcslen wcscpy wcsncpy wcschr wcscat wcsncat getcwd gettimeofday mkdir re_comp regcmp select strcspn strerror strstr strtod strtol uname)
-AC_CHECK_FUNCS(strdup,,AC_DEFINE(NEED_STRDUP))
-AC_CHECK_FUNCS(strcasecmp,,AC_DEFINE(NEED_STRCASECMP))
-AC_CHECK_FUNCS(putenv,,AC_DEFINE(NO_PUTENV))
-AC_CHECK_FUNCS(regcomp,,AC_DEFINE(NO_REGCOMP))
-AC_CHECK_FUNCS(memmove,,AC_DEFINE(NO_MEMMOVE))
+AC_CHECK_FUNCS(strdup,,AC_DEFINE(NEED_STRDUP, 1, no strdup))
+AC_CHECK_FUNCS(strcasecmp,,AC_DEFINE(NEED_STRCASECMP, 1, no strcasecmp))
+AC_CHECK_FUNCS(putenv,,AC_DEFINE(NO_PUTENV, 1, No PUTENV))
+AC_CHECK_FUNCS(regcomp,,AC_DEFINE(NO_REGCOMP, 1, no regcmp))
+AC_CHECK_FUNCS(memmove,,AC_DEFINE(NO_MEMMOVE, 1, no memmove))
+
 
 AC_ARG_ENABLE(message-catalog, [  --enable-message-catalog
                           Enable building of the message catalog (default=no)])
 if test "$enable_message_catalog" != "yes"
 then
-    AC_DEFINE(NO_MESSAGE_CATALOG)
+    AC_DEFINE(NO_MESSAGE_CATALOG, 1, No Defined Message Catalog)
 fi
 AM_CONDITIONAL(MessageCatalog, test x$enable_message_catalog = xyes)
 
@@ -185,7 +122,7 @@ if test "$enable_themes" = "yes"
 then
     if test -f $srcdir/lib/Xm/Theme.h
     then
-	AC_DEFINE(USE_XMTHEMES)
+	AC_DEFINE(USE_XMTHEMES, 1, "Use XmThemes")
 	XMTHEME_DIST = "Theme.h ThemeP.h DynLibP.h Theme.c DynLib.c"
     else
 	AC_MSG_WARN([--enable-themes specified, but I don't have the code. Disabled])
@@ -200,7 +137,7 @@ if test "$enable_themes" = "yes"
 then
     if test "$enable_debug_themes" = "yes"
     then
-	AC_DEFINE(DEBUGTHEMES)
+	AC_DEFINE(DEBUGTHEMES, 1, "Debug Themes")
     fi
 fi
 
@@ -208,7 +145,7 @@ if test x$GCC = xyes
 then
     CFLAGS="$CFLAGS -Wall -Wno-unused -Wno-comment"
 fi
-AC_DEFINE(NO_OL_COMPAT)
+AC_DEFINE(NO_OL_COMPAT, 1, "No OL Compatability")
 
 CDE_INSTALLATION_TOP="\${prefix}/dt"
 AC_SUBST(CDE_INSTALLATION_TOP)

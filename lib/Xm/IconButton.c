@@ -1726,7 +1726,7 @@ CreateGCs(Widget w)
 
     stipple = GetGreyStipple(w);
 
-    _XmFontListGetDefaultFont(XmIconButton_font_list(iw), &fs);
+    XmeRenderTableGetDefaultFont(XmIconButton_font_list(iw), &fs);
 
     values.foreground = fg;
     values.background = bg;
