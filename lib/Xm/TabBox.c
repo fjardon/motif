@@ -853,8 +853,8 @@ Redisplay(widget, event, region)
     int              count = _XmTabbedStackListCount(list),
                      shadow = tab->manager.shadow_thickness;
     GC               gc = XmTabBox__tab_GC(tab);
-    Pixel            pixel;
-    Pixmap           pixmap;
+    Pixel            pixel= 0 ;
+    Pixmap           pixmap= 0 ;
     XGCValues gcValues; /* CR03218 begin */
     Boolean getNewGC = False;
     if(gc)
@@ -5153,8 +5153,8 @@ static int
 CalcGeometryMajor(XmTabBoxWidget tab, int minor_d)
 {
     XmTabbedStackList  list = XmTabBox_tab_list(tab);
-    int        count = _XmTabbedStackListCount(list), i, max, total, num_rows, tmp,
-               offset = XmTabBox_tab_offset(tab), num_cols;
+    int        count = _XmTabbedStackListCount(list), i, max, total, num_rows;
+    int        tmp=0, offset = XmTabBox_tab_offset(tab), num_cols;
     XRectangle *geom;
 
     if( count == 0 )

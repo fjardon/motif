@@ -58,6 +58,17 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 # include <stdarg.h>
 # define Va_start(a,b) va_start(a,b)
 
+#ifdef NEED_XICPROC
+
+typedef Bool (*XICProc)(
+#if NeedFunctionPrototypes
+    XIC,
+    XPointer,
+    XPointer
+#endif
+);
+
+#endif
 
 /* Data structures:
  *	While multiple XIMs are not currently supported, some thought

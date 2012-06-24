@@ -51,70 +51,46 @@ static Boolean ConstraintSetValues(Widget, Widget, Widget, ArgList, Cardinal*);
 static void ConstraintDestroy(Widget);
 static void ConstraintGetValues(Widget, ArgList, Cardinal*);
 
-#if 0	/* POSITION HANDLING */
-static Boolean CvtStringToLabelPosition(
-        Display*, XrmValue*, Cardinal*, XrmValue*, XrmValue*, XtPointer);
-#endif
+
 static Boolean CvtStringToXiAlignment(
-#if NeedFunctionPrototypes
 	Display*, XrmValue*, Cardinal*, XrmValue*, XrmValue*, XtPointer
-#endif
 );
 static Boolean CvtStringToFillStyle(
-#if NeedFunctionPrototypes
 	Display*, XrmValue*, Cardinal*, XrmValue*, XrmValue*, XtPointer
-#endif
 );
 static Boolean CvtStringToDistribution(
-#if NeedFunctionPrototypes
 	Display*, XrmValue*, Cardinal*, XrmValue*, XrmValue*, XtPointer
-#endif
 );
 
 static void Layout(
-#if NeedFunctionPrototypes
 	XmColumnWidget, Widget, XtWidgetGeometry*, int, int
-#endif
 );
 static void HorizontalLayout(
-#if NeedFunctionPrototypes
 	XmColumnWidget, Widget, XtWidgetGeometry*, int, int
-#endif
 );
 static void VerticalLayout(
-#if NeedFunctionPrototypes
 	XmColumnWidget, Widget, XtWidgetGeometry*, int, int
-#endif
 );
 static void VerifyResources(
-#if NeedFunctionPrototypes
 	XmColumnWidget, XmColumnWidget, XmColumnWidget
-#endif
 );
 static void VerifyConstraints(
-#if NeedFunctionPrototypes
 	Widget, Widget, Widget
-#endif
 );
 static void CalcSize(
-#if NeedFunctionPrototypes
 	XmColumnWidget, Widget, XtWidgetGeometry*, Boolean, Dimension*, Dimension*
-#endif
 );
 static Boolean CompareGeometry(
-#if NeedFunctionPrototypes
+
 	XtWidgetGeometry*, XtWidgetGeometry*
-#endif
+
 );
 static Boolean CompareGeometryToWidget(
-#if NeedFunctionPrototypes
 	XtWidgetGeometry*, Widget
-#endif
+
 );
 static void XmColumnLabelDestroyedCallback(
-#if NeedFunctionPrototypes
 	Widget, XtPointer, XtPointer
-#endif
 );
 
 #if 0	/* POSITION HANDLING */
@@ -376,11 +352,7 @@ XmOffsetPtr XmColumnC_offsets;
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 ClassInitialize(void)
-#else
-ClassInitialize()
-#endif
 {
     XmColumnClassRec* wc = &xmColumnClassRec;
     int i;
@@ -454,14 +426,7 @@ ClassPartInitialize(WidgetClass w_class)
  */
 /* ARGSUSED */
 static void
-#if NeedFunctionPrototypes
 Initialize(Widget request, Widget set, ArgList arg_list, Cardinal *arg_cnt)
-#else
-Initialize(request, set, arg_list, arg_cnt)
-    Widget   request, set;
-    ArgList  arg_list;
-    Cardinal *arg_cnt;
-#endif
 {
     XmColumnWidget rc = (XmColumnWidget) request,
                    sc = (XmColumnWidget) set;
@@ -494,12 +459,7 @@ Initialize(request, set, arg_list, arg_cnt)
  */
 /* ARGSUSED */
 static void
-#if NeedFunctionPrototypes
 Destroy(Widget widget)
-#else
-Destroy(widget)
-    Widget widget;
-#endif
 {
     /* This space intentionally left blank */
 }
@@ -517,12 +477,7 @@ Destroy(widget)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 Resize(Widget widget)
-#else
-Resize(widget)
-    Widget widget;
-#endif
 {
     WidgetClass    sc = XtSuperclass(widget);
     XmColumnWidget cw = (XmColumnWidget) widget;
@@ -558,15 +513,8 @@ Resize(widget)
  */
 /* ARGSUSED */
 static Boolean
-#if NeedFunctionPrototypes
 SetValues(Widget current, Widget request, Widget set, ArgList arg_list,
 	  Cardinal *arg_cnt)
-#else
-SetValues(current, request, set, arg_list, arg_cnt)
-    Widget   current, request, set;
-    ArgList  arg_list;
-    Cardinal *arg_cnt;
-#endif
 {
     XmColumnWidget cc = (XmColumnWidget) current,
                    cs = (XmColumnWidget) set;
@@ -691,14 +639,8 @@ SetValues(current, request, set, arg_list, arg_cnt)
  *	XtWidgetResult - the columns response to the geometry request
  */
 static XtGeometryResult
-#if NeedFunctionPrototypes
 QueryGeometry(Widget widget, XtWidgetGeometry *request,
 	      XtWidgetGeometry *wanted)
-#else
-QueryGeometry(widget, request, wanted)
-    Widget           widget;
-    XtWidgetGeometry *request, *wanted;
-#endif
 {
     XmColumnWidget   cw = (XmColumnWidget) widget;
     XtGeometryResult result;
@@ -791,14 +733,8 @@ QueryGeometry(widget, request, wanted)
  *	XtWidgetResult - the columns response to the geometry request
  */
 static XtGeometryResult
-#if NeedFunctionPrototypes
 GeometryManager(Widget widget, XtWidgetGeometry *request,
 		XtWidgetGeometry *allowed)
-#else
-GeometryManager(widget, request, allowed)
-    Widget           widget;
-    XtWidgetGeometry *request, *allowed;
-#endif
 {
     XmColumnWidget   cw = (XmColumnWidget) XtParent(widget);
     Dimension        width, height, width_return, height_return;
@@ -961,12 +897,7 @@ GeometryManager(widget, request, allowed)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 ChangeManaged(Widget widget)
-#else
-ChangeManaged(widget)
-    Widget widget;
-#endif
 {
     static Boolean in = False;
     XmColumnWidget cw = (XmColumnWidget) widget;
@@ -1107,15 +1038,8 @@ ChangeManaged(widget)
  */
 /* ARGSUSED */
 static void
-#if NeedFunctionPrototypes
 ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list,
 		     Cardinal *arg_cnt)
-#else
-ConstraintInitialize(request, new_w, arg_list, arg_cnt)
-    Widget   request, new_w;
-    ArgList  arg_list;
-    Cardinal *arg_cnt;
-#endif
 {
     static         Boolean label_widget = False;	/* STATIC DATA */
     XmColumnWidget cw = (XmColumnWidget) XtParent(new_w);
@@ -1243,15 +1167,8 @@ ConstraintInitialize(request, new_w, arg_list, arg_cnt)
  */
 /* ARGSUSED */
 static Boolean
-#if NeedFunctionPrototypes
 ConstraintSetValues(Widget current, Widget request, Widget new_w,
 		    ArgList arg_list, Cardinal *arg_cnt)
-#else
-ConstraintSetValues(current, request, new_w, arg_list, arg_cnt)
-    Widget   request, current, new_w;
-    ArgList  arg_list;
-    Cardinal *arg_cnt;
-#endif
 {
     XmColumnWidget         cw = (XmColumnWidget) XtParent(new_w);
     XmColumnConstraintPart *cc = XiC(current),
@@ -1339,12 +1256,7 @@ ConstraintSetValues(current, request, new_w, arg_list, arg_cnt)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 ConstraintDestroy(Widget widget)
-#else
-ConstraintDestroy(widget)
-    Widget widget;
-#endif
 {
     XmStringFree(XiC(widget)->label_string);
     if( XiC(widget)->label_widget != NULL )
@@ -1466,17 +1378,8 @@ CompareISOLatin1 (char *first, char *second)
  *	Boolean - True if the conversion was successful else False.
  */
 static Boolean
-#if NeedFunctionPrototypes
 CvtStringToLabelPosition(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 			 XrmValue *from, XrmValue *to, XtPointer data)
-#else
-CvtStringToLabelPosition(dpy, args, arg_cnt, from, to, data)
-    Display   dpy;
-    XrmValue  *args;
-    Cardinal  *arg_cnt;
-    XrmValue  *from, *to;
-    XtPointer data;
-#endif
 {
     unsigned char result = XiLABEL_POSITION_LEFT;
     String        str = (String) (from->addr);
@@ -1539,17 +1442,9 @@ CvtStringToLabelPosition(dpy, args, arg_cnt, from, to, data)
  */
 /* ARGSUSED */
 static Boolean
-#if NeedFunctionPrototypes
 CvtStringToXiAlignment(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 		       XrmValue *from, XrmValue *to, XtPointer data)
-#else
-CvtStringToXiAlignment(dpy, args, arg_cnt, from, to, data)
-    Display   dpy;
-    XrmValue  *args;
-    Cardinal  *arg_cnt;
-    XrmValue  *from, *to;
-    XtPointer data;
-#endif
+
 {
     unsigned char result = XmALIGNMENT_CENTER;
     String        str = (String) (from->addr);
@@ -1601,17 +1496,8 @@ CvtStringToXiAlignment(dpy, args, arg_cnt, from, to, data)
  */
 /* ARGSUSED */
 static Boolean
-#if NeedFunctionPrototypes
 CvtStringToFillStyle(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 		     XrmValue *from, XrmValue *to, XtPointer data)
-#else
-CvtStringToFillStyle(dpy, args, arg_cnt, from, to, data)
-    Display   dpy;
-    XrmValue  *args;
-    Cardinal  *arg_cnt;
-    XrmValue  *from, *to;
-    XtPointer data;
-#endif
 {
     unsigned char result = XmFILL_UNSPECIFIED;
     String        str = (String) (from->addr);
@@ -1658,17 +1544,8 @@ CvtStringToFillStyle(dpy, args, arg_cnt, from, to, data)
  */
 /* ARGSUSED */
 static Boolean
-#if NeedFunctionPrototypes
 CvtStringToDistribution(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 			XrmValue *from, XrmValue *to, XtPointer data)
-#else
-CvtStringToDistribution(dpy, args, arg_cnt, from, to, data)
-    Display   dpy;
-    XrmValue  *args;
-    Cardinal  *arg_cnt;
-    XrmValue  *from, *to;
-    XtPointer data;
-#endif
 {
     unsigned char result = XmDISTRIBUTE_TIGHT;
     String        str = (String) (from->addr);
@@ -1708,13 +1585,8 @@ CvtStringToDistribution(dpy, args, arg_cnt, from, to, data)
  */
 /* ARGSUSED */
 static void
-#if NeedFunctionPrototypes
 VerifyResources(XmColumnWidget request, XmColumnWidget current, 
 		XmColumnWidget new_w)
-#else
-VerifyResources(request, current, new_w)
-    XmColumnWidget request, current, new_w;
-#endif
 {
     Cardinal zero = 0;
     Boolean  reset;
@@ -1842,17 +1714,8 @@ VerifyResources(request, current, new_w)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 Layout(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
        int col_width, int col_height)
-#else
-Layout(cw, child, child_size, col_width, col_height)
-    XmColumnWidget	cw;
-    Widget		child;
-    XtWidgetGeometry	*child_size;
-    int			col_width;
-    int			col_height;
-#endif
 {
     if (XmColumn_orientation(cw) == XmHORIZONTAL)
     {
@@ -1879,17 +1742,8 @@ Layout(cw, child, child_size, col_width, col_height)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 HorizontalLayout(XmColumnWidget cw, Widget child,
 		 XtWidgetGeometry *child_size, int col_width, int col_height)
-#else
-HorizontalLayout(cw, child, child_size, col_width, col_height)
-    XmColumnWidget	cw;
-    Widget		child;
-    XtWidgetGeometry	*child_size;
-    int			col_width;
-    int			col_height;
-#endif
 {
     /* Do the Horizontal Layout, Baby! */
     WidgetList	kids = cw->composite.children, kid;
@@ -2064,17 +1918,8 @@ HorizontalLayout(cw, child, child_size, col_width, col_height)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 VerticalLayout(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
 	       int col_width, int col_height)
-#else
-VerticalLayout(cw, child, child_size, col_width, col_height)
-    XmColumnWidget   cw;
-    Widget           child;
-    XtWidgetGeometry *child_size;
-	int col_width;
-	int col_height;
-#endif
 {
     WidgetList kids = cw->composite.children, kid;
     Widget     label;
@@ -2491,12 +2336,7 @@ VerticalLayout(cw, child, child_size, col_width, col_height)
  */
 /* ARGSUSED */
 static void
-#if NeedFunctionPrototypes
 VerifyConstraints(Widget request, Widget current, Widget set)
-#else
-VerifyConstraints(request, current, set)
-    Widget request, current, set;
-#endif
 {
     Cardinal zero = 0;
     Boolean  reset;
@@ -2597,17 +2437,8 @@ VerifyConstraints(request, current, set)
  *	None.
  */
 static void
-#if NeedFunctionPrototypes
 CalcSize(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
 	 Boolean query, Dimension *width, Dimension *height)
-#else
-     CalcSize(cw, child, child_size, query, width, height)
-     XmColumnWidget   cw;
-     Widget           child;
-     XtWidgetGeometry *child_size;
-     Boolean          query;
-     Dimension        *width, *height;
-#endif
 {
   int              _width = 0, _height = 0, cnt = 0;
   Cardinal         i, kidCnt = cw->composite.num_children;
@@ -2790,12 +2621,7 @@ CalcSize(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
  *	Boolean - True if the geometry structures are equal, else False
  */
 static Boolean
-#if NeedFunctionPrototypes
 CompareGeometry(XtWidgetGeometry *geom1, XtWidgetGeometry *geom2)
-#else
-CompareGeometry(geom1, geom2)
-    XtWidgetGeometry *geom1, *geom2;
-#endif
 {
     Boolean result;
 
@@ -2823,13 +2649,7 @@ CompareGeometry(geom1, geom2)
  *	Boolean - True if the widget equals the geom spec, else False.
  */
 static Boolean
-#if NeedFunctionPrototypes
 CompareGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
-#else
-CompareGeometryToWidget(geom, widget)
-    XtWidgetGeometry *geom;
-    Widget           widget;
-#endif
 {
     Boolean result;
 
@@ -2862,14 +2682,8 @@ CompareGeometryToWidget(geom, widget)
  */
 /* ARGSUSED */
 static void
-#if NeedFunctionPrototypes
 XmColumnLabelDestroyedCallback(Widget widget, XtPointer client,
 			       XtPointer cbdata)
-#else
-XmColumnLabelDestroyedCallback(widget, client, cbdata)
-    Widget    widget;
-    XtPointer client, cbdata;
-#endif
 {
     Widget field = (Widget) client;
 
