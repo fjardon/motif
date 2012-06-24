@@ -21,8 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-#ifndef _TabStackP_h_
-#define _TabStackP_h_
+#ifndef _XmTabStackP_h_
+#define _XmTabStackP_h_
 
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>

@@ -36,24 +36,25 @@ typedef XmVendorShellExtPart XmToolTipDataStruct;
 static XmToolTipDataStruct *
 ToolTipGetData(Widget w)
 {
-Widget top = w;
-XmWidgetExtData	extData;
-XmVendorShellExtObject vse;
-
+    Widget top = w;
+    XmWidgetExtData	extData;
+    XmVendorShellExtObject vse;
+    
     while (XtParent(top))
     {
 	top = XtParent(top);
     }
     if ((extData = _XmGetWidgetExtData( (Widget) top, XmSHELL_EXTENSION)) &&
-	 (vse = (XmVendorShellExtObject) extData->widget))
+        (vse = (XmVendorShellExtObject) extData->widget))
     {
     	if (vse->vendor.label == NULL)
     	{
-    	Widget shell;
-
-	    shell = XtVaCreateWidget("TipShell", transientShellWidgetClass, top,
-		XmNoverrideRedirect, True,
-		NULL);
+            Widget shell;
+            
+	    shell = XtVaCreateWidget("TipShell", 
+                                     transientShellWidgetClass, top,
+                                     XmNoverrideRedirect, True,
+                                     NULL);
 	    vse->vendor.label = XmCreateLabel(shell, "TipLabel", NULL, 0);
 	    XtManageChild(vse->vendor.label);
     	}
@@ -68,8 +69,8 @@ XmVendorShellExtObject vse;
 static void
 ToolTipUnpostFinish(Widget slide, XtPointer client_data, XtPointer call_data)
 {
-XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
-
+    XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
+    
     if ( ! XtParent(TipData->label)->core.being_destroyed)
     {
 	XtPopdown(XtParent(TipData->label));
@@ -79,8 +80,8 @@ XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
 static void
 ToolTipUnpost(XtPointer client_data, XtIntervalId *id)
 {
-XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
-
+    XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
+    
     if (TipData->duration_timer)
     {
 	if (! id || (id && (*id != TipData->duration_timer)))
@@ -100,41 +101,43 @@ XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
 static void
 ToolTipPostFinish(Widget slide, XtPointer client_data, XtPointer call_data)
 {
-XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
-
+    XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
+    
     TipData->slider = NULL;
     if (TipData->post_duration > 0)
     {
-    	TipData->duration_timer = XtAppAddTimeOut(XtWidgetToApplicationContext(TipData->label),
-    		(unsigned long)TipData->post_duration,
-    		(XtTimerCallbackProc)ToolTipUnpost,
-    		TipData);
+    	TipData->duration_timer = 
+            XtAppAddTimeOut(
+                            XtWidgetToApplicationContext(TipData->label),
+                            (unsigned long)TipData->post_duration,
+                            (XtTimerCallbackProc)ToolTipUnpost,
+                            TipData);
     }
 }
 
 static void
 ToolTipPost(XtPointer client_data, XtIntervalId *id)
 {
-Widget w = (Widget)client_data;
-XmToolTipDataStruct *TipData = ToolTipGetData(w);
-int rx, ry, x, y;
-unsigned int key;
-Window root, child;
-XtWidgetGeometry geo;
-Position destX, destY;
-
+    Widget w = (Widget)client_data;
+    XmToolTipDataStruct *TipData = ToolTipGetData(w);
+    int rx, ry, x, y;
+    unsigned int key;
+    Window root, child;
+    XtWidgetGeometry geo;
+    Position destX, destY;
+    
     /*
-    printf("%s:%s(%d) - %s\n", __FILE__, __FUNCTION__, __LINE__,
-    	XtName(w));
-    	*/
+      printf("%s:%s(%d) - %s\n", __FILE__, __FUNCTION__, __LINE__,
+      XtName(w));
+    */
     TipData->timer = (XtIntervalId)NULL;
     XQueryPointer(XtDisplay(w),
-		    XtWindow(w),
-		    &root,
-		    &child,
-		    &rx, &ry,
-		    &x, &y,
-		    &key);
+                  XtWindow(w),
+                  &root,
+                  &child,
+                  &rx, &ry,
+                  &x, &y,
+                  &key);
     if (TipData->duration_timer != (XtIntervalId)NULL)
     {
 	XtRemoveTimeOut(TipData->duration_timer);
@@ -143,23 +146,24 @@ Position destX, destY;
     if (XmIsPrimitive(w))
     {
 	XtVaSetValues(TipData->label,
-	    XmNlabelString, ((XmPrimitiveWidget)w)->primitive.tool_tip_string,
-	    NULL);
+                      XmNlabelString, 
+                      ((XmPrimitiveWidget)w)->primitive.tool_tip_string,
+                      NULL);
     }
     else if (XmIsGadget(w))
     {
 	XtVaSetValues(TipData->label,
-	    XmNlabelString, ((XmGadget)w)->gadget.tool_tip_string,
-	    NULL);
+                      XmNlabelString, ((XmGadget)w)->gadget.tool_tip_string,
+                      NULL);
     }
     else
     {
-    XmString string;
-
+        XmString string;
+        
 	string = XmStringCreateLocalized(XtName(w));
 	XtVaSetValues(TipData->label,
-	    XmNlabelString, string,
-	    NULL);
+                      XmNlabelString, string,
+                      NULL);
 	XmStringFree(string);
     }
     XtQueryGeometry(TipData->label, NULL, &geo);
@@ -167,7 +171,7 @@ Position destX, destY;
     /* rws 25 Feb 2001
        Fix for Bug #1153
        Don't let the tip be off the right/bottom of the screen
-     */
+    */
     destX = rx + (XmIsGadget(w) ? XtX(w) : 0) - x + XtWidth(w) / 2;
     if (destX + geo.width > WidthOfScreen(XtScreen(w)))
     {
@@ -180,47 +184,56 @@ Position destX, destY;
     }
 #endif
     XtVaSetValues(XtParent(TipData->label),
-	XmNx, rx + 1,
-	XmNy, ry + 1,
-	XmNwidth, 1,
-	XmNheight, 1,
-	NULL);
-    TipData->slider = XtVaCreateWidget("ToolTipSlider", xmSlideContextWidgetClass,
-	XmGetXmDisplay(XtDisplay(w)),
-	XmNslideWidget, XtParent(TipData->label),
-	XmNslideDestX, destX,
-	XmNslideDestY, destY,
-	XmNslideDestWidth, geo.width,
-	XmNslideDestHeight, geo.height,
-	NULL);
-    XtAddCallback(TipData->slider, XmNslideFinishCallback, (XtCallbackProc)ToolTipPostFinish, TipData);
+                  XmNx, rx + 1,
+                  XmNy, ry + 1,
+                  XmNwidth, 1,
+                  XmNheight, 1,
+                  NULL);
+    TipData->slider = XtVaCreateWidget("ToolTipSlider", 
+                                       xmSlideContextWidgetClass,
+                                       XmGetXmDisplay(XtDisplay(w)),
+                                       XmNslideWidget, 
+                                       XtParent(TipData->label),
+                                       XmNslideDestX, destX,
+                                       XmNslideDestY, destY,
+                                       XmNslideDestWidth, geo.width,
+                                       XmNslideDestHeight, geo.height,
+                                       NULL);
+    XtAddCallback(TipData->slider, 
+                  XmNslideFinishCallback, 
+                  (XtCallbackProc)ToolTipPostFinish, 
+                  TipData);
     XtPopup(XtParent(TipData->label), XtGrabNone);
 }
 
 void 
 _XmToolTipEnter(Widget wid,
-		  XEvent *event,
-		  String *params,
-		  Cardinal *num_params)
+                XEvent *event,
+                String *params,
+                Cardinal *num_params)
 {
-XmToolTipDataStruct *TipData;
-
+    XmToolTipDataStruct *TipData;
+    
     /*
-    printf("%s:%s(%d) - %s %s %i\n", 
-	__FILE__, __FUNCTION__, __LINE__,
-	XtName(wid),
-	XmIsPrimitive(wid) ? "Primitive" : (XmIsGadget(wid) ? "Gadget" : "Unknown"),
-	event ? event->type : 0);
-	*/
-    if ((XmIsPrimitive(wid) && ((XmPrimitiveWidget)wid)->primitive.tool_tip_string) ||
+      printf("%s:%s(%d) - %s %s %i\n", 
+      __FILE__, __FUNCTION__, __LINE__,
+      XtName(wid),
+      XmIsPrimitive(wid) ? "Primitive" : 
+      (XmIsGadget(wid) ? "Gadget" : "Unknown"),
+      event ? event->type : 0);
+    */
+    if ((XmIsPrimitive(wid) && 
+         ((XmPrimitiveWidget)wid)->primitive.tool_tip_string) ||
         (XmIsGadget(wid) && ((XmGadget)wid)->gadget.tool_tip_string))
     {
 	TipData = ToolTipGetData(wid);
 	if (TipData && TipData->enable && ! TipData->timer)
 	{
-	unsigned long delay;
-
-	    if (event && (event->xcrossing.time - TipData->leave_time < TipData->post_delay))
+            unsigned long delay;
+            
+	    if (event && 
+                (event->xcrossing.time - 
+                 TipData->leave_time < TipData->post_delay))
 	    {
 		delay = 0;
 	    }
@@ -234,23 +247,24 @@ XmToolTipDataStruct *TipData;
 		TipData->duration_timer = (XtIntervalId)NULL;
 	    }
 	    TipData->timer = XtAppAddTimeOut(XtWidgetToApplicationContext(wid),
-		delay,
-		(XtTimerCallbackProc)ToolTipPost,
-		wid);
+                                             delay,
+                                             (XtTimerCallbackProc)ToolTipPost,
+                                             wid);
 	}
     }
 }
 
 void 
 _XmToolTipLeave(Widget wid,
-		  XEvent *event,
-		  String *params,
-		  Cardinal *num_params)
+                XEvent *event,
+                String *params,
+                Cardinal *num_params)
 {
-XmToolTipDataStruct *TipData = ToolTipGetData(wid);
-
+    XmToolTipDataStruct *TipData = ToolTipGetData(wid);
+    
     /*
-    printf("%s:%s(%d) - %s\n", __FILE__, __FUNCTION__, __LINE__, XtName(wid));
+      printf("%s:%s(%d) - %s\n",
+      __FILE__, __FUNCTION__, __LINE__, XtName(wid));
     */
     if (TipData)
     {
@@ -261,7 +275,8 @@ XmToolTipDataStruct *TipData = ToolTipGetData(wid);
 	}
 	else
 	{
-	    if (event && (TipData->duration_timer || TipData->post_duration == 0))
+	    if (event && 
+                (TipData->duration_timer || TipData->post_duration == 0))
 	    {
 		TipData->leave_time = event->xcrossing.time;
 	    }
@@ -273,7 +288,7 @@ XmToolTipDataStruct *TipData = ToolTipGetData(wid);
 Widget 
 XmToolTipGetLabel(Widget wid)
 {
-XmToolTipDataStruct *TipData = ToolTipGetData(wid);
-
+    XmToolTipDataStruct *TipData = ToolTipGetData(wid);
+    
     return(TipData->label);
 }
