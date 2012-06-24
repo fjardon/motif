@@ -1477,10 +1477,12 @@ XmGetVisibility(
 
   /* Obscurity by siblings */
 
+  children = NULL;
   if (!(parent_window = XtWindow(XtParent(wid))) ||
 	XQueryTree( XtDisplay(wid), parent_window, &rootwindow, 
 		&p_window, &children, &numchildren ) == 0)
   {
+        if (children) XFree(children);
         _XmAppUnlock(app);
         return( XmVISIBILITY_UNOBSCURED) ;
   }
@@ -1542,6 +1544,7 @@ XmGetVisibility(
      XDestroyRegion(region);
      XDestroyRegion(tmp_region);
      XDestroyRegion(left_region);
+    if (children) XFree(children);
      _XmAppUnlock(app);
      return (value);
   }
