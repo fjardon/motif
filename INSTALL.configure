@@ -34,7 +34,8 @@ The simplest way to compile this package is:
      Running `configure' takes awhile.  While running, it prints some
      messages telling which features it is checking for.
 
-  2. Type `make' to compile the package.
+  2. Type `make' to compile the package. (see "KNOWN  ISSUES" for problems
+     you might encounter durring a build)
 
   3. Optionally, type `make check' to run any self-tests that come with
      the package.
@@ -180,3 +181,24 @@ operates.
      script, and exit.
 
 `configure' also accepts some other, not widely useful, options.
+
+
+Known Issues (and other problems while compiling)
+=================================================
+
+1)
+  On RH 7.3 your build may fail when compiling the demo "animations".
+  to correct this please set your language to en_US:
+  
+  setenv LANG en_US
+  
+  ./make
+  
+  all will be well.
+  
+2)
+  Multi process make (make -j) works fine for the libraries, however
+  sometimes files in tools can be confused. when this happens just run regular
+  ./make (with out the -j option) and the build should continue. Sometimes
+  you will need to cd into the offending directory and do a "make clean" before 
+  continuing the build.
