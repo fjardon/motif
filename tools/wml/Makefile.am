@@ -26,7 +26,7 @@ noinst_PROGRAMS = wml wmluiltok wmldbcreate
 wmluiltok_SOURCES = wmluiltok.l
 wmluiltok_LDADD = @LEXLIB@
 
-wml_SOURCES =
+wml_SOURCES = wml.c
 wml_LDADD = -L. -lwml
 
 wmldbcreate_LDADD = ../../lib/Xm/libXm.la
