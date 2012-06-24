@@ -12,14 +12,23 @@ to pass any to it, please specify them on the autogen.sh command line.
 
 autogen.sh: ./configure: No such file or directory"
 
-To facilitate new users building Motif from CVS for the first time, I have
-started checking in a couple of files to help out:
+
+To avoid updating the autoconf and automake packages, I have started checking
+in a couple of files to help out:
 configure.rh73
 and
 include/config.h.in.rh73
 
 To actually make use of it on a RedHat v7.3 platform, 'mv' or create links
 to versions of the files without the rh73 extension.
+
+So the actual procedure for building Open Motif Everywhere (OME) after
+pulling from CVS might be:
+cd openmotif/include
+mv config.h.in.rh73 config.h.in
+cd ..
+sh autogen.sh
+mv configure.rh73 configure
 
 At this point you should be able to follow the directions in the next
 section called "Basic Installation"
