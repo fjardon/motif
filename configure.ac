@@ -236,7 +236,6 @@ demos/programs/setdate/Makefile \
 demos/programs/todo/Makefile \
 demos/programs/workspace/Makefile \
 demos/programs/tooltips/Makefile \
-demos/programs/Makefile \
 demos/programs/FontSel/Makefile \
 demos/programs/ButtonBox/Makefile \
 demos/programs/ColorSel/Makefile \
