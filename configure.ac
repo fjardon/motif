@@ -7,15 +7,15 @@ AC_PREFIX_DEFAULT(/usr/X11R6)
 AM_MAINTAINER_MODE
 
 dnl The version of the OpenMotif libraries
-CURRENT=3
-REVISION=2
+CURRENT=4
+REVISION=0
 AGE=0
 AC_SUBST(CURRENT)
 AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(openMotif,2.2.3)
+AM_INIT_AUTOMAKE(openMotif,2.3.x)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 

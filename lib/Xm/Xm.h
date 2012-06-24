@@ -57,10 +57,10 @@ extern "C" {
 #endif
 
 #define XmVERSION	2
-#define XmREVISION	2
-#define XmUPDATE_LEVEL	3
+#define XmREVISION	3
+#define XmUPDATE_LEVEL	0
 #define XmVersion	(XmVERSION * 1000 + XmREVISION)
-#define XmVERSION_STRING "@(#)Motif Version 2.2.3"
+#define XmVERSION_STRING "@(#)Motif Version 2.3.0"
 
 externalref int xmUseVersion;
 

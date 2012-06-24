@@ -1,7 +1,7 @@
 -------------------------------------------------------
 
 
-                               Motif 2.2.3
+                               Motif 2.3.0
 
                               Release Notes
 
@@ -10,8 +10,8 @@
                      Integrated Computer Solutions
 
 
-This document provides Release notes for Motif 2.2.3.
-This contains information on what is new in Motif 2.2.3
++This document provides Release notes for Motif 2.3.0
++This contains information on what is new in Motif 2.3.0
 Please see the COPYING file included with this release.
 
 
@@ -34,7 +34,7 @@ and is the recommended build method.
 
 
 
-1 What is Motif 2.2
+1 What is Motif 2.3
 
 Motif is the freely available source code distribution for a
 user interface component toolkit.  Motif is built on top
@@ -42,7 +42,7 @@ of the standard X Toolkit(Xt) and X11 libraries.
 
 1.1 Overview of Motif
 
-Motif 2.2 is an updated version of 2.1.  Any applications
+Motif 2.3 is an updated version of 2.1.  Any applications
 built against a previous 2.X release of Motif will be
 compatible with this release.  This is a source code release.
 After downloading the distribution, it will need to be unpacked
@@ -54,149 +54,20 @@ and compiled.  The distribution contains the following items:
      Demo programs
 
 
-2 What is unchanged in Motif 2.2
+2 What is unchanged in Motif 2.3
 
 This is an update release, with alls of the existing functional-
 ity (widgets, convenience functions, resources, etc) unchanged.
 There have been no widgets removed from the set, and several have
 been added.
 
-3 What is new in Motif 2.2
+3 What is new in Motif 2.3
 
-The major new functionality in 2.2 is the addition of ten new widgets to the
-existing toolkit.  These widgets expand Motif's capabilities in several
-areas, including geometry management, resource specification, and user
-interaction.
-
-Motif 2.2 also adds in user-defined "ToolTips" to all widgets that are a
-subclass of XmPrimitive.  Any widget that is a child of a VendorShell gains
-this functionality.
-
-All libraries used in this release are compatible with previous
-Motif 2.X releases. However, applications or widgets that access internal
-Motif structures may require a recompile. See Section 7 for details.  
-
-
-3.1 ToolTips
-
-All widgets in Motif that are subclassed from XmPrimitive or XmGadget
-support the ability to display user-defined "ToolTips", small labels that
-appear in their own shell over the designated widget.  By setting the
-XmtoolTipEnable resource on the main application shell (or any subclass of
-VendorShell), each child widget gains the ability to show a ToolTip.  The
-text for each widget's tooltip is contained in the XmtoolTipString resource
-for that widget.
-
-3.2 New Widgets
-
-Motif 2.2 adds ten new widgets to the toolkit. 
-
-3.2.1 XmButtonBox
-
-The XmRowColumn widget is often used as a general layout manager, when in
-actuality it was designed for menu support.  As a result, application
-programmers often end up fighting with the widget to make it behave as they
-want.  To rectify this, the XmButtonBox was created to manage children
-(usually buttons) specifically in a single row or column layout.
-
-3.2.2 XmColorSelector
-
-This widget lets an end user choose a color using RGB sliders or by
-specifying a color name taken from the RBG database.  The selected color is
-displayed dynamically.
-
-3.2.3 XmColumn
-
-The XmColumn widget displays its children stacked in a column, each with an
-optional associated label.  The labels appear in one column and the children
-in another.  This greatly simplifies the creation of entry forms.
-
-3.2.4 XmDataField
-
-A subclass of XmTextField, the XmDataField widget handles display and entry
-of data as text.  In addition to the normal functionality of XmTextField, it
-adds regular expression parsing and input validity checking.
-
-3.2.5 XmExt18List
-
-The Extended Internationalized (I18N) List widget supports multiple columns,
-colored text, internationalized string, and pixmap display.  The list can be
-scrolled horizontally or vertically.  Additionally, it provides hooks for
-adding user-defined searching and sorting functionality.
-
-3.2.6 XmFontSelector
-
-The XmFontSelector widget introduces a widget-based method for end users to
-dynamically specify an X Logical Font Description (XLFD) interactively.  Font
-family, size, scaling, and encoding are all selectable, and the resulting
-font set is displayed.  Non-XLFD fonts are also displayable through this
-widget.  Wildcarding is also supported.
-
-3.2.7 XmIconBox
-
-This widget lays out its children on a grid, forcing each child to be the
-same size.  New cells are automatically added when it is resized.  The
-location of each child widget is specified as an X and Y location on the
-grid.
-
-3.2.8 XmIconButton
-
-Similar to the existing XmPushButton, the XmIconButton provides a selectable
-object that can simultaneously display both a label and a pixmap.  It
-supports the same set of callbacks as PushButton does.
-
-3.2.9 XmTabStack
-
-Designed to be a light-weight solution, the XmTabStack manages a group of
-widgets but only allows one child to be visible at a time.  Children are
-selected by selected the associated tab field.  Tabs can be configured to
-display on any side of the TabStack.
-
-3.2.10 XmTree
-
-The XmTree widget, another new container, displays its children in a
-tree-like format, showing a virtual parent-child relationship.  Portions of
-this hierarchy can be opened and closed dynamically by the user.
-
-3.3 Autotool Build Process
-It is now possible to build Motif using the Autotools. Please see 
-the file INSTALL.configure on how to build and install this product using
-the autoconf tools. 
-
-The Autotools are distributed under the GPL (see http://www.gnu.org). In 
-providing this alternative build process, several configurations files were
-pre-generated that are covered by the GPL. In addition, during the build
-process itself, several files may be generated that are also covered by the
-GPL. None of these files are linked into Motif itself. They are
-exclusively used in controlling the building of Motif. Consequently,
-their inclusion with this distribution does not effect the license under
-which Motif is distributed. The GPL Licensing FAQ:
-http://www.gnu.org/licenses/gpl-faq.html provides more details on this type
-of use.
-
-4.  Motif Distribution
-
-4.1 Motif Source Tree
-
-The general layout of Motif is this:
-
-bitmaps/     Various XMB files
-clients/     mwm, uil, xmbind
-config/      configuration, make, and imake files
-demos/       various supported (and unsupported) demos
-doc/         man pages
-include/     included files for building and using Motif
-lib/         source files for the Motif libraries
-localized/   localization support
-tools/       WML support
-BUGREPORT    template file for submitting bugs
-RELNOTES     This file
-REAMDE.configure building/installation instructions using configure
-REAMDE.imake building/installation instructions using imake
+ << FILL IN >>
 
 4.2 Build Systems
 
-Motif 2.2 was built and tested on the following systems:
+Motif 2.3 was built and tested on the following systems:
 
 
      FreeBSD 4.4
@@ -232,12 +103,13 @@ http://www.opengroup.org/openmotif/docs/
 7. Compatibility Notice
 
 Some structures in existing widgets have been changed in
-Motif 2.2. This can cause binary incompatibility problems which require
+Motif 2.3. This can cause binary incompatibility problems which require
 a recompile of your application. One recommended solution is to install
 the runtime libraries from Motif 2.1.x. Link all your new applications to
 the current Motif Shared Library.
 
-Motif 2.2.3 is binary compatable with Motif 2.2.2.
+Motif 2.3 is not binary compatably with 2.2  or 2.1, existing applications
+will want to install the runtimes for older versions. 
 
 8. Change Log
 
