@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = xmstring.list Xm.msg Imakefile $(XMTHEME_DIST) \
+EXTRA_DIST = xmstring.list Xm.msg Imakefile \
              XmStrDefs.ct
 
 INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
@@ -34,24 +34,10 @@ EXTRA_SRCS = XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
              Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
              Hierarchy.c Outline.c TabBox.c TabList.c TabStack.c \
-             DrawUtils.c Tree.c ComboBox2.c XmStrDefs.ht  XmStrDefsI.ht
+             DrawUtils.c Tree.c ComboBox2.c XmStrDefs.ht  XmStrDefs22.ht  XmStrDefsI.ht
 
 SLIDE_HDRS = SlideC.h SlideCP.h
 SLIDE_SRCS = SlideC.c
-
-if OM_XMTHEMES
-
-XMTHEME_HDRS = Theme.h ThempP.h DynLibP.h
-XMTHEME_SRCS = Theme.c DynLib.c
-XMTHEME_LIBD = -ldl
-
-else
-
-XMTHEME_HDRS =
-XMTHEME_SRCS =
-XMTHEME_LIBS =
-
-endif
 
 if OM_XMU
 
@@ -63,8 +49,7 @@ EDITRES_SRCS =
 
 endif
 
-libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt ${X_PRE_LIBS} -lXext -lXp -lX11 ${X_EXTRA_LIBS} $(XMTHEME_LIBS)
-#libXm_la_LIBADD = ${X_LIBS} -lXt ${X_PRE_LIBS} -lXext -lXp -lX11 ${X_EXTRA_LIBS} $(XMTHEME_LIBS)
+libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt ${X_PRE_LIBS} -lXext -lXp -lX11 ${X_EXTRA_LIBS}
 
 noinst_HEADERS = BaseClassI.h \
 BitmapsI.h \
@@ -184,7 +169,8 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         TextP.h         TextStrSoP.h    ToggleB.h       ToggleBG.h \
         ToggleBGP.h     ToggleBP.h      Xm.h            XmP.h \
         BaseClassP.h    ManagerP.h      PrimitiveP.h    GadgetP.h \
-        XmStrDefs.h     VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
+        XmStrDefs.h     XmStrDefs22.h   VaSimpleP.h     VirtKeys.h \
+        VirtKeysP.h \
         ExtObjectP.h    Display.h       DisplayP.h      Screen.h \
         ScreenP.h       ShellEP.h       VendorS.h       VendorSP.h \
         VendorSEP.h     DesktopP.h      AtomMgr.h \
@@ -207,7 +193,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
-        ${SLIDE_HDRS}	${XMTHEME_HDRS} ${EXTRA_HDRS}
+        ${SLIDE_HDRS}	${EXTRA_HDRS}
 
 SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
         CascadeB.c      CascadeBG.c     Command.c       CutPaste.c \
@@ -262,11 +248,11 @@ NEW_WID_SRCS =         IconH.c        Container.c     IconG.c  \
         SSpinB.c       TxtPropCv.c    XmStringSeg.c   TranslNew.c
 
 libXm_la_SOURCES = $(SRCS1) $(SRCS2) $(OBSO_SRCS) $(XPM_SRCS) $(NEW_WID_SRCS) $(SLIDE_SRCS) \
-        $(XMTHEME_SRCS) $(TIP_SRCS) $(EDITRES_SRCS) $(EXTRA_SRCS)
+        $(TIP_SRCS) $(EDITRES_SRCS) $(EXTRA_SRCS)
 
-EXTRA_libXm_la_SOURCES = $(SLIDE_SRCS) $(XMTHEME_SRCS) $(TIP_SRCS) 
+EXTRA_libXm_la_SOURCES = $(SLIDE_SRCS) $(TIP_SRCS)
 
-STRING_FILES = XmStrDefs.h XmStrDefsI.h XmStrDefs.c
+STRING_FILES = XmStrDefs.h XmStrDefs22.h XmStrDefsI.h XmStrDefs.c
 
 BUILT_SOURCES = $(STRING_FILES) $(CAT_FILES)
 
@@ -276,6 +262,7 @@ $(top_builddir)/config/util/makestrs:
 $(STRING_FILES): Makefile xmstring.list XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/config/util/makestrs
 	test -f xmstring.list || $(LN_S) $(srcdir)/xmstring.list xmstring.list
 	test -f XmStrDefs.ht || $(LN_S) $(srcdir)/XmStrDefs.ht XmStrDefs.ht
+	test -f XmStrDefs22.ht || $(LN_S) $(srcdir)/XmStrDefs22.ht XmStrDefs22.ht
 	test -f XmStrDefsI.ht || $(LN_S) $(srcdir)/XmStrDefsI.ht XmStrDefsI.ht
 	test -f XmStrDefs.ct || $(LN_S) $(srcdir)/XmStrDefs.ct XmStrDefs.ct
 	$(top_builddir)/config/util/makestrs -f xmstring.list >XmStrDefs.c
