@@ -277,7 +277,7 @@ static XmSyntheticResource get_resources[] =
 };
 #undef offset
 
-XmIconButtonClassRec xmIconButtonClassRec = {
+XmIconButtonClassRec xiIconButtonClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	XM_ICON_BUTTON_CLASS_NAME,
@@ -326,7 +326,7 @@ XmIconButtonClassRec xmIconButtonClassRec = {
   }
 };
 
-WidgetClass xmIconButtonWidgetClass = (WidgetClass)&xmIconButtonClassRec;
+WidgetClass xmIconButtonWidgetClass = (WidgetClass)&xiIconButtonClassRec;
 
 /* Trait record for iconButton */
 static XmConst XmActivatableTraitRec iconButtonAT = 
@@ -350,7 +350,7 @@ static XmConst XmActivatableTraitRec iconButtonAT =
 static void 
 ClassInit()
 {
-    XmIconButtonClassRec *wc = &xmIconButtonClassRec;
+    XmIconButtonClassRec *wc = &xiIconButtonClassRec;
     int i;
 
     XmResolveAllPartOffsets(xmIconButtonWidgetClass,

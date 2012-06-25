@@ -172,7 +172,7 @@ typedef struct _XmIconButtonRec {
 *	EXTERNAL DECLARATIONS
 *************************************************************/
 
-extern XmIconButtonClassRec xmIconButtonClassRec;
+extern XmIconButtonClassRec xiIconButtonClassRec;
 
 /************************************************************
 *	STATIC DECLARATIONS
