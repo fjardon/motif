@@ -1146,7 +1146,7 @@ RefigureLines(XmTextWidget tw)
         tw->text.new_top = tw->text.force_display + 1 ;
       else
         tw->text.new_top = tw->text.first_position;
-      tw->text.pending_scroll -= tw->text.number_lines;
+      tw->text.pending_scroll--;
     } else if (tw->text.force_display > tw->text.bottom_position) {
       /* need to add one to account for border condition,
        * i.e. cursor at begginning of line

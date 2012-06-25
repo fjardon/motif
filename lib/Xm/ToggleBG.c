@@ -47,6 +47,7 @@ static char rcsid[] = "$TOG: ToggleBG.c /main/46 1999/12/06 18:10:15 samborn $"
 #include <Xm/MenuT.h>
 #include <Xm/ToggleBGP.h>
 #include <Xm/TraitP.h>
+#include <Xm/VaSimpleP.h>
 #include "BaseClassI.h"
 #include "CacheI.h"
 #include "ColorI.h"
