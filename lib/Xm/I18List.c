@@ -44,8 +44,12 @@
 #endif
 
 #include <Xm/ScrollBar.h>
+#include <Xm/TraitP.h>
+#include <Xm/TransferT.h>
+#include "TransferI.h"		/* for _XmConvertComplete() */
 #include <Xm/ExtP.h>
 #include <Xm/XmP.h>
+#include "RepTypeI.h"
 
 /************************************************************
 *	TYPEDEFS AND DEFINES
@@ -159,6 +163,13 @@ static void FreeColumnTitles(XmI18ListWidget);
 static void SelectRow(XmI18ListWidget, int, Boolean, Boolean);
 static void SelectItems(XmI18ListWidget, XmString,
 			int, Boolean, Boolean);
+static void CheckSetRenderTable(Widget wid, int offset, XrmValue *value); 
+static void ListConvert(Widget, XtPointer, XmConvertCallbackStruct*);
+static void ListPreDestProc(Widget, XtPointer, XmDestinationCallbackStruct*);
+static void CopyToClipboard(Widget, XEvent*, String*, Cardinal*);
+static void DragDropFinished(Widget, XtPointer, XtPointer);
+static XmString GetConcatenatedRow(Widget, int);
+static void ProcessDrag(Widget, XEvent*, String*, Cardinal*);
 
 /***********************************
  * Actions and Callback function defs.
@@ -191,13 +202,18 @@ static char defaultTranslations[] =
      Ctrl ~Shift  <Btn1Down>:		ButtonDown(Toggle)\n\
      ~Ctrl Shift  <Btn1Down>:		ButtonDown(Extend)\n\
      Button1 <Motion>:		Motion()\n\
-     <Btn1Up>:			ButtonUpOrLeave()";
+     <Btn1Up>:			ButtonUpOrLeave()\n\
+     <Btn2Down>:		ProcessDrag()\n\
+     :c <Key>osfInsert:		CopyToClipboard()\n\
+     :<Key>osfCopy:		CopyToClipboard()";
 
 static XtActionsRec actionsList[] =
 {
   {"ButtonDown",	ButtonDownAction},
   {"ButtonUpOrLeave",	ButtonUpOrLeaveAction},
   {"Motion",      	MotionAction},
+  {"ProcessDrag",       ProcessDrag},
+  {"CopyToClipboard",   CopyToClipboard},
 };
 
 /* ARGSUSED */
@@ -230,8 +246,12 @@ static XmPartResource resources[] = {
      offset(row_data), XmRImmediate, (XtPointer) NULL},
   {XmNfirstColumnPixmaps, XmCFirstColumnPixmaps, XmRBoolean, sizeof(Boolean),
      offset(first_col_pixmaps), XmRImmediate, (XtPointer) False},
-  {XmNfontList,	XmCFontList, XmRFontList, sizeof (XmFontList),
-     offset (font_list), XmRImmediate, (XtPointer) NULL},
+  {"pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
+     offset(check_set_render_table), XmRImmediate, (XtPointer) False},
+  {XmNfontList, XmCFontList, XmRFontList, sizeof(XmFontList),
+     offset(font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
+  {XmNrenderTable, XmCRenderTable, XmRRenderTable, sizeof(XmRenderTable),
+     offset(font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
   {XmNverticalScrollBar, XmCScrollBar, XmRWidget, sizeof (Widget),
      offset (v_bar), XmRImmediate, (XtPointer) NULL},
   {XmNhorizontalScrollBar, XmCScrollBar, XmRWidget, sizeof (Widget),
@@ -254,7 +274,7 @@ static XmPartResource resources[] = {
   {XmNstringDirection, XmCStringDirection,
      XmRStringDirection, sizeof(unsigned char),
      offset(string_direction), XmRImmediate,
-     (XtPointer) XmSTRING_DIRECTION_L_TO_R},
+     (XtPointer) XmDEFAULT_DIRECTION},
   {XmNvisibleItemCount, XmCVisibleItemCount, XmRInt, sizeof(int),
      offset(visible_rows), XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT},
   {XmNnewVisualStyle, XmCNewVisualStyle, XmRBoolean, sizeof(Boolean),
@@ -324,6 +344,15 @@ WidgetClass xmI18ListWidgetClass = (WidgetClass)&xmI18ListClassRec;
 
 XmOffsetPtr XmI18List_offsets;
 
+/* Transfer trait record */
+
+static XmConst XmTransferTraitRec ListTransfer = {
+  0, 						/* version */
+  (XmConvertCallbackProc) ListConvert,		/* convertProc */
+  NULL,						/* destinationProc */
+  (XmDestinationCallbackProc) ListPreDestProc,	/* destinationPreHookProc */
+};
+
 /*
  * Comment on code structure.
  *
@@ -369,6 +398,9 @@ ClassPartInitialize(WidgetClass w_class)
 #endif /* _NO_PROTO */
 {
     _XmFastSubclassInit (w_class, XmI18LIST_BIT);
+
+    /* Install transfer trait */
+    XmeTraitSet((XtPointer)w_class, XmQTtransfer, (XtPointer) &ListTransfer);
 }
 
 
@@ -433,6 +465,29 @@ static void Initialize(Widget req, Widget set,
     if (XtHeight(req) == 0)
     {
 	SetVisibleSize(set, (XtWidth(req) == 0));
+    }
+
+  /* If layout_direction is set, it overrides string_direction.
+   * If string_direction is set, but not layout_direction, use
+   *	string_direction value.
+   * If neither is set, get from parent 
+   */
+    if (XmPrim_layout_direction(ilist) != XmDEFAULT_DIRECTION) {
+	XmI18List_string_direction(ilist) = 
+	    XmDirectionToStringDirection(XmPrim_layout_direction(ilist));
+    } else if (XmI18List_string_direction(ilist) != XmDEFAULT_DIRECTION) {
+	XmPrim_layout_direction(ilist) = 
+	    XmStringDirectionToDirection(XmI18List_string_direction(ilist));
+    } else {
+	XmPrim_layout_direction(ilist) = _XmGetLayoutDirection(XtParent(set));
+	XmI18List_string_direction(ilist) = 
+	    XmDirectionToStringDirection(XmPrim_layout_direction(ilist));
+    }
+  
+    if (!XmRepTypeValidValue(XmRID_STRING_DIRECTION,
+			   XmI18List_string_direction(ilist), set))
+    {
+	XmI18List_string_direction(ilist) = XmSTRING_DIRECTION_L_TO_R;
     }
 }
 
@@ -1675,7 +1730,10 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 
     if (XmI18List_left_loc(ilist) >= 0)
         XmI18List_left_loc(ilist) = HORIZONTAL_SPACE;
-    cur_x = XmI18List_left_loc(ilist);
+    if (LayoutIsRtoLP(w))
+	cur_x = width - XmI18List_left_loc(ilist);
+    else
+	cur_x = XmI18List_left_loc(ilist);
 
     col_widths = XmI18List_column_widths(ilist);
 
@@ -1712,7 +1770,10 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 	    else
 		height -= LINE_HEIGHT;
 	    XFillRectangle(XtDisplay(w), XtWindow(w), XmI18List_entry_background_fill_gc(ilist),
-			   cur_x - HORIZONTAL_SPACE/2, cur_y,
+	                   LayoutIsRtoLP(w)
+			   ? -tot_width + XtWidth(w) - XmI18List_left_loc(ilist) + HORIZONTAL_SPACE/2
+			   : XmI18List_left_loc(ilist) - HORIZONTAL_SPACE/2,
+			   cur_y,
 #define MaX(a,b) (a>b?a:b)
 			   (unsigned int) MaX(w->core.width,tot_width), 
 #undef MaX
@@ -1722,7 +1783,10 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
     for (i = start_row ; i <= end_row ; i++) {
 	if (XmI18List_row_data(ilist)[i].selected) {
 	    XFillRectangle(XtDisplay(w), XtWindow(w), XmI18List_gc(ilist),
-			   cur_x - HORIZONTAL_SPACE/2, cur_y,
+	                   LayoutIsRtoLP(w)
+			   ? -tot_width + XtWidth(w) - XmI18List_left_loc(ilist) + HORIZONTAL_SPACE/2
+			   : XmI18List_left_loc(ilist) - HORIZONTAL_SPACE/2,
+			   cur_y,
 			   (unsigned int) tot_width, 
 			   (unsigned int) row_height);
 	}
@@ -1747,8 +1811,18 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
     for (i = 0; i < XmI18List_num_columns(ilist); i++) {
 	GC entry_gc;
 
-	if (cur_x > (int) width) 
-	    return;
+	if (LayoutIsRtoLP(w))
+	{
+	    if (cur_x < 0)
+		return;
+	    else
+	      cur_x -= col_widths[i];
+	}
+	else
+	{
+	    if (cur_x > (int) width) 
+		return;
+	}
 	
 	if (redraw_headers) {
 
@@ -1791,7 +1865,7 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 		XmStringDraw(XtDisplay(w), XtWindow(w),
 			     XmI18List_font_list(ilist), ptr, gc, cur_x, cur_y,
 			     col_widths[i], XmI18List_alignment(ilist),
-			     XmI18List_string_direction(ilist), NULL);
+			     XmPrim_layout_direction(ilist), NULL);
 	    }
 	}
 
@@ -1829,14 +1903,20 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 				 XtWindow(w), entry_gc, 0, 0,
 				 XmI18List_row_data(ilist)[j].pix_width,
 				 XmI18List_row_data(ilist)[j].pix_height,
-				 cur_x, cur_y+pix_y_offset, (unsigned long) 1);
+				 LayoutIsRtoLP(w)
+				 ? width - XmI18List_left_loc(ilist) - XmI18List_row_data(ilist)[j].pix_width
+				 : cur_x,
+				 cur_y+pix_y_offset, (unsigned long) 1);
 		    }
 		    else {
 		      XCopyArea(XtDisplay(w), XmI18List_row_data(ilist)[j].pixmap,
 				 XtWindow(w), entry_gc, 0, 0,
 				 XmI18List_row_data(ilist)[j].pix_width,
 				 XmI18List_row_data(ilist)[j].pix_height,
-				 cur_x, cur_y+pix_y_offset );
+				 LayoutIsRtoLP(w)
+				 ? width - XmI18List_left_loc(ilist) - XmI18List_row_data(ilist)[j].pix_width
+				 : cur_x,
+				 cur_y+pix_y_offset );
 		    }
 		}
 		
@@ -1880,15 +1960,18 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 		XmStringDraw(XtDisplay(w), XtWindow(w), 
 			     XmI18List_font_list(ilist), ptr, entry_gc, cur_x, cur_y,
 			     col_widths[i], XmI18List_alignment(ilist),
-			     XmI18List_string_direction(ilist), NULL);
+			     XmPrim_layout_direction(ilist), NULL);
 		
 		cur_y -= (int)(XmI18List_row_height(ilist) - VERTICAL_SPACE -
 			       text_height)/2;
 		cur_y += XmI18List_row_height(ilist) + VERTICAL_SPACE;
 	    }
 	}
-	    
-	cur_x += HORIZONTAL_SPACE + col_widths[i];
+	
+	if (LayoutIsRtoLP(w))    
+	    cur_x -= HORIZONTAL_SPACE;
+	else
+	    cur_x += HORIZONTAL_SPACE + col_widths[i];
     }
 }
 
@@ -2458,11 +2541,23 @@ CvtPixelValToColNum(Widget w, short x)
      * Sum up the widest pixel values in each column
      * and see where the passed in x pixel value falls
      */
-    cur_col = XmI18List_left_loc(ilist);
+    if (LayoutIsRtoLP(w))
+	cur_col = XtWidth(w) - XmI18List_left_loc(ilist);
+    else
+	cur_col = XmI18List_left_loc(ilist);
     for (; i < XmI18List_num_columns(ilist); i++) {
-        cur_col += XmI18List_column_widths(ilist)[i] + HORIZONTAL_SPACE;
-        if (cur_col > x)
-            break;
+	if (LayoutIsRtoLP(w))
+	{
+            cur_col -= XmI18List_column_widths(ilist)[i] + HORIZONTAL_SPACE;
+            if (cur_col < x)
+                break;
+	}
+	else
+	{
+            cur_col += XmI18List_column_widths(ilist)[i] + HORIZONTAL_SPACE;
+            if (cur_col > x)
+                break;
+	}
     }
 
     return((short) i);
@@ -2724,8 +2819,11 @@ InvertArea(Widget w, short row, short column)
   if (column == ENTIRE_ROW) {
     CvtRowColumnToPosition(w, row, 0, &x, &y);
     
-    x = XmI18List_left_loc(ilist) - HORIZONTAL_SPACE/2;
     width = GetListWidth((Widget) ilist);
+    if (LayoutIsRtoLP(w))
+	x = -width + XtWidth(w) - XmI18List_left_loc(ilist) + HORIZONTAL_SPACE/2;
+    else
+	x = XmI18List_left_loc(ilist) - HORIZONTAL_SPACE/2;
   }
   else {
     CvtRowColumnToPosition(w, row, column, &x, &y);
@@ -2755,7 +2853,10 @@ InvertArea(Widget w, short row, short column)
 		XtWindow(w), XmI18List_entry_background_gc(ilist), 0, 0,
 		XmI18List_row_data(ilist)[row].pix_width,
 		XmI18List_row_data(ilist)[row].pix_height,
-		XmI18List_left_loc(ilist), y+pix_y_offset );
+		LayoutIsRtoLP(w)
+		  ? XtWidth(ilist) - XmI18List_left_loc(ilist) - XmI18List_row_data(ilist)[row].pix_height
+		  : XmI18List_left_loc(ilist),
+		y+pix_y_offset );
   }
 }
 
@@ -3263,10 +3364,14 @@ Xm18IListUnselectAllItems( Widget w )
   XmI18ListWidget ilist = (XmI18ListWidget) w;
   Xm18RowInfo *ptr = XmI18List_row_data(ilist);
 
+  _XmWidgetToAppContext(w);
+  _XmAppLock(app);
+
   for (row = 0; row < XmI18List_num_rows(ilist); row++, ptr++) {
     if (ptr->selected)
       ToggleRow(w, row);
   }
+  _XmAppUnlock(app);
 }
 
 
@@ -3448,6 +3553,9 @@ SelectItems(XmI18ListWidget i18list, XmString item,
     int	i, j;
     int	rowcount, colcount, colstart;
 
+    _XmWidgetToAppContext((Widget)i18list);
+    _XmAppLock(app);
+
     colstart = (XmI18List_first_col_pixmaps(i18list) ? 1 : 0);
 
     rowcount = XmI18List_num_rows(i18list);
@@ -3474,6 +3582,428 @@ SelectItems(XmI18ListWidget i18list, XmString item,
 
 		break;
 	    }
+    _XmAppUnlock(app);
+}
+
+/*
+ * XmRCallProc routine for checking font_list before setting it to NULL
+ * If "check_set_render_table" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetRenderTable(Widget wid, int offset, XrmValue *value)
+{
+  XmI18ListWidget il = (XmI18ListWidget)wid;
+
+  /* Check if been here before */
+  if (il->ilist.check_set_render_table)
+      value->addr = NULL;
+  else {
+      il->ilist.check_set_render_table = True;
+      value->addr = (char*)&(il->ilist.font_list);
+  }
+}
+
+/***************************************************************************
+ *									   *
+ * ListConvert - Convert routine for dragNDrop.				   *
+ *									   *
+ ***************************************************************************/
+
+/*ARGSUSED*/
+static void
+ListConvert(Widget w, XtPointer client_data,
+	    XmConvertCallbackStruct *cs)
+{
+    enum { XmA_MOTIF_COMPOUND_STRING, XmACOMPOUND_TEXT, XmATEXT,
+	   XmATARGETS, XmA_MOTIF_DROP, XmA_MOTIF_LOSE_SELECTION,
+	   XmA_MOTIF_EXPORT_TARGETS, XmA_MOTIF_CLIPBOARD_TARGETS,
+	   NUM_ATOMS };
+    static char *atom_names[] = { 
+	   XmS_MOTIF_COMPOUND_STRING, XmSCOMPOUND_TEXT, XmSTEXT,
+	   XmSTARGETS, XmS_MOTIF_DROP, XmS_MOTIF_LOSE_SELECTION,
+	   XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS };
+
+    Atom atoms[XtNumber(atom_names)];
+    Atom C_ENCODING = XmeGetEncodingAtom(w);
+    int target_count = 0;
+    int i;
+    Atom type = None;
+    XtPointer value = NULL;
+    unsigned long size = 0;
+    int format = 8;
+    XmI18ListWidget lw = (XmI18ListWidget) w;
+    XmI18ListDragConvertStruct *ListDragConv = lw->ilist.drag_conv;
+
+    assert(XtNumber(atom_names) == NUM_ATOMS);
+    XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
+
+    if (cs->target == atoms[XmATARGETS])
+    {
+	Atom *targs = XmeStandardTargets(w, 5, &target_count);
+
+	value = (XtPointer) targs;
+	targs[target_count++] = atoms[XmA_MOTIF_COMPOUND_STRING];
+	targs[target_count++] = atoms[XmACOMPOUND_TEXT];
+	targs[target_count++] = atoms[XmATEXT];
+	targs[target_count++] = C_ENCODING;
+	if (XA_STRING != C_ENCODING)
+	    targs[target_count++] = XA_STRING;
+	if (ListDragConv->pixmap != None)
+	    targs[target_count++] = XA_PIXMAP;
+	type = XA_ATOM;
+	size = target_count;
+	format = 32;
+    }
+    else if ((cs->target == atoms[XmA_MOTIF_EXPORT_TARGETS]) ||
+	     (cs->target == atoms[XmA_MOTIF_CLIPBOARD_TARGETS]))
+    {
+	Atom *targs = (Atom *) XtMalloc(sizeof(Atom) * 5);
+	int n = 0;
+
+	value = (XtPointer) targs;
+	targs[n++] = atoms[XmA_MOTIF_COMPOUND_STRING];
+	targs[n++] = atoms[XmACOMPOUND_TEXT];
+	targs[n++] = atoms[XmATEXT];
+	targs[n++] = C_ENCODING;
+	if (XA_STRING != C_ENCODING)
+	    targs[n++] = XA_STRING;
+	if (ListDragConv->pixmap != None)
+	    targs[n++] = XA_PIXMAP;
+	format = 32;
+	size = n;
+	type = XA_ATOM;
+	cs->status = XmCONVERT_DONE;
+    }
+    else if (cs->target == atoms[XmACOMPOUND_TEXT] ||
+	   cs->target == atoms[XmA_MOTIF_COMPOUND_STRING] ||
+	   cs->target == XA_STRING ||
+	   cs->target == C_ENCODING ||
+	   cs->target == atoms[XmATEXT])
+    {
+	XmString concat;
+	XmString sep = XmStringSeparatorCreate();
+
+	format = 8;
+
+	if (cs->selection == atoms[XmA_MOTIF_DROP])
+	{
+	    int itemcount = ListDragConv->num_items;
+	    XmString *items = ListDragConv->strings;
+
+	    concat = (itemcount ? XmStringCopy(items[0]) : NULL);
+	    for (i = 1; i < itemcount; i++) {
+		concat = XmStringConcatAndFree(concat, XmStringCopy(sep));
+		concat = XmStringConcatAndFree(concat, XmStringCopy(items[i]));
+	    }
+	}
+	else
+	{
+	    Cardinal row;
+	    int rowcount;
+	    concat = NULL;
+	    int * rows = GetSelectedRows(lw, &rowcount);
+	    for (row = 0; row < rowcount; row++) {
+		if (concat) {
+		    concat = XmStringConcatAndFree(concat,
+			    XmStringCopy(GetConcatenatedRow(w, rows[row])));
+		} else {
+		    concat = GetConcatenatedRow(w, rows[row]);
+		}
+		if (row < rowcount-1) {
+		    concat = XmStringConcatAndFree(concat,
+			XmStringCopy(sep));
+		}
+	    }
+	    XtFree((XtPointer)rows);
+	}
+
+	if (cs->target == atoms[XmACOMPOUND_TEXT] ||
+		cs->target == C_ENCODING ||
+		cs->target == XA_STRING ||
+		cs->target == atoms[XmATEXT])
+	{
+	    if (concat != NULL)
+		value = XmCvtXmStringToCT(concat);
+	    else
+		value = NULL;
+
+	    type = atoms[XmACOMPOUND_TEXT];
+
+	    if (value != NULL)
+		size = strlen((char*) value);
+	    else
+		size = 0;
+
+	    if (cs->target == XA_STRING)
+	    {
+		XTextProperty tmp_prop;
+		int ret_status;
+
+		/* convert value to 8859.1 */
+		ret_status = XmbTextListToTextProperty(XtDisplay(w),
+						     (char**) &value, 1,
+						     (XICCEncodingStyle)
+						     XStringStyle,
+						     &tmp_prop);
+		XtFree((char*) value);
+		if (ret_status == Success || ret_status > 0)
+		{
+		    value = (XtPointer) tmp_prop.value;
+		    type = XA_STRING;
+		    size = tmp_prop.nitems;
+		}
+		else
+		{
+		    value = NULL;
+		    size = 0;
+		}
+
+	      /* If the target was TEXT then try and convert it.  If
+	       * fully converted then we'll pass it back in locale
+	       * text.  For locale text requests,  always pass
+	       * back the converted text */
+	    }
+	    else if ((cs->target == atoms[XmATEXT] || cs->target == C_ENCODING)
+		    && (value != NULL))
+	    {
+		char *cvt;
+		Boolean success;
+		cvt = _XmTextToLocaleText(w, value, type, format, size,
+			&success);
+		if ((cvt != NULL && success) || cs->target == C_ENCODING)
+		{
+		    if (! success && cvt != NULL)
+			    cs->flags |= XmCONVERTING_PARTIAL;
+		    XtFree((char*) value);
+		    value = cvt;
+		    type = C_ENCODING;
+		}
+	    }
+	}
+	else
+	{
+	    size = XmCvtXmStringToByteStream(concat, (unsigned char**) &value);
+	    type = atoms[XmA_MOTIF_COMPOUND_STRING];
+	}
+
+	XmStringFree(concat);
+	XmStringFree(sep);
+    }
+    else if (cs->target == atoms[XmA_MOTIF_LOSE_SELECTION])
+    {
+	/* Deselect everything in the list since we lost
+	   the primary selection. */
+	Xm18IListUnselectAllItems(w);
+    }
+    else if (cs->target == XA_PIXMAP)
+    {
+	/* Get row's pixmap */
+	Pixmap *pix;
+      
+	pix = (Pixmap *) XtMalloc(sizeof(Pixmap));
+	*pix = ListDragConv->pixmap;
+	/* value, type, size, and format must be set */
+	value = (XtPointer) pix;
+	type = XA_DRAWABLE;
+	size = 1;
+	format = 32;
+    }
+
+  _XmConvertComplete(w, value, size, format, type, cs);
+}
+
+/*ARGSUSED*/
+static void
+ListPreDestProc(Widget w,
+		XtPointer ignore, /* unused */
+		XmDestinationCallbackStruct *cs)
+{
+  XmDropProcCallbackStruct *ds;
+  Atom XA_MOTIF_DROP = XInternAtom(XtDisplay(w), XmS_MOTIF_DROP, False);
+  int index;
+  short row, col;
+
+  if (cs->selection != XA_MOTIF_DROP) return;
+
+  /* If this is the result of a drop,  we can fill in location_data with
+   * the apparent site */
+  ds = (XmDropProcCallbackStruct *) cs->destination_data;
+
+  CvtPositionToRowColumn(w, ds->x, ds->y, &row, &col);
+
+  cs->location_data = (XtPointer) (long) row;
+}
+
+/*
+ * Function:
+ *	GetConcatenatedRow(ilist)
+ * Description:
+ *	Helper fucntion for UTM operations. Returns joined collumns of a row,
+ *      with tabs between column values.
+ * Input:
+ *	w : Widget - the widget to copy titles
+ *    row : Xm18RowInfo - the row to concatenate
+ * Output:
+ *	XmString - the concatenated string.
+ */
+
+static XmString
+GetConcatenatedRow(Widget w, int row)
+{
+    XmString result = NULL;
+    XmString temp_string;
+    XmString tab = XmStringComponentCreate(XmSTRING_COMPONENT_TAB, 0, NULL);
+    XmI18ListWidget lw = (XmI18ListWidget)w;
+    short i;
+    
+    for (i = 0; i < lw->ilist.num_columns; i++) {
+	if (lw->ilist.row_data[row].values[i]) {
+	    if (result) {
+		temp_string = XmStringConcat(tab,
+			lw->ilist.row_data[row].values[i]);
+		result = XmStringConcatAndFree(result, temp_string);
+	    } else {
+		result = XmStringCopy(lw->ilist.row_data[row].values[i]);
+	    }
+	}
+    }
+    XmStringFree(tab);
+    return result;
+}
+
+/***************************************************************************
+ *									   *
+ * ProcessDrag - drag the selected items				   *
+ *									   *
+ ***************************************************************************/
+
+/*ARGSUSED*/
+static void
+ProcessDrag(Widget wid,
+	    XEvent *event,
+	    String *params,		/* unused */
+	    Cardinal *num_params)	/* unused */
+{
+    XmI18ListWidget lw = (XmI18ListWidget) wid;
+    register int i;
+    short row, col;
+    Widget drag_icon, dc;
+    Arg args[10];
+    int n, location_data;
+    XmI18ListDragConvertStruct *ListDragConv; 
+    XmString temp_string = NULL;
+    XmString temp_string2 = NULL;
+    XmString tab;
+
+    /* Don't allow multi-button drags. */
+    if (event->xbutton.state &
+	    ~((Button1Mask >> 1) << event->xbutton.button) &
+	    (Button1Mask | Button2Mask | Button3Mask | Button4Mask |
+	    Button5Mask))
+	return;
+
+    CvtPositionToRowColumn(wid, event->xbutton.x, event->xbutton.y, &row, &col);
+    
+    if (col < 0 || row >= lw->ilist.num_rows || col >= lw->ilist.num_columns)
+	return;
+
+    location_data = row;
+    
+    lw->ilist.drag_conv = ListDragConv = (XmI18ListDragConvertStruct *)
+	    XtMalloc(sizeof(XmI18ListDragConvertStruct));
+
+    ListDragConv->w = wid;
+    ListDragConv->strings = NULL;
+    ListDragConv->pixmap = None;
+    ListDragConv->num_items = 0;
+    
+    if (col == 0 && lw->ilist.first_col_pixmaps && row >= 0) {
+    	ListDragConv->num_items = 1;
+	ListDragConv->pixmap = lw->ilist.row_data[row].pixmap;
+    }
+    
+    if (row >= 0) {
+	if (lw->ilist.row_data[row].selected)
+	{
+	    int rowcount;
+	    int * rows = GetSelectedRows(lw, &rowcount);
+	    ListDragConv->num_items = rowcount;
+	    ListDragConv->strings =	(XmString *)
+		    XtMalloc(sizeof(XmString) * ListDragConv->num_items);
+	    for (i = 0; i < rowcount; i++)
+		ListDragConv->strings[i] = GetConcatenatedRow(wid, rows[i]);
+	    XtFree((XtPointer)rows);
+	}
+	else
+	{
+	    ListDragConv->strings = (XmString *) XtMalloc(sizeof(XmString));
+	    ListDragConv->num_items = 1;
+	    ListDragConv->strings[0] = GetConcatenatedRow(wid, row);
+	}
+    } else if (row == -2 && lw->ilist.column_titles) { /* drag column header */
+	ListDragConv->strings = (XmString *) XtMalloc(sizeof(XmString));
+	ListDragConv->num_items = 1;
+	ListDragConv->strings[0] = lw->ilist.column_titles[col];
+    } else {
+	return;
+    }
+
+    /* OK, now start the drag... */
+    drag_icon = XmeGetTextualDragIcon(wid);
+
+    n = 0;
+    XtSetArg(args[n], XmNcursorForeground, lw->primitive.foreground), n++;
+    XtSetArg(args[n], XmNcursorBackground, lw->core.background_pixel), n++;
+    XtSetArg(args[n], XmNsourceCursorIcon, drag_icon), n++;
+    XtSetArg(args[n], XmNdragOperations, XmDROP_COPY), n++;
+    dc = XmeDragSource(wid, (XtPointer) (long) location_data, event, args, n);
+
+    if (dc)
+	XtAddCallback(dc, XmNdragDropFinishCallback, DragDropFinished, lw);
+    else
+	DragDropFinished(dc, lw, NULL);
+}
+
+/***************************************************************************
+ *									   *
+ * CopyToClipboard - copy the current selected items to the clipboard.     *
+ *									   *
+ *	This is a *sloow* process...					   *
+ *									   *
+ ***************************************************************************/
+
+/*ARGSUSED*/
+static void
+CopyToClipboard(Widget w, XEvent *event, String *params, Cardinal *num_params)
+{
+    XmI18ListWidget lw = (XmI18ListWidget) w;
+    int rowcount;
+    
+    /* text to the clipboard */
+    (void)GetSelectedRows(lw, &rowcount);
+    if (rowcount > 0)
+	(void) XmeClipboardSource(w, XmCOPY, 0);
+}
+
+/*ARGSUSED*/
+static void
+DragDropFinished(Widget w,		/* unused */
+		 XtPointer closure,
+		 XtPointer call_data)	/* unused */
+{
+    int i;
+    XmI18ListWidget lw = (XmI18ListWidget)closure;
+    XmI18ListDragConvertStruct *ListDragConv = lw->ilist.drag_conv;
+
+    for (i = 0; i < ListDragConv->num_items; i++)
+	XmStringFree(ListDragConv->strings[i]);
+
+    XtFree((char *) ListDragConv->strings);
+    XtFree((char *) ListDragConv);
 }
 
 /*  Function Name: XmI18ListSelectItems

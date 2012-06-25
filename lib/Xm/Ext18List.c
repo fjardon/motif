@@ -1085,7 +1085,6 @@ XmExt18ListGetSelectedRows(Widget w)
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
 
-    ret_rows = (Xm18RowInfo **) XtMalloc(sizeof(Xm18RowInfo *) + 1);
     ret_rows = XmI18ListGetSelectedRows(XmExt18List_ilist(elist));
 
     _XmAppUnlock(app); 
@@ -1334,7 +1333,8 @@ XmExt18ListGetSelectedRowArray(Widget w, int *num_rows)
 
     ret_val = XmI18ListGetSelectedRowArray((XmI18ListWidget)XmExt18List_ilist(elist),
 					num_rows);
-    _XmAppUnlock(app); 
+    _XmAppUnlock(app);
+    return ret_val;
 }
 
 /*  Function Name: XmExt18ListMakeRowVisible
