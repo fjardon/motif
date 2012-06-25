@@ -68,6 +68,7 @@ man_MANS = ApplicationShell.3 \
     XmClipboardWithdrawFormat.3 \
     XmColorSelector.3 \
     XmColumn.3 \
+    XmDropDown.3 \
     XmComboBox.3 \
     XmComboBoxAddItem.3 \
     XmComboBoxDeletePos.3 \
@@ -94,8 +95,10 @@ man_MANS = ApplicationShell.3 \
     XmCreateArrowButtonGadget.3 \
     XmCreateBulletinBoard.3 \
     XmCreateBulletinBoardDialog.3 \
+    XmCreateButtonBox.3 \
     XmCreateCascadeButton.3 \
     XmCreateCascadeButtonGadget.3 \
+    XmCreateDropDown.3 \
     XmCreateComboBox.3 \
     XmCreateCommand.3 \
     XmCreateCommandDialog.3 \
@@ -194,7 +197,7 @@ man_MANS = ApplicationShell.3 \
     XmDropTransfer.3 \
     XmDropTransferAdd.3 \
     XmDropTransferStart.3 \
-    XmExt18List.3 \
+    XmMultiList.3 \
     XmFileSelectionBox.3 \
     XmFileSelectionBoxGetChild.3 \
     XmFileSelectionDoSearch.3 \
@@ -554,12 +557,97 @@ man_MANS = ApplicationShell.3 \
     XmTree.3 \
     XmUninstallImage.3 \
     XmUpdateDisplay.3 \
+    XmVaCreateArrowButton.3 \
+    XmVaCreateArrowButtonGadget.3 \
+    XmVaCreateBulletinBoard.3 \
+    XmVaCreateButtonBox.3 \
+    XmVaCreateCascadeButton.3 \
+    XmVaCreateCascadeButtonGadget.3 \
+    XmVaCreateColorSelector.3 \
+    XmVaCreateColumn.3 \
+    XmVaCreateDropDown.3 \
+    XmVaCreateComboBox.3 \
+    XmVaCreateCommand.3 \
+    XmVaCreateContainer.3 \
+    XmVaCreateDataField.3 \
+    XmVaCreateDrawingArea.3 \
+    XmVaCreateDrawnButton.3 \
+    XmVaCreateMultiList.3 \
+    XmVaCreateFileSelectionBox.3 \
+    XmVaCreateForm.3 \
+    XmVaCreateFrame.3 \
+    XmVaCreateIconGadget.3 \
+    XmVaCreateLabel.3 \
+    XmVaCreateLabelGadget.3 \
+    XmVaCreateList.3 \
+    XmVaCreateMainWindow.3 \
+    XmVaCreateManagedArrowButton.3 \
+    XmVaCreateManagedArrowButtonGadget.3 \
+    XmVaCreateManagedBulletinBoard.3 \
+    XmVaCreateManagedButtonBox.3 \
+    XmVaCreateManagedCascadeButton.3 \
+    XmVaCreateManagedCascadeButtonGadget.3 \
+    XmVaCreateManagedColorSelector.3 \
+    XmVaCreateManagedColumn.3 \
+    XmVaCreateManagedDropDown.3 \
+    XmVaCreateManagedComboBox.3 \
+    XmVaCreateManagedCommand.3 \
+    XmVaCreateManagedContainer.3 \
+    XmVaCreateManagedDataField.3 \
+    XmVaCreateManagedDrawingArea.3 \
+    XmVaCreateManagedDrawnButton.3 \
+    XmVaCreateManagedMultiList.3 \
+    XmVaCreateManagedFileSelectionBox.3 \
+    XmVaCreateManagedForm.3 \
+    XmVaCreateManagedFrame.3 \
+    XmVaCreateManagedIconGadget.3 \
+    XmVaCreateManagedLabel.3 \
+    XmVaCreateManagedLabelGadget.3 \
+    XmVaCreateManagedList.3 \
+    XmVaCreateManagedMainWindow.3 \
+    XmVaCreateManagedMessageBox.3 \
+    XmVaCreateManagedNotebook.3 \
+    XmVaCreateManagedPanedWindow.3 \
+    XmVaCreateManagedPushButton.3 \
+    XmVaCreateManagedPushButtonGadget.3 \
+    XmVaCreateManagedRowColumn.3 \
+    XmVaCreateManagedScale.3 \
+    XmVaCreateManagedScrollBar.3 \
+    XmVaCreateManagedScrolledWindow.3 \
+    XmVaCreateManagedSelectionBox.3 \
+    XmVaCreateManagedSeparatorGadget.3 \
+    XmVaCreateManagedSimpleSpinBox.3 \
+    XmVaCreateManagedSpinBox.3 \
+    XmVaCreateManagedTable.3 \
+    XmVaCreateManagedTabStack.3 \
+    XmVaCreateManagedText.3 \
+    XmVaCreateManagedTextField.3 \
+    XmVaCreateManagedToggleButton.3 \
+    XmVaCreateManagedToggleButtonGadget.3 \
+    XmVaCreateMessageBox.3 \
+    XmVaCreateNotebook.3 \
+    XmVaCreatePanedWindow.3 \
+    XmVaCreatePushButton.3 \
+    XmVaCreatePushButtonGadget.3 \
+    XmVaCreateRowColumn.3 \
+    XmVaCreateScale.3 \
+    XmVaCreateScrollBar.3 \
+    XmVaCreateScrolledWindow.3 \
+    XmVaCreateSelectionBox.3 \
+    XmVaCreateSeparatorGadget.3 \
     XmVaCreateSimpleCheckBox.3 \
     XmVaCreateSimpleMenuBar.3 \
     XmVaCreateSimpleOptionMenu.3 \
     XmVaCreateSimplePopupMenu.3 \
     XmVaCreateSimplePulldownMenu.3 \
     XmVaCreateSimpleRadioBox.3 \
+    XmVaCreateSimpleSpinBox.3 \
+    XmVaCreateSpinBox.3 \
+    XmVaCreateTable.3 \
+    XmVaCreateTabStack.3 \
+    XmVaCreateText.3 \
+    XmVaCreateTextField.3 \
+    XmVaCreateToggleButton.3 \
+    XmVaCreateToggleButtonGadget.3 \
     XmWidgetGetBaselines.3 \
     XmWidgetGetDisplayRect.3 
-    
