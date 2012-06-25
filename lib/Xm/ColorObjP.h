@@ -156,6 +156,15 @@ extern Boolean XmeGetDesktopColorCells (
 			 int n_colors,     
 			 int * ncolors_returns) ;
 
+extern Boolean XmeGetPixelData (
+			int screen_number,
+			int *colorUse,
+			XmPixelSet *pixelSet,
+			short *a,
+			short *i,
+			short *p,
+			short *s) ;
+
 /********    End Private Function Declarations    ********/
 
 
