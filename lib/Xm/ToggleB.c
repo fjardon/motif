@@ -665,7 +665,6 @@ redisplayPixmap(XmToggleButtonWidget tb,
   int x, y, offset;
   short saveY;
   unsigned short saveWidth, saveHeight;
-  Pixmap tmp;
   
   offset = tb->primitive.highlight_thickness + tb->primitive.shadow_thickness;
 
@@ -691,13 +690,18 @@ redisplayPixmap(XmToggleButtonWidget tb,
     todo = tb->label.pixmap_insen;
       
   if (! IsNull(todo))
-    {
-      tmp = tb->label.pixmap;
-      tb->label.pixmap = todo;
-      _XmCalcLabelDimensions((Widget)tb);
-      h = (XtHeight(tb) - Lab_TextRect_height(tb)) / 2;
-      Lab_TextRect_y(tb) = MAX(h, 0);
-    }
+    XmeGetPixmapData(XtScreen(tb), todo, 
+		     NULL, NULL, NULL, NULL, NULL, NULL,
+		     &onW, &onH);
+
+  saveY = Lab_TextRect_y(tb);
+  saveWidth = Lab_TextRect_width(tb);
+  saveHeight = Lab_TextRect_height(tb);
+
+  h = (XtHeight(tb) - onH) / 2;
+  Lab_TextRect_y(tb) = MAX(h, 0);
+  Lab_TextRect_height(tb) = onH;
+  Lab_TextRect_width(tb) = onW;
   {
     XtExposeProc expose;
     _XmProcessLock();
@@ -705,8 +709,10 @@ redisplayPixmap(XmToggleButtonWidget tb,
     _XmProcessUnlock();
     (* expose) ((Widget) tb, event, region);
   }
-  if (! IsNull(todo))
-    tb->label.pixmap = tmp;
+
+  Lab_TextRect_y(tb) = saveY;
+  Lab_TextRect_width(tb) = saveWidth;
+  Lab_TextRect_height(tb) = saveHeight;
 }
 
 static void
@@ -862,11 +868,11 @@ ActionDraw(XmToggleButtonWidget w,
 	{
 	  if (w->primitive.shadow_thickness > 0)
 	    DrawToggleShadow(w);
-	  if (w->toggle.fill_on_select && Lab_IsText(w))
-	  	    DrawToggleLabel(w);
+	  if (w->toggle.fill_on_select && !Lab_IsPixmap(w))
+	    DrawToggleLabel(w);
 	}
 
-      if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w))
+      if (Lab_IsPixmap(w))
 	SetAndDisplayPixmap(w, event, NULL);
     }
 }
@@ -1056,7 +1062,7 @@ Arm(
 	DrawToggleLabel(tb);
     }
   
-  if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
+  if (Lab_IsPixmap(tb))
     SetAndDisplayPixmap(tb, event, NULL);
   
   if (tb->toggle.arm_CB)
@@ -1105,12 +1111,12 @@ Select(
    * button is still set. (Hint this allows for the
    * XmNvalueChangedCallback to use XmToggleButtonSetState
    * to reset a different button to be the active one) */
-  if ( (radio && always) &&
-       ((tb->toggle.set == XmSET) &&
-       ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
-       (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
-       (tb->toggle.ind_type == XmONE_OF_MANY))))
-       return;
+//rasta  if ( (radio && always) &&
+//       ((tb->toggle.set == XmSET) &&
+//       ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
+//       (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
+//       (tb->toggle.ind_type == XmONE_OF_MANY))))
+//       return;
 
 
 
@@ -1240,11 +1246,12 @@ ArmAndActivate(
     NULL);
   }
 
-  no_change = ( (radio && always) &&
-          (tb->toggle.set == XmSET) &&
-          ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND) ||
-          (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND) ||
-          (tb->toggle.ind_type == XmONE_OF_MANY)));
+//  no_change = ( (radio && always) &&
+//          (tb->toggle.set == XmSET) &&
+//          ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND) ||
+//          (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND) ||
+//          (tb->toggle.ind_type == XmONE_OF_MANY)));
+no_change = False; //rasta
   
   menuSTrait = (XmMenuSystemTrait) 
     XmeTraitGet((XtPointer) XtClass(XtParent(tb)), XmQTmenuSystem);
@@ -1290,10 +1297,10 @@ ArmAndActivate(
       /* Draw the toggle indicator in case of tear off */
       if (tb->toggle.ind_on)
 	DrawToggle(tb);
-      else if (tb->toggle.fill_on_select && Lab_IsText(tb))
+      else if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 	DrawToggleLabel(tb);
 
-      if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
+      if (Lab_IsPixmap(tb))
 	SetAndDisplayPixmap( tb, event, NULL);
     }
   else
@@ -1304,10 +1311,10 @@ ArmAndActivate(
 	{
 	  if (tb->primitive.shadow_thickness > 0) 
 	    DrawToggleShadow (tb);
-	  if (tb->toggle.fill_on_select && Lab_IsText(tb)) //FIXME: need to process?!
+	  if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 	    DrawToggleLabel (tb);
 	}
-      if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
+      if (Lab_IsPixmap(tb))
 	SetAndDisplayPixmap( tb, event, NULL);
     }
   
@@ -1570,10 +1577,10 @@ BtnUp(
 
 		  if (tb->toggle.ind_on)
 		    DrawToggle(tb);
-		  else if (tb->toggle.fill_on_select && Lab_IsText(tb))
+		  else if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 		    DrawToggleLabel(tb);
 
-		  if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
+		  if (Lab_IsPixmap(tb))
 		    SetAndDisplayPixmap( tb, event, NULL);
 
 		  if (tb->toggle.arm_CB) 
@@ -1840,7 +1847,7 @@ Initialize(
   
 
   /* BEGIN OSF Fix pir 1778 */
-  if ((Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w)) &&
+  if (Lab_IsPixmap(new_w) &&
       (!IsNull(PixmapOff(new_w)) || !IsNull(PixmapInsenOff(new_w)) ||
        !IsNull(PixmapOn(new_w)) || !IsNull(PixmapInsenOn(new_w)) ||
        !IsNull(PixmapInd(new_w)) || !IsNull(PixmapInsenInd(new_w))))
@@ -2157,7 +2164,7 @@ DrawToggle
     x = w->primitive.highlight_thickness + w->primitive.shadow_thickness +
       w->label.margin_width;
   
-  if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w) || XmStringEmpty(w->label._label))
+  if (Lab_IsPixmap(w)  || XmStringEmpty(w->label._label))
     y = (int)((w->core.height - w->toggle.indicator_dim))/2;
   else
     {
@@ -2512,10 +2519,10 @@ KeySelect(
     {
       if (tb->toggle.ind_on)
 	DrawToggle(tb);
-      else if (tb->toggle.fill_on_select && Lab_IsText(tb))
+      else if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 	DrawToggleLabel(tb);
 
-      if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
+      if (Lab_IsPixmap(tb))
 	SetAndDisplayPixmap( tb, event, NULL);
 
       tb->toggle.Armed = FALSE;
@@ -2647,7 +2654,7 @@ Redisplay(
   
   ComputeSpace (tb);
   
-  if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
+  if (Lab_IsPixmap(tb))
     SetAndDisplayPixmap(tb, event, region);
   else if (!tb->toggle.ind_on && tb->toggle.fill_on_select)
     DrawToggleLabel (tb);
@@ -2703,7 +2710,7 @@ Resize(
   register XmToggleButtonWidget tb = (XmToggleButtonWidget) w;
 
   /* BEGIN OSF Fix pir 1778 */
-  if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w))
+  if (Lab_IsPixmap(w)) 
     SetToggleSize(tb);
   else {
     XtWidgetProc resize;
@@ -2825,7 +2832,7 @@ SetValues(
   /* BEGIN OSF Fix pir 1778 */
   /* Have to reset the TextRect width because label's resize will have
    * mucked with it. */
-  if ((Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox)) &&
+  if (Lab_IsPixmap(newcbox) &&
       (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
        !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
        !IsNull(PixmapInd(newcbox)) || !IsNull(PixmapInsenInd(newcbox))))
@@ -2858,7 +2865,7 @@ SetValues(
       (PixmapInsenInd(newcbox) != PixmapInsenInd(curcbox)) ||
       (newcbox->toggle.ind_on != curcbox->toggle.ind_on) ||
       (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim) ||
-      (newcbox->label.label_type != curcbox->label.label_type))
+      (Lab_IsPixmap(newcbox) != Lab_IsPixmap(curcbox)))
     {
       int right_delta = 0;	/* Our desired margin adjustments. */
       int left_delta = 0;
@@ -2873,7 +2880,7 @@ SetValues(
             new_w->core.height = 0;
 	}
       
-      if ((Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox)) && 
+      if (Lab_IsPixmap(newcbox) && 
 	  ((PixmapOn(newcbox) != PixmapOn(curcbox)) ||
 	  (PixmapInsenOn(newcbox) != PixmapInsenOn(curcbox)) ||
 	  (PixmapInd(newcbox) != PixmapInd(curcbox)) ||
@@ -2897,7 +2904,7 @@ if (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim)
       if (!(newcbox->toggle.indicator_set) &&
 	  (newcbox->toggle.indicator_dim == curcbox->toggle.indicator_dim))
 	{
-	  if ((newcbox->label.label_type != curcbox->label.label_type) ||
+	  if ((Lab_IsPixmap(newcbox) != Lab_IsPixmap(curcbox)) ||
 	      (newcbox->label._label != curcbox->label._label) ||
 	      (PixmapOff(newcbox) != PixmapOff(curcbox)) ||
 	      (newcbox->label.font != curcbox->label.font) ||
@@ -3166,7 +3173,7 @@ if (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim)
 	      if (newcbox->toggle.ind_on)
 		{
 		  DrawToggle (newcbox);
-		  if (Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox))
+		  if (Lab_IsPixmap(newcbox))
 		    SetAndDisplayPixmap(newcbox, NULL, NULL);
 		}
 	      else
@@ -3174,9 +3181,9 @@ if (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim)
 		  /* Begin fixing OSF 5946 */ 
 		  if (newcbox->primitive.shadow_thickness > 0)
 		    DrawToggleShadow (newcbox);
-		  if (newcbox->toggle.fill_on_select && Lab_IsText(newcbox))
+		  if (newcbox->toggle.fill_on_select && !Lab_IsPixmap(newcbox))
 		    DrawToggleLabel (newcbox);
-		  if (Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox))
+		  if (Lab_IsPixmap(newcbox))
 		    {
 		    SetAndDisplayPixmap(newcbox, NULL, NULL);
 		    flag = True; 
@@ -3283,11 +3290,11 @@ XmToggleButtonSetState(
 	    {
 	      if (tw->primitive.shadow_thickness > 0)
 		DrawToggleShadow (tw);
-	      if (tw->toggle.fill_on_select && Lab_IsText(tw))
+	      if (tw->toggle.fill_on_select && !Lab_IsPixmap(tw))
 		DrawToggleLabel (tw);
 	    }
 
-	  if (Lab_IsPixmap(tw) || Lab_IsPixmapAndText(tw))
+	  if (Lab_IsPixmap(tw))
             SetAndDisplayPixmap( tw, NULL, NULL);
 	}
 
@@ -3366,10 +3373,10 @@ XmToggleButtonSetValue(
 	    {
 	      if (tw->primitive.shadow_thickness > 0)
 		DrawToggleShadow (tw);
-	      if (tw->toggle.fill_on_select && Lab_IsText(tw))
+	      if (tw->toggle.fill_on_select && !Lab_IsPixmap(tw))
 		DrawToggleLabel (tw);
 	    }
-	  if (Lab_IsPixmap(tw) || Lab_IsPixmapAndText(tw))
+	  if (Lab_IsPixmap(tw))
             SetAndDisplayPixmap( tw, NULL, NULL);
 	}
 
@@ -3399,6 +3406,23 @@ XmToggleButtonSetValue(
   _XmAppUnlock(app);
   return True;
 } 
+  
+/***********************************************************************
+ *
+ * XmCreateToggleButton
+ *   Creates an instance of a togglebutton and returns the widget id.
+ *
+ ************************************************************************/
+Widget 
+XmCreateToggleButton(
+        Widget parent,
+        char *name,
+        Arg *arglist,
+        Cardinal argCount )
+{
+  return XtCreateWidget(name, xmToggleButtonWidgetClass, parent,
+			arglist, argCount);
+}
   
 /***********************************************************************
  *
@@ -3467,11 +3491,6 @@ XmVaCreateManagedToggleButton(
     return w;
     
 }
-
-
-
-
-
 
 /*
  * DrawToggleShadow (tb)
@@ -3697,6 +3716,7 @@ SetToggleSize(
 	  ASSIGN_MAX(maxW, tmpW);
 	  ASSIGN_MAX(maxH, tmpH);
 	}
+      
       if (!IsNull(PixmapOff(newtb)))
 	{
 	  XmeGetPixmapData(XtScreen(newtb), PixmapOff(newtb),
@@ -3705,6 +3725,7 @@ SetToggleSize(
 	  ASSIGN_MAX(maxW, tmpW);
 	  ASSIGN_MAX(maxH, tmpH);
 	}
+
       if (!IsNull(PixmapInd(newtb)))
 	{
 	  XmeGetPixmapData(XtScreen(newtb), PixmapInd(newtb),
@@ -3724,6 +3745,7 @@ SetToggleSize(
 	  ASSIGN_MAX(maxW, tmpW);
 	  ASSIGN_MAX(maxH, tmpH);
 	}
+      
       if (!IsNull(PixmapInsenOff(newtb)))
 	{
 	  XmeGetPixmapData(XtScreen(newtb), PixmapInsenOff(newtb),
@@ -3732,6 +3754,7 @@ SetToggleSize(
 	  ASSIGN_MAX(maxW, tmpW);
 	  ASSIGN_MAX(maxH, tmpH);
 	}
+
       if (!IsNull(PixmapInsenInd(newtb)))
 	{
 	  XmeGetPixmapData(XtScreen(newtb), PixmapInsenInd(newtb),
@@ -3742,9 +3765,8 @@ SetToggleSize(
 	}
     }
 
-  newtb->label.PixmapRect.width = (unsigned short) maxW;
-  newtb->label.PixmapRect.height = (unsigned short) maxH;
-  _XmLabelCalcTextRect(newtb);
+  newtb->label.TextRect.width = (unsigned short) maxW;
+  newtb->label.TextRect.height = (unsigned short) maxH;
   
   /* Invoke Label's SetSize procedure. */
   {
