@@ -126,7 +126,7 @@ typedef struct _DtValidCachedDirStruct{
      * we allocate both the offsets array and the names themselves in
      * a heap hanging off the end of this struct
      */
-    short		nameOffsets[1];
+    unsigned short	nameOffsets[1];
     /*
     String		names
     */
@@ -234,7 +234,7 @@ MakeCachedDirEntry(String dirName)
 	     */
 	    validDir = (DtValidCachedDir) 
 	      XtMalloc((sizeof(DtValidCachedDirStruct)) +
-		       (sizeof(short) * numFiles) +
+		       (sizeof(validDir->nameOffsets[0]) * numFiles) +
 		       (nameHeapSize));
 
 	    validDir->dirNameLen = strlen(dirName);
