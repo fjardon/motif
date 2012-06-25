@@ -4129,7 +4129,11 @@ XmTabStackIndexToWidget(widget, idx)
     _XmWidgetToAppContext(widget);
     _XmAppLock(app);
 
-    if( !XmIsTabStack(widget) || idx < 0 ) return( NULL );
+    if( !XmIsTabStack(widget) || idx < 0 )
+    {
+	_XmAppUnlock(app); 
+	return( NULL );
+    }
 
     for( i = 0, cnt = 0, kid = tab->composite.children;
 	 i < tab->composite.num_children; ++i, ++kid )
@@ -4158,7 +4162,11 @@ XmTabStackGetSelectedTab(widget)
     _XmWidgetToAppContext(widget);
     _XmAppLock(app);
 
-    if (!XmIsTabStack(widget)) return(NULL);
+    if (!XmIsTabStack(widget))
+    {
+	_XmAppUnlock(app); 
+	return(NULL);
+    }
 
     if (!XtIsRealized((Widget)tab) && XmTabStack__selected_tab(tab))
       {
