@@ -166,6 +166,7 @@ extern XmOffsetPtr XmDataField_offsets;
 #define XmTextF_redisplay(w) XmTextFField(w, redisplay, Boolean)
 #define XmTextF_overstrike(w) XmTextFField(w, overstrike, Boolean)
 #define XmTextF_sel_start(w) XmTextFField(w, sel_start, Boolean)
+#define XmTextF_check_set_render_table(w) XmTextFField(w, check_set_render_table, Boolean)
 #define XmTextF_extension(w) XmTextFField(w, extension, XtPointer)
 
 #define XmDataFieldField(w,f,t) \

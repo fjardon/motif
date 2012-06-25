@@ -58,6 +58,14 @@ extern Widget XmCreateCommand(
                         String name,
                         ArgList al,
                         Cardinal ac) ;
+extern Widget XmVaCreateCommand(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedCommand(
+                        Widget parent,
+                        char *name,
+                        ...);
 extern Widget XmCommandGetChild( 
                         Widget widget,
 #if NeedWidePrototypes

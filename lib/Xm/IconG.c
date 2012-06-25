@@ -39,6 +39,7 @@
 #include <Xm/IconGP.h>
 #include <Xm/TraitP.h>		/* for XmeTraitSet */
 #include <Xm/XmosP.h>
+#include <Xm/VaSimpleP.h>
 #include "BaseClassI.h"
 #include "CacheI.h"
 #include "ColorI.h"
@@ -3637,4 +3638,49 @@ XmCreateIconGadget(
     return(XtCreateWidget(name,xmIconGadgetClass,parent,arglist,argcount));
 }
 
+Widget 
+XmVaCreateIconGadget(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmIconGadgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedIconGadget(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmIconGadgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}

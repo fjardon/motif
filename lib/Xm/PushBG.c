@@ -2965,7 +2965,8 @@ DrawPushButtonLabelGadget(
       ((! LabG_IsMenupane(pb) && PBG_FillOnArm(pb)) ||
        (LabG_IsMenupane(pb) && etched_in)))
     {
-      if ((LabG_LabelType(pb) == XmSTRING) &&
+      if ((LabG_LabelType(pb) == XmSTRING ||
+          LabG_LabelType(pb) == XmPIXMAP_AND_STRING) &&
 	  (PBG_ArmColor(pb) == LabG_Foreground(pb)))
 	{
 	  tmp_gc = LabG_NormalGC(pb);
@@ -3001,7 +3002,8 @@ DrawLabelGadget(
   Boolean    deadjusted = False;
   LRectangle background_box;
 
-  if (LabG_LabelType(pb) == XmPIXMAP)
+  if (LabG_LabelType(pb) == XmPIXMAP ||
+     LabG_LabelType(pb) == XmPIXMAP_AND_STRING)
     {
       if (PBG_Armed(pb))
 	{
@@ -3345,18 +3347,19 @@ static void
 SetPushButtonSize(
      XmPushButtonGadget newpb)
 {
-  unsigned int onW = 0, onH = 0;
+  unsigned int onW = 0, onH = 0, onW2 = 0, onH2 = 0;
   
-  /* We know it's a pixmap so find out how how big it is */
   if (PBG_ArmPixmap(newpb) != XmUNSPECIFIED_PIXMAP)
-    XmeGetPixmapData(XtScreen(newpb), PBG_ArmPixmap(newpb),
-		     NULL, NULL, NULL, NULL, NULL, NULL,
-		     &onW, &onH); 
-  
-  if ((onW > LabG_TextRect(newpb).width) || (onH > LabG_TextRect(newpb).height))
     {
-      LabG_TextRect(newpb).width =  (unsigned short) onW;
-      LabG_TextRect(newpb).height = (unsigned short) onH;
+      XmeGetPixmapData(XtScreen(newpb), LabG_Pixmap(newpb),
+		     NULL, NULL, NULL, NULL, NULL, NULL,
+		     &onW, &onH);
+      XmeGetPixmapData(XtScreen(newpb), PBG_ArmPixmap(newpb),
+		     NULL, NULL, NULL, NULL, NULL, NULL,
+		     &onW2, &onH2);
+      newpb->label.PixmapRect.width = MAX(onW2, onW);
+      newpb->label.PixmapRect.height = MAX(onH2, onH);
+      _XmLabelGCalcTextRect(newpb);
     }
   
   /* Let LabelG do the rest. */

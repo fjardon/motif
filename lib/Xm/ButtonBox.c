@@ -31,6 +31,7 @@
 #include <Xm/ExtP.h>
 #include <Xm/TraitP.h>
 #include <Xm/TakesDefT.h>
+#include <Xm/VaSimpleP.h>
 #include "XmI.h"
 
 /************************************************************
@@ -877,10 +878,13 @@ LayoutChildren(Widget w, Widget special_child)
 	    pos_minor = margin_minor;
 	
 	if ( IsHorizontal(bbox) ) {
-	    pos_x = (int) pos_major;
-	    pos_y = pos_minor;
 	    child_width = child_major;
 	    child_height = child_minor;
+	    if (LayoutIsRtoLM(bbox))
+		pos_x = box_major - (int) pos_major - child_width;
+	    else
+		pos_x = (int) pos_major;
+	    pos_y = pos_minor;
 	}
 	else {
 	    pos_x = pos_minor;
@@ -1097,7 +1101,52 @@ XmCreateButtonBox(Widget parent, String name, ArgList args, Cardinal num_args)
 			  xmButtonBoxWidgetClass, parent, args, num_args));
 }
 
+Widget 
+XmVaCreateButtonBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmButtonBoxWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedButtonBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmButtonBoxWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
 /****************************************************************/
 static void 

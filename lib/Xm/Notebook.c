@@ -45,6 +45,7 @@
 #include <Xm/TravConT.h>
 #include <Xm/UnhighlightT.h>
 #include <Xm/VendorSEP.h>
+#include <Xm/VaSimpleP.h>
 #include "CareVisualTI.h"
 #include "ColorI.h"
 #include "GeoUtilsI.h"
@@ -7040,6 +7041,52 @@ XmCreateNotebook(
    return(XtCreateWidget(name,xmNotebookWidgetClass,parent,arglist,argcount));
 }
 
+Widget 
+XmVaCreateNotebook(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmNotebookWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedNotebook(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmNotebookWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
 /* End of Notebook.c */
 

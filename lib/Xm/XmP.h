@@ -693,6 +693,7 @@ enum{	XmCASCADE_BUTTON_BIT = 1,	XmCASCADE_BUTTON_GADGET_BIT,
     XmTABBOX_BIT,
     XmCOLUMN_BIT,
     XmFONTSELECTOR_BIT,
+    XmCOMBINATION_BOX_2_BIT,
     
 	XmFAST_SUBCLASS_TAIL_BIT /* New entries precede this. */
 	} ;
@@ -911,6 +912,10 @@ enum{	XmCASCADE_BUTTON_BIT = 1,	XmCASCADE_BUTTON_GADGET_BIT,
 #undef XmIsCSText
 #define XmIsCSText(w)  \
   (_XmIsFastSubclass(XtClass(w), XmCSTEXT_BIT))
+
+#undef XmIsCombinationBox2
+#define XmIsCombinationBox2(w)  \
+  (_XmIsFastSubclass(XtClass(w), XmCOMBINATION_BOX_2_BIT))
 
 
 /************************************************************************

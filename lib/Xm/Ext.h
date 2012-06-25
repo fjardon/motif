@@ -70,7 +70,7 @@ typedef Widget (*XmWidgetFunc)(Widget);
 
 #define XmNcolorNameTooLong "colorNameTooLong"
 #define XmNcolorNameTooLongMsg \
-  "%s: Color name '%s' is too long, truncated to '%s'."
+  "Color name '%s' is too long, truncated to '%s'."
 
 #define XmNcontextSaveFailed "contextSaveFailed"
 #define XmNcontextSaveFailedMsg "Internal Error: Could not save context data."
@@ -124,7 +124,7 @@ typedef Widget (*XmWidgetFunc)(Widget);
 
 #define XmNunparsableColor "unparsableColor"
 #define XmNunparsableColorMsg \
-  "%s: Could not parse the color name '%s'."
+  "Could not parse the color name '%s'."
 
 #define XmNnodeParentIsSelf "nodeParentIsSelf"
 #define XmNnodeParentIsSelfMsg \

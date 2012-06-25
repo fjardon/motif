@@ -38,6 +38,7 @@ static char rcsid[] = "$TOG: Command.c /main/21 1999/01/26 18:12:51 mgreess $"
 #include <Xm/DialogS.h>
 #include <Xm/List.h>
 #include <Xm/TextF.h>
+#include <Xm/VaSimpleP.h>
 #include "BulletinBI.h"
 #include "MessagesI.h"
 #include "RepTypeI.h"
@@ -882,7 +883,6 @@ XmCreateCommand(
 {
     Widget   w;
     ArgList  argsNew;
-/****************/
 
     /* add dialogType to arglist and force to XmDIALOG_COMMAND... */
     /* big time bad stuff will happen if they use prompt type...  */
@@ -899,7 +899,54 @@ XmCreateCommand(
 
     return (w);
 }
-/****************************************************************/
+
+Widget 
+XmVaCreateCommand(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmCommandWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedCommand(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmCommandWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
 Widget 
 XmCommandGetChild(
         Widget widget,

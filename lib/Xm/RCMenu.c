@@ -2585,9 +2585,24 @@ _XmRC_UpdateOptionMenuCBG(
             XtSetArg (al[ac], XmNfontList, LabG_Font(lg)); ac++;
 	 }
       }
-      else
+      else if (LabG_IsPixmap (lg))
       {
          XtSetArg (al[ac], XmNlabelType, XmPIXMAP);    ac++;
+	 pix = LabG_Pixmap(lg);
+         XtSetArg (al[ac], XmNlabelPixmap, pix);      ac++;
+	 ipix = LabG_PixmapInsensitive(lg);
+         XtSetArg (al[ac], XmNlabelInsensitivePixmap, ipix);      ac++;
+      }
+      else
+      {
+         XtSetArg (al[ac], XmNlabelType, XmPIXMAP_AND_STRING);    ac++;
+	 xmstr = XmStringCopy(LabG__label(lg));
+         XtSetArg (al[ac], XmNlabelString, xmstr);      ac++;
+
+	 if (LabG_Font(lg) != LabG_Font(cbg))
+	 {
+            XtSetArg (al[ac], XmNfontList, LabG_Font(lg)); ac++;
+	 }
 	 pix = LabG_Pixmap(lg);
          XtSetArg (al[ac], XmNlabelPixmap, pix);      ac++;
 	 ipix = LabG_PixmapInsensitive(lg);
@@ -2610,9 +2625,24 @@ _XmRC_UpdateOptionMenuCBG(
             XtSetArg (al[ac], XmNfontList, lw->label.font); ac++;
 	 }
       }
-      else
+      else if (Lab_IsPixmap (lw))
       {
          XtSetArg (al[ac], XmNlabelType, XmPIXMAP);    ac++;
+	 pix = lw->label.pixmap;
+         XtSetArg (al[ac], XmNlabelPixmap, pix);      ac++;
+	 ipix = lw->label.pixmap_insen;
+         XtSetArg (al[ac], XmNlabelInsensitivePixmap, ipix);      ac++;
+      }
+      else
+      {
+         XtSetArg (al[ac], XmNlabelType, XmPIXMAP_AND_STRING);    ac++;
+	 xmstr = XmStringCopy(lw->label._label);
+         XtSetArg (al[ac], XmNlabelString, xmstr);      ac++;
+
+	 if (lw->label.font != LabG_Font(cbg))
+	 {
+            XtSetArg (al[ac], XmNfontList, lw->label.font); ac++;
+	 }
 	 pix = lw->label.pixmap;
          XtSetArg (al[ac], XmNlabelPixmap, pix);      ac++;
 	 ipix = lw->label.pixmap_insen;

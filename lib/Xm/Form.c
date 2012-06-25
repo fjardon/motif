@@ -42,6 +42,7 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #include <Xm/DrawP.h>
 #include <Xm/FormP.h>
 #include <Xm/DialogS.h>
+#include <Xm/VaSimpleP.h>
 #include "XmI.h"
 #include "MessagesI.h"
 #include "RepTypeI.h"
@@ -3254,8 +3255,52 @@ XmCreateForm(
    return(XtCreateWidget(name, xmFormWidgetClass, parent, arglist, argcount));
 }
 
+Widget 
+XmVaCreateForm(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmFormWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
+Widget
+XmVaCreateManagedForm(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmFormWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
 /************************************************************************
  *

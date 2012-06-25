@@ -113,6 +113,11 @@ typedef struct _XmLabelPart
   
   Boolean	  check_set_render_table;
 
+  XmPixmapPlacement pixmap_placement; /* Where to place the icon label. */
+  Dimension pixmap_text_padding; /* padding between the icon and the text. */
+
+  XRectangle	  PixmapRect;   /* The bounding box of the pixmap in TextRect */
+  XRectangle	  StringRect;   /* The bounding box of the string in TextRect */
 } XmLabelPart;
 
 
@@ -139,6 +144,8 @@ typedef struct _XmLabelRec
 
 #define Lab_IsText(w)	(((XmLabelWidget)(w)) ->label.label_type == XmSTRING)
 #define Lab_IsPixmap(w)	(((XmLabelWidget)(w)) ->label.label_type == XmPIXMAP)
+#define Lab_IsPixmapAndText(w)	(((XmLabelWidget)(w)) ->label.label_type == \
+				XmPIXMAP_AND_STRING)
 
 #define Lab_Font(w)		(((XmLabelWidget)(w)) ->label.font)
 

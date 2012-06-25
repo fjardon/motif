@@ -64,6 +64,18 @@ extern void XmCascadeButtonGadgetHighlight(
                         Boolean highlight) ;
 #endif /* NeedWidePrototypes */
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateCascadeButtonGadget(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedCascadeButtonGadget(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

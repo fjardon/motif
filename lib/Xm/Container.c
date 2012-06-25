@@ -54,6 +54,7 @@
 #include <Xm/TravConT.h>
 #include <Xm/CareVisualT.h>
 #include <Xm/PointInT.h>
+#include <Xm/VaSimpleP.h>
 #include "ColorI.h"
 #include "GadgetUtiI.h"
 #include "GeoUtilsI.h"
@@ -9712,3 +9713,49 @@ XmCreateContainer(
    return(XtCreateWidget(name,xmContainerWidgetClass,parent,arglist,argcount));
 }
 
+Widget 
+XmVaCreateContainer(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmContainerWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedContainer(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmContainerWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}

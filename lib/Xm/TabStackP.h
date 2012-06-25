@@ -113,6 +113,8 @@ typedef struct _XmTabStackPart {
 
     Boolean		do_notify;	/* for notify XmNtabSelectedCallback */
 
+    Boolean		check_set_render_table;
+  
 } XmTabStackPart;
 
 #define XmTabStackField(w,f,t) XmField(w, XmTabStack_offsets, XmTabStack, f, t)

@@ -87,6 +87,19 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateCombinationBox2(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedCombinationBox2(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 /*      Function Name:  XmCombinationBox2GetLabel
  *      Description:    Returns the "label" child of the XmCombinationBox2
  *      Arguments:      w - The XmCombinationBox2 Widget

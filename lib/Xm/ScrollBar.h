@@ -78,6 +78,18 @@ extern void XmScrollBarSetValues(
                         Boolean notify) ;
 #endif /* NeedWidePrototypes */
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateScrollBar(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedScrollBar(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

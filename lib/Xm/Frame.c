@@ -38,6 +38,7 @@ static char rcsid[] = "$XConsortium: Frame.c /main/18 1996/10/15 15:01:45 cde-os
 #include <Xm/DrawP.h>
 #include <Xm/FrameP.h>
 #include <Xm/GadgetP.h>
+#include <Xm/VaSimpleP.h>
 #include "GMUtilsI.h"
 #include "RepTypeI.h"
 #include "XmI.h"
@@ -1423,4 +1424,51 @@ XmCreateFrame(
 {
    return (XtCreateWidget (name, xmFrameWidgetClass, 
                            parent, arglist, argcount));
+}
+
+Widget 
+XmVaCreateFrame(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmFrameWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedFrame(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmFrameWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }

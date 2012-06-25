@@ -64,6 +64,19 @@ extern Widget XmCreateBulletinBoardDialog(
                         ArgList bb_args,
                         Cardinal bb_n) ;
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateBulletinBoard(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedBulletinBoard(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 /********    End Public Function Declarations    ********/
 
 

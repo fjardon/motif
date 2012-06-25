@@ -100,6 +100,18 @@ extern void XmAddToPostFromList(
 extern void XmRemoveFromPostFromList(
 			Widget m,
 			Widget widget );
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateRowColumn(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedRowColumn(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

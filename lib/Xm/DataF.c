@@ -55,11 +55,14 @@
 
 #include <Xm/TraitP.h>
 #include <Xm/AccTextT.h>
+#include <Xm/TransferT.h>
 #include <Xm/SpecRenderT.h>
+#include <Xm/VaSimpleP.h>
 
 #include "TextFI.h"
 #include "TextFSelI.h"
 #include "XmStringI.h"
+#include "ImageCachI.h"
 
 /*
  * Stuff from various internal motif headers that we need to declare
@@ -68,14 +71,6 @@
 #ifndef MAX
 #define MAX(x,y)	((x) > (y) ? (x) : (y))
 #endif
-
-#define XmStackAlloc(size, stack_cache_array)     \
-    ((size) <= sizeof(stack_cache_array)          \
-    ?  (XtPointer)(stack_cache_array)             \
-    :  XtMalloc((unsigned)(size)))
-
-#define XmStackFree(ptr, stack_array) \
-    if ((char *)(ptr) != ((char *)(stack_array))) XtFree((char *)ptr);
 
 #define TEXT_MAX_INSERT_SIZE 64    /* Size of buffer for XLookupString. */
 /*
@@ -138,10 +133,8 @@ extern void _XmPrimitiveEnter();
 extern void _XmPrimitiveLeave();
 extern Boolean _XmGetImage();
 extern Boolean _XmGetIconControlInfo();
-extern Boolean _XmInstallPixmap();
 extern unsigned char _XmGetAudibleWarning();
 extern void _XmSetDestination();
-extern XtGeometryResult _XmGMReplyToQueryGeometry();
 #else
 extern Boolean _XmParentProcess(Widget, XmParentProcessData);
 extern Boolean _XmMgrTraversal(Widget, XmTraversalDirection);
@@ -155,11 +148,8 @@ extern Boolean _XmGetIconControlInfo(
                         Boolean *useMaskRtn,
                         Boolean *useMultiColorIconsRtn,
                         Boolean *useIconFileCacheRtn) ;
-extern Boolean _XmInstallPixmap(Pixmap, Screen *, char *, Pixel, Pixel);
 extern unsigned char _XmGetAudibleWarning(Widget);
 extern void _XmSetDestination(Display *, Widget);
-extern XtGeometryResult _XmGMReplyToQueryGeometry(Widget, XtWidgetGeometry *,
-						  XtWidgetGeometry *);
 #endif
 
 /*
@@ -1167,6 +1157,10 @@ static void DataFieldSetValue(Widget w,
 
 static int DataFieldPreferredValue(Widget w);
 
+static void CheckSetRenderTable(Widget wid,
+				int offset,
+				XrmValue *value); 
+
 static Boolean DataFieldRemove(Widget w,
 			       XEvent *event);
 static void PictureVerifyCallback(Widget w,
@@ -1384,9 +1378,19 @@ static XtResource resources[] =
       XmRImmediate, (XtPointer) 500
     },
     {
-      XmNfontList, XmCFontList, XmRFontList, sizeof(XmFontList),
-      offset(font_list),
-      XmRString, NULL
+      "pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
+      offset(check_set_render_table),
+      XmRImmediate, (XtPointer) False
+    },
+    {
+     XmNfontList, XmCFontList, XmRFontList, sizeof(XmFontList),
+     offset(font_list),
+     XmRCallProc, (XtPointer)CheckSetRenderTable
+    },
+    {
+     XmNrenderTable, XmCRenderTable, XmRRenderTable, sizeof(XmRenderTable),
+     offset(font_list),
+     XmRCallProc, (XtPointer)CheckSetRenderTable
     },
     {
       XmNselectionArray, XmCSelectionArray, XmRPointer,
@@ -1445,16 +1449,16 @@ static XmSyntheticResource syn_resources[] =
      XmNmarginWidth,
      sizeof(Dimension),
      offset(margin_width),
-     _XmFromHorizontalPixels,
-     _XmToHorizontalPixels
+     XmeFromHorizontalPixels,
+     XmeToHorizontalPixels
    },
 
    {
      XmNmarginHeight,
      sizeof(Dimension),
      offset(margin_height),
-     _XmFromVerticalPixels,
-     _XmToVerticalPixels
+     XmeFromVerticalPixels,
+     XmeToVerticalPixels
    },
 
    {
@@ -1571,6 +1575,7 @@ ClassInit(void)
 #endif
 {
     XmDataFieldClassRec* wc = &xmDataFieldClassRec;
+    XmTransferTrait tt;
     int i;
 
     XmResolveAllPartOffsets(xmDataFieldWidgetClass,
@@ -1586,7 +1591,12 @@ ClassInit(void)
     }
     _XmProcessUnlock();
     
-    _XmTextFieldInstallTransferTrait();
+    /* set TextField's transfer trait */
+    tt = XmeTraitGet((XtPointer)xmTextFieldWidgetClass, XmQTtransfer);
+    XmeTraitSet((XtPointer)xmDataFieldWidgetClass,
+    		XmQTtransfer,
+		(XtPointer) &tt);
+    
     XmeTraitSet((XtPointer)xmDataFieldWidgetClass, 
 		XmQTaccessTextual, 
 		(XtPointer) &dataFieldCS);   
@@ -6970,7 +6980,7 @@ df_StartDrag(
     targets[num_targets++] = XA_STRING;
     targets[num_targets++] = XmInternAtom(XtDisplay(w), "TEXT", False);
 
-    drag_icon = _XmGetTextualDragIcon(w);
+    drag_icon = XmeGetTextualDragIcon(w);
 
     n = 0;
     XtSetArg(args[n], XmNcursorBackground, tf->core.background_pixel);  n++;
@@ -8899,7 +8909,7 @@ df_InitializeTextStruct(
 
     /* copy over the font list */
     if (XmTextF_font_list(tf) == NULL) {
-       XmTextF_font_list(tf) = _XmGetDefaultFontList((Widget)tf,
+       XmTextF_font_list(tf) = XmeGetDefaultRenderTable((Widget)tf,
 				              (unsigned char) XmTEXT_FONTLIST);
        XmTextF_fontlist_created(tf) = True;
     }
@@ -9024,7 +9034,7 @@ df_GetClipMask(
 		  XmTextF_cursor_height(tf));
 
   /* Install the clipmask for pixmap caching */
-   (void) _XmInstallPixmap(clip_mask, screen, pixmap_name, 1, 0);
+   (void) _XmCachePixmap(clip_mask, screen, pixmap_name, 1, 0, 0, 0, 0);
 
    XFreeGC(XtDisplay(tf), fillGC);
 
@@ -9268,7 +9278,7 @@ df_MakeIBeamStencil(
       XDrawSegments(dpy, XmTextF_cursor(tf), fillGC, segments, 3);
 
     /* Install the cursor for pixmap caching */
-      (void) _XmInstallPixmap(XmTextF_cursor(tf), XtScreen(tf), pixmap_name, 1, 0);
+      (void) _XmCachePixmap(XmTextF_cursor(tf), XtScreen(tf), pixmap_name, 1, 0, 0, 0, 0);
 
      /* Free the fill GC */
       XFreeGC(XtDisplay(tf), fillGC);
@@ -9380,8 +9390,8 @@ df_MakeAddModeCursor(
                        XmTextF_cursor_height(tf));
 
         /* Install the pixmap for pixmap caching */
-        _XmInstallPixmap(XmTextF_add_mode_cursor(tf),
-		         XtScreen(tf), pixmap_name, 1, 0);
+        _XmCachePixmap(XmTextF_add_mode_cursor(tf),
+		         XtScreen(tf), pixmap_name, 1, 0, 0, 0, 0);
 
         XFreePixmap(dpy, stipple);
         XFreeGC(dpy, fillGC);
@@ -10124,7 +10134,7 @@ df_QueryGeometry(
     df_ComputeSize((XmDataFieldWidget) widget, 
 		&desired->width, &desired->height);
 
-    return _XmGMReplyToQueryGeometry(widget, intended, desired) ;
+    return XmeReplyToQueryGeometry(widget, intended, desired) ;
 }
 
 
@@ -10408,7 +10418,7 @@ df_SetValues(
     if (XmTextF_font_list(new_tf)!= XmTextF_font_list(old_tf)) {
        new_font = True;
        if (XmTextF_font_list(new_tf) == NULL)
-          XmTextF_font_list(new_tf) = _XmGetDefaultFontList(new_w, XmTEXT_FONTLIST);
+          XmTextF_font_list(new_tf) = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
        XmTextF_font_list(new_tf) =
 			    (XmFontList)XmFontListCopy(XmTextF_font_list(new_tf));
        if (!df_LoadFontMetrics(new_tf)){ /* Fails if font set required but not
@@ -10814,6 +10824,26 @@ DataFieldPreferredValue(Widget w) /* unused */
   return(XmFORMAT_MBYTE);
 }
 
+/*
+ * XmRCallProc routine for checking data.font_list before setting it to NULL
+ * if no value is specified for both XmNrenderTable and XmNfontList.
+ * If "check_set_render_table" == True, then function has been called twice
+ * on same widget, thus resource needs to be set NULL, otherwise leave it
+ * alone.
+ */
+/* ARGSUSED */
+static void 
+CheckSetRenderTable(Widget wid, int offset, XrmValue *value)
+{
+  XmDataFieldWidget df = (XmDataFieldWidget)wid;
+
+  if (XmTextF_check_set_render_table(df))
+	value->addr = NULL;
+  else {
+	XmTextF_check_set_render_table(df) = True;
+	value->addr = (char*)&(XmTextF_font_list(df));
+  }
+}
 /***********************************<->***************************************
 
  *                              Public Functions                             *
@@ -12508,4 +12538,51 @@ XmCreateDataField(
 {
     return (XtCreateWidget(name, xmDataFieldWidgetClass,
                            parent, arglist, argcount));
+}
+
+Widget 
+XmVaCreateDataField(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmDataFieldWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedDataField(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmDataFieldWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }

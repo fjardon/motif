@@ -60,6 +60,14 @@ extern Widget XmCreateDrawnButton(
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
+extern Widget XmVaCreateDrawnButton(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedDrawnButton(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

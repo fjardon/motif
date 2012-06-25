@@ -51,7 +51,14 @@ extern Widget XmCreateIconGadget(
                         String name,
                         ArgList arglist,
                         Cardinal argcount) ;
-
+extern Widget XmVaCreateIconGadget(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedIconGadget(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 #ifdef __cplusplus

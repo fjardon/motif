@@ -38,6 +38,7 @@
 #include <X11/keysym.h>
 
 #include <Xm/TextF.h>
+#include <Xm/VaSimpleP.h>
 #include "MessagesI.h"
 #include "XmI.h"
 
@@ -651,6 +652,53 @@ XmCreateSimpleSpinBox(	Widget		parent,
 {
     return(XtCreateWidget(name, xmSimpleSpinBoxWidgetClass, parent,
 			  arglist, argcount));
+}
+
+Widget 
+XmVaCreateSimpleSpinBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSimpleSpinBoxWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedSimpleSpinBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSimpleSpinBoxWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }
 
 /************************************************************************

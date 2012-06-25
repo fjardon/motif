@@ -63,6 +63,20 @@ extern Widget XmCreatePanedWindow(
                         ArgList args,
                         Cardinal argCount) ;
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreatePanedWindow(
+                        Widget parent,
+                        char *name,
+                        ...);
+
+extern Widget XmVaCreateManagedPanedWindow(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 /********    End Public Function Declarations    ********/
 
 

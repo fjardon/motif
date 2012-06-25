@@ -65,6 +65,14 @@ extern Widget XmCreateMainWindow(
                         char *name,
                         ArgList args,
                         Cardinal argCount) ;
+extern Widget XmVaCreateMainWindow(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedMainWindow(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

@@ -848,7 +848,8 @@ enum{	XmNO_LINE,			XmSINGLE_LINE,
 	XmSHADOW_ETCHED_OUT_DASH,	XmINVALID_SEPARATOR_TYPE
 	} ;
 
-enum{	XmPIXMAP = 1,			XmSTRING
+enum{	XmPIXMAP = 1,			XmSTRING,
+	XmPIXMAP_AND_STRING
 	} ;
 
 /************************************************************************

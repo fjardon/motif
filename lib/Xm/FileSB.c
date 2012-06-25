@@ -59,6 +59,7 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 #include <Xm/DragC.h>
 #include <Xm/DropSMgr.h>
 #include <Xm/Protocols.h>
+#include <Xm/VaSimpleP.h>
 #include <Xm/TraitP.h>
 #include <Xm/ActivatableT.h>
 #include "BulletinBI.h"
@@ -3489,7 +3490,55 @@ XmCreateFileSelectionBox(
 /****************/
 
     return( XtCreateWidget( name, xmFileSelectionBoxWidgetClass, p, args, n));
-    }
+}
+
+Widget 
+XmVaCreateFileSelectionBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmFileSelectionBoxWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedFileSelectionBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmFileSelectionBoxWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
 /****************************************************************
  * This convenience function creates a DialogShell
  *   and a FileSelectionBox child of the shell;

@@ -130,6 +130,15 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
+extern Widget XmVaCreateExt18List(
+                        Widget parent,
+                        char *name,
+                        ...);
+
+extern Widget XmVaCreateManagedExt18List(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /*  Function Name: XmExt18ListUnselectAllItems
  *  Description:   Unselects all rows

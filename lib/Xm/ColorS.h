@@ -53,6 +53,19 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateColorSelector(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedColorSelector(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 extern WidgetClass       xmColorSelectorWidgetClass;
 
 #if defined(__cplusplus)

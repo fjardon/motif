@@ -2334,6 +2334,12 @@ NpixmapHeight
 NpixmapDepth
 NallowUnusedSpace
 CAllowUnusedSpace
+NdefaultEntryLabelRenderTable
+NentryLabelRenderTable
+NpixmapPlacement
+CPixmapPlacement
+RPixmapPlacement
+NpixmapTextPadding
 
 #file XmStrDefsI.h
 #table _XmStringsI

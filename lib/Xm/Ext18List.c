@@ -40,6 +40,7 @@
 #include <Xm/ScrollBar.h>
 #include <Xm/TextF.h>
 
+#include <Xm/VaSimpleP.h>
 #include <Xm/ExtP.h>
 
 /************************************************************
@@ -260,7 +261,7 @@ static void Initialize(Widget req, Widget set,
 	XmExt18List_find_label(elist) = XmStringCopy(XmExt18List_find_label(elist));
 	else 
 	XmExt18List_find_label(elist) = 
-		XmStringCreateLtoR("Find", XmFONTLIST_DEFAULT_TAG);
+		XmStringGenerate("Find", NULL, XmCHARSET_TEXT, NULL);
 
     XmExt18List_title_wid(elist) = CreateTitle(set, 
 					    (XmExt18List_title_string(elist) ? 
@@ -407,6 +408,7 @@ GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
             streq(args[i].name, XmNentryBackground)      ||
             streq(args[i].name, XmNfirstColumnPixmaps)   ||
             streq(args[i].name, XmNfontList)             ||
+            streq(args[i].name, XmNrenderTable)          ||
             streq(args[i].name, XmNverticalScrollBar)    ||
             streq(args[i].name, XmNhorizontalScrollBar)  ||
             streq(args[i].name, XmNfirstRow)             ||
@@ -754,7 +756,11 @@ static void LayoutChildren(Widget w)
 	/* 
 	 * Put the title widget in the top left corner 
 	 */
-	_XmMoveWidget(t_wid, (Position) H_MARGIN, (Position) V_MARGIN);
+	if (LayoutIsRtoLM(w))
+	    _XmMoveWidget(t_wid, (Position)(width - H_MARGIN - XtWidth(t_wid)),
+	                  (Position) V_MARGIN);
+	else
+	    _XmMoveWidget(t_wid, (Position) H_MARGIN, (Position) V_MARGIN);
 
 	XtSetArg(args[0], XmNmappedWhenManaged, True);
 	XtSetValues(t_wid, args, (Cardinal) 1);
@@ -827,7 +833,7 @@ static void PositionFindAndFindText(Widget w)
     Widget find = XmExt18List_find(elist);
     Widget find_text = XmExt18List_find_text(elist);
 
-    Dimension find_height, max_child_height;
+    Dimension find_height, max_child_height, find_width;
     Dimension height = elist->core.height;
     Dimension width = elist->core.width;
     Position find_x, find_y;
@@ -836,6 +842,7 @@ static void PositionFindAndFindText(Widget w)
         return;
 
     find_height = find->core.height + 2 * find->core.border_width;
+    find_width = find->core.width + 2 * find->core.border_width;
     max_child_height = find_text->core.height + 2*find_text->core.border_width;
 
     if (find_height > max_child_height)
@@ -844,8 +851,11 @@ static void PositionFindAndFindText(Widget w)
     /*
      * Put the Find widget in the lower left corner.
      */
+    if (LayoutIsRtoLM(w))
+        find_x = width - H_MARGIN - find_width;
+    else
+        find_x = H_MARGIN;
 
-    find_x = H_MARGIN;
     find_y = (Position) height -
          (Position) ((int)(max_child_height + find_height)/2 + V_MARGIN);
 
@@ -857,19 +867,25 @@ static void PositionFindAndFindText(Widget w)
      */
 
     {
-    Dimension find_width, text_width, temp_val;
+    Dimension text_width, temp_val;
     Position x, y;
 
-    find_width = find->core.width + 2 * find->core.border_width;
 
-    x = (Dimension) find_x + find_width + H_MARGIN;
+    if (LayoutIsRtoLM(w))
+	x = H_MARGIN;
+    else
+	x = (Dimension) find_x + find_width + H_MARGIN;
+    
     y = find_y - (int)(max_child_height - find_height)/2;
 
     temp_val = x + H_MARGIN;
     if (temp_val >= width)
         text_width = 1;
     else
-        text_width = width - temp_val;
+	if (LayoutIsRtoLM(w))
+            text_width = width - find_width - temp_val;
+	else
+            text_width = width - temp_val;
 
     _XmConfigureWidget(find_text, x, y, text_width, find_text->core.height,
                find_text->core.border_width);
@@ -1099,8 +1115,52 @@ XmCreateExt18List(Widget parent, String name,
     return (XmCreateExtended18List(parent, name, args, num_args));
 }
 
+Widget 
+XmVaCreateExt18List(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmExt18ListWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
+Widget
+XmVaCreateManagedExt18List(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmExt18ListWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
 /*  Function Name: XmExt18ListUnselectAllItems
  *  Description:   Unselects all rows
@@ -1198,6 +1258,7 @@ XmExt18ListDeselectItems(Widget w, XmString item, int column)
 
     XmI18ListDeselectItems((XmI18ListWidget)XmExt18List_ilist(elist),
 			   item, column);
+
     _XmAppUnlock(app); 
 }
 
@@ -1213,7 +1274,7 @@ void XmExt18ListSelectAllItems(Widget w, Boolean notify)
 
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
-    
+
     XmI18ListSelectAllItems((XmI18ListWidget)XmExt18List_ilist(elist), notify);
     _XmAppUnlock(app); 
 }

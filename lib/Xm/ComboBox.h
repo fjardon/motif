@@ -60,7 +60,14 @@ extern Widget XmCreateDropDownList (Widget parent,
 				    char *name, 
 				    ArgList args, 
 				    Cardinal argCount);
-
+extern Widget XmVaCreateComboBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedComboBox(
+                        Widget parent,
+                        char *name,
+                        ...);
 extern void XmComboBoxAddItem (Widget   widget,
 			       XmString item,
 			       int      pos,

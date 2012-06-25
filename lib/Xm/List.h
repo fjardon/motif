@@ -204,7 +204,14 @@ extern Widget XmCreateScrolledList(
                         char *name,
                         ArgList args,
                         Cardinal argCount) ;
-
+extern Widget XmVaCreateList(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedList(
+                        Widget parent,
+                        char *name,
+                        ...);
 /********    End Public Function Declarations    ********/
 
 

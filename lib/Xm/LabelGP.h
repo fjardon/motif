@@ -113,7 +113,6 @@ typedef struct _XmLabelGCacheObjPart
   
   Pixel		highlight_color;
   Pixmap	highlight_pixmap;
-  
 } XmLabelGCacheObjPart;
 
 typedef struct _XmLabelGCacheObjRec
@@ -172,6 +171,12 @@ typedef struct _XmLabelGadgetPart
   XtEnum          fill_bg_box;     /* Computed by LabelGadget or */
 				   /* pinned by subclasses. */
   Boolean	  check_set_render_table;
+
+  XmPixmapPlacement pixmap_placement; /* Where to place the icon label. */
+  Dimension pixmap_text_padding; /* padding between the icon and the text. */
+
+  XRectangle	  PixmapRect;   /* The bounding box of the pixmap in TextRect */
+  XRectangle	  StringRect;   /* The bounding box of the string in TextRect */
 
 } XmLabelGadgetPart;
 
@@ -280,6 +285,14 @@ typedef struct _LRectangle
                                            label.TextRect)
 #define LabG_AccTextRect(w)		(((XmLabelGadget)(w)) -> \
                                            label.acc_TextRect)
+#define LabG_PixmapRect(w)		(((XmLabelGadget)(w)) -> \
+                                           label.PixmapRect)
+#define LabG_StringRect(w)		(((XmLabelGadget)(w)) -> \
+                                           label.StringRect)
+#define LabG_PixmapPlacement(w)		(((XmLabelGadget)(w)) -> \
+                                           label.pixmap_placement)
+#define LabG_PixmapTextPadding(w)	(((XmLabelGadget)(w)) -> \
+                                           label.pixmap_text_padding)
 
 
 /********
@@ -292,10 +305,13 @@ typedef struct _LRectangle
 #define LabG_TextRect_width(w)		(LabG_TextRect(w).width)
                                            
 #define LabG_TextRect_height(w)		(LabG_TextRect(w).height)
-                                           
+
 #define LabG_IsText(w)			(LabG_LabelType(w) == XmSTRING)
 
 #define LabG_IsPixmap(w)		(LabG_LabelType(w) == XmPIXMAP)
+
+#define LabG_IsPixmapAndText(w)		(LabG_LabelType(w) == \
+					XmPIXMAP_AND_STRING)
 
 #define LabG_Cache(w)			(((XmLabelGadget)(w))-> \
 					   label.cache)

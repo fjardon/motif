@@ -53,6 +53,14 @@ extern	Widget	XmCreateContainer(
 			String name,
 			ArgList arglist,
 			Cardinal argcount);
+extern Widget XmVaCreateContainer(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedContainer(
+                        Widget parent,
+                        char *name,
+                        ...);
 extern	int	XmContainerGetItemChildren(
 			Widget		wid,
 			Widget		item,

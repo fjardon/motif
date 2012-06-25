@@ -88,6 +88,19 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateButtonBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedButtonBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 extern WidgetClass xmButtonBoxWidgetClass;
 
 #if defined(__cplusplus)

@@ -56,6 +56,14 @@ extern Widget XmCreateDrawingArea(
                         String name,
                         ArgList args,
                         Cardinal n) ;
+extern Widget XmVaCreateDrawingArea(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedDrawingArea(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

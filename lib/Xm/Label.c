@@ -123,6 +123,8 @@ static void ProcessDrag(Widget w, XEvent *event,
                         String *params, Cardinal *num_params);
 static void SetActivateCallbackState(Widget w, XmActivateState state);
 static void CheckSetRenderTable(Widget wid, int offset, XrmValue *value); 
+static void FromPaddingPixels(Widget, int, XtArgVal *);
+static XmImportOperator ToPaddingPixels(Widget, int, XtArgVal*);
 static XtPointer LabelGetValue(Widget, int);
 static void LabelSetValue(Widget, XtPointer, int);
 static int LabelPreferredValue(Widget);
@@ -329,8 +331,18 @@ static XtResource resources[] =
     XmNlayoutDirection, XmCLayoutDirection, XmRDirection,
     sizeof(XmDirection), XtOffsetOf(XmPrimitiveRec, primitive.layout_direction),
     XmRImmediate, (XtPointer) XmDEFAULT_DIRECTION
-  }
+  },
 #endif
+  {
+    XmNpixmapPlacement, XmCPixmapPlacement, XmRPixmapPlacement,
+    sizeof(unsigned int), XtOffsetOf(XmLabelRec, label.pixmap_placement),
+    XmRImmediate, (XtPointer) XmPIXMAP_LEFT
+  },
+  {
+    XmNpixmapTextPadding, XmCSpace, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmLabelRec, label.pixmap_text_padding),
+    XmRImmediate, (XtPointer) 2
+  }
 };
 
 /* Definition for resources that need special processing in get values. */
@@ -395,6 +407,12 @@ static XmSyntheticResource syn_resources[] =
     XmNacceleratorText, sizeof(XmString),
     XtOffsetOf(XmLabelRec, label._acc_text),
     GetAcceleratorText, NULL
+  },
+  
+  {
+    XmNpixmapTextPadding, sizeof(Dimension),
+    XtOffsetOf(XmLabelRec, label.pixmap_text_padding),
+    FromPaddingPixels, (XmImportProc) ToPaddingPixels
   }
 };
 
@@ -683,12 +701,18 @@ _XmCalcLabelDimensions(Widget wid)
   
 
   /* Initialize TextRect width and height to 0, change later if needed */
-  lp->TextRect.width = 0;
-  lp->TextRect.height = 0;
   lp->acc_TextRect.width = 0;
   lp->acc_TextRect.height = 0;
+  lp->StringRect.x = 0;
+  lp->StringRect.y = 0;
+  lp->StringRect.width = 0;
+  lp->StringRect.height = 0;
+  lp->PixmapRect.x = 0;
+  lp->PixmapRect.y = 0;
+  lp->PixmapRect.width = 0;
+  lp->PixmapRect.height = 0;
   
-  if (Lab_IsPixmap(newlw))
+  if (Lab_IsPixmap(newlw) || Lab_IsPixmapAndText(newlw))
     {
       /* change NULL pixmap to refer to XmUNSPECIFIED_PIXMAP */
       if (Pix(newlw) == (Pixmap)None)
@@ -705,8 +729,8 @@ _XmCalcLabelDimensions(Widget wid)
 			       NULL, NULL, NULL, NULL, NULL, NULL,
 			       &w, &h);         
 	      
-	      lp->TextRect.width = (unsigned short) w;
-	      lp->TextRect.height = (unsigned short) h;
+	      lp->PixmapRect.width = (unsigned short) w;
+	      lp->PixmapRect.height = (unsigned short) h;
 	    }
 	}
       else
@@ -722,24 +746,13 @@ _XmCalcLabelDimensions(Widget wid)
 			       NULL, NULL, NULL, NULL, NULL, NULL,
 			       &w, &h);         
 	      
-	      lp->TextRect.width = (unsigned short) w;
-	      lp->TextRect.height = (unsigned short) h;
-	    }
-	}
-      if (lp->_acc_text != NULL)
-	{
-	  Dimension w, h;
-	  
-	  /* If we have a string then size it. */
-	  if (!XmStringEmpty (lp->_acc_text))
-	    {
-	      XmStringExtent(lp->font, lp->_acc_text, &w, &h);
-	      lp->acc_TextRect.width = (unsigned short)w;
-	      lp->acc_TextRect.height = (unsigned short)h;
+	      lp->PixmapRect.width = (unsigned short) w;
+	      lp->PixmapRect.height = (unsigned short) h;
 	    }
 	}
     }
-  else if (Lab_IsText(newlw))
+	
+  if (Lab_IsText(newlw) || Lab_IsPixmapAndText(newlw))
     {
       Dimension w, h;
       
@@ -747,22 +760,116 @@ _XmCalcLabelDimensions(Widget wid)
 	{
 	  /* If we have a string then size it. */
 	  XmStringExtent(lp->font, lp->_label, &w, &h);
-	  lp->TextRect.width = (unsigned short)w;
-	  lp->TextRect.height = (unsigned short)h;
-	}
-      
-      if (lp->_acc_text != NULL)
-	{
-	  /* If we have a string then size it. */
-	  if (!XmStringEmpty (lp->_acc_text))
-	    {
-	      XmStringExtent(lp->font, lp->_acc_text, &w, &h);
-	      lp->acc_TextRect.width = (unsigned short)w;
-	      lp->acc_TextRect.height = (unsigned short)h;
-	    }
+	  lp->StringRect.width = (unsigned short)w;
+	  lp->StringRect.height = (unsigned short)h;
 	}
     }
+    
+  _XmLabelCalcTextRect(wid);
+
+ if (lp->_acc_text != NULL)
+   {
+     Dimension w, h;
+	  
+     /* If we have a string then size it. */
+     if (!XmStringEmpty (lp->_acc_text))
+       {
+         XmStringExtent(lp->font, lp->_acc_text, &w, &h);
+         lp->acc_TextRect.width = (unsigned short)w;
+         lp->acc_TextRect.height = (unsigned short)h;
+       }
+   }
 }       
+
+void 
+_XmLabelCalcTextRect(Widget wid)
+{
+  XmLabelWidget newlw = (XmLabelWidget) wid;
+  XmLabelPart  *lp = &(newlw->label);
+
+  lp->TextRect.width = 0;
+  lp->TextRect.height = 0;
+  
+  if (Lab_IsPixmap(newlw))
+    {
+      lp->TextRect.width = lp->PixmapRect.width;
+      lp->TextRect.height = lp->PixmapRect.height;
+    }
+  else if (Lab_IsText(newlw))
+    {
+      lp->TextRect.width = lp->StringRect.width;
+      lp->TextRect.height = lp->StringRect.height;
+    }
+  else if (Lab_IsPixmapAndText(newlw))
+    {
+      if (lp->pixmap_placement == XmPIXMAP_TOP ||
+          lp->pixmap_placement == XmPIXMAP_BOTTOM)
+	{
+          lp->TextRect.height =	lp->PixmapRect.height +
+          	lp->StringRect.height + lp->pixmap_text_padding;
+          lp->TextRect.width = MAX(lp->StringRect.width, lp->PixmapRect.width);
+	}
+      else if (lp->pixmap_placement == XmPIXMAP_LEFT ||
+	       lp->pixmap_placement == XmPIXMAP_RIGHT)
+        {
+          lp->TextRect.width = lp->PixmapRect.width +
+          	lp->StringRect.width + lp->pixmap_text_padding;
+          lp->TextRect.height = MAX(lp->StringRect.height, lp->PixmapRect.height);
+        }
+	  
+      if (lp->pixmap_placement == XmPIXMAP_TOP)
+        {
+	  lp->PixmapRect.y = 0;
+	  lp->StringRect.y = lp->PixmapRect.height + lp->pixmap_text_padding;
+        }
+      else if (lp->pixmap_placement == XmPIXMAP_BOTTOM)
+        {
+          lp->StringRect.y = 0;
+          lp->PixmapRect.y = lp->StringRect.height + lp->pixmap_text_padding;
+        }
+      else if ((lp->pixmap_placement == XmPIXMAP_RIGHT &&
+	        LayoutIsRtoLP(wid)) ||
+               (lp->pixmap_placement == XmPIXMAP_LEFT &&
+                !LayoutIsRtoLP(wid)))
+	{
+          lp->PixmapRect.x = 0;
+          lp->StringRect.x = lp->PixmapRect.width + lp->pixmap_text_padding;
+	}
+      else if ((lp->pixmap_placement == XmPIXMAP_LEFT &&
+                LayoutIsRtoLP(wid)) ||
+               (lp->pixmap_placement == XmPIXMAP_RIGHT &&
+                !LayoutIsRtoLP(wid)))
+	{
+	   lp->StringRect.x = 0;
+	   lp->PixmapRect.x = lp->StringRect.width + lp->pixmap_text_padding;
+	}
+	    
+      if (lp->pixmap_placement == XmPIXMAP_RIGHT ||
+	    lp->pixmap_placement == XmPIXMAP_LEFT)
+        {
+          lp->PixmapRect.y = (lp->TextRect.height - lp->PixmapRect.height) / 2;
+          lp->StringRect.y = (lp->TextRect.height - lp->StringRect.height) / 2;
+        }
+      else
+        {
+          if (lp->alignment == XmALIGNMENT_CENTER)
+            {
+              lp->PixmapRect.x =
+	        (lp->TextRect.width - lp->PixmapRect.width) / 2;
+              lp->StringRect.x =
+              	(lp->TextRect.width - lp->StringRect.width) / 2;
+            }
+          else if ((lp->alignment == XmALIGNMENT_END &&
+                     !LayoutIsRtoLP(wid)) ||
+                    (lp->alignment == XmALIGNMENT_BEGINNING &&
+                     LayoutIsRtoLP(wid)))
+            {
+              lp->PixmapRect.x = lp->TextRect.width - lp->PixmapRect.width;
+              lp->StringRect.x = lp->TextRect.width - lp->StringRect.width;
+            }
+        }
+    }
+}
 
 /************************************************************************
  *
@@ -895,7 +1002,7 @@ Resize(Widget wid)
       /* make sure the label and accelerator text line up */
       /* when the fonts are different */
       
-      if (Lab_IsText(newlw))
+      if (Lab_IsText(newlw) || Lab_IsPixmapAndText(newlw))
 	{
 	  base_label = XmStringBaseline (lp->font, lp->_label);
 	  base_accText = XmStringBaseline (lp->font, lp->_acc_text);
@@ -958,6 +1065,10 @@ Initialize(
       lw->label.alignment = XmALIGNMENT_CENTER;
     }
   
+  if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, lw->label.pixmap_placement, (Widget) lw))
+    {
+      lw->label.pixmap_placement = XmPIXMAP_LEFT;
+    }
 #ifndef NO_XM_1_2_BC
   /*
    * Some pre-Motif 2.0 XmManager subclasses may be bypassing the
@@ -1313,7 +1424,7 @@ Redisplay(
     } else
       XSetClipMask (XtDisplay (lw), clipgc, None);
   
-  if (Lab_IsPixmap(lw))
+  if (Lab_IsPixmap(lw) || Lab_IsPixmapAndText(lw))
     {
       if (XtIsSensitive(wid)) 
 	{
@@ -1326,13 +1437,18 @@ Redisplay(
 	      
 	      if (depth == lw->core.depth)
 		XCopyArea (XtDisplay(lw), Pix(lw), XtWindow(lw), gc, 0, 0, 
-			   lp->TextRect.width, lp->TextRect.height,
-			   lp->TextRect.x, lp->TextRect.y); 
+			   lp->PixmapRect.width,
+			   lp->PixmapRect.height,
+			   lp->TextRect.x + lp->PixmapRect.x,
+			   lp->TextRect.y + lp->PixmapRect.y); 
 	      else if (depth == 1)
 		XCopyPlane (XtDisplay(lw), Pix(lw), XtWindow(lw), 
 			    gc, 0, 0, 
-			    lp->TextRect.width, lp->TextRect.height,
-			    lp->TextRect.x, lp->TextRect.y, 1); 
+			    lp->PixmapRect.width,
+			    lp->PixmapRect.height,
+			    lp->TextRect.x + lp->PixmapRect.x,
+			    lp->TextRect.y + lp->PixmapRect.y,
+			    1); 
 	    }
 	}
       else 
@@ -1352,29 +1468,36 @@ Redisplay(
 	      if (depth == lw->core.depth)
 		XCopyArea (XtDisplay(lw), pix_use, XtWindow(lw), 
 			   gc, 0, 0, 
-			   lp->TextRect.width, lp->TextRect.height,
-			   lp->TextRect.x, lp->TextRect.y); 
+			   lp->PixmapRect.width,
+			   lp->PixmapRect.height,
+			   lp->TextRect.x + lp->PixmapRect.x,
+			   lp->TextRect.y + lp->PixmapRect.y);
 	      else if (depth == 1)
 		XCopyPlane (XtDisplay(lw), pix_use, XtWindow(lw), 
 			    gc, 0, 0, 
-			    lp->TextRect.width, lp->TextRect.height,
-			    lp->TextRect.x, lp->TextRect.y, 1); 
+			    lp->PixmapRect.width,
+			    lp->PixmapRect.height,
+			    lp->TextRect.x + lp->PixmapRect.x,
+			    lp->TextRect.y + lp->PixmapRect.y,
+			    1); 
 
 	      /* if no insensitive pixmap but a regular one, we need
  		 to do the stipple manually, since copyarea doesn't */
  	      if (pix_use == Pix(lw)) {
  		  /* need fill stipple, not opaque */
  		  XSetFillStyle(XtDisplay(lw), gc, FillStippled);
- 		  XFillRectangle(XtDisplay(lw), XtWindow(lw), 
- 				 gc, lp->TextRect.x, lp->TextRect.y, 
- 				 lp->TextRect.width, lp->TextRect.height);
+ 		  XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
+			lp->TextRect.x + lp->PixmapRect.x,
+			lp->TextRect.y + lp->PixmapRect.y,
+ 			lp->PixmapRect.width,
+			lp->PixmapRect.height);
  		  XSetFillStyle(XtDisplay(lw), gc, FillOpaqueStippled);
  	      }
 	    }
 	}
     }
   
-  else if ((Lab_IsText (lw)) && (lp->_label != NULL)) 
+  if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)) 
     {
       if (lp->mnemonic != XK_VoidSymbol)
 	{ 
@@ -1389,8 +1512,10 @@ Redisplay(
 				lp->font, lp->_label,
 				(XtIsSensitive(wid) ? 
 				 lp->normal_GC : lp->insensitive_GC),
-				lp->TextRect.x, lp->TextRect.y,
-				lp->TextRect.width, lp->alignment,
+				lp->TextRect.x + lp->StringRect.x,
+				lp->TextRect.y + lp->StringRect.y,
+				lp->StringRect.width,
+				lp->alignment,
 				XmPrim_layout_direction(lw), NULL,
 				underline);
 	  XmStringFree(underline);
@@ -1400,8 +1525,10 @@ Redisplay(
 		       lp->font, lp->_label,
 		       (XtIsSensitive(wid) ? 
 			lp->normal_GC : lp->insensitive_GC),
-		       lp->TextRect.x, lp->TextRect.y,
-		       lp->TextRect.width, lp->alignment,
+		       lp->TextRect.x + lp->StringRect.x,
+		       lp->TextRect.y + lp->StringRect.y,
+		       lp->StringRect.width,
+		       lp->alignment,
 		       XmPrim_layout_direction(lw), NULL);
     }
   
@@ -1625,6 +1752,12 @@ SetValues(Widget cw,
     {
       new_w->label.label_type = current->label.label_type;
     }
+
+  if (!XmRepTypeValidValue(XmRID_LABEL_TYPE, new_w->label.pixmap_placement,
+			   (Widget) new_w))
+    {
+      new_w->label.pixmap_placement = current->label.pixmap_placement;
+    }
   
   if (LayoutP(new_w) != LayoutP(current))
     {
@@ -1641,16 +1774,18 @@ SetValues(Widget cw,
   
   /* ValidateInputs(new_w); */
   
-  if ((Lab_IsText(new_w) && 
+  if (((Lab_IsText(new_w) || Lab_IsPixmapAndText(new_w)) && 
        ((newstring) ||
 	(newlp->font != curlp->font))) ||
-      (Lab_IsPixmap(new_w) &&
+      ((Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w)) &&
        ((newlp->pixmap != curlp->pixmap) ||
 	(newlp->pixmap_insen  != curlp->pixmap_insen) ||
 	/* When you have different sized pixmaps for sensitive and */
 	/* insensitive states and sensitivity changes, */
 	/* the right size is chosen. (osfP2560) */
 	(XtIsSensitive(nw) != XtIsSensitive(cw)))) ||
+      (Lab_IsPixmapAndText(new_w) &&
+	(newlp->pixmap_placement != curlp->pixmap_placement)) ||
       (newlp->label_type != curlp->label_type))
     {
       /* CR 9179: Redo CR 5419 changes. */
@@ -1695,7 +1830,8 @@ SetValues(Widget cw,
        current->primitive.shadow_thickness) ||
       (new_w->primitive.highlight_thickness !=
        current->primitive.highlight_thickness) ||
-      ((new_w->core.width <= 0) || (new_w->core.height <= 0)))
+      ((new_w->core.width <= 0) || (new_w->core.height <= 0)) ||
+      (newlp->pixmap_text_padding != curlp->pixmap_text_padding))
     {
       if (!XmRepTypeValidValue(XmRID_ALIGNMENT, new_w->label.alignment,
 			       (Widget) new_w))
@@ -1809,7 +1945,8 @@ SetValues(Widget cw,
     {
       /* New grabs only required if mnemonic changes */
       ProcessFlag = TRUE;
-      if (new_w->label.label_type == XmSTRING)
+      if (new_w->label.label_type == XmSTRING ||
+          new_w->label.label_type == XmPIXMAP_AND_STRING)
 	flag = TRUE;
     }
   
@@ -1825,7 +1962,8 @@ SetValues(Widget cw,
       if (current->label.mnemonicCharset != NULL)
 	XtFree (current->label.mnemonicCharset);
       
-      if (new_w->label.label_type == XmSTRING)
+      if (new_w->label.label_type == XmSTRING ||
+          new_w->label.label_type == XmPIXMAP_AND_STRING)
 	flag = TRUE;
     }
   
@@ -2339,7 +2477,7 @@ _XmLabelConvert(Widget w,
   int format = 8;
   XmString label_string;
   Pixmap label_pixmap;
-  Boolean is_pixmap;
+  Boolean is_pixmap, is_text;
   
   if (w == (Widget) NULL)
     {
@@ -2362,13 +2500,15 @@ _XmLabelConvert(Widget w,
     {
       label_string = ((XmLabelWidget) w)->label._label;
       label_pixmap = ((XmLabelWidget) w)->label.pixmap;
-      is_pixmap = Lab_IsPixmap(w);
+      is_pixmap = Lab_IsPixmap(w) || Lab_IsPixmapAndText(w);
+      is_text = Lab_IsText(w) || Lab_IsPixmapAndText(w);
     } 
   else
     {
       label_string = ((XmLabelGadget) w)->label._label;
       label_pixmap = ((XmLabelGadget) w)->label.pixmap;
-      is_pixmap = LabG_IsPixmap(w);
+      is_pixmap = LabG_IsPixmap(w) || LabG_IsPixmapAndText(w);;
+      is_text = LabG_IsText(w) || LabG_IsPixmapAndText(w);
     }
   
   if (cs->target == atoms[XmATARGETS] ||
@@ -2390,7 +2530,8 @@ _XmLabelConvert(Widget w,
 	{
 	  targs[target_count] = XA_PIXMAP; target_count++;
 	} 
-      else 
+	
+      if (is_text) 
 	{
 	  XtPointer temp;
 	  unsigned long length;
@@ -2607,7 +2748,55 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
 
   return(rval);
 }
+    
+/**************************************************************************
+ * FromPaddingPixels
+ *
+ * Converts from pixels to current unit type does either horiz or vert
+ * depending on icon placement.
+ *  widget - the icon button widget.
+ *  offset, value - passed to correct function based on orientation.
+ **************************************************************************/
+  
+static void
+FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
+{
+    XmLabelWidget iw = (XmLabelWidget) widget;
 
+    switch(iw->label.pixmap_placement) {
+    case XmPIXMAP_TOP:
+    case XmPIXMAP_BOTTOM:
+	XmeFromVerticalPixels(widget, offset, value);
+	break;
+    default:			/* everything else is horiz. */
+	XmeFromHorizontalPixels(widget, offset, value);
+	break;
+    }
+}
+    
+/**************************************************************************
+ * ToPaddingPixels
+ *
+ * Converts from pixels to current unit type does either horiz or vert
+ * depending on icon placement.
+ *  widget - the icon button widget.
+ *  offset, value - passed to correct function based on orientation.
+ * Returns the import order from _XmTo{Horizontal, Vertical}Pixels.
+ **************************************************************************/
+
+static XmImportOperator
+ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
+{
+    XmLabelWidget iw = (XmLabelWidget) widget;
+
+    switch(iw->label.pixmap_placement) {
+    case XmPIXMAP_TOP:
+    case XmPIXMAP_BOTTOM:
+	return(XmeToVerticalPixels(widget, offset, value));
+    default:
+	return(XmeToHorizontalPixels(widget, offset, value));
+    }
+}
     
 /*
  * XmRCallProc routine for checking label.font before setting it to NULL

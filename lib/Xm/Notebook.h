@@ -83,6 +83,16 @@ extern XmNotebookPageStatus XmNotebookGetPageInfo(
 			int page_number,
 			XmNotebookPageInfo *page_info) ;
 
+extern Widget XmVaCreateNotebook(
+                        Widget parent,
+                        char *name,
+                        ...);
+
+extern Widget XmVaCreateManagedNotebook(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 
 #ifdef __cplusplus
 }

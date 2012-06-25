@@ -76,6 +76,19 @@ extern Widget XmCreatePromptDialog(
                         ArgList sb_args,
                         Cardinal sb_n) ;
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateSelectionBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedSelectionBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 /********    End Public Function Declarations    ********/
 
 

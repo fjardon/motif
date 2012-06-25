@@ -60,6 +60,7 @@ static char rcsid[] = "$TOG: SelectioB.c /main/19 1997/06/18 17:42:11 samborn $"
 #include <Xm/TextF.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransltnsP.h>
+#include <Xm/VaSimpleP.h>
 #include "BulletinBI.h"
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
@@ -2084,7 +2085,52 @@ XmCreateSelectionBox(
     return (XtCreateWidget (name, xmSelectionBoxWidgetClass, p, args, n));
 }
 
+Widget 
+XmVaCreateSelectionBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSelectionBoxWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedSelectionBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmSelectionBoxWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
 /****************************************************************
  * This convenience function creates a DialogShell and a SelectionBox

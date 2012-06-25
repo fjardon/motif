@@ -137,6 +137,15 @@ extern XmOffsetPtr XmI18List_offsets;
  * IList widget definitions.
  */
 
+/* I18List struct passed to Convert proc for drag and drop */
+typedef struct _XmI18ListDragConvertStruct
+{
+    Widget    w;
+    XmString *strings;
+    int       num_items;
+    Pixmap    pixmap;
+} XmI18ListDragConvertStruct;
+
 typedef struct _I18ListClassPart {
     XtPointer extension;	/* Just in case we need it later. */
 } I18ListClassPart;
@@ -221,6 +230,9 @@ typedef struct _XmI18ListPart {
     GC entry_background_inv_gc;			
     GC entry_background_rev_gc;			
 
+    Boolean check_set_render_table; /* used in CheckSetRenderTable */
+
+    XmI18ListDragConvertStruct * drag_conv;
 } XmI18ListPart;
 
 typedef struct _XmI18ListRec {

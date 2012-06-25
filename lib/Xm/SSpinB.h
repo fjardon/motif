@@ -55,6 +55,20 @@ extern void XmSimpleSpinBoxSetItem(
                 Widget          widget,
                 XmString        item);
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateSimpleSpinBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+
+extern Widget XmVaCreateManagedSimpleSpinBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 #ifdef __cplusplus
 }
 #endif

@@ -115,6 +115,8 @@ typedef struct {
     Time time;			/* The server time of the last button click. */
 
     Boolean label_from_name;
+    Boolean check_set_render_table;
+
 } XmIconButtonPart;
 
 #define XmIconButtonField(w,f,t) XmField(w, XmIconButton_offsets, XmIconButton, f, t)

@@ -54,6 +54,7 @@ static char rcsid[] = "$TOG: BulletinB.c /main/22 1999/10/13 16:15:40 mgreess $"
 #include <Xm/DialogSavvyT.h>
 #include <Xm/SpecRenderT.h>
 #include <Xm/TakesDefT.h>
+#include <Xm/VaSimpleP.h>
 #include "XmI.h"
 #include "BaseClassI.h"
 #include "CallbackI.h"
@@ -2266,4 +2267,51 @@ XmCreateBulletinBoardDialog(
 {   
     return XmeCreateClassDialog (xmBulletinBoardWidgetClass, 
 				 ds_p, name, bb_args, bb_n) ;
+}
+
+Widget 
+XmVaCreateBulletinBoard(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmBulletinBoardWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedBulletinBoard(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmBulletinBoardWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }

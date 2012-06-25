@@ -54,6 +54,14 @@ extern Widget XmCreateFrame(
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
+extern Widget XmVaCreateFrame(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedFrame(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

@@ -42,6 +42,7 @@
 #include <Xm/RowColumn.h>
 #include <Xm/TabStackP.h>
 #include <Xm/TabBoxP.h>
+#include <Xm/VaSimpleP.h>
 
 #undef TEAR_OFF_TABS
 
@@ -118,6 +119,7 @@ static void DrawStackedShadows _ARGS((XmTabStackWidget, GC, GC, int, int,
 				      int, int));
 
 static void TabSelectedCallback _ARGS((Widget, XtPointer, XtPointer));
+static void CheckSetRenderTable(Widget wid, int offs, XrmValue *value); 
 #ifdef TEAR_OFF_TABS
 static void TearOffCallback _ARGS((Widget, XtPointer, XtPointer));
 static void XmTabStackMenu _ARGS((Widget, XEvent*, String*, Cardinal*));
@@ -356,9 +358,15 @@ static XmPartResource resources[] = {
     { XmNtabMarginHeight, XmCMarginHeight,
 	  XmRVerticalDimension, sizeof(Dimension), offset(tab_margin_height),
 	  XmRImmediate, (XtPointer) 3 },
+    { "pri.vate", "Pri.vate",
+	  XmRBoolean, sizeof(Boolean), offset(check_set_render_table),
+	  XmRImmediate, (XtPointer) False },
     { XmNfontList, XmCFontList,
-	  XmRFontList, sizeof(XmFontList), offset(font_list),
-	  XmRImmediate, (XtPointer) NULL },
+	  XmRFontList, sizeof (XmFontList), offset(font_list),
+	  XmRCallProc, (XtPointer) CheckSetRenderTable },
+    { XmNrenderTable, XmCRenderTable,
+	  XmRRenderTable, sizeof(XmRenderTable), offset(font_list),
+	  XmRCallProc, (XtPointer) CheckSetRenderTable },
     { XmNhighlightThickness, XmCHighlightThickness,
 	  XmRDimension, sizeof(Dimension), offset(highlight_thickness),
 	  XmRImmediate, (XtPointer) 2 },
@@ -782,7 +790,7 @@ Initialize(request, set, arg_list, arg_cnt)
      * color and font specification. This way if they were set via app
      * defaults the correct thing will happen.
      */
-    XtSetArg(args[n], XmNfontList, XmTabStack_font_list(ts)); ++n;
+    XtSetArg(args[n], XmNrenderTable, XmTabStack_font_list(ts)); ++n;
     XtSetArg(args[n], XmNbackground, ts->core.background_pixel); ++n;
     XtSetArg(args[n], XmNshadowThickness, ts->manager.shadow_thickness); ++n;
     XtSetArg(args[n], XmNtabMode, XmTabStack_tab_mode(ts)); ++n;
@@ -2748,6 +2756,7 @@ DrawShadows(tab, top_GC, bottom_GC, x, y, width, height)
      * The only bit of redisplaying that we really have to do is draw
      * the three sides of the shadow that the XmTabBox does not draw.
      */
+
     switch( XmTabStack_tab_side(tab) )
     {
     case XmTABS_ON_TOP:
@@ -3015,6 +3024,8 @@ PickSizes(tab, tab_width, tab_height, box, kid)
 	    }
 	    else
 	    {
+		if (LayoutIsRtoL(tab))
+		    kid->x += offset * (num_rows-1);
 		int tmp = (((int)tab_width) - ((num_rows-1) * offset))/
 		    num_cols;
 		
@@ -3245,6 +3256,31 @@ TabSelectedCallback(widget, client, cbdata)
     }
 }
 
+/*
+ * XmRCallProc routine for checking font_list before setting it to NULL
+ * If "check_set_render_table" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetRenderTable(Widget wid,
+		    int offs,
+		    XrmValue *value)
+{
+  XmTabStackWidget lw = (XmTabStackWidget)wid;
+
+  /* Check if been here before */
+  if (lw->tab_stack.check_set_render_table)
+      value->addr = NULL;
+  else {
+      lw->tab_stack.check_set_render_table = True;
+      value->addr = (char*)&(lw->tab_stack.font_list);
+  }
+
+}
+
 #ifdef UNUSED_FUNCTION
 /* ARGSUSED */
 static Widget
@@ -3313,6 +3349,53 @@ XmCreateTabStack(parent, name, arg_list, arg_cnt)
 			   arg_cnt) );
 }
 
+Widget 
+XmVaCreateTabStack(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmTabStackWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedTabStack(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmTabStackWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
 void
 #ifndef _NO_PROTO
 XmTabStackSelectTab(Widget widget, Boolean notify)
@@ -3376,7 +3459,6 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
     Pixel      pixel;
     Pixmap     pixmap;
 
-
     shadow = tab->manager.shadow_thickness;
     num_rows = XmTabBoxGetNumRows(XmTabStack_tab_box(tab));
     num_cols = XmTabBoxGetNumColumns(XmTabStack_tab_box(tab));
@@ -3397,211 +3479,427 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
     {
     case XmTABS_ON_TOP:
     default:
-	x = 0;
-	y = XmTabStack_tab_box(tab)->core.height;
+	if (LayoutIsRtoLM(tab)) {
+	    x = 0;
+	    y = XmTabStack_tab_box(tab)->core.height;
 
-	XFillRectangle(XtDisplay(tab), XtWindow(tab), top_GC,
-		       x, y, shadow, base_height + shadow);
-	XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
-		       x + shadow, y + base_height, base_width + shadow,
-		       shadow);
-	XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
-		    x, y + base_height, shadow, XmBEVEL_BOTTOM);
+	    XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
+		       x + shadow + offset * (num_rows - 1), y + base_height,
+		       base_width + shadow, shadow);
 
-	x += base_width + shadow;
-	x2 = x + offset;
-	y2 = y + base_height;
-	for( i = 0; i < num_rows; ++i )
-	{
-	    if( i == 0 )
+	    x += offset * (num_rows - 1);
+	    x2 = x + offset;
+	    y2 = y + base_height;
+
+	    for( i = 0; i < num_rows; ++i )
 	    {
-		XFillRectangle(XtDisplay(tab), XtWindow(tab),
-			       tab->manager.bottom_shadow_GC,
-			       x, y, shadow, y2 - y);
-		x += shadow;
-		x2 = x + offset;
-	    }
-	    else
-	    {
-		if( (idx = _XiGetTabIndex(XmTabStack_tab_box(tab), i,
-					  (num_cols-1))) >= 0 )
+	    	if (i == 0)
 		{
-		    Widget child = XmTabStackIndexToWidget((Widget)tab, idx);
+		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
+			       tab->manager.top_shadow_GC,
+			       x, y, shadow, y2 - y);
+		    XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
+				   x, y2, shadow, XmBEVEL_BOTH);
+		    y2 -= offset;
+		    x -= offset;
+		    x2 -= offset;
+		}
+		else
+		{
+		    if( (idx = _XiGetTabIndex(XmTabStack_tab_box(tab), i,
+					  (num_cols-1))) >= 0 )
+		    {
+			Widget child = XmTabStackIndexToWidget((Widget)tab, idx);
 
-		    if( child == NULL ||
-		        !XiBackgroundSpecified(child) )
-		    {
-			gc = tab->manager.background_GC;
-		    }
-		    else
-		    {
-			gc = XmTabStack__gc(tab);
-			SetChildGC(child, gc);
-		    }
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
-				   x, y, x2 - x, y2 - y);
-
-	
-		    if( XmIsManager(parent) )
-		    {
-			gc = ((XmManagerWidget)parent)->manager.background_GC;
-		    }
-		    else
-		    {
-			gc = XmTabStack__gc(tab);
-			if( ValidPixmap(pixmap) )
+			if( child == NULL ||
+				!XiBackgroundSpecified(child) )
 			{
-			    SetTiledGC(XtDisplay(tab), gc, pixmap);
+			    gc = tab->manager.background_GC;
 			}
 			else
 			{
-			    SetSolidGC(XtDisplay(tab), gc, pixel);
+			    gc = XmTabStack__gc(tab);
+			    SetChildGC(child, gc);
 			}
-		    }
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+				   x, y, x2 - x, y2 - y);
+
+			if( XmIsManager(parent) )
+			{
+			    gc = ((XmManagerWidget)parent)->manager.background_GC;
+			}
+			else
+			{
+			    gc = XmTabStack__gc(tab);
+			    if( ValidPixmap(pixmap) )
+			    {
+				SetTiledGC(XtDisplay(tab), gc, pixmap);
+			    }
+		    	    else
+			    {
+				SetSolidGC(XtDisplay(tab), gc, pixel);
+			    }
+		        }
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
 				   x, y2, x2 - x, (int)XtHeight(tab) - y2);
 
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
-				   tab->manager.bottom_shadow_GC,
-				   x2 - shadow, y, shadow, y2 - y);
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
+				   tab->manager.top_shadow_GC,
+				   x, y, shadow, y2 - y);
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
 				   tab->manager.bottom_shadow_GC,
 				   x, y2 - shadow, x2 - x, shadow);
-		    x = x2;
+			XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
+				   x, y2 - shadow, shadow, XmBEVEL_BOTH);
+			x2 -= offset;
+		    }
+		    x -= offset;
+		    y2 -= offset;
 		}
-		x2 += offset;
-	    }
-	    y2 -= offset;
-	}
-	if( XmIsManager(parent) )
-	{
-	    gc = ((XmManagerWidget)parent)->manager.background_GC;
-	}
-	else
-	{
-	    gc = XmTabStack__gc(tab);
-	    if( ValidPixmap(pixmap) )
+	    } /* for */
+	    if( XmIsManager(parent) )
 	    {
-		SetTiledGC(XtDisplay(tab), gc, pixmap);
+		gc = ((XmManagerWidget)parent)->manager.background_GC;
 	    }
 	    else
 	    {
-		SetSolidGC(XtDisplay(tab), gc, pixel);
+		gc = XmTabStack__gc(tab);
+		if( ValidPixmap(pixmap) )
+		{
+		    SetTiledGC(XtDisplay(tab), gc, pixmap);
+		}
+		else
+		{
+		    SetSolidGC(XtDisplay(tab), gc, pixel);
+		}
 	    }
-	}
-	if( x < (int)XtWidth(tab) )
-	{
 	    XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+			offset * (num_rows-1) + base_width + 2*shadow, 0,
+			XtWidth(tab) - offset * (num_rows-1) + base_width + 2*shadow, XtHeight(tab));
+	    if( _XiGetTabIndex(XmTabStack_tab_box(tab), num_rows-1,
+		    num_cols-1) < 0 )
+	    {
+	        XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+			0, 0, offset, XtHeight(tab));
+	    }
+	    XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
+		       offset * (num_rows - 1) + base_width + shadow, y,
+		       shadow, base_height + shadow);
+	} else {
+	    x = 0;
+	    y = XmTabStack_tab_box(tab)->core.height;
+
+	    XFillRectangle(XtDisplay(tab), XtWindow(tab), top_GC,
+		       x, y, shadow, base_height + shadow);
+	    XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
+		       x + shadow, y + base_height, base_width + shadow,
+		       shadow);
+	    XmDrawBevel(XtDisplay(tab), XtWindow(tab), top_GC, bottom_GC,
+		    x, y + base_height, shadow, XmBEVEL_BOTTOM);
+
+	    x += base_width + shadow;
+	    x2 = x + offset;
+	    y2 = y + base_height;
+	    for( i = 0; i < num_rows; ++i )
+	    {
+		if( i == 0 )
+		{
+		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
+			       tab->manager.bottom_shadow_GC,
+			       x, y, shadow, y2 - y);
+		    x += shadow;
+		    x2 = x + offset;
+		}
+		else
+		{
+		    if( (idx = _XiGetTabIndex(XmTabStack_tab_box(tab), i,
+					  (num_cols-1))) >= 0 )
+		    {
+			Widget child = XmTabStackIndexToWidget((Widget)tab, idx);
+
+			if( child == NULL || !XiBackgroundSpecified(child) )
+			{
+			    gc = tab->manager.background_GC;
+			}
+			else
+			{
+			    gc = XmTabStack__gc(tab);
+			    SetChildGC(child, gc);
+			}
+		        XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+				   x, y, x2 - x, y2 - y);
+
+			if( XmIsManager(parent) )
+			{
+			    gc = ((XmManagerWidget)parent)->manager.background_GC;
+			}
+			else
+			{
+			    gc = XmTabStack__gc(tab);
+			    if( ValidPixmap(pixmap) )
+			    {
+				SetTiledGC(XtDisplay(tab), gc, pixmap);
+			    }
+			    else
+			    {
+				SetSolidGC(XtDisplay(tab), gc, pixel);
+			    }
+			}
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+				   x, y2, x2 - x, (int)XtHeight(tab) - y2);
+
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
+				   tab->manager.bottom_shadow_GC,
+				   x2 - shadow, y, shadow, y2 - y);
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
+				   tab->manager.bottom_shadow_GC,
+				   x, y2 - shadow, x2 - x, shadow);
+			x = x2;
+		    }
+		    x2 += offset;
+		}
+	        y2 -= offset;
+	    }
+	    
+
+	    if( XmIsManager(parent) )
+	    {
+		gc = ((XmManagerWidget)parent)->manager.background_GC;
+	    }
+	    else
+	    {
+		gc = XmTabStack__gc(tab);
+		if( ValidPixmap(pixmap) )
+		{
+		    SetTiledGC(XtDisplay(tab), gc, pixmap);
+		}
+		else
+		{
+		    SetSolidGC(XtDisplay(tab), gc, pixel);
+		}
+	    }
+	    if( x < (int)XtWidth(tab) )
+	    {
+		XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
 			   x, 0, (int)XtWidth(tab) - x, XtHeight(tab));
+	    }
 	}
 	break;
     case XmTABS_ON_BOTTOM:
-	rts[0].x = 0;
-	rts[0].y = 0;
-	rts[0].width = shadow;
-	rts[0].height = XtHeight(tab);
+	if( LayoutIsRtoL(tab) )
+	{
+	    XFillRectangle(XtDisplay(tab), XtWindow(tab), bottom_GC,
+		    offset * (num_rows - 1) + base_width + shadow, 0, shadow, XtHeight(tab));
 	
-	rts[1].x = shadow;
-	rts[1].y = 0;
-	rts[1].width = base_width + shadow;
-	rts[1].height = shadow;
-	XFillRectangles(XtDisplay(tab), XtWindow(tab), top_GC, rts, 2);
-	x += base_width + shadow;
+	    XFillRectangle(XtDisplay(tab), XtWindow(tab), top_GC,
+		    offset * (num_rows - 1), 0,
+		    base_width + shadow, shadow);
 
-	XmDrawBevel(XtDisplay(tab), XtWindow(tab),
+	    x = offset * (num_rows - 1);
+	    y = 0;
+	    x2 = x + offset;
+	    y2 = y + offset;
+
+	    for( i = 0; i < num_rows; ++i )
+	    {
+	    	if (i == 0)
+		{
+		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
+			       tab->manager.top_shadow_GC,
+			       x, y + shadow, shadow, base_height);
+		    x -= offset;
+		    x2 -= offset;
+		}
+		else
+		{
+		    if( (idx = _XiGetTabIndex(XmTabStack_tab_box(tab), i,
+			(num_cols-1))) >= 0 )
+		    {
+			Widget child = XmTabStackIndexToWidget((Widget)tab, idx);
+
+			if( child == NULL || !XiBackgroundSpecified(child) )
+			{
+			    gc = tab->manager.background_GC;
+			}
+			else
+			{
+			    gc = XmTabStack__gc(tab);
+			    SetChildGC(child, gc);
+			}
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+				   x, y2 + shadow, x2 - x, base_height - y2);
+
+			if( XmIsManager(parent) )
+			{
+			    gc = ((XmManagerWidget)parent)->manager.background_GC;
+			}
+			else
+			{
+			    gc = XmTabStack__gc(tab);
+			    if( ValidPixmap(pixmap) )
+			    {
+				SetTiledGC(XtDisplay(tab), gc, pixmap);
+			    }
+			    else
+			    {
+				SetSolidGC(XtDisplay(tab), gc, pixel);
+			    }
+			}
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+				   x, y, x2 - x, y2 - y);
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
+				   tab->manager.top_shadow_GC,
+				   x, y2 + shadow, shadow, base_height - y2);
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
+				   tab->manager.top_shadow_GC,
+				   x, y2, x2 - x, shadow);
+			
+			x2 -= offset;
+		    }
+		    x -= offset;
+		    y2 += offset;
+		}
+	    }
+	    
+	    if( XmIsManager(parent) )
+	    {
+		gc = ((XmManagerWidget)parent)->manager.background_GC;
+	    }
+	    else
+	    {
+		gc = XmTabStack__gc(tab);
+		if( ValidPixmap(pixmap) )
+		{
+		    SetTiledGC(XtDisplay(tab), gc, pixmap);
+		}
+		else
+		{
+		    SetSolidGC(XtDisplay(tab), gc, pixel);
+		}
+	    }
+	    i = offset * (num_rows-1) + base_width + shadow*2;
+	    if( i < (int)XtWidth(tab) )
+	    {
+		XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+			   i, 0, (int)XtWidth(tab) - i, XtHeight(tab));
+	    }
+	    if( _XiGetTabIndex(XmTabStack_tab_box(tab), num_rows-1,
+		    num_cols-1) < 0 )
+	    {
+	        XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+			0, 0, offset, XtHeight(tab));
+	    }
+	}
+	else
+	{
+	    rts[0].x = 0;
+	    rts[0].y = 0;
+	    rts[0].width = shadow;
+	    rts[0].height = XtHeight(tab);
+
+	    rts[1].x = shadow;
+	    rts[1].y = 0;
+	    rts[1].width = base_width + shadow;
+	    rts[1].height = shadow;
+	    XFillRectangles(XtDisplay(tab), XtWindow(tab), top_GC, rts, 2);
+	    x += base_width + shadow;
+
+	    XmDrawBevel(XtDisplay(tab), XtWindow(tab),
 		    tab->manager.top_shadow_GC,
 		    tab->manager.bottom_shadow_GC,
 		    x, 0, shadow, XmBEVEL_BOTTOM);
 
-	x2 = x + offset;
-	y += shadow;
-	y2 = y + base_height;
-	for( i = 0; i < num_rows; ++i )
-	{
-	    if( i == 0 )
+	    x2 = x + offset;
+	    y += shadow;
+	    y2 = y + base_height;
+	    for( i = 0; i < num_rows; ++i )
 	    {
-		XFillRectangle(XtDisplay(tab), XtWindow(tab),
+		if( i == 0 )
+		{
+		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
 			       tab->manager.bottom_shadow_GC,
 			       x, y, shadow, y2 - y);
 		
-		x += shadow;
-		x2 = x + offset;
-	    }
-	    else
-	    {
-		if( (idx = _XiGetTabIndex(XmTabStack_tab_box(tab), i,
-					  (num_cols-1))) >= 0 )
+		    x += shadow;
+		    x2 = x + offset;
+	        }
+		else
 		{
-		    Widget child = XmTabStackIndexToWidget((Widget)tab, idx);
+		    if( (idx = _XiGetTabIndex(XmTabStack_tab_box(tab), i,
+					  (num_cols-1))) >= 0 )
+		    {
+			Widget child =
+				XmTabStackIndexToWidget((Widget)tab, idx);
 
-		    if( child == NULL || !XiBackgroundSpecified(child) )
-		    {
-			gc = tab->manager.background_GC;
-		    }
-		    else
-		    {
-			gc = XmTabStack__gc(tab);
-			SetChildGC(child, gc);
-		    }
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
-				   x, y, x2 - x, y2 - y);
-
-	
-		    if( XmIsManager(parent) )
-		    {
-			gc = ((XmManagerWidget)parent)->manager.background_GC;
-		    }
-		    else
-		    {
-			gc = XmTabStack__gc(tab);
-			if( ValidPixmap(pixmap) )
+			if( child == NULL || !XiBackgroundSpecified(child) )
 			{
-			    SetTiledGC(XtDisplay(tab), gc, pixmap);
+			    gc = tab->manager.background_GC;
 			}
 			else
 			{
-			    SetSolidGC(XtDisplay(tab), gc, pixel);
+			    gc = XmTabStack__gc(tab);
+			    SetChildGC(child, gc);
 			}
-		    }
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+				   x, y, x2 - x, y2 - y);
+
+	
+			if( XmIsManager(parent) )
+			{
+			    gc = ((XmManagerWidget)parent)->manager.background_GC;
+			}
+			else
+			{
+			    gc = XmTabStack__gc(tab);
+			    if( ValidPixmap(pixmap) )
+			    {
+				SetTiledGC(XtDisplay(tab), gc, pixmap);
+			    }
+			    else
+			    {
+				SetSolidGC(XtDisplay(tab), gc, pixel);
+			    }
+			}
+			XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
 				   x, 0, x2 - x, y);
 
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
 				   tab->manager.bottom_shadow_GC,
 				   x2 - shadow, y, shadow, y2 - y);
-		    XFillRectangle(XtDisplay(tab), XtWindow(tab),
+			XFillRectangle(XtDisplay(tab), XtWindow(tab),
 				   tab->manager.top_shadow_GC,
 				   x, y, x2 - x, shadow);
-		    XmDrawBevel(XtDisplay(tab), XtWindow(tab),
+			XmDrawBevel(XtDisplay(tab), XtWindow(tab),
 				tab->manager.top_shadow_GC,
 				tab->manager.bottom_shadow_GC,
 				x2 - shadow, y, shadow, XmBEVEL_BOTTOM);
-		    x = x2;
+			x = x2;
+		    }
+		    x2 += offset;
 		}
-		x2 += offset;
+		y += offset;
 	    }
-	    y += offset;
-	}
-	if( XmIsManager(parent) )
-	{
-	    gc = ((XmManagerWidget)parent)->manager.background_GC;
-	}
-	else
-	{
-	    gc = XmTabStack__gc(tab);
-	    if( ValidPixmap(pixmap) )
+	    if( XmIsManager(parent) )
 	    {
-		SetTiledGC(XtDisplay(tab), gc, pixmap);
+		gc = ((XmManagerWidget)parent)->manager.background_GC;
 	    }
 	    else
 	    {
-		SetSolidGC(XtDisplay(tab), gc, pixel);
+		gc = XmTabStack__gc(tab);
+		if( ValidPixmap(pixmap) )
+		{
+		    SetTiledGC(XtDisplay(tab), gc, pixmap);
+		}
+		else
+		{
+		    SetSolidGC(XtDisplay(tab), gc, pixel);
+		}
 	    }
-	}
-	if( x < (int)XtWidth(tab) )
-	{
-	    XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
+	    if( x < (int)XtWidth(tab) )
+	    {
+		XFillRectangle(XtDisplay(tab), XtWindow(tab), gc,
 			   x, 0, (int)XtWidth(tab) - x, XtHeight(tab));
+	    }
 	}
 	break;
     case XmTABS_ON_RIGHT:

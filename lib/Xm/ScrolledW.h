@@ -65,6 +65,19 @@ extern void XmScrollVisible(
 			Dimension       hor_margin, 
 			Dimension       ver_margin) ;
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateScrolledWindow(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedScrolledWindow(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 /********    End Public Function Declarations    ********/
 
 

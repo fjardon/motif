@@ -81,6 +81,14 @@ extern Widget XmCreateFileSelectionDialog(
                         String name,
                         ArgList fsb_args,
                         Cardinal fsb_n) ;
+extern Widget XmVaCreateFileSelectionBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedFileSelectionBox(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

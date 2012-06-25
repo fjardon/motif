@@ -29,6 +29,7 @@
 #include <Xm/ColumnP.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Label.h>
+#include <Xm/VaSimpleP.h>
 #include "XmI.h"
 
 #define XK_LATIN1
@@ -89,6 +90,8 @@ static Boolean CompareGeometryToWidget(
 	XtWidgetGeometry*, Widget
 
 );
+static void CheckSetEntryLabelRenderTable(Widget wid, int offs, XrmValue *value); 
+static void CheckSetDefaultEntryLabelRenderTable(Widget wid, int offs, XrmValue *value); 
 static void XmColumnLabelDestroyedCallback(
 	Widget, XtPointer, XtPointer
 );
@@ -153,10 +156,18 @@ static void XmColumnLabelDestroyedCallback(
 #endif
 #define offset(field) XmPartOffset(XmColumn, field)
 static XmPartResource resources[] = {
+    { "pri.vate", "Pri.vate",
+	  XmRBoolean, sizeof(Boolean),
+	  offset (check_set_render_table),
+	  XmRImmediate, (XtPointer) False },
     { XmNdefaultEntryLabelFontList, XmCFontList,
 	  XmRFontList, sizeof(XmFontList),
 	  XmPartOffset(XmBulletinBoard, label_font_list),
-	  XmRImmediate, (XtPointer) NULL },
+	  XmRCallProc, (XtPointer) CheckSetDefaultEntryLabelRenderTable },
+    { XmNdefaultEntryLabelRenderTable, XmCRenderTable,
+	  XmRRenderTable, sizeof(XmRenderTable),
+	  XmPartOffset(XmBulletinBoard, label_font_list),
+	  XmRCallProc, (XtPointer) CheckSetDefaultEntryLabelRenderTable },
     { XmNdefaultEntryLabelAlignment, XmCAlignment,
 	  XmRXmAlignment, sizeof(unsigned char),
 	  offset(default_label_alignment), 
@@ -199,10 +210,18 @@ static XmSyntheticResource get_resources[] =
 
 #define offset(field) XmConstraintPartOffset(XmColumn, field)
 static XmPartResource constraint_resources[] = {
+    { "pri.vate", "Pri.vate",
+	  XmRBoolean, sizeof(Boolean),
+	  offset (check_set_render_table),
+	  XmRImmediate, (XtPointer) False },
     { XmNentryLabelFontList, XmCFontList,
 	  XmRFontList, sizeof(XmFontList),
-	  offset(label_font_list),
-	  XmRImmediate, (XtPointer) NULL },
+	  offset (label_font_list),
+	  XmRCallProc, (XtPointer) CheckSetEntryLabelRenderTable },
+    { XmNentryLabelRenderTable, XmCRenderTable,
+	  XmRRenderTable, sizeof(XmRenderTable),
+	  offset (label_font_list),
+	  XmRCallProc, (XtPointer) CheckSetEntryLabelRenderTable },
     { XmNentryLabelAlignment, XmCAlignment,
 	  XmRXmAlignment, sizeof(unsigned char),
 	  offset(label_alignment),
@@ -575,7 +594,7 @@ SetValues(Widget current, Widget request, Widget set, ArgList arg_list,
 	    if( XiC(*kid)->label_font_list == NULL )
 	    {
 		XtVaSetValues(XiC(*kid)->label_widget,
-			      XmNfontList,
+			      XmNrenderTable,
 			      BBPart(cs)->label_font_list,
 			      NULL);
 	    }
@@ -1126,7 +1145,7 @@ ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list,
 	XtSetArg(args[nargs],
 		 XmNlabelPixmap, XiC(new_w)->label_pixmap); nargs++;
 	XtSetArg(args[nargs], XmNalignment,   XiAlignment(new_w));     nargs++;
-	XtSetArg(args[nargs], XmNfontList,    lfont);          nargs++;
+	XtSetArg(args[nargs], XmNrenderTable,    lfont);          nargs++;
 	XtSetArg(args[nargs], XmNrecomputeSize, True);                 nargs++;
 	XtSetArg(args[nargs], XmNforeground,  cw->manager.foreground); nargs++;
 	XtSetArg(args[nargs],
@@ -1196,7 +1215,7 @@ ConstraintSetValues(Widget current, Widget request, Widget new_w,
 	XmFontList lfont = XmColumnC_label_font_list(new_w);
 	if(lfont == NULL)
 	    lfont = BBPart(XtParent(new_w))->label_font_list;
-	XtSetArg(args[i], XmNfontList, lfont); ++i;
+	XtSetArg(args[i], XmNrenderTable, lfont); ++i;
     }
 
     if( cc->label_alignment != sc->label_alignment )
@@ -1594,7 +1613,7 @@ VerifyResources(XmColumnWidget request, XmColumnWidget current,
     if( BBPart(new_w)->label_font_list == NULL )
     {
 	BBPart(new_w)->label_font_list =
-	    _XmGetDefaultFontList((Widget) new_w, XmLABEL_FONTLIST);
+	    XmeGetDefaultRenderTable((Widget) new_w, XmLABEL_FONTLIST);
     }
 
     reset = False;
@@ -1840,7 +1859,6 @@ HorizontalLayout(XmColumnWidget cw, Widget child,
 	if( !XiValidChild(*kid) ) continue;
 	
 	label = XiC(*kid)->label_widget;
-	XiC(label)->position.x = x;
 	XiC(label)->position.width = XtWidth(label);
         if( XiC(*kid)->show_label )
 		{
@@ -1852,13 +1870,20 @@ HorizontalLayout(XmColumnWidget cw, Widget child,
 		lWidth = 0;
 		mySpace = 0;
 		}
+	if (LayoutIsRtoLM(cw))
+	    XiC(label)->position.x = col_width - x - lWidth;
+	else
+	    XiC(label)->position.x = x;
 
 	/* First, let's calculate the kid's X-position */
-	XiC(*kid)->position.x = x + lWidth + space;
 	if( *kid == child )
 		cWidth = XiC(*kid)->position.width = child_size->width;
 	else
 		cWidth = XiC(*kid)->position.width = XiC(*kid)->request_width;
+	if (LayoutIsRtoLM(cw))
+	    XiC(*kid)->position.x = col_width - (x + lWidth + space) - cWidth;
+	else
+	    XiC(*kid)->position.x = x + lWidth + space;
 	if( child == *kid )
 	    cBorder = child_size->border_width;
 	else
@@ -2042,7 +2067,10 @@ VerticalLayout(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
 	
 	label = XiC(*kid)->label_widget;
 	cBorder = XtBorderWidth(*kid);
-	XiC(label)->position.x = x;
+	if (LayoutIsRtoLM(cw))
+	    XiC(label)->position.x = col_width - x - lWidth;
+	else
+	    XiC(label)->position.x = x;
 	XiC(label)->position.width = lWidth;
 
 	/* cbWidth is whatever is left over */
@@ -2072,7 +2100,10 @@ VerticalLayout(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
 	    }
 	}
 
-	XiC(*kid)->position.x = x + lWidth + space;
+	if (LayoutIsRtoLM(cw))
+	    XiC(*kid)->position.x = col_width - (x + lWidth + space + cWidth);
+	else
+	    XiC(*kid)->position.x = x + lWidth + space;
 	XiC(*kid)->position.width = cWidth;
     }
 
@@ -2667,6 +2698,52 @@ CompareGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
 }
 
 /*
+ * XmRCallProc routine for checking label_font_list before setting it to NULL
+ * If constrainit's "check_set_render_table" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetEntryLabelRenderTable(Widget wid, int offs, XrmValue *value)
+{
+  XmColumnConstraintPart* cc = XiC(wid);
+
+  /* Check if been here before */
+  if (cc->check_set_render_table)
+      value->addr = NULL;
+  else {
+      cc->check_set_render_table = True;
+      value->addr = (char*)&(cc->label_font_list);
+  }
+
+}
+
+/*
+ * XmRCallProc routine for checking label_font_list before setting it to NULL
+ * If column's "check_set_render_table" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetDefaultEntryLabelRenderTable(Widget wid, int offs, XrmValue *value)
+{
+  XmBulletinBoardPart* bb = BBPart(wid);
+  XmColumnWidget c = (XmColumnWidget)wid;
+
+  /* Check if been here before */
+  if (c->column.check_set_render_table)
+      value->addr = NULL;
+  else {
+      c->column.check_set_render_table = True;
+      value->addr = (char*)&(bb->label_font_list);
+  }
+
+}
+/*
  * Function:
  *	XmColumnLabelDestroyedCallback(widget, client, cbdata)
  * Description:
@@ -2718,4 +2795,49 @@ XmCreateColumn(Widget parent, String name, ArgList arg_list, Cardinal arg_cnt)
 			   arg_cnt) );
 }
 
-		        
+Widget 
+XmVaCreateColumn(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmColumnWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedColumn(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmColumnWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}

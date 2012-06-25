@@ -1026,8 +1026,13 @@ RefigureLocations(XmPanedWidget pw, int paneindex, Direction dir)
     for ( childP = XmPaned_managed_children(pw) ;
 	  childP < XmPaned_managed_children(pw) + XmPaned_num_panes(pw);
 	  childP++ ) {
-        PaneInfo(*childP)->delta = loc;
-        loc += PaneInfo(*childP)->size + 2 * (*childP)->core.border_width;
+	if (LayoutIsRtoLM(pw) && !(IsVert(pw))) {
+	    loc += PaneInfo(*childP)->size + 2 * (*childP)->core.border_width;
+	    PaneInfo(*childP)->delta = pw->core.width - loc;
+	} else {
+	    PaneInfo(*childP)->delta = loc;
+	    loc += PaneInfo(*childP)->size + 2 * (*childP)->core.border_width;
+	}
 
 	if (HasSash(*childP))
 	    loc += MAX(XmPaned_internal_bw(pw), sash_size);
@@ -1145,7 +1150,12 @@ CommitNewLocations(XmPanedWidget pw, Widget no_resize_child)
 	    }
 	    	    
 	    if (sash != NULL) {	    /* Move and Display the Sash */
-		changes.x = ((*childP)->core.x + (*childP)->core.width +
+		if (LayoutIsRtoLM(pw))
+		    changes.x = ((*childP)->core.x -
+			     internal_space / 2 - sash->core.width/2 -
+			     sash->core.border_width); 
+		else
+		    changes.x = ((*childP)->core.x + (*childP)->core.width +
 			     2 * (*childP)->core.border_width +
 			     internal_space / 2 - sash->core.width/2 -
 			     sash->core.border_width); 
@@ -1163,7 +1173,12 @@ CommitNewLocations(XmPanedWidget pw, Widget no_resize_child)
 		sep.width = XmPaned_sash_shadow_thickness(pw);
 		sep.height = pw->core.height;
 		sep.y = 0;
-		sep.x = ((*childP)->core.x + (*childP)->core.width -
+		if (LayoutIsRtoLM(pw))
+		    sep.x = ((*childP)->core.x -
+			 sep.width / 2 - separator->core.border_width -
+			 internal_space / 2);
+		else
+		    sep.x = ((*childP)->core.x + (*childP)->core.width -
 			 sep.width / 2 - separator->core.border_width +
 			 internal_space / 2 +
 			 2 * (*childP)->core.border_width);
@@ -1284,8 +1299,11 @@ _DrawTrackLines(XmPanedWidget pw, Boolean erase)
 	 * First child never has a track line.
 	 */
 
-	if ((XmPaned_managed_children(pw) != childP) && 
-	    (erase || (pane->olddelta != pane->delta)))
+        if ((((IsVert(pw) || !(LayoutIsRtoLM(pw))) &&
+	   (XmPaned_managed_children(pw) != childP)) ||
+	   (!(IsVert(pw)) && LayoutIsRtoLM(pw) &&
+	   !(IsLastPane(pw, childP)))) &&
+	   (erase || (pane->olddelta != pane->delta)))
 	{
 	    if(IsVert(pw)) {
 		on_size = pane->separator ?
@@ -1398,10 +1416,16 @@ MoveSashAdjustment(XmPanedWidget pw, Widget sash, int loc)
     /* CR03589 CR03163 should check the sash loc is over the maximum */
     if ((PaneSize(w, vert) + diff) > PaneInfo(w)->max)
 	diff = PaneInfo(w)->max - PaneSize(w, vert);
-    PaneInfo(w)->size = PaneSize(w, vert) + diff;
+    if (LayoutIsRtoLM(pw) && !(IsVert(pw)))
+	PaneInfo(w)->size = PaneSize(w, vert) - diff;
+    else
+	PaneInfo(w)->size = PaneSize(w, vert) + diff;
 
     w = *NthPane(pw, PaneIndex(sash) + 1);
-    PaneInfo(w)->size = PaneSize(w, vert) - diff;
+    if (LayoutIsRtoLM(pw) && !(IsVert(pw)))
+	PaneInfo(w)->size = PaneSize(w, vert) + diff;
+    else
+	PaneInfo(w)->size = PaneSize(w, vert) - diff;
 
     index = PaneIndex(sash);
     if (diff < 0)

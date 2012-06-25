@@ -274,9 +274,24 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
   cb.menuToPost = popup;
   cb.target = postWidget;
 
-  /* Call the callback(s) */
-  if (XtHasCallbacks(postWidget, XmNpopupHandlerCallback) == XtCallbackHasSome)
-    XtCallCallbacks(postWidget, XmNpopupHandlerCallback, (XtPointer) &cb);
+  /* Call the callback(s) 
+   * 
+   * Gadgets have no callback list, hence the callbacks of the manager
+   * widget are called.
+   */
+  switch (XtHasCallbacks(postWidget, XmNpopupHandlerCallback))
+    {
+    case XtCallbackNoList:
+      if (XtHasCallbacks(wid, XmNpopupHandlerCallback))
+        XtCallCallbacks(wid, XmNpopupHandlerCallback, (XtPointer) &cb);
+      break;
+    case XtCallbackHasNone:
+      break;
+    case XtCallbackHasSome:
+      XtCallCallbacks(postWidget, XmNpopupHandlerCallback, (XtPointer) &cb);
+      break;
+    }
+        
 
   popup = cb.menuToPost;
 

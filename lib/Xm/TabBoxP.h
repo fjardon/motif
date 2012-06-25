@@ -120,6 +120,8 @@ typedef struct _XmTabBoxPart {
 
     struct _XmCache *_cache;
     int              _cache_size;
+    
+    Boolean		check_set_render_table;
 } XmTabBoxPart;
 
 /*

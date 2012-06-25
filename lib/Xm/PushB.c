@@ -833,7 +833,8 @@ Initialize(
       (* resize) ((Widget) new_w);
     }
   
-    if ((new_w->label.label_type == XmPIXMAP) &&
+    if ((new_w->label.label_type == XmPIXMAP ||
+       new_w->label.label_type == XmPIXMAP_AND_STRING) &&
        (new_w->pushbutton.arm_pixmap != XmUNSPECIFIED_PIXMAP))
     {
       if (request->core.width == 0)
@@ -1164,7 +1165,8 @@ SetValues(
 	flag = TRUE;
     }
   
-  if ((new_w->label.label_type == XmPIXMAP) &&
+  if ((new_w->label.label_type == XmPIXMAP ||
+      new_w->label.label_type == XmPIXMAP_AND_STRING) &&
       (new_w->pushbutton.arm_pixmap != current->pushbutton.arm_pixmap))
     {
       if ((new_w->label.recompute_size))
@@ -1230,7 +1232,7 @@ Resize(
 {
   register XmPushButtonWidget tb = (XmPushButtonWidget) w;
 
-  if (Lab_IsPixmap(w)) 
+  if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w)) 
     SetPushButtonSize((XmPushButtonWidget) tb);
   else {
     XtWidgetProc    resize;
@@ -1355,7 +1357,8 @@ DrawPushButtonLabel(
       ((! Lab_IsMenupane(pb) && pb->pushbutton.fill_on_arm) ||
        (Lab_IsMenupane(pb) && etched_in)))
     {
-      if ((pb->label.label_type == XmSTRING) && 
+      if ((pb->label.label_type == XmSTRING ||
+           pb->label.label_type == XmPIXMAP_AND_STRING) && 
 	  (pb->pushbutton.arm_color == pb->primitive.foreground))
 	{
 	  tmp_gc = pb->label.normal_GC;
@@ -1364,7 +1367,8 @@ DrawPushButtonLabel(
 	}
     }
   
-  if (pb->label.label_type == XmPIXMAP)
+  if (pb->label.label_type == XmPIXMAP ||
+     pb->label.label_type == XmPIXMAP_AND_STRING)
     {
 	if (pb->pushbutton.armed)
 	  {
@@ -2032,20 +2036,22 @@ SetPushButtonSize(
      XmPushButtonWidget newpb)
 {
   XmLabelPart *lp = &(newpb->label);
-  unsigned int onW = 0, onH = 0;
+  unsigned int onW = 0, onH = 0, onW2 = 0, onH2 = 0;
   XtWidgetProc resize;
   
-  /* We know it's a pixmap so find out how how big it is */
   if (newpb->pushbutton.arm_pixmap != XmUNSPECIFIED_PIXMAP)
-    XmeGetPixmapData(XtScreen(newpb), newpb->pushbutton.arm_pixmap,
-		     NULL, NULL, NULL, NULL, NULL, NULL,
-		     &onW, &onH);   
-  
-  if ((onW > lp->TextRect.width) || (onH > lp->TextRect.height))
     {
-      lp->TextRect.width  = (unsigned short) onW;
-      lp->TextRect.height = (unsigned short) onH;
+      XmeGetPixmapData(XtScreen(newpb), newpb->label.pixmap,
+		     NULL, NULL, NULL, NULL, NULL, NULL,
+		     &onW, &onH);
+      XmeGetPixmapData(XtScreen(newpb), newpb->pushbutton.arm_pixmap,
+		     NULL, NULL, NULL, NULL, NULL, NULL,
+		     &onW2, &onH2);
+      newpb->label.PixmapRect.width = MAX(onW2, onW);
+      newpb->label.PixmapRect.height = MAX(onH2, onH);
+      _XmLabelCalcTextRect(newpb);
     }
+  
   
   /* Let Label do the rest. */
   _XmProcessLock();

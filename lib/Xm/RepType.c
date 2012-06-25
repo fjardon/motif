@@ -388,10 +388,10 @@ static XmConst char *XmConst KeyboardFocusPolicyNames[] =
     } ;
 
 static XmConst char *XmConst LabelTypeNames[] =
-{   "pixmap", "string"
+{   "pixmap", "string", "pixmap_and_string"
     } ;
 static XmConst unsigned char LabelTypeMap[] = 
-{   XmPIXMAP, XmSTRING
+{   XmPIXMAP, XmSTRING, XmPIXMAP_AND_STRING
     } ;
 static XmConst char *XmConst LayoutTypeNames[] =
 {   "outline", "spatial", "detail"
@@ -658,6 +658,12 @@ static XmConst char *XmConst WhichButtonNames[] =
 static XmConst unsigned char WhichButtonMap[] = 
 {   Button1, Button1, Button2, Button2, Button3, Button3, Button4, Button4,
     Button5, Button5
+    } ;
+static XmConst char *XmConst PixmapPlacementNames[] =
+{   "top", "bottom", "left", "right"
+    } ;
+static XmConst unsigned char PixmapPlacementMap[] = 
+{   XmPIXMAP_TOP, XmPIXMAP_BOTTOM, XmPIXMAP_LEFT, XmPIXMAP_RIGHT
     } ;
 
 
@@ -1148,7 +1154,11 @@ static XmRepTypeEntryRec StandardRepTypes[] = {
   {
     XmRWhichButton, (String*)WhichButtonNames, (unsigned char *)WhichButtonMap,
     XtNumber(WhichButtonNames),  FALSE,
-  }    
+  },    
+  {
+    XmRPixmapPlacement, (String*)PixmapPlacementNames, (unsigned char *)PixmapPlacementMap,
+    XtNumber(PixmapPlacementNames), FALSE,
+  }
 } ;
 
 static XmConst Cardinal StandardNumRecs = XtNumber( StandardRepTypes );

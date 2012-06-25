@@ -69,7 +69,8 @@ typedef struct _XmColumnConstraintPart {
     Dimension		request_width;
     Dimension		request_height;
     XRectangle		position;
-} XmColumnConstraintPart;
+    Boolean		check_set_render_table; /* used by CheckSetEntryLabelRenderTable */
+} XmColumnConstraintPart, * XmColumnConstraint;
 
 typedef struct _XmColumnConstraintRec {
     XmManagerConstraintPart manager;
@@ -92,6 +93,7 @@ typedef struct _XmColumnPart {
     /* Private */
 
     Boolean	  resize_done;
+    Boolean	  check_set_render_table; /* used by CheckSetDefaultEntryLabelRenderTable */
 
 } XmColumnPart;
 

@@ -207,6 +207,8 @@ static int InfoToIndex _ARGS((XmTabBoxWidget, XmTabAttributes));
 
 static Visual* GetShellVisual _ARGS((Widget));
 
+static void CheckSetRenderTable(Widget wid, int offs, XrmValue *value); 
+
 #define CachePixmap(t,i) XmTabBox__cache((t))[InfoToIndex(t,i)].pixmap
 #define CacheLabel(t,i)  XmTabBox__cache((t))[InfoToIndex(t,i)].label
 #define CacheSensitive(t,i)  XmTabBox__cache((t))[InfoToIndex(t,i)].sensitive
@@ -435,9 +437,15 @@ static XtResource resources[] = {
     { XmNtabOffset, XmCTabOffset,
 	  XmRDimension, sizeof(Dimension), offset(tab_offset),
 	  XmRImmediate, (XtPointer) 10 },
+    { "pri.vate", "Pri.vate",
+	  XmRBoolean, sizeof(Boolean), offset(check_set_render_table),
+	  XmRImmediate, (XtPointer) False },
     { XmNfontList, XmCFontList,
-	  XmRFontList, sizeof(XmFontList), offset(font_list),
-	  XmRImmediate, (XtPointer) NULL },
+	  XmRFontList, sizeof (XmFontList), offset(font_list),
+	  XmRCallProc, (XtPointer) CheckSetRenderTable },
+    { XmNrenderTable, XmCRenderTable,
+	  XmRRenderTable, sizeof(XmRenderTable), offset(font_list),
+	  XmRCallProc, (XtPointer) CheckSetRenderTable },
     { XmNhighlightThickness, XmCHighlightThickness,
 	  XmRDimension, sizeof(Dimension), offset(highlight_thickness),
 	  XmRImmediate, (XtPointer) 2 },
@@ -2632,7 +2640,6 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 
     stacked = (XmTabBox_tab_mode(tab) == XmTABS_STACKED ||
 	       XmTabBox_tab_mode(tab) == XmTABS_STACKED_STATIC);
-
     /*
      * Lets set up the GC used to draw the shadow that may or may not be
      * visible depending on the selected state.
@@ -2683,7 +2690,9 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 
 	    if( !selected && geometry->row == 0 )
 	    {
-		if( geometry->column == 0 )
+		if( (geometry->column == 0 && !LayoutIsRtoLP(tab)) ||
+			((geometry->column == XmTabBox__num_columns(tab)-1) &&
+			LayoutIsRtoLP(tab)) )
 		{
 		    rect[2].x = geometry->x + shadow;
 		    rect[2].width = (int)geometry->width - shadow;
@@ -2709,7 +2718,10 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 			       (int)geometry->width - 2*shadow,
 			       shadow);
 			       
-		if( geometry->row == 0 && geometry->column > 0)
+		if( geometry->row == 0 &&
+			((geometry->column > 0 && !LayoutIsRtoLP(tab)) ||
+			((geometry->column < XmTabBox__num_columns(tab)-1) &&
+			LayoutIsRtoLP(tab))) )
 		{
 		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
@@ -2718,13 +2730,16 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 				XmBEVEL_BOTH);
 		}
 	    }
-	    else if( geometry->row == 0 && geometry->column == 0 )
+	    else if(geometry->row == 0 &&
+		    ((geometry->column == 0 && !LayoutIsRtoLP(tab)) ||
+		    ((geometry->column == XmTabBox__num_columns(tab)-1) &&
+		    LayoutIsRtoLP(tab))) )
 	    {
 		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    geometry->x, geometry->y, shadow,
-			    XmBEVEL_BOTTOM);
+			    XmBEVEL_BOTH);
 	    }
 	}
 	else
@@ -2790,6 +2805,7 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 	}
 	break;
     case XmTAB_EDGE_BOTTOM_RIGHT:
+
 	if( XmTabBox_orientation(tab) == XmHORIZONTAL )
 	{
 	    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
@@ -2828,11 +2844,15 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 			       (int)geometry->width - 2*shadow,
 			       shadow);
 
-		if( !stacked ||
-		    (stacked && geometry->row == 0 &&
-		     (geometry->column != XmTabBox__num_columns(tab) - 1 ||
-		      XmTabBox__num_rows(tab) == 1 ||
-		      !XmTabBox_stacked_effect(tab))) )
+		if( (!stacked && 
+			(((geometry->column != XmTabBox__num_columns(tab) - 1) &&
+			!LayoutIsRtoLP(tab)) ||
+			(geometry->column != 0 && LayoutIsRtoLP(tab)))) ||
+			(stacked && geometry->row == 0 &&
+			(((geometry->column != XmTabBox__num_columns(tab) - 1) &&
+			!LayoutIsRtoLP(tab)) ||
+			XmTabBox__num_rows(tab) == 1 ||
+			!XmTabBox_stacked_effect(tab))) )
 		{
 		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
@@ -2842,10 +2862,16 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 				shadow, XmBEVEL_BOTTOM);
 		}
 	    }
-	    else if( stacked && XmTabBox_stacked_effect(tab) &&
+	    else if( (stacked && XmTabBox_stacked_effect(tab) &&
 		     XmTabBox__num_rows(tab) > 1 &&
 		     geometry->row == 0 && 
-		     geometry->column == XmTabBox__num_columns(tab) - 1 )
+		     ((geometry->column == XmTabBox__num_columns(tab) - 1 &&
+		     !LayoutIsRtoLP(tab)) ||
+		     (geometry->column == 0 && LayoutIsRtoLP(tab)))) ||
+		     (!stacked &&
+		     ((geometry->column == XmTabBox__num_columns(tab) - 1 &&
+		     !LayoutIsRtoLP(tab)) ||
+		     (geometry->column == 0 && LayoutIsRtoLP(tab)))))
 	    {
 		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
@@ -2895,9 +2921,9 @@ DrawSegments(tab, info, geometry, edge, corner_size, shadow, selected)
 
 		if( !stacked ||
 		    (stacked && geometry->row == 0 &&
-		     (geometry->column != XmTabBox__num_columns(tab) - 1 ||
-		      XmTabBox__num_rows(tab) == 1 ||
-		      !XmTabBox_stacked_effect(tab))) )
+		    (geometry->column != XmTabBox__num_columns(tab) - 1 ||
+		    XmTabBox__num_rows(tab) == 1 ||
+		    !XmTabBox_stacked_effect(tab))) )
 		{
 		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
@@ -2995,7 +3021,9 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 
 	    if( !selected && geometry->row == 0 )
 	    {
-		if( geometry->column == 0 )
+		if( geometry->column == 0 && !LayoutIsRtoL(tab) ||
+			(geometry->column == XmTabBox__num_columns(tab)-1) &&
+			LayoutIsRtoLP(tab))
 		{
 		    rt[2].x = geometry->x + shadow;
 		    rt[2].width = (int)geometry->width - shadow;
@@ -3037,13 +3065,27 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 				XmBEVEL_BOTH);
 		}
 	    }
-	    else if( geometry->row == 0 && geometry->column == 0 )
+	    else if( geometry->row == 0 )
 	    {
-		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		if (geometry->column == 0 && !LayoutIsRtoLP(tab))
+		{
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
 			    tab->manager.bottom_shadow_GC,
 			    geometry->x, geometry->y, shadow,
 			    XmBEVEL_BOTTOM);
+		}
+		else if (geometry->column == XmTabBox__num_columns(tab)-1 &&
+		     LayoutIsRtoLP(tab))
+		{
+		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
+			    tab->manager.top_shadow_GC,
+			    tab->manager.bottom_shadow_GC,
+			    geometry->x, geometry->y, shadow,
+			    XmBEVEL_BOTTOM);
+			    return;
+		}
+		
 	    }
 	}
 	else
@@ -3118,7 +3160,7 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
     case XmTAB_EDGE_BOTTOM_RIGHT:
 	if( XmTabBox_orientation(tab) == XmHORIZONTAL )
 	{
-	    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+		XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 			   tab->manager.bottom_shadow_GC, 
 			   geometry->x + (int)geometry->width - shadow,
 			   geometry->y,
@@ -3161,24 +3203,48 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 			       (int)geometry->width - 2*shadow,
 			       shadow);
 
-		if( !stacked ||
-		    (stacked && geometry->row == 0 &&
-		     (geometry->column != XmTabBox__num_columns(tab) - 1 ||
-		      XmTabBox__num_rows(tab) == 1 ||
-		      !XmTabBox_stacked_effect(tab))) )
+		if (LayoutIsRtoLP(tab))
 		{
+		    if (geometry->column != 0 && geometry->row == 0)
+		    {
 		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
 				tab->manager.top_shadow_GC,
 				geometry->x + (int)geometry->width - shadow,
 				geometry->y + (int)geometry->height - shadow,
 				shadow, XmBEVEL_BOTH);
+		    }
+		}
+		else
+		{
+		    if( (!stacked &&
+			((((geometry->column != XmTabBox__num_columns(tab) - 1) &&
+			!LayoutIsRtoLP(tab))) ||
+			(geometry->column != 0 && LayoutIsRtoLP(tab)))) ||
+			(stacked && geometry->row == 0 &&
+			(geometry->column != XmTabBox__num_columns(tab) - 1 ||
+			(XmTabBox__num_rows(tab) == 1) ||
+			!XmTabBox_stacked_effect(tab))) )
+		    {
+			XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
+				tab->manager.bottom_shadow_GC,
+				tab->manager.top_shadow_GC,
+				geometry->x + (int)geometry->width - shadow,
+				geometry->y + (int)geometry->height - shadow,
+				shadow, XmBEVEL_BOTH);
+		    }
 		}
 	    }
-	    else if( stacked && XmTabBox_stacked_effect(tab) &&
+	    else if( (stacked && XmTabBox_stacked_effect(tab) &&
 		     XmTabBox__num_rows(tab) > 1 &&
-		     geometry->row == 0 &&
-		     geometry->column == XmTabBox__num_columns(tab) - 1 )
+		     geometry->row == 0 && 
+		     ((geometry->column == XmTabBox__num_columns(tab) - 1 &&
+		     !LayoutIsRtoLP(tab)) ||
+		     (geometry->column == 0 && LayoutIsRtoLP(tab)))) ||
+		     (!stacked &&
+		     ((geometry->column == XmTabBox__num_columns(tab) - 1 &&
+		     !LayoutIsRtoLP(tab)) ||
+		     (geometry->column == 0 && LayoutIsRtoLP(tab)))))
 	    {
 		XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 			    tab->manager.top_shadow_GC,
@@ -3235,9 +3301,9 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 
 		if( !stacked ||
 		    (stacked && geometry->row == 0 &&
-		     (geometry->column != XmTabBox__num_columns(tab) - 1 ||
-		      XmTabBox__num_rows(tab) == 1 ||
-		      !XmTabBox_stacked_effect(tab))) )
+		    (geometry->column != XmTabBox__num_columns(tab) - 1 ||
+		    XmTabBox__num_rows(tab) == 1 ||
+		    !XmTabBox_stacked_effect(tab))) )
 		{
 		    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 				tab->manager.bottom_shadow_GC,
@@ -3553,7 +3619,10 @@ DrawTab(tab, info, geometry, selected, keyboard)
 	row = geometry->row;
 	do
 	{
-	    above = GetTabInfo(tab, ++row, geometry->column);
+	    if( LayoutIsRtoLP(tab) )
+		above = GetTabInfo(tab, ++row, geometry->column-1);
+	    else
+		above = GetTabInfo(tab, ++row, geometry->column);
 	} while( above == NULL && row < XmTabBox__num_rows(tab) );
 
 	if( above != NULL )
@@ -3640,7 +3709,10 @@ DrawTab(tab, info, geometry, selected, keyboard)
 	row = geometry->row;
 	do
 	{
-	    above = GetTabInfo(tab, ++row, geometry->column - 1);
+	    if( LayoutIsRtoLP(tab) )
+		above = GetTabInfo(tab, ++row, geometry->column);
+	    else
+		above = GetTabInfo(tab, ++row, geometry->column - 1);
 	} while( above == NULL && row < XmTabBox__num_rows(tab) );
 
 	if( above != NULL )
@@ -4434,7 +4506,7 @@ HorizontalBasicLayout(tab)
     XiTabRect  *actual = XmTabBox__actual(tab);
     XRectangle *wanted = XmTabBox__wanted(tab);
 
-    x = 0;
+    x = LayoutIsRtoLP(tab) ? (tab->core.width - wanted[0].width) : 0;
     height = XtHeight(tab);
     for( i = 0; i < cnt; ++i )
     {
@@ -4444,7 +4516,8 @@ HorizontalBasicLayout(tab)
 	actual[i].height = height;
 	actual[i].row = 0;
 	actual[i].column = i;
-	x += actual[i].width;
+	if (i < cnt-1)
+	    x += LayoutIsRtoLP(tab) ? -actual[i+1].width : actual[i].width;
     }
     XmTabBox__num_rows(tab) = 1;
     XmTabBox__num_columns(tab) = i;
@@ -4577,7 +4650,13 @@ HorizontalBasicRedisplay(tab)
      */
     if( XmTabBox_tab_edge(tab) == XmTAB_EDGE_BOTTOM_RIGHT )
     {
-	XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+	if (LayoutIsRtoLP(tab))
+	    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+		       tab->manager.top_shadow_GC,
+		       0, (int)XtHeight(tab) - shadow,
+		       geom[count-1].x, shadow);
+	else
+	    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 		       tab->manager.top_shadow_GC,
 		       x, (int)XtHeight(tab) - shadow,
 		       (int)XtWidth(tab) - x, shadow);
@@ -4590,7 +4669,12 @@ HorizontalBasicRedisplay(tab)
     }
     else
     {
-	XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+	if (LayoutIsRtoLP(tab))
+	    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+		       tab->manager.bottom_shadow_GC,
+		       0, 0, geom[count-1].x, shadow);
+	else
+	    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 		       tab->manager.bottom_shadow_GC,
 		       x, 0, (int)XtWidth(tab) - x, shadow);
     }
@@ -5543,7 +5627,7 @@ DrawLeftToRightTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	}
 	XmStringDraw(XtDisplay(tab), XiCanvas(tab), font_list,
 		     info->label_string, gc, draw.x, (Position)y, draw.width,
-		     info->label_alignment, XmSTRING_DIRECTION_L_TO_R,
+		     info->label_alignment, info->string_direction,
 		     NULL);
     }
 }
@@ -5893,7 +5977,7 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	}
 	XmStringDraw(XtDisplay(tab), bitmap, font_list, info->label_string,
 		     XmTabBox__one_GC(tab), 0, 0, (Dimension)label_width,
-		     info->label_alignment, XmSTRING_DIRECTION_L_TO_R, NULL);
+		     info->label_alignment, info->string_direction, NULL);
 
 	/*
 	 * Now that the label string is rendered we need to grab it back
@@ -6475,7 +6559,7 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	}
 	XmStringDraw(XtDisplay(tab), bitmap, font_list, info->label_string,
 		     XmTabBox__one_GC(tab), 0, 0, (Dimension)label_width,
-		     info->label_alignment, XmSTRING_DIRECTION_L_TO_R, NULL);
+		     info->label_alignment, info->string_direction, NULL);
 
 	/*
 	 * Now that the label string is rendered we need to grab it back
@@ -6916,9 +7000,13 @@ HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
      * can choose a row/column as we place them. For the dynamic we
      * will first choose a row column and then a pixel location.
      */
+   
     if( is_static )
     {
-	start_x = x = 0;
+	start_x = x = (LayoutIsRtoLP(tab)
+		? (per_line-1) * tab_width + offset * (num_rows-1)
+		: 0);
+	
 	on_line = 0;
 	row = 0;
 	if( XmTabBox_tab_edge(tab) == XmTAB_EDGE_BOTTOM_RIGHT )
@@ -6935,14 +7023,14 @@ HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 		if( ++on_line >= per_line )
 		{
 		    on_line = 0;
-		    start_x += offset;
+		    start_x += (LayoutIsRtoLP(tab) ? -offset : offset);
 		    x = start_x;
 		    y -= tab_height;
 		    row++;
 		}
 		else
 		{
-		    x += tab_width;
+		    x += (LayoutIsRtoLP(tab) ? -tab_width : tab_width);
 		}
 	    }	
 	}
@@ -6960,14 +7048,14 @@ HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 		if( ++on_line >= per_line )
 		{
 		    on_line = 0;
-		    start_x += offset;
+		    start_x += (LayoutIsRtoLP(tab) ? -offset : offset);
 		    x = start_x;
 		    y += tab_height;
 		    row++;
 		}
 		else
 		{
-		    x += tab_width;
+		    x += (LayoutIsRtoLP(tab) ? -tab_width : tab_width);
 		}
 	    }	
 	}
@@ -6981,7 +7069,9 @@ HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 	 * always on row 0. So the first thing we need to do is break up
 	 * the tabs into rows.
 	 */
-	start_x = x = 0;
+	start_x = x = (LayoutIsRtoLP(tab)
+		? (per_line-1)*tab_width + offset*(num_rows-1)
+		: 0);
 	on_line = 0;
 	row = 0;
 
@@ -7008,14 +7098,14 @@ HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 		if( ++on_line >= per_line || idx >= cnt )
 		{
 		    on_line = 0;
-		    start_x += offset;
+		    start_x += LayoutIsRtoLP(tab) ? -offset : offset;
 		    x = start_x;
 		    y -= tab_height;
 		    row++;
 		}
 		else
 		{
-		    x += tab_width;
+		    x += LayoutIsRtoLP(tab) ? -tab_width : tab_width;
 		}
 		if( idx >= cnt ) idx = 0;
 	    }
@@ -7034,14 +7124,14 @@ HorizontalStackedLayout(XmTabBoxWidget tab, Boolean is_static)
 		if( ++on_line >= per_line || idx >= cnt )
 		{
 		    on_line = 0;
-		    start_x += offset;
+		    start_x += LayoutIsRtoLP(tab) ? -offset : offset;
 		    x = start_x;
 		    y += tab_height;
 		    row++;
 		}
 		else
 		{
-		    x += tab_width;
+		    x += LayoutIsRtoLP(tab) ? -tab_width : tab_width;
 		}
 		if( idx >= cnt ) idx = 0;
 	    }
@@ -7367,35 +7457,71 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 
 	    if( corner < 0 )
 	    {
-		rect[cnt].x = geom[i].x + geom[i].width - offset;
-		rect[cnt].y = geom[i].y + geom[i].height;
-		rect[cnt].width = offset;
-		rect[cnt++].height = height;
+		if (LayoutIsRtoLP(tab))
+		{
+		    rect[cnt].x = geom[i].x;
+		    rect[cnt].y = geom[i].y + geom[i].height;
+		    rect[cnt].width = offset;
+		    rect[cnt++].height = height;
 
-		bottom.x = geom[i].x + geom[i].width - shadow;
-		bottom.y = geom[i].y + geom[i].height;
+		    bottom.x = geom[i].x;
+		    bottom.y = geom[i].y + geom[i].height;
+		}
+		else
+		{
+		    rect[cnt].x = geom[i].x + geom[i].width - offset;
+		    rect[cnt].y = geom[i].y + geom[i].height;
+		    rect[cnt].width = offset;
+		    rect[cnt++].height = height;
+
+		    bottom.x = geom[i].x + geom[i].width - shadow;
+		    bottom.y = geom[i].y + geom[i].height;
+		}
 		bottom.width = shadow;
 		bottom.height = height;
 		do_bottom = True;
 	    }
-	    
+
 	    if( below < 0 )
 	    {
+	        if( LayoutIsRtoLP(tab) )
+		{
+		rect[cnt].x = geom[i].x + offset;
+		}
+		else
+		{
 		rect[cnt].x = geom[i].x;
+		}
 		rect[cnt].y = geom[i].y + geom[i].height;
 		rect[cnt].width = geom[i].width - offset;
-		rect[cnt++].height = geom[i].height;
+		rect[cnt].height = geom[i].height;
+		cnt++;
 
-		top.x = geom[i].x;
+		if( LayoutIsRtoLP(tab) )
+		{
+		    top.x = geom[i].x + geom[i].width - shadow;
+		}
+		else
+		{
+		    top.x = geom[i].x;
+		}
 		top.y = geom[i].y + geom[i].height;
 		top.width = shadow;
 		top.height = geom[i].height;
 		do_top = True;
+		
 
 		if( geom[i].row > 1 &&
 		    geom[i].column == XmTabBox__num_columns(tab) - 1 )
 		{
+		    if( LayoutIsRtoLP(tab) )
+		    {
+		    rect[cnt].x = offset;
+		    }
+		    else
+		    {
 		    rect[cnt].x = geom[i].x + geom[i].width - (2*offset);
+		    }
 		    rect[cnt].y = geom[i].y + geom[i].height;
 		    rect[cnt].width = offset;
 		    rect[cnt].height = (int)XtHeight(tab) - rect[cnt].y;
@@ -7406,15 +7532,29 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 	    XFillRectangles(XtDisplay(tab), XiCanvas(tab), gc, rect, cnt);
 	    if( do_bottom )
 	    {
-		XFillRectangle(XtDisplay(tab), XiCanvas(tab), 
+		if( LayoutIsRtoLP(tab) )
+		    XFillRectangle(XtDisplay(tab), XiCanvas(tab), 
+			       tab->manager.top_shadow_GC, bottom.x,
+			       bottom.y, bottom.width, bottom.height);
+		else
+		    XFillRectangle(XtDisplay(tab), XiCanvas(tab), 
 			       tab->manager.bottom_shadow_GC, bottom.x,
 			       bottom.y, bottom.width, bottom.height);
 	    }
 	    if( do_top )
 	    {
-		XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+	    	if( LayoutIsRtoLP(tab) )
+		{
+		    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+			       tab->manager.bottom_shadow_GC, top.x,
+			       top.y, top.width, top.height);
+		}
+		else
+		{
+		    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 			       tab->manager.top_shadow_GC, top.x,
 			       top.y, top.width, top.height);
+		}
 	    }
 	}
     }
@@ -7442,21 +7582,40 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 	}
     }
 
-    x = offset;
     cnt = 0;
-    for( i = 1; i < XmTabBox__num_rows(tab); ++i, x += offset )
+    if (LayoutIsRtoLP(tab))
     {
-	if( (idx = GetTabIndex(tab, i, 0)) < 0 ) continue;
-
-	rect[cnt].x = 0;
-	rect[cnt].y = geom[idx].y;
-	rect[cnt].width = x;
-	rect[cnt++].height = geom[idx].height;
-
-	if( cnt >= _NUM_RECTS )
+	for( i = 1; i < XmTabBox__num_rows(tab); ++i, x -= offset )
 	{
-	    XFillRectangles(XtDisplay(tab), XiCanvas(tab), gc, rect, cnt);
-	    cnt=0;
+	    if( (idx = GetTabIndex(tab, i, 0)) < 0 ) continue;
+
+	    rect[cnt].x = geom[idx].x + geom[idx].width;
+	    rect[cnt].y = geom[idx].y;
+	    rect[cnt].width = XtWidth(tab) - geom[idx].x;
+	    rect[cnt++].height = geom[idx].height;
+
+	    if( cnt >= _NUM_RECTS )
+	    {
+		XFillRectangles(XtDisplay(tab), XiCanvas(tab), gc, rect, cnt);
+		cnt=0;
+	    }
+	}
+    } else {
+	x = offset;
+	for( i = 1; i < XmTabBox__num_rows(tab); ++i, x += offset )
+	{
+	    if( (idx = GetTabIndex(tab, i, 0)) < 0 ) continue;
+
+	    rect[cnt].x = 0;
+	    rect[cnt].y = geom[idx].y;
+	    rect[cnt].width = x;
+	    rect[cnt++].height = geom[idx].height;
+
+	    if( cnt >= _NUM_RECTS )
+	    {
+		XFillRectangles(XtDisplay(tab), XiCanvas(tab), gc, rect, cnt);
+		cnt=0;
+	    }
 	}
     }
 
@@ -7470,18 +7629,24 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
     for( i = 0; i < XmTabBox__num_rows(tab); ++i )
     {
 	if( (idx = GetTabIndex(tab, i, col)) >= 0 )
-	{
+        {
 	    last = idx;
 	}
     }
-
     if( last != -1 )
     {
+	if( LayoutIsRtoLP(tab) )
+	{
+	    rect[cnt].x = 0;
+	    rect[cnt].y = 0;
+	    rect[cnt].width = geom[last].x;
+	    rect[cnt++].height = XtHeight(tab);
+	    last = GetTabIndex(tab, 0, 0);
+	}
 	rect[cnt].x = geom[last].x + geom[last].width;
 	rect[cnt].y = 0;
 	rect[cnt].width = (int)XtWidth(tab) - rect[cnt].x;
 	rect[cnt++].height = XtHeight(tab);
-
 	if( cnt >= _NUM_RECTS )
 	{
 	    XFillRectangles(XtDisplay(tab), XiCanvas(tab), gc, rect, cnt);
@@ -7498,9 +7663,14 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 
 	if( last >= 0 )
 	{
-	    rect[cnt].x = geom[last].x + geom[last].width;
+	    if (LayoutIsRtoLP(tab)) {
+		rect[cnt].x = 0;
+		rect[cnt].width = geom[last].x;
+	    } else {
+		rect[cnt].x = geom[last].x + geom[last].width;
+		rect[cnt].width = (int)XtWidth(tab) - rect[cnt].x;
+	    }
 	    rect[cnt].y = 0;
-	    rect[cnt].width = (int)XtWidth(tab) - rect[cnt].x;
 	    rect[cnt++].height = geom[last].height;
 
 	    if( cnt >= _NUM_RECTS )
@@ -7548,8 +7718,16 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 	 * need to do is draw a line from the last tab in row 0 to the
 	 * location where the row should end.
 	 */
-	x1 = geom[first].x + geom[first].width;
-	x2 = XmTabBox__num_columns(tab) * geom[first].width;
+	if( LayoutIsRtoLP(tab) )
+	{
+	    x1 = offset * ((XmTabBox__num_rows(tab) - 1));
+	    x2 = geom[first].x;
+	}
+	else
+	{
+	    x1 = geom[first].x + geom[first].width;
+	    x2 = XmTabBox__num_columns(tab) * geom[first].width;
+	}
     }
     else
     {
@@ -7567,11 +7745,15 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
 		   tab->manager.top_shadow_GC,
 		   x1, (int)XtHeight(tab) - shadow,
 		   x2 - x1, shadow);
-    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
+  
+    if( !LayoutIsRtoLP(tab) )
+    {  
+	XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
 		tab->manager.top_shadow_GC,
 		tab->manager.bottom_shadow_GC,
 		x2 - shadow, (int)XtHeight(tab) - shadow,
 		shadow, XmBEVEL_BOTTOM);
+    }
 }
 
 static void
@@ -7655,12 +7837,20 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 
 	    if( corner < 0 )
 	    {
-		rect[cnt].x = geom[i].x + geom[i].width - offset;
+		if( LayoutIsRtoLP(tab) )
+		{
+		    rect[cnt].x = geom[i].x;
+		    bottom.x = geom[i].x;
+		}
+		else
+		{
+		    rect[cnt].x = geom[i].x + geom[i].width - offset;
+		    bottom.x = geom[i].x + geom[i].width - shadow;
+		}
 		rect[cnt].y = geom[i].y - height;
 		rect[cnt].width = offset;
 		rect[cnt++].height = height;
 
-		bottom.x = geom[i].x + geom[i].width - shadow;
 		bottom.y = geom[i].y - height;
 		bottom.width = shadow;
 		bottom.height = height;
@@ -7669,12 +7859,26 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 	    
 	    if( below < 0 )
 	    {
-		rect[cnt].x = geom[i].x;
+	    	if( LayoutIsRtoLP(tab) )
+		{
+		    rect[cnt].x = geom[i].x + offset;
+		}
+		else
+		{
+		    rect[cnt].x = geom[i].x;
+		}
 		rect[cnt].y = geom[i].y - geom[i].height;
 		rect[cnt].width = geom[i].width - offset;
 		rect[cnt++].height = geom[i].height;
 
-		top.x = geom[i].x;
+	    	if( LayoutIsRtoLP(tab) )
+		{
+		    top.x = geom[i].x + geom[i].width - shadow;
+		}
+		else
+		{
+		    top.x = geom[i].x;
+		}
 		top.y = geom[i].y - geom[i].height;
 		top.width = shadow;
 		top.height = geom[i].height;
@@ -7683,7 +7887,14 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 		if( geom[i].row > 1 &&
 		    geom[i].column == XmTabBox__num_columns(tab) - 1 )
 		{
-		    rect[cnt].x = geom[i].x + geom[i].width - (2*offset);
+		    if( LayoutIsRtoLP(tab) )
+		    {
+			rect[cnt].x = offset;
+		    }
+		    else
+		    {
+			rect[cnt].x = geom[i].x + geom[i].width - (2*offset);
+		    }
 		    rect[cnt].y = 0;
 		    rect[cnt].width = offset;
 		    rect[cnt].height = geom[i].y;
@@ -7696,17 +7907,29 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 	    if( do_bottom )
 	    {
 		XFillRectangle(XtDisplay(tab), XiCanvas(tab), 
-			       tab->manager.bottom_shadow_GC, bottom.x,
-			       bottom.y, bottom.width, bottom.height);
+			       LayoutIsRtoLP(tab)
+			           ? tab->manager.top_shadow_GC
+				   : tab->manager.bottom_shadow_GC,
+			       bottom.x, bottom.y, bottom.width, bottom.height);
 	    }
 	    if( do_top )
 	    {
-		XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+		if( LayoutIsRtoLP(tab) )
+		{
+		    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
+			       tab->manager.bottom_shadow_GC, top.x,
+			       top.y, top.width, top.height);
+		}
+		else
+		{
+		    XFillRectangle(XtDisplay(tab), XiCanvas(tab),
 			       tab->manager.top_shadow_GC, top.x,
 			       top.y, top.width, top.height);
+		}
 	    }
 	}
     }
+
     /*
      * Now that all the tab stuff is done, lets clear all the background
      * areas to our parents background color.
@@ -7736,7 +7959,7 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
     {
 	if( (idx = GetTabIndex(tab, i, 0)) < 0 ) continue;
 
-	rect[cnt].x = 0;
+	rect[cnt].x = LayoutIsRtoLP(tab) ? geom[idx].x + geom[idx].width : 0;
 	rect[cnt].y = geom[idx].y;
 	rect[cnt].width = x;
 	rect[cnt++].height = geom[idx].height;
@@ -7764,6 +7987,14 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 
     if( last != -1 )
     {
+	if( LayoutIsRtoLP(tab) )
+	{
+	    rect[cnt].x = 0;
+	    rect[cnt].y = 0;
+	    rect[cnt].width = geom[last].x;
+	    rect[cnt++].height = XtHeight(tab);
+	    last = GetTabIndex(tab, 0, 0);
+	}
 	rect[cnt].x = geom[last].x + geom[last].width;
 	rect[cnt].y = 0;
 	rect[cnt].width = (int)XtWidth(tab) - rect[cnt].x;
@@ -7785,10 +8016,20 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 
 	if( last >= 0 )
 	{
-	    rect[cnt].x = geom[last].x + geom[last].width;
-	    rect[cnt].y = (int)XtHeight(tab) - geom[last].height;
-	    rect[cnt].width = (int)XtWidth(tab) - rect[cnt].x;
-	    rect[cnt++].height = geom[last].height;
+	    if( LayoutIsRtoLP(tab) )
+	    {
+		rect[cnt].x = 0;
+		rect[cnt].y = (int)XtHeight(tab) - geom[last].height;
+		rect[cnt].width = geom[last].x;
+		rect[cnt++].height = geom[last].height;
+	    }
+	    else
+	    {
+		rect[cnt].x = geom[last].x + geom[last].width;
+		rect[cnt].y = (int)XtHeight(tab) - geom[last].height;
+		rect[cnt].width = (int)XtWidth(tab) - rect[cnt].x;
+		rect[cnt++].height = geom[last].height;
+	    }
 
 	    if( cnt >= _NUM_RECTS )
 	    {
@@ -7803,7 +8044,6 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 	XFillRectangles(XtDisplay(tab), XiCanvas(tab), gc, rect, cnt);
 	cnt=0;
     }
-
 
     /*
      * If the users wants the special stacked effect then we are done so 
@@ -7835,15 +8075,32 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
 	 * need to do is draw a line from the last tab in row 0 to the
 	 * location where the row should end.
 	 */
-	x1 = geom[first].x + geom[first].width;
-	x2 = XmTabBox__num_columns(tab) * geom[first].width;
+	if( LayoutIsRtoLP(tab) )
+	{
+	    x1 = offset * (XmTabBox__num_rows(tab) - 1) + shadow;
+	    x2 = geom[first].x;
+	    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    tab->manager.top_shadow_GC,
+		    tab->manager.bottom_shadow_GC,
+		    x1 - shadow, 0,
+		    shadow, XmBEVEL_BOTH);
+	    XmDrawBevel(XtDisplay(tab), XiCanvas(tab),
+		    tab->manager.bottom_shadow_GC,
+		    tab->manager.top_shadow_GC,
+		    x2, 0,
+		    shadow, XmBEVEL_BOTH);
+	}
+	else
+	{
+	    x1 = geom[first].x + geom[first].width;
+	    x2 = XmTabBox__num_columns(tab) * geom[first].width;
+	}
     }
     else
     {
 	x1 = geom[first].x + geom[first].width;
 	x2 = XtWidth(tab);
     }
-
 
     /*
      * Now that we know what we are dealing with all we have to do
@@ -7874,7 +8131,7 @@ VerticalStackedRightEdgeRedisplay(XmTabBoxWidget tab)
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     int             i, count = _XmTabbedStackListCount(list), row = 0, col,
                     shadow = tab->manager.shadow_thickness, y, width,
-                    offset, idx, below, corner, cnt, first, last,
+                    offset, idx, below, corner, cnt = 0, first, last,
                     y1, y2;
     XmTabAttributes info;
     XiTabRect       *geom;
@@ -8173,7 +8430,7 @@ VerticalStackedLeftEdgeRedisplay(XmTabBoxWidget tab)
     XmTabbedStackList       list = XmTabBox_tab_list(tab);
     int             i, count = _XmTabbedStackListCount(list), row = 0, col,
                     shadow = tab->manager.shadow_thickness, y, width,
-                    offset, idx, below, corner, cnt, first, last,
+                    offset, idx, below, corner, cnt = 0, first, last,
                     y1, y2;
     XmTabAttributes info;
     XiTabRect       *geom;
@@ -8990,6 +9247,29 @@ GetShellVisual(Widget widget)
 	return( DefaultVisualOfScreen(XtScreen(widget)) );
     }
     return( visual );
+}
+
+/*
+ * XmRCallProc routine for checking font_list before setting it to NULL
+ * If "check_set_render_table" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetRenderTable(Widget wid, int offs, XrmValue *value)
+{
+  XmTabBoxWidget tb = (XmTabBoxWidget)wid;
+
+  /* Check if been here before */
+  if (tb->tab_box.check_set_render_table)
+      value->addr = NULL;
+  else {
+      tb->tab_box.check_set_render_table = True;
+      value->addr = (char*)&(tb->tab_box.font_list);
+  }
+
 }
 
 Widget

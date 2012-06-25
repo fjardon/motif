@@ -64,6 +64,14 @@ extern Widget XmCreateFormDialog(
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
+extern Widget XmVaCreateForm(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedForm(
+                        Widget parent,
+                        char *name,
+                        ...);
 
 /********    End Public Function Declarations    ********/
 

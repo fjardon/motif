@@ -49,6 +49,18 @@ extern Widget XmCreateColumn();
 extern Widget XmColumnGetChildLabel();
 #endif
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateColumn(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedColumn(
+                        Widget parent,
+                        char *name,
+                        ...);
 #ifdef __cplusplus
 }
 #endif

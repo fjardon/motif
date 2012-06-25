@@ -148,6 +148,8 @@ XmBaselineMargins *margins_rec);
 static Widget GetPixmapDragIcon(Widget w);
 static void SetGadgetActivateCallbackState(Widget w, XmActivateState state);
 static void CheckSetRenderTable(Widget wid, int offset, XrmValue *value);
+static void FromPaddingPixels(Widget, int, XtArgVal *);
+static XmImportOperator ToPaddingPixels(Widget, int, XtArgVal*);
 static Boolean HandleRedraw(Widget kid,
 Widget cur_parent,
 Widget new_parent,
@@ -298,6 +300,18 @@ static XtResource resources[] =
         XmNhighlightThickness, XmCHighlightThickness, XmRHorizontalDimension,
         sizeof(Dimension), XtOffsetOf(XmGadgetRec, gadget.highlight_thickness),
         XmRImmediate, (XtPointer) 0
+    },
+    
+    {
+        XmNpixmapPlacement, XmCPixmapPlacement, XmRPixmapPlacement,
+        sizeof(unsigned int), XtOffsetOf(XmLabelGadgetRec, label.pixmap_placement),
+        XmRImmediate, (XtPointer) XmPIXMAP_LEFT
+    },
+    
+    {
+        XmNpixmapTextPadding, XmCSpace, XmRVerticalDimension,
+        sizeof(Dimension), XtOffsetOf(XmLabelGadgetRec, label.pixmap_text_padding),
+        XmRImmediate, (XtPointer) 2
     }
 };
 
@@ -485,6 +499,12 @@ static XmSyntheticResource syn_resources[] =
         XmNmnemonicCharSet,
         sizeof(XmStringCharSet), XtOffsetOf(XmLabelGadgetRec,label.mnemonicCharset),
         GetMnemonicCharset, NULL
+    },
+    
+    {
+        XmNpixmapTextPadding,
+	sizeof(Dimension), XtOffsetOf(XmLabelGadgetRec, label.pixmap_text_padding),
+        FromPaddingPixels, (XmImportProc) ToPaddingPixels
     }
 };
 
@@ -1305,12 +1325,18 @@ _XmCalcLabelGDimensions(Widget wid)
 
     /* initialize TextRect width and height to 0, reset if needed */
 
-    LabG_TextRect(newlw).width = 0;
-    LabG_TextRect(newlw).height = 0;
     LabG_AccTextRect(newlw).width = 0;
     LabG_AccTextRect(newlw).height = 0;
+    LabG_StringRect(newlw).x = 0;
+    LabG_StringRect(newlw).y = 0;
+    LabG_StringRect(newlw).width = 0;
+    LabG_StringRect(newlw).height = 0;
+    LabG_PixmapRect(newlw).x = 0;
+    LabG_PixmapRect(newlw).y = 0;
+    LabG_PixmapRect(newlw).width = 0;
+    LabG_PixmapRect(newlw).height = 0;
 
-    if (LabG_IsPixmap (newlw))
+    if (LabG_IsPixmap(newlw) || LabG_IsPixmapAndText(newlw))
     {
         if (XtIsSensitive(wid))
         {
@@ -1320,8 +1346,8 @@ _XmCalcLabelGDimensions(Widget wid)
                     NULL, NULL, NULL, NULL, NULL, NULL,
                     &w, &h);
 
-                LabG_TextRect(newlw).width = (unsigned short) w;
-                LabG_TextRect(newlw).height = (unsigned short) h;
+                LabG_PixmapRect(newlw).width = (unsigned short) w;
+                LabG_PixmapRect(newlw).height = (unsigned short) h;
             }
         }
         else
@@ -1337,27 +1363,13 @@ _XmCalcLabelGDimensions(Widget wid)
                     NULL, NULL, NULL, NULL, NULL, NULL,
                     &w, &h);
 
-                LabG_TextRect(newlw).width = (unsigned short) w;
-                LabG_TextRect(newlw).height = (unsigned short) h;
-            }
-        }
-
-        if (LabG__acceleratorText(newlw) != NULL)
-        {
-            /* If we have a string then size it. */
-            Dimension w,h;
-
-            if (!XmStringEmpty (LabG__acceleratorText(newlw)))
-            {
-                XmStringExtent(LabG_Font(newlw),
-                    LabG__acceleratorText(newlw), &w, &h);
-                LabG_AccTextRect(newlw).width = (unsigned short)w;
-                LabG_AccTextRect(newlw).height = (unsigned short)h;
+                LabG_PixmapRect(newlw).width = (unsigned short) w;
+                LabG_PixmapRect(newlw).height = (unsigned short) h;
             }
         }
     }
-
-    else if (LabG_IsText (newlw))
+	
+    if (LabG_IsText (newlw) || LabG_IsPixmapAndText(newlw))
     {
         Dimension w, h;
 
@@ -1365,19 +1377,124 @@ _XmCalcLabelGDimensions(Widget wid)
         if (!XmStringEmpty (LabG__label(newlw)))
         {
             XmStringExtent (LabG_Font(newlw), LabG__label(newlw), &w, &h);
-            LabG_TextRect(newlw).width = (unsigned short)w;
-            LabG_TextRect(newlw).height = (unsigned short)h;
+            LabG_StringRect(newlw).width = (unsigned short)w;
+            LabG_StringRect(newlw).height = (unsigned short)h;
         }
+    }
+    
+    _XmLabelGCalcTextRect(wid);
+    
+    if (LabG__acceleratorText(newlw) != NULL)
+    {
+        /* If we have a string then size it. */
+        Dimension w,h;
 
-        if (LabG__acceleratorText(newlw) != NULL)
+        if (!XmStringEmpty (LabG__acceleratorText(newlw)))
         {
-            /* If we have a string then size it. */
-            if (!XmStringEmpty (LabG__acceleratorText(newlw)))
+            XmStringExtent(LabG_Font(newlw),
+                    LabG__acceleratorText(newlw), &w, &h);
+            LabG_AccTextRect(newlw).width = (unsigned short)w;
+            LabG_AccTextRect(newlw).height = (unsigned short)h;
+        }
+    }
+}
+
+void 
+_XmLabelGCalcTextRect(Widget wid)
+{
+//  XmLabelWidget newlw = (XmLabelWidget) wid;
+//  XmLabelPart  *lp = &(newlw->label);
+  
+
+  LabG_TextRect(wid).width = 0;
+  LabG_TextRect(wid).height = 0;
+  
+  if (LabG_IsPixmap(wid))
+    {
+      LabG_TextRect(wid).width = LabG_PixmapRect(wid).width;
+      LabG_TextRect(wid).height = LabG_PixmapRect(wid).height;
+    }
+  else if (LabG_IsText(wid))
+    {
+      LabG_TextRect(wid).width = LabG_StringRect(wid).width;
+      LabG_TextRect(wid).height = LabG_StringRect(wid).height;
+    }
+  else if (LabG_IsPixmapAndText(wid))
+    {
+      if (LabG_PixmapPlacement(wid) == XmPIXMAP_TOP ||
+          LabG_PixmapPlacement(wid) == XmPIXMAP_BOTTOM)
+	{
+          LabG_TextRect(wid).height = LabG_PixmapRect(wid).height +
+          	LabG_StringRect(wid).height + LabG_PixmapTextPadding(wid);
+          LabG_TextRect(wid).width =
+          	MAX(LabG_StringRect(wid).width, LabG_PixmapRect(wid).width);
+	}
+      else if (LabG_PixmapPlacement(wid) == XmPIXMAP_LEFT ||
+	       LabG_PixmapPlacement(wid) == XmPIXMAP_RIGHT)
+        {
+          LabG_TextRect(wid).width = LabG_PixmapRect(wid).width +
+          	LabG_StringRect(wid).width + LabG_PixmapTextPadding(wid);
+          LabG_TextRect(wid).height =
+          	MAX(LabG_StringRect(wid).height, LabG_PixmapRect(wid).height);
+        }
+	  
+      if (LabG_PixmapPlacement(wid) == XmPIXMAP_TOP)
+        {
+	  LabG_PixmapRect(wid).y = 0;
+	  LabG_StringRect(wid).y =
+          	LabG_PixmapRect(wid).height + LabG_PixmapTextPadding(wid);
+        }
+      else if (LabG_PixmapPlacement(wid) == XmPIXMAP_BOTTOM)
+        {
+          LabG_StringRect(wid).y = 0;
+          LabG_PixmapRect(wid).y =
+          	LabG_StringRect(wid).height + LabG_PixmapTextPadding(wid);
+        }
+      else if ((LabG_PixmapPlacement(wid) == XmPIXMAP_RIGHT &&
+	        LayoutIsRtoLG(wid)) ||
+               (LabG_PixmapPlacement(wid) == XmPIXMAP_LEFT &&
+                !LayoutIsRtoLG(wid)))
+	{
+          LabG_PixmapRect(wid).x = 0;
+          LabG_StringRect(wid).x =
+          	LabG_PixmapRect(wid).width + LabG_PixmapTextPadding(wid);
+	}
+      else if ((LabG_PixmapPlacement(wid) == XmPIXMAP_LEFT &&
+                LayoutIsRtoLG(wid)) ||
+               (LabG_PixmapPlacement(wid) == XmPIXMAP_RIGHT &&
+                !LayoutIsRtoLG(wid)))
+	{
+	   LabG_StringRect(wid).x = 0;
+	   LabG_PixmapRect(wid).x =
+           	LabG_StringRect(wid).width + LabG_PixmapTextPadding(wid);
+	}
+	    
+      if (LabG_PixmapPlacement(wid) == XmPIXMAP_RIGHT ||
+	  LabG_PixmapPlacement(wid) == XmPIXMAP_LEFT)
+        {
+          LabG_PixmapRect(wid).y =
+          	(LabG_TextRect(wid).height - LabG_PixmapRect(wid).height) / 2;
+          LabG_StringRect(wid).y =
+          	(LabG_TextRect(wid).height - LabG_StringRect(wid).height) / 2;
+        }
+      else
+        {
+          if (LabG_Alignment(wid) == XmALIGNMENT_CENTER)
             {
-                XmStringExtent(LabG_Font(newlw), LabG__acceleratorText(newlw),
-                    &w, &h);
-                LabG_AccTextRect(newlw).width = w;
-                LabG_AccTextRect(newlw).height = h;
+              LabG_PixmapRect(wid).x =
+	        (LabG_TextRect(wid).width - LabG_PixmapRect(wid).width) / 2;
+              LabG_StringRect(wid).x =
+              	(LabG_TextRect(wid).width - LabG_StringRect(wid).width) / 2;
+            }
+          else if ((LabG_Alignment(wid) == XmALIGNMENT_END &&
+                     !LayoutIsRtoLG(wid)) ||
+                    (LabG_Alignment(wid) == XmALIGNMENT_BEGINNING &&
+                     LayoutIsRtoLG(wid)))
+            {
+              LabG_PixmapRect(wid).x =
+              	LabG_TextRect(wid).width - LabG_PixmapRect(wid).width;
+              LabG_StringRect(wid).x =
+              	LabG_TextRect(wid).width - LabG_StringRect(wid).width;
             }
         }
     }
@@ -1607,6 +1724,9 @@ Cardinal *num_args)
     if (!XmRepTypeValidValue(XmRID_ALIGNMENT, LabG_Alignment(new_w), new_w))
         LabG_Alignment(new_w) = XmALIGNMENT_CENTER;
 
+    if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, LabG_PixmapPlacement(new_w), new_w))
+        LabG_PixmapPlacement(new_w) = XmPIXMAP_LEFT;
+	
     #ifndef NO_XM_1_2_BC
     /*
      * Some pre-Motif 2.0 XmManager subclasses may be bypassing the
@@ -2187,7 +2307,7 @@ LRectangle *background_box)
 
     /*  Draw the pixmap or text  */
 
-    if (LabG_IsPixmap(lw))
+    if (LabG_IsPixmap(lw) || LabG_IsPixmapAndText(lw))
     {
         int depth;
 
@@ -2203,14 +2323,20 @@ LRectangle *background_box)
 
                 if (depth == XtParent(lw)->core.depth)
                     XCopyArea (XtDisplay(lw), Pix(lw), XtWindow(lw), gc, 0, 0,
-                        LabG_TextRect(lw).width, LabG_TextRect(lw).height,
-                        lw->rectangle.x + LabG_TextRect(lw).x,
-                        lw->rectangle.y + LabG_TextRect(lw).y);
+                        LabG_PixmapRect(lw).width, LabG_PixmapRect(lw).height,
+                        lw->rectangle.x + LabG_TextRect(lw).x +
+				LabG_PixmapRect(lw).x,
+                        lw->rectangle.y + LabG_TextRect(lw).y +
+				LabG_PixmapRect(lw).y);
                 else if (depth == 1)
                     XCopyPlane (XtDisplay(lw), Pix(lw), XtWindow(lw), gc, 0, 0,
-                            LabG_TextRect(lw).width, LabG_TextRect(lw).height,
-                            lw->rectangle.x + LabG_TextRect(lw).x,
-                            lw->rectangle.y + LabG_TextRect(lw).y, 1);
+                            LabG_PixmapRect(lw).width,
+			    LabG_PixmapRect(lw).height,
+                            lw->rectangle.x + LabG_TextRect(lw).x +
+				LabG_PixmapRect(lw).x,
+                            lw->rectangle.y + LabG_TextRect(lw).y +
+				LabG_PixmapRect(lw).y,
+			    1);
             }
         }
         else
@@ -2229,14 +2355,18 @@ LRectangle *background_box)
 
                 if (depth == XtParent(lw)->core.depth)
                     XCopyArea (XtDisplay(lw), pix_use, XtWindow(lw), gc, 0, 0,
-                        LabG_TextRect(lw).width, LabG_TextRect(lw).height,
-                        lw->rectangle.x + LabG_TextRect(lw).x,
-                        lw->rectangle.y + LabG_TextRect(lw).y);
+                        LabG_PixmapRect(lw).width, LabG_PixmapRect(lw).height,
+                        lw->rectangle.x + LabG_TextRect(lw).x +
+				LabG_PixmapRect(lw).x,
+                        lw->rectangle.y + LabG_TextRect(lw).y +
+				LabG_PixmapRect(lw).y);
                 else if (depth == 1)
                     XCopyPlane (XtDisplay(lw), pix_use, XtWindow(lw), gc, 0, 0,
-                            LabG_TextRect(lw).width, LabG_TextRect(lw).height,
-                            lw->rectangle.x + LabG_TextRect(lw).x,
-                            lw->rectangle.y + LabG_TextRect(lw).y, 1);
+                            LabG_PixmapRect(lw).width,
+			    LabG_PixmapRect(lw).height,
+                            lw->rectangle.x + LabG_TextRect(lw).x + LabG_PixmapRect(lw).x,
+                            lw->rectangle.y + LabG_TextRect(lw).y + LabG_PixmapRect(lw).y,
+			    1);
 
                 /* if no insensitive pixmap but a regular one, we need
                 to do the stipple manually, since copyarea doesn't */
@@ -2245,17 +2375,20 @@ LRectangle *background_box)
                     /* need fill stipple, not opaque */
                     XSetFillStyle(XtDisplay(lw), gc, FillStippled);
                     XFillRectangle(XtDisplay(lw), XtWindow(lw),
-                        gc, lw->rectangle.x + LabG_TextRect(lw).x,
-                        lw->rectangle.y + LabG_TextRect(lw).y,
-                        LabG_TextRect(lw).width,
-                        LabG_TextRect(lw).height);
+                        gc,
+			lw->rectangle.x + LabG_TextRect(lw).x +
+				LabG_PixmapRect(lw).x,
+                        lw->rectangle.y + LabG_TextRect(lw).y +
+				LabG_PixmapRect(lw).y,
+                        LabG_PixmapRect(lw).width,
+                        LabG_PixmapRect(lw).height);
                     XSetFillStyle(XtDisplay(lw), gc, FillOpaqueStippled);
                 }
             }
         }
     }
 
-    else if ((LabG_IsText (lw)) && (LabG__label(lw) != NULL))
+    if ((LabG_IsText(lw) || LabG_IsPixmapAndText(lw)) && (LabG__label(lw) != NULL))
     {
         LabelDrawBackground((Widget)lw, event, region, background_box);
         if (LabG_Mnemonic(lw) != XK_VoidSymbol)
@@ -2271,9 +2404,9 @@ LRectangle *background_box)
                 LabG_Font(lw), LabG__label(lw),
                 (XtIsSensitive(wid) ?
                 LabG_NormalGC(lw) : LabG_InsensitiveGC(lw)),
-                lw->rectangle.x + LabG_TextRect(lw).x,
-                lw->rectangle.y + LabG_TextRect(lw).y,
-                LabG_TextRect(lw).width, LabG_Alignment(lw),
+                lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+                lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+                LabG_StringRect(lw).width, LabG_Alignment(lw),
                 LayoutG(lw), NULL, underline);
             XmStringFree(underline);
         }
@@ -2282,9 +2415,9 @@ LRectangle *background_box)
                 LabG_Font(lw), LabG__label(lw),
                 (XtIsSensitive(wid) ?
                 LabG_NormalGC(lw) : LabG_InsensitiveGC(lw)),
-            lw->rectangle.x + LabG_TextRect(lw).x,
-            lw->rectangle.y + LabG_TextRect(lw).y,
-            LabG_TextRect(lw).width,
+            lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+            lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+            LabG_StringRect(lw).width,
             LabG_Alignment(lw), LayoutG(lw), NULL);
     }
 
@@ -2477,6 +2610,12 @@ Cardinal *num_args)                               /* unused */
         LabG_LabelType(new_w) = LabG_LabelType(current);
     }
 
+    if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, LabG_PixmapPlacement(new_w),
+        (Widget) new_w))
+    {
+        LabG_PixmapPlacement(new_w) = LabG_PixmapPlacement(current);
+    }
+
     if (LayoutG(new_w) != LayoutG(current))
     {
         /* If no new margins specified swap them */
@@ -2492,15 +2631,17 @@ Cardinal *num_args)                               /* unused */
 
     /* ValidateInputs(new_w); */
 
-    if ((LabG_IsText(new_w) &&
+    if (((LabG_IsText(new_w) || LabG_IsPixmapAndText(new_w)) &&
         (newstring || (LabG_Font(new_w) != LabG_Font(current)))) ||
-        (LabG_IsPixmap(new_w) &&
+        ((LabG_IsPixmap(new_w) || LabG_IsPixmapAndText(new_w)) &&
         ((LabG_Pixmap(new_w) != LabG_Pixmap(current)) ||
         (LabG_PixmapInsensitive(new_w) != LabG_PixmapInsensitive(current)) ||
         /* When you have different sized pixmaps for sensitive and */
         /* insensitive states and sensitivity changes, */
         /* the right size is chosen. (osfP2560) */
         (XtIsSensitive(nw) != XtIsSensitive(cw)))) ||
+	(LabG_IsPixmapAndText(new_w) &&
+	LabG_PixmapPlacement(new_w) != LabG_PixmapPlacement(current)) ||
         (LabG_LabelType(new_w) != LabG_LabelType(current)))
     {
         /* CR 9179: back out CR 5419 changes. */
@@ -2542,7 +2683,8 @@ Cardinal *num_args)                               /* unused */
         (new_w->gadget.shadow_thickness != current->gadget.shadow_thickness) ||
         (new_w->gadget.highlight_thickness !=
         current->gadget.highlight_thickness) ||
-        ((new_w->rectangle.width <= 0) || (new_w->rectangle.height <= 0)))
+        ((new_w->rectangle.width <= 0) || (new_w->rectangle.height <= 0)) ||
+        (LabG_PixmapTextPadding(new_w) != LabG_PixmapTextPadding(current)))
     {
         if (LabG_RecomputeSize(new_w))
         {
@@ -2654,7 +2796,8 @@ Cardinal *num_args)                               /* unused */
     {
         /* New grabs only required if mnemonic changes */
         ProcessFlag = TRUE;
-        if (LabG_LabelType(new_w) == XmSTRING)
+        if (LabG_LabelType(new_w) == XmSTRING ||
+	   LabG_LabelType(new_w) == XmPIXMAP_AND_STRING)
             flag = TRUE;
     }
 
@@ -2670,7 +2813,8 @@ Cardinal *num_args)                               /* unused */
         if (LabG_MnemonicCharset (current) != NULL)
             XtFree(LabG_MnemonicCharset(current));
 
-        if (LabG_LabelType(new_w) == XmSTRING)
+        if (LabG_LabelType(new_w) == XmSTRING ||
+	   LabG_LabelType(new_w) == XmPIXMAP_AND_STRING)
             flag = TRUE;
     }
 
@@ -3651,6 +3795,51 @@ XrmValue *value)
     }
 }
 
+/**************************************************************************
+ * FromPaddingPixels
+ *
+ * Converts from pixels to current unit type does either horiz or vert
+ * depending on icon placement.
+ *  widget - the icon button widget.
+ *  offset, value - passed to correct function based on orientation.
+ **************************************************************************/
+  
+static void
+FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
+{
+    switch(LabG_PixmapPlacement(widget)) {
+    case XmPIXMAP_TOP:
+    case XmPIXMAP_BOTTOM:
+	XmeFromVerticalPixels(widget, offset, value);
+	break;
+    default:			/* everything else is horiz. */
+	XmeFromHorizontalPixels(widget, offset, value);
+	break;
+    }
+}
+    
+/**************************************************************************
+ * ToPaddingPixels
+ *
+ * Converts from pixels to current unit type does either horiz or vert
+ * depending on icon placement.
+ *  widget - the icon button widget.
+ *  offset, value - passed to correct function based on orientation.
+ * Returns the import order from _XmTo{Horizontal, Vertical}Pixels.
+ **************************************************************************/
+
+static XmImportOperator
+ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
+{
+    switch(LabG_PixmapPlacement(widget)) {
+    case XmPIXMAP_TOP:
+    case XmPIXMAP_BOTTOM:
+	return(XmeToVerticalPixels(widget, offset, value));
+    default:
+	return(XmeToHorizontalPixels(widget, offset, value));
+    }
+}
+    
 
 static char*
 GetLabelGadgetAccelerator(Widget w)

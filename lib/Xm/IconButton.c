@@ -28,12 +28,16 @@
 
 #include <Xm/XmP.h>
 #include <Xm/DrawP.h>
+#include <Xm/TraitP.h>
+#include <Xm/ActivatableT.h>
 #include <stdio.h>
 #include <Xm/IconButtonP.h>
 #include <X11/bitmaps/gray>
 #include <Xm/ExtP.h>
+#include "PrimitiveI.h"
 #include "XmStrDefsI.h"
 #include "xmlist.h"
+#include "RepTypeI.h"
 
 /************************************************************
 *	TYPEDEFS AND DEFINES
@@ -92,7 +96,7 @@ static void SetValuesAlmost(Widget, Widget,
 			    XtWidgetGeometry *,  XtWidgetGeometry *);
 
 static void GetValues_labelString ( Widget w, int n, XtArgVal *value) ;
-
+static void ChangeCB(Widget w, XtCallbackProc activCB, XtPointer closure, Boolean setunset);
 
 /************************
  * Actions and callbacks.
@@ -125,6 +129,7 @@ static void CreateGCs(Widget), DestroyGCs(Widget w);
 static void FromPaddingPixels(Widget, int, XtArgVal *);
 static XmImportOperator ToPaddingPixels(Widget, int, XtArgVal *);
 static XmString CreateXmString(Widget, String);
+static void CheckSetRenderTable(Widget wid, int offs, XrmValue *value); 
 
 /******************
  * Type Converters
@@ -213,14 +218,18 @@ static XmPartResource resources[] = {
      offset(label_string), XmRImmediate, (XtPointer) NULL},
   {XmNpixmap, XmCPixmap, XmRPrimForegroundPixmap, sizeof(Pixmap),
      offset(pixmap), XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP},
-  {XmNfontList,	XmCFontList, XmRFontList, sizeof (XmFontList),
-     offset (font_list), XmRImmediate, (XtPointer) NULL},
+  {"pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
+     offset (check_set_render_table), XmRImmediate, (XtPointer) False},
+  {XmNfontList, XmCFontList, XmRFontList, sizeof (XmFontList),
+     offset (font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
+  {XmNrenderTable, XmCRenderTable, XmRRenderTable, sizeof(XmRenderTable),
+     offset (font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
   {XmNalignment, XmCAlignment, XmRAlignment, sizeof(unsigned char),
      offset(alignment), XmRImmediate,(XtPointer) XmALIGNMENT_BEGINNING},
   {XmNstringDirection, XmCStringDirection,
      XmRStringDirection, sizeof(unsigned char),
      offset(string_direction), XmRImmediate,
-       (XtPointer) XmSTRING_DIRECTION_L_TO_R},
+       (XtPointer) XmDEFAULT_DIRECTION},
   {XmNiconPlacement, XmCIconPlacement, 
      XmRXmIconPlacement, sizeof(XmIconPlacement),
      offset (icon_placement), XmRImmediate, (XtPointer) XmIconTop},
@@ -274,7 +283,7 @@ XmIconButtonClassRec xmIconButtonClassRec = {
     /* class_name		*/	XM_ICON_BUTTON_CLASS_NAME,
     /* widget_size		*/	sizeof(XmIconButtonPart),
     /* class_initialize		*/	ClassInit,
-    /* class_part_initialize	*/	NULL,
+    /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
     /* initialize		*/	Initialize,
     /* initialize_hook		*/	NULL,
@@ -318,6 +327,13 @@ XmIconButtonClassRec xmIconButtonClassRec = {
 };
 
 WidgetClass xmIconButtonWidgetClass = (WidgetClass)&xmIconButtonClassRec;
+
+/* Trait record for iconButton */
+static XmConst XmActivatableTraitRec iconButtonAT = 
+{
+  0,				/* version	*/
+  ChangeCB			/* changeCB	*/
+};
 
 /************************************************************
 *	STATIC CODE
@@ -366,6 +382,9 @@ ClassPartInitialize(WidgetClass w_class)
 #endif /* _NO_PROTO */
 {
     _XmFastSubclassInit (w_class, XmICONBUTTON_BIT );
+
+    /* Install the activatable trait for all subclasses */
+    XmeTraitSet((XtPointer)w_class, XmQTactivatable, (XtPointer) &iconButtonAT);
 }
 
 
@@ -444,6 +463,31 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
         IncPixCache(XtDisplay(set), XmIconButton_pixmap(iw));
     }
 
+    /* If layout_direction is set, it overrides string_direction.
+     * If string_direction is set, but not layout_direction, use
+     *	string_direction value.
+     * If neither is set, get from parent 
+     */
+    if (XmPrim_layout_direction(iw) != XmDEFAULT_DIRECTION) {
+	if (XmIconButton_string_direction(iw) == XmDEFAULT_DIRECTION) 
+	    XmIconButton_string_direction(iw) =
+		XmDirectionToStringDirection(XmPrim_layout_direction(iw));
+    } else if (XmIconButton_string_direction(iw) != XmDEFAULT_DIRECTION) {
+	XmPrim_layout_direction(iw) =
+	    XmStringDirectionToDirection(XmIconButton_string_direction(iw));
+    } else {
+	XmPrim_layout_direction(iw) = _XmGetLayoutDirection(XtParent(set));
+	XmIconButton_string_direction(iw) =
+	    XmDirectionToStringDirection(XmPrim_layout_direction(iw));
+    }
+  
+    if (!XmRepTypeValidValue(XmRID_STRING_DIRECTION,
+	    XmIconButton_string_direction(iw), (Widget) iw))
+    {
+	XmIconButton_string_direction(iw) = XmSTRING_DIRECTION_L_TO_R;
+	XmPrim_layout_direction(iw) =
+	    XmStringDirectionToDirection(XmIconButton_string_direction(iw));
+    }
 
     if (XmIconButton_font_list(iw) == NULL)
     {
@@ -719,11 +763,11 @@ SetValues(Widget current, Widget request, Widget set,
 	recalc = redisplay = TRUE;
     }
 
-
     if ((XmIconButton_set(old_iw) != XmIconButton_set(set_iw)) ||
 	(XmIconButton_alignment(old_iw) != XmIconButton_alignment(set_iw)) ||
-	(XmIconButton_string_direction(old_iw) != XmIconButton_string_direction(set_iw)))
-    {
+	(XmIconButton_string_direction(old_iw) != XmIconButton_string_direction(set_iw)) ||
+        (XmPrim_layout_direction(old_iw) != XmPrim_layout_direction(set_iw)))
+    {	    
 	redisplay = TRUE;
     }
 
@@ -1655,7 +1699,7 @@ static void
 			 XmIconButton_label_string(iw), text_gc, 
 			 XmIconButton_text_x(iw), XmIconButton_text_y(iw),
 			 XmIconButton_max_text_width(iw), XmIconButton_alignment(iw),
-			 XmIconButton_string_direction(iw), NULL);
+			 XmPrim_layout_direction(iw), NULL);
 	    XSetClipMask(XtDisplay(w), text_gc, None);
 	}
     }
@@ -1817,6 +1861,53 @@ CreateXmString(Widget w, String str)
     }
     return(NULL);
 }	   
+
+/*
+ * XmRCallProc routine for checking font_list before setting it to NULL
+ * If "check_set_render_table" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetRenderTable(Widget wid,
+		    int offs,
+		    XrmValue *value)
+{
+  XmIconButtonWidget lw = (XmIconButtonWidget)wid;
+
+  /* Check if been here before */
+  if (lw->icon.check_set_render_table)
+      value->addr = NULL;
+  else {
+      lw->icon.check_set_render_table = True;
+      value->addr = (char*)&(lw->icon.font_list);
+  }
+
+}
+
+/*	Function name: ChangeCB
+ *	Description: add or remove the activate callback list.
+ *	Arguments:   w - the child widget ha— its list of callbacks modified
+ *	             activCB - the callback to add or remove from
+ *	             closure - additional data to be passed to the callback
+ *	             setunset - set/unset flag
+ *	Returns: none
+ */
+
+static void 
+ChangeCB(
+	 Widget w, 
+	 XtCallbackProc activCB,
+	 XtPointer closure,
+	 Boolean setunset)
+{
+  if (setunset)
+    XtAddCallback (w, XmNactivateCallback, activCB, closure);
+  else
+    XtRemoveCallback (w, XmNactivateCallback, activCB, closure);
+}
 
 /************************************************************
  *

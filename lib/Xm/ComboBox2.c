@@ -38,6 +38,7 @@
 #include <Xm/Xm.h>
 #include <Xm/XmP.h>
 #include "XmI.h"
+#include <Xm/VaSimpleP.h>
 #include <Xm/DrawP.h>
 
 #include <Xm/ComboBox2P.h>
@@ -118,6 +119,7 @@ static XtGeometryResult GeometryManager(Widget,
 static XtGeometryResult QueryGeometry(Widget,
 				      XtWidgetGeometry *, XtWidgetGeometry *);
 
+static void ClassPartInitialize(WidgetClass);
 static void ClassInitialize();
 static void ExposeMethod(Widget, XEvent*, Region);
 
@@ -238,7 +240,7 @@ XmCombinationBox2ClassRec xmCombinationBox2ClassRec = {
     /* class_name		*/	"XmCombinationBox2",
     /* widget_size		*/	sizeof(XmCombinationBox2Part),
     /* class_initialize		*/	ClassInitialize,
-    /* class_part_initialize	*/	NULL,
+    /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
     /* initialize		*/	Initialize,
     /* initialize_hook		*/	NULL,
@@ -371,6 +373,19 @@ ClassInitialize()
 			    &XmCombinationBox2_offsets);
     }
     _XmProcessUnlock();
+}
+
+/*	Function Name: ClassPartInitialize
+ *	Description:   class_part_initialize method for XmCombinationBox2
+ *	Arguments:     w_class - the widget class.
+ *	Returns:       nothing
+ */
+
+/*ARGSUSED*/
+static void
+ClassPartInitialize(WidgetClass w_class)
+{
+      _XmFastSubclassInit (w_class, XmCOMBINATION_BOX_2_BIT);
 }
 
 /*	Function Name: Initialize
@@ -821,8 +836,12 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
     if(!XmComboBox2_new_visual_style(cbw))
 	return;
 
-    x = text->core.x - text->core.border_width -
-	cbw->manager.shadow_thickness;
+    if (LayoutIsRtoLM(cbw))
+	x = arrow->core.x - arrow->core.border_width -
+	    cbw->manager.shadow_thickness;
+    else
+	x = text->core.x - text->core.border_width -
+	    cbw->manager.shadow_thickness;
 
     y = text->core.y - text->core.border_width -
 	cbw->manager.shadow_thickness;
@@ -834,7 +853,7 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
     h = text->core.height + 2*text->core.border_width +
 	2*cbw->manager.shadow_thickness;
 
-    _XmDrawShadows(XtDisplay(cbw), XtWindow(cbw),
+    XmeDrawShadows(XtDisplay(cbw), XtWindow(cbw),
 		   cbw->manager.top_shadow_GC,
 		   cbw->manager.bottom_shadow_GC,
 		   x, y, w, h,
@@ -904,7 +923,7 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 			   (XtPointer) &cbdata);
     }
     else {
-	if (success = PopupList((Widget) cbw))
+	if ((success = PopupList((Widget) cbw)) == True)
 	{
 	    cbdata.reason = XmCR_UPDATE_SHELL;
 	    cbdata.event = (arrow == NULL ? NULL : arrow->event);
@@ -1185,8 +1204,8 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
     list_data = (XmListCallbackStruct *) list_data_ptr;
 
     if ((list_data->reason == XmCR_BROWSE_SELECT) &&
-	((list_data->event == NULL) ||
-	 (list_data->event->xany.type != ButtonPress) &&
+	(((list_data->event == NULL) ||
+	  (list_data->event->xany.type != ButtonPress)) &&
 	 (list_data->event->xany.type != ButtonRelease)))
     {
 	/* 
@@ -1438,7 +1457,7 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
     Dimension width, height, rwidth, rheight, child_height;
     Dimension text_width, label_width, label_bw;
     Dimension shadow;
-    Position arrow_x, text_x;
+    Position label_x, arrow_x, text_x;
     XtWidgetGeometry arrow_geom, label_geom, text_geom;
     Widget label = NULL;
     Widget text = XmComboBox2_text(cbw);
@@ -1480,15 +1499,25 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
     }
 
     child_height = rheight - 2 * XmComboBox2_v_space(cbw);
-    arrow_x = (rwidth - (arrow_geom.width + 2 * arrow_geom.border_width) \
+    if (LayoutIsRtoLM(cbw)) {
+	arrow_x = XmComboBox2_h_space(cbw);
+	label_x = (rwidth - (label_width + 2 * label_geom.border_width) \
 	       - XmComboBox2_h_space(cbw));
-
-    text_x = label_width + 2*label_geom.border_width + \
-	XmComboBox2_h_space(cbw);
-
+	text_x = label_x - text_width - 2*text_geom.border_width;
+    } else {
+	label_x = XmComboBox2_h_space(cbw);
+	arrow_x = (rwidth - (arrow_geom.width + 2 * arrow_geom.border_width) \
+	       - XmComboBox2_h_space(cbw));
+	text_x = label_width + 2*label_geom.border_width + \
+	       XmComboBox2_h_space(cbw);
+    }
+    
     if (XmComboBox2_show_label(cbw)) 
     {
-	text_x += XmComboBox2_h_space(cbw);
+	if (!LayoutIsRtoLM(cbw))
+	    text_x += XmComboBox2_h_space(cbw);
+	else
+	    text_x -= XmComboBox2_h_space(cbw);
     }
     else
     {
@@ -1500,8 +1529,16 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
     {
 	shadow        = cbw->manager.shadow_thickness;
 	child_height -= 2 * shadow;
-	arrow_x      -= shadow;
-	text_x       += shadow;
+	if (LayoutIsRtoLM(cbw))
+	{
+	    arrow_x      += shadow;
+	    text_x       -= shadow;
+	}
+	else
+	{
+	    arrow_x      -= shadow;
+	    text_x       += shadow;
+	}
     }
     else 
     {
@@ -1513,23 +1550,23 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
      */
     if (XmComboBox2_show_label(cbw)) 
     {
-	_XmConfigureWidget(label, XmComboBox2_h_space(cbw),
+	_XmConfigureWidget(label, label_x, //XmComboBox2_h_space(cbw),
 			   XmComboBox2_v_space(cbw), 
 			   label_width, 
 			   child_height - 2 * label_geom.border_width,
 			   label_geom.border_width);
     }	
 
+    _XmConfigureWidget(text, text_x,
+		       XmComboBox2_v_space(cbw) + shadow, 
+		       text_width, child_height - 2 * text_geom.border_width, 
+		       text_geom.border_width);
+
     _XmConfigureWidget(arrow, arrow_x,
 		       XmComboBox2_v_space(cbw) + shadow,
 		       arrow_geom.width, 
 		       child_height - 2 * arrow_geom.border_width,
 		       arrow_geom.border_width);
-
-    _XmConfigureWidget(text, text_x,
-		       XmComboBox2_v_space(cbw) + shadow, 
-		       text_width, child_height - 2 * text_geom.border_width, 
-		       text_geom.border_width);
 
 }
 
@@ -1965,6 +2002,9 @@ PopupList(Widget w)
 
     num_args = 0;
 
+    if (LayoutIsRtoLM(w))
+    temp = XmComboBox2_arrow(cbw)->core.x + XmComboBox2_popup_offset(cbw);
+    else
     temp = XmComboBox2_text_x(cbw) + XmComboBox2_popup_offset(cbw);
     x += temp;
 
@@ -2335,6 +2375,53 @@ XmCreateCombinationBox2(Widget parent, String name,
 {
     return(XtCreateWidget(name, xmCombinationBox2WidgetClass,
 			  parent, args, num_args));
+}
+
+Widget 
+XmVaCreateCombinationBox2(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmCombinationBox2WidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedCombinationBox2(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmCombinationBox2WidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }
 
 /*      Function Name:  XmCombinationBox2GetLabel

@@ -994,7 +994,8 @@ _XmTearOffInitiate(
      XtSetArg(args[0], XmNlabelType, &label_type); 
      XtGetValues((Widget)lwid, args, 1);
 
-     if (label_type == XmSTRING)	/* better be a compound string! */
+     /* better be a compound string! */
+     if (label_type == XmSTRING || label_type == XmPIXMAP_AND_STRING)
        {
 	 XmString title_xms, suffix_xms;
 

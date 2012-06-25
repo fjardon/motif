@@ -100,6 +100,19 @@ extern Widget XmMessageBoxGetChild(
                         unsigned char child) ;
 #endif /* NeedWidePrototypes */
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateMessageBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedMessageBox(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 /********    End Public Function Declarations    ********/
 
 

@@ -36,8 +36,9 @@
 #include "ColorSP.h"
 
 #include <Xm/Xm.h>
-#include <Xm/ButtonBox.h>
+#include <Xm/VaSimpleP.h>
 
+#include <Xm/ButtonBox.h>
 #include <Xm/Scale.h>
 #include <Xm/ScrolledW.h>
 #include <Xm/List.h>
@@ -319,6 +320,7 @@ Initialize(Widget request, Widget set, ArgList args, Cardinal *num_args)
     XmColorSelectorWidget	csw = (XmColorSelectorWidget)set;
     Dimension			width, height;
     String 			temp;
+    char			message_buffer[BUFSIZ];
     ArgList 			f_args;
     Cardinal 			f_num_args;
     Widget			button;
@@ -344,18 +346,8 @@ Initialize(Widget request, Widget set, ArgList args, Cardinal *num_args)
     read_rgb_file(csw, f_args, f_num_args, True);
 
     if (!color_name_changed(csw, temp)) {
-	static String params[] = {"XmColorSelector", NULL};
-	static Cardinal num = 2;
-
-	params[1] = temp;
-
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XmNunparsableColor, 
-			XmNunparsableColor,
-			XmCICSWidgetSetError, 
-			XmNunparsableColorMsg, 
-			params, 
-			&num);
+        snprintf(message_buffer, BUFSIZ, XmNunparsableColorMsg, temp);
+	XmeWarning((Widget)set, message_buffer);
 
 	(void) color_name_changed(csw, "White");
     }
@@ -505,6 +497,7 @@ SetValues(Widget current, Widget request, Widget set,
     {
 	String		oldValue;	/* old color name, will free. */
 	String		newValue;	/* new color name, allocate   */
+	char            string_buffer[BUFSIZ];
 	
 	oldValue = XmColorS_color_name(curr);
 	newValue = XmColorS_color_name(csw);
@@ -518,15 +511,8 @@ SetValues(Widget current, Widget request, Widget set,
 
 	    XmColorS_color_name(csw) = oldValue; /* so it free's the right thing. */
 	    if (!color_name_changed(csw, newValue)) {
-		static String params[] = {"XmColorSelector", NULL};
-		static Cardinal num = 2;
-		
-		params[1] = newValue;
-		
-		XtAppWarningMsg(XtWidgetToApplicationContext(set),
-				XmNunparsableColor, XmNunparsableColor,
-				XmCICSWidgetSetError, XmNunparsableColorMsg, 
-				params, &num);
+		snprintf(string_buffer, BUFSIZ, XmNunparsableColorMsg, newValue);
+		XmeWarning(set, string_buffer);
 
 		XmColorS_color_name(csw) = oldValue;
 	    }
@@ -1163,6 +1149,7 @@ read_rgb_file(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args, Bool
 {
     FILE *file;
     char buf[BUFSIZ];
+    char string_buffer[BUFSIZ];
     char *color_name;
     ColorInfo * color_info = NULL;
     register int i;
@@ -1245,17 +1232,10 @@ read_rgb_file(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args, Bool
 
 	    len = strlen(color_name);
 	    if (len > XmColorSelector_COLOR_NAME_SIZE) {
-		static String params[] = {"XmColorSelector", NULL, NULL};
-		static Cardinal num = 3;
 		color_name[XmColorSelector_COLOR_NAME_SIZE - 1] = '\0';
-
-		params[1] = buf;
-		params[2] = color_name;
-
-		XtAppWarningMsg(XtWidgetToApplicationContext((Widget) csw),
-				XmNcolorNameTooLong, XmNcolorNameTooLong,
-				XmCICSWidgetSetError, XmNcolorNameTooLongMsg,
-				params, &num);
+		snprintf(string_buffer, BUFSIZ,
+			 XmNcolorNameTooLongMsg, buf, color_name);
+		XmeWarning((Widget)csw, string_buffer);
 	    }
 
 	    name = color_info[count].no_space_lower_name;
@@ -1769,7 +1749,49 @@ XmCreateColorSelector(Widget parent, String name,
 			  parent, args, num_args));
 }
 
+Widget 
+XmVaCreateColorSelector(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
 
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmColorSelectorWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
 
-
-
+Widget
+XmVaCreateManagedColorSelector(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmColorSelectorWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
+}

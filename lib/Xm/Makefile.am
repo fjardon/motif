@@ -26,13 +26,13 @@ EXTRA_HDRS = Ext.h ExtP.h  \
              Paned.h PanedP.h FontS.h FontSP.h \
              IconBox.h IconBoxP.h IconButton.h IconButtonP.h xmlist.h \
              Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
-             Table.h TableP.h TabBox.h TabBoxP.h TabStack.h TabStackP.h \
+             TabBox.h TabBoxP.h TabStack.h TabStackP.h \
              TabList.h DrawUtils.h Tree.h TreeP.h ComboBox2.h ComboBox2P.h
 
 EXTRA_SRCS = XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
              Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
-             Hierarchy.c Outline.c Table.c TabBox.c TabList.c TabStack.c \
+             Hierarchy.c Outline.c TabBox.c TabList.c TabStack.c \
              DrawUtils.c Tree.c ComboBox2.c XmStrDefs.ht  XmStrDefsI.ht
 
 SLIDE_HDRS = SlideC.h SlideCP.h

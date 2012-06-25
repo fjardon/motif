@@ -59,6 +59,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include <Xm/TraitP.h>
 #include <Xm/TransferT.h>
 #include <Xm/TransltnsP.h>
+#include <Xm/VaSimpleP.h>
 #include "ColorI.h"
 #include "DisplayI.h"
 #include "DrawI.h"
@@ -9597,6 +9598,53 @@ XmCreateList(Widget parent,
 	     Cardinal argCount)
 {
   return XtCreateWidget(name, xmListWidgetClass, parent, args, argCount);
+}
+
+Widget 
+XmVaCreateList(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmListWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedList(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmListWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }
 
 /************************************************************************

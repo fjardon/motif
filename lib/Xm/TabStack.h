@@ -53,6 +53,19 @@ extern void   XmTabStackSelectTab(Widget, Boolean);
 extern Widget XmTabStackIndexToWidget(Widget, int);
 extern Widget XmTabStackXYToWidget(Widget, int, int);
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateTabStack(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedTabStack(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif

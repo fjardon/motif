@@ -32,6 +32,7 @@
 #include <Xm/GadgetP.h>
 #include <Xm/SlideC.h>
 #include "BaseClassI.h"
+#include "XmI.h"
 
 typedef XmVendorShellExtPart XmToolTipDataStruct;
 
@@ -133,6 +134,21 @@ ToolTipUnpost(XtPointer client_data, XtIntervalId *id)
 }
 
 static void
+ChangeLayoutDirection(Widget *label, XmDirection direction)
+{
+    /* we can't change layout direction after initialization */
+    char s[200];
+    Widget new_label =
+	XtVaCreateWidget("TipLabel",
+	    xmLabelWidgetClass, XtParent(*label),
+	    XmNlayoutDirection, direction,
+	    NULL);
+    XtDestroyWidget(*label);
+    *label = new_label;
+    XtManageChild(*label);
+}
+
+static void
 ToolTipPostFinish(Widget slide, XtPointer client_data, XtPointer call_data)
 {
     XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
@@ -184,6 +200,11 @@ ToolTipPost(XtPointer client_data, XtIntervalId *id)
 	    XtRemoveTimeOut(TipData->duration_timer);
 	    TipData->duration_timer = (XtIntervalId)NULL;
 	}
+	
+        /* check if we should change layout direction */
+        if (GetLayout(TipData->label) != GetLayout(w))
+	    ChangeLayoutDirection(&TipData->label, GetLayout(w));
+	
 	if (XmIsPrimitive(w))
 	{
 	    XtVaSetValues(TipData->label,

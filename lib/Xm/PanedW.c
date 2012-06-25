@@ -43,6 +43,7 @@ static char rcsid[] = "$TOG: PanedW.c /main/24 1999/07/13 07:46:01 mgreess $"
 #include <Xm/PanedWP.h>
 #include <Xm/SeparatoG.h>
 #include <Xm/SashP.h>
+#include <Xm/VaSimpleP.h>
 #include "MessagesI.h"
 #include "RepTypeI.h"
 
@@ -2619,4 +2620,51 @@ XmCreatePanedWindow(
 {
     return (XtCreateWidget(name, xmPanedWindowWidgetClass,
                                    parent, args, argCount));
+}
+
+Widget 
+XmVaCreatePanedWindow(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmPanedWindowWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedPanedWindow(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmPanedWindowWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }

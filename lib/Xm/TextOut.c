@@ -4169,24 +4169,32 @@ OutputSetValues(Widget oldw,
   
   /* Don't word wrap, have multiple row or have vertical scrollbars
      if editMode is single_line */
-  if (newtw->text.edit_mode != oldtw->text.edit_mode)
+  if (newtw->text.edit_mode != oldtw->text.edit_mode) {
+    if (newtw->text.edit_mode == XmSINGLE_LINE_EDIT)
+	newdata->rows = 1;
+    
     if(XmDirectionMatch(XmPrim_layout_direction(newtw),
 			XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       if (newtw->text.edit_mode == XmSINGLE_LINE_EDIT) {
-	newdata->rows = 1;
-	o_redisplay = True;
 	if (data->hbar) XtUnmanageChild(data->hbar);
       } else {
 	if (data->hbar) XtManageChild(data->hbar);
       }
-    if (newtw->text.edit_mode == XmSINGLE_LINE_EDIT) {
-      newdata->rows = 1;
-      o_redisplay = True;
-      if (data->vbar) XtUnmanageChild(data->vbar);
+      if (newtw->text.edit_mode == XmSINGLE_LINE_EDIT) {
+        if (data->vbar) XtUnmanageChild(data->vbar);
+      } else {
+        if (data->vbar) XtManageChild(data->vbar);
+      }
     } else {
-      if (data->vbar) XtManageChild(data->vbar);
+      if (data->hbar) XtManageChild(data->hbar);
+      if (newtw->text.edit_mode != XmSINGLE_LINE_EDIT) {
+          if (data->vbar) XtManageChild(data->vbar);
+      } else {
+          if (data->vbar) XtUnmanageChild(data->vbar);
+      }
     }
-    }
+    o_redisplay = True;
+  }
   
   /*  what is called margin, in this code, is composed of margin, shadow, and
       highlight.   Previously, only margin was accomodated.   This addition

@@ -48,6 +48,7 @@
 #include <Xm/TraitP.h>
 #include <Xm/TransltnsP.h>
 #include <Xm/VendorS.h>
+#include <Xm/VaSimpleP.h>
 #include "GeoUtilsI.h"
 #include "MenuShellI.h"
 #include "MessagesI.h"
@@ -3371,6 +3372,53 @@ XmCreateDropDownList(Widget   parent,
   XtFree((char *)merged_args);
 
   return result;
+}
+
+Widget 
+XmVaCreateComboBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    register Widget w;
+    va_list var;
+    int count;
+    
+    Va_start(var,name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmComboBoxWidgetClass,
+                         parent, False, 
+                         var, count);
+    va_end(var);   
+    return w;
+}
+
+Widget
+XmVaCreateManagedComboBox(
+        Widget parent,
+        char *name,
+        ...)
+{
+    Widget w = NULL;
+    va_list var;
+    int count;
+    
+    Va_start(var, name);
+    count = XmeCountVaListSimple(var);
+    va_end(var);
+    
+    Va_start(var, name);
+    w = XmeVLCreateWidget(name, 
+                         xmComboBoxWidgetClass,
+                         parent, True, 
+                         var, count);
+    va_end(var);   
+    return w;
 }
 
 /*

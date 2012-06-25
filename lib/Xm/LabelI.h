@@ -42,6 +42,7 @@ extern void _XmCalcLabelDimensions(Widget wid) ;
 extern void _XmLabelCloneMenuSavvy(WidgetClass, XmMenuSavvyTrait);
 extern char* _XmCBNameActivate(void);
 extern char* _XmCBNameValueChanged(void);
+extern void _XmLabelCalcTextRect(Widget wid) ;
 
 
 /********    End Private Function Declarations    ********/

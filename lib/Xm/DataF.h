@@ -49,6 +49,19 @@ Widget, String, ArgList, Cardinal
 #endif
 );
 
+/*
+ * Variable argument list functions
+ */
+
+extern Widget XmVaCreateDataField(
+                        Widget parent,
+                        char *name,
+                        ...);
+extern Widget XmVaCreateManagedDataField(
+                        Widget parent,
+                        char *name,
+                        ...);
+
 Boolean _XmDataFieldReplaceText(
 #ifndef _NO_PROTO
 XmDataFieldWidget, XEvent*, XmTextPosition, XmTextPosition, char*, int, Boolean
