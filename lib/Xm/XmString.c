@@ -1951,7 +1951,7 @@ XmStringCompare(
 	return FALSE;
   }
 
-  if (_XmStrOptimized(a)) {
+  if (_XmStrOptimized(a) && _XmStrOptimized(b)) {
     if (!((_XmStrTagGet(a) == _XmStrTagGet(b)) ||
 	  (_XmStrTagGet(a) == NULL) ||
 	  (_XmStrTagGet(b) == NULL) ||
@@ -1980,18 +1980,36 @@ XmStringCompare(
     }
   } else {
     int i, j;
-    _XmStringEntry *entry_a = _XmStrEntry(a);
-    _XmStringEntry *entry_b = _XmStrEntry(b);
-    
-    if (_XmStrEntryCount(a) != _XmStrEntryCount(b)) {
+    _XmStringEntry *entry_a;
+    _XmStringEntry *entry_b;
+    XmString a_unopt = NULL;
+    XmString b_unopt = NULL;
+
+    if (_XmStrEntryCountGet(a) != _XmStrEntryCountGet(b)) {
       _XmProcessUnlock();
       return (FALSE);
     }
-    
-    for (i = 0; i < _XmStrEntryCount(a); i++) {
+
+    if (_XmStrOptimized(a)) {
+      a_unopt = _XmStringOptToNonOpt((_XmStringOpt)a);
+      entry_a = _XmStrEntry(a_unopt);
+    } else {
+      entry_a = _XmStrEntry(a);
+    }
+
+    if (_XmStrOptimized(b)) {
+      b_unopt = _XmStringOptToNonOpt((_XmStringOpt)b);
+      entry_b = _XmStrEntry(b_unopt);
+    } else {
+      entry_b = _XmStrEntry(b);
+    }
+
+    for (i = 0; i < _XmStrEntryCountGet(a); i++) {
       if (_XmEntryMultiple(entry_a[i]) && _XmEntryMultiple(entry_b[i])) {
 	if (_XmEntrySegmentCount(entry_a[i]) != 
 	    _XmEntrySegmentCount(entry_b[i])) {
+	  if (a_unopt) XmStringFree(a_unopt);
+	  if (b_unopt) XmStringFree(b_unopt);
 	  _XmProcessUnlock();
 	  return (FALSE);
 	}
@@ -2010,12 +2028,16 @@ XmStringCompare(
 		 _XmStringIsCurrentCharset(b_tag)) ||
 		((strcmp(b_tag, XmFONTLIST_DEFAULT_TAG) == 0) &&
 		 _XmStringIsCurrentCharset(a_tag)))) {
+	        if (a_unopt) XmStringFree(a_unopt);
+	        if (b_unopt) XmStringFree(b_unopt);
 	        _XmProcessUnlock();
 		return (FALSE);
 	  }
 	  
 	  len = _XmEntryByteCountGet((_XmStringEntry)a_seg);
 	  if (len != _XmEntryByteCountGet((_XmStringEntry)b_seg)) {
+	    if (a_unopt) XmStringFree(a_unopt);
+	    if (b_unopt) XmStringFree(b_unopt);
 	    _XmProcessUnlock();
 	    return (FALSE);
 	  }
@@ -2028,6 +2050,8 @@ XmStringCompare(
 		  (b_dir != XmSTRING_DIRECTION_L_TO_R)) ||
 		 ((b_dir == XmSTRING_DIRECTION_UNSET) &&
 		  (a_dir != XmSTRING_DIRECTION_L_TO_R)))) {
+	      if (a_unopt) XmStringFree(a_unopt);
+	      if (b_unopt) XmStringFree(b_unopt);
 	      _XmProcessUnlock();
 	      return (FALSE);
 	    }
@@ -2036,6 +2060,8 @@ XmStringCompare(
 	  if (strncmp ((char*)_XmEntryTextGet((_XmStringEntry)a_seg),
 		       (char*)_XmEntryTextGet((_XmStringEntry)b_seg), 
 		       len) != 0) {
+	    if (a_unopt) XmStringFree(a_unopt);
+	    if (b_unopt) XmStringFree(b_unopt);
 	    _XmProcessUnlock();
 	    return (FALSE);
 	  }
@@ -2054,12 +2080,16 @@ XmStringCompare(
 		       XmFONTLIST_DEFAULT_TAG) == 0) &&
 	       _XmStringIsCurrentCharset(_XmEntryTag(entry_a[i])))))
 	{
+	  if (a_unopt) XmStringFree(a_unopt);
+	  if (b_unopt) XmStringFree(b_unopt);
 	  _XmProcessUnlock();
 	  return (FALSE);
 	}
 	
 	len = _XmEntryByteCountGet(entry_a[i]);
 	if (len != _XmEntryByteCountGet(entry_b[i])) {
+	  if (a_unopt) XmStringFree(a_unopt);
+	  if (b_unopt) XmStringFree(b_unopt);
 	  _XmProcessUnlock();
 	  return (FALSE);
 	}
@@ -2074,6 +2104,8 @@ XmStringCompare(
 	       XmSTRING_DIRECTION_UNSET) &&
 	      (_XmEntryDirectionGet(entry_a[i]) != 
 	       XmSTRING_DIRECTION_L_TO_R)))) {
+	  if (a_unopt) XmStringFree(a_unopt);
+	  if (b_unopt) XmStringFree(b_unopt);
 	  _XmProcessUnlock();
 	  return (FALSE);
 	}
@@ -2081,14 +2113,20 @@ XmStringCompare(
 	if (strncmp ((char*) _XmEntryTextGet(entry_a[i]), 
 		     (char*) _XmEntryTextGet(entry_b[i]), 
 		     len) != 0) {
+	  if (a_unopt) XmStringFree(a_unopt);
+	  if (b_unopt) XmStringFree(b_unopt);
 	  _XmProcessUnlock();
 	  return (FALSE);
 	}
       } else {
+        if (a_unopt) XmStringFree(a_unopt);
+	if (b_unopt) XmStringFree(b_unopt);
 	_XmProcessUnlock();
 	return (FALSE);
       }
     }
+    if (a_unopt) XmStringFree(a_unopt);
+    if (b_unopt) XmStringFree(b_unopt);
   }
   _XmProcessUnlock();
   return (TRUE);

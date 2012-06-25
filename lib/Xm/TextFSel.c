@@ -938,11 +938,15 @@ DropTransferProc(Widget w, XtPointer closure,
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
-
+#define CR1228
 /*ARGSUSED*/
 static void
 DoStuff(Widget w, 
+#ifdef CR1228
+	XtPointer closure,
+#else
 	XtPointer closure,	/* unused */
+#endif
 	XmSelectionCallbackStruct *ds)
 {
   enum { XmANULL, XmACLIPBOARD, XmATEXT, XmACOMPOUND_TEXT, NUM_ATOMS };
@@ -955,6 +959,9 @@ DoStuff(Widget w,
   Boolean replace_res = False;
   XmAnyCallbackStruct cb;
   Atom atoms[XtNumber(atom_names)];
+#ifdef CR1228
+  _XmTextPrimSelect *prim_select = (_XmTextPrimSelect *) closure;
+#endif
 
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
