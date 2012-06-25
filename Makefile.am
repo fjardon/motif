@@ -1,14 +1,12 @@
 datadir = ${prefix}/share/Xm/doc
 
-data_DATA = BUGREPORT CLOSEDBUGS COPYRIGHT.MOTIF LICENSE OPENBUGS \
-            README RELEASE RELNOTES
+#data_DATA = BUGREPORT COPYRIGHT.MOTIF COPYING \
+#            README RELEASE RELNOTES
 
 EXTRA_DIST = BUGREPORT \
-             CLOSEDBUGS \
              COPYRIGHT.MOTIF \
              Imakefile \
              LICENSE \
-             OPENBUGS \
              README RELEASE RELNOTES \
              INSTALL.configure Makefile.imake-pure
 
