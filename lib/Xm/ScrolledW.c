@@ -1539,7 +1539,8 @@ Widget child )
 
     /* Clean up the Navigator.  Metro Link fix, suggested by
      * Kevin B. Hendricks of Java-Linux project. */
-    RemoveNavigator(swWid, child);
+    if (XmeTraitGet((XtPointer) XtClass(child), XmQTnavigator) != NULL)
+      RemoveNavigator(swWid, child);
 
     _XmProcessLock();
     delete_child =
