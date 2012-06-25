@@ -102,13 +102,20 @@ XmChangeColor(
 			   windowed_ancestor->core.colormap,
 			   background, NULL, NULL, NULL, &select_ret);
 
-	      if (XmIsScrollBar(w))
-		XtSetArg (args[0], XmNtroughColor, (XtArgVal) select_ret);
-	      else if (XmIsPushButton(w) || XmIsPushButtonGadget(w))
-		XtSetArg (args[0], XmNarmColor, (XtArgVal) select_ret);
-	      else if (XmIsToggleButton(w) || XmIsToggleButtonGadget(w))
-		XtSetArg (args[0], XmNselectColor, (XtArgVal) select_ret);
-	      XtSetValues (w, args, 1);
+	      if (XmIsToggleButton(w) || XmIsToggleButtonGadget(w))
+	        {
+		  XtSetArg (args[0], XmNselectColor, (XtArgVal) select_ret);
+		  XtSetArg (args[1], XmNunselectColor, (XtArgVal) use_background);
+	          XtSetValues (w, args, 2);
+	        }
+		else
+		{
+	          if (XmIsScrollBar(w))
+		    XtSetArg (args[0], XmNtroughColor, (XtArgVal) select_ret);
+	          else if (XmIsPushButton(w) || XmIsPushButtonGadget(w))
+		    XtSetArg (args[0], XmNarmColor, (XtArgVal) select_ret);
+	          XtSetValues (w, args, 1);
+	        }
 	    }
 	}
     }
