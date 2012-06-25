@@ -965,6 +965,15 @@ Initialize (
     SetVisualConfig(new_w);
 
     /* page number resources */
+
+    /* fix BUX 1183 in notebook widget, the real_back_page_number is used
+     * for division, however it is never set unless the back_page_number
+     * changed (in SetValues).
+     */
+    ASSIGN_MIN(new_w->notebook.real_back_page_number,
+                 (Dimension)(new_w->notebook.back_page_size /2));
+    ASSIGN_MAX(new_w->notebook.real_back_page_number, 1);
+
     if (new_w->notebook.current_page_number == XmUNSPECIFIED_PAGE_NUMBER)
        new_w->notebook.current_page_number = new_w->notebook.first_page_number;
     if (new_w->notebook.last_page_number == XmUNSPECIFIED_PAGE_NUMBER)
@@ -1459,6 +1468,7 @@ GeometryManager (
 
         /* ask parent, only if notebook resize request is needed */
         if (myrequest.request_mode)
+	    {
 	    if (NB_IS_CHILD_TAB(nc->child_type))
 	      result = XtGeometryYes;
 	    else /* nc->resizable */
@@ -1468,6 +1478,7 @@ GeometryManager (
 	    /* Parent unable to completely fulfill request */
 	    if (result == XtGeometryAlmost)
 	    result = XtGeometryNo;
+	    }
 	    }
 
 	/* Update the geometry, if necessary */
@@ -2257,6 +2268,7 @@ UpdateJoinSide (
 		side_to_join = XmRIGHT;
 		break;
 	    case TOP:
+	    default:
 		side_to_join = XmBOTTOM;
 		break;
 	    }
@@ -2497,7 +2509,7 @@ LayoutMajorTabs (
     Boolean gray_prev, gray_next;	/* True if need to gray out scrollers */
     int i;
     unsigned char direction;
-int total_major_tabs, top_tab_count, current_tab = 0;
+    int total_major_tabs, top_tab_count = 0, current_tab = 0;
     /*
      * Initialize
      */
@@ -6374,7 +6386,7 @@ RedirectTraversal(
     XmTraversalDirection direction,
     unsigned int	pass) /* unused */
 {
-    unsigned char to_type, from_type;
+    unsigned char to_type = XmMAJOR_TAB, from_type = XmMAJOR_TAB;
     Widget to_child, from_child;
     Widget to_parent, from_parent;
     Widget new_focus_widget;
@@ -6387,7 +6399,7 @@ RedirectTraversal(
 
     /* Determine nearest notebook parent for the target. */
     to_parent = NULL;
-    if (to_child=new_focus)
+    if ((to_child=new_focus))
 	{
 	if ((to_parent=XtParent(to_child)) == NULL)
 	    return new_focus;
@@ -6405,7 +6417,7 @@ RedirectTraversal(
 
     /* Determine nearest notebook parent for the source. */
     from_parent = NULL;
-    if (from_child=old_focus)
+    if ((from_child=old_focus))
 	{
         if ((from_parent = XtParent(from_child)) == NULL)
 	    return new_focus;
