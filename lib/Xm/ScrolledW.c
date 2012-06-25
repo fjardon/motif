@@ -760,7 +760,7 @@ unsigned char orientation)
          */
         tmp = sw->swindow.traverseObscuredCallback ;
         sw->swindow.traverseObscuredCallback = NULL ;
-        if (XmIsTraversable(focus))
+        if (focus && XmIsTraversable(focus))
             XmProcessTraversal(focus, XmTRAVERSE_CURRENT);
         else
             XmProcessTraversal(sw->swindow.WorkWindow, XmTRAVERSE_CURRENT);
