@@ -7190,7 +7190,7 @@ StartSelect(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			current_cwid;
-	XmContainerConstraint	c;
+	XmContainerConstraint	c = NULL;
 
 	current_cwid = ObjectAtPoint(wid,event->xbutton.x,event->xbutton.y);
 	/* Handle ObjectAtPoint returning an outline button */
@@ -8144,7 +8144,7 @@ GetLastTraversableChild(
 		{
 		if (XtIsSensitive(child_node->widget_ptr))
 		    last_node = child_node;
-		if (recu_node=GetLastTraversableChild(child_node))
+		if ((recu_node=GetLastTraversableChild(child_node)))
 		    last_node = recu_node;
 		}
 	    child_node = child_node->next_ptr;
@@ -8170,7 +8170,7 @@ GetPrevTraversableSibling(
 	    {
 	     if (NodeIsActive(prev_node))
 		{
-		if (recu_node=GetLastTraversableChild(prev_node))
+		if ((recu_node=GetLastTraversableChild(prev_node)))
 		    {
 		    prev_node = recu_node;
 		    break;
@@ -8207,7 +8207,7 @@ GetPrevTraversableUplevel(
 		    prev_node = parent_node;
 		    break;
 		    }
-		if (recu_node=GetPrevTraversableSibling(parent_node))
+		if ((recu_node=GetPrevTraversableSibling(parent_node)))
 		    {
 		    prev_node = recu_node;
 		    break;
@@ -8239,7 +8239,7 @@ GetNextTraversableChild(
 	    	{
 		if (XtIsSensitive(next_node->widget_ptr))
 		    break;
-		if (recu_node=GetNextTraversableChild(next_node))
+		if ((recu_node=GetNextTraversableChild(next_node)))
 		    {
 		    next_node = recu_node;
 		    break;
@@ -8270,7 +8270,7 @@ GetNextTraversableSibling(
 		{
 		if (XtIsSensitive(next_node->widget_ptr))
 		    break;
-		if (recu_node=GetNextTraversableChild(next_node))
+		if ((recu_node=GetNextTraversableChild(next_node)))
 		    {
 		    next_node = recu_node;
 		    break;
@@ -8355,7 +8355,7 @@ GetLastTraversalWidget(
     if (child_node)
         {
 	last_node = child_node;
-        while (temp_node=GetNextTraversableSibling(last_node))
+        while ((temp_node=GetNextTraversableSibling(last_node)))
             last_node = temp_node;
         if (last_node && (temp_node=GetLastTraversableChild(last_node)))
             last_node = temp_node;
