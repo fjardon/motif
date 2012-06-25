@@ -327,6 +327,7 @@ class_attribute_name
 
 boolean_class_attribute_name
 	: DIALOGCLASS		{ yytknval1 = DIALOGCLASS; }
+	;
 
 boolean_attribute_value
 	: ATTRTRUE		{ yytknval2 = ATTRTRUE; }
@@ -718,7 +719,7 @@ predefined_charset_attribute_value
 	| ONEBYTE		{ yytknval2 = ONEBYTE; }
 	| TWOBYTE		{ yytknval2 = TWOBYTE; }
 	| MIXED1_2BYTE		{ yytknval2 = MIXED1_2BYTE; }
-
+        ;
 
 
 /*
