@@ -21,6 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 
+#define BUG1232
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,6 +35,21 @@
 
 typedef XmVendorShellExtPart XmToolTipDataStruct;
 
+#ifdef BUG1232
+/* rws 25 Sep 2003
+   If the TipLabel gets destroyed, get rid of it's Shell, and get rid
+   of the dangling reference to it.
+ */
+static void
+TipLabelDestroy(Widget label, XtPointer client_data, XtPointer call_data)
+{
+XmToolTipDataStruct *TipData = (XmToolTipDataStruct *)client_data;
+
+    XtDestroyWidget(XtParent(label));
+    TipData->label = NULL;
+}
+#endif
+
 static XmToolTipDataStruct *
 ToolTipGetData(Widget w)
 {
@@ -44,7 +61,15 @@ ToolTipGetData(Widget w)
     {
 	top = XtParent(top);
     }
-    if ((extData = _XmGetWidgetExtData( (Widget) top, XmSHELL_EXTENSION)) &&
+    if (
+#ifdef BUG1232
+/* rws 25 Sep 2003
+   If the VendorShell is in the process of being destroyed, do not return
+   any TipData.
+ */
+        ! top->core.being_destroyed &&
+#endif
+        (extData = _XmGetWidgetExtData( (Widget) top, XmSHELL_EXTENSION)) &&
         (vse = (XmVendorShellExtObject) extData->widget))
     {
     	if (vse->vendor.label == NULL)
@@ -56,6 +81,15 @@ ToolTipGetData(Widget w)
                                      XmNoverrideRedirect, True,
                                      NULL);
 	    vse->vendor.label = XmCreateLabel(shell, "TipLabel", NULL, 0);
+#ifdef BUG1232
+/* rws 25 Sep 2003
+   Make sure we know if the label disappears.
+ */
+	    XtAddCallback(vse->vendor.label, 
+		      XmNdestroyCallback, 
+		      (XtCallbackProc)TipLabelDestroy, 
+		      &vse->vendor);
+#endif
 	    XtManageChild(vse->vendor.label);
     	}
     	return(&vse->vendor);
@@ -130,80 +164,88 @@ ToolTipPost(XtPointer client_data, XtIntervalId *id)
       printf("%s:%s(%d) - %s\n", __FILE__, __FUNCTION__, __LINE__,
       XtName(w));
     */
-    TipData->timer = (XtIntervalId)NULL;
-    XQueryPointer(XtDisplay(w),
-                  XtWindow(w),
-                  &root,
-                  &child,
-                  &rx, &ry,
-                  &x, &y,
-                  &key);
-    if (TipData->duration_timer != (XtIntervalId)NULL)
-    {
-	XtRemoveTimeOut(TipData->duration_timer);
-	TipData->duration_timer = (XtIntervalId)NULL;
-    }
-    if (XmIsPrimitive(w))
-    {
-	XtVaSetValues(TipData->label,
-                      XmNlabelString, 
-                      ((XmPrimitiveWidget)w)->primitive.tool_tip_string,
-                      NULL);
-    }
-    else if (XmIsGadget(w))
-    {
-	XtVaSetValues(TipData->label,
-                      XmNlabelString, ((XmGadget)w)->gadget.tool_tip_string,
-                      NULL);
-    }
-    else
-    {
-        XmString string;
-        
-	string = XmStringCreateLocalized(XtName(w));
-	XtVaSetValues(TipData->label,
-                      XmNlabelString, string,
-                      NULL);
-	XmStringFree(string);
-    }
-    XtQueryGeometry(TipData->label, NULL, &geo);
-#if 1
-    /* rws 25 Feb 2001
-       Fix for Bug #1153
-       Don't let the tip be off the right/bottom of the screen
-    */
-    destX = rx + (XmIsGadget(w) ? XtX(w) : 0) - x + XtWidth(w) / 2;
-    if (destX + geo.width > WidthOfScreen(XtScreen(w)))
-    {
-    	destX = WidthOfScreen(XtScreen(w)) - geo.width;
-    }
-    destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y + XtHeight(w);
-    if (destY + geo.height > HeightOfScreen(XtScreen(w)))
-    {
-	destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y - geo.height;
-    }
+#ifdef BUG1232
+/* rws 25 Sep 2003
+   protect against NULL TipData
+ */
 #endif
-    XtVaSetValues(XtParent(TipData->label),
-                  XmNx, rx + 1,
-                  XmNy, ry + 1,
-                  XmNwidth, 1,
-                  XmNheight, 1,
-                  NULL);
-    TipData->slider = XtVaCreateWidget("ToolTipSlider", 
-                                       xmSlideContextWidgetClass,
-                                       XmGetXmDisplay(XtDisplay(w)),
-                                       XmNslideWidget, 
-                                       XtParent(TipData->label),
-                                       XmNslideDestX, destX,
-                                       XmNslideDestY, destY,
-                                       XmNslideDestWidth, geo.width,
-                                       XmNslideDestHeight, geo.height,
-                                       NULL);
-    XtAddCallback(TipData->slider, 
-                  XmNslideFinishCallback, 
-                  (XtCallbackProc)ToolTipPostFinish, 
-                  TipData);
-    XtPopup(XtParent(TipData->label), XtGrabNone);
+    if (TipData)
+    {
+	TipData->timer = (XtIntervalId)NULL;
+	XQueryPointer(XtDisplay(w),
+		      XtWindow(w),
+		      &root,
+		      &child,
+		      &rx, &ry,
+		      &x, &y,
+		      &key);
+	if (TipData->duration_timer != (XtIntervalId)NULL)
+	{
+	    XtRemoveTimeOut(TipData->duration_timer);
+	    TipData->duration_timer = (XtIntervalId)NULL;
+	}
+	if (XmIsPrimitive(w))
+	{
+	    XtVaSetValues(TipData->label,
+			  XmNlabelString, 
+			  ((XmPrimitiveWidget)w)->primitive.tool_tip_string,
+			  NULL);
+	}
+	else if (XmIsGadget(w))
+	{
+	    XtVaSetValues(TipData->label,
+			  XmNlabelString, ((XmGadget)w)->gadget.tool_tip_string,
+			  NULL);
+	}
+	else
+	{
+	    XmString string;
+	    
+	    string = XmStringCreateLocalized(XtName(w));
+	    XtVaSetValues(TipData->label,
+			  XmNlabelString, string,
+			  NULL);
+	    XmStringFree(string);
+	}
+	XtQueryGeometry(TipData->label, NULL, &geo);
+#if 1
+	/* rws 25 Feb 2001
+	   Fix for Bug #1153
+	   Don't let the tip be off the right/bottom of the screen
+	*/
+	destX = rx + (XmIsGadget(w) ? XtX(w) : 0) - x + XtWidth(w) / 2;
+	if (destX + geo.width > WidthOfScreen(XtScreen(w)))
+	{
+	    destX = WidthOfScreen(XtScreen(w)) - geo.width;
+	}
+	destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y + XtHeight(w);
+	if (destY + geo.height > HeightOfScreen(XtScreen(w)))
+	{
+	    destY = ry + (XmIsGadget(w) ? XtY(w) : 0) - y - geo.height;
+	}
+#endif
+	XtVaSetValues(XtParent(TipData->label),
+		      XmNx, rx + 1,
+		      XmNy, ry + 1,
+		      XmNwidth, 1,
+		      XmNheight, 1,
+		      NULL);
+	TipData->slider = XtVaCreateWidget("ToolTipSlider", 
+					   xmSlideContextWidgetClass,
+					   XmGetXmDisplay(XtDisplay(w)),
+					   XmNslideWidget, 
+					   XtParent(TipData->label),
+					   XmNslideDestX, destX,
+					   XmNslideDestY, destY,
+					   XmNslideDestWidth, geo.width,
+					   XmNslideDestHeight, geo.height,
+					   NULL);
+	XtAddCallback(TipData->slider, 
+		      XmNslideFinishCallback, 
+		      (XtCallbackProc)ToolTipPostFinish, 
+		      TipData);
+	XtPopup(XtParent(TipData->label), XtGrabNone);
+    }
 }
 
 void 
@@ -290,5 +332,10 @@ XmToolTipGetLabel(Widget wid)
 {
     XmToolTipDataStruct *TipData = ToolTipGetData(wid);
     
-    return(TipData->label);
+#ifdef BUG1232
+/* rws 25 Sep 2003
+   protect against NULL TipData
+ */
+#endif
+    return(TipData ? TipData->label : NULL);
 }
