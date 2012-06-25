@@ -592,7 +592,7 @@ A pointer to the following structure is passed to each callback for
 typedef struct
 {
         int \fIreason\fP;
-        XEvent \fI* xevent\fP;
+        XEvent \fI* event\fP;
         Widget \fImenuToPost\fP;
         Boolean \fIpostIt\fP;
         Widget \fItarget\fP;
@@ -600,7 +600,7 @@ typedef struct
 .fi
 .IP "\fIreason\fP" 10
 Indicates why the callback was invoked\&.
-.IP "\fIxevent\fP" 10
+.IP "\fIevent\fP" 10
 Points to the \fBXEvent\fP that triggered the handler\&.
 .IP "\fImenuToPost\fP" 10
 Specifies the popup menu that the menu system believes should be
