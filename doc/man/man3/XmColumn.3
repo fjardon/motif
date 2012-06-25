@@ -18,8 +18,6 @@ characteristics of the label, such as displaying text or a pixmap, alignment of 
 .br
 Column inherits behavior and resources from Core, Composite, Constraint, XmManager, and 
 XmBulletinBoard.
-For a complete description of each resource, refer to the OSF/Motif Programmer’s Reference.
-Resources 
 .br
 .SH Resources
 .br
@@ -33,7 +31,7 @@ alignment_beginning, beginning, alignment_center, center, alignment_end, end.
 .br
 .B XmNdefaultEntryLabelFontList
 Specifies the default XmNentryLabelFontList to use when a child specifies no significant value. If 
-unspecified, uses the XmBulletinBoard’s XmNlabelFontList resource.
+unspecified, uses XmNlabelFontList resource of the XmBulletinBoard.
 .br
 .B XmNdefaultFillStyle
 Specifies the default XmNfillStyle to use when a child specifies no significant value. 
@@ -51,7 +49,7 @@ and children (in horizontal orientation).
 .br
 .B XmNlabelSpacing
 Specifies the spacing between the column containing the labels and the column containing the 
-XmColumn’s children.
+XmColumn's children.
 .br
 .B XmNorientation
 Specifies the layout direction of the XmColumn. When XmVERTICAL, the widgets and their 
@@ -65,38 +63,44 @@ These resources are derived from those supported by XmLabel; see the manual page
 for valid values and usage.
 .br
 .B XmNentryLabelAlignment
-Specifies justification of text within the child’s associated label. Valid values are the same as 
+Specifies justification of text within the child's associated label. Valid values are the same as 
 those for XmNdefaultEntryLabelAlignment.
 .br
 .B XmNentryLabelFontList
-Specifies fontList used to render the text within the child’s associated label.
+Specifies fontList used to render the text within the child's associated label.
 .br
 .B XmNentryLabelPixmap
-Specifies the pixmap used in the child’s associated label.
+Specifies the pixmap used in the child's associated label.
 .br
 .B XmNentryLabelString
-Specifies the text used in the child’s associated label.
+Specifies the text used in the child's associated label.
 .br
 .B XmNentryLabelType
-Specifies whether to display a string (XmSTRING) or a pixmap (XmPIXMAP) in the child’s 
+Specifies whether to display a string (XmSTRING) or a pixmap (XmPIXMAP) in the child's 
 associated label. 
 .br
 .B XmNfillStyle
 Specifies whether the child should be displayed at its natural size (XmFILL_RAGGED) or 
 stretched to fill the entire width of the column it is displayed within (XmFILL_FLUSH). 
 .br
-.B XmFILL_UNSPECIFIED uses the value of the XmColumn’s XmNdefaultFillStyle.
+.B XmFILL_UNSPECIFIED uses the value of the XmColumn's XmNdefaultFillStyle.
 .br
 .B XmNshowEntryLabel
-Specifies whether or not to display the child’s associated label.
+Specifies whether or not to display the child's associated label.
 .br
 .B XmNstretchable
 Specifies whether the child should expand in size proportionately when the XmColumn is resized 
 vertically to be larger than its natural size.
 .SH Translations and Actions
-.SH "SEE ALSO"
-.br
-.SH WARNINGS
+.SH "RELATED"
+.PP
+\fBComposite\fP(3),
+\fBCore\fP(3),
+\fBXmBulletinBoard\fP(3),
+\fBXmCreateColumn\fP(3),
+\fBXmManager\fP(3),
+\fBXmVaCreateColumn\fP(3), and
+\fBXmVaCreateManagedColumn\fP(3)\&.
 .br
 .SH VERSION
 This manual page documents the XmColumn widget shipped in Motif version 2.2
