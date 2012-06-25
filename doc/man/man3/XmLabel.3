@@ -275,6 +275,10 @@ XmNmnemonicXmCMnemonicKeySymNULLCSG
 _____
 XmNmnemonicCharSetXmCMnemonicCharSetStringXmFONTLIST_DEFAULT_TAGCSG
 _____
+XmNpixmapPlacementXmCPixmapPlacementunsigned intXmPIXMAP_LEFTCSG
+_____
+XmNpixmapTextPaddingXmCSpaceDimension2CSG
+_____
 XmNrecomputeSizeXmCRecomputeSizeBooleanTrueCSG
 _____
 XmNrenderTableXmCRenderTableXmRenderTabledynamicCSG
@@ -438,6 +442,14 @@ unshifted mnemonic key\&.
 .IP "\fBXmNmnemonicCharSet\fP" 10
 Specifies the character set of the mnemonic for the label\&.
 The default is \fBXmFONTLIST_DEFAULT_TAG\fP\&.
+.IP "\fBXmNpixmapPlacement\fP" 10
+The location of the pixmap with respect to the text label. This resource 
+can take one of the following values: \fBXmPIXMAP_TOP\fP, \fBXmPIXMAP_BOTTOM\fP,
+\fBXmPIXMAP_LEFT\fP, and \fBXmPIXMAP_RIGHT\fP. A type converter has been 
+registered that converts the following strings: "top", "bottom", "left", and
+"right".
+.IP "\fBXmNpixmapTextPadding\fP" 10
+The amount of space to be left between the pixmap and the label string.
 .IP "\fBXmNrecomputeSize\fP" 10
 Specifies a Boolean value that indicates whether the widget
 shrinks or expands to accommodate its contents (label string or
@@ -743,9 +755,11 @@ For information about bindings for virtual buttons and keys, see
 \fBVirtualBindings\fP(3)\&.
 .SH "RELATED"
 .PP
-\fBCore\fP(3), \fBXmCreateLabel\fP(3),
+\fBCore\fP(3),
+\fBXmCreateLabel\fP(3),
 \fBXmFontListAppendEntry\fP(3),
 \fBXmStringCreate\fP(3),
 \fBXmStringCreateLtoR\fP(3),
-and \fBXmPrimitive\fP(3)\&.
-...\" created by instant / docbook-to-man, Sun 22 Dec 1996, 20:25
+\fBXmPrimitive\fP(3),
+\fBXmVaCreateLabel\fP(3), and
+\fBXmVaCreateManagedLabel\fP(3)\&.

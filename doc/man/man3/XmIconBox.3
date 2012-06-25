@@ -1,15 +1,12 @@
 .DT
 .TH XmIconBox 3X ""
 .SH NAME
-The IconBox widget class
+\fBXmIconBox\fP \(em The IconBox widget class
 .SH SYNOPSIS
+.nf
 #include <Xm/IconBox.h>
+.fi
 .SH DESCRIPTION
-.PP
-.TS
-tab (%);
-l l.
-.TE
 .PP
 The Icon Box widget lays out its children on a grid with each child forced to be the 
 same size and with the location of each child specified as an X and Y location on the 
@@ -20,111 +17,220 @@ as described below. The general idea is that all children are always be shown an
 should be given their desired size whenever possible. The user may add or delete cells 
 by resizing this window using the window manager widget.
 .PP
-.ta 5
-.HP 5
-\(bu	The preferred size is calculated by using the maximum desired child height or 
+The preferred size is calculated by using the maximum desired child height or 
 width and making sure that these are no smaller than the minimum sizes. This size 
 is multiplied by the number of cells along the axis and properly padded to come 
 up with a preferred size. The number of cells is the maximum of the largest cellX 
 or cellY value and the minimum number of horizontal or vertical cells.
-.HP 5
-\(bu	If the Icon box is forced larger than its preferred size more cells are added at the 
+.PP
+If the Icon box is forced larger than its preferred size more cells are added at the 
 bottom-right of the widget while the children all remain at their preferred sizes.
-.HP 5
-\(bu	If the Icon box is forced smaller than its preferred size each cell is forced to be 
+.PP
+If the Icon box is forced smaller than its preferred size each cell is forced to be 
 smaller in order to allow all children to fit within the Icon Box. All children will 
 be forced to the same smaller size.
-.RE
+.SS "Classes"
 .PP
-.SH Normal Resources
+Icon Box inherits behavior, resources, and traits from \fBCore\fP,
+\fBComposite\fP, \fBConstraint\fP, and
+\fBXmManager\fP\&.
+.PP
+The class pointer is \fBxmIconBoxWidgetClass\fP\&.
+.PP
+The class name is \fBXmIconBox\fP\&.
+.SS "New Resources"
+.PP
+The following table defines a set of widget resources used by the
+programmer to specify data\&. The programmer can also set the resource
+values for the inherited classes to set attributes for this widget\&.
+To reference a resource by name or by class in a \fB\&.Xdefaults\fP file,
+remove the \fBXmN\fP or \fBXmC\fP prefix and use the remaining letters\&.
+To specify one of the defined values for a resource in a \fB\&.Xdefaults\fP
+file, remove the \fBXm\fP prefix and use the remaining letters (in
+either lowercase or uppercase, but include any underscores between
+words)\&. The codes in the access column indicate if the given resource
+can be set at creation time (C), set by using \fBXtSetValues\fP
+(S), retrieved by using \fBXtGetValues\fP (G), or is not
+applicable (N/A)\&.
 .PP
 .TS
-tab (%);
-l l l l.
-Name%Class%Type%Init. Value
-horizontalMargin%Margin%HorizontalDimension%4
-minimumHorizontalCells%DefaultCells%Int%8
-minimumVerticalCells%DefaultCells%Int%4
-minimumCellHeight%MinimumCellSize%VerticalDimension%10
-minimumCellWidth%MinimumCellSize%HorizontalDimension%20
-verticalMargin%Margin%VerticalDimension%4 
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBXmIconBox Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNhorizontalMarginXmCMarginDimension4CSG
+_____
+XmNminimumHorizontalCellsXmCDefaultCellsint8CSG
+_____
+XmNminimumVerticalCellsXmCDefaultCellsint4CSG
+_____
+XmNminimumCellHeightXmCMinimumCellSizeDimension10CSG
+_____
+XmNminimumCellWidthXmCMinimumCellSizeDimension20CSG
+_____
+XmNverticalMarginXmCMarginDimension4CSG
+_____
 .TE
-.PP
-All resource names begin with XmN and all resource class names begin with XmC.
-.PP
-.SH horizontalMargin
-.PP
-.SH verticalMargin
-.PP
+.IP "\fBXmNhorizontalMargin\fP" 10
+.IP "\fBXmNverticalMargin\fP" 10
 The amount of space between each cell and its neighbor or the edge of the Icon 
 Box.
-.PP
-.SH minimumHorizontalCells
-.PP
-.SH minimumVerticalCells
-.PP
+.IP "\fBXmNminimumHorizontalCells\fP" 10
+.IP "\fBXmNminimumVerticalCells\fP" 10
 The minimum number of cells to display in the horizontal and vertical directions. 
 This number of cells will always be displayed.
-.PP
-.SH minimumCellWidth
-.PP
-.SH minimumCellHeight
-.PP
+.IP "\fBXmNminimumCellWidth\fP" 10
+.IP "\fBXmNminimumCellHeight\fP" 10
 The smallest size the cells are allowed to be in the direction specified.
 .PP
-.SH Constraint Resources
+.SS "Constraint Resources"
 .PP
 .TS
-tab (%);
-l l l l.
-Name%Class%Type%Initial Value
-cellX%CellX%Short%XmIconBoxAnyCell
-cellY%CellY%Short%XmIconBoxAnyCell
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBXmIconBox Constraint Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+cellXCellXShortXmIconBoxAnyCellCSG
+_____
+cellYCellYShortXmIconBoxAnyCellCSG
+_____
 .TE
-.PP
-All resource names begin with XmN and all resource class names begin with XmC.
-.PP
-.SH cellX
-.PP
-.SH cellY
-.PP
+.IP "\fBXmNcellX\fP" 10
+.IP "\fBXmNcellY\fP" 10
 The location of this cell in cell space. These coordinates may be any positive 
 integer. They determine where this widget will be placed relative to its neighbors. 
 Having two children at the same cell X and cell Y location will result in undefined 
 behavior. To place a cell at any empty cell, set cell X and cell Y to the value 
 XmIconBoxAnyCell.
+.SS "Inherited Resources"
 .PP
-.SH Convenience Routines
+Icon Box inherits behavior and resources from the
+superclasses described in the following tables\&.
+For a complete description of each resource, refer to the
+reference page for that superclass\&.
 .PP
-.SH XmCreateIconBox  - Widget creation convenience routine 
-.nf
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBXmManager Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNbottomShadowColorXmCBottomShadowColorPixeldynamicCSG
+_____
+XmNbottomShadowPixmapXmCBottomShadowPixmapPixmapXmUNSPECIFIED_PIXMAPCSG
+_____
+XmNforegroundXmCForegroundPixeldynamicCSG
+_____
+XmNhelpCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNhighlightColorXmCHighlightColorPixeldynamicCSG
+_____
+XmNhighlightPixmapXmCHighlightPixmapPixmapdynamicCSG
+_____
+XmNinitialFocusXmCInitialFocusWidgetdynamicCSG
+_____
+XmNlayoutDirectionXmCLayoutDirectionXmDirectiondynamicCG
+_____
+XmNnavigationTypeXmCNavigationTypeXmNavigationTypeXmTAB_GROUPCSG
+_____
+XmNpopupHandlerCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNshadowThicknessXmCShadowThicknessDimensiondynamicCSG
+_____
+XmNstringDirectionXmCStringDirectionXmStringDirectiondynamicCG
+_____
+XmNtopShadowColorXmCTopShadowColorPixeldynamicCSG
+_____
+XmNtopShadowPixmapXmCTopShadowPixmapPixmapdynamicCSG
+_____
+XmNtraversalOnXmCTraversalOnBooleanTrueCSG
+_____
+XmNunitTypeXmCUnitTypeunsigned chardynamicCSG
+_____
+XmNuserDataXmCUserDataXtPointerNULLCSG
+_____
+.TE
+.PP
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBComposite Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNchildrenXmCReadOnlyWidgetListNULLG
+_____
+XmNinsertPositionXmCInsertPositionXtOrderProcNULLCSG
+_____
+XmNnumChildrenXmCReadOnlyCardinal0G
+_____
+.TE
+.PP
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBCore Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNacceleratorsXmCAcceleratorsXtAcceleratorsdynamicN/A
+_____
+XmNancestorSensitiveXmCSensitiveBooleandynamicG
+_____
+XmNbackgroundXmCBackgroundPixeldynamicCSG
+_____
+XmNbackgroundPixmapXmCPixmapPixmapXmUNSPECIFIED_PIXMAPCSG
+_____
+XmNborderColorXmCBorderColorPixelXtDefaultForegroundCSG
+_____
+XmNborderPixmapXmCPixmapPixmapXmUNSPECIFIED_PIXMAPCSG
+_____
+XmNborderWidthXmCBorderWidthDimension0CSG
+_____
+XmNcolormapXmCColormapColormapdynamicCG
+_____
+XmNdepthXmCDepthintdynamicCG
+_____
+XmNdestroyCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNheightXmCHeightDimensiondynamicCSG
+_____
+XmNinitialResourcesPersistentXmCInitialResourcesPersistentBooleanTrueC
+_____
+XmNmappedWhenManagedXmCMappedWhenManagedBooleanTrueCSG
+_____
+XmNscreenXmCScreenScreen *dynamicCG
+_____
+XmNsensitiveXmCSensitiveBooleanTrueCSG
+_____
+XmNtranslationsXmCTranslationsXtTranslationsdynamicCSG
+_____
+XmNwidthXmCWidthDimensiondynamicCSG
+_____
+XmNxXmCPositionPosition0CSG
+_____
+XmNyXmCPositionPosition0CSG
+_____
+.TE
+.SS "Translations"
+.PP
+XmIconBox inherits translations from XmManager\&.
+.PP
+.SH "RELATED"
+.PP
+\fBComposite\fP(3), \fBConstraint\fP(3),
+\fBCore\fP(3),
+\fBXmCreateIconBox\fP(3),
+\fBXmIconBoxIsCellEmpty\fP(3),
+\fBXmManager\fP(3),
+\fBXmVaCreateIconBox\fP(3), and
+\fBXmVaCreateManagedIconBox\fP(3)\&.
 
-Widget XmCreateIconBox( 
-	Widget parent,     /* Widget id of parent for IconBox */
-	String name,       /* Name of the created widget */
-	ArgList args,      /* argument list */
-	Cardinal num_args  /* number of items in argument list */
-	)				 
-
-.nf
-.PP
-To find out if a cell in the icon box is empty use the XiIconBoxIsCellEmpty function:
-
-.HP 20
-Boolean XmIconBoxIsCellEmpty(Widget w, Position cell_x, Position cell_y)
-.ta 15
-.HP 15
-w		the icon box widget
-.HP 15
-cell_x		the x location of the cell to check
-.HP 15
-cell_y		the y location of the cell to check
-.PP
-This function returns True if the specified cell has no child in it, and False otherwise. 
-.PP
-.SH SEE ALSO
-.PP
-XiIconButton(3I)
 .PP
 .SH COPYRIGHT
 .PP
