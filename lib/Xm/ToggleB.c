@@ -1084,32 +1084,32 @@ Select(
         Cardinal *num_params )
 {
   XmToggleButtonWidget tb = (XmToggleButtonWidget) wid ;
-/*  static XmToggleButtonWidget prev = NULL;  */
   XmToggleButtonCallbackStruct call_value;
   Boolean hit;
   XmMenuSystemTrait menuSTrait;
+  Boolean radio = TRUE, always = TRUE;
   
   if (tb->toggle.Armed == FALSE)
     return;
   
   tb->toggle.Armed = FALSE;
 
-#define CR1154
-#ifdef CR1154
+  if (XmIsRowColumn(XtParent(tb))) {
+    XtVaGetValues(XtParent(tb),
+    XmNradioBehavior, &radio,
+    XmNradioAlwaysOne, &always,
+    NULL);
+  }
   /* Skip processing if 1) the toggle type (ind_type)
    * is one of the ONE_OF_MANY*, and 2) if the toggle
    * button is still set. (Hint this allows for the
    * XmNvalueChangedCallback to use XmToggleButtonSetState
    * to reset a different button to be the active one) */
-  if ((tb->toggle.set == XmSET) &&
-      ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
+  if ( (radio && always) &&
+       ((tb->toggle.set == XmSET) &&
+       ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
        (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
-       (tb->toggle.ind_type == XmONE_OF_MANY)))
-#else
-  if ((prev == tb) && ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
-                     (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
-                     (tb->toggle.ind_type == XmONE_OF_MANY)))
-#endif
+       (tb->toggle.ind_type == XmONE_OF_MANY))))
        return;
 
 
@@ -1166,9 +1166,6 @@ Select(
 	}
 
     }
-#ifndef CR1154
-prev = tb;
-#endif
 }
 
 /**********************************************************************
@@ -1194,10 +1191,8 @@ Disarm(
 
   /* CR 7803:  Suppress redundant redraws. */
   if (tb->toggle.set != tb->toggle.visual_set)
-{
-    tb->toggle.visual_set = tb->toggle.set;
     Redisplay((Widget) tb, event, (Region) NULL);
-}
+
 /* END OSF Fix pir 2826 */
 }
 
@@ -1236,6 +1231,20 @@ ArmAndActivate(
   Boolean is_menupane = Lab_IsMenupane(tb);
   Boolean torn_has_focus = FALSE;
   XmMenuSystemTrait menuSTrait;
+  Boolean radio = TRUE, always = TRUE, no_change;
+
+  if (XmIsRowColumn(XtParent(tb))) {
+    XtVaGetValues(XtParent(tb),
+    XmNradioBehavior, &radio,
+    XmNradioAlwaysOne, &always,
+    NULL);
+  }
+
+  no_change = ( (radio && always) &&
+          (tb->toggle.set == XmSET) &&
+          ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND) ||
+          (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND) ||
+          (tb->toggle.ind_type == XmONE_OF_MANY)));
   
   menuSTrait = (XmMenuSystemTrait) 
     XmeTraitGet((XtPointer) XtClass(XtParent(tb)), XmQTmenuSystem);
@@ -1253,17 +1262,19 @@ ArmAndActivate(
   
   tb->toggle.Armed = FALSE;
   
-  if (tb->toggle.toggle_mode == XmTOGGLE_INDETERMINATE)
+  if (!no_change) /* skip toggle for buttons already turned on */
     {
-      NextState(&tb->toggle.visual_set);
-      NextState(&tb->toggle.set);
+      if (tb->toggle.toggle_mode == XmTOGGLE_INDETERMINATE)
+        {
+          NextState(&tb->toggle.visual_set);
+          NextState(&tb->toggle.set);
+        }
+      else
+        {
+          tb->toggle.set = (tb->toggle.set == XmSET)? XmUNSET : XmSET;
+          IsOn(tb) = tb->toggle.set;
+        }
     }
-  else
-    {
-      tb->toggle.set = (tb->toggle.set == XmSET)? XmUNSET : XmSET;
-      IsOn(tb) = tb->toggle.set;
-    }
-  
   
   if (is_menupane && menuSTrait != NULL)
     {
@@ -1312,6 +1323,8 @@ ArmAndActivate(
       ToggleButtonCallback(tb, XmCR_ARM, tb->toggle.set, event);
     }
   
+  if (!no_change)
+  {
   /* UNDOING this fix .... */
   /* CR 8904: Notify value_changed before entry so that state is */
   /* 	reported correctly even if the entry callback resets it. */
@@ -1331,6 +1344,7 @@ ArmAndActivate(
       XFlush(XtDisplay(tb));
       ToggleButtonCallback(tb, XmCR_VALUE_CHANGED, tb->toggle.set, event);
     }
+  }
   
   if (tb->toggle.disarm_CB)
     {

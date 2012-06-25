@@ -47,7 +47,6 @@ static char rcsid[] = "$TOG: ToggleBG.c /main/46 1999/12/06 18:10:15 samborn $"
 #include <Xm/MenuT.h>
 #include <Xm/ToggleBGP.h>
 #include <Xm/TraitP.h>
-#include <Xm/VaSimpleP.h>
 #include "BaseClassI.h"
 #include "CacheI.h"
 #include "ColorI.h"
@@ -1515,20 +1514,33 @@ Select(
         XmToggleButtonGadget tb,
         XEvent *event )
 {
-  static XmToggleButtonGadget prev = NULL;
   XmToggleButtonCallbackStruct call_value;
   Boolean hit;
   XmMenuSystemTrait menuSTrait;
+  Boolean radio = TRUE, always = TRUE;
  
   if ( TBG_Armed(tb) == FALSE)
      return;
  
   TBG_Armed(tb) = FALSE;
 
-  if ((prev == tb) && (( TBG_IndType(tb) == XmONE_OF_MANY_ROUND) ||
-                      ( TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND) ||
-                      ( TBG_IndType(tb) == XmONE_OF_MANY)))
-      return;
+  if (XmIsRowColumn(XtParent(tb))) {
+    XtVaGetValues(XtParent(tb),
+    XmNradioBehavior, &radio,
+    XmNradioAlwaysOne, &always,
+    NULL);
+  }
+  /* Skip processing if 1) the toggle type (ind_type)
+   * is one of the ONE_OF_MANY*, and 2) if the toggle
+   * button is still set. (Hint this allows for the
+   * XmNvalueChangedCallback to use XmToggleButtonSetState
+   * to reset a different button to be the active one) */
+  if ( (radio && always) &&
+       (tb->toggle.set == XmSET) &&
+       ((TBG_IndType(tb) == XmONE_OF_MANY_ROUND)||
+       (TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND)||
+       (TBG_IndType(tb) == XmONE_OF_MANY)))
+    return;
   
   /* CR 8068: Verify that this is in fact a button event. */
   /* CR 9181: Consider clipping when testing visibility. */
@@ -1582,7 +1594,6 @@ Select(
 	}
 
     }
-  prev = tb;
 }
 
 /**********************************************************************
@@ -1601,7 +1612,10 @@ Disarm(
     ToggleButtonCallback(tb, XmCR_DISARM, TBG_Set(tb), event);
 
   if (tb->toggle.set != tb->toggle.visual_set)
+  {
+    tb->toggle.visual_set = tb->toggle.set;
     Redisplay((Widget) tb, event, (Region) NULL);
+  }
 }
 
 static void 
@@ -1641,6 +1655,19 @@ ArmAndActivate(
   Boolean is_menupane = LabG_IsMenupane(tb);
   Boolean torn_has_focus = FALSE;
   XmMenuSystemTrait menuSTrait;
+  Boolean radio = TRUE, always = TRUE, no_change;
+  
+  if (XmIsRowColumn(XtParent(tb))) {
+    XtVaGetValues(XtParent(tb),
+    XmNradioBehavior, &radio,
+    XmNradioAlwaysOne, &always,
+    NULL);
+  }
+  no_change = ( (radio && always) &&
+          (tb->toggle.set == XmSET) &&
+          ((TBG_IndType(tb) == XmONE_OF_MANY_ROUND) ||
+          (TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND) ||
+          (TBG_IndType(tb) == XmONE_OF_MANY)));
   
   menuSTrait = (XmMenuSystemTrait) 
     XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
@@ -1659,17 +1686,19 @@ ArmAndActivate(
   
   TBG_Armed(tb) = FALSE;    
   
-  if (TBG_ToggleMode(tb) == XmTOGGLE_INDETERMINATE)
+  if (!no_change)
     {
-      NextState(&TBG_VisualSet(tb));
-      NextState(&TBG_Set(tb));
+      if (TBG_ToggleMode(tb) == XmTOGGLE_INDETERMINATE)
+        {
+          NextState(&TBG_VisualSet(tb));
+          NextState(&TBG_Set(tb));
+        }
+      else
+        {
+          TBG_Set(tb) = (TBG_Set(tb) == TRUE) ? FALSE : TRUE;
+          IsOn(tb) = TBG_Set(tb);
+        }
     }
-  else
-    {
-      TBG_Set(tb) = (TBG_Set(tb) == TRUE) ? FALSE : TRUE;
-      IsOn(tb) = TBG_Set(tb);
-    }
-  
   
   if (is_menupane && menuSTrait != NULL)
     {
@@ -1716,25 +1745,28 @@ ArmAndActivate(
   if (TBG_ArmCB(tb) && !already_armed)
     ToggleButtonCallback(tb, XmCR_ARM, TBG_Set(tb), event);
 
-  /* UNDOING this fix ... */  
-  /* CR 8904: Notify value_changed before entry so that state is */
-  /*	reported correctly even if the entry callback resets it. */
+  if (!no_change)
+  {
+    /* UNDOING this fix ... */  
+    /* CR 8904: Notify value_changed before entry so that state is */
+    /*	reported correctly even if the entry callback resets it. */
   
-  /* if the parent is menu system able, notify it about the select */
-  if (menuSTrait != NULL)
-    {
-      call_value.reason = XmCR_VALUE_CHANGED;
-      call_value.event = event;
-      call_value.set = TBG_Set(tb);
-      menuSTrait->entryCallback(XtParent(tb), (Widget) tb, &call_value);
-    }
+    /* if the parent is menu system able, notify it about the select */
+    if (menuSTrait != NULL)
+      {
+        call_value.reason = XmCR_VALUE_CHANGED;
+        call_value.event = event;
+        call_value.set = TBG_Set(tb);
+        menuSTrait->entryCallback(XtParent(tb), (Widget) tb, &call_value);
+      }
   
-  if ((! LabG_SkipCallback(tb)) &&
-      (TBG_ValueChangedCB(tb)))
-    {
-      XFlush(XtDisplay(tb));
-      ToggleButtonCallback(tb, XmCR_VALUE_CHANGED, TBG_Set(tb), event);
-    }
+    if ((! LabG_SkipCallback(tb)) &&
+        (TBG_ValueChangedCB(tb)))
+      {
+        XFlush(XtDisplay(tb));
+        ToggleButtonCallback(tb, XmCR_VALUE_CHANGED, TBG_Set(tb), event);
+      }
+  }
 
   if (TBG_DisarmCB(tb))
     {
