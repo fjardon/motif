@@ -54,7 +54,6 @@ in this Software without prior written authorization from the X Consortium.
 
 #include <X11/Xatom.h>
 #include <X11/Xos.h>		/* for strcpy declaration */
-#include <X11/Xaw/Cardinals.h>
 #include <X11/Xmu/EditresP.h>
 #include <X11/Xmu/CharSet.h>
 #include <X11/Xmd.h>
