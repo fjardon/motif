@@ -1437,7 +1437,7 @@ GeometryManager (
 	}
 
     /* only for resizing request */
-    if (nc->resizable
+    if ((nc->resizable || NB_IS_CHILD_TAB(nc->child_type))
         && (desired->request_mode & (CWWidth|CWHeight|CWBorderWidth))
 	&& !nb->notebook.in_setshadow)
 	{
@@ -1459,12 +1459,15 @@ GeometryManager (
 
         /* ask parent, only if notebook resize request is needed */
         if (myrequest.request_mode)
-	    {
-            result = XtMakeGeometryRequest((Widget)nb, &myrequest, &myallowed);
+	    if (NB_IS_CHILD_TAB(nc->child_type))
+	      result = XtGeometryYes;
+	    else /* nc->resizable */
+            {
+	    result = XtMakeGeometryRequest((Widget)nb, &myrequest, &myallowed);
 
 	    /* Parent unable to completely fulfill request */
 	    if (result == XtGeometryAlmost)
-		result = XtGeometryNo;
+	    result = XtGeometryNo;
 	    }
 
 	/* Update the geometry, if necessary */
