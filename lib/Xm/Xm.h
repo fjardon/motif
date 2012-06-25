@@ -367,9 +367,11 @@ enum{   XmLAST_POSITION = -1,           XmFIRST_POSITION
 	} ;
 enum{	XmPOPUP_DISABLED = 0,	XmPOPUP_KEYBOARD = 1,
 	XmPOPUP_AUTOMATIC,	XmPOPUP_AUTOMATIC_RECURSIVE };
+
 /************************************************************************
  *  Color Selector defines
  ************************************************************************/
+
 typedef enum {XmListMode = 0, XmScaleMode = 1} XmColorMode;
 
 /************************************************************************

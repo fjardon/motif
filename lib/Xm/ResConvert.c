@@ -1758,8 +1758,8 @@ XmeGetDefaultRenderTable(
     XmSpecRenderTrait trait ;
     _XmWidgetToAppContext(w);
 
-    _XmAppLock(app);
-    if (fontListType)
+    if (fontListType) {
+        _XmAppLock(app);
 	/* look for the first ancestor with the trait */
 	while ((w = XtParent(w)) != NULL) {
 	    if ((trait = (XmSpecRenderTrait) 
@@ -1769,18 +1769,17 @@ XmeGetDefaultRenderTable(
 		break ;  
 	    }
 	}
+        _XmAppUnlock(app);
+    }
 
     if (fontlist) {
-        _XmAppUnlock(app);
         return (fontlist);
     }
 #if 0
     else if (sFontList) {
 	printf("Reusing sFontList\n");
-        _XmAppUnlock(app);
 	return(sFontList);
     }
-    _XmAppUnlock(app);
 #endif
 
     _XmProcessLock();
