@@ -47,11 +47,6 @@ XtPointer client_data, cbs;
   XrmValue value, get_value;
   char *str_type_return;
 
-  XmeGetDefaultPixel(w, XmBACKGROUND, offset, &value);
-  if (*(Pixel*)value.addr != background)
-    printf("ERROR: background pixel value: %d  expected: %d\n",
-	   (*(Pixel*)value.addr), background);
-
   XmeGetDefaultPixel(w, XmFOREGROUND, offset, &value);
   if (*(Pixel*)value.addr != foreground)
     printf("ERROR: foreground pixel value: %d  expected: %d\n",
