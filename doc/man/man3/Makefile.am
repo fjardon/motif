@@ -643,7 +643,6 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateSimpleRadioBox.3 \
     XmVaCreateSimpleSpinBox.3 \
     XmVaCreateSpinBox.3 \
-    XmVaCreateTable.3 \
     XmVaCreateTabStack.3 \
     XmVaCreateText.3 \
     XmVaCreateTextField.3 \
