@@ -67,17 +67,6 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
  * my own definitions.
  */
 
-#undef MIN			
-#undef MAX			
-#undef ABS
-
-#define MIN(a,b)        (((int)(a) < (int)(b)) ? (a) : (b))
-#define MAX(a,b)        (((int)(a) > (int)(b)) ? (a) : (b))
-#define ABS(a)          (((int)(a) >= 0) ? (a) : -(a))
-
-#define ASSIGN_MAX(a, b) ((a) = ((int)(a) > (int)(b) ? (a) : (b)))
-#define ASSIGN_MIN(a, b) ((a) = ((int)(a) < (int)(b) ? (a) : (b)))
-
 #define XM_ICON_BUTTON_CLASS_NAME ("XmIconButton")
 #define XM_EXT_LIST_CLASS_NAME ("XmExtendedList")
 #define XM_ILIST_CLASS_NAME ("XmIList")
@@ -89,11 +78,13 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-void   XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
-void  _XmMoveWidget(Widget, Position, Position);
-void  _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
-void  _XmConfigureWidget(Widget, Position, Position, 
-                         Dimension, Dimension, Dimension);
+   
+
+void XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
+void _XmMoveWidget(Widget, Position, Position);
+void _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
+void _XmConfigureWidget(Widget, Position, Position, 
+                        Dimension, Dimension, Dimension);
 
 XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension,
                                    Dimension,
@@ -120,6 +111,8 @@ void _XmSetContextData(Widget, XContext, XtPointer);
 void _XmDeleteContextData(Widget, XContext);
 Boolean _XmGetContextData(Widget, XContext, XtPointer *);
 Boolean _XmUtilIsSubclassByNameQ(Widget, XrmQuark);
+void _XmInitialIzeConverters(Widget);
+
 void _XmExtHighlightBorder(Widget);
 void _XmExtUnhighlightBorder(Widget);
 
