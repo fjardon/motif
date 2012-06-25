@@ -618,7 +618,6 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateManagedSeparatorGadget.3 \
     XmVaCreateManagedSimpleSpinBox.3 \
     XmVaCreateManagedSpinBox.3 \
-    XmVaCreateManagedTable.3 \
     XmVaCreateManagedTabStack.3 \
     XmVaCreateManagedText.3 \
     XmVaCreateManagedTextField.3 \
