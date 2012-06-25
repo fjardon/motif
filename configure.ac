@@ -15,7 +15,7 @@ AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(openMotif,2.3.x)
+AM_INIT_AUTOMAKE(openmotif,2.2.4)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
