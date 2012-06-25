@@ -22,12 +22,13 @@ EXTRA_HDRS = Ext.h ExtP.h  \
              ButtonBox.h ButtonBoxP.h \
              ColorS.h ColorSP.h \
              Picture.h PictureP.h DataF.h DataFP.h DataFSelP.h \
-             Ext18List.h Ext18ListP.h \
+             Ext18List.h Ext18ListP.h MultiList.h MultiListP.h \
              Paned.h PanedP.h FontS.h FontSP.h \
              IconBox.h IconBoxP.h IconButton.h IconButtonP.h xmlist.h \
              Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
              TabBox.h TabBoxP.h TabStack.h TabStackP.h \
-             TabList.h DrawUtils.h Tree.h TreeP.h ComboBox2.h ComboBox2P.h
+             TabList.h DrawUtils.h Tree.h TreeP.h \
+             ComboBox2.h ComboBox2P.h DropDown.h DropDownP.h
 
 EXTRA_SRCS = XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
