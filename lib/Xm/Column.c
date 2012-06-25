@@ -271,7 +271,7 @@ static XmSyntheticResource cont_get_resources[] =
 };
 #undef offset
 
-ConstraintClassExtensionRec xmColumnConstraintExtension = {
+ConstraintClassExtensionRec xiColumnConstraintExtension = {
     NULL,			         /* next_extension  */
     NULLQUARK,			         /* record_type     */
     XtConstraintExtensionVersion,        /* version         */
@@ -279,7 +279,7 @@ ConstraintClassExtensionRec xmColumnConstraintExtension = {
     ConstraintGetValues		         /* get_values_hook */
 };
 
-XmColumnClassRec xmColumnClassRec = {
+XmColumnClassRec xiColumnClassRec = {
   {
     /* core_class members      */
     /* superclass         */	(WidgetClass) &xmBulletinBoardClassRec,
@@ -330,7 +330,7 @@ XmColumnClassRec xmColumnClassRec = {
     /* init proc          */ 	ConstraintInitialize,
     /* destroy proc       */ 	ConstraintDestroy,
     /* set values proc    */ 	ConstraintSetValues,
-    /* extension          */ 	&xmColumnConstraintExtension,
+    /* extension          */ 	&xiColumnConstraintExtension,
   },
   { /* manager_class fields */
     /* default translations */ 	XtInheritTranslations,
@@ -353,7 +353,7 @@ XmColumnClassRec xmColumnClassRec = {
   }
 };
 
-WidgetClass xmColumnWidgetClass = (WidgetClass) &xmColumnClassRec;
+WidgetClass xmColumnWidgetClass = (WidgetClass) &xiColumnClassRec;
 
 XmOffsetPtr XmColumn_offsets;
 XmOffsetPtr XmColumnC_offsets;
@@ -373,7 +373,7 @@ XmOffsetPtr XmColumnC_offsets;
 static void
 ClassInitialize(void)
 {
-    XmColumnClassRec* wc = &xmColumnClassRec;
+    XmColumnClassRec* wc = &xiColumnClassRec;
     int i;
 
     XmResolveAllPartOffsets(xmColumnWidgetClass,
