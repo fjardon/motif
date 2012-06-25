@@ -1,0 +1,6 @@
+#! /bin/sh
+
+if [ -x /usr/X11R6/bin/xmbind ] ; then
+    /usr/X11R6/bin/xmbind
+fi
+
