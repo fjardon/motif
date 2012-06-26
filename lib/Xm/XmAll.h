@@ -42,6 +42,7 @@
 #include <Xm/Command.h>
 #include <Xm/Container.h>
 #include <Xm/CutPaste.h>
+#include <Xm/DataField.h>
 #include <Xm/DialogS.h>
 #include <Xm/Display.h>
 #include <Xm/DragC.h>
@@ -86,6 +87,7 @@
 #include <Xm/SeparatoG.h>
 #include <Xm/Separator.h>
 #include <Xm/SpinB.h>
+#include <Xm/TabBox.h>
 #include <Xm/TabStack.h>
 #include <Xm/Text.h>
 #include <Xm/TextF.h>
