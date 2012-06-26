@@ -1253,191 +1253,181 @@ static XtActionsRec data_actions[] = {
   {"leave",			df_TextLeave},
 };
 
-#define offset(f) XmPartOffset(XmTextField, f)
-#define doffset(f) (XmPartOffset(XmDataField, f) + sizeof(XmTextFieldPart))
-
 static XtResource resources[] =
 {
     {
       XmNpicture, XmCPicture, XmRString, sizeof(String),
-      doffset(picture_source), XmRImmediate,
-      (XtPointer) NULL
+      XtOffsetOf(XmDataFieldRec, data.picture_source),
+      XmRImmediate, (XtPointer) NULL
     },
     {
       XmNautoFill, XmCAutoFill, XmRBoolean, sizeof(Boolean),
-      doffset(auto_fill), XmRImmediate,
-      (XtPointer) True
+      XtOffsetOf(XmDataFieldRec, data.auto_fill),
+      XmRImmediate, (XtPointer) True
     },
     {
       XmNalignment, XmCAlignment, XmRAlignment, sizeof(unsigned char),
-      doffset(alignment), XmRImmediate,
+      XtOffsetOf(XmDataFieldRec, data.alignment), XmRImmediate,
       (XtPointer) XmALIGNMENT_BEGINNING
     },
     {
-      XmNpictureErrorCallback, XmCCallback, XmRCallback,
-      sizeof(XtCallbackList), doffset(picture_error_cb), XmRCallback,
+      XmNpictureErrorCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
+      XtOffsetOf(XmDataFieldRec, data.picture_error_cb), XmRCallback,
       (XtPointer) NULL
     },
     {
-      XmNvalidateCallback, XmCCallback, XmRCallback,
-      sizeof(XtCallbackList), doffset(validate_cb), XmRCallback,
-      (XtPointer) NULL
+      XmNvalidateCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
+      XtOffsetOf(XmDataFieldRec, data.validate_cb),
+      XmRCallback, (XtPointer) NULL
     },
 
 	/* the following are undocumented overrides of XmTextField resources */
     {
       XmNactivateCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-      offset(activate_callback),
+      XtOffsetOf(XmDataFieldRec, text.activate_callback),
       XmRCallback, NULL
     },
     {
       XmNlosingFocusCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-      offset(losing_focus_callback),
+      XtOffsetOf(XmDataFieldRec, text.losing_focus_callback),
       XmRCallback, NULL
     },
     {
       XmNfocusCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-      offset(focus_callback),
+      XtOffsetOf(XmDataFieldRec, text.focus_callback),
       XmRCallback, NULL
     },
     {
-      XmNmodifyVerifyCallback, XmCCallback, XmRCallback,
-      sizeof(XtCallbackList),
-      offset(modify_verify_callback),
+      XmNmodifyVerifyCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
+      XtOffsetOf(XmDataFieldRec, text.modify_verify_callback),
       XmRCallback, NULL
     },
     {
-      XmNmodifyVerifyCallbackWcs, XmCCallback, XmRCallback,
-      sizeof(XtCallbackList),
-      offset(wcs_modify_verify_callback),
+      XmNmodifyVerifyCallbackWcs, XmCCallback, XmRCallback, sizeof(XtCallbackList),
+      XtOffsetOf(XmDataFieldRec, text.wcs_modify_verify_callback),
       XmRCallback, NULL
     },
     {
-      XmNmotionVerifyCallback, XmCCallback, XmRCallback,
-      sizeof(XtCallbackList),
-      offset(motion_verify_callback),
+      XmNmotionVerifyCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
+      XtOffsetOf(XmDataFieldRec, text.motion_verify_callback),
       XmRCallback, NULL
     },
     {
       XmNgainPrimaryCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-      offset(gain_primary_callback),
+      XtOffsetOf(XmDataFieldRec, text.gain_primary_callback),
       XmRCallback, NULL
     },
     {
       XmNlosePrimaryCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-      offset(lose_primary_callback),
+      XtOffsetOf(XmDataFieldRec, text.lose_primary_callback),
       XmRCallback, NULL
     },
     {
-      XmNvalueChangedCallback, XmCCallback, XmRCallback,
-      sizeof(XtCallbackList),
-      offset(value_changed_callback),
+      XmNvalueChangedCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
+      XtOffsetOf(XmDataFieldRec, text.value_changed_callback),
       XmRCallback, NULL
     },
     {
       XmNvalue, XmCValue, XmRString, sizeof(String),
-      offset(value),
+      XtOffsetOf(XmDataFieldRec, text.value),
       XmRString, ""
     },
     {
       XmNvalueWcs, XmCValueWcs, XmRValueWcs, sizeof(wchar_t*),
-      offset(wc_value),
+      XtOffsetOf(XmDataFieldRec, text.wc_value),
       XmRString, NULL
     },
     {
-      XmNmarginHeight, XmCMarginHeight, XmRVerticalDimension,
-      sizeof(Dimension),
-      offset(margin_height),
+      XmNmarginHeight, XmCMarginHeight, XmRVerticalDimension, sizeof(Dimension),
+      XtOffsetOf(XmDataFieldRec, text.margin_height),
       XmRImmediate, (XtPointer) 5
     },
     {
-      XmNmarginWidth, XmCMarginWidth, XmRHorizontalDimension,
-      sizeof(Dimension),
-      offset(margin_width),
+      XmNmarginWidth, XmCMarginWidth, XmRHorizontalDimension, sizeof(Dimension),
+      XtOffsetOf(XmDataFieldRec, text.margin_width),
       XmRImmediate, (XtPointer) 5
     },
     {
-      XmNcursorPosition, XmCCursorPosition, XmRTextPosition,
-      sizeof (XmTextPosition),
-      offset(cursor_position),
+      XmNcursorPosition, XmCCursorPosition, XmRTextPosition, sizeof (XmTextPosition),
+      XtOffsetOf(XmDataFieldRec, text.cursor_position),
       XmRImmediate, (XtPointer) 0
     },
     {
       XmNcolumns, XmCColumns, XmRShort, sizeof(short),
-      offset(columns),
+      XtOffsetOf(XmDataFieldRec, text.columns),
       XmRImmediate, (XtPointer) 20
     },
     {
       XmNmaxLength, XmCMaxLength, XmRInt, sizeof(int),
-      offset(max_length),
+      XtOffsetOf(XmDataFieldRec, text.max_length),
       XmRImmediate, (XtPointer) INT_MAX
     },
     {
       XmNblinkRate, XmCBlinkRate, XmRInt, sizeof(int),
-      offset(blink_rate),
+      XtOffsetOf(XmDataFieldRec, text.blink_rate),
       XmRImmediate, (XtPointer) 500
     },
     {
       "pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
-      offset(check_set_render_table),
+      XtOffsetOf(XmDataFieldRec, text.check_set_render_table),
       XmRImmediate, (XtPointer) False
     },
     {
      XmNfontList, XmCFontList, XmRFontList, sizeof(XmFontList),
-     offset(font_list),
+     XtOffsetOf(XmDataFieldRec, text.font_list),
      XmRCallProc, (XtPointer)CheckSetRenderTable
     },
     {
      XmNrenderTable, XmCRenderTable, XmRRenderTable, sizeof(XmRenderTable),
-     offset(font_list),
+     XtOffsetOf(XmDataFieldRec, text.font_list),
      XmRCallProc, (XtPointer)CheckSetRenderTable
     },
     {
       XmNselectionArray, XmCSelectionArray, XmRPointer,
       sizeof(XtPointer),
-      offset(selection_array),
+      XtOffsetOf(XmDataFieldRec, text.selection_array),
       XmRImmediate, (XtPointer) df_sarray
     },
     {
       XmNselectionArrayCount, XmCSelectionArrayCount, XmRInt, sizeof(int),
-      offset(selection_array_count),
+      XtOffsetOf(XmDataFieldRec, text.selection_array_count),
       XmRInt, (XtPointer) &df_sarraysize
     },
     {
       XmNresizeWidth, XmCResizeWidth, XmRBoolean, sizeof(Boolean),
-      offset(resize_width),
+      XtOffsetOf(XmDataFieldRec, text.resize_width),
       XmRImmediate, (XtPointer) False
     },
     {
       XmNpendingDelete, XmCPendingDelete, XmRBoolean, sizeof(Boolean),
-      offset(pending_delete),
+      XtOffsetOf(XmDataFieldRec, text.pending_delete),
       XmRImmediate, (XtPointer) True
     },
     {
       XmNeditable, XmCEditable, XmRBoolean, sizeof(Boolean),
-      offset(editable),
+      XtOffsetOf(XmDataFieldRec, text.editable),
       XmRImmediate, (XtPointer) True
     },
     {
       XmNcursorPositionVisible, XmCCursorPositionVisible, XmRBoolean,
       sizeof(Boolean),
-      offset(cursor_position_visible),
+      XtOffsetOf(XmDataFieldRec, text.cursor_position_visible),
       XmRImmediate, (XtPointer) True
     },
    {
      XmNverifyBell, XmCVerifyBell, XmRBoolean, sizeof(Boolean),
-     offset(verify_bell),
+     XtOffsetOf(XmDataFieldRec, text.verify_bell),
      XmRImmediate, (XtPointer) XmDYNAMIC_BOOL
    },
    {
      XmNselectThreshold, XmCSelectThreshold, XmRInt, sizeof(int),
-     offset(threshold),
+     XtOffsetOf(XmDataFieldRec, text.threshold),
      XmRImmediate, (XtPointer) 5
    },
    {
      XmNnavigationType, XmCNavigationType, XmRNavigationType,
      sizeof (unsigned char),
-     XmPartOffset(XmPrimitive, navigation_type),
+     XtOffsetOf(XmDataFieldRec, primitive.navigation_type),
      XmRImmediate, (XtPointer) XmTAB_GROUP
    },
 };
@@ -1448,7 +1438,7 @@ static XmSyntheticResource syn_resources[] =
    {
      XmNmarginWidth,
      sizeof(Dimension),
-     offset(margin_width),
+     XtOffsetOf(XmDataFieldRec, text.margin_width),
      XmeFromHorizontalPixels,
      XmeToHorizontalPixels
    },
@@ -1456,7 +1446,7 @@ static XmSyntheticResource syn_resources[] =
    {
      XmNmarginHeight,
      sizeof(Dimension),
-     offset(margin_height),
+     XtOffsetOf(XmDataFieldRec, text.margin_height),
      XmeFromVerticalPixels,
      XmeToVerticalPixels
    },
@@ -1464,7 +1454,7 @@ static XmSyntheticResource syn_resources[] =
    {
      XmNvalue,
      sizeof(char *),
-     offset(value),
+     XtOffsetOf(XmDataFieldRec, text.value),
      df_MakeCopy,
      NULL
    },
@@ -1472,13 +1462,12 @@ static XmSyntheticResource syn_resources[] =
    {
      XmNvalueWcs,
      sizeof(wchar_t *),
-     offset(wc_value),
+     XtOffsetOf(XmDataFieldRec, text.wc_value),
      df_WcsMakeCopy,
      NULL
    },
 
 };
-#undef offset
 
 XmPrimitiveClassExtRec _XmDataFPrimClassExtRec = {
     NULL,
@@ -1496,8 +1485,7 @@ externaldef(xmdatafieldclassrec) XmDataFieldClassRec xmDataFieldClassRec =
    {
       (WidgetClass) &xmPrimitiveClassRec,       /* superclass         */
       "XmDataField",				/* class_name         */
-      sizeof(XmTextFieldPart) 
-      + sizeof(XmDataFieldPart),		/* widget_size        */
+      sizeof(XmDataFieldRec),			/* widget_size        */
       ClassInit,		                /* class_initialize   */
       df_ClassPartInitialize,			/* class_part_initiali*/
       FALSE,					/* class_inited       */
@@ -1557,7 +1545,6 @@ externaldef(xmdatafieldclassrec) XmDataFieldClassRec xmDataFieldClassRec =
 
 externaldef(xmdatafieldwidgetclass) WidgetClass xmDataFieldWidgetClass =
 					 (WidgetClass) &xmDataFieldClassRec;
-XmOffsetPtr XmDataField_offsets;
 
 /* AccessXmString Trait record for DataField */
 static XmConst XmAccessTextualTraitRec dataFieldCS = {
@@ -1576,21 +1563,7 @@ ClassInit(void)
 {
     XmDataFieldClassRec* wc = &xmDataFieldClassRec;
     XmTransferTrait tt;
-    int i;
 
-    XmResolveAllPartOffsets(xmDataFieldWidgetClass,
-			    &XmDataField_offsets,
-			    NULL);
-
-    _XmProcessLock(); 
-    for(i=0; i<wc->primitive_class.num_syn_resources; i++)
-    {
-	    (wc->primitive_class.syn_resources)[i].resource_offset = 
-            XmGetPartOffset(wc->primitive_class.syn_resources + i,
-            &XmDataField_offsets);
-    }
-    _XmProcessUnlock();
-    
     /* set TextField's transfer trait */
     tt = XmeTraitGet((XtPointer)xmTextFieldWidgetClass, XmQTtransfer);
     XmeTraitSet((XtPointer)xmDataFieldWidgetClass,

@@ -42,7 +42,7 @@
 #include <Xm/Command.h>
 #include <Xm/Container.h>
 #include <Xm/CutPaste.h>
-#include <Xm/DataField.h>
+#include <Xm/DataF.h>
 #include <Xm/DialogS.h>
 #include <Xm/Display.h>
 #include <Xm/DragC.h>
