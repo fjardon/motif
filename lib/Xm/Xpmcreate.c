@@ -499,7 +499,7 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
     Colormap colormap;
-    XpmColorSymbol *colorsymbols;
+    XpmColorSymbol *colorsymbols = NULL;
     unsigned int numsymbols;
     XpmAllocColorFunc allocColor;
     void *closure;
@@ -507,7 +507,7 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
     char *colorname;
     unsigned int color, key;
     Bool pixel_defined;
-    XpmColorSymbol *symbol;
+    XpmColorSymbol *symbol = NULL;
     char **defaults;
     int ErrorStatus = XpmSuccess;
     char *s;
