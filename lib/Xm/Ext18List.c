@@ -273,6 +273,21 @@ static XtResource resources[] =
   }
 };
 
+static XmSyntheticResource syn_resources[] =
+{
+  {
+    XmNwidth,
+    sizeof (Dimension), XtOffsetOf(CoreRec, core.width),
+    XmeFromHorizontalPixels, XmeToHorizontalPixels
+  },
+
+  {
+    XmNheight,
+    sizeof (Dimension), XtOffsetOf(CoreRec, core.height),
+    XmeFromVerticalPixels, XmeToVerticalPixels
+  }
+};
+
 XmExt18ListClassRec xmExt18ListClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
@@ -326,8 +341,8 @@ XmExt18ListClassRec xmExt18ListClassRec = {
    },
    {		/* manager_class fields */
     /* default translations   */      XtInheritTranslations,	
-    /* syn_resources          */      NULL,
-    /* num_syn_resources      */      0,
+    /* syn_resources          */      syn_resources,
+    /* num_syn_resources      */      XtNumber(syn_resources),
     /* syn_cont_resources     */      NULL,
     /* num_syn_cont_resources */      0,
     /* parent_process         */      NULL,
