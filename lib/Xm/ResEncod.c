@@ -2214,10 +2214,9 @@ processCharsetAndText(XmStringCharSet tag,
 	  return(False);
 	}
 	
-      ctlen = strlen((char *)prop_rtn.value);
-	
       /* Now copy in the text */
-      if (ctlen > 0) {
+      if (prop_rtn.value) {
+        ctlen = strlen((char *)prop_rtn.value);
 	*outc = ctextConcat(*outc, *outlen, prop_rtn.value, ctlen);
 	*outlen += ctlen;
       };
