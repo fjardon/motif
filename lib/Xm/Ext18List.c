@@ -100,40 +100,84 @@ static XtGeometryResult GeometryManager(Widget, XtWidgetGeometry *,
 *************************************************************/
 
 
-static XmPartResource resources[] = {
-#define offset(field) XmPartOffset(XmExt18List, field)
-#define core_offset(field) XmPartOffset(Core, field)
-  {XmNwidth, XmCWidth, XmRHorizontalDimension, sizeof(Dimension),
-     core_offset(width), XmRImmediate, (XtPointer) 0},
-  {XmNheight, XmCHeight, XmRVerticalDimension, sizeof(Dimension),
-     core_offset(height), XmRImmediate, (XtPointer) 0},
-  {XmNtitle, XmCTitle, XmRXmString, sizeof(XmString),
-     offset(title), XmRImmediate, (XtPointer) NULL},
-  {XmNtitleString, XmCTitleString, XmRXmString, sizeof(XmString),
-     offset(title_string), XmRImmediate, (XtPointer) NULL},
+static XtResource resources[] =
+{
+  {
+    XmNwidth, XmCWidth, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(CoreRec, core.width),
+    XmRImmediate, (XtPointer) 0
+  },
 
-  {XmNdoubleClickCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(double_click), XmRImmediate, (XtPointer) NULL},
-  {"pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
-     offset(check_set_select_callback), XmRImmediate, (XtPointer) False},
-  {XmNselectCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(single_select), XmRImmediate, (XtPointer) NULL},
+  {
+    XmNheight, XmCHeight, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(CoreRec, core.height),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNtitle, XmCTitle, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmExt18ListRec, ext_list.title),
+    XmRImmediate, (XtPointer) NULL
+  },
+  {
+    XmNtitleString, XmCTitleString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmExt18ListRec, ext_list.title_string),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNdoubleClickCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmExt18ListRec, ext_list.double_click),
+    XmRImmediate, (XtPointer) NULL
+  },
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmExt18ListRec, ext_list.check_set_select_callback),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNselectCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmExt18ListRec, ext_list.single_select),
+    XmRImmediate, (XtPointer) NULL
+  },
+
   /* this is the old name for the above */
-  {XmNsingleSelectionCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(single_select), XmRImmediate, (XtPointer) NULL},
+  {
+    XmNsingleSelectionCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmExt18ListRec, ext_list.single_select),
+    XmRImmediate, (XtPointer) NULL
+  },
 
-  {XmNshowFind, XmCShowFind, XmRBoolean, sizeof(Boolean),
-     offset(show_find), XmRImmediate, (XtPointer) True},
-  {XmNfindLabel, XmCFindLabel, XmRXmString, sizeof(XmString),
-     offset(find_label), XmRImmediate, (XtPointer) NULL},
-  {XmNitemNotFoundCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(not_found), XmRImmediate, (XtPointer) NULL},
-  {XmNitemFoundCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(item_found), XmRImmediate, (XtPointer) NULL},
-  {XmNvisibleItemCount, XmCVisibleItemCount, XmRInt, sizeof(int),
-     offset(visible_rows), XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT},
-#undef offset
-#undef core_offset
+  {
+    XmNshowFind, XmCShowFind, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmExt18ListRec, ext_list.show_find),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNfindLabel, XmCFindLabel, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmExt18ListRec, ext_list.find_label),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNitemNotFoundCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmExt18ListRec, ext_list.not_found),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNitemFoundCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmExt18ListRec, ext_list.item_found),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNvisibleItemCount, XmCVisibleItemCount, XmRInt,
+    sizeof(int), XtOffsetOf(XmExt18ListRec, ext_list.visible_rows),
+    XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT
+  }
 };
 
 
@@ -141,7 +185,7 @@ XmExt18ListClassRec xmExt18ListClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	XM_EXT_18_LIST_CLASS_NAME,
-    /* widget_size		*/	sizeof(XmExt18ListPart),
+    /* widget_size		*/	sizeof(XmExt18ListRec),
     /* class_initialize		*/	ClassInitialize,
     /* class_part_initialize */ ClassPartInitialize,	
     /* class_inited		*/	FALSE,
@@ -204,9 +248,6 @@ XmExt18ListClassRec xmExt18ListClassRec = {
 
 WidgetClass xmExt18ListWidgetClass = (WidgetClass)&xmExt18ListClassRec;
 
-XmOffsetPtr XmExt18List_offsets;
-XmOffsetPtr XmExt18ListC_offsets;
-
 /************************************************************
 *	STATIC CODE
 *************************************************************/
@@ -219,9 +260,7 @@ XmOffsetPtr XmExt18ListC_offsets;
 static void
 ClassInitialize()
 {
-    XmResolveAllPartOffsets(xmExt18ListWidgetClass,
-			    &XmExt18List_offsets,
-			    &XmExt18ListC_offsets);
+  /* do nothing */
 }
 
 /*	Function Name: Initialize

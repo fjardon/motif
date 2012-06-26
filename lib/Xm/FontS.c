@@ -190,9 +190,6 @@ static void ClassInitialize();
 
 /*  Resource definitions for Subclasses of Primitive */
 
-#define poffset(field) XmPartOffset(XmPaned, field)
-#define offset(field) XmPartOffset(XmFontSelector, field)
-
 #define SAMPLE \
 ("abcdefghijklmonpqrstuvwxyz\n\
 ABCDEFGHIJKLMONPQRSTUVWXYZ\n\
@@ -210,100 +207,209 @@ ABCDEFGHIJKLMONPQRSTUVWXYZ\n\
 
 static int resolutions[] = { 75, 100 };
 
-static XmPartResource resources[] = {
-    {XmNspacing, XmCSpacing, XmRVerticalDimension, sizeof(Dimension),
-       poffset(internal_bw), XmRImmediate, (XtPointer) 2},
-    {XmNseparatorOn, XmCSeparatorOn, XmRBoolean, sizeof(Boolean),
-       poffset(separator_on), XmRImmediate, (XtPointer) True},
-    {XmNmarginHeight, XmCMargin, XmRVerticalDimension, sizeof(Dimension),
-       poffset(margin_height), XmRImmediate, (XtPointer) 0},
+static XtResource resources[] =
+{
+  {
+    XmNspacing, XmCSpacing, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.internal_bw),
+    XmRImmediate, (XtPointer) 2
+  },
 
-    {XmNcurrentFont, XmCString, XmRString, sizeof(String),
-       offset(current_font), XmRImmediate, (XtPointer)NULL },
-    {XmNshowFontName, XmCBoolean, XmRBoolean, sizeof(Boolean),
-       offset(show_font_name), XmRImmediate, (XtPointer) False},
-    {XmNuseScaling, XmCBoolean, XmRBoolean, sizeof(Boolean),
-       offset(use_scaling), XmRImmediate, (XtPointer) True},
-    {XmNtextRows, XmCTextRows, XmRDimension, sizeof(Dimension),
-       offset(text_rows), XmRImmediate, (XtPointer) 8},
-    {XmNvalueChangedCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-       offset(font_changed_callback), XmRImmediate, (XtPointer) NULL},
+  {
+    XmNseparatorOn, XmCSeparatorOn, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedRec, paned.separator_on),
+    XmRImmediate, (XtPointer) True
+  },
 
-    {XmNsampleText, XmCSampleText, XmRXmString, sizeof(XmString),
-       offset(strings.sample_text), XmRString, (XtPointer) SAMPLE},
-    {XmNanyString, XmCAnyString, XmRXmString, sizeof(XmString),
-       offset(strings.any), XmRString, (XtPointer) "Any"},
-    {XmNanyLowerString, XmCAnyLowerString, XmRXmString, sizeof(XmString),
-       offset(strings.lower_any), XmRString, (XtPointer) "any"},
-    {XmNfamilyString, XmCFamilyString, XmRXmString, sizeof(XmString),
-       offset(strings.family), XmRString, (XtPointer) "Family"},
-    {XmNsizeString, XmCSizeString, XmRXmString, sizeof(XmString),
-       offset(strings.size), XmRString, (XtPointer) "Size"},
-    {XmNboldString, XmCBoldString, XmRXmString, sizeof(XmString),
-       offset(strings.bold), XmRString, (XtPointer) "Bold"},
-    {XmNitalicString, XmCItalicString, XmRXmString, sizeof(XmString),
-       offset(strings.italic), XmRString, (XtPointer) "Italic"},
-    {XmNoptionString, XmCOptionString, XmRXmString, sizeof(XmString),
-       offset(strings.option), XmRString, (XtPointer) "Options..."},
-    {XmNbothString, XmCBothString, XmRXmString, sizeof(XmString),
-       offset(strings.both), XmRString, (XtPointer) "Both"},
-    {XmNmonoSpaceString, XmCMonoSpaceString, XmRXmString, sizeof(XmString),
-       offset(strings.mono_space), XmRString, (XtPointer)"Fixed Width Fonts"}, 
-    {XmNpropSpaceString, XmCPropSpaceString, XmRXmString, sizeof(XmString),
-       offset(strings.prop_space), XmRString, (XtPointer)"Proportional Fonts"},
-    {XmNotherString, XmCOtherString, XmRXmString, sizeof(XmString),
-       offset(strings.other_font), XmRString, (XtPointer)"Other Fonts"},
-    {XmNxlfdString, XmCXlfdSpaceString, XmRXmString, sizeof(XmString),
-       offset(strings.xlfd), XmRString, (XtPointer)"Xlfd Fonts"},
-    {XmN75DPIstring, XmC75DPIString, XmRXmString, sizeof(XmString),
-       offset(strings.dpi_75), XmRString, (XtPointer) "75 dpi"},
-    {XmN100DPIstring, XmC100DPIString, XmRXmString, sizeof(XmString),
-       offset(strings.dpi_100), XmRString, (XtPointer) "100 dpi"},
-    {XmNscalingString, XmCScalingString, XmRXmString, sizeof(XmString),
-       offset(strings.scaling), XmRString, (XtPointer) "Use Font Scaling"},
-    {XmNshowNameString, XmCShowNameString, XmRXmString, sizeof(XmString),
-       offset(strings.show_name), XmRString, (XtPointer) "Show Font Name"},
+  {
+    XmNmarginHeight, XmCMargin, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.margin_height),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNcurrentFont, XmCString, XmRString,
+    sizeof(String), XtOffsetOf(XmFontSelectorRec, fs.current_font),
+    XmRImmediate, (XtPointer)NULL
+  },
+
+  {
+    XmNshowFontName, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmFontSelectorRec, fs.show_font_name),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNuseScaling, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmFontSelectorRec, fs.use_scaling),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNtextRows, XmCTextRows, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmFontSelectorRec, fs.text_rows),
+    XmRImmediate, (XtPointer) 8
+  },
+
+  {
+    XmNvalueChangedCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmFontSelectorRec, fs.font_changed_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNsampleText, XmCSampleText, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.sample_text),
+    XmRString, (XtPointer) SAMPLE
+  },
+
+  {
+    XmNanyString, XmCAnyString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.any),
+    XmRString, (XtPointer) "Any"
+  },
+
+  {
+    XmNanyLowerString, XmCAnyLowerString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.lower_any),
+    XmRString, (XtPointer) "any"
+  },
+
+  {
+    XmNfamilyString, XmCFamilyString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.family),
+    XmRString, (XtPointer) "Family"
+  },
+
+  {
+    XmNsizeString, XmCSizeString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.size),
+    XmRString, (XtPointer) "Size"
+  },
+
+  {
+    XmNboldString, XmCBoldString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.bold),
+    XmRString, (XtPointer) "Bold"
+  },
+
+  {
+    XmNitalicString, XmCItalicString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.italic),
+    XmRString, (XtPointer) "Italic"
+  },
+
+  {
+      XmNoptionString, XmCOptionString, XmRXmString,
+      sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.option),
+      XmRString, (XtPointer) "Options..."
+  },
+
+  {
+    XmNbothString, XmCBothString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.both),
+    XmRString, (XtPointer) "Both"
+  },
+
+  {
+    XmNmonoSpaceString, XmCMonoSpaceString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.mono_space),
+    XmRString, (XtPointer) "Fixed Width Fonts"
+  },
+
+  {
+    XmNpropSpaceString, XmCPropSpaceString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.prop_space),
+    XmRString, (XtPointer) "Proportional Fonts"
+  },
+  
+  {
+    XmNotherString, XmCOtherString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.other_font),
+    XmRString, (XtPointer) "Other Fonts"
+  },
+
+  {
+    XmNxlfdString, XmCXlfdSpaceString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.xlfd),
+    XmRString, (XtPointer) "Xlfd Fonts"
+  },
+
+  {
+    XmN75DPIstring, XmC75DPIString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.dpi_75),
+    XmRString, (XtPointer) "75 dpi"
+  },
+
+  {
+    XmN100DPIstring, XmC100DPIString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.dpi_100),
+    XmRString, (XtPointer) "100 dpi"
+  },
+
+  {
+    XmNscalingString, XmCScalingString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.scaling),
+    XmRString, (XtPointer) "Use Font Scaling"
+    },
+
+  {
+    XmNshowNameString, XmCShowNameString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.show_name),
+    XmRString, (XtPointer) "Show Font Name"
+  },
 
     /*
      * Stuff to set the valid charset/encoding pairs.
      */
 
-    {XmNencodingString, XmCEncodingString, XmRXmString, sizeof(XmString),
-       offset(strings.encoding_only), XmRString, (XtPointer) "Encoding"},
+  {
+    XmNencodingString, XmCEncodingString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmFontSelectorRec, fs.strings.encoding_only),
+    XmRString, (XtPointer) "Encoding"
+  },
     
     /*
      * NOTE: This resource value must end in a comma because the resource
      *       converter is broken in Motif1.1.4.
      */
 
-    {XmNencodingList, XmCEncodingList, XmRStringTable, sizeof(String *), 
-       offset(strings.encoding_list), XmRString, (XtPointer) "iso8859-1,"},
-    {XmNdefaultEncodingString, XmCDefaultEncodingString, 
-       XmRString, sizeof(String), offset(encoding), 
-       XmRString, (XtPointer) "iso8859-1"},
+  {
+    XmNencodingList, XmCEncodingList, XmRStringTable,
+    sizeof(String *), XtOffsetOf(XmFontSelectorRec, fs.strings.encoding_list),
+    XmRString, (XtPointer) "iso8859-1,"
+  },
+
+  {
+    XmNdefaultEncodingString, XmCDefaultEncodingString, XmRString,
+    sizeof(String), XtOffsetOf(XmFontSelectorRec, fs.encoding), 
+    XmRString, (XtPointer) "iso8859-1"
+  }
 };
 
 static XmSyntheticResource syn_resources[] =
 {
-    { XmNspacing, sizeof(Dimension), poffset(internal_bw), 
-	  _XmFromPanedPixels, (XmImportProc) _XmToPanedPixels
-    },
-    { XmNmarginHeight, sizeof(Dimension), poffset(margin_height),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    }
+  {
+    XmNspacing, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.internal_bw),
+    _XmFromPanedPixels, (XmImportProc) _XmToPanedPixels
+  },
+
+  {
+    XmNmarginHeight, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.margin_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  }
 };
 
-#undef poffset
-#undef offset
-
-#define offset(field) XmConstraintPartOffset(XmPaned, field)
-
-static XtResource subresources[] = {
-    {XmNshowSash, XmCShowSash, XmRBoolean, sizeof(Boolean),
-	 offset(show_sash), XmRImmediate, (XtPointer) False},
+static XtResource subresources[] =
+{
+  {
+    XmNshowSash, XmCShowSash, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedConstraintsRec, paned.show_sash),
+    XmRImmediate, (XtPointer) False
+  }
 };
-
-#undef offset
 
 #define SuperClass ((ConstraintWidgetClass) &xmPanedClassRec)
 
@@ -312,7 +418,7 @@ XmFontSelectorClassRec xmFontSelectorClassRec = {
 /* core class fields */
     /* superclass         */   (WidgetClass) SuperClass,
     /* class name         */   "XmFontSelector",
-    /* size               */   sizeof(XmFontSelectorPart),
+    /* size               */   sizeof(XmFontSelectorRec),
     /* class_initialize   */   ClassInitialize,
     /* class_part init    */   ClassPartInitialize,
     /* class_inited       */   FALSE,
@@ -353,7 +459,7 @@ XmFontSelectorClassRec xmFontSelectorClassRec = {
 /* constraint class fields */
     /* subresources       */   subresources,
     /* subresource_count  */   XtNumber(subresources),
-    /* constraint_size    */   sizeof(XmFontSelectorConstraintsPart),
+    /* constraint_size    */   sizeof(XmFontSelectorConstraintsRec),
     /* initialize         */   NULL,
     /* destroy            */   NULL,
     /* set_values         */   NULL,
@@ -377,9 +483,6 @@ XmFontSelectorClassRec xmFontSelectorClassRec = {
 };
 
 WidgetClass xmFontSelectorWidgetClass = (WidgetClass) &xmFontSelectorClassRec;
-
-XmOffsetPtr XmFontS_offsets;
-XmOffsetPtr XmFontSC_offsets;
 
 /***********************************************************
  *
@@ -3325,19 +3428,7 @@ RemoveUserError(Widget w, XtPointer fsw_ptr, XtPointer data)
 static void
 ClassInitialize()
 {
-    XmFontSelectorClassRec* wc = &xmFontSelectorClassRec;
-
-    int i;
-    XmResolveAllPartOffsets(xmFontSelectorWidgetClass,
-			    &XmFontS_offsets,
-			    &XmFontSC_offsets);
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmFontS_offsets);
-    }
-    _XmProcessUnlock();
+  /* do nothing */
 }
 
 

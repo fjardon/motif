@@ -93,39 +93,80 @@ static void ButtonBoxSetDefaultShadow(Widget button) ;
  *       STATIC DECLARATIONS
  ************************************************************/
 
-#define offset(field) XmPartOffset(XmButtonBox, field)
-static XmPartResource resources[] = {
-  { XmNequalSize, XmCEqualSize, XmRBoolean, sizeof(Boolean),
-     offset(equal_size), XmRImmediate, (XtPointer)False },
-  { XmNfillOption, XmCFillOption, XmRXmFillOption, sizeof(XmFillOption),
-     offset(fill_option), XmRImmediate, (XtPointer)XmFillNone },
-  { XmNmarginHeight, XmCMargin, XmRVerticalDimension, sizeof(Dimension),
-     offset(margin_height), XmRImmediate, (XtPointer) 0 },
-  { XmNmarginWidth, XmCMargin, XmRHorizontalDimension, sizeof(Dimension),
-     offset(margin_width), XmRImmediate, (XtPointer) 0 },
-  { XmNorientation, XmCOrientation, XmROrientation, sizeof(unsigned char),
-     offset(orientation), XmRImmediate, (XtPointer)XmHORIZONTAL },
+static XtResource resources[] =
+{
+  {
+    XmNequalSize, XmCEqualSize, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmButtonBoxRec, button_box.equal_size),
+    XmRImmediate, (XtPointer) False
+  },
 
-  {	XmNdefaultButton, XmCWidget, XmRWidget, sizeof (Widget), 
-		offset(default_button), XmRImmediate, (XtPointer) NULL },
+  {
+    XmNfillOption, XmCFillOption, XmRXmFillOption,
+    sizeof(XmFillOption), XtOffsetOf(XmButtonBoxRec, button_box.fill_option),
+    XmRImmediate, (XtPointer) XmFillNone
+  },
 
+  {
+    XmNmarginHeight, XmCMargin, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmButtonBoxRec, button_box.margin_height),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNmarginWidth, XmCMargin, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmButtonBoxRec, button_box.margin_width),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNorientation, XmCOrientation, XmROrientation,
+    sizeof(unsigned char), XtOffsetOf(XmButtonBoxRec, button_box.orientation),
+    XmRImmediate, (XtPointer)XmHORIZONTAL
+  },
+
+  {
+    XmNdefaultButton, XmCWidget, XmRWidget,
+    sizeof(Widget), XtOffsetOf(XmButtonBoxRec, button_box.default_button),
+    XmRImmediate, (XtPointer) NULL
+  }
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNmarginHeight, sizeof(Dimension), offset(margin_height),
-      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
-    { XmNmarginWidth, sizeof(Dimension), offset(margin_width),
-      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
+  {
+    XmNmarginHeight, sizeof(Dimension),
+    XtOffsetOf(XmButtonBoxRec, button_box.margin_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNmarginWidth, sizeof(Dimension),
+    XtOffsetOf(XmButtonBoxRec, button_box.margin_width),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  }
 };
-#undef offset
+
+static XtResource constraints[] =
+{
+   {
+      "pri.vate1", "Pri.vate1", XmRDimension, sizeof(Dimension),
+      XtOffsetOf(XmBBoxConstraintsRec, bbox.pref_width),
+      XmRImmediate, (XtPointer) 0
+   },
+   {
+      "pri.vate2", "Pri.vate2", XmRAttachment, sizeof(Dimension),
+      XtOffsetOf(XmBBoxConstraintsRec, bbox.pref_height),
+      XmRImmediate, (XtPointer) 0
+   }
+};
 	    
 XmButtonBoxClassRec xmButtonBoxClassRec = {
   {
     /* core_class members      */
     /* superclass         */	(WidgetClass)SUPERCLASS,
     /* class_name         */	"XmButtonBox",                            
-    /* widget_size        */	sizeof(XmButtonBoxPart),                 
+    /* widget_size        */	sizeof(XmButtonBoxRec),                 
     /* class_initialize   */	ClassInitialize,
     /* class_part_init    */	ClassPartInitialize, 	
     /* class_inited       */	False,                            	
@@ -167,9 +208,9 @@ XmButtonBoxClassRec xmButtonBoxClassRec = {
     /* extension          */	NULL,
   },
   { /* constraint_class fields */
-    /* resource list      */    NULL,
-    /* num resources      */ 	0,
-    /* constraint size    */ 	sizeof(XmBBoxConstraintsPart),
+    /* resource list      */    constraints,
+    /* num resources      */    XtNumber(constraints),
+    /* constraint size    */ 	sizeof(XmBBoxConstraintsRec),
     /* init proc          */ 	ConstraintInitialize,
     /* destroy proc       */ 	NULL,
     /* set values proc    */ 	ConstraintSetValues,
@@ -192,9 +233,6 @@ XmButtonBoxClassRec xmButtonBoxClassRec = {
 
 WidgetClass xmButtonBoxWidgetClass = (WidgetClass)&xmButtonBoxClassRec;
 
-XmOffsetPtr XmButtonBox_offsets;
-XmOffsetPtr XmButtonBoxC_offsets;
-
 /************************************************************
  *       STATIC CODE
  ************************************************************/
@@ -211,19 +249,6 @@ static void
 ClassInitialize()
 {
     XmButtonBoxClassRec *wc = &xmButtonBoxClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmButtonBoxWidgetClass,
-			    &XmButtonBox_offsets,
-			    &XmButtonBoxC_offsets);
-
-    _XmProcessLock();
-    for(i=0; i < wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmButtonBox_offsets);
-    }
-    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmFillOption, 
 		       (XtTypeConverter) CvtStringToFillOption,

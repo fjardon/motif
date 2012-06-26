@@ -49,48 +49,31 @@ extern "C" {
 *	MACROS
 *************************************************************/
 
-#define XmOutlineIndex (XmHierarchyIndex + 1)
+#define XmOutline_top_node_of_display(w) (((XmOutlineWidget)(w))->outline.top_node_of_display)
+#define XmOutline_max_width(w) (((XmOutlineWidget)(w))->outline.max_width)
+#define XmOutline_max_widget_width(w) (((XmOutlineWidget)(w))->outline.max_widget_width)
+#define XmOutline_child_op_list(w) (((XmOutlineWidget)(w))->outline.child_op_list)
+#define XmOutline_ul_point(w) (((XmOutlineWidget)(w))->outline.ul_point)
+#define XmOutline_lr_point(w) (((XmOutlineWidget)(w))->outline.lr_point)
+#define XmOutline_draw_gc(w) (((XmOutlineWidget)(w))->outline.draw_gc)
 
-extern XmOffsetPtr XmOutline_offsets;
-extern XmOffsetPtr XmOutlineC_offsets;
-
-#define XmOutlineField(w,f,t) XmField(w, XmOutline_offsets, XmOutline, f, t)
-#define XmOutline_top_node_of_display(w) XmOutlineField(w, top_node_of_display, OutlineConstraints)
-#define XmOutline_max_width(w) XmOutlineField(w, max_width, Dimension)
-#define XmOutline_max_widget_width(w) XmOutlineField(w, max_widget_width, Dimension)
-#define XmOutline_child_op_list(w) XmOutlineField(w, child_op_list, XmList)
-#define XmOutline_ul_point(w) XmOutlineField(w, ul_point, XPoint)
-#define XmOutline_lr_point(w) XmOutlineField(w, lr_point, XPoint)
-#define XmOutline_draw_gc(w) XmOutlineField(w, draw_gc, GC)
-
-#define XmOutline_indent_space(w) XmOutlineField(w, indent_space, Dimension)
-#define XmOutline_constrain_width(w) XmOutlineField(w, constrain_width, Boolean)
-#define XmOutline_connect_nodes(w) XmOutlineField(w, connect_nodes, Boolean)
+#define XmOutline_indent_space(w) (((XmOutlineWidget)(w))->outline.indent_space)
+#define XmOutline_constrain_width(w) (((XmOutlineWidget)(w))->outline.constrain_width)
+#define XmOutline_connect_nodes(w) (((XmOutlineWidget)(w))->outline.connect_nodes)
 
 
 
-/*
- * WARNING!
- *
- * These macros don't use the standard fieldmacro(widget) form.  They take
- * _pointers to OutlineConstraintsRec structures_.  Be careful.
- */
-#define XmOutlineCField(constraints, variable, type) \
-        (*(type *)(((char *) constraints) + \
-        XmOutlineC_offsets[XmOutlineIndex] + \
-        XtOffsetOf(XmOutlineConstraintPart, variable)))
-
-#define XmOutlineC_top_node_of_display(c) XmOutlineCField(c, top_node_of_display, HierarchyConstraintRec*)
-#define XmOutlineC_widget_x(c) XmOutlineCField(c, widget_x, Position)
-#define XmOutlineC_open_close_x(c) XmOutlineCField(c, open_close_x, Position)
-#define XmOutlineC_height(c) XmOutlineCField(c, height, Dimension)
-#define XmOutlineC_new_x(c) XmOutlineCField(c, new_x, Position)
-#define XmOutlineC_new_y(c) XmOutlineCField(c, new_y, Position)
-#define XmOutlineC_oc_new_x(c) XmOutlineCField(c, oc_new_x, Position)
-#define XmOutlineC_oc_new_y(c) XmOutlineCField(c, oc_new_y, Position)
-#define XmOutlineC_map(c) XmOutlineCField(c, map, Boolean)
-#define XmOutlineC_unmap(c) XmOutlineCField(c, unmap, Boolean)
-#define XmOutlineC_move(c) XmOutlineCField(c, move, Boolean)
+#define XmOutlineC_top_node_of_display(c) (((XmOutlineConstraintPtr)(c))->outline.top_node_of_display)
+#define XmOutlineC_widget_x(c) (((XmOutlineConstraintPtr)(c))->outline.widget_x)
+#define XmOutlineC_open_close_x(c) (((XmOutlineConstraintPtr)(c))->outline.open_close_x)
+#define XmOutlineC_height(c) (((XmOutlineConstraintPtr)(c))->outline.height)
+#define XmOutlineC_new_x(c) (((XmOutlineConstraintPtr)(c))->outline.new_x)
+#define XmOutlineC_new_y(c) (((XmOutlineConstraintPtr)(c))->outline.new_y)
+#define XmOutlineC_oc_new_x(c) (((XmOutlineConstraintPtr)(c))->outline.oc_new_x)
+#define XmOutlineC_oc_new_y(c) (((XmOutlineConstraintPtr)(c))->outline.oc_new_y)
+#define XmOutlineC_map(c) (((XmOutlineConstraintPtr)(c))->outline.map)
+#define XmOutlineC_unmap(c) (((XmOutlineConstraintPtr)(c))->outline.unmap)
+#define XmOutlineC_move(c) (((XmOutlineConstraintPtr)(c))->outline.move)
 
 /************************************************************
 *	GLOBAL DECLARATIONS
@@ -144,7 +127,7 @@ typedef struct _OutlineConstraintRec {
     XmManagerConstraintPart manager;
     HierNodeInfo 	hierarchy;
     OutlineNodeInfo 	outline;
-} OutlineConstraintRec, *OutlineConstraints;
+} XmOutlineConstraintRec, OutlineConstraintRec, *OutlineConstraints, *XmOutlineConstraintPtr;
 
 
 typedef struct _OutlinePart {

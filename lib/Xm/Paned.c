@@ -147,132 +147,230 @@ static void ChangeManaged(Widget), Resize(Widget);
 
 /*  Resource definitions for Subclasses of Primitive */
 
-#define offset(field) XmPartOffset(XmPaned, field)
-
 static Position def_pos = -10;	/* negative numbers cannot be set with immed.*/
 
-static XmPartResource resources[] = {
-    {XmNspacing, XmCSpacing, XmRVerticalDimension, sizeof(Dimension),
-	offset(internal_bw), XmRImmediate, (XtPointer) 10},
-    {XmNmarginWidth, XmCMargin, XmRHorizontalDimension, sizeof(Dimension),
-       offset(margin_width), XmRImmediate, (XtPointer) 3},
-    {XmNmarginHeight, XmCMargin, XmRVerticalDimension, sizeof(Dimension),
-       offset(margin_height), XmRImmediate, (XtPointer) 3},
-    {XmNrefigureMode, XmCBoolean, XmRBoolean, sizeof(Boolean),
-	offset(refiguremode), XmRImmediate, (XtPointer) TRUE},
-    {XmNorientation, XmCOrientation, XmROrientation, sizeof(unsigned char),
-	 offset(orientation), XmRImmediate, (XtPointer) XmVERTICAL},
-    {XmNseparatorOn, XmCSeparatorOn, XmRBoolean, sizeof(Boolean),
-       offset(separator_on), XmRImmediate, (XtPointer) TRUE},
+static XtResource resources[] =
+{
+  {
+    XmNspacing, XmCSpacing, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.internal_bw),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    XmNmarginWidth, XmCMargin, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.margin_width),
+    XmRImmediate, (XtPointer) 3
+  },
+
+  {
+    XmNmarginHeight, XmCMargin, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.margin_height),
+    XmRImmediate, (XtPointer) 3
+  },
+
+  {
+    XmNrefigureMode, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedRec, paned.refiguremode),
+    XmRImmediate, (XtPointer) TRUE
+  },
+
+  {
+    XmNorientation, XmCOrientation, XmROrientation,
+    sizeof(unsigned char), XtOffsetOf(XmPanedRec, paned.orientation),
+    XmRImmediate, (XtPointer) XmVERTICAL
+  },
+
+  {
+    XmNseparatorOn, XmCSeparatorOn, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedRec, paned.separator_on),
+    XmRImmediate, (XtPointer) TRUE
+  },
 
     /* Cursors - these are used in both horiz and vertical mode. */
 
-    {XmNcursor, XmCCursor, XmRCursor, sizeof(Cursor),
-         offset(cursor), XmRImmediate, None},
+  {
+    XmNcursor, XmCCursor, XmRCursor,
+    sizeof(Cursor), XtOffsetOf(XmPanedRec, paned.cursor),
+    XmRImmediate, None
+  },
 
     /* Sash control resources */
 
-    {XmNsashIndent, XmCSashIndent, XmRHorizontalPosition, sizeof(Position),
-	offset(sash_indent), XmRHorizontalPosition, (XtPointer) &def_pos},
-    {XmNsashTranslations, XmCTranslations, XmRTranslationTable,
-         sizeof(XtTranslations),
-         offset(sash_translations), XmRString, (XtPointer)defSashTranslations},
-    {XmNsashWidth, XmCSashWidth, XmRHorizontalDimension, sizeof(Dimension),
-       offset(sash_width), XmRImmediate, (XtPointer) 10},
-    {XmNsashHeight, XmCSashHeight, XmRVerticalDimension, sizeof(Dimension),
-       offset(sash_height), XmRImmediate, (XtPointer) 10},
-    {XmNsashShadowThickness, XmCShadowThickness, XmRHorizontalDimension,
-       sizeof(Dimension), offset(sash_shadow_thickness), XmRImmediate,
-       (XtPointer) 2},
+  {
+    XmNsashIndent, XmCSashIndent, XmRHorizontalPosition,
+    sizeof(Position), XtOffsetOf(XmPanedRec, paned.sash_indent),
+    XmRHorizontalPosition, (XtPointer) &def_pos
+  },
 
-    {XmNallowUnusedSpace, XmCAllowUnusedSpace, XmRBoolean, sizeof(Boolean),
-       offset(allow_unused_space), XmRImmediate, (XtPointer) TRUE},
+  {
+    XmNsashTranslations, XmCTranslations, XmRTranslationTable,
+    sizeof(XtTranslations), XtOffsetOf(XmPanedRec, paned.sash_translations),
+    XmRString, (XtPointer)defSashTranslations
+  },
+
+  {
+    XmNsashWidth, XmCSashWidth, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.sash_width),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    XmNsashHeight, XmCSashHeight, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.sash_height),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    XmNsashShadowThickness, XmCShadowThickness, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedRec, paned.sash_shadow_thickness),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNallowUnusedSpace, XmCAllowUnusedSpace, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedRec, paned.allow_unused_space),
+    XmRImmediate, (XtPointer) TRUE
+  }
 };
 
 /* Definition for resources that need special processing in get values */
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNmarginWidth, sizeof(Dimension), offset(margin_width),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNmarginHeight, sizeof(Dimension), offset(margin_height),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-    { XmNspacing, sizeof(Dimension), offset(internal_bw), 
-	  _XmFromPanedPixels, (XmImportProc) _XmToPanedPixels
-    },
-    { XmNsashIndent, sizeof(Position), offset(sash_indent),
-	  FromPanedOppositePixels, (XmImportProc) ToPanedOppositePixels
-    },
-    { XmNsashWidth, sizeof(Dimension), offset(sash_width),
-          XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNsashHeight, sizeof(Dimension), offset(sash_height),
-          XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-    { XmNsashShadowThickness, sizeof(Dimension), offset(sash_shadow_thickness),
-          XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
+  {
+    XmNmarginWidth, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.margin_width),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNmarginHeight, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.margin_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNspacing, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.internal_bw),
+    _XmFromPanedPixels, (XmImportProc) _XmToPanedPixels
+  },
+
+  {
+    XmNsashIndent, sizeof(Position),
+    XtOffsetOf(XmPanedRec, paned.sash_indent),
+    FromPanedOppositePixels, (XmImportProc) ToPanedOppositePixels
+  },
+
+  {
+    XmNsashWidth, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.sash_width),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNsashHeight, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.sash_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNsashShadowThickness, sizeof(Dimension),
+    XtOffsetOf(XmPanedRec, paned.sash_shadow_thickness),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  }
 };
-#undef offset
 
-#define offset(field) XmConstraintPartOffset(XmPaned, field)
-static XmPartResource subresources[] = {
-    {XmNallowResize, XmCBoolean, XmRBoolean, sizeof(Boolean),
-         offset(allow_resize), XmRImmediate, (XtPointer) FALSE},
-    {XmNpaneMinimum, XmCPaneMinimum, XmRVerticalDimension, sizeof(Dimension),
-         offset(min), XmRImmediate, (XtPointer) 1},
-    {XmNpaneMaximum, XmCPaneMaximum, XmRVerticalDimension, sizeof(Dimension),
-         offset(max), XmRImmediate, (XtPointer) 1000},
+static XtResource subresources[] =
+{
+  {
+    XmNallowResize, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedConstraintsRec, paned.allow_resize),
+    XmRImmediate, (XtPointer) FALSE
+  },
+
+  {
+    XmNpaneMinimum, XmCPaneMinimum, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedConstraintsRec, paned.min),
+    XmRImmediate, (XtPointer) 1
+  },
+
+  {
+    XmNpaneMaximum, XmCPaneMaximum, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedConstraintsRec, paned.max),
+    XmRImmediate, (XtPointer) 1000
+  },
 #ifdef POSITION_IMPLEMENTED
-    {XmNposition, XmCPosition, XmRInt, sizeof(int),
-         offset(position), XmRImmediate, (XtPointer) 0},
+  {
+    XmNposition, XmCPosition, XmRInt,
+    sizeof(int), XtOffsetOf(XmPanedConstraintsRec, paned.position),
+    XmRImmediate, (XtPointer) 0
+  },
 #endif
-    {XmNpreferredPaneSize, XmCPreferredPaneSize, XmRHorizontalDimension,
-	 sizeof(Dimension), offset(preferred_size), 
-         XmRImmediate, (XtPointer) XmPanedAskChild},
+  {
+    XmNpreferredPaneSize, XmCPreferredPaneSize, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmPanedConstraintsRec, paned.preferred_size),
+    XmRImmediate, (XtPointer) XmPanedAskChild
+  },
 
-    /*
-     * Overrides user's grip placement and go back to preferred size when
-     * paned window is resized or a management change happens.
-     */
+  /*
+   * Overrides user's grip placement and go back to preferred size when
+   * paned window is resized or a management change happens.
+   */
 
-    {XmNresizeToPreferred, XmCBoolean, XmRBoolean, sizeof(Boolean),
-         offset(resize_to_pref), XmRImmediate, (XtPointer) FALSE},
-    {XmNskipAdjust, XmCBoolean, XmRBoolean, sizeof(Boolean),
-         offset(skip_adjust), XmRImmediate, (XtPointer) FALSE},
-    {XmNshowSash, XmCShowSash, XmRBoolean, sizeof(Boolean),
-	 offset(show_sash), XmRImmediate, (XtPointer) TRUE},
+  {
+    XmNresizeToPreferred, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedConstraintsRec, paned.resize_to_pref),
+    XmRImmediate, (XtPointer) FALSE
+  },
+
+  {
+    XmNskipAdjust, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedConstraintsRec, paned.skip_adjust),
+    XmRImmediate, (XtPointer) FALSE
+  },
+
+  {
+    XmNshowSash, XmCShowSash, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedConstraintsRec, paned.show_sash),
+    XmRImmediate, (XtPointer) TRUE
+  },
 
     /* 
      * This is an internal constraint resources set on sashes and separators
      * at start up to False, it should be True for all real panes.
      */
 
-    {XmNisAPane, XmNisAPane, XmRBoolean, sizeof(Boolean),
-         offset(is_a_pane), XmRImmediate, (XtPointer) TRUE},
+  {
+    XmNisAPane, XmNisAPane, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmPanedConstraintsRec, paned.is_a_pane),
+    XmRImmediate, (XtPointer) TRUE
+  }
 };
-#undef offset
 
 /* Definition for constraint resources that need special */
 /* processing in get values                              */
 
-#define offset(field) XmConstraintPartOffset(XmPaned, field)
-
 static XmSyntheticResource get_constraint_resources[] =
 {
-    {  XmNpaneMinimum, sizeof(Dimension), offset(min),
-       FromPanedChildPixels, (XmImportProc) ToPanedChildPixels
-    },
-    {  XmNpaneMaximum, sizeof(Dimension), offset(max),
-       FromPanedChildPixels, (XmImportProc) ToPanedChildPixels
-    },
-    {  XmNpreferredPaneSize, sizeof(Dimension), offset(preferred_size), 
-       FromPanedChildPixels, (XmImportProc) ToPanedChildPixels
-    },
+  {
+    XmNpaneMinimum, sizeof(Dimension),
+    XtOffsetOf(XmPanedConstraintsRec, paned.min),
+    FromPanedChildPixels, (XmImportProc) ToPanedChildPixels
+  },
+
+  {
+    XmNpaneMaximum, sizeof(Dimension),
+    XtOffsetOf(XmPanedConstraintsRec, paned.max),
+    FromPanedChildPixels, (XmImportProc) ToPanedChildPixels
+  },
+
+  {
+    XmNpreferredPaneSize, sizeof(Dimension),
+    XtOffsetOf(XmPanedConstraintsRec, paned.preferred_size),
+    FromPanedChildPixels, (XmImportProc) ToPanedChildPixels
+  }
 };
-#undef offset
 
 #define SuperClass ((ConstraintWidgetClass)&xmManagerClassRec)
 
@@ -281,7 +379,7 @@ XmPanedClassRec xmPanedClassRec = {
 /* core class fields */
     /* superclass         */   (WidgetClass) SuperClass,
     /* class name         */   "XmPaned",
-    /* size               */   sizeof(XmPanedPart),
+    /* size               */   sizeof(XmPanedRec),
     /* class_initialize   */   ClassInitialize,
     /* class_part init    */   NULL,
     /* class_inited       */   FALSE,
@@ -322,7 +420,7 @@ XmPanedClassRec xmPanedClassRec = {
 /* constraint class fields */
     /* subresources       */   (XtResource*)subresources,
     /* subresource_count  */   XtNumber(subresources),
-    /* constraint_size    */   sizeof(XmPanedConstraintsPart),
+    /* constraint_size    */   sizeof(XmPanedConstraintsRec),
     /* initialize         */   NULL,
     /* destroy            */   ConstraintDestroy,
     /* set_values         */   PaneSetValues,
@@ -344,9 +442,6 @@ XmPanedClassRec xmPanedClassRec = {
 
 WidgetClass xmPanedWidgetClass = (WidgetClass) &xmPanedClassRec;
 
-XmOffsetPtr XmPaned_offsets;
-XmOffsetPtr XmPanedC_offsets;
-
 /***********************************************************
  *
  * Private Functions.
@@ -362,28 +457,7 @@ XmOffsetPtr XmPanedC_offsets;
 static void
 ClassInitialize()
 {
-    XmPanedClassRec* wc = &xmPanedClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmPanedWidgetClass,
-			    &XmPaned_offsets,
-			    &XmPanedC_offsets);
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmPaned_offsets);
-    }
-    _XmProcessUnlock();
-    
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
-        (wc->manager_class.syn_constraint_resources)[i].resource_offset =
-            XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
-                            &XmPanedC_offsets);
-    }
-    _XmProcessUnlock();
+  /* do nothing */
 }
 
 /*	Function Name: AdjustPanedSize

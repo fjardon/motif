@@ -41,7 +41,7 @@
 *	MACROS
 *************************************************************/
 #define GetIconInfo(w) ((IconInfo*) \
-           ((char*)((w)->core.constraints) + XmIconBoxC_offsets[XmIconBoxIndex]))
+           &(((XmIconBoxConstraintsRec*)((char*)((w)->core.constraints)))->icon))
 
 
 /************************************************************
@@ -90,61 +90,93 @@ static Boolean SetToEmptyCell(Widget);
 *	STATIC DECLARATIONS
 *************************************************************/
 
-/*
- * Stuff for XmResolveAllPartOffsets
- */
-XmOffsetPtr XmIconBox_offsets;   /* instance offsets */
-XmOffsetPtr XmIconBoxC_offsets;  /* contraint offsets */
+static XtResource resources[] =
+{
+  {
+    XmNminimumVerticalCells, XmCDefaultCells, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconBoxRec, box.min_v_cells),
+    XmRImmediate, (XtPointer) 2
+  },
+  {
+    XmNminimumHorizontalCells, XmCDefaultCells, XmRHorizontalDimension, 
+    sizeof(Dimension), XtOffsetOf(XmIconBoxRec, box.min_h_cells),
+    XmRImmediate, (XtPointer) 2
+  },
 
-static XmPartResource resources[] = {
-#define offset(field) XmPartOffset(XmIconBox,field)
-  {XmNminimumVerticalCells, XmCDefaultCells, XmRDimension, sizeof(Dimension),
-     offset(min_v_cells), XmRImmediate, (XtPointer) 2},
-  {XmNminimumHorizontalCells, XmCDefaultCells, XmRHorizontalDimension, 
-     sizeof(Dimension), offset(min_h_cells), XmRImmediate, (XtPointer) 2},
-  {XmNminimumCellWidth, XmCMinimumCellSize, XmRHorizontalDimension,
-     sizeof(Dimension), offset(min_cell_width), XmRImmediate, (XtPointer) 20},
-  {XmNminimumCellHeight, XmCMinimumCellSize, XmRDimension, sizeof(Dimension),
-     offset(min_cell_height), XmRImmediate, (XtPointer) 10},
-  {XmNverticalMargin, XmCMargin, XmRVerticalDimension, sizeof(Dimension),
-     offset(v_margin), XmRImmediate, (XtPointer) 4},
-  {XmNhorizontalMargin, XmCMargin, XmRHorizontalDimension, sizeof(Dimension),
-     offset(h_margin), XmRImmediate, (XtPointer) 4},
+  {
+    XmNminimumCellWidth, XmCMinimumCellSize, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconBoxRec, box.min_cell_width),
+    XmRImmediate, (XtPointer) 20
+  },
+
+  {
+    XmNminimumCellHeight, XmCMinimumCellSize, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconBoxRec, box.min_cell_height),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    XmNverticalMargin, XmCMargin, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconBoxRec, box.v_margin),
+    XmRImmediate, (XtPointer) 4
+  },
+  
+  {
+    XmNhorizontalMargin, XmCMargin, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconBoxRec, box.h_margin),
+    XmRImmediate, (XtPointer) 4
+  }
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNhorizontalMargin, sizeof(Dimension), offset(h_margin),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNverticalMargin, sizeof(Dimension), offset(v_margin),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-    { XmNminimumCellWidth, sizeof(Dimension), offset(min_cell_width),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNminimumCellHeight, sizeof(Dimension), offset(min_cell_height),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
+  {
+    XmNhorizontalMargin, sizeof(Dimension),
+    XtOffsetOf(XmIconBoxRec, box.h_margin),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNverticalMargin, sizeof(Dimension),
+    XtOffsetOf(XmIconBoxRec, box.v_margin),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNminimumCellWidth, sizeof(Dimension),
+    XtOffsetOf(XmIconBoxRec, box.min_cell_width),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNminimumCellHeight, sizeof(Dimension),
+    XtOffsetOf(XmIconBoxRec, box.min_cell_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  }
 };
-#undef offset
 
 static short G_any_cell = XmIconBoxAnyCell;
 
-static XmPartResource constraints[] = {
-#define offset(field) XmConstraintPartOffset(XmIconBox,field)
-  {XmNcellX, XmCCellX, XmRShort, sizeof(short),
-     offset(cell_x), XmRShort, (XtPointer) &G_any_cell},
-  {XmNcellY, XmCCellY, XmRShort, sizeof(short),
-     offset(cell_y), XmRShort, (XtPointer) &G_any_cell},
-#undef offset
+static XtResource constraints[] =
+{
+  {
+    XmNcellX, XmCCellX, XmRShort,
+    sizeof(short), XtOffsetOf(XmIconBoxConstraintsRec, icon.cell_x),
+    XmRShort, (XtPointer) &G_any_cell
+  },
+
+  {
+    XmNcellY, XmCCellY, XmRShort,
+    sizeof(short), XtOffsetOf(XmIconBoxConstraintsRec, icon.cell_y),
+    XmRShort, (XtPointer) &G_any_cell
+  }
 };
  
 XmIconBoxClassRec xmIconBoxClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	"XmIconBox",
-    /* widget_size		*/	sizeof(XmIconBoxPart),
+    /* widget_size		*/	sizeof(XmIconBoxRec),
     /* class_initialize		*/	ClassInitialize,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -185,7 +217,7 @@ XmIconBoxClassRec xmIconBoxClassRec = {
    {		/* constraint_class fields */
     /* resource list        */         (XtResource*)constraints,
     /* num resources        */         XtNumber(constraints),	
-    /* constraint size      */         sizeof(IconInfo),	
+    /* constraint size      */         sizeof(XmIconBoxConstraintsRec),
     /* init proc            */         ConstraintInitialize,
     /* destroy proc         */         NULL,
     /* set values proc      */         ConstraintSetValues,
@@ -226,21 +258,7 @@ WidgetClass xmIconBoxWidgetClass = (WidgetClass)&xmIconBoxClassRec;
 static void
 ClassInitialize()
 {
-    XmIconBoxClassRec* wc = &xmIconBoxClassRec;
-    int i;
-    
-    XmResolveAllPartOffsets(xmIconBoxWidgetClass,
-			    &XmIconBox_offsets,
-			    &XmIconBoxC_offsets);
-    
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmIconBox_offsets);
-    }
-    _XmProcessUnlock();
-
+  /* do nothing */
 }
 
 /*ARGSUSED*/

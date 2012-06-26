@@ -46,21 +46,16 @@
 
 #define XmButtonBoxIndex (XmManagerIndex + 1)
 
-extern XmOffsetPtr XmButtonBox_offsets;
-extern XmOffsetPtr XmButtonBoxC_offsets;
+#define XmButtonBox_equal_size(w) (((XmButtonBoxWidget)(w))->button_box.equal_size)
+#define XmButtonBox_fill_option(w) (((XmButtonBoxWidget)(w))->button_box.fill_option)
+#define XmButtonBox_margin_width(w) (((XmButtonBoxWidget)(w))->button_box.margin_width)
+#define XmButtonBox_margin_height(w) (((XmButtonBoxWidget)(w))->button_box.margin_height)
+#define XmButtonBox_spacing(w) (((XmButtonBoxWidget)(w))->button_box.spacing)
+#define XmButtonBox_orientation(w) (((XmButtonBoxWidget)(w))->button_box.orientation)
+#define XmButtonBox_default_button(w) (((XmButtonBoxWidget)(w))->button_box.default_button)
 
-#define BBoxField(w,f,t) XmField(w, XmButtonBox_offsets, XmButtonBox, f, t)
-#define XmButtonBox_equal_size(w) BBoxField(w, equal_size, Boolean)
-#define XmButtonBox_fill_option(w) BBoxField(w, fill_option, XmFillOption)
-#define XmButtonBox_margin_width(w) BBoxField(w, margin_width, Dimension)
-#define XmButtonBox_margin_height(w) BBoxField(w, margin_height, Dimension)
-#define XmButtonBox_spacing(w) BBoxField(w, spacing, Dimension)
-#define XmButtonBox_orientation(w) BBoxField(w, orientation, unsigned char)
-#define XmButtonBox_default_button(w) BBoxField(w, default_button, Widget)
-
-#define BBoxCField(w,f,t) XmConstraintField(w, XmButtonBoxC_offsets, XmButtonBox, f, t)
-#define XmButtonBoxC_pref_width(w) BBoxCField(w, pref_width, Dimension)
-#define XmButtonBoxC_pref_height(w) BBoxCField(w, pref_height, Dimension)
+#define XmButtonBoxC_pref_width(w) (((XmBBoxConstraints)((Widget)(w))->core.constraints)->bbox.pref_width)
+#define XmButtonBoxC_pref_height(w) (((XmBBoxConstraints)((Widget)(w))->core.constraints)->bbox.pref_height)
 
 /************************************************************
  *      GLOBAL DECLARATIONS

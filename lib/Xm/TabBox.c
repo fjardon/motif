@@ -367,108 +367,182 @@ static char canvas_translations[] =
      <Key>osfActivate: XmTabBoxArmAndActivate()\n\
      <Key>space:       XmTabBoxArmAndActivate()";
 
-#ifdef offset
-#undef offset
-#endif
-#define offset(field) XmPartOffset(XmTabBox, field)
-
 /* because this is a private widget for the TabStack, the resources are
 ** assumed already to be in pixels
 */
 
-static XtResource resources[] = {
-    /* Inherit (but changed default) resources */
-    { XmNshadowThickness, XmCShadowThickness,
-	  XmRDimension, sizeof(Dimension),
-	  XmPartOffset(XmManager, shadow_thickness),
-	  XmRImmediate, (XtPointer) 2 },
+static XtResource resources[] =
+{
+  /* Inherit (but changed default) resources */
+  {
+    XmNshadowThickness, XmCShadowThickness, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
+    XmRImmediate, (XtPointer) 2
+  },
 
-    /* TabBox Resources */
-    { XmNtabStyle, XmCTabStyle,
-	  XmRTabStyle, sizeof(XmTabStyle), offset(tab_style),
-	  XmRImmediate, (XtPointer) XmTABS_BEVELED },
-    { XmNtabMode, XmCTabMode,
-	  XmRTabMode, sizeof(XmTabMode), offset(tab_mode),
-	  XmRImmediate, (XtPointer) XmTABS_BASIC },
-    { XmNtabList, XmCTabList,
-	  XmRTabList, sizeof(XmTabbedStackList), offset(tab_list),
-	  XmRImmediate, (XtPointer) NULL },
-    { XmNtabOrientation, XmCTabOrientation,
-	  XmRTabOrientation, sizeof(XmTabOrientation), offset(tab_orientation),
-	  XmRImmediate, (XtPointer) XmTABS_LEFT_TO_RIGHT },
-    { XmNtabAutoSelect, XmCTabAutoSelect,
-	  XmRBoolean, sizeof(Boolean), offset(tab_auto_select),
-	  XmRImmediate, (XtPointer) True },
-    { XmNorientation, XmCOrientation,
-	  XmROrientation, sizeof(unsigned char), offset(orientation),
-	  XmRImmediate, (XtPointer) XmHORIZONTAL },
-    { XmNuniformTabSize, XmCUniformTabSize,
-	  XmRBoolean, sizeof(Boolean), offset(uniform_tab_size),
-	  XmRImmediate, (XtPointer) True },
-    { XmNtabSelectColor, XmCTabSelectColor,
-	  XmRXmPixel, sizeof(Pixel), offset(select_color),
-	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
-    { XmNtabSelectPixmap, XmCTabSelectPixmap,
-	  XmRXmPixmap, sizeof(Pixel), offset(select_pixmap),
-	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
-    { XmNtabMarginWidth, XmCMarginWidth,
-	  XmRDimension, sizeof(Dimension), offset(tab_margin_width),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNtabMarginHeight, XmCMarginHeight,
-	  XmRDimension, sizeof(Dimension), offset(tab_margin_height),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNtabLabelSpacing, XmCTabLabelSpacing,
-	  XmRDimension, sizeof(Dimension), offset(tab_label_spacing),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNtabCornerPercent, XmCTabCornerPercent,
-	  XmRInt, sizeof(int), offset(tab_corner_percent),
-	  XmRImmediate, (XtPointer) 40 },
-    { XmNnumStacks, XmCNumStacks,
-	  XmRInt, sizeof(int), offset(num_stacks),
-	  XmRImmediate, (XtPointer) 5 },
+  /* TabBox Resources */
+  {
+    XmNtabStyle, XmCTabStyle, XmRTabStyle,
+    sizeof(XmTabStyle), XtOffsetOf(XmTabBoxRec, tab_box.tab_style),
+    XmRImmediate, (XtPointer) XmTABS_BEVELED
+  },
+
+  {
+    XmNtabMode, XmCTabMode, XmRTabMode,
+    sizeof(XmTabMode), XtOffsetOf(XmTabBoxRec, tab_box.tab_mode),
+    XmRImmediate, (XtPointer) XmTABS_BASIC
+  },
+
+  {
+    XmNtabList, XmCTabList, XmRTabList,
+    sizeof(XmTabbedStackList), XtOffsetOf(XmTabBoxRec, tab_box.tab_list),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNtabOrientation, XmCTabOrientation, XmRTabOrientation,
+    sizeof(XmTabOrientation), XtOffsetOf(XmTabBoxRec, tab_box.tab_orientation),
+    XmRImmediate, (XtPointer) XmTABS_LEFT_TO_RIGHT
+  },
+
+  {
+    XmNtabAutoSelect, XmCTabAutoSelect, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabBoxRec, tab_box.tab_auto_select),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNorientation, XmCOrientation, XmROrientation,
+    sizeof(unsigned char), XtOffsetOf(XmTabBoxRec, tab_box.orientation),
+    XmRImmediate, (XtPointer) XmHORIZONTAL
+  },
+
+  {
+      XmNuniformTabSize, XmCUniformTabSize, XmRBoolean,
+      sizeof(Boolean), XtOffsetOf(XmTabBoxRec, tab_box.uniform_tab_size),
+      XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNtabSelectColor, XmCTabSelectColor, XmRXmPixel,
+    sizeof(Pixel), XtOffsetOf(XmTabBoxRec, tab_box.select_color),
+    XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC
+  },
+
+  {
+    XmNtabSelectPixmap, XmCTabSelectPixmap, XmRXmPixmap,
+    sizeof(Pixel), XtOffsetOf(XmTabBoxRec, tab_box.select_pixmap),
+    XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+  },
+
+  {
+    XmNtabMarginWidth, XmCMarginWidth, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabBoxRec, tab_box.tab_margin_width),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNtabMarginHeight, XmCMarginHeight, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabBoxRec, tab_box.tab_margin_height),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+      XmNtabLabelSpacing, XmCTabLabelSpacing, XmRDimension,
+      sizeof(Dimension), XtOffsetOf(XmTabBoxRec, tab_box.tab_label_spacing),
+      XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNtabCornerPercent, XmCTabCornerPercent, XmRInt,
+    sizeof(int), XtOffsetOf(XmTabBoxRec, tab_box.tab_corner_percent),
+    XmRImmediate, (XtPointer) 40
+  },
+
+  {
+      XmNnumStacks, XmCNumStacks, XmRInt,
+      sizeof(int), XtOffsetOf(XmTabBoxRec, tab_box.num_stacks),
+      XmRImmediate, (XtPointer) 5
+  },
 #ifdef SCROLLED_LAYOUT
-    { XmNtabArrowPlacement, XmCTabArrowPlacement,
-	  XmRTabArrowPlacement, sizeof(int), offset(arrow_placement),
-	  XmRImmediate, (XtPointer) XmTAB_ARROWS_ON_LEFT },
+  {
+    XmNtabArrowPlacement, XmCTabArrowPlacement, XmRTabArrowPlacement,
+    sizeof(int), XtOffsetOf(XmTabBoxRec, tab_box.arrow_placement),
+    XmRImmediate, (XtPointer) XmTAB_ARROWS_ON_LEFT
+  },
 #endif
-    { XmNtabEdge, XmCTabEdge,
-	  XmRTabEdge, sizeof(XmTabEdge), offset(tab_edge),
-	  XmRImmediate, (XtPointer) XmTAB_EDGE_BOTTOM_RIGHT },
-    { XmNtabOffset, XmCTabOffset,
-	  XmRDimension, sizeof(Dimension), offset(tab_offset),
-	  XmRImmediate, (XtPointer) 10 },
-    { "pri.vate", "Pri.vate",
-	  XmRBoolean, sizeof(Boolean), offset(check_set_render_table),
-	  XmRImmediate, (XtPointer) False },
-    { XmNfontList, XmCFontList,
-	  XmRFontList, sizeof (XmFontList), offset(font_list),
-	  XmRCallProc, (XtPointer) CheckSetRenderTable },
-    { XmNrenderTable, XmCRenderTable,
-	  XmRRenderTable, sizeof(XmRenderTable), offset(font_list),
-	  XmRCallProc, (XtPointer) CheckSetRenderTable },
-    { XmNhighlightThickness, XmCHighlightThickness,
-	  XmRDimension, sizeof(Dimension), offset(highlight_thickness),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNstackedEffect, XmCStackedEffect,
-	  XmRBoolean, sizeof(Boolean), offset(stacked_effect),
-	  XmRImmediate, (XtPointer) True },
-    { XmNuseImageCache, XmCUseImageCache,
-	  XmRBoolean, sizeof(Boolean), offset(use_image_cache),
-	  XmRImmediate, (XtPointer) True },
-    { XmNselectedIndex, XmCSelectedIndex,
-	  XmRInt, sizeof(int), offset(selected_index),
-	  XmRImmediate, (XtPointer) -1 },
-    { XmNtraversalIndex, XmCTraversalIndex,
-	  XmRInt, sizeof(int), offset(traversal_index),
-	  XmRImmediate, (XtPointer) -1 },
-    { XmNselectCallback, XmCCallback,
-	  XmRCallback, sizeof(XtCallbackList), offset(select_callback),
-	  XmRImmediate, (XtPointer) NULL },
-    { XmNunselectCallback, XmCCallback,
-	  XmRCallback, sizeof(XtCallbackList), offset(unselect_callback),
-	  XmRImmediate, (XtPointer) NULL },
+  {
+    XmNtabEdge, XmCTabEdge, XmRTabEdge,
+    sizeof(XmTabEdge), XtOffsetOf(XmTabBoxRec, tab_box.tab_edge),
+    XmRImmediate, (XtPointer) XmTAB_EDGE_BOTTOM_RIGHT
+  },
+
+  {
+    XmNtabOffset, XmCTabOffset, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabBoxRec, tab_box.tab_offset),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabBoxRec, tab_box.check_set_render_table),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNfontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), XtOffsetOf(XmTabBoxRec, tab_box.font_list),
+    XmRCallProc, (XtPointer) CheckSetRenderTable
+  },
+
+  {
+    XmNrenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), XtOffsetOf(XmTabBoxRec, tab_box.font_list),
+    XmRCallProc, (XtPointer) CheckSetRenderTable
+  },
+
+  {
+    XmNhighlightThickness, XmCHighlightThickness, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabBoxRec, tab_box.highlight_thickness),
+     XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNstackedEffect, XmCStackedEffect, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabBoxRec, tab_box.stacked_effect),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNuseImageCache, XmCUseImageCache, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabBoxRec, tab_box.use_image_cache),
+    XmRImmediate, (XtPointer) True
+  },
+ 
+  {
+    XmNselectedIndex, XmCSelectedIndex, XmRInt,
+    sizeof(int), XtOffsetOf(XmTabBoxRec, tab_box.selected_index),
+    XmRImmediate, (XtPointer) -1
+  },
+  
+  {
+    XmNtraversalIndex, XmCTraversalIndex, XmRInt,
+    sizeof(int), XtOffsetOf(XmTabBoxRec, tab_box.traversal_index),
+    XmRImmediate, (XtPointer) -1
+  },
+
+  {
+    XmNselectCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmTabBoxRec, tab_box.select_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNunselectCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmTabBoxRec, tab_box.unselect_callback),
+    XmRImmediate, (XtPointer) NULL
+  }
 };
-#undef offset
 
 typedef struct _XiTabCanvasClassPart {
     XtPointer extension;
@@ -494,7 +568,7 @@ XiTabCanvasClassRec xmTabCanvasClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmPrimitiveClassRec,
     /* class_name	  */	"XiTabCanvas",
-    /* widget_size	  */	sizeof(XiTabCanvasPart),
+    /* widget_size	  */	sizeof(XiTabCanvasRec),
     /* class_initialize   */    TabCanvasClassInitialize,
     /* chained class init */	ClassPartInitialize,
     /* class_inited       */	False,
@@ -542,7 +616,7 @@ XmTabBoxClassRec xmTabBoxClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmManagerClassRec,
     /* class_name	  */	"XmTabBox",
-    /* widget_size	  */	sizeof(XmTabBoxPart),
+    /* widget_size	  */	sizeof(XmTabBoxRec),
     /* class_initialize   */    ClassInitialize,
     /* class_part_initial */	NULL,
     /* class_inited       */	False,
@@ -601,11 +675,6 @@ XmTabBoxClassRec xmTabBoxClassRec = {
 WidgetClass xmTabCanvasWidgetClass = (WidgetClass) &xmTabCanvasClassRec;
 WidgetClass xmTabBoxWidgetClass = (WidgetClass) &xmTabBoxClassRec;
 
-XmOffsetPtr XmTabBox_offsets;
-XmOffsetPtr XmTabBoxC_offsets;
-
-XmOffsetPtr XiTabCanvas_offsets;
-
 static void
 #ifndef _NO_PROTO
 TabCanvasClassInitialize(void)
@@ -613,9 +682,7 @@ TabCanvasClassInitialize(void)
 TabCanvasClassInitialize()
 #endif
 {
-    XmResolveAllPartOffsets(xmTabCanvasWidgetClass,
-			    &XiTabCanvas_offsets,
-			    NULL);
+  /* do nothing */
 }
 
 /*
@@ -641,10 +708,6 @@ ClassInitialize(void)
 ClassInitialize()
 #endif
 {
-    XmResolveAllPartOffsets(xmTabBoxWidgetClass,
-			    &XmTabBox_offsets,
-			    &XmTabBoxC_offsets);
-
     XtSetTypeConverter(XmRString, XmRTabOrientation,
 		       CvtStringToTabOrientation, NULL, 0, XtCacheNone, NULL);
     XtSetTypeConverter(XmRString, XmRTabStyle,

@@ -85,7 +85,7 @@ typedef struct _HierNodeInfo {
 typedef struct _HierarchyConstraintRec {
     XmManagerConstraintPart manager;
     HierNodeInfo hierarchy;
-} HierarchyConstraintRec, *HierarchyConstraints;
+} HierarchyConstraintRec, XmHierarchyConstraintRec, *HierarchyConstraints;
 
 typedef void	(*XmHierarchyNodeProc)(HierarchyConstraints);
 typedef void	(*XmHierarchyExtraNodeProc)(Widget, HierarchyConstraints);
@@ -164,49 +164,35 @@ typedef struct _XmHierarchyRec {
 typedef HierarchyPart XmHierarchyPart;
 typedef HierNodeInfo  XmHierarchyConstraintPart;
 
-#define XmHierarchyIndex (XmManagerIndex + 1)
+#define XmHierarchy_auto_close(w) (((XmHierarchyWidget)(w))->hierarchy.auto_close)
+#define XmHierarchy_refigure_mode(w) (((XmHierarchyWidget)(w))->hierarchy.refigure_mode)
+#define XmHierarchy_h_margin(w) (((XmHierarchyWidget)(w))->hierarchy.h_margin)
+#define XmHierarchy_v_margin(w) (((XmHierarchyWidget)(w))->hierarchy.v_margin)
+#define XmHierarchy_open_folder(w) (((XmHierarchyWidget)(w))->hierarchy.open_folder)
+#define XmHierarchy_close_folder(w) (((XmHierarchyWidget)(w))->hierarchy.close_folder)
+#define XmHierarchy_node_state_callback(w) (((XmHierarchyWidget)(w))->hierarchy.node_state_callback)
+#define XmHierarchy_node_state_changed_callback(w) (((XmHierarchyWidget)(w))->hierarchy.node_state_changed_callback)
+#define XmHierarchy_node_state_beg_end_callback(w) (((XmHierarchyWidget)(w))->hierarchy.node_state_beg_end_callback)
+#define XmHierarchy_node_table(w) (((XmHierarchyWidget)(w))->hierarchy.node_table)
+#define XmHierarchy_top_node(w) (((XmHierarchyWidget)(w))->hierarchy.top_node)
+#define XmHierarchy_num_nodes(w) (((XmHierarchyWidget)(w))->hierarchy.num_nodes)
+#define XmHierarchy_alloc_nodes(w) (((XmHierarchyWidget)(w))->hierarchy.alloc_nodes)
+#define XmHierarchy_def_open_folder(w) (((XmHierarchyWidget)(w))->hierarchy.def_open_folder)
+#define XmHierarchy_def_close_folder(w) (((XmHierarchyWidget)(w))->hierarchy.def_close_folder)
+#define XmHierarchy_work_proc_id(w) (((XmHierarchyWidget)(w))->hierarchy.work_proc_id)
 
-#define XmHierarchyField(w,f,t) XmField(w, XmHierarchy_offsets, XmHierarchy, f, t)
-#define XmHierarchy_auto_close(w) XmHierarchyField(w, auto_close, Boolean)
-#define XmHierarchy_refigure_mode(w) XmHierarchyField(w, refigure_mode, Boolean)
-#define XmHierarchy_h_margin(w) XmHierarchyField(w, h_margin, Dimension)
-#define XmHierarchy_v_margin(w) XmHierarchyField(w, v_margin, Dimension)
-#define XmHierarchy_open_folder(w) XmHierarchyField(w, open_folder, Pixmap)
-#define XmHierarchy_close_folder(w) XmHierarchyField(w, close_folder, Pixmap)
-#define XmHierarchy_node_state_callback(w) XmHierarchyField(w, node_state_callback, XtCallbackList)
-#define XmHierarchy_node_state_changed_callback(w) XmHierarchyField(w, node_state_changed_callback, XtCallbackList)
-#define XmHierarchy_node_state_beg_end_callback(w) XmHierarchyField(w, node_state_beg_end_callback, XtCallbackList)
-#define XmHierarchy_node_table(w) XmHierarchyField(w, node_table, HierarchyConstraintRec**)
-#define XmHierarchy_top_node(w) XmHierarchyField(w, top_node, HierarchyConstraints)
-#define XmHierarchy_num_nodes(w) XmHierarchyField(w, num_nodes, Cardinal)
-#define XmHierarchy_alloc_nodes(w) XmHierarchyField(w, alloc_nodes, Cardinal)
-#define XmHierarchy_def_open_folder(w) XmHierarchyField(w, def_open_folder, Pixmap)
-#define XmHierarchy_def_close_folder(w) XmHierarchyField(w, def_close_folder, Pixmap)
-#define XmHierarchy_work_proc_id(w) XmHierarchyField(w, work_proc_id, XtWorkProcId)
-
-/*
- * WARNING!
- *
- * These macros don't use the standard fieldmacro(widget) form.  They take
- * _pointers to HierarchyConstraintsRec structures_.  Be careful.
- */
-#define XmHierarchyCField(constraints, variable, type) \
-        (*(type *)(((char *) constraints) + \
-        XmHierarchyC_offsets[XmHierarchyIndex] + \
-        XtOffsetOf(XmHierarchyConstraintPart, variable)))
-
-#define XmHierarchyC_state(constraints) XmHierarchyCField(constraints, state, XmHierarchyNodeState)
-#define XmHierarchyC_parent(constraints) XmHierarchyCField(constraints, parent, Widget)
-#define XmHierarchyC_insert_before(constraints) XmHierarchyCField(constraints, insert_before, Widget)
-#define XmHierarchyC_open_folder(constraints) XmHierarchyCField(constraints, open_folder, Pixmap)
-#define XmHierarchyC_close_folder(constraints) XmHierarchyCField(constraints, close_folder, Pixmap)
-#define XmHierarchyC_widget(constraints) XmHierarchyCField(constraints, widget, Widget)
-#define XmHierarchyC_open_close_button(constraints) XmHierarchyCField(constraints, open_close_button, Widget)
-#define XmHierarchyC_children(constraints) XmHierarchyCField(constraints, children, struct _HierarchyConstraintRec **)
-#define XmHierarchyC_num_children(constraints) XmHierarchyCField(constraints, num_children, Cardinal)
-#define XmHierarchyC_alloc_attrs(constraints) XmHierarchyCField(constraints, alloc_attrs, Cardinal)
-#define XmHierarchyC_alloc(constraints) XmHierarchyCField(constraints, alloc, Cardinal)
-#define XmHierarchyC_status(constraints) XmHierarchyCField(constraints, status, unsigned char)
+#define XmHierarchyC_state(constraints) ((constraints)->hierarchy.state)
+#define XmHierarchyC_parent(constraints) ((constraints)->hierarchy.parent)
+#define XmHierarchyC_insert_before(constraints) ((constraints)->hierarchy.insert_before)
+#define XmHierarchyC_open_folder(constraints) ((constraints)->hierarchy.open_folder)
+#define XmHierarchyC_close_folder(constraints) ((constraints)->hierarchy.close_folder)
+#define XmHierarchyC_widget(constraints) ((constraints)->hierarchy.widget)
+#define XmHierarchyC_open_close_button(constraints) ((constraints)->hierarchy.open_close_button)
+#define XmHierarchyC_children(constraints) ((constraints)->hierarchy.children)
+#define XmHierarchyC_num_children(constraints) ((constraints)->hierarchy.num_children)
+#define XmHierarchyC_alloc_attrs(constraints) ((constraints)->hierarchy.alloc_attrs)
+#define XmHierarchyC_alloc(constraints) ((constraints)->hierarchy.alloc)
+#define XmHierarchyC_status(constraints) ((constraints)->hierarchy.status)
 
 #define XtInheritChangeNodeState       ((XmHierarchyNodeProc)_XtInherit)
 #define XtInheritUnmapAllExtraNodes    ((XmHierarchyExtraNodeProc)_XtInherit)
@@ -220,9 +206,6 @@ typedef HierNodeInfo  XmHierarchyConstraintPart;
 *	EXTERNAL DECLARATIONS
 *************************************************************/
 
-
-extern XmOffsetPtr XmHierarchy_offsets;
-extern XmOffsetPtr XmHierarchyC_offsets;
 
 /************************************************************
 *	STATIC DECLARATIONS

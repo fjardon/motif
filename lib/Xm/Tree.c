@@ -138,66 +138,118 @@ static void LineStyle_confirm (Widget w, int value);
 *	STATIC DECLARATIONS
 *************************************************************/
 
-#define offset(field) XmPartOffset(XmTree, field)
+static XtResource resources[] =
+{
+  {
+    XmNconnectStyle, XmCConnectStyle, XmRXmConnectStyle,
+    sizeof(XmTreeConnectStyle), XtOffsetOf(XmTreeRec, tree.connect_style),
+    XmRImmediate, (XtPointer) XmTreeDirect
+  },
 
-static XmPartResource resources[] = {
-  {XmNconnectStyle, XmCConnectStyle, XmRXmConnectStyle, 
-       sizeof(XmTreeConnectStyle), offset(connect_style),
-       XmRImmediate, (XtPointer) XmTreeDirect},
-  {XmNorientation, XmCOrientation, XmROrientation, 
-       sizeof(unsigned char), offset(orientation), XmRImmediate, (XtPointer) XmHORIZONTAL},
-  {XmNcompressStyle, XmCCompressStyle, XmRXmCompressStyle, 
-       sizeof(XmTreeCompressStyle), offset(compress_style),
-       XmRImmediate, (XtPointer) XmTreeCompressLeaves},
-  {XmNverticalDelta, XmCVerticalDelta, XmRVerticalDimension, 
-       sizeof(Dimension), offset(vertical_delta), XmRImmediate, (XtPointer) 30},
-  {XmNhorizontalDelta, XmCHorizontalDelta, XmRHorizontalDimension, 
-       sizeof(Dimension), offset(horizontal_delta), XmRImmediate, (XtPointer) 25},
-  {XmNhorizontalNodeSpace, XmCDimension, XmRHorizontalDimension, 
-       sizeof(Dimension), offset(h_node_space),
-       XmRCallProc, (XtPointer) HorizontalNodeSpaceDefault},
-  {XmNverticalNodeSpace, XmCDimension, XmRVerticalDimension, 
-       sizeof(Dimension), offset(v_node_space),
-       XmRCallProc, (XtPointer) VerticalNodeSpaceDefault},
+  {
+    XmNorientation, XmCOrientation, XmROrientation,
+    sizeof(unsigned char), XtOffsetOf(XmTreeRec, tree.orientation),
+    XmRImmediate, (XtPointer) XmHORIZONTAL
+  },
+
+  {
+    XmNcompressStyle, XmCCompressStyle, XmRXmCompressStyle,
+    sizeof(XmTreeCompressStyle), XtOffsetOf(XmTreeRec, tree.compress_style),
+    XmRImmediate, (XtPointer) XmTreeCompressLeaves
+  },
+
+  {
+    XmNverticalDelta, XmCVerticalDelta, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTreeRec, tree.vertical_delta),
+    XmRImmediate, (XtPointer) 30
+  },
+
+  {
+    XmNhorizontalDelta, XmCHorizontalDelta, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTreeRec, tree.horizontal_delta),
+    XmRImmediate, (XtPointer) 25
+  },
+
+  {
+    XmNhorizontalNodeSpace, XmCDimension, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTreeRec, tree.h_node_space),
+    XmRCallProc, (XtPointer) HorizontalNodeSpaceDefault
+  },
+
+  {
+    XmNverticalNodeSpace, XmCDimension, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTreeRec, tree.v_node_space),
+    XmRCallProc, (XtPointer) VerticalNodeSpaceDefault
+  }
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNhorizontalNodeSpace, sizeof(Dimension), offset(h_node_space),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNverticalNodeSpace, sizeof(Dimension), offset(v_node_space),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-    { XmNverticalDelta, sizeof(Dimension), offset(vertical_delta),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-    { XmNhorizontalDelta, sizeof(Dimension), offset(horizontal_delta),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
+  {
+    XmNhorizontalNodeSpace, sizeof(Dimension),
+    XtOffsetOf(XmTreeRec, tree.h_node_space),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNverticalNodeSpace, sizeof(Dimension),
+    XtOffsetOf(XmTreeRec, tree.v_node_space),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNverticalDelta, sizeof(Dimension),
+    XtOffsetOf(XmTreeRec, tree.vertical_delta),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNhorizontalDelta, sizeof(Dimension),
+    XtOffsetOf(XmTreeRec, tree.horizontal_delta),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  }
 };
 
-#undef offset
-#define offset(field) XmConstraintPartOffset(XmTree, field)
-
-static XmPartResource constraints[] = {
-  {XmNopenClosePadding, XmCOpenClosePadding, XmRInt ,sizeof(int),
-       offset(open_close_padding), XmRImmediate, (XtPointer) 0},
-  {XmNlineColor, XmCForeground, XmRPixel, sizeof(Pixel),
-       offset(color), XmRCallProc, (XtPointer) LineColorDefault},
-  {XmNlineBackgroundColor, XmCBackground, XmRPixel, sizeof(Pixel),
-       offset(background_color), XmRCallProc, (XtPointer) LineBackgroundColorDefault},
-  {XmNlineWidth, XmCLineWidth, XmRInt, sizeof(int),
-       offset(line_width), XmRImmediate, (XtPointer) 0},
-  {XmNlineStyle, XmCLineStyle, XmRXmLineStyle, sizeof(int),
-       offset(line_style), XmRImmediate, (XtPointer) LineSolid}
+static XtResource constraints[] =
+{
+  {
+    XmNopenClosePadding, XmCOpenClosePadding, XmRInt,
+    sizeof(int), XtOffsetOf(XmTreeConstraintRec, tree.open_close_padding),
+    XmRImmediate, (XtPointer) 0
+  },
+  
+  {
+    XmNlineColor, XmCForeground, XmRPixel,
+    sizeof(Pixel), XtOffsetOf(XmTreeConstraintRec, tree.color),
+    XmRCallProc, (XtPointer) LineColorDefault
+  },
+  
+  {
+    XmNlineBackgroundColor, XmCBackground, XmRPixel,
+    sizeof(Pixel), XtOffsetOf(XmTreeConstraintRec, tree.background_color),
+    XmRCallProc, (XtPointer) LineBackgroundColorDefault
+  },
+  
+  {
+    XmNlineWidth, XmCLineWidth, XmRInt,
+    sizeof(int), XtOffsetOf(XmTreeConstraintRec, tree.line_width),
+    XmRImmediate, (XtPointer) 0
+  },
+  
+  {
+    XmNlineStyle, XmCLineStyle, XmRXmLineStyle,
+    sizeof(int), XtOffsetOf(XmTreeConstraintRec, tree.line_style),
+    XmRImmediate, (XtPointer) LineSolid
+  }
 };
 
 static XmSyntheticResource get_cons_resources[] =
 {
-    { XmNopenClosePadding, sizeof(int), offset(open_close_padding),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
+  {
+    XmNopenClosePadding, sizeof(int),
+    XtOffsetOf(XmTreeConstraintRec, tree.open_close_padding),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  }
 };
 
 #undef offset
@@ -206,7 +258,7 @@ XmTreeClassRec xmTreeClassRec = {
   { /* core fields */
     /* superclass		*/	((WidgetClass) SUPERCLASS),
     /* class_name		*/	"XmTree",
-    /* widget_size		*/	sizeof(XmTreePart),
+    /* widget_size		*/	sizeof(XmTreeRec),
     /* class_initialize		*/	ClassInit,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -247,7 +299,7 @@ XmTreeClassRec xmTreeClassRec = {
    {		/* constraint_class fields */
     /* resource list        */         (XtResource*)constraints,
     /* num resources        */         XtNumber(constraints),
-    /* constraint size      */         sizeof(XmTreeConstraintPart),	
+    /* constraint size      */         sizeof(XmTreeConstraintRec),
     /* init proc            */         ConstraintInitialize,
     /* destroy proc         */         ConstraintDestroy,
     /* set values proc      */         ConstraintSetValues,
@@ -279,9 +331,6 @@ XmTreeClassRec xmTreeClassRec = {
 
 WidgetClass xmTreeWidgetClass = (WidgetClass) &xmTreeClassRec;
 
-XmOffsetPtr XmTree_offsets;
-XmOffsetPtr XmTreeC_offsets;
-
 /************************************************************
 *	STATIC CODE
 *************************************************************/
@@ -298,27 +347,6 @@ static void
 ClassInit(void)
 {
     XmTreeClassRec* wc = &xmTreeClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmTreeWidgetClass,
-			    &XmTree_offsets,
-			    &XmTreeC_offsets);
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmTree_offsets);
-    }
-    _XmProcessUnlock();
-    
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
-	(wc->manager_class.syn_constraint_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
-			    &XmTreeC_offsets);
-    }
-    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmConnectStyle,
 		       (XtTypeConverter) CvtStringToConnectStyle,

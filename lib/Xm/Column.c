@@ -102,10 +102,8 @@ static void XmColumnLabelDestroyedCallback(
 	Everything is marked with the #if used above.
 #endif
 
-#define BBPart(w) ((XmBulletinBoardPart*)(((char*)w) \
-					  + XmColumn_offsets[XmBulletinBoardIndex]))
-#define XiC(c) ((XmColumnConstraintPart*)(((char*)((c)->core.constraints)) \
-					+ XmColumnC_offsets[XmColumnIndex]))
+#define BBPart(w) ((XmBulletinBoardPart*)(&(((XmBulletinBoardWidget)(w))->bulletin_board)))
+#define XiC(w) ((XmColumnConstraintPart*)(&((XmColumnConstraintPtr)((w)->core.constraints))->column))
 #define XiValidChild(c) (((c)) != NULL && XtIsManaged((c)) && \
 			 !(c)->core.being_destroyed && \
 			 XiC(c)->label_widget != NULL)
@@ -151,111 +149,151 @@ static void XmColumnLabelDestroyedCallback(
 #define DEFAULT_ORIENTATION XmVERTICAL
 #define DEFAULT_FILL_STYLE XmFILL_RAGGED
 
-#ifdef offset
-#undef offset
-#endif
-#define offset(field) XmPartOffset(XmColumn, field)
-static XmPartResource resources[] = {
-    { "pri.vate", "Pri.vate",
-	  XmRBoolean, sizeof(Boolean),
-	  offset (check_set_render_table),
-	  XmRImmediate, (XtPointer) False },
-    { XmNdefaultEntryLabelFontList, XmCFontList,
-	  XmRFontList, sizeof(XmFontList),
-	  XmPartOffset(XmBulletinBoard, label_font_list),
-	  XmRCallProc, (XtPointer) CheckSetDefaultEntryLabelRenderTable },
-    { XmNdefaultEntryLabelRenderTable, XmCRenderTable,
-	  XmRRenderTable, sizeof(XmRenderTable),
-	  XmPartOffset(XmBulletinBoard, label_font_list),
-	  XmRCallProc, (XtPointer) CheckSetDefaultEntryLabelRenderTable },
-    { XmNdefaultEntryLabelAlignment, XmCAlignment,
-	  XmRXmAlignment, sizeof(unsigned char),
-	  offset(default_label_alignment), 
-	  XmRImmediate, (XtPointer) DEFAULT_ALIGNMENT },
+static XtResource resources[] =
+{
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmColumnRec, column.check_set_render_table),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNdefaultEntryLabelFontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), XtOffsetOf(XmBulletinBoardRec, bulletin_board.label_font_list),
+    XmRCallProc, (XtPointer) CheckSetDefaultEntryLabelRenderTable
+  },
+
+  {
+    XmNdefaultEntryLabelRenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), XtOffsetOf(XmBulletinBoardRec, bulletin_board.label_font_list),
+    XmRCallProc, (XtPointer) CheckSetDefaultEntryLabelRenderTable
+  },
+
+  {
+    XmNdefaultEntryLabelAlignment, XmCAlignment, XmRXmAlignment,
+    sizeof(unsigned char), XtOffsetOf(XmColumnRec, column.default_label_alignment),
+    XmRImmediate, (XtPointer) DEFAULT_ALIGNMENT
+  },
 #if 0	/* POSITION HANDLING */
-    { XmNdefaultEntryLabelPosition, XmCEntryLabelPosition,
-	  XmRLabelPosition, sizeof(unsigned char),
-	  offset(default_label_position),
-	  XmRImmediate, (XtPointer) DEFAULT_POSITION },
+  {
+    XmNdefaultEntryLabelPosition, XmCEntryLabelPosition, XmRLabelPosition,
+    sizeof(unsigned char), XtOffsetOf(XmColumnRec, column.default_label_position),
+    XmRImmediate, (XtPointer) DEFAULT_POSITION
+  },
 #endif
-    { XmNdefaultFillStyle, XmCFillStyle,
-	  XmRFillStyle, sizeof(unsigned char),
-	  offset(default_fill_style),
-	  XmRImmediate, (XtPointer) DEFAULT_FILL_STYLE },
-    { XmNitemSpacing, XmCItemSpacing,
-	  XmRVerticalDimension, sizeof(Dimension),
-	  offset(item_spacing),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNlabelSpacing, XmCLabelSpacing,
-	  XmRHorizontalDimension, sizeof(Dimension),
-	  offset(label_spacing),
-	  XmRImmediate, (XtPointer) 10 },
-    { XmNorientation, XmCOrientation,
-	  XmROrientation, sizeof(unsigned char),
-	  offset(orientation),
-	  XmRImmediate, (XtPointer) DEFAULT_ORIENTATION },
-    { XmNdistribution, XmCDistribution,
-	  XmRDistribution, sizeof(unsigned char),
-	  offset(distribution),
-	  XmRImmediate, (XtPointer) XmDISTRIBUTE_TIGHT },
+  {
+    XmNdefaultFillStyle, XmCFillStyle, XmRFillStyle,
+    sizeof(unsigned char), XtOffsetOf(XmColumnRec, column.default_fill_style),
+    XmRImmediate, (XtPointer) DEFAULT_FILL_STYLE
+  },
+
+  {
+    XmNitemSpacing, XmCItemSpacing, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmColumnRec, column.item_spacing),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNlabelSpacing, XmCLabelSpacing, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmColumnRec, column.label_spacing),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    XmNorientation, XmCOrientation, XmROrientation,
+    sizeof(unsigned char), XtOffsetOf(XmColumnRec, column.orientation),
+    XmRImmediate, (XtPointer) DEFAULT_ORIENTATION
+  },
+
+  {
+    XmNdistribution, XmCDistribution, XmRDistribution,
+    sizeof(unsigned char), XtOffsetOf(XmColumnRec, column.distribution),
+    XmRImmediate, (XtPointer) XmDISTRIBUTE_TIGHT
+  }
 };
+
 static XmSyntheticResource get_resources[] =
 {
-    { XmNlabelSpacing, sizeof(Dimension), offset(label_spacing),
-      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
-    { XmNitemSpacing, sizeof(Dimension), offset(item_spacing),
-      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
-};
-#undef offset
+  {
+    XmNlabelSpacing, sizeof(Dimension),
+    XtOffsetOf(XmColumnRec, column.label_spacing),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
 
-#define offset(field) XmConstraintPartOffset(XmColumn, field)
-static XmPartResource constraint_resources[] = {
-    { "pri.vate", "Pri.vate",
-	  XmRBoolean, sizeof(Boolean),
-	  offset (check_set_render_table),
-	  XmRImmediate, (XtPointer) False },
-    { XmNentryLabelFontList, XmCFontList,
-	  XmRFontList, sizeof(XmFontList),
-	  offset (label_font_list),
-	  XmRCallProc, (XtPointer) CheckSetEntryLabelRenderTable },
-    { XmNentryLabelRenderTable, XmCRenderTable,
-	  XmRRenderTable, sizeof(XmRenderTable),
-	  offset (label_font_list),
-	  XmRCallProc, (XtPointer) CheckSetEntryLabelRenderTable },
-    { XmNentryLabelAlignment, XmCAlignment,
-	  XmRXmAlignment, sizeof(unsigned char),
-	  offset(label_alignment),
-	  XmRImmediate, (XtPointer) XmALIGNMENT_UNSPECIFIED },
+  {
+    XmNitemSpacing, sizeof(Dimension),
+    XtOffsetOf(XmColumnRec, column.item_spacing),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  }
+};
+
+static XtResource constraint_resources[] =
+{
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmColumnConstraintRec, column.check_set_render_table),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNentryLabelFontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), XtOffsetOf(XmColumnConstraintRec, column.label_font_list),
+    XmRCallProc, (XtPointer) CheckSetEntryLabelRenderTable
+  },
+
+  {
+    XmNentryLabelRenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), XtOffsetOf(XmColumnConstraintRec, column.label_font_list),
+    XmRCallProc, (XtPointer) CheckSetEntryLabelRenderTable
+  },
+
+  {
+    XmNentryLabelAlignment, XmCAlignment, XmRXmAlignment,
+    sizeof(unsigned char), XtOffsetOf(XmColumnConstraintRec, column.label_alignment),
+    XmRImmediate, (XtPointer) XmALIGNMENT_UNSPECIFIED
+  },
 #if 0	/* POSITION HANDLING */
-    { XmNentryLabelPosition, XmCEntryLabelPosition,
-	  XmRLabelPosition, sizeof(unsigned char),
-	  offset(label_position),
-	  XmRImmediate, (XtPointer) XiLABEL_POSITION_UNSPECIFIED },
+  {
+    XmNentryLabelPosition, XmCEntryLabelPosition, XmRLabelPosition,
+    sizeof(unsigned char), XtOffsetOf(XmColumnConstraintRec, column.label_position),
+    XmRImmediate, (XtPointer) XiLABEL_POSITION_UNSPECIFIED
+  },
 #endif
-    { XmNfillStyle, XmCFillStyle,
-	  XmRFillStyle, sizeof(unsigned char),
-	  offset(fill_style),
-	  XmRImmediate, (XtPointer) XmFILL_UNSPECIFIED },
-    { XmNentryLabelType, XmCLabelType,
-	  XmRLabelType, sizeof(unsigned char),
-	  offset(label_type),
-	  XmRImmediate, (XtPointer) XmSTRING },
-    { XmNentryLabelString, XmCLabelString,
-	  XmRXmString, sizeof(XmString),
-	  offset(label_string),
-	  XmRImmediate, (XtPointer) NULL },
-    { XmNentryLabelPixmap, XmCLabelPixmap,
-	  XmRPrimForegroundPixmap, sizeof(Pixmap),
-	  offset(label_pixmap),
-	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
-    { XmNshowEntryLabel, XmCShowLabel,
-	  XmRBoolean, sizeof(Boolean),
-	  offset(show_label),
-	  XmRImmediate, (XtPointer) True },
-    { XmNstretchable, XmCStretchable,
-	  XmRBoolean, sizeof(Boolean),
-	  offset(stretchable),
-	  XmRImmediate, (XtPointer) False },
+  {
+    XmNfillStyle, XmCFillStyle, XmRFillStyle,
+    sizeof(unsigned char), XtOffsetOf(XmColumnConstraintRec, column.fill_style),
+    XmRImmediate, (XtPointer) XmFILL_UNSPECIFIED
+  },
+
+  { 
+    XmNentryLabelType, XmCLabelType, XmRLabelType,
+    sizeof(unsigned char), XtOffsetOf(XmColumnConstraintRec, column.label_type),
+    XmRImmediate, (XtPointer) XmSTRING
+  },
+
+  {
+      XmNentryLabelString, XmCLabelString, XmRXmString,
+      sizeof(XmString), XtOffsetOf(XmColumnConstraintRec, column.label_string),
+      XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+      XmNentryLabelPixmap, XmCLabelPixmap, XmRPrimForegroundPixmap,
+      sizeof(Pixmap), XtOffsetOf(XmColumnConstraintRec, column.label_pixmap),
+      XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+  },
+
+  {
+      XmNshowEntryLabel, XmCShowLabel, XmRBoolean,
+      sizeof(Boolean), XtOffsetOf(XmColumnConstraintRec, column.show_label),
+      XmRImmediate, (XtPointer) True
+  },
+  
+  {
+      XmNstretchable, XmCStretchable, XmRBoolean,
+      sizeof(Boolean), XtOffsetOf(XmColumnConstraintRec, column.stretchable),
+      XmRImmediate, (XtPointer) False
+  }
 };
 
 /*
@@ -266,10 +304,12 @@ static XmPartResource constraint_resources[] = {
 static void Get_entryLabelString(Widget, int, XtArgVal *);
 static XmSyntheticResource cont_get_resources[] =
 {
-    { XmNentryLabelString, sizeof(XmString), offset(label_string),
-      Get_entryLabelString, (XmImportProc) NULL},
+  {
+    XmNentryLabelString, sizeof(XmString),
+    XtOffsetOf(XmColumnConstraintRec, column.label_string),
+    Get_entryLabelString, (XmImportProc) NULL
+  }
 };
-#undef offset
 
 ConstraintClassExtensionRec xiColumnConstraintExtension = {
     NULL,			         /* next_extension  */
@@ -284,7 +324,7 @@ XmColumnClassRec xmColumnClassRec = {
     /* core_class members      */
     /* superclass         */	(WidgetClass) &xmBulletinBoardClassRec,
     /* class_name         */	"XmColumn",                            
-    /* widget_size        */	sizeof(XmColumnPart),                 
+    /* widget_size        */	sizeof(XmColumnRec),
     /* class_initialize   */	ClassInitialize,
     /* class_part_init    */	ClassPartInitialize,
     /* class_inited       */	False,                            	
@@ -326,7 +366,7 @@ XmColumnClassRec xmColumnClassRec = {
   { /* constraint_class fields */
     /* resource list      */    (XtResource*)constraint_resources,
     /* num resources      */ 	XtNumber(constraint_resources),
-    /* constraint size    */ 	sizeof(XmColumnConstraintPart),
+    /* constraint size    */ 	sizeof(XmColumnConstraintRec),
     /* init proc          */ 	ConstraintInitialize,
     /* destroy proc       */ 	ConstraintDestroy,
     /* set values proc    */ 	ConstraintSetValues,
@@ -355,9 +395,6 @@ XmColumnClassRec xmColumnClassRec = {
 
 WidgetClass xmColumnWidgetClass = (WidgetClass) &xmColumnClassRec;
 
-XmOffsetPtr XmColumn_offsets;
-XmOffsetPtr XmColumnC_offsets;
-
 /*
  * Function:
  *	ClassInitialize(void)
@@ -374,27 +411,6 @@ static void
 ClassInitialize(void)
 {
     XmColumnClassRec* wc = &xmColumnClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmColumnWidgetClass,
-			    &XmColumn_offsets,
-			    &XmColumnC_offsets);
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmColumn_offsets);
-    }
-    _XmProcessUnlock();
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
-        (wc->manager_class.syn_constraint_resources)[i].resource_offset =
-            XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
-                            &XmColumnC_offsets);
-    }
-    _XmProcessUnlock();
 
 #if 0	/* POSITION HANDLING */
     XtSetTypeConverter(XmRString, XmRLabelPosition,

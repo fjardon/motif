@@ -50,35 +50,22 @@ extern "C" {
  */
 #define XmIconBoxConstraintPart IconInfo
 
-#define XmIconBoxIndex (XmManagerIndex + 1)
-
-extern XmOffsetPtr XmIconBox_offsets;   /* instance offsets */
-extern XmOffsetPtr XmIconBoxC_offsets;  /* contraint offsets */
-
 /*
  * Access macros for widget instance fields
  */
-#define XmIconBoxField(w,f,t) XmField(w, XmIconBox_offsets, XmIconBox, f, t)
+#define XmIconBox_min_v_cells(w)	(((XmIconBoxWidget)(w))->box.min_v_cells)
+#define XmIconBox_min_h_cells(w)	(((XmIconBoxWidget)(w))->box.min_h_cells)
+#define XmIconBox_v_margin(w)	(((XmIconBoxWidget)(w))->box.v_margin)
+#define XmIconBox_h_margin(w)	(((XmIconBoxWidget)(w))->box.h_margin)
+#define XmIconBox_min_cell_width(w)  (((XmIconBoxWidget)(w))->box.min_cell_width)
+#define XmIconBox_min_cell_height(w) (((XmIconBoxWidget)(w))->box.min_cell_height)
+#define XmIconBox_cell_width(w)	(((XmIconBoxWidget)(w))->box.cell_width)
+#define XmIconBox_cell_height(w)	(((XmIconBoxWidget)(w))->box.cell_height)
 
-#define XmIconBox_min_v_cells(w)	XmIconBoxField(w, min_v_cells, Dimension)
-#define XmIconBox_min_h_cells(w)	XmIconBoxField(w, min_h_cells, Dimension)
-#define XmIconBox_v_margin(w)	XmIconBoxField(w, v_margin, Dimension)
-#define XmIconBox_h_margin(w)	XmIconBoxField(w, h_margin, Dimension)
-#define XmIconBox_min_cell_width(w)  XmIconBoxField(w, min_cell_width, Dimension)
-#define XmIconBox_min_cell_height(w) XmIconBoxField(w, min_cell_height, Dimension)
-#define XmIconBox_cell_width(w)	XmIconBoxField(w, cell_width, Dimension)
-#define XmIconBox_cell_height(w)	XmIconBoxField(w, cell_height, Dimension)
-
-/*
- * Access macros for widget constraint fields
- */
-#define XmIconBoxCField(w,f,t) \
-             XmConstraintField(w, XmIconBoxC_offsets, XmIconBox, f, t)
-
-#define XmIconBoxC_cell_x(w)	XmIconBoxCField(w, cell_x, short)
-#define XmIconBoxC_cell_y(w)	XmIconBoxCField(w, cell_y, short)
-#define XmIconBoxC_pref_width(w)	XmIconBoxCField(w, pref_width, Dimension)
-#define XmIconBoxC_pref_height(w)	XmIconBoxCField(w, pref_height, Dimension)
+#define XmIconBoxC_cell_x(w)      (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.cell_x)
+#define XmIconBoxC_cell_y(w)      (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.cell_y)
+#define XmIconBoxC_pref_width(w)  (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.pref_width)
+#define XmIconBoxC_pref_height(w) (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.pref_height)
 
 /************************************************************
 *	MACROS

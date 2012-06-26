@@ -232,70 +232,154 @@ static void SetEntryBackground(Widget w, int offset, XrmValue *value)
     XmI18List_entry_background_use(ilist) = False;
 }
 
-static XmPartResource resources[] = {
-#define offset(field) XmPartOffset(XmI18List, field)
-  {XmNnumColumns, XmCNumColumns, XmRShort, sizeof(short),
-     offset(num_columns), XmRImmediate, (XtPointer) 0},
-  {XmNnumRows, XmCNumRows, XmRShort, sizeof(short),
-     offset(num_rows), XmRImmediate, (XtPointer) 0},
-  {XmNselectedColumn, XmCSelectedColumn, XmRShort, sizeof(short),
-     offset(selected_header), XmRImmediate, (XtPointer) 0},
-  {XmNcolumnTitles, XmCColumnTitles, XmRXmStringTable, sizeof(XmString *),
-     offset(column_titles), XmRImmediate, (XtPointer) NULL},
-  {XmNentryData, XmCEntryData, XmRPointer, sizeof(XtPointer),
-     offset(row_data), XmRImmediate, (XtPointer) NULL},
-  {XmNfirstColumnPixmaps, XmCFirstColumnPixmaps, XmRBoolean, sizeof(Boolean),
-     offset(first_col_pixmaps), XmRImmediate, (XtPointer) False},
-  {"pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
-     offset(check_set_render_table), XmRImmediate, (XtPointer) False},
-  {XmNfontList, XmCFontList, XmRFontList, sizeof(XmFontList),
-     offset(font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
-  {XmNrenderTable, XmCRenderTable, XmRRenderTable, sizeof(XmRenderTable),
-     offset(font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
-  {XmNverticalScrollBar, XmCScrollBar, XmRWidget, sizeof (Widget),
-     offset (v_bar), XmRImmediate, (XtPointer) NULL},
-  {XmNhorizontalScrollBar, XmCScrollBar, XmRWidget, sizeof (Widget),
-     offset (h_bar), XmRImmediate, (XtPointer) NULL},
-  {XmNfirstRow, XmCFirstLocation, XmRShort, sizeof(short),
-     offset(first_row), XmRImmediate, (XtPointer) 0},
-  {XmNfirstColumn, XmCFirstLocation, XmRShort, sizeof(short),
-     offset(first_col), XmRImmediate, (XtPointer) 0},
-  {XmNdoubleClickCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(double_click), XmRImmediate, (XtPointer) NULL},
-  {XmNsortFunctions, XmCFunction, XmRFunction, sizeof(Xm18SortFunction **),
-     offset(sort_functions), XmRImmediate, (XtPointer) NULL},
-  {XmNselectionPolicy, XmCSelectionPolicy, XmRSelectionPolicy,
-     sizeof(unsigned char), offset(selection_policy), 
-     XmRImmediate, (XtPointer) XmEXTENDED_SELECT },
-  {XmNsingleSelectionCallback, XmCCallback, XmRCallback,sizeof(XtCallbackList),
-     offset(single_select), XmRImmediate, (XtPointer) NULL},
-  {XmNalignment, XmCAlignment, XmRAlignment, sizeof(unsigned char),
-     offset(alignment), XmRImmediate, (XtPointer) XmALIGNMENT_BEGINNING},
-  {XmNstringDirection, XmCStringDirection,
-     XmRStringDirection, sizeof(unsigned char),
-     offset(string_direction), XmRImmediate,
-     (XtPointer) XmDEFAULT_DIRECTION},
-  {XmNvisibleItemCount, XmCVisibleItemCount, XmRInt, sizeof(int),
-     offset(visible_rows), XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT},
-  {XmNnewVisualStyle, XmCNewVisualStyle, XmRBoolean, sizeof(Boolean),
-     offset(new_visual_style), XmRImmediate, (XtPointer) True},
+static XtResource resources[] =
+{
+  {
+    XmNnumColumns, XmCNumColumns, XmRShort,
+    sizeof(short), XtOffsetOf(XmI18ListRec, ilist.num_columns),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNnumRows, XmCNumRows, XmRShort,
+    sizeof(short), XtOffsetOf(XmI18ListRec, ilist.num_rows),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNselectedColumn, XmCSelectedColumn, XmRShort,
+    sizeof(short), XtOffsetOf(XmI18ListRec, ilist.selected_header),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNcolumnTitles, XmCColumnTitles, XmRXmStringTable,
+    sizeof(XmString *), XtOffsetOf(XmI18ListRec, ilist.column_titles),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNentryData, XmCEntryData, XmRPointer,
+    sizeof(XtPointer), XtOffsetOf(XmI18ListRec, ilist.row_data),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstColumnPixmaps, XmCFirstColumnPixmaps, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmI18ListRec, ilist.first_col_pixmaps),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmI18ListRec, ilist.check_set_render_table),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNfontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), XtOffsetOf(XmI18ListRec, ilist.font_list),
+    XmRCallProc, (XtPointer)CheckSetRenderTable
+  },
+
+  {
+    XmNrenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), XtOffsetOf(XmI18ListRec, ilist.font_list),
+    XmRCallProc, (XtPointer)CheckSetRenderTable
+  },
+
+  {
+    XmNverticalScrollBar, XmCScrollBar, XmRWidget,
+    sizeof(Widget), XtOffsetOf(XmI18ListRec, ilist.v_bar),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNhorizontalScrollBar, XmCScrollBar, XmRWidget,
+    sizeof(Widget), XtOffsetOf(XmI18ListRec, ilist.h_bar),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstRow, XmCFirstLocation, XmRShort,
+    sizeof(short), XtOffsetOf(XmI18ListRec, ilist.first_row),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNfirstColumn, XmCFirstLocation, XmRShort,
+    sizeof(short), XtOffsetOf(XmI18ListRec, ilist.first_col),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNdoubleClickCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmI18ListRec, ilist.double_click),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNsortFunctions, XmCFunction, XmRFunction,
+    sizeof(Xm18SortFunction **), XtOffsetOf(XmI18ListRec, ilist.sort_functions),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNselectionPolicy, XmCSelectionPolicy, XmRSelectionPolicy,
+    sizeof(unsigned char), XtOffsetOf(XmI18ListRec, ilist.selection_policy), 
+    XmRImmediate, (XtPointer) XmEXTENDED_SELECT
+  },
+  
+  {
+    XmNsingleSelectionCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmI18ListRec, ilist.single_select),
+    XmRImmediate, (XtPointer) NULL
+  },
+  
+  {
+      XmNalignment, XmCAlignment, XmRAlignment,
+      sizeof(unsigned char), XtOffsetOf(XmI18ListRec, ilist.alignment),
+      XmRImmediate, (XtPointer) XmALIGNMENT_BEGINNING
+  },
+
+  {
+    XmNstringDirection, XmCStringDirection, XmRStringDirection,
+    sizeof(unsigned char), XtOffsetOf(XmI18ListRec, ilist.string_direction),
+    XmRImmediate, (XtPointer) XmDEFAULT_DIRECTION
+  },
+
+  {
+    XmNvisibleItemCount, XmCVisibleItemCount, XmRInt,
+    sizeof(int), XtOffsetOf(XmI18ListRec, ilist.visible_rows),
+    XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT
+  },
+
+  {
+    XmNnewVisualStyle, XmCNewVisualStyle, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmI18ListRec, ilist.new_visual_style),
+    XmRImmediate, (XtPointer) True
+  },
 
   /* process this first; set the value to True */
-  {"is.entry.background.set", "I.Really.Wonder", XtRBoolean, sizeof(Boolean),
-     offset(entry_background_use), XmRImmediate, (XtPointer) True},
+  {
+    "is.entry.background.set", "I.Really.Wonder", XtRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmI18ListRec, ilist.entry_background_use),
+    XmRImmediate, (XtPointer) True
+  },
   /* now see if this resource is set in the defaults file */
   /* XmNentryBackground currently UNDOCUMENTED */
-  {XmNentryBackground, XmCBackground, XtRPixel, sizeof(Pixel),
-     offset(entry_background_pixel), XmRCallProc, (XtPointer) SetEntryBackground},
-
-#undef offset
+  {
+    XmNentryBackground, XmCBackground, XtRPixel,
+    sizeof(Pixel), XtOffsetOf(XmI18ListRec, ilist.entry_background_pixel),
+    XmRCallProc, (XtPointer) SetEntryBackground
+  }
 };
 
 XmI18ListClassRec xmI18ListClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	XM_I18LIST_CLASS_NAME,
-    /* widget_size		*/	sizeof(XmI18ListPart),
+    /* widget_size		*/	sizeof(XmI18ListRec),
     /* class_initialize		*/	ClassInitialize,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -342,8 +426,6 @@ XmI18ListClassRec xmI18ListClassRec = {
 
 WidgetClass xmI18ListWidgetClass = (WidgetClass)&xmI18ListClassRec;
 
-XmOffsetPtr XmI18List_offsets;
-
 /* Transfer trait record */
 
 static XmConst XmTransferTraitRec ListTransfer = {
@@ -381,9 +463,7 @@ static XmConst XmTransferTraitRec ListTransfer = {
 static void
 ClassInitialize()
 {
-    XmResolveAllPartOffsets(xmI18ListWidgetClass,
-			    &XmI18List_offsets,
-			    NULL);
+  /* do nothing */
 }
 
 /*

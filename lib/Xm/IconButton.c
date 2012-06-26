@@ -142,8 +142,6 @@ static Boolean CvtStringToIconPlacement(Display *, XrmValuePtr, Cardinal *,
 *	STATIC DECLARATIONS
 *************************************************************/
 
-XmOffsetPtr XmIconButton_offsets;
-
 /*
  * It seems redundant to have both Btn1Up and BtnUp bound to
  * EndDrag, but for some reason BtnUp does not cause the event to
@@ -210,78 +208,158 @@ static XtActionsRec actionsList[] =
     { "PrimitiveLeave",		(XtActionProc) _XmPrimitiveLeave },
 };
 
-static XmPartResource resources[] = {
-#define offset(field) XmPartOffset(XmIconButton,field)
-  {XmNlabel, XmCLabel, XmRString, sizeof(String),
-     offset(label), XmRImmediate, (XtPointer) NULL},
-  {XmNlabelString, XmCLabelString, XmRXmString, sizeof(XmString),
-     offset(label_string), XmRImmediate, (XtPointer) NULL},
-  {XmNpixmap, XmCPixmap, XmRPrimForegroundPixmap, sizeof(Pixmap),
-     offset(pixmap), XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP},
-  {"pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
-     offset (check_set_render_table), XmRImmediate, (XtPointer) False},
-  {XmNfontList, XmCFontList, XmRFontList, sizeof (XmFontList),
-     offset (font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
-  {XmNrenderTable, XmCRenderTable, XmRRenderTable, sizeof(XmRenderTable),
-     offset (font_list), XmRCallProc, (XtPointer)CheckSetRenderTable},
-  {XmNalignment, XmCAlignment, XmRAlignment, sizeof(unsigned char),
-     offset(alignment), XmRImmediate,(XtPointer) XmALIGNMENT_BEGINNING},
-  {XmNstringDirection, XmCStringDirection,
-     XmRStringDirection, sizeof(unsigned char),
-     offset(string_direction), XmRImmediate,
-       (XtPointer) XmDEFAULT_DIRECTION},
-  {XmNiconPlacement, XmCIconPlacement, 
-     XmRXmIconPlacement, sizeof(XmIconPlacement),
-     offset (icon_placement), XmRImmediate, (XtPointer) XmIconTop},
-  {XmNrecomputeSize, XmCBoolean , XmRBoolean, sizeof (Boolean),
-     offset (recompute), XmRImmediate, (XtPointer) True},
-  {XmNarmColor, XmCArmColor, XmRPixel, sizeof (Pixel),
-     offset(arm_color), XmRCallProc, (XtPointer) _XmSelectColorDefault},
-  {XmNset, XmCBoolean , XmRBoolean, sizeof (Boolean),
-     offset (set), XmRImmediate, (XtPointer) False},
+static XtResource resources[] =
+{
+  {
+    XmNlabel, XmCLabel, XmRString,
+    sizeof(String), XtOffsetOf(XmIconButtonRec, icon.label),
+    XmRImmediate, (XtPointer) NULL
+  },
 
-  {XmNverticalMargin, XmCSpace, XmRVerticalDimension, sizeof(Dimension), 
-     offset(v_space), XmRImmediate, (XtPointer) 2},
-  {XmNhorizontalMargin, XmCSpace, XmRHorizontalDimension, sizeof(Dimension),
-     offset(h_space), XmRImmediate, (XtPointer) 2},
+  {
+    XmNlabelString, XmCLabelString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmIconButtonRec, icon.label_string),
+    XmRImmediate, (XtPointer) NULL
+  },
 
-  {XmNiconTextPadding, XmCSpace, XmRVerticalDimension, sizeof(Dimension),
-     offset(icon_text_padding), XmRImmediate, (XtPointer) 2},
+  {
+    XmNpixmap, XmCPixmap, XmRPrimForegroundPixmap,
+    sizeof(Pixmap), XtOffsetOf(XmIconButtonRec, icon.pixmap),
+    XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+  },
 
-  {XmNactivateCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(activate_callback), XmRPointer, (XtPointer) NULL},
-  {XmNdoubleClickCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(double_click_callback), XmRPointer, (XtPointer) NULL},
-  {XmNpixmapWidth, XmCDimension, XmRDimension, sizeof(Dimension),
-     offset(pix_width), XmRImmediate, (XtPointer) 0},
-  {XmNpixmapHeight, XmCDimension, XmRDimension, sizeof(Dimension),
-     offset(pix_height), XmRImmediate, (XtPointer) 0},
-  {XmNpixmapDepth, XmCDimension, XmRDimension, sizeof(Dimension),
-     offset(pix_depth), XmRImmediate, (XtPointer) 0},
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmIconButtonRec, icon.check_set_render_table),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNfontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), XtOffsetOf(XmIconButtonRec, icon.font_list),
+    XmRCallProc, (XtPointer)CheckSetRenderTable
+  },
+
+  {
+    XmNrenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), XtOffsetOf(XmIconButtonRec, icon.font_list),
+    XmRCallProc, (XtPointer)CheckSetRenderTable
+  },
+
+  {
+    XmNalignment, XmCAlignment, XmRAlignment,
+    sizeof(unsigned char), XtOffsetOf(XmIconButtonRec, icon.alignment),
+    XmRImmediate,(XtPointer) XmALIGNMENT_BEGINNING
+  },
+
+  {
+    XmNstringDirection, XmCStringDirection, XmRStringDirection,
+    sizeof(unsigned char), XtOffsetOf(XmIconButtonRec, icon.string_direction),
+    XmRImmediate, (XtPointer) XmDEFAULT_DIRECTION
+  },
+
+  {
+    XmNiconPlacement, XmCIconPlacement, XmRXmIconPlacement,
+    sizeof(XmIconPlacement), XtOffsetOf(XmIconButtonRec, icon.icon_placement),
+    XmRImmediate, (XtPointer) XmIconTop
+  },
+
+  {
+    XmNrecomputeSize, XmCBoolean , XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmIconButtonRec, icon.recompute),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNarmColor, XmCArmColor, XmRPixel,
+    sizeof(Pixel), XtOffsetOf(XmIconButtonRec, icon.arm_color),
+    XmRCallProc, (XtPointer) _XmSelectColorDefault
+  },
+
+  {
+    XmNset, XmCBoolean , XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmIconButtonRec, icon.set),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNverticalMargin, XmCSpace, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconButtonRec, icon.v_space),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNhorizontalMargin, XmCSpace, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconButtonRec, icon.h_space),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNiconTextPadding, XmCSpace, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconButtonRec, icon.icon_text_padding),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNactivateCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmIconButtonRec, icon.activate_callback),
+    XmRPointer, (XtPointer) NULL
+  },
+
+  {
+    XmNdoubleClickCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmIconButtonRec, icon.double_click_callback),
+    XmRPointer, (XtPointer) NULL
+  },
+
+  {
+    XmNpixmapWidth, XmCDimension, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconButtonRec, icon.pix_width),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNpixmapHeight, XmCDimension, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconButtonRec, icon.pix_height),
+    XmRImmediate, (XtPointer) 0
+  },
+
+  {
+    XmNpixmapDepth, XmCDimension, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmIconButtonRec, icon.pix_depth),
+    XmRImmediate, (XtPointer) 0
+  }
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNhorizontalMargin, sizeof(Dimension), offset(h_space),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNverticalMargin, sizeof(Dimension), offset(v_space),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-    { XmNiconTextPadding, sizeof(Dimension), offset(icon_text_padding),
-	  FromPaddingPixels, (XmImportProc) ToPaddingPixels
-    },
-    { XmNlabelString, sizeof(XmString), offset(label_string), 
-	  GetValues_labelString, NULL
-    }
+  {
+    XmNhorizontalMargin, sizeof(Dimension),
+    XtOffsetOf(XmIconButtonRec, icon.h_space),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+  {
+    XmNverticalMargin, sizeof(Dimension),
+    XtOffsetOf(XmIconButtonRec, icon.v_space),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+  {
+    XmNiconTextPadding, sizeof(Dimension),
+    XtOffsetOf(XmIconButtonRec, icon.icon_text_padding),
+    FromPaddingPixels, (XmImportProc) ToPaddingPixels
+  },
+  {
+    XmNlabelString, sizeof(XmString),
+    XtOffsetOf(XmIconButtonRec, icon.label_string),
+    GetValues_labelString, NULL
+  }
 };
-#undef offset
 
 XmIconButtonClassRec xmIconButtonClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	XM_ICON_BUTTON_CLASS_NAME,
-    /* widget_size		*/	sizeof(XmIconButtonPart),
+    /* widget_size		*/	sizeof(XmIconButtonRec),
     /* class_initialize		*/	ClassInit,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -351,19 +429,6 @@ static void
 ClassInit()
 {
     XmIconButtonClassRec *wc = &xmIconButtonClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmIconButtonWidgetClass,
-			    &XmIconButton_offsets,
-			    NULL);
-
-    _XmProcessLock();
-    for(i=0; i<wc->primitive_class.num_syn_resources; i++) {
-	(wc->primitive_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->primitive_class.syn_resources + i,
-			    &XmIconButton_offsets);
-    }
-    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmIconPlacement,
 		       (XtTypeConverter) CvtStringToIconPlacement,

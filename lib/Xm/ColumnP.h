@@ -108,31 +108,26 @@ typedef struct _XmColumnRec {
 
 #define XmColumnIndex (XmBulletinBoardIndex + 1)
 
-extern XmOffsetPtr XmColumn_offsets;
-extern XmOffsetPtr XmColumnC_offsets;
+#define XmColumnC_label_alignment(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_alignment)
+#define XmColumnC_label_type(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_type)
+#define XmColumnC_fill_style(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.fill_style)
+#define XmColumnC_show_label(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.show_label)
+#define XmColumnC_stretchable(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.stretchable)
+#define XmColumnC_label_pixmap(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_pixmap)
+#define XmColumnC_label_string(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_string)
+#define XmColumnC_label_font_list(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_font_list)
+#define XmColumnC_label_widget(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_widget)
+#define XmColumnC_request_width(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.request_width)
+#define XmColumnC_request_height(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.request_height)
+#define XmColumnC_position(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.position)
 
-#define XmColCField(w,f,t) XmConstraintField(w, XmColumnC_offsets, XmColumn, f, t)
-#define XmColumnC_label_alignment(w) XmColCField(w, label_alignment, unsigned char)
-#define XmColumnC_label_type(w) XmColCField(w, label_type, unsigned char)
-#define XmColumnC_fill_style(w) XmColCField(w, fill_style, unsigned char)
-#define XmColumnC_show_label(w) XmColCField(w, show_label, Boolean)
-#define XmColumnC_stretchable(w) XmColCField(w, stretchable, Boolean)
-#define XmColumnC_label_pixmap(w) XmColCField(w, label_pixmap, Pixmap)
-#define XmColumnC_label_string(w) XmColCField(w, label_string, XmString)
-#define XmColumnC_label_font_list(w) XmColCField(w, label_font_list, XmFontList)
-#define XmColumnC_label_widget(w) XmColCField(w, label_widget, Widget)
-#define XmColumnC_request_width(w) XmColCField(w, request_width, Dimension)
-#define XmColumnC_request_height(w) XmColCField(w, request_height, Dimension)
-#define XmColumnC_position(w) XmColCField(w, position, XRectangle)
-
-#define XmColField(w,f,t) XmField(w, XmColumn_offsets, XmColumn, f, t)
-#define XmColumn_default_label_alignment(w) XmColField(w, default_label_alignment, unsigned char)
-#define XmColumn_default_fill_style(w) XmColField(w, default_fill_style, unsigned char)
-#define XmColumn_orientation(w) XmColField(w, orientation, unsigned char)
-#define XmColumn_distribution(w) XmColField(w, distribution, unsigned char)
-#define XmColumn_item_spacing(w) XmColField(w, item_spacing, Dimension)
-#define XmColumn_label_spacing(w) XmColField(w, label_spacing, Dimension)
-#define XmColumn_resize_done(w) XmColField(w, resize_done, Boolean)
+#define XmColumn_default_label_alignment(w) (((XmColumnWidget)(w))->column.default_label_alignment)
+#define XmColumn_default_fill_style(w) (((XmColumnWidget)(w))->column.default_fill_style)
+#define XmColumn_orientation(w) (((XmColumnWidget)(w))->column.orientation)
+#define XmColumn_distribution(w) (((XmColumnWidget)(w))->column.distribution)
+#define XmColumn_item_spacing(w) (((XmColumnWidget)(w))->column.item_spacing)
+#define XmColumn_label_spacing(w) (((XmColumnWidget)(w))->column.label_spacing)
+#define XmColumn_resize_done(w) (((XmColumnWidget)(w))->column.resize_done)
 
 #ifdef __cplusplus
 }

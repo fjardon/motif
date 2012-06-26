@@ -124,73 +124,133 @@ static char defaultTranslations[] =
 	 <FocusOut>:     ManagerFocusOut() \n\
 	 <FocusIn>:      ManagerFocusIn()";
 
-static XmPartResource resources[] = {
-#define offset(field) XmPartOffset(XmHierarchy, field)
-#define core_offset(field) XmPartOffset(Core, field)
-  {XmNwidth, XmCWidth, XmRHorizontalDimension, sizeof(Dimension),
-     core_offset(width), XmRImmediate, (XtPointer) 300},
-  {XmNheight, XmCHeight, XmRVerticalDimension, sizeof(Dimension),
-     core_offset(height), XmRImmediate, (XtPointer) 300},
-
-  {XmNautoClose, XmCAutoClose, XmRBoolean, sizeof(Boolean), 
-     offset(auto_close), XmRImmediate, (XtPointer) True},
-  {XmNrefigureMode, XmCBoolean, XmRBoolean, sizeof(Boolean),
-     offset(refigure_mode), XmRImmediate, (XtPointer) True},
-  {XmNnodeStateCallback, XmCNodeStateCallback,
-     XmRCallback, sizeof(XtCallbackList), 
-     offset(node_state_callback), XmRPointer, (XtPointer) NULL},
-  {XmNverticalMargin, XmCDimension, XmRVerticalDimension, sizeof(Dimension),
-     offset(v_margin), XmRImmediate, (XtPointer) 2},
-  {XmNhorizontalMargin, XmCDimension, XmRHorizontalDimension,sizeof(Dimension),
-     offset(h_margin), XmRImmediate, (XtPointer) 2},
-  {XmNopenFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap, sizeof(Pixmap),
-     offset(open_folder), XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP},
-  {XmNcloseFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,sizeof(Pixmap),
-     offset(close_folder), XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP},
-  {XmNnodeStateChangedCallback, XmCNodeStateChangedCallback,
-     XmRCallback, sizeof(XtCallbackList), 
-     offset(node_state_changed_callback), XmRPointer, (XtPointer) NULL},
-
-  {XmNnodeStateBegEndCallback, XmCCallback,
-     XmRCallback, sizeof(XtCallbackList), 
-     offset(node_state_beg_end_callback), XmRPointer, (XtPointer) NULL},
-  {XmNnodeStateBeginEndCallback, XmCCallback,
-     XmRCallback, sizeof(XtCallbackList), 
-     offset(node_state_beg_end_callback), XmRPointer, (XtPointer) NULL},
-};
-static XmSyntheticResource get_resources[] =
+static XtResource resources[] =
 {
-    { XmNhorizontalMargin, sizeof(Dimension), offset(h_margin),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNverticalMargin, sizeof(Dimension), offset(v_margin),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
-};
-#undef offset
-#undef core_offset
+  {
+    XmNwidth, XmCWidth, XmRHorizontalDimension,
+        sizeof(Dimension), XtOffsetOf(CoreRec, core.width),
+        XmRImmediate, (XtPointer) 300
+      },
 
-static XmPartResource constraints[] = {
-#define offset(field) XmConstraintPartOffset(XmHierarchy, field)
-  {XmNnodeState, XmCNodeState, 
-     XmRXmHierarchyNodeState, sizeof(XmHierarchyNodeState),
-     offset(state), XmRImmediate, (XtPointer) XmOpen},
-  {XmNparentNode, XmCParentNode, XmRWidget, sizeof(Widget),
-     offset(parent), XmRImmediate, (XtPointer) NULL},
-  {XmNinsertBefore, XmCInsertBefore, XmRWidget, sizeof(Widget),
-     offset(insert_before), XmRImmediate, (XtPointer) NULL},
-  {XmNnodeOpenFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,sizeof(Pixmap),
-     offset(open_folder), XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP},
-  {XmNnodeCloseFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,sizeof(Pixmap),
-     offset(close_folder), XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP},
-#undef offset
-};
+      {
+        XmNheight, XmCHeight, XmRVerticalDimension,
+        sizeof(Dimension), XtOffsetOf(CoreRec, core.height),
+        XmRImmediate, (XtPointer) 300
+      },
 
-XmHierarchyClassRec xmHierarchyClassRec = {
+      {
+        XmNautoClose, XmCAutoClose, XmRBoolean,
+        sizeof(Boolean), XtOffsetOf(XmHierarchyRec, hierarchy.auto_close),
+        XmRImmediate, (XtPointer) True
+      },
+
+      {
+        XmNrefigureMode, XmCBoolean, XmRBoolean,
+        sizeof(Boolean), XtOffsetOf(XmHierarchyRec, hierarchy.refigure_mode),
+        XmRImmediate, (XtPointer) True
+      },
+
+      {
+        XmNnodeStateCallback, XmCNodeStateCallback, XmRCallback,
+        sizeof(XtCallbackList), XtOffsetOf(XmHierarchyRec, hierarchy.node_state_callback),
+        XmRPointer, (XtPointer) NULL
+      },
+
+      {
+        XmNverticalMargin, XmCDimension, XmRVerticalDimension,
+        sizeof(Dimension), XtOffsetOf(XmHierarchyRec, hierarchy.v_margin),
+        XmRImmediate, (XtPointer) 2
+      },
+
+      {
+        XmNhorizontalMargin, XmCDimension, XmRHorizontalDimension,
+        sizeof(Dimension), XtOffsetOf(XmHierarchyRec, hierarchy.h_margin),
+        XmRImmediate, (XtPointer) 2
+      },
+
+      {
+        XmNopenFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,
+        sizeof(Pixmap), XtOffsetOf(XmHierarchyRec, hierarchy.open_folder),
+        XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+      },
+
+      {
+        XmNcloseFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,
+        sizeof(Pixmap), XtOffsetOf(XmHierarchyRec, hierarchy.close_folder),
+        XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+      },
+
+      {
+        XmNnodeStateChangedCallback, XmCNodeStateChangedCallback, XmRCallback,
+        sizeof(XtCallbackList),  XtOffsetOf(XmHierarchyRec, hierarchy.node_state_changed_callback),
+        XmRPointer, (XtPointer) NULL
+      },
+
+      {
+        XmNnodeStateBegEndCallback, XmCCallback, XmRCallback,
+        sizeof(XtCallbackList), XtOffsetOf(XmHierarchyRec, hierarchy.node_state_beg_end_callback),
+        XmRPointer, (XtPointer) NULL
+      },
+
+      {
+        XmNnodeStateBeginEndCallback, XmCCallback, XmRCallback,
+        sizeof(XtCallbackList), XtOffsetOf(XmHierarchyRec, hierarchy.node_state_beg_end_callback),
+        XmRPointer, (XtPointer) NULL
+      }
+    };
+
+    static XmSyntheticResource get_resources[] =
+    {
+      {
+        XmNhorizontalMargin, sizeof(Dimension),
+        XtOffsetOf(XmHierarchyRec, hierarchy.h_margin),
+        XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+      },
+      {
+        XmNverticalMargin, sizeof(Dimension),
+        XtOffsetOf(XmHierarchyRec, hierarchy.v_margin),
+        XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+      }
+    };
+
+    static XtResource constraints[] =
+    {
+      {
+        XmNnodeState, XmCNodeState, XmRXmHierarchyNodeState,
+        sizeof(XmHierarchyNodeState), XtOffsetOf(XmHierarchyConstraintRec, hierarchy.state),
+        XmRImmediate, (XtPointer) XmOpen
+      },
+
+      {
+        XmNparentNode, XmCParentNode, XmRWidget,
+        sizeof(Widget), XtOffsetOf(XmHierarchyConstraintRec, hierarchy.parent),
+        XmRImmediate, (XtPointer) NULL
+      },
+
+      {
+        XmNinsertBefore, XmCInsertBefore, XmRWidget,
+        sizeof(Widget), XtOffsetOf(XmHierarchyConstraintRec, hierarchy.insert_before),
+        XmRImmediate, (XtPointer) NULL
+      },
+
+      {
+        XmNnodeOpenFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,
+        sizeof(Pixmap), XtOffsetOf(XmHierarchyConstraintRec, hierarchy.open_folder),
+        XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+      },
+
+      {
+        XmNnodeCloseFolderPixmap, XmCPixmap, XmRPrimForegroundPixmap,
+        sizeof(Pixmap), XtOffsetOf(XmHierarchyConstraintRec, hierarchy.close_folder),
+        XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+      }
+    };
+
+    XmHierarchyClassRec xmHierarchyClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	"XmHierarchy",
-    /* widget_size		*/	sizeof(XmHierarchyPart),
+    /* widget_size		*/	sizeof(XmHierarchyRec),
     /* class_initialize		*/	ClassInit,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -231,7 +291,7 @@ XmHierarchyClassRec xmHierarchyClassRec = {
    {		/* constraint_class fields */
     /* resource list        */         (XtResource*)constraints,
     /* num resources        */         XtNumber(constraints),	
-    /* constraint size      */         sizeof(HierNodeInfo),	
+    /* constraint size      */         sizeof(XmHierarchyConstraintRec),
     /* init proc            */         ConstraintInitialize,
     /* destroy proc         */         ConstraintDestroy,
     /* set values proc      */         ConstraintSetValues,
@@ -260,9 +320,6 @@ XmHierarchyClassRec xmHierarchyClassRec = {
 
 WidgetClass xmHierarchyWidgetClass = (WidgetClass) &xmHierarchyClassRec;
 
-XmOffsetPtr XmHierarchy_offsets;
-XmOffsetPtr XmHierarchyC_offsets;
-
 /************************************************************
 *	STATIC CODE
 *************************************************************/
@@ -279,19 +336,6 @@ static void
 ClassInit()
 {
     XmHierarchyClassRec* wc = &xmHierarchyClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmHierarchyWidgetClass,
-			    &XmHierarchy_offsets,
-			    &XmHierarchyC_offsets);
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-    	(wc->manager_class.syn_resources)[i].resource_offset =
-	        XmGetPartOffset(wc->manager_class.syn_resources + i,
-			&XmHierarchy_offsets);
-    }
-    _XmProcessUnlock();
 
     XtSetTypeConverter(XmRString, XmRXmHierarchyNodeState,CvtStringToNodeState,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);

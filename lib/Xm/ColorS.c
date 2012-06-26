@@ -123,73 +123,149 @@ static void GetValues_XmNfileReadError( Widget w, int n, XtArgVal *value) ;
  *       STATIC DECLARATIONS
  ************************************************************/
 
-#define	offset(field) XmPartOffset(XmColorSelector, field)
-	
-static XmPartResource resources[] = {
-    { XmNcolorMode, XmCColorMode, XmRXmColorMode, sizeof(XmColorMode),
-      offset(color_mode), XmRImmediate, (XtPointer) XmScaleMode },
-    { XmNcolorName, XmCString, XmRString, sizeof(String),
-       offset(color_name), XmRString, "White" },
-#ifdef VMS    
-    { XmNrgbFile, XmCString, XmRString, sizeof(String),
-      offset(rgb_file), XmRString, (XtPointer) "sys$manager:decw$rgb.dat" },
-#else
-    { XmNrgbFile, XmCString, XmRString, sizeof(String),
-      offset(rgb_file), XmRString, (XtPointer) "/usr/lib/X11/rgb.txt" },
-#endif
-    { XmNmarginWidth, XmCMargin, XmRHorizontalDimension,sizeof(Dimension),
-      offset(margin_width), XmRImmediate, (XtPointer) 2 },
-    { XmNmarginHeight, XmCMargin, XmRVerticalDimension,sizeof(Dimension),
-      offset(margin_height), XmRImmediate, (XtPointer) 2 },
+static XtResource resources[] =
+{
+  {
+    XmNcolorMode, XmCColorMode, XmRXmColorMode,
+    sizeof(XmColorMode), XtOffsetOf(XmColorSelectorRec, cs.color_mode),
+    XmRImmediate, (XtPointer) XmScaleMode
+  },
 
-    { XmNredSliderLabel, XmCSliderLabel, XmRXmString, sizeof(XmString),
-       offset(strings.slider_labels[0]), XmRString, (XtPointer) "Red"},
-    { XmNgreenSliderLabel, XmCSliderLabel, XmRXmString, sizeof(XmString),
-       offset(strings.slider_labels[1]), XmRString, (XtPointer) "Green"},
-    { XmNblueSliderLabel, XmCSliderLabel, XmRXmString, sizeof(XmString),
-       offset(strings.slider_labels[2]), XmRString, (XtPointer) "Blue"},
-    { XmNcolorListTogLabel, XmCTogLabel, XmRXmString, sizeof(XmString),
-       offset(strings.tog_labels[0]), XmRString, (XtPointer) "Color List"},
-    { XmNsliderTogLabel, XmCTogLabel, XmRXmString, sizeof(XmString),
-       offset(strings.tog_labels[1]),XmRString,(XtPointer)"Color Sliders"},
-    { XmNnoCellError, XmCNoCellError, XmRXmString, sizeof(XmString),
-       offset(strings.no_cell_error),XmRString,
-       (XtPointer)"\n\nNo Color Cell Available!"},
-    { XmNfileReadError, XmCFileReadError, XmRXmString, sizeof(XmString),
-       offset(strings.file_read_error),XmRString,
-       (XtPointer)"Could not read rgb.txt file:"},
+  {
+    XmNcolorName, XmCString, XmRString,
+    sizeof(String), XtOffsetOf(XmColorSelectorRec, cs.color_name),
+    XmRString, "White"
+  },
+#ifdef VMS    
+  {
+    XmNrgbFile, XmCString, XmRString,
+    sizeof(String), XtOffsetOf(XmColorSelectorRec, cs.rgb_file),
+    XmRString, (XtPointer) "sys$manager:decw$rgb.dat"
+  },
+#else
+  {
+    XmNrgbFile, XmCString, XmRString,
+    sizeof(String), XtOffsetOf(XmColorSelectorRec, cs.rgb_file),
+    XmRString, (XtPointer) "/usr/lib/X11/rgb.txt"
+  },
+#endif
+  {
+    XmNmarginWidth, XmCMargin, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmColorSelectorRec, cs.margin_width),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNmarginHeight, XmCMargin, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmColorSelectorRec, cs.margin_height),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNredSliderLabel, XmCSliderLabel, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.slider_labels[0]),
+    XmRString, (XtPointer) "Red"
+  },
+
+  {
+    XmNgreenSliderLabel, XmCSliderLabel, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.slider_labels[1]),
+    XmRString, (XtPointer) "Green"
+  },
+
+  {
+    XmNblueSliderLabel, XmCSliderLabel, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.slider_labels[2]),
+    XmRString, (XtPointer) "Blue"
+  },
+
+  {
+    XmNcolorListTogLabel, XmCTogLabel, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.tog_labels[0]),
+    XmRString, (XtPointer) "Color List"
+  },
+
+  {
+    XmNsliderTogLabel, XmCTogLabel, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.tog_labels[1]),
+    XmRString,(XtPointer)"Color Sliders"
+  },
+
+  {
+    XmNnoCellError, XmCNoCellError, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.no_cell_error),
+    XmRString, (XtPointer)"\n\nNo Color Cell Available!"
+  },
+
+  {
+    XmNfileReadError, XmCFileReadError, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmColorSelectorRec, cs.strings.file_read_error),
+    XmRString, (XtPointer)"Could not read rgb.txt file:"
+  }
 };	
 
-static XmSyntheticResource get_resources[] = {
-    { XmNmarginWidth, sizeof(Dimension), offset(margin_width),
-      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
-    { XmNmarginHeight, sizeof(Dimension), offset(margin_height),
-      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
+static XmSyntheticResource get_resources[] =
+{
+  {
+    XmNmarginWidth, sizeof(Dimension),
+    XtOffsetOf(XmColorSelectorRec, cs.margin_width),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
 
-    { XmNredSliderLabel, sizeof(XmString), offset(strings.slider_labels[0]), 
-	GetValues_XmNredSliderLabel, NULL},
-    { XmNgreenSliderLabel, sizeof(XmString), offset(strings.slider_labels[1]), 
-	GetValues_XmNgreenSliderLabel, NULL},
-    { XmNblueSliderLabel, sizeof(XmString), offset(strings.slider_labels[2]), 
-	GetValues_XmNblueSliderLabel, NULL},
-    { XmNcolorListTogLabel, sizeof(XmString), offset(strings.tog_labels[0]), 
-	GetValues_XmNcolorListTogLabel, NULL},
-    { XmNsliderTogLabel, sizeof(XmString), offset(strings.tog_labels[1]),
-	GetValues_XmNsliderTogLabel, NULL},
-    { XmNnoCellError, sizeof(XmString), offset(strings.no_cell_error),
-	GetValues_XmNnoCellError, NULL},
-    { XmNfileReadError, sizeof(XmString), offset(strings.file_read_error),
-	GetValues_XmNfileReadError, NULL}
+  {
+    XmNmarginHeight, sizeof(Dimension),
+    XtOffsetOf(XmColorSelectorRec, cs.margin_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
 
+  {
+    XmNredSliderLabel, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.slider_labels[0]), 
+    GetValues_XmNredSliderLabel, NULL
+  },
+
+  {
+    XmNgreenSliderLabel, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.slider_labels[1]),
+    GetValues_XmNgreenSliderLabel, NULL
+  },
+
+  {
+    XmNblueSliderLabel, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.slider_labels[2]), 
+    GetValues_XmNblueSliderLabel, NULL
+  },
+
+  {
+    XmNcolorListTogLabel, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.tog_labels[0]), 
+    GetValues_XmNcolorListTogLabel, NULL
+  },
+
+  {
+    XmNsliderTogLabel, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.tog_labels[1]),
+    GetValues_XmNsliderTogLabel, NULL
+  },
+
+  {
+    XmNnoCellError, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.no_cell_error),
+    GetValues_XmNnoCellError, NULL
+  },
+
+  {
+    XmNfileReadError, sizeof(XmString),
+    XtOffsetOf(XmColorSelectorRec, cs.strings.file_read_error),
+    GetValues_XmNfileReadError, NULL
+  }
 };
-
-#undef offset
 
 XmColorSelectorClassRec xmColorSelectorClassRec = {
   { /* core fields */
     /* superclass               */      SUPERCLASS,
     /* class_name               */      "XmColorSelector",
-    /* widget_size              */      sizeof(XmColorSelectorPart),
+    /* widget_size              */      sizeof(XmColorSelectorRec),
     /* class_initialize         */      ClassInitialize,
     /* class_part_initialize    */      ClassPartInitialize,
     /* class_inited             */      False,
@@ -252,9 +328,6 @@ XmColorSelectorClassRec xmColorSelectorClassRec = {
 
 WidgetClass xmColorSelectorWidgetClass = (WidgetClass)&xmColorSelectorClassRec;
 
-XmOffsetPtr XmColorS_offsets;
-XmOffsetPtr XmColorSC_offsets;
-
 /************************************************************
  *       STATIC CODE
  ************************************************************/
@@ -269,18 +342,7 @@ static void
 ClassInitialize(void)
 {
     XmColorSelectorClassRec *wc = &xmColorSelectorClassRec;
-    int i;
 
-    XmResolveAllPartOffsets(xmColorSelectorWidgetClass,
-			    &XmColorS_offsets,
-			    &XmColorSC_offsets);
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-        (wc->manager_class.syn_resources)[i].resource_offset =
-            XmGetPartOffset(wc->manager_class.syn_resources + i,
-                            &XmColorS_offsets);
-    }
-    _XmProcessUnlock();
     XtSetTypeConverter(XmRString, XmRXmColorMode, 
 		       (XtTypeConverter) CvtStringToColorMode, 
 		       NULL, (Cardinal) 0, XtCacheAll, NULL);

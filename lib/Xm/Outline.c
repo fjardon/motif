@@ -118,30 +118,41 @@ static void CreateGC(XmOutlineWidget ow);
 /************************************************************
 *	STATIC DECLARATIONS
 *************************************************************/
-#define offset(field) XmPartOffset(XmOutline, field)
-static XmPartResource resources[] = {
-  {XmNindentSpace, XmCIndentSpace, XmRHorizontalDimension, sizeof(Dimension),
-   offset(indent_space), XmRImmediate, (XtPointer)DEF_INDENT_SPACE},
-  {XmNconstrainWidth, XmCConstrainWidth, XmRBoolean, sizeof(Boolean),
-   offset(constrain_width), XmRImmediate, (XtPointer)False},
-  {XmNconnectNodes, XmCBoolean, XmRBoolean, sizeof(Boolean),
-   offset(connect_nodes), XmRImmediate, (XtPointer)False},
+static XtResource resources[] =
+{
+  {
+    XmNindentSpace, XmCIndentSpace, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmOutlineRec, outline.indent_space),
+    XmRImmediate, (XtPointer)DEF_INDENT_SPACE
+  },
+
+  {
+    XmNconstrainWidth, XmCConstrainWidth, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmOutlineRec, outline.constrain_width),
+    XmRImmediate, (XtPointer)False
+  },
+
+  {
+    XmNconnectNodes, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmOutlineRec, outline.connect_nodes),
+    XmRImmediate, (XtPointer)False
+  }
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNindentSpace, sizeof(Dimension), offset(indent_space),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    }
+  {
+    XmNindentSpace, sizeof(Dimension),
+    XtOffsetOf(XmOutlineRec, outline.indent_space),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  }
 };
-
-#undef offset
 
 XmOutlineClassRec xmOutlineClassRec = {
   { /* core fields */
     /* superclass		*/	((WidgetClass) SUPERCLASS),
     /* class_name		*/	"XmOutline",
-    /* widget_size		*/	sizeof(XmOutlinePart),
+    /* widget_size		*/	sizeof(XmOutlineRec),
     /* class_initialize		*/	ClassInitialize,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -182,7 +193,7 @@ XmOutlineClassRec xmOutlineClassRec = {
    {		/* constraint_class fields */
     /* resource list        */         NULL,
     /* num resources        */         0,
-    /* constraint size      */         sizeof(XmOutlineConstraintPart),	
+    /* constraint size      */         sizeof(XmOutlineConstraintRec),	
     /* init proc            */         ConstraintInitialize,
     /* destroy proc         */         ConstraintDestroy,
     /* set values proc      */         ConstraintSetValues,
@@ -216,9 +227,6 @@ XmOutlineClassRec xmOutlineClassRec = {
 
 WidgetClass xmOutlineWidgetClass = (WidgetClass) &xmOutlineClassRec;
 
-XmOffsetPtr XmOutline_offsets;
-XmOffsetPtr XmOutlineC_offsets;
-
 /************************************************************
 *	STATIC CODE
 *************************************************************/
@@ -231,20 +239,7 @@ XmOffsetPtr XmOutlineC_offsets;
 static void
 ClassInitialize()
 {
-    XmOutlineClassRec *wc = &xmOutlineClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmOutlineWidgetClass,
-			    &XmOutline_offsets,
-			    &XmOutlineC_offsets);
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-        (wc->manager_class.syn_resources)[i].resource_offset =
-            XmGetPartOffset(wc->manager_class.syn_resources + i,
-                            &XmOutline_offsets);
-	}
-    _XmProcessUnlock();
+  /* do nothing */
 }
 
 /*	Function Name: ClassPartInitialize

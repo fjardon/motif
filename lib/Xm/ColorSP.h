@@ -130,36 +130,26 @@ typedef struct _XmColorSelectorConstraintRec
 
 #define XmColorSelectorIndex (XmManagerIndex + 1)
 
-#define XmColorSField(w,f,t) XmField(w,XmColorS_offsets,XmColorSelector,f,t)
-
-/*
- * Special handling for array members.  The XmField macro can't deal with
- * them
- */
-#define XmColorSArrayField(w, field, type)                 \
-    ((type*)((char*)w + XmColorS_offsets[XmColorSelectorIndex]  \
-            + XtOffsetOf(XmColorSelectorPart, field)))
-
-#define XmColorS_color_mode(w) XmColorSField(w, color_mode, XmColorMode)
-#define XmColorS_color_name(w) XmColorSField(w, color_name, char*)
-#define XmColorS_rgb_file(w) XmColorSField(w, rgb_file, String)
-#define XmColorS_margin_width(w) XmColorSField(w, margin_width, Dimension)
-#define XmColorS_margin_height(w) XmColorSField(w, margin_height, Dimension)
-#define XmColorS_strings(w) XmColorSField(w, strings, ColorSelStrings)
-#define XmColorS_slider_red(w) XmColorSField(w, slider_red, int)
-#define XmColorS_slider_green(w) XmColorSField(w, slider_green, int)
-#define XmColorS_slider_blue(w) XmColorSField(w, slider_blue, int)
-#define XmColorS_bb(w) XmColorSField(w, bb, Widget)
-#define XmColorS_sliders(w) XmColorSArrayField(w, sliders, Widget)
-#define XmColorS_scrolled_list(w) XmColorSField(w, scrolled_list, Widget)
-#define XmColorS_list(w) XmColorSField(w, list, Widget)
-#define XmColorS_color_window(w) XmColorSField(w, color_window, Widget)
-#define XmColorS_chose_radio(w) XmColorSField(w, chose_radio, Widget)
-#define XmColorS_chose_mode(w) XmColorSArrayField(w, chose_mode, Widget)
-#define XmColorS_color_pixel(w) XmColorSField(w, color_pixel, Pixel)
-#define XmColorS_good_cell(w) XmColorSField(w, good_cell, Boolean)
-#define XmColorS_colors(w) XmColorSField(w, colors, ColorInfo*)
-#define XmColorS_num_colors(w) XmColorSField(w, num_colors, short)
+#define XmColorS_color_mode(w) (((XmColorSelectorWidget)(w))->cs.color_mode)
+#define XmColorS_color_name(w) (((XmColorSelectorWidget)(w))->cs.color_name)
+#define XmColorS_rgb_file(w) (((XmColorSelectorWidget)(w))->cs.rgb_file)
+#define XmColorS_margin_width(w) (((XmColorSelectorWidget)(w))->cs.margin_width)
+#define XmColorS_margin_height(w) (((XmColorSelectorWidget)(w))->cs.margin_height)
+#define XmColorS_strings(w) (((XmColorSelectorWidget)(w))->cs.strings)
+#define XmColorS_slider_red(w) (((XmColorSelectorWidget)(w))->cs.slider_red)
+#define XmColorS_slider_green(w) (((XmColorSelectorWidget)(w))->cs.slider_green)
+#define XmColorS_slider_blue(w) (((XmColorSelectorWidget)(w))->cs.slider_blue)
+#define XmColorS_bb(w) (((XmColorSelectorWidget)(w))->cs.bb)
+#define XmColorS_sliders(w) (((XmColorSelectorWidget)(w))->cs.sliders)
+#define XmColorS_scrolled_list(w) (((XmColorSelectorWidget)(w))->cs.scrolled_list)
+#define XmColorS_list(w) (((XmColorSelectorWidget)(w))->cs.list)
+#define XmColorS_color_window(w) (((XmColorSelectorWidget)(w))->cs.color_window)
+#define XmColorS_chose_radio(w) (((XmColorSelectorWidget)(w))->cs.chose_radio)
+#define XmColorS_chose_mode(w) (((XmColorSelectorWidget)(w))->cs.chose_mode)
+#define XmColorS_color_pixel(w) (((XmColorSelectorWidget)(w))->cs.color_pixel)
+#define XmColorS_good_cell(w) (((XmColorSelectorWidget)(w))->cs.good_cell)
+#define XmColorS_colors(w) (((XmColorSelectorWidget)(w))->cs.colors)
+#define XmColorS_num_colors(w) (((XmColorSelectorWidget)(w))->cs.num_colors)
 
 /************************************************************
  *      GLOBAL DECLARATIONS

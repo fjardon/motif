@@ -169,68 +169,146 @@ static XtActionsRec actions[] =
     { "XiComboListCancel", ComboCancel },
 };
 
-static XmPartResource resources[] = {
-#define offset(field) XmPartOffset(XmCombinationBox2, field)
-  {XmNhorizontalMargin, XmCMargin, XmRHorizontalDimension, sizeof(Dimension),
-     offset(h_space), XmRImmediate, (XtPointer) 2},
-  {XmNverticalMargin, XmCMargin, XmRVerticalDimension, sizeof(Dimension),
-     offset(v_space), XmRImmediate, (XtPointer) 2},
-  {XmNverify, XmCVerify, XmRBoolean, sizeof(Boolean),
-     offset(verify), XmRImmediate, (XtPointer) True},
-  {XmNeditable, XmCEditable, XmRBoolean, sizeof(Boolean),
-     offset(editable), XmRImmediate, (XtPointer) True},
-  {XmNcustomizedCombinationBox, XmCBoolean, XmRBoolean, sizeof(Boolean),
-     offset(customized_combo_box), XmRImmediate, (XtPointer) False},
-  {XmNverifyTextCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(verify_text_callback), XmRImmediate, (XtPointer) NULL},
-  {XmNupdateTextCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(update_text_callback), XmRImmediate, (XtPointer) NULL},
-  {XmNupdateShellCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
-     offset(update_shell_callback), XmRImmediate, (XtPointer) NULL},
-  {XmNpopupShellWidget, XmCWidget, XmRWidget, sizeof(Widget),
-     offset(popup_shell), XmRImmediate, (XtPointer) NULL},
-  {XmNshowLabel, XmCBoolean, XmRBoolean, sizeof(Boolean),
-     offset(show_label), XmRImmediate, (XtPointer) True},
-  {XmNpopupOffset, XmCPopupOffset, XmRInt, sizeof(int),
-     offset(popup_offset), XmRImmediate, (XtPointer) 15},
-  {XmNpopupCursor, XmCCursor, XmRCursor, sizeof(Cursor),
-     offset(popup_cursor), XmRString, (XtPointer) "left_ptr"},
-  {XmNuseTextField, XmCUseTextField, XmRBoolean, sizeof(Boolean),
-     offset(use_text_field), XmRImmediate, (XtPointer) True },
-  {XmNcomboTranslations, XmCTranslations, XmRTranslationTable,
-     sizeof(XtTranslations), offset(translations),
-     XmRString, (XtPointer) combo_translations},
-  {XmNvisibleItemCount, XmCVisibleItemCount, XmRInt, sizeof(int),
-     offset(visible_items), XmRImmediate, (XtPointer) 5},
-  {XmNnewVisualStyle, XmCNewVisualStyle, XmRBoolean, sizeof(Boolean),
-     offset(new_visual_style), XmRImmediate, (XtPointer)True},
-  {XmNshadowThickness, XmCShadowThickness, XmRHorizontalDimension,
-     sizeof (Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
-     XmRImmediate, (XtPointer) 2},
+static XtResource resources[] =
+{
+  {
+    XmNhorizontalMargin, XmCMargin, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmCombinationBox2Rec, combo.h_space),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNverticalMargin, XmCMargin, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmCombinationBox2Rec, combo.v_space),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNverify, XmCVerify, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.verify),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNeditable, XmCEditable, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.editable),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNcustomizedCombinationBox, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.customized_combo_box),
+    XmRImmediate, (XtPointer) False
+  },
+
+  {
+    XmNverifyTextCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmCombinationBox2Rec, combo.verify_text_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNupdateTextCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmCombinationBox2Rec, combo.update_text_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNupdateShellCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmCombinationBox2Rec, combo.update_shell_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNpopupShellWidget, XmCWidget, XmRWidget,
+    sizeof(Widget), XtOffsetOf(XmCombinationBox2Rec, combo.popup_shell),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNshowLabel, XmCBoolean, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.show_label),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNpopupOffset, XmCPopupOffset, XmRInt,
+    sizeof(int), XtOffsetOf(XmCombinationBox2Rec, combo.popup_offset),
+    XmRImmediate, (XtPointer) 15
+  },
+
+  {
+    XmNpopupCursor, XmCCursor, XmRCursor,
+    sizeof(Cursor), XtOffsetOf(XmCombinationBox2Rec, combo.popup_cursor),
+    XmRString, (XtPointer) "left_ptr"
+  },
+
+  {
+    XmNuseTextField, XmCUseTextField, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.use_text_field),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNcomboTranslations, XmCTranslations, XmRTranslationTable,
+    sizeof(XtTranslations), XtOffsetOf(XmCombinationBox2Rec, combo.translations),
+    XmRString, (XtPointer) combo_translations
+  },
+
+  {
+    XmNvisibleItemCount, XmCVisibleItemCount, XmRInt,
+    sizeof(int), XtOffsetOf(XmCombinationBox2Rec, combo.visible_items),
+    XmRImmediate, (XtPointer) 5
+  },
+
+  {
+    XmNnewVisualStyle, XmCNewVisualStyle, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.new_visual_style),
+    XmRImmediate, (XtPointer)True
+  },
+
+  {
+    XmNshadowThickness, XmCShadowThickness, XmRHorizontalDimension,
+    sizeof (Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
+    XmRImmediate, (XtPointer) 2
+  },
 
   /* intentionally undocumented feature used by other ICS widgets */
-  {XmNverifyTextFailedCallback, XmCCallback, XmRCallback,
-     sizeof(XtCallbackList), offset(verify_text_failed_callback),
-     XmRImmediate, (XtPointer) NULL},
+  {
+    XmNverifyTextFailedCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmCombinationBox2Rec, combo.verify_text_failed_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
 #ifdef XmNautoTraversal
-  {XmNautoTraversal, XmCAutoTraversal, XmRBoolean, sizeof(Boolean),
-	offset(autoTraversal), XmRImmediate, (XtPointer) True},
+  {
+    XmNautoTraversal, XmCAutoTraversal, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmCombinationBox2Rec, combo.autoTraversal),
+    XmRImmediate, (XtPointer) True
+  },
 #endif
 #ifdef XmNactivateOnFill
-  {XmNactivateOnFill, XmCActivateOnFill, XmRInt, sizeof(int),
-	offset(activateOnFill), XmRImmediate, (XtPointer) 0},
+  {
+    XmNactivateOnFill, XmCActivateOnFill, XmRInt,
+    sizeof(int), XtOffsetOf(XmCombinationBox2Rec, combo.activateOnFill),
+    XmRImmediate, (XtPointer) 0
+  },
 #endif
 
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNhorizontalMargin, sizeof(Dimension), offset(h_space),
-	  XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
-    },
-    { XmNverticalMargin, sizeof(Dimension), offset(v_space),
-	  XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
-    },
+  {
+    XmNhorizontalMargin, sizeof(Dimension),
+    XtOffsetOf(XmCombinationBox2Rec, combo.h_space),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+  
+  {
+    XmNverticalMargin, sizeof(Dimension),
+    XtOffsetOf(XmCombinationBox2Rec, combo.v_space),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
 };
 #undef offset
  
@@ -238,7 +316,7 @@ XmCombinationBox2ClassRec xmCombinationBox2ClassRec = {
   { /* core fields */
     /* superclass		*/	SUPERCLASS,
     /* class_name		*/	"XmCombinationBox2",
-    /* widget_size		*/	sizeof(XmCombinationBox2Part),
+    /* widget_size		*/	sizeof(XmCombinationBox2Rec),
     /* class_initialize		*/	ClassInitialize,
     /* class_part_initialize	*/	ClassPartInitialize,
     /* class_inited		*/	FALSE,
@@ -302,9 +380,6 @@ XmCombinationBox2ClassRec xmCombinationBox2ClassRec = {
 WidgetClass xmCombinationBox2WidgetClass = 
                                     (WidgetClass)&xmCombinationBox2ClassRec;
 
-XmOffsetPtr XmCombinationBox2_offsets;
-XmOffsetPtr XmCombinationBox2C_offsets;
-
 /************************************************************
 *	STATIC CODE
 *************************************************************/
@@ -359,20 +434,7 @@ OsiStrncpy( char *s1, char *s2, int len )
 static void
 ClassInitialize()
 {
-    XmCombinationBox2ClassRec* wc = &xmCombinationBox2ClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmCombinationBox2WidgetClass,
-			    &XmCombinationBox2_offsets,
-			    &XmCombinationBox2C_offsets);
-
-    _XmProcessLock();
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmCombinationBox2_offsets);
-    }
-    _XmProcessUnlock();
+  /* do nothing */
 }
 
 /*	Function Name: ClassPartInitialize

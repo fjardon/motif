@@ -47,57 +47,39 @@ extern "C" {
 *	MACROS
 *************************************************************/
 
-#define XmTreeIndex (XmHierarchyIndex + 1)
+#define XmTree_h_node_space(w) (((XmTreeWidget)(w))->tree.h_node_space)
+#define XmTree_v_node_space(w) (((XmTreeWidget)(w))->tree.v_node_space)
+#define XmTree_connect_style(w) (((XmTreeWidget)(w))->tree.connect_style)
+#define XmTree_max_width(w) (((XmTreeWidget)(w))->tree.max_width)
+#define XmTree_max_height(w) (((XmTreeWidget)(w))->tree.max_height)
+#define XmTree_child_op_list(w) (((XmTreeWidget)(w))->tree.child_op_list)
+#define XmTree_ul_point(w) (((XmTreeWidget)(w))->tree.ul_point)
+#define XmTree_lr_point(w) (((XmTreeWidget)(w))->tree.lr_point)
+#define XmTree_orientation(w) (((XmTreeWidget)(w))->tree.orientation)
+#define XmTree_compress_style(w) (((XmTreeWidget)(w))->tree.compress_style)
+#define XmTree_vertical_delta(w) (((XmTreeWidget)(w))->tree.vertical_delta)
+#define XmTree_horizontal_delta(w) (((XmTreeWidget)(w))->tree.horizontal_delta)
 
-extern XmOffsetPtr XmTree_offsets;
-extern XmOffsetPtr XmTreeC_offsets;
-
-#define XmTreeField(w,f,t) XmField(w, XmTree_offsets, XmTree, f, t)
-
-#define XmTree_h_node_space(w) XmTreeField(w, h_node_space, Dimension)
-#define XmTree_v_node_space(w) XmTreeField(w, v_node_space, Dimension)
-#define XmTree_connect_style(w) XmTreeField(w, connect_style, XmTreeConnectStyle)
-#define XmTree_max_width(w) XmTreeField(w, max_width, Dimension)
-#define XmTree_max_height(w) XmTreeField(w, max_height, Dimension)
-#define XmTree_child_op_list(w) XmTreeField(w, child_op_list, XmList)
-#define XmTree_ul_point(w) XmTreeField(w, ul_point, XPoint)
-#define XmTree_lr_point(w) XmTreeField(w, lr_point, XPoint)
-#define XmTree_orientation(w) XmTreeField(w, orientation, unsigned char)
-#define XmTree_compress_style(w) XmTreeField(w, compress_style, XmTreeCompressStyle)
-#define XmTree_vertical_delta(w) XmTreeField(w, vertical_delta, Dimension)
-#define XmTree_horizontal_delta(w) XmTreeField(w, horizontal_delta, Dimension)
-
-/*
- * WARNING!
- *
- * These macros don't use the standard fieldmacro(widget) form.  They take
- * _pointers to TreeConstraints structures_.  Be careful.
- */
-#define XmTreeCField(constraints, variable, type) \
-        (*(type *)(((char *) constraints) + \
-        XmTreeC_offsets[XmTreeIndex] + \
-        XtOffsetOf(XmTreeConstraintPart, variable)))
-
-#define XmTreeC_open_close_padding(c) XmTreeCField(c, open_close_padding, int)
-#define XmTreeC_box_x(c) XmTreeCField(c, box_x, Position)
-#define XmTreeC_box_y(c) XmTreeCField(c, box_y, Position)
-#define XmTreeC_bb_width(c) XmTreeCField(c, bb_width, Dimension)
-#define XmTreeC_bb_height(c) XmTreeCField(c, bb_height, Dimension)
-#define XmTreeC_widget_offset(c) XmTreeCField(c, widget_offset, Dimension)
-#define XmTreeC_placed(c) XmTreeCField(c, placed, Boolean)
-#define XmTreeC_color(c) XmTreeCField(c, color, Pixel)
-#define XmTreeC_background_color(c) XmTreeCField(c, background_color, Pixel)
-#define XmTreeC_line_width(c) XmTreeCField(c, line_width, int)
-#define XmTreeC_line_style(c) XmTreeCField(c, line_style, int)
-#define XmTreeC_gc(c) XmTreeCField(c, gc, GC)
-#define XmTreeC_new_x(c) XmTreeCField(c, new_x, Position)
-#define XmTreeC_new_y(c) XmTreeCField(c, new_y, Position)
-#define XmTreeC_oc_new_x(c) XmTreeCField(c, oc_new_x, Position)
-#define XmTreeC_oc_new_y(c) XmTreeCField(c, oc_new_y, Position)
-#define XmTreeC_map(c) XmTreeCField(c, map, Boolean)
-#define XmTreeC_unmap(c) XmTreeCField(c, unmap, Boolean)
-#define XmTreeC_move(c) XmTreeCField(c, move, Boolean)
-#define XmTreeC_is_compressed(c) XmTreeCField(c, is_compressed, Boolean)
+#define XmTreeC_open_close_padding(c) (((XmTreeConstraintPtr)(c))->tree.open_close_padding)
+#define XmTreeC_box_x(c) (((XmTreeConstraintPtr)(c))->tree.box_x)
+#define XmTreeC_box_y(c) (((XmTreeConstraintPtr)(c))->tree.box_y)
+#define XmTreeC_bb_width(c) (((XmTreeConstraintPtr)(c))->tree.bb_width)
+#define XmTreeC_bb_height(c) (((XmTreeConstraintPtr)(c))->tree.bb_height)
+#define XmTreeC_widget_offset(c) (((XmTreeConstraintPtr)(c))->tree.widget_offset)
+#define XmTreeC_placed(c) (((XmTreeConstraintPtr)(c))->tree.placed)
+#define XmTreeC_color(c) (((XmTreeConstraintPtr)(c))->tree.color)
+#define XmTreeC_background_color(c) (((XmTreeConstraintPtr)(c))->tree.background_color)
+#define XmTreeC_line_width(c) (((XmTreeConstraintPtr)(c))->tree.line_width)
+#define XmTreeC_line_style(c) (((XmTreeConstraintPtr)(c))->tree.line_style)
+#define XmTreeC_gc(c) (((XmTreeConstraintPtr)(c))->tree.gc)
+#define XmTreeC_new_x(c) (((XmTreeConstraintPtr)(c))->tree.new_x)
+#define XmTreeC_new_y(c) (((XmTreeConstraintPtr)(c))->tree.new_y)
+#define XmTreeC_oc_new_x(c) (((XmTreeConstraintPtr)(c))->tree.oc_new_x)
+#define XmTreeC_oc_new_y(c) (((XmTreeConstraintPtr)(c))->tree.oc_new_y)
+#define XmTreeC_map(c) (((XmTreeConstraintPtr)(c))->tree.map)
+#define XmTreeC_unmap(c) (((XmTreeConstraintPtr)(c))->tree.unmap)
+#define XmTreeC_move(c) (((XmTreeConstraintPtr)(c))->tree.move)
+#define XmTreeC_is_compressed(c) (((XmTreeConstraintPtr)(c))->tree.is_compressed)
 
 /************************************************************
 *	GLOBAL DECLARATIONS
@@ -153,7 +135,7 @@ typedef struct _TreeConstraintRec {
     XmManagerConstraintPart manager;
     HierNodeInfo 	hierarchy;
     TreeNodeInfo 	tree;
-} TreeConstraintRec, *TreeConstraints;
+} XmTreeConstraintRec, TreeConstraintRec, *TreeConstraints, *XmTreeConstraintPtr;
 
 
 typedef struct _TreePart {

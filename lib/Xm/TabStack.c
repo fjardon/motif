@@ -204,7 +204,8 @@ static void XiMoveTabPanel _ARGS((Widget, Widget));
 #define IsValidChild(t, k) (XtIsManaged(k) && !(k)->core.being_destroyed && \
 			    !IsTabBox(t,k))
 
-#define BBPart(w) (*(XmBulletinBoardPart*)((char*)(w) + XmTabStack_offsets[XmBulletinBoardIndex]))
+//#define BBPart(w) (*(XmBulletinBoardPart*)((char*)(w) + XmTabStack_offsets[XmBulletinBoardIndex]))
+#define BBPart(w) (((XmBulletinBoardWidget)(w))->bulletin_board)
 
 
 
@@ -318,158 +319,263 @@ static unsigned char invalid_mask_bits[] = {
   0x00, 0xfe, 0x7f, 0x00, 0x00, 0xf0, 0x0f, 0x00, };
 #endif
 
-#ifdef offset
-#undef offset
-#endif
-#define offset(field) XmPartOffset(XmTabStack, field)
-static XmPartResource resources[] = {
-    /* Inherit (but changed default) resources */
-    { XmNshadowThickness, XmCShadowThickness,
-	  XmRDimension, sizeof(Dimension),
-	  XmPartOffset(XmManager, shadow_thickness),
-	  XmRImmediate, (XtPointer) 2 },
+static XtResource resources[] =
+{
+  /* Inherit (but changed default) resources */
+  {
+    XmNshadowThickness, XmCShadowThickness, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
+    XmRImmediate, (XtPointer) 2
+  },
 
-    { XmNautoUnmanage, XmCAutoUnmanage,
-	  XmRBoolean, sizeof(Boolean),
-	  XmPartOffset(XmBulletinBoard, auto_unmanage),
-	  XmRImmediate, (XtPointer) False },
+  {
+    XmNautoUnmanage, XmCAutoUnmanage, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmBulletinBoardRec, bulletin_board.auto_unmanage),
+    XmRImmediate, (XtPointer) False
+  },
 
-    /* TabBox Resources */
+  /* TabBox Resources */
 #ifdef TEAR_OFF_TABS
-    { XmNallowTearOffTabs, XmCAllowTearOffTabs,
-	  XmRBoolean, sizeof(Boolean), offset(allow_tear_offs),
-	  XmRImmediate, (XtPointer) True },
-    { XmNtearOffLabelString, XmCTearOffLabelString,
-	  XmRXmString, sizeof(XmString), offset(tear_off_label),
-	  XmRString, (XtPointer) "Tear Off Tab" },
-#endif
-    { XmNtabAutoSelect, XmCTabAutoSelect,
-	  XmRBoolean, sizeof(Boolean), offset(tab_auto_select),
-	  XmRImmediate, (XtPointer) True },
-    { XmNtabStyle, XmCTabStyle,
-	  XmRTabStyle, sizeof(XmTabStyle), offset(tab_style),
-	  XmRImmediate, (XtPointer) XmTABS_BEVELED },
-    { XmNtabMode, XmCTabMode,
-	  XmRTabMode, sizeof(XmTabMode), offset(tab_mode),
-	  XmRImmediate, (XtPointer) XmTABS_BASIC },
-    { XmNtabMarginWidth, XmCMarginWidth,
-	  XmRHorizontalDimension, sizeof(Dimension), offset(tab_margin_width),
-	  XmRImmediate, (XtPointer) 3 },
-    { XmNtabMarginHeight, XmCMarginHeight,
-	  XmRVerticalDimension, sizeof(Dimension), offset(tab_margin_height),
-	  XmRImmediate, (XtPointer) 3 },
-    { "pri.vate", "Pri.vate",
-	  XmRBoolean, sizeof(Boolean), offset(check_set_render_table),
-	  XmRImmediate, (XtPointer) False },
-    { XmNfontList, XmCFontList,
-	  XmRFontList, sizeof (XmFontList), offset(font_list),
-	  XmRCallProc, (XtPointer) CheckSetRenderTable },
-    { XmNrenderTable, XmCRenderTable,
-	  XmRRenderTable, sizeof(XmRenderTable), offset(font_list),
-	  XmRCallProc, (XtPointer) CheckSetRenderTable },
-    { XmNhighlightThickness, XmCHighlightThickness,
-	  XmRDimension, sizeof(Dimension), offset(highlight_thickness),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNtabSide, XmCTabSide,
-	  XmRXmTabSide, sizeof(XmTabSide), offset(tab_side),
-	  XmRImmediate, (XtPointer) XmTABS_ON_TOP },
-    { XmNtabOrientation, XmCTabOrientation,
-	  XmRTabOrientation, sizeof(XmTabOrientation), offset(tab_orientation),
-	  XmRImmediate, (XtPointer) XmTAB_ORIENTATION_DYNAMIC },
-    { XmNuniformTabSize, XmCUniformTabSize,
-	  XmRBoolean, sizeof(Boolean), offset(uniform_tab_size),
-	  XmRImmediate, (XtPointer) True },
-    { XmNtabSelectColor, XmCTabSelectColor,
-	  XmRXmPixel, sizeof(Pixel), offset(select_color),
-	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
-    { XmNtabSelectPixmap, XmCTabSelectPixmap,
-	  XmRXmPixmap, sizeof(Pixmap), offset(select_pixmap),
-	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
-    { XmNstackedEffect, XmCStackedEffect,
-	  XmRBoolean, sizeof(Boolean), offset(stacked_effect),
-	  XmRImmediate, (XtPointer) True },
-    { XmNtabCornerPercent, XmCTabCornerPercent,
-	  XmRInt, sizeof(int), offset(tab_corner_percent),
-	  XmRImmediate, (XtPointer) 40 },
-    { XmNtabLabelSpacing, XmCTabLabelSpacing,
-	  XmRHorizontalDimension, sizeof(Dimension), offset(tab_label_spacing),
-	  XmRImmediate, (XtPointer) 2 },
-    { XmNtabOffset, XmCTabOffset,
-	  XmRHorizontalDimension, sizeof(Dimension), offset(tab_offset),
-	  XmRImmediate, (XtPointer) 10 },
-    { XmNuseImageCache, XmCUseImageCache,
-	  XmRBoolean, sizeof(Boolean), offset(use_image_cache),
-	  XmRImmediate, (XtPointer) True },
-    { XmNtabSelectedCallback, XmCCallback,
-	  XmRCallback, sizeof(XtCallbackList), offset(tab_select_callback),
-	  XmRImmediate, (XtPointer) NULL },
+  {
+    XmNallowTearOffTabs, XmCAllowTearOffTabs, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackRec, tab_stack.allow_tear_offs),
+    XmRImmediate, (XtPointer) True
+  },
 
-    /* appears to be intentionally undocumented; interface not yet public */
-    { XmNtabBoxWidget, XmCWidget,
-	  XmRWidget, sizeof(Widget), offset(tab_box),
-	  XmRImmediate, (XtPointer) NULL },
+  {
+    XmNtearOffLabelString, XmCTearOffLabelString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmTabStackRec, tab_stack.tear_off_label),
+    XmRString, (XtPointer) "Tear Off Tab"
+  },
+#endif
+  {
+    XmNtabAutoSelect, XmCTabAutoSelect, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackRec, tab_stack.tab_auto_select),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNtabStyle, XmCTabStyle, XmRTabStyle,
+    sizeof(XmTabStyle), XtOffsetOf(XmTabStackRec, tab_stack.tab_style),
+    XmRImmediate, (XtPointer) XmTABS_BEVELED
+  },
+
+  {
+    XmNtabMode, XmCTabMode, XmRTabMode,
+    sizeof(XmTabMode), XtOffsetOf(XmTabStackRec, tab_stack.tab_mode),
+    XmRImmediate, (XtPointer) XmTABS_BASIC
+  },
+
+  {
+    XmNtabMarginWidth, XmCMarginWidth, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabStackRec, tab_stack.tab_margin_width),
+    XmRImmediate, (XtPointer) 3
+  },
+
+  {
+    XmNtabMarginHeight, XmCMarginHeight, XmRVerticalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabStackRec, tab_stack.tab_margin_height),
+    XmRImmediate, (XtPointer) 3
+  },
+
+  {
+    "pri.vate", "Pri.vate", XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackRec, tab_stack.check_set_render_table),
+    XmRImmediate, (XtPointer) False
+  },
+  
+  {
+    XmNfontList, XmCFontList, XmRFontList,
+    sizeof (XmFontList), XtOffsetOf(XmTabStackRec, tab_stack.font_list),
+    XmRCallProc, (XtPointer) CheckSetRenderTable
+  },
+  
+  {
+    XmNrenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), XtOffsetOf(XmTabStackRec, tab_stack.font_list),
+    XmRCallProc, (XtPointer) CheckSetRenderTable
+  },
+
+  {
+    XmNhighlightThickness, XmCHighlightThickness, XmRDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabStackRec, tab_stack.highlight_thickness),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNtabSide, XmCTabSide, XmRXmTabSide,
+    sizeof(XmTabSide), XtOffsetOf(XmTabStackRec, tab_stack.tab_side),
+    XmRImmediate, (XtPointer) XmTABS_ON_TOP
+  },
+
+  {
+    XmNtabOrientation, XmCTabOrientation, XmRTabOrientation,
+    sizeof(XmTabOrientation), XtOffsetOf(XmTabStackRec, tab_stack.tab_orientation),
+    XmRImmediate, (XtPointer) XmTAB_ORIENTATION_DYNAMIC
+  },
+
+  {
+    XmNuniformTabSize, XmCUniformTabSize, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackRec, tab_stack.uniform_tab_size),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNtabSelectColor, XmCTabSelectColor, XmRXmPixel,
+    sizeof(Pixel), XtOffsetOf(XmTabStackRec, tab_stack.select_color),
+    XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC
+  },
+
+  {
+    XmNtabSelectPixmap, XmCTabSelectPixmap, XmRXmPixmap,
+    sizeof(Pixmap), XtOffsetOf(XmTabStackRec, tab_stack.select_pixmap),
+    XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+  },
+
+  {
+    XmNstackedEffect, XmCStackedEffect, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackRec, tab_stack.stacked_effect),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNtabCornerPercent, XmCTabCornerPercent, XmRInt,
+    sizeof(int), XtOffsetOf(XmTabStackRec, tab_stack.tab_corner_percent),
+    XmRImmediate, (XtPointer) 40
+  },
+
+  {
+    XmNtabLabelSpacing, XmCTabLabelSpacing, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabStackRec, tab_stack.tab_label_spacing),
+    XmRImmediate, (XtPointer) 2
+  },
+
+  {
+    XmNtabOffset, XmCTabOffset, XmRHorizontalDimension,
+    sizeof(Dimension), XtOffsetOf(XmTabStackRec, tab_stack.tab_offset),
+    XmRImmediate, (XtPointer) 10
+  },
+
+  {
+    XmNuseImageCache, XmCUseImageCache, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackRec, tab_stack.use_image_cache),
+    XmRImmediate, (XtPointer) True
+  },
+
+  {
+    XmNtabSelectedCallback, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList), XtOffsetOf(XmTabStackRec, tab_stack.tab_select_callback),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  /* appears to be intentionally undocumented; interface not yet public */
+  {
+    XmNtabBoxWidget, XmCWidget, XmRWidget,
+    sizeof(Widget), XtOffsetOf(XmTabStackRec, tab_stack.tab_box),
+    XmRImmediate, (XtPointer) NULL
+  }
 };
 
 static XmSyntheticResource get_resources[] =
 {
-    { XmNtabMarginWidth, sizeof(Dimension), offset(tab_margin_width),
-      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
-    { XmNtabMarginHeight, sizeof(Dimension), offset(tab_margin_height),
-      XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels },
-    { XmNtabLabelSpacing, sizeof(Dimension), offset(tab_label_spacing),
-      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
-    { XmNtabOffset, sizeof(Dimension), offset(tab_offset),
-      XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels },
+  {
+    XmNtabMarginWidth, sizeof(Dimension),
+    XtOffsetOf(XmTabStackRec, tab_stack.tab_margin_width),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNtabMarginHeight, sizeof(Dimension),
+    XtOffsetOf(XmTabStackRec, tab_stack.tab_margin_height),
+    XmeFromVerticalPixels, (XmImportProc) XmeToVerticalPixels
+  },
+
+  {
+    XmNtabLabelSpacing, sizeof(Dimension),
+    XtOffsetOf(XmTabStackRec, tab_stack.tab_label_spacing),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  },
+
+  {
+    XmNtabOffset, sizeof(Dimension),
+    XtOffsetOf(XmTabStackRec, tab_stack.tab_offset),
+    XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
+  }
 };
 
-#undef offset
-
-#ifdef offset
-#undef offset
-#endif
 #define offset(field) XmConstraintPartOffset(XmTabStack, field)
-static XtResource constraint_resources[] = {
-    { XmNtabLabelString, XmCTabLabelString,
-	  XmRXmString, sizeof(XmString), offset(tab_label_string),
-	  XmRImmediate, (XtPointer) NULL },
-    { XmNtabAlignment, XmCAlignment,
-	  XmRAlignment, sizeof(unsigned char), offset(tab_alignment),
-	  XmRImmediate, (XtPointer) XmALIGNMENT_CENTER },
-    { XmNtabStringDirection, XmCStringDirection,
-	  XmRStringDirection, sizeof(unsigned char),
-	  offset(tab_string_direction),
-	  XmRImmediate, (XtPointer) XmSTRING_DIRECTION_DEFAULT },
-    { XmNtabLabelPixmap, XmCTabLabelPixmap,
-	  XmRManForegroundPixmap, sizeof(Pixmap), offset(tab_label_pixmap),
-	  XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP },
-    { XmNtabPixmapPlacement, XmCTabPixmapPlacement,
-	  XmRXmPixmapPlacement, sizeof(XmPixmapPlacement),
-	  offset(tab_pixmap_placement),
-	  XmRImmediate, (XtPointer) XmPIXMAP_RIGHT },
-    { XmNfreeTabPixmap, XmCFreeTabPixmap,
-	  XmRBoolean, sizeof(Boolean), offset(free_tab_pixmap),
-	  XmRImmediate, (XtPointer) False },
-    { XmNtabBackground, XmCBackground,
-	  XmRXmPixel, sizeof(Pixel), offset(tab_background),
-	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
-    { XmNtabBackgroundPixmap, XmCBackgroundPixmap,
-	  XmRXmPixmap, sizeof(Pixmap), offset(tab_background_pixmap),
-	  XmRImmediate, (XtPointer) XmPIXMAP_DYNAMIC },
-    { XmNtabForeground, XmCForeground,
-	  XmRXmPixel, sizeof(Pixel), offset(tab_foreground),
-	  XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC },
+static XtResource constraint_resources[] =
+{
+  {
+    XmNtabLabelString, XmCTabLabelString, XmRXmString,
+    sizeof(XmString), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_label_string),
+    XmRImmediate, (XtPointer) NULL
+  },
+
+  {
+    XmNtabAlignment, XmCAlignment, XmRAlignment,
+    sizeof(unsigned char), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_alignment),
+    XmRImmediate, (XtPointer) XmALIGNMENT_CENTER
+  },
+
+  {
+    XmNtabStringDirection, XmCStringDirection, XmRStringDirection,
+    sizeof(unsigned char), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_string_direction),
+    XmRImmediate, (XtPointer) XmSTRING_DIRECTION_DEFAULT
+  },
+
+  {
+    XmNtabLabelPixmap, XmCTabLabelPixmap, XmRManForegroundPixmap,
+    sizeof(Pixmap), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_label_pixmap),
+    XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
+  },
+
+  {
+    XmNtabPixmapPlacement, XmCTabPixmapPlacement, XmRXmPixmapPlacement,
+    sizeof(XmPixmapPlacement), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_pixmap_placement),
+    XmRImmediate, (XtPointer) XmPIXMAP_RIGHT
+  },
+
+  {
+    XmNfreeTabPixmap, XmCFreeTabPixmap, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackConstraintRec, tab_stack.free_tab_pixmap),
+    XmRImmediate, (XtPointer) False
+  },
+  
+  {
+    XmNtabBackground, XmCBackground, XmRXmPixel,
+    sizeof(Pixel), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_background),
+    XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC
+  },
+
+  {
+    XmNtabBackgroundPixmap, XmCBackgroundPixmap, XmRXmPixmap,
+    sizeof(Pixmap), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_background_pixmap),
+    XmRImmediate, (XtPointer) XmPIXMAP_DYNAMIC
+  },
+
+  {
+    XmNtabForeground, XmCForeground, XmRXmPixel,
+    sizeof(Pixel), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_foreground),
+    XmRImmediate, (XtPointer) XmCOLOR_DYNAMIC
+  },
 #ifdef TEAR_OFF_TABS
-    { XmNtabTearOffEnabled, XmCTabTearOffEnabled,
-	  XmRBoolean, sizeof(Boolean), offset(tear_off_enabled),
-	  XmRImmediate, (XtPointer) True },
+  {
+    XmNtabTearOffEnabled, XmCTabTearOffEnabled, XmRBoolean,
+    sizeof(Boolean), XtOffsetOf(XmTabStackConstraintRec, tab_stack.tear_off_enabled),
+    XmRImmediate, (XtPointer) True
+  }
 #endif
 };
 
 static void Get_tabLabelString(Widget, int, XtArgVal *);
 static XmSyntheticResource cont_get_resources[] =
 {
-    { XmNtabLabelString, sizeof(XmString), offset(tab_label_string),
-      Get_tabLabelString, (XmImportProc) NULL},
+  {
+    XmNtabLabelString, sizeof(XmString),
+    XtOffsetOf(XmTabStackConstraintRec, tab_stack.tab_label_string),
+    Get_tabLabelString, (XmImportProc) NULL
+  }
 };
 
 /* ARGSUSED */
@@ -484,7 +590,7 @@ XmTabStackClassRec xmTabStackClassRec = {
   { /* Core Fields */
     /* superclass	  */	(WidgetClass) &xmBulletinBoardClassRec,
     /* class_name	  */	"XmTabStack",
-    /* widget_size	  */	sizeof(XmTabStackPart),
+    /* widget_size	  */	sizeof(XmTabStackRec),
     /* class_initialize   */    ClassInitialize,
 #ifdef TEAR_OFF_TABS
     /* class_part_initial */	ClassPartInitialize,
@@ -532,7 +638,7 @@ XmTabStackClassRec xmTabStackClassRec = {
   { /* Constraint Fields */
     /* resources          */    constraint_resources,
     /* num_resources      */    XtNumber(constraint_resources),
-    /* constraint_size    */    sizeof (XmTabStackConstraintPart),
+    /* constraint_size    */    sizeof (XmTabStackConstraintRec),
     /* initialize         */    ConstraintInitialize,
     /* destroy            */    ConstraintDestroy,
     /* set_values         */    ConstraintSetValues,
@@ -565,8 +671,6 @@ WidgetClass xmTabStackWidgetClass = (WidgetClass) &xmTabStackClassRec;
  * Note these aren't static, even though they should be.  TabBox.c
  * uses the instance data too.
  */
-XmOffsetPtr XmTabStack_offsets;
-XmOffsetPtr XmTabStackC_offsets;
 
 /*
  * Function:
@@ -587,22 +691,6 @@ ClassInitialize()
 #endif
 {
     XmTabStackClassRec* wc = &xmTabStackClassRec;
-    int i;
-
-    XmResolveAllPartOffsets(xmTabStackWidgetClass,
-			    &XmTabStack_offsets,
-			    &XmTabStackC_offsets);
-
-    for(i=0; i<wc->manager_class.num_syn_resources; i++) {
-	(wc->manager_class.syn_resources)[i].resource_offset =
-	    XmGetPartOffset(wc->manager_class.syn_resources + i,
-			    &XmTabStack_offsets);
-    }
-    for(i=0; i<wc->manager_class.num_syn_constraint_resources; i++) {
-        (wc->manager_class.syn_constraint_resources)[i].resource_offset =
-            XmGetPartOffset(wc->manager_class.syn_constraint_resources + i,
-                            &XmTabStackC_offsets);
-    }
 
     /*
      * Initialize the XmTabBox class to add its type converters which we
@@ -1244,10 +1332,14 @@ Redisplay(widget, event, region)
 #define rfield(f) (XmTabStack_##f(r_tab))
 #define cfield(f) (XmTabStack_##f(c_tab))
 #define sfield(f) (XmTabStack_##f(s_tab))
-#define bcfield(f) ((XmBulletinBoardPart*) \
-		    ((char*)c_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
-#define bsfield(f) ((XmBulletinBoardPart*) \
-		    ((char*)s_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
+#define bcfield(f) \
+    (((XmBulletinBoardWidget) c_tab)->bulletin_board.f)
+#define bsfield(f) \
+    (((XmBulletinBoardWidget) s_tab)->bulletin_board.f)
+//#define bcfield(f) ((XmBulletinBoardPart*) \
+//		    ((char*)c_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
+//#define bsfield(f) ((XmBulletinBoardPart*) \
+//		    ((char*)s_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
 static Boolean
 #ifndef _NO_PROTO
 SetValues(Widget current, Widget request, Widget set, ArgList arg_list,
