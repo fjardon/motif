@@ -180,9 +180,98 @@ static XtResource resources[] =
     XmNvisibleItemCount, XmCVisibleItemCount, XmRInt,
     sizeof(int), XtOffsetOf(XmExt18ListRec, ext_list.visible_rows),
     XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT
+  },
+
+  {
+    XmNnumColumns, XmCNumColumns, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNnumRows, XmCNumRows, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNselectedColumn, XmCSelectedColumn, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNcolumnTitles, XmCColumnTitles, XmRXmStringTable,
+    sizeof(XmString *), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNentryData, XmCEntryData, XmRPointer,
+    sizeof(XtPointer), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNentryBackground, XmCBackground, XtRPixel,
+    sizeof(Pixel), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstColumnPixmaps, XmCFirstColumnPixmaps, XmRBoolean,
+    sizeof(Boolean), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNrenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNverticalScrollBar, XmCScrollBar, XmRWidget,
+    sizeof(Widget), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNhorizontalScrollBar, XmCScrollBar, XmRWidget,
+    sizeof(Widget), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstRow, XmCFirstLocation, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstColumn, XmCFirstLocation, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNsortFunctions, XmCFunction, XmRFunction,
+    sizeof(Xm18SortFunction **), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNselectionPolicy, XmCSelectionPolicy, XmRSelectionPolicy,
+    sizeof(unsigned char), 0, 
+    NULL, (XtPointer) NULL
   }
 };
-
 
 XmExt18ListClassRec xmExt18ListClassRec = {
   { /* core fields */
