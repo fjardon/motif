@@ -503,7 +503,6 @@ static XmSyntheticResource get_resources[] =
   }
 };
 
-#define offset(field) XmConstraintPartOffset(XmTabStack, field)
 static XtResource constraint_resources[] =
 {
   {
@@ -583,8 +582,6 @@ static void Get_tabLabelString (Widget widget, int offset, XtArgVal *value)
 {
     (*value) = (XtArgVal) XmStringCopy(XmTabStackC_tab_label_string(widget));
 }
-
-#undef offset
 
 XmTabStackClassRec xmTabStackClassRec = {
   { /* Core Fields */
