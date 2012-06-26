@@ -1621,10 +1621,9 @@ HandleSash(Widget sash, XtPointer junk, XtPointer callData)
 	(action_type == 'M' && call_data->num_params != 1)     ||
 	(action_type == 'S' && call_data->num_params != 1)) 
     {
-	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) pw),
-			XmNbadActionParameters, XmNbadActionParameters,
-			XmCICSWidgetSetError, XmNbadActionParametersMsg, 
-			params, &num);
+	_XmWarningMsg((Widget) pw,
+		XmNbadActionParameters, XmNbadActionParametersMsg, 
+		params, num);
 
 	return;
     }
@@ -1718,10 +1717,8 @@ HandleSash(Widget sash, XtPointer junk, XtPointer callData)
 	
     default:
         {
-	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget) pw),
-			    XmNbadActionParameters, XmNbadActionParameters,
-			    XmCICSWidgetSetError,
-			    XmNbadActionParametersMsg, params, &num);
+	    _XmWarningMsg((Widget) pw, XmNbadActionParameters,
+		    XmNbadActionParametersMsg, params, num);
 	    
 	    return;
 	}
@@ -2763,13 +2760,7 @@ SetValues(Widget old, Widget request, Widget set,
 
     if (XmPaned_sash_translations(old_pw) != XmPaned_sash_translations(set_pw))
     {
-	static String params[] = { "Translations" };
-	Cardinal num = 1;
-
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XmNstaticResource, XmNstaticResource,
-			XmCICSWidgetSetError,
-			XmNstaticResourceMsg, params, &num);
+	XmeWarning(set, XmNstaticTranslationsMsg);
 
 	XmPaned_sash_translations(set_pw) = XmPaned_sash_translations(old_pw);
     }

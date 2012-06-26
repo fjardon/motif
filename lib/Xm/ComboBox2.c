@@ -1996,10 +1996,7 @@ PopdownList(Widget w)
 	XtPopdown(XmComboBox2_popup_shell(cbw));
     }
     else {
-	XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			XmNnoComboShell, XmNnoComboShell,
-			XmCICSWidgetSetError,
-			XmNnoComboShellMsg, NULL, NULL);
+	XmeWarning(w, XmNnoComboShellMsg);
     }
 }
 
@@ -2053,9 +2050,7 @@ PopupList(Widget w)
     Cardinal num_args;
 
     if (shell == NULL) {
-	XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			XmNnoComboShell, XmNnoComboShell, XmCICSWidgetSetError,
-			XmNnoComboShellMsg, NULL, NULL);
+	XmeWarning(w, XmNnoComboShellMsg);
 	return(False);
     }
 
@@ -2364,13 +2359,7 @@ SetTextFromList(Widget w)
 	ptr = _XmGetMBStringFromXmString(items[i]);
 
 	if (ptr == NULL) {
-	    static String strs[] = {"Combination Box", NULL};
-	    Cardinal num = 1;
-	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget) cbw),
-			    XmNstringGetFailed, XmNstringGetFailed,
-			    XmCICSWidgetSetError,
-			    XmNstringGetFailedMsg, strs, &num);
-
+	    XmeWarning((Widget) cbw, XmNstringGetFailedMsg);
 	    i++;
 	    continue;
 	}

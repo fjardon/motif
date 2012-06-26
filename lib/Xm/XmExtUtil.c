@@ -191,19 +191,10 @@ _XmHWQuery(Widget w, XtWidgetGeometry * intended, XtWidgetGeometry * preferred)
 Boolean
 _XmGadgetWarning(Widget w)
 {
-    String params[1];
-    Cardinal num;
-
     if (!XtIsRectObj(w) || XtIsWidget(w))
 	return(False);
 
-    params[0] = XtName(XtParent(w));
-    num = 1;
-    
-    XtAppWarningMsg(XtWidgetToApplicationContext(w),
-		    XmNnoGadgetSupport, XmNnoGadgetSupport, 
-		    XmCICSWidgetSetError,
-		    XmNnoGadgetSupportMsg, params, &num);
+    XmeWarning(XtParent(w), XmNnoGadgetSupportMsg);
     
     return(True); 
 }
@@ -522,72 +513,6 @@ _XmConfigureWidget(Widget w, Position x, Position y,
     XmDropSiteEndUpdate(w);
 
 }
-
-#ifdef notdef
-
-/************************************************************
- *
- *  Some nice routines for using the context manager, 
- * 
- *  This code is currently unused.
- *
- ************************************************************/
-
-/*	Function Name: _XmSetContextData
- *	Description: Sets context data on a widget
- *	Arguments: w - the widget to set the context data on.
- *                 context - the context to set it onto.
- *                 data - the data to set.
- *	Returns: none.
- */
-
-void
-_XmSetContextData(Widget w, XContext context, XtPointer data)
-{
-    int ret;
-    
-    ret = XSaveContext(XtDisplay(w), (Window) w, context, (XtPointer) data);
-
-    if (ret != XCSUCCESS) {
-	XtAppErrorMsg(XtWidgetToApplicationContext(w),
-		      XmNcontextSaveFailed, XmNcontextSaveFailed, 
-		      XmCICSWidgetSetError,
-		      XmNcontextSaveFailedMsg, NULL, NULL);
-    }
-}
-
-/*	Function Name: _XmGetContextData
- *	Description: Gets context data on a widget
- *	Arguments: w - the widget to get the context data from.
- *                 context - the context to find it in.
- *                 data - the data retreived.
- *	Returns: Boolean - True if the request succeeds.
- */
-
-Boolean
-_XmGetContextData(Widget w, XContext context, XtPointer *data)
-{
-    int ret;
-
-    ret = XFindContext(XtDisplay(w), (Window) w, context, (XtPointer *) data);
-
-    return(ret == XCSUCCESS);
-}
-
-/*	Function Name: _XmDeleteContextData
- *	Description: Deletes context data from a widget
- *	Arguments: w - the widget the data is set on.
- *                 context - the context to remove.
- *	Returns: none.
- */
-
-void
-_XmDeleteContextData(Widget w, XContext context)
-{
-    (void) XDeleteContext(XtDisplay(w), (Window) w, context);
-}
-
-#endif				/* Context manager stuff */
 
 /************************************************************
  *

@@ -686,16 +686,10 @@ static Boolean SetValues(Widget current, Widget request, Widget set,
     if ((XmI18List_v_bar(i_set) != XmI18List_v_bar(i_old)) ||
 	(XmI18List_h_bar(i_set) != XmI18List_h_bar(i_old)))
     {
-	Cardinal num = 1;
-	static String params[] = { "Scrollbars" };
-      
 	XmI18List_v_bar(i_set) = XmI18List_v_bar(i_old);
 	XmI18List_h_bar(i_set) = XmI18List_h_bar(i_old);
       
-	XtAppWarningMsg(XtWidgetToApplicationContext(current),
-			XmNstaticResource, XmNstaticResource,
-			XmCICSWidgetSetError, XmNstaticResourceMsg,
-			params, &num);
+	XmeWarning(current, XmNstaticScrollbarsMsg);
     }
   
     if( XtIsSensitive(current) != XtIsSensitive(set) )
@@ -724,16 +718,9 @@ static Boolean SetValues(Widget current, Widget request, Widget set,
     {
 	if (XmI18List_visible_rows(i_set) < 1)
 	{
-	    static String	params[] = { "XmI18List", 
-					     "XmNvisibleItemCount" };
-	    Cardinal		num = 2;
-
 	    XmI18List_visible_rows(i_set) = 1;	/* reset value to 1 */
 
-	    XtAppWarningMsg(XtWidgetToApplicationContext(current),
-			    XmNforceGreaterThanZero, XmNforceGreaterThanZero,
-			    XmCICSWidgetSetError, XmNforceGreaterThanZeroMsg,
-			    params, &num);
+	    XmeWarning(current, XmNforceGreaterThanZeroMsg);
 	}
 
 	/* Change height only... */
@@ -930,13 +917,7 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
     Boolean notify_type;
 #endif /* CR1166 */
     if (*num_params > 1) {
-        Cardinal num = 3;
-        static String params[] = { "Extended List", "NoButton", "BtnDown" };
-
-        XtAppWarningMsg(XtWidgetToApplicationContext(w),
-                        XmNbadMotionParams, XmNbadMotionParams,
-                        XmCICSWidgetSetError, XmNbadMotionParamsMsg,
-                        params, &num);
+        XmeWarning(w, XmNbadMotionParamsMsg);
         return;
     }
 
@@ -956,10 +937,8 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
 	    default:
 	        {
 		    Cardinal num = 1;
-		    XtAppWarningMsg(XtWidgetToApplicationContext(w),
+		    _XmWarningMsg(XtWidgetToApplicationContext(w),
 				    XmNbadActionParameters,
-				    XmNbadActionParameters,
-				    XmCICSWidgetSetError,
 				    XmNbadActionParametersMsg,
 				    params, &num);
                 }
@@ -968,13 +947,11 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
     }
 	    
     if (event->type != ButtonPress) {
-        Cardinal num = 2;
-        static String params[] = { "Extended List", "BtnDown" };
+        Cardinal num = 1;
+        static String params[] = { "BtnDown" };
 
-        XtAppWarningMsg(XtWidgetToApplicationContext(w),
-                        XmNunexpectedEvent, XmNunexpectedEvent,
-                        XmCICSWidgetSetError, XmNunexpectedEventMsg,
-                        params, &num);
+        _XmWarningMsg(w, XmNunexpectedEvent,
+                XmNunexpectedEventMsg, params, &num);
 
 	return;
     }
@@ -1065,13 +1042,11 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
     XmI18ListWidget ilist = (XmI18ListWidget) w;
 
     if (event->type != ButtonRelease) {
-	Cardinal num = 2;
-	static String params[] = { "Extended List", "BtnUp or BtnLeave" };
+	Cardinal num = 1;
+	static String params[] = { "BtnUp or BtnLeave" };
 	
-	XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			XmNunexpectedEvent, XmNunexpectedEvent,
-			XmCICSWidgetSetError, XmNunexpectedEventMsg,
-			params, &num);
+	_XmWarningMsg(w, XmNunexpectedEvent,
+		XmNunexpectedEventMsg, params, &num);
 	
 	return;
     }

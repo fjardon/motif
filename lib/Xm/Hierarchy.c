@@ -533,15 +533,7 @@ ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     HierarchyConstraints node = GetNodeInfo(set);
 
     if (XmHierarchyC_parent(node) == set) {
-	static String msg[] = { "Hierarchy Widget", NULL };
-	Cardinal num = 1;
-	
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-	 		XmNnodeParentIsSelf,
-			XmNnodeParentIsSelf,
-			XmCICSWidgetSetError,
-			XmNnodeParentIsSelfMsg, msg, &num);
-	
+	XmeWarning(set,	XmNnodeParentIsSelfMsg);
 	XmHierarchyC_parent(node) = NULL;
     }
 
@@ -762,14 +754,7 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	Widget parent = XmHierarchyC_parent(new_node);
 	
 	if (XmHierarchyC_parent(new_node) == set) {
-	    static String msg[] = { "Hierarchy Widget", NULL };
-	    Cardinal num = 1;
-
-	    XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			    XmNnodeParentIsSelf,
-			    XmNnodeParentIsSelf,
-			    XmCICSWidgetSetError,
-			    XmNnodeParentIsSelfMsg, msg, &num);
+	    XmeWarning(set, XmNnodeParentIsSelfMsg);
 	    
 	    XmHierarchyC_parent(new_node) = XmHierarchyC_parent(old_node);
 	}
@@ -1409,10 +1394,8 @@ AddChildToList(HierarchyConstraints ** list, Cardinal * num, Cardinal * alloc,
 	Cardinal num = 1;
 
 	params[0] = XtName(XmHierarchyC_widget(child));
-	XtAppWarningMsg(XtWidgetToApplicationContext(XmHierarchyC_widget(child)),
-			XmNinsertBeforeNotSibling, XmNinsertBeforeNotSibling, 
-			XmCICSWidgetSetError, XmNinsertBeforeNotSiblingMsg,
-			params, &num);
+	_XmWarningMsg(XmHierarchyC_widget(child), XmNinsertBeforeNotSibling,
+		XmNinsertBeforeNotSiblingMsg, params, &num);
     }
     
     if (success != YES)		/* Stick it on the end of the list. */

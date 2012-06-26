@@ -866,10 +866,7 @@ Initialize(request, set, arg_list, arg_cnt)
 	 * stacked mode.
 	 */
 	XmTabStack_uniform_tab_size(ts) = True;
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XmNillegalResourceValue, XmNillegalResourceValue,
-			XmCICSEnhancementPakResourceError,
-			XmNillegalUniformTabSizeMsg, NULL, NULL);
+	XmeWarning(set, XmNillegalUniformTabSizeMsg);
 	XtSetArg(args[n], XmNuniformTabSize, True); ++n;
     }
     
@@ -1460,10 +1457,7 @@ SetValues(current, request, set, arg_list, arg_cnt)
         (XmTabStack_tab_mode(s_tab) == XmTABS_STACKED ||
 	 XmTabStack_tab_mode(s_tab) == XmTABS_STACKED_STATIC) )
     {
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XmNillegalResourceValue, XmNillegalResourceValue,
-			XmCICSEnhancementPakResourceError,
-			XmNillegalUniformTabSizeMsg, NULL, NULL);
+	XmeWarning(set, XmNillegalUniformTabSizeMsg);
 	XtSetArg(args[n], XmNuniformTabSize, True); ++n;
     }
 
@@ -1472,10 +1466,7 @@ SetValues(current, request, set, arg_list, arg_cnt)
         sfield(tab_mode) != cfield(tab_mode) &&
         !sfield(uniform_tab_size) )
     {
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			XmNillegalResourceValue, XmNillegalResourceValue,
-			XmCICSEnhancementPakResourceError,
-			XmNillegalUniformTabSizeMsg, NULL, NULL);
+	XmeWarning(set, XmNillegalUniformTabSizeMsg);
 	XtSetArg(args[n], XmNuniformTabSize, True); ++n;
     }
 	 

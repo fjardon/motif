@@ -1416,14 +1416,12 @@ UpdateBoldItalic(XmFontSelectorWidget fsw)
     if ((fam = FindFamily(cf->familyq, XmFontS_font_info(fsw)->family_info,
 			  XmFontS_font_info(fsw)->num_families)) == NULL)
     {
-	static String params[] = { "FontSelector", NULL };
-	Cardinal num = 2;
+	String params[1];
+	Cardinal num = 1;
 
-	params[1] = XrmQuarkToString(cf->familyq);
-	dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
-			XmCICSWidgetSetError,
-			XmNcouldNotFindFamilyDataMsg, params, &num);
+	params[0] = XrmQuarkToString(cf->familyq);
+	dbg(); _XmWarningMsg((Widget) fsw, XmNcouldNotFindFamilyData,
+			XmNcouldNotFindFamilyDataMsg, params, num);
 	return;
     }
 
@@ -1475,14 +1473,12 @@ UpdateFixedProportional(XmFontSelectorWidget fsw)
     if ((fam = FindFamily(cf->familyq, XmFontS_font_info(fsw)->family_info,
 			  XmFontS_font_info(fsw)->num_families)) == NULL)
     {
-	static String params[] = { "FontSelector", NULL };
-	Cardinal num = 2;
+	String params[1];
+	Cardinal num = 1;
 
-	params[1] = XrmQuarkToString(cf->familyq);
-	dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
-			XmCICSWidgetSetError,
-			XmNcouldNotFindFamilyDataMsg, params, &num);
+	params[0] = XrmQuarkToString(cf->familyq);
+	dbg(); _XmWarningMsg((Widget) fsw, XmNcouldNotFindFamilyData,
+		XmNcouldNotFindFamilyDataMsg, params, num);
 	return;
     }
 
@@ -1655,14 +1651,12 @@ UpdateSizes(XmFontSelectorWidget fsw)
 			     XmFontS_font_info(fsw)->family_info,
 			     XmFontS_font_info(fsw)->num_families)) == NULL) 
     {	
-	static String params[] = { "FontSelector", NULL };
-	Cardinal num = 2;
+	String params[1];
+	Cardinal num = 1;
 
-	params[1] = XrmQuarkToString(cf->familyq);
-	dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
-			XmCICSWidgetSetError,
-			XmNcouldNotFindFamilyDataMsg, params, &num);
+	params[0] = XrmQuarkToString(cf->familyq);
+	dbg(); _XmWarningMsg((Widget) fsw, XmNcouldNotFindFamilyData,
+		XmNcouldNotFindFamilyDataMsg, params, num);
 	return;
     }    
     
@@ -1882,14 +1876,12 @@ SetDisplayedFont(XmFontSelectorWidget fsw, String new_font)
 	    FillData(fsw, cf, new_font);
 	else {
 	    if (strchr(new_font, '-')) {
-		static String params[] = { "FontSelector", NULL };
-		Cardinal num = 2;
+		String params[1];
+		Cardinal num = 1;
 		
 		params[1] = new_font;
-		dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-				XmNbadXlfdFont, XmNbadXlfdFont, 
-				XmCICSWidgetSetError,
-				XmNbadXlfdFontMsg, params, &num);
+		dbg(); _XmWarningMsg((Widget) fsw, XmNbadXlfdFont,
+			XmNbadXlfdFontMsg, params, num);
 	    }
 	    else {
 		ChangeMode(fsw, False, False);
@@ -2972,14 +2964,12 @@ ToggleScaling(Widget w, XtPointer fsw_ptr, XtPointer data)
     if ((family = FindFamily(cf->familyq, XmFontS_font_info(fsw)->family_info,
 			     XmFontS_font_info(fsw)->num_families)) == NULL) 
     {
-	static String params[] = { "FontSelector", NULL };
-	Cardinal num = 2;
+	String params[1];
+	Cardinal num = 1;
 
-	params[1] = XrmQuarkToString(cf->familyq);
-	dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
-			XmCICSWidgetSetError,
-			XmNcouldNotFindFamilyDataMsg, params, &num);
+	params[0] = XrmQuarkToString(cf->familyq);
+	dbg(); _XmWarningMsg((Widget) fsw, XmNcouldNotFindFamilyData,
+		XmNcouldNotFindFamilyDataMsg, params, num);
 	return;
     }
 
@@ -3027,14 +3017,12 @@ ToggleBold(Widget w, XtPointer fsw_ptr, XtPointer data)
     if ((family = FindFamily(cf->familyq, XmFontS_font_info(fsw)->family_info,
 			     XmFontS_font_info(fsw)->num_families)) == NULL) 
     {
-	static String params[] = { "FontSelector", NULL };
-	Cardinal num = 2;
+	String params[1];
+	Cardinal num = 1;
 
-	params[1] = XrmQuarkToString(cf->familyq);
-	dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
-			XmCICSWidgetSetError,
-			XmNcouldNotFindFamilyDataMsg, params, &num);
+	params[0] = XrmQuarkToString(cf->familyq);
+	dbg(); _XmWarningMsg((Widget) fsw, XmNcouldNotFindFamilyData,
+		XmNcouldNotFindFamilyDataMsg, params, num);
 
 	return;
     }
@@ -3072,14 +3060,12 @@ ToggleItalic(Widget w, XtPointer fsw_ptr, XtPointer data)
     if ((family = FindFamily(cf->familyq, XmFontS_font_info(fsw)->family_info,
 			     XmFontS_font_info(fsw)->num_families)) == NULL) 
     {
-	static String params[] = { "FontSelector", NULL };
-	Cardinal num = 2;
+	String params[1];
+	Cardinal num = 1;
 
-	params[1] = XrmQuarkToString(cf->familyq);
-	dbg(); XtAppWarningMsg(XtWidgetToApplicationContext((Widget) fsw),
-			XmNcouldNotFindFamilyData, XmNcouldNotFindFamilyData,
-			XmCICSWidgetSetError,
-			XmNcouldNotFindFamilyDataMsg, params, &num);
+	params[0] = XrmQuarkToString(cf->familyq);
+	dbg(); _XmWarningMsg((Widget) fsw, XmNcouldNotFindFamilyData,
+		XmNcouldNotFindFamilyDataMsg, params, num);
 	return;
     }
 

@@ -559,12 +559,10 @@ ChangeManaged(Widget w)
 	    char buf[BUFSIZ];
 	    
 	    params[0] = buf;
-	    sprintf(buf, "(%d, %d)", info->cell_x, info->cell_y);
+	    snprintf(buf, BUFSIZ, "(%d, %d)", info->cell_x, info->cell_y);
 	    
-	    XtAppWarningMsg(XtWidgetToApplicationContext(w),
-			    XmNcellNotEmpty, XmNcellNotEmpty, 
-			    XmCICSWidgetSetError,
-			    XmNcellNotEmptyMsg, params, &num);
+	    _XmWarningMsg(w, XmNcellNotEmpty,
+		    XmNcellNotEmptyMsg, params, num);
 	    /*
 	     * tell it to reset this to an empty cell.
 	     */
@@ -596,10 +594,7 @@ ChangeManaged(Widget w)
 	     * If this cell is full the just find any empty cell.
 	     */
 	    else if (!SetToEmptyCell(*childp)) {
-		XtAppWarningMsg(XtWidgetToApplicationContext(w),
-				XmNnoEmptyCells, XmNnoEmptyCells,
-				XmCICSWidgetSetError,
-				XmNnoEmptyCellsMsg, NULL, NULL);
+		XmeWarning(w, XmNnoEmptyCellsMsg);
 	    }
 	}
     }
@@ -684,12 +679,10 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	    char buf[BUFSIZ];
 	    
 	    params[0] = buf;
-	    sprintf(buf, "(%d, %d)", set_info->cell_x, set_info->cell_y);
+	    snprintf(buf, BUFSIZ, "(%d, %d)", set_info->cell_x, set_info->cell_y);
 
-	    XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			    XmNcellNotEmpty, XmNcellNotEmpty, 
-			    XmCICSWidgetSetError,
-			    XmNcellNotEmptyMsg, params, &num);
+	    _XmWarningMsg(set, XmNcellNotEmpty,
+		    XmNcellNotEmptyMsg, params, num);
 
 	    set_info->cell_x = old_info->cell_x;
 	    set_info->cell_y = old_info->cell_y;

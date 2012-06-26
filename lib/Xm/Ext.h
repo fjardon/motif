@@ -81,11 +81,11 @@ typedef Widget (*XmWidgetFunc)(Widget);
 
 #define XmNcouldNotFindFamilyData "couldNotFindFamilyData"
 #define XmNcouldNotFindFamilyDataMsg \
-  "%s: Could not find family data for family '%s'."
+  "Could not find family data for family '%s'."
 
 #define XmNforceGreaterThanZero "forceGreaterThanZero"
 #define XmNforceGreaterThanZeroMsg \
-"%s : %s must be greater than zero being reset to one (1)."
+"XmNvisibleItemCount must be greater than zero being reset to one (1)."
     
 #define XmNinsertBeforeNotSibling "insertBeforeNotSibling"
 #define XmNinsertBeforeNotSiblingMsg "XmHierarchy: InsertBefore Widget\
@@ -99,7 +99,7 @@ typedef Widget (*XmWidgetFunc)(Widget);
 #define XmNnoEmptyCellsMsg "XmIconBox: Could not find any empty cells."
 
 #define XmNnoGadgetSupport "noGadgetSupport"
-#define XmNnoGadgetSupportMsg "Widget %s does not support gadget children."
+#define XmNnoGadgetSupportMsg "Widget does not support gadget children."
     
 #define XmNpixEditBadImageCreate "pixEditBadImageCreate"
 #define XmNpixEditBadImageCreateMsg "Pixmap Editor: Can't allocate image data"
@@ -112,15 +112,17 @@ typedef Widget (*XmWidgetFunc)(Widget);
 #define XmNselfOrOutsideOfApplicationDropMsg \
     "Attempt to drop into illegal object."
 
-#define XmNstaticResource "staticResource"
-#define XmNstaticResourceMsg \
-    "The resource '%s' may not be changed dynamically."
+#define XmNstaticTranslationsMsg \
+    "Cannot change translation table after initialization."
+
+#define XmNstaticScrollbarsMsg \
+    "Cannot change scrollbars after initialization."
 
 #define XmNtextVerifyFailed "textVerifyFailed"
 #define XmNtextVerifyFailedMsg "Combination Box: Text item validation failed."
 
 #define XmNunexpectedEvent "unexpectedEvent"
-#define XmNunexpectedEventMsg "%s: Unexpected Event Type %s.\n"
+#define XmNunexpectedEventMsg "Unexpected Event Type %s.\n"
 
 #define XmNunparsableColor "unparsableColor"
 #define XmNunparsableColorMsg \
@@ -128,12 +130,10 @@ typedef Widget (*XmWidgetFunc)(Widget);
 
 #define XmNnodeParentIsSelf "nodeParentIsSelf"
 #define XmNnodeParentIsSelfMsg \
-  "%s: The node parent cannot be self referential."
+  "The node parent cannot be self referential."
 
 #define XmNstringGetFailed "stringGetFailed"
-#define XmNstringGetFailedMsg "%s: XmGetStringLToR Failed."
-
-#define XmCICSWidgetSetError "ICSWidgetSetError"
+#define XmNstringGetFailedMsg "Unable to get MB string from XmString."
 
 /************************************************************
 *	MACROS

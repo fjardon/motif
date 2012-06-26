@@ -1623,7 +1623,6 @@ static void
 VerifyResources(XmColumnWidget request, XmColumnWidget current, 
 		XmColumnWidget new_w)
 {
-    Cardinal zero = 0;
     Boolean  reset;
 
     if( BBPart(new_w)->label_font_list == NULL )
@@ -1643,21 +1642,13 @@ VerifyResources(XmColumnWidget request, XmColumnWidget current,
     case XiLABEL_POSITION_BOTTOM:
 	break;
     case XiLABEL_POSITION_UNSPECIFIED:
-	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) new_w),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNdefaultEntryLabelPosition,
-			"The illegal resource value \"XiLABEL_POSITION_UNSPECIFIED\" was assigned\nto the resource XmNDefaultLabelPosition",
-			NULL, &zero);
+	XmeWarning((Widget) new_w),
+			"The illegal resource value \"XiLABEL_POSITION_UNSPECIFIED\" was assigned to the resource XmNDefaultLabelPosition");
 	reset = True;
 	break;
     default:
-	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) new_w),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNdefaultEntryLabelPosition,
-			"An illegal resource value was assigned to the resource\nXmNDefaultLabelPosition",
-			NULL, &zero);
+	XmeWarning((Widget) new_w,
+			"An illegal resource value was assigned to the resource XmNDefaultLabelPosition");
 	reset = True;
 	break;
     }    
@@ -1679,21 +1670,13 @@ VerifyResources(XmColumnWidget request, XmColumnWidget current,
     case XmALIGNMENT_END:
 	break;
     case XmALIGNMENT_UNSPECIFIED:
-	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) new_w),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNdefaultEntryLabelAlignment,
-			"The illegal resource value \"XmALIGNMENT_UNSPECIFIED\" was assigned\nto the resource XmNdefaultEntryLabelAlignment",
-			NULL, &zero);
+	XmeWarning((Widget) new_w,
+			"The illegal resource value \"XmALIGNMENT_UNSPECIFIED\" was assigned to the resource XmNdefaultEntryLabelAlignment");
 	reset = True;
 	break;
     default:
-	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) new_w),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNdefaultEntryLabelAlignment,
-			"An illegal resource value was assigned to the resource\nXmNdefaultEntryLabelAlignment",
-			NULL, &zero);
+	XmeWarning((Widget) new_w,
+			"An illegal resource value was assigned to the resource XmNdefaultEntryLabelAlignment");
 	reset = True;
 	break;
     }
@@ -1713,12 +1696,8 @@ VerifyResources(XmColumnWidget request, XmColumnWidget current,
     case XmVERTICAL:
 	break;
     default:
-	XtAppWarningMsg(XtWidgetToApplicationContext((Widget) new_w),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmCOrientation,
-			"An illegal resource value was assigned to the resource XmNorientation",
-			NULL, &zero);
+	XmeWarning((Widget) new_w,
+			"An illegal resource value was assigned to the resource XmNorientation");
 	reset = True;
 	break;
     }
@@ -2385,7 +2364,6 @@ VerticalLayout(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
 static void
 VerifyConstraints(Widget request, Widget current, Widget set)
 {
-    Cardinal zero = 0;
     Boolean  reset;
 
 #if 0	/* POSITION HANDLING */
@@ -2400,12 +2378,8 @@ VerifyConstraints(Widget request, Widget current, Widget set)
     case XiLABEL_POSITION_UNSPECIFIED:
 	break;
     default:
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNentryLabelPosition,
-			"An illegal resource value was assigned to the resource XmNentryLabelPosition",
-			NULL, &zero);
+	XmeWarning(set,
+			"An illegal resource value was assigned to the resource XmNentryLabelPosition");
 	reset = True;
 	break;
     }
@@ -2426,12 +2400,8 @@ VerifyConstraints(Widget request, Widget current, Widget set)
     case XmALIGNMENT_UNSPECIFIED:
 	break;
     default:
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNentryLabelAlignment,
-			"An illegal resource value was assigned to the resource XmNentryLabelAlignment",
-			NULL, &zero);
+	XmeWarning(set,
+		"An illegal resource value was assigned to the resource XmNentryLabelAlignment");
 	reset = True;
 	break;
     }
@@ -2450,12 +2420,8 @@ VerifyConstraints(Widget request, Widget current, Widget set)
     case XmFILL_RAGGED:
 	break;
     default:
-	XtAppWarningMsg(XtWidgetToApplicationContext(set),
-			"illegalResourceSetting",
-			"a resource was set to an illegal value",
-			XmNfillStyle,
-			"An illegal resource value was assigned to the resource XmNfillStyle",
-			NULL, &zero);
+	XmeWarning(set,
+		"An illegal resource value was assigned to the resource XmNfillStyle");
 	reset = True;
 	break;
     }
