@@ -1,22 +1,22 @@
 .DT
-.TH "XmVaCreateLabel" "library call"
+.TH "XmVaCreateOutline" "library call"
 .SH "NAME"
-\fBXmVaCreateLabel\fP,
-\fBXmVaCreateManagedLabel\fP \(em A Label
+\fBXmVaCreateOutline\fP,
+\fBXmVaCreateManagedOutline\fP \(em A Outline
 widget convenience creation functions\&.
-.iX "XmVaCreateLabel" "XmVaCreateManagedLabel"
+.iX "XmVaCreateOutline" "XmVaCreateManagedOutline"
 .iX "creation functions"
 .SH "SYNOPSIS"
 .PP
 .nf
-#include <Xm/Label\&.h>
+#include <Xm/Outline\&.h>
 .PP
-\fBWidget \fBXmVaCreateLabel\fP\fR(
+\fBWidget \fBXmVaCreateOutline\fP\fR(
 \fBWidget \fBparent\fR\fR,
 \fBString \fBname\fR\fR,
 \&.\&.\&.);
 .PP
-\fBWidget \fBXmVaCreateManagedLabel\fP\fR(
+\fBWidget \fBXmVaCreateManagedOutline\fP\fR(
 \fBWidget \fBparent\fR\fR,
 \fBString \fBname\fR\fR,
 \&.\&.\&.);
@@ -24,14 +24,14 @@ widget convenience creation functions\&.
 .SH "DESCRIPTION"
 .PP
 These functions create an instance of a
-Label widget and returns the associated widget ID\&.
+Outline widget and returns the associated widget ID\&.
 These routines use the ANSI C variable-length argument list (\fIvarargs\fP)
 calling convention\&.
 .PP
-The \fBXmVaCreateLabel\fP function
+The \fBXmVaCreateOutline\fP function
 is a convenience routine that calls \fBXtCreateWidget\fP\&.
 .PP
-The \fBXmVaCreateManagedLabel\fP
+The \fBXmVaCreateManagedOutline\fP
 function is a convenience routine that calls \fBXtCreateManagedWidget\fP\&.
 .PP
 .IP "\fIparent\fP" 10
@@ -41,14 +41,14 @@ Specifies the name of the created widget\&.
 .IP \fI...\fP
 Specifies the variable argument list to override the resource defaults.
 .PP
-For a complete definition of Label and its associated
-resources, see \fBXmLabel\fP(3)\&.
+For a complete definition of Outline and its associated
+resources, see \fBXmOutline\fP(3)\&.
 .SH "RETURN"
 .PP
-Returns the Label widget ID\&.
+Returns the Outline widget ID\&.
 .SH "RELATED"
 .PP
-\fBXmLabel\fP(3),
-\fBXmCreateLabel\fP(3),
-\fBXtCreateWidget\fP(3), and
-\fBXtCreateManagedWidget\fP(3)\&.
+\fBXmCreateOutline\fP(3),
+\fBXtCreateWidget\fP(3),
+\fBXtCreateManagedWidget\fP(3), and
+\fBXmOutline\fP(3)\&.

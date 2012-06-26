@@ -4,8 +4,8 @@
 \fBXmVaCreateFileSelectionBox\fP,
 \fBXmVaCreateManagedFileSelectionBox\fP \(em A FileSelectionBox
 widget convenience creation functions\&.
-.iX "XmVaCreateToggleFileSelectionBox" "XmVaCreateManagedFileSelectionBox"
-.iX "creation functions" "XmVaCreateFileSelectionBox"
+.iX "XmVaCreateFileSelectionBox" "XmVaCreateManagedFileSelectionBox"
+.iX "creation functions"
 .SH "SYNOPSIS"
 .PP
 .nf
@@ -24,14 +24,14 @@ widget convenience creation functions\&.
 .SH "DESCRIPTION"
 .PP
 These functions create an instance of a
-ToggleButtonGadget widget and returns the associated widget ID\&.
+FileSelectionBox widget and returns the associated widget ID\&.
 These routines use the ANSI C variable-length argument list (\fIvarargs\fP)
 calling convention\&.
 .PP
 The \fBXmVaCreateFileSelectionBox\fP function
 is a convenience routine that calls \fBXtCreateWidget\fP\&.
 .PP
-The \fBXmVaCreateFileSelectionBox\fP
+The \fBXmVaCreateManagedFileSelectionBox\fP
 function is a convenience routine that calls \fBXtCreateManagedWidget\fP\&.
 .PP
 .IP "\fIparent\fP" 10
@@ -48,7 +48,7 @@ resources, see \fBXmFileSelectionBox\fP(3)\&.
 Returns the FileSelectionBox widget ID\&.
 .SH "RELATED"
 .PP
-\fBXmFileSelectionBox\fP(3),
 \fBXmCreateFileSelectionBox\fP(3),
+\fBXtCreateManagedWidget\fP(3),
 \fBXtCreateWidget\fP(3), and
-\fBXtCreateManagedWidget\fP(3)\&.
+\fBXmFileSelectionBox\fP(3)\&.

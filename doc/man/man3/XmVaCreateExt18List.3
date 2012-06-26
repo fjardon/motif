@@ -1,22 +1,22 @@
 .DT
-.TH "XmVaCreateCascadeButtonGadget" "library call"
+.TH "XmVaCreateExt18List" "library call"
 .SH "NAME"
-\fBXmVaCreateCascadeButtonGadget\fP,
-\fBXmVaCreateManagedCascadeButtonGadget\fP \(em A CascadeButtonGadget
+\fBXmVaCreateExt18List\fP,
+\fBXmVaCreateManagedExt18List\fP \(em A Form
 widget convenience creation functions\&.
-.iX "XmVaCreateCascadeButtonGadget" "XmVaCreateManagedCascadeButtonGadget"
+.iX "XmVaCreateExt18List" "XmVaCreateManagedExt18List"
 .iX "creation functions"
 .SH "SYNOPSIS"
 .PP
 .nf
-#include <Xm/CascadeBG\&.h>
+#include <Xm/Ext18List\&.h>
 .PP
-\fBWidget \fBXmVaCreateCascadeButtonGadget\fP\fR(
+\fBWidget \fBXmVaCreateExt18List\fP\fR(
 \fBWidget \fBparent\fR\fR,
 \fBString \fBname\fR\fR,
 \&.\&.\&.);
 .PP
-\fBWidget \fBXmVaCreateManagedCascadeButtonGadget\fP\fR(
+\fBWidget \fBXmVaCreateManagedExt18List\fP\fR(
 \fBWidget \fBparent\fR\fR,
 \fBString \fBname\fR\fR,
 \&.\&.\&.);
@@ -24,14 +24,14 @@ widget convenience creation functions\&.
 .SH "DESCRIPTION"
 .PP
 These functions create an instance of a
-CascadeButtonGadget widget and returns the associated widget ID\&.
+Ext18List widget and returns the associated widget ID\&.
 These routines use the ANSI C variable-length argument list (\fIvarargs\fP)
 calling convention\&.
 .PP
-The \fBXmVaCreateCascadeButtonGadget\fP function
+The \fBXmVaCreateExt18List\fP function
 is a convenience routine that calls \fBXtCreateWidget\fP\&.
 .PP
-The \fBXmVaCreateManagedCascadeButtonGadget\fP
+The \fBXmVaCreateManagedExt18List\fP
 function is a convenience routine that calls \fBXtCreateManagedWidget\fP\&.
 .PP
 .IP "\fIparent\fP" 10
@@ -41,14 +41,14 @@ Specifies the name of the created widget\&.
 .IP \fI...\fP
 Specifies the variable argument list to override the resource defaults.
 .PP
-For a complete definition of CascadeButtonGadget and its associated
-resources, see \fBXmCascadeButtonGadget\fP(3)\&.
+For a complete definition of Form and its associated
+resources, see \fBXmExt18List\fP(3)\&.
 .SH "RETURN"
 .PP
-Returns the CascadeButtonGadget widget ID\&.
+Returns the Ext18List widget ID\&.
 .SH "RELATED"
 .PP
-\fBXmCascadeButtonGadget\fP(3),
-\fBXmCreateCascadeButtonGadget\fP(3),
+\fBXmCreateExt18List\fP(3),
+\fBXtCreateManagedWidget\fP(3),
 \fBXtCreateWidget\fP(3), and
-\fBXtCreateManagedWidget\fP(3)\&.
+\fBXmExt18List\fP(3)\&.

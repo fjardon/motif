@@ -68,7 +68,6 @@ man_MANS = ApplicationShell.3 \
     XmClipboardWithdrawFormat.3 \
     XmColorSelector.3 \
     XmColumn.3 \
-    XmDropDown.3 \
     XmComboBox.3 \
     XmComboBoxAddItem.3 \
     XmComboBoxDeletePos.3 \
@@ -100,6 +99,7 @@ man_MANS = ApplicationShell.3 \
     XmCreateCascadeButtonGadget.3 \
     XmCreateDropDown.3 \
     XmCreateComboBox.3 \
+    XmCreateCombinationBox2.3 \
     XmCreateCommand.3 \
     XmCreateCommandDialog.3 \
     XmCreateContainer.3 \
@@ -115,6 +115,7 @@ man_MANS = ApplicationShell.3 \
     XmCreateForm.3 \
     XmCreateFormDialog.3 \
     XmCreateFrame.3 \
+    XmCreateHierarchy.3 \
     XmCreateIconGadget.3 \
     XmCreateInformationDialog.3 \
     XmCreateLabel.3 \
@@ -127,6 +128,7 @@ man_MANS = ApplicationShell.3 \
     XmCreateMessageDialog.3 \
     XmCreateNotebook.3 \
     XmCreateOptionMenu.3 \
+    XmCreateOutline.3 \
     XmCreatePanedWindow.3 \
     XmCreatePopupMenu.3 \
     XmCreatePromptDialog.3 \
@@ -184,6 +186,7 @@ man_MANS = ApplicationShell.3 \
     XmDragStart.3 \
     XmDrawingArea.3 \
     XmDrawnButton.3 \
+    XmDropDown.3 \
     XmDropSite.3 \
     XmDropSiteConfigureStackingOrder.3 \
     XmDropSiteEndUpdate.3 \
@@ -198,6 +201,7 @@ man_MANS = ApplicationShell.3 \
     XmDropTransferAdd.3 \
     XmDropTransferStart.3 \
     XmMultiList.3 \
+    XmExt18List.3 \
     XmFileSelectionBox.3 \
     XmFileSelectionBoxGetChild.3 \
     XmFileSelectionDoSearch.3 \
@@ -238,6 +242,9 @@ man_MANS = ApplicationShell.3 \
     XmGetVisibility.3 \
     XmGetXmDisplay.3 \
     XmGetXmScreen.3 \
+    XmHierarchy.3 \
+    XmHierarchyGetChildNodes.3 \
+    XmHierarchyOpenAllAncestors.3 \
     XmIconBox.3 \
     XmIconButton.3 \
     XmIconGadget.3 \
@@ -314,6 +321,7 @@ man_MANS = ApplicationShell.3 \
     XmObjectAtPoint.3 \
     XmOptionButtonGadget.3 \
     XmOptionLabelGadget.3 \
+    XmOutline.3 \
     XmPanedWindow.3 \
     XmParseMapping.3 \
     XmParseMappingCreate.3 \
@@ -565,17 +573,19 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateCascadeButtonGadget.3 \
     XmVaCreateColorSelector.3 \
     XmVaCreateColumn.3 \
-    XmVaCreateDropDown.3 \
+    XmVaCreateCombinationBox2.3 \
     XmVaCreateComboBox.3 \
     XmVaCreateCommand.3 \
     XmVaCreateContainer.3 \
     XmVaCreateDataField.3 \
     XmVaCreateDrawingArea.3 \
     XmVaCreateDrawnButton.3 \
-    XmVaCreateMultiList.3 \
+    XmVaCreateDropDown.3 \
+    XmVaCreateExt18List.3 \
     XmVaCreateFileSelectionBox.3 \
     XmVaCreateForm.3 \
     XmVaCreateFrame.3 \
+    XmVaCreateHierarchy.3 \
     XmVaCreateIconGadget.3 \
     XmVaCreateLabel.3 \
     XmVaCreateLabelGadget.3 \
@@ -589,24 +599,28 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateManagedCascadeButtonGadget.3 \
     XmVaCreateManagedColorSelector.3 \
     XmVaCreateManagedColumn.3 \
-    XmVaCreateManagedDropDown.3 \
     XmVaCreateManagedComboBox.3 \
+    XmVaCreateManagedCombinationBox2.3 \
     XmVaCreateManagedCommand.3 \
     XmVaCreateManagedContainer.3 \
     XmVaCreateManagedDataField.3 \
     XmVaCreateManagedDrawingArea.3 \
     XmVaCreateManagedDrawnButton.3 \
-    XmVaCreateManagedMultiList.3 \
+    XmVaCreateManagedDropDown.3 \
+    XmVaCreateManagedExt18List.3 \
     XmVaCreateManagedFileSelectionBox.3 \
     XmVaCreateManagedForm.3 \
     XmVaCreateManagedFrame.3 \
+    XmVaCreateManagedHierarchy.3 \
     XmVaCreateManagedIconGadget.3 \
     XmVaCreateManagedLabel.3 \
     XmVaCreateManagedLabelGadget.3 \
     XmVaCreateManagedList.3 \
     XmVaCreateManagedMainWindow.3 \
     XmVaCreateManagedMessageBox.3 \
+    XmVaCreateManagedMultiList.3 \
     XmVaCreateManagedNotebook.3 \
+    XmVaCreateManagedOutline.3 \
     XmVaCreateManagedPanedWindow.3 \
     XmVaCreateManagedPushButton.3 \
     XmVaCreateManagedPushButtonGadget.3 \
@@ -624,7 +638,9 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateManagedToggleButton.3 \
     XmVaCreateManagedToggleButtonGadget.3 \
     XmVaCreateMessageBox.3 \
+    XmVaCreateMultiList.3 \
     XmVaCreateNotebook.3 \
+    XmVaCreateOutline.3 \
     XmVaCreatePanedWindow.3 \
     XmVaCreatePushButton.3 \
     XmVaCreatePushButtonGadget.3 \
