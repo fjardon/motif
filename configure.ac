@@ -5,6 +5,7 @@ AC_PREREQ(2.52)
 AC_CONFIG_AUX_DIR(.)
 AC_PREFIX_DEFAULT(/usr/X11R6)
 AM_MAINTAINER_MODE
+AC_CANONICAL_TARGET
 
 dnl The version of the OpenMotif libraries
 CURRENT=4
@@ -70,8 +71,6 @@ AC_SUBST(X_XMU)
 LIBS="$save_LIBS"
 CFLAGS="$save_CFLAGS"
 AM_CONDITIONAL(OM_XMU, test x$X_XMU != x)
-
-
 
 dnl Checks for header files.
 AC_HEADER_DIRENT
@@ -162,6 +161,10 @@ AC_SUBST(INCDIR)
 
 XMBINDDIR_FALLBACK="${libdir}/X11/bindings"
 AC_SUBST(XMBINDDIR_FALLBACK)
+
+case "$target_os" in
+    freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI"
+esac
 
 AC_CONFIG_FILES([Makefile \
 bindings/Makefile \

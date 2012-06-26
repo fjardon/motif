@@ -3704,8 +3704,8 @@ ListConvert(Widget w, XtPointer client_data,
 	{
 	    Cardinal row;
 	    int rowcount;
-	    concat = NULL;
 	    int * rows = GetSelectedRows(lw, &rowcount);
+	    concat = NULL;
 	    for (row = 0; row < rowcount; row++) {
 		if (concat) {
 		    concat = XmStringConcatAndFree(concat,

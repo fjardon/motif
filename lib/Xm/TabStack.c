@@ -3024,9 +3024,10 @@ PickSizes(tab, tab_width, tab_height, box, kid)
 	    }
 	    else
 	    {
+	        int tmp;
 		if (LayoutIsRtoL(tab))
 		    kid->x += offset * (num_rows-1);
-		int tmp = (((int)tab_width) - ((num_rows-1) * offset))/
+		tmp = (((int)tab_width) - ((num_rows-1) * offset))/
 		    num_cols;
 		
 		row_width = num_cols * tmp;
