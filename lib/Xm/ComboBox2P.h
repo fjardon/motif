@@ -198,6 +198,10 @@ typedef struct {
     int	activateOnFill;		/* activate when we fill this many chars */
     Boolean doActivate;		/* do activate on next value changed */
     Boolean inValueChanged;	/* recursion prevention */
+
+    Widget		vsb;
+    Widget		hsb;
+    Boolean		scrolling;
 } XmCombinationBox2Part;
 
 typedef struct _XmCombinationBox2Rec {

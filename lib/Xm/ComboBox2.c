@@ -49,6 +49,7 @@
 #include <Xm/TextF.h>
 #include <Xm/Text.h>
 #include <Xm/List.h>
+#include <Xm/GrabShellP.h>
 
 #include <Xm/ExtP.h>
 
@@ -93,6 +94,10 @@
     ( XmIsTextField(t) ? XmTextFieldSetInsertionPosition(t,p) \
                        : XmTextSetInsertionPosition(t,p) )
     
+/* From GrabShell.c */
+#define Events	(EnterWindowMask | LeaveWindowMask | ButtonPressMask | \
+		 ButtonReleaseMask)
+
 
 /************************************************************
 *	GLOBAL DECLARATIONS
@@ -123,6 +128,8 @@ static void ClassPartInitialize(WidgetClass);
 static void ClassInitialize();
 static void ExposeMethod(Widget, XEvent*, Region);
 
+static Boolean ComboBoxParentProcess(Widget wid, XmParentProcessData event);
+
 /************************
  * Actions and callbacks.
  ************************/
@@ -135,6 +142,9 @@ static void ListSelected(Widget, XtPointer, XtPointer);
 static void ComboUnpost(Widget, XEvent *, String *, Cardinal *);
 static void ComboPost(Widget, XEvent *, String *, Cardinal *);
 static void ComboCancel(Widget, XEvent *, String *, Cardinal *);
+
+static void SBBtnDownEH (Widget, XtPointer, XEvent *, Boolean *);
+static void SBBtnUpEH (Widget, XtPointer, XEvent *, Boolean *);
 
 /*********************
  * Internal Routines.
@@ -474,6 +484,9 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     XmComboBox2_old_text(cbw) = NULL;
     XmComboBox2_doActivate(cbw) = False;
     XmComboBox2_inValueChanged(cbw) = False;
+
+    cbw->combo.hsb = NULL;
+    cbw->combo.vsb = NULL;
 
     _XmFilterArgs(args, *num_args, xm_std_filter, &f_args, &f_num_args);
 
@@ -949,11 +962,9 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmAnyCallbackStruct         cbdata;
     XmArrowButtonCallbackStruct *arrow = (XmArrowButtonCallbackStruct*)
 	info_ptr;
-
     /*
      * Do Nothing... 
      */
-
     if (XmComboBox2_list_state(cbw) == XmCombinationBox2_IN_PROGRESS)
 	return;
 
@@ -974,9 +985,10 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmComboBox2_list_state(cbw) = XmCombinationBox2_IN_PROGRESS;
 
     if (is_unposted) {
-	PopdownList((Widget) cbw);
+        if (!XmIsGrabShell(XmComboBox2_popup_shell(cbw)))
+	    PopdownList((Widget) cbw);
 
-	if (!XmComboBox2_customized_combo_box(cbw))	
+	if (!XmComboBox2_customized_combo_box(cbw))
 	    (void) SetTextFromList((Widget) cbw);
 
 	cbdata.reason = XmCR_UPDATE_TEXT;
@@ -1282,7 +1294,6 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
     /*
      * Same thing happens as when the arrow is clicked.
      */
-
     ArrowClicked(XmComboBox2_arrow(cbw), (XtPointer) cbw, NULL);
 }
 
@@ -1303,11 +1314,35 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
 
 /* ARGSUSED */
 static void
-ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
+ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *dispatch)
 {
     XmCombinationBox2Widget cbw = (XmCombinationBox2Widget) cbw_ptr;
     Widget event_widget;
 
+  switch (event->type)
+    {
+    case ButtonRelease:
+      if (cbw->combo.scrolling)
+	*dispatch = cbw->combo.scrolling = FALSE;
+      break;
+
+    case ButtonPress:
+      /* Press & release in the scrollbar shouldn't popdown the list. */
+      if ((cbw->combo.vsb &&
+	   XtIsRealized(cbw->combo.vsb) &&
+	   (event->xbutton.window == XtWindow(cbw->combo.vsb))) ||
+	  (cbw->combo.hsb &&
+	   XtIsRealized(cbw->combo.hsb) &&
+	   (event->xbutton.window == XtWindow(cbw->combo.hsb))))
+	cbw->combo.scrolling = TRUE;
+      break;
+
+    default:
+      /* This shouldn't happen. */
+      break;
+    }
+
+    /* TODO: move the following into the switch statement above */
     if (event->xany.type != ButtonPress) {
 	if ((event->xany.type == ButtonRelease) &&
 	    !XmComboBox2_customized_combo_box(cbw))
@@ -1324,7 +1359,7 @@ ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
 	return;
     else if ((event_widget == XmComboBox2_text(cbw)) && !XmComboBox2_editable(cbw))
     {
-	TextButtonPress(event_widget, NULL, event, junk);
+	TextButtonPress(event_widget, NULL, event, dispatch);
 	return;
     }
     else {
@@ -1355,6 +1390,7 @@ ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
  */
 
 /* ARGSUSED */
+
 static void
 LoseFocusHandler(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
 {
@@ -1434,7 +1470,8 @@ ComboCancel(Widget w, XEvent *event, String *params, Cardinal *num_params)
     if ((cbw == NULL) || XmComboBox2_list_state(cbw) != XmCombinationBox2_UNPOSTED)
 	return;
 
-    PopdownList((Widget) cbw);
+    if (!XmIsGrabShell((Widget)cbw))
+        PopdownList((Widget) cbw);
     XmComboBox2_list_state(cbw) = XmCombinationBox2_POSTED; /* List is now down (not visible). */
 
     num_args = 0;
@@ -1498,9 +1535,6 @@ RegisterShellHandler(Widget w)
     XtAddEventHandler(XmComboBox2_popup_shell(cbw), 
 		      ButtonPressMask | ButtonReleaseMask, False,
 		      ShellButtonEvent, (XtPointer) w);
-    
-    XtAddEventHandler(XmComboBox2_popup_shell(cbw), FocusChangeMask, False,
-		      LoseFocusHandler, (XtPointer) cbw);
 }
 
 /*	Function Name: PlaceChildren
@@ -1920,6 +1954,47 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
     XtAddCallback(XmComboBox2_arrow(cbw), XmNactivateCallback, 
 		  ArrowClicked, (XtPointer) w);
 }
+
+/*
+ * To deal with the problem, SBBtnDownEH will do an XtGrabPointer
+ * to transfer the grab to the scrollbar and SBBtnUpEH will cause
+ * the grab to return to the grab shell.
+ */
+
+/*ARGSUSED*/
+static void
+SBBtnDownEH(Widget    w, 
+	    XtPointer client_data, 
+	    XEvent   *event, 
+	    Boolean  *cont)	/* unused */
+{
+  XmGrabShellWidget shell = (XmGrabShellWidget) client_data;
+
+  XtGrabPointer(w, False, Events | PointerMotionMask | ButtonMotionMask,
+		GrabModeAsync, GrabModeAsync,
+		None, shell->grab_shell.cursor, event->xbutton.time);
+}
+
+/*ARGSUSED*/
+static void
+SBBtnUpEH(Widget    w,		/* unused */
+	  XtPointer client_data, 
+	  XEvent   *event, 
+	  Boolean  *cont)	/* unused */
+{
+  XmGrabShellWidget shell = (XmGrabShellWidget) client_data;
+
+  /* Note that this regrab to the grab shell will need to be changed
+   * if the kind of grab that the grabshell imposes changes.
+   */
+  XtGrabPointer((Widget) shell, shell->grab_shell.owner_events, 
+		Events,
+		shell->grab_shell.grab_style, GrabModeAsync,
+		None, shell->grab_shell.cursor, event->xbutton.time);
+  if (shell->grab_shell.grab_style == GrabModeSync)
+    XAllowEvents(XtDisplay(shell), SyncPointer, event->xbutton.time);
+}
+
 
 /*	Function Name: CreatePopup
  *	Description:   Create the popup shell that contains the list.
@@ -1934,15 +2009,18 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
     XmCombinationBox2Widget cbw = (XmCombinationBox2Widget) w;
     Arg *new_list, largs[10];
     Cardinal num_largs;
+    Widget sb;
 
     num_largs = 0;
     XtSetArg(largs[num_largs], XmNoverrideRedirect, True); num_largs++;
     XtSetArg(largs[num_largs], XmNsaveUnder, True); num_largs++;
     XtSetArg(largs[num_largs], XmNallowShellResize, True); num_largs++;
     XtSetArg(largs[num_largs], XmNancestorSensitive, True); num_largs++;
+    XtSetArg(largs[num_largs], XmNownerEvents, True), num_largs++;
+    XtSetArg(largs[num_largs], XmNgrabStyle, GrabModeSync), num_largs++;
     new_list = XtMergeArgLists(args, num_args, largs, num_largs);
     XmComboBox2_popup_shell(cbw) = XtCreatePopupShell("popupShell", 
-						topLevelShellWidgetClass, w,
+						xmGrabShellWidgetClass, w,
 						new_list,
 						num_largs + num_args);
     XtFree((char *) new_list);
@@ -1969,6 +2047,27 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 		  ListSelected, (XtPointer) cbw);
 
     XtManageChild(XmComboBox2_list(cbw));
+
+    num_largs = 0;
+    XtSetArg(largs[num_largs], XmNhorizontalScrollBar, &(cbw->combo.hsb)), num_largs++;
+    XtSetArg(largs[num_largs], XmNverticalScrollBar, &(cbw->combo.vsb)), num_largs++;
+    XtGetValues(XtParent(XmComboBox2_list(cbw)), largs, num_largs);
+
+    sb = cbw->combo.vsb;
+    if (sb != (Widget) NULL) {
+	XtInsertEventHandler(sb, ButtonPressMask, False, SBBtnDownEH,
+			       (XtPointer) XmComboBox2_popup_shell(cbw), XtListHead);
+	XtInsertEventHandler(sb, ButtonReleaseMask, False, SBBtnUpEH,
+			       (XtPointer) XmComboBox2_popup_shell(cbw), XtListHead);
+    }
+
+    sb = cbw->combo.hsb;
+    if (sb != (Widget) NULL) {
+	  XtInsertEventHandler(sb, ButtonPressMask, False, SBBtnDownEH,
+			       (XtPointer) XmComboBox2_popup_shell(cbw), XtListHead);
+	  XtInsertEventHandler(sb, ButtonReleaseMask, False, SBBtnUpEH,
+			       (XtPointer) XmComboBox2_popup_shell(cbw), XtListHead);
+    }
 }
 
 /*	Function Name: PopdownList
@@ -2122,7 +2221,8 @@ PopupList(Widget w)
         (*resize) (shell);
     }
 
-    XGetInputFocus(XtDisplay(shell), 
+    if (!XmIsGrabShell(shell))
+        XGetInputFocus(XtDisplay(shell),
 		   &(XmComboBox2_focus_owner(cbw)), &(XmComboBox2_focus_state(cbw)));
 
     /*
@@ -2143,39 +2243,42 @@ PopupList(Widget w)
      * Chris D. Peterson
      */
 
-    XSetInputFocus(XtDisplay(shell), XtWindow((Widget) cbw), RevertToParent, 
+    if (!XmIsGrabShell(shell))
+        XSetInputFocus(XtDisplay(shell), XtWindow((Widget) cbw), RevertToParent, 
 		   XtLastTimestampProcessed(XtDisplay(w)) - 1);
 
     XtPopupSpringLoaded(shell);
 
-    ret = XtGrabPointer(shell, True, 
+    if (!XmIsGrabShell(shell)) {
+        ret = XtGrabPointer(shell, True,
 			ButtonPressMask | ButtonReleaseMask,
 			GrabModeAsync, GrabModeAsync, None, 
 			XmComboBox2_popup_cursor(cbw),
 			XtLastTimestampProcessed(XtDisplay(w)));
 
-    if (ret != GrabSuccess) {
-	XtPopdown(shell);
+        if (ret != GrabSuccess) {
+	    XtPopdown(shell);
 
-	/*
-	 * We could not popup the list, this is because somehow things
-	 * got so slow that we were not allowed to grab the server.
-	 * In this case I will fail silently and the user can try again.
-	 */
+	    /*
+	     * We could not popup the list, this is because somehow things
+	     * got so slow that we were not allowed to grab the server.
+	     * In this case I will fail silently and the user can try again.
+	     */
 
-	return(False);
-    }
+	    return(False);
+        }
 	
-    XtAddGrab(XmComboBox2_arrow(cbw), False, False);
+        XtAddGrab(XmComboBox2_arrow(cbw), False, False);
 
-    /*
-     * Since this is an override redirect window we know that no one
-     * will get in the way of thisX SetInputFocus Event.
-     */
+        /*
+         * Since this is an override redirect window we know that no one
+         * will get in the way of thisX SetInputFocus Event.
+         */
 
-    XSetInputFocus(XtDisplay(shell), 
-		   XtWindow(shell), RevertToParent, CurrentTime);
-
+        XSetInputFocus(XtDisplay(shell),
+		   XtWindow(shell), RevertToParent, CurrentTime);		   
+    }
+		   
     return(True);
 }
 
@@ -2571,3 +2674,4 @@ Widget XmCombinationBox2GetChild(Widget w, int num)
     _XmAppUnlock(app);    
     return child;
 }
+
