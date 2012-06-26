@@ -169,7 +169,7 @@ xpmParseData(data, image, info)
     /*
      * parse extensions
      */
-    if (info && (info->valuemask & XpmReturnExtensions))
+    if (info && (info->valuemask & XpmReturnExtensions)) {
 	if (extensions) {
 	    ErrorStatus = xpmParseExtensions(data, &info->extensions,
 					     &info->nextensions);
@@ -179,6 +179,7 @@ xpmParseData(data, image, info)
 	    info->extensions = NULL;
 	    info->nextensions = 0;
 	}
+    }
 
     /*
      * store found informations in the XpmImage structure
@@ -373,7 +374,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    curkey = 0;
 	    lastwaskey = 0;
 	    *curbuf = '\0';		/* init curbuf */
-	    while (l = xpmNextWord(data, buf, BUFSIZ)) {
+	    while ((l = xpmNextWord(data, buf, BUFSIZ))) {
 		if (!lastwaskey) {
 		    for (key = 0, sptr = xpmColorKeys; key < NKEYS; key++,
 			 sptr++)
@@ -453,7 +454,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	     */
 	    xpmNextString(data);	/* get to the next string */
 	    *curbuf = '\0';		/* init curbuf */
-	    while (l = xpmNextWord(data, buf, BUFSIZ)) {
+	    while ((l = xpmNextWord(data, buf, BUFSIZ))) {
 		if (*curbuf != '\0')
 		    strcat(curbuf, " ");/* append space */
 		buf[l] = '\0';
