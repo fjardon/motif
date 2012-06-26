@@ -2142,13 +2142,13 @@ GetNodeHeightAndWidth(Widget w, TreeConstraints node,
       if ((int)XmTreeC_bb_width(node) < (int)l_width)
         XmTreeC_bb_width(node) = l_width;
 
-      if ( ((XmTree_compress_style(tw) == XmTreeCompressAll)
+      if ( (((XmTree_compress_style(tw) == XmTreeCompressAll)
 	        && ((sib_index % 2) == 1))
-	        && (XmHierarchyC_parent(node) != NULL)
-          ||   ((XmTree_compress_style(tw) == XmTreeCompressLeaves)
+	        && (XmHierarchyC_parent(node) != NULL))
+          ||   (((XmTree_compress_style(tw) == XmTreeCompressLeaves)
                 && (num_kids == 0)
 		&& (XmHierarchyC_parent(node) != NULL)
-                &&   ((sib_index % 2) == 1))  )
+                &&   ((sib_index % 2) == 1))) )
       {
             XmTreeC_is_compressed(node) = True;
       }

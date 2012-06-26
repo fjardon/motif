@@ -106,6 +106,7 @@ extern void _XmRedisplayLabG (Widget      w,
 extern void _XmLabelGCloneMenuSavvy(WidgetClass, XmMenuSavvyTrait);
 
 extern void _XmLabelSetBackgroundGC(XmLabelGadget lw);
+extern void _XmLabelGCalcTextRect(Widget wid);
 /********    End Private Function Declarations    ********/
 
 

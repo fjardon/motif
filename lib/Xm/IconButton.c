@@ -71,7 +71,7 @@ typedef struct _PixCacheEntry {
 *************************************************************/
 
 #define streq(a, b) (((a) != NULL) && ((b) != NULL) && (strcmp((a), (b)) == 0))
-#define ValidPixmap(p) ((p)!=NULL&&(p)!=XmUNSPECIFIED_PIXMAP)
+#define ValidPixmap(p) ((p)!=None&&(p)!=XmUNSPECIFIED_PIXMAP)
 
 /************************************************************
 *	GLOBAL DECLARATIONS

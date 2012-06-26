@@ -3359,7 +3359,7 @@ SetPushButtonSize(
 		     &onW2, &onH2);
       newpb->label.PixmapRect.width = MAX(onW2, onW);
       newpb->label.PixmapRect.height = MAX(onH2, onH);
-      _XmLabelGCalcTextRect(newpb);
+      _XmLabelGCalcTextRect((Widget)newpb);
     }
   
   /* Let LabelG do the rest. */

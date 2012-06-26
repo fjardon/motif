@@ -257,7 +257,9 @@ _XmConst char _XmSpinB_defaultTranslations[] = "\
 :<KeyUp>osfLeft:	SpinBDisarm()\n\
 :<KeyUp>osfRight:	SpinBDisarm()\n\
 :<Key>osfBeginLine:	SpinBFirst()\n\
-:<Key>osfEndLine:	SpinBLast()";
+:<Key>osfEndLine:	SpinBLast()\n\
+<Btn4Down>,<Btn4Up>:	SpinBNext()SpinBDisarm()\n\
+<Btn5Down>,<Btn5Up>:	SpinBPrior()SpinBDisarm()";
 
 _XmConst char _XmSpinB_defaultAccelerators[] =
   "\043override\n\

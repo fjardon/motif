@@ -1326,7 +1326,7 @@ int *
 XmExt18ListGetSelectedRowArray(Widget w, int *num_rows)
 {
     XmExt18ListWidget elist = (XmExt18ListWidget) w;
-    int ret_val;
+    int *ret_val;
 
     _XmWidgetToAppContext(w);
     _XmAppLock(app);

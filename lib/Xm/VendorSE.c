@@ -861,13 +861,13 @@ _XmGetAudibleWarning(Widget w)
       {
 	extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION); 
 
-  if(extData == NULL)
-  {
+        if(extData == NULL)
+          {
 #ifdef DEBUG
-    XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
+            XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
 #endif
-    return;
-  }
+            return XmBELL;
+        }
 
 
 	vendorExt = (XmVendorShellExtObject) extData->widget;

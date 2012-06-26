@@ -2888,7 +2888,7 @@ ToggleScaling(Widget w, XtPointer fsw_ptr, XtPointer data)
 	Boolean bad_100 = (CheckFlag(XmFontS_user_state(fsw), DPI_100) && 
 			   !CheckLongFlag(family->sizes_100, map));
 
-	if (map_bad || bad_75 || bad_100 && (cf->point_size != 0)) {
+	if (map_bad || bad_75 || (bad_100 && (cf->point_size != 0))) {
 	    String temp = _XmGetMBStringFromXmString(ANY_STRING(fsw));
 
 	    cf->point_size = 0;	/* Reset to Any. */

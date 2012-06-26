@@ -340,7 +340,6 @@ typedef struct _LRectangle
 extern void _XmQualifyLabelLocalCache(XmLabelGCacheObjPart *, XmLabelGadget);
 extern void _XmReCacheLabG_r(XmLabelGCacheObjPart *, XmLabelGadget);
 
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

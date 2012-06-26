@@ -3021,9 +3021,9 @@ DrawSquareShadows(tab, info, geometry, selected, edge, shadow)
 
 	    if( !selected && geometry->row == 0 )
 	    {
-		if( geometry->column == 0 && !LayoutIsRtoL(tab) ||
-			(geometry->column == XmTabBox__num_columns(tab)-1) &&
-			LayoutIsRtoLP(tab))
+		if( (geometry->column == 0 && !LayoutIsRtoL(tab)) ||
+			((geometry->column == XmTabBox__num_columns(tab)-1) &&
+			LayoutIsRtoLP(tab)))
 		{
 		    rt[2].x = geometry->x + shadow;
 		    rt[2].width = (int)geometry->width - shadow;
@@ -8330,7 +8330,8 @@ VerticalStackedRightEdgeRedisplay(XmTabBoxWidget tab)
 	rect[cnt].x = 0;
 	rect[cnt].y = geom[last].y + geom[last].height;
 	rect[cnt].width = XtWidth(tab);
-	rect[cnt++].height = (int)XtHeight(tab) - rect[cnt].y;
+	rect[cnt].height = (int)XtHeight(tab) - rect[cnt].y;
+	cnt++;
 
 	if( cnt >= _NUM_RECTS )
 	{
@@ -8351,7 +8352,8 @@ VerticalStackedRightEdgeRedisplay(XmTabBoxWidget tab)
 	    rect[cnt].x = 0;
 	    rect[cnt].y = geom[last].y + geom[last].height;
 	    rect[cnt].width = geom[last].width;
-	    rect[cnt++].height = (int)XtHeight(tab) - rect[cnt].y;
+	    rect[cnt].height = (int)XtHeight(tab) - rect[cnt].y;
+	    cnt++;
 
 	    if( cnt >= _NUM_RECTS )
 	    {
@@ -8613,7 +8615,8 @@ VerticalStackedLeftEdgeRedisplay(XmTabBoxWidget tab)
 	rect[cnt].x = 0;
 	rect[cnt].y = geom[last].y + geom[last].height;
 	rect[cnt].width = XtWidth(tab);
-	rect[cnt++].height = (int)XtHeight(tab) - rect[cnt].y;
+	rect[cnt].height = (int)XtHeight(tab) - rect[cnt].y;
+	cnt++;
 
 	if( cnt >= _NUM_RECTS )
 	{
@@ -8634,7 +8637,8 @@ VerticalStackedLeftEdgeRedisplay(XmTabBoxWidget tab)
 	    rect[cnt].x = (int)XtWidth(tab) - geom[last].width;
 	    rect[cnt].y = geom[last].y + geom[last].height;
 	    rect[cnt].width = geom[last].width;
-	    rect[cnt++].height = (int)XtHeight(tab) - rect[cnt].y;
+	    rect[cnt].height = (int)XtHeight(tab) - rect[cnt].y;
+	    cnt++;
 
 	    if( cnt >= _NUM_RECTS )
 	    {

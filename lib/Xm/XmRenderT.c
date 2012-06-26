@@ -1482,7 +1482,7 @@ CopyToArg(char *src, XtArgVal *dst, unsigned int size)
     if	    (size == sizeof(long))	   *dst = (XtArgVal)*(long*)src;
 #ifdef CR1152
     else if (size == sizeof(int))    *dst = (XtArgVal)*(int*)src;
-#endif;
+#endif
     else if (size == sizeof(short))    *dst = (XtArgVal)*(short*)src;
     else if (size == sizeof(char))	   *dst = (XtArgVal)*(char*)src;
     else if (size == sizeof(XtPointer)) *dst = (XtArgVal)*(XtPointer*)src;

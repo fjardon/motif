@@ -8119,6 +8119,8 @@ RedirectTraversal(
 	case XmTRAVERSE_HOME:
 	    to_widget = GetFirstTraversalWidget(cw, old_focus, wrap);
 	    break;
+	default:
+	    break;
 	} /* switch */
 
     return (to_widget ? to_widget : old_focus);

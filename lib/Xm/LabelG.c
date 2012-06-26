@@ -1402,10 +1402,6 @@ _XmCalcLabelGDimensions(Widget wid)
 void 
 _XmLabelGCalcTextRect(Widget wid)
 {
-//  XmLabelWidget newlw = (XmLabelWidget) wid;
-//  XmLabelPart  *lp = &(newlw->label);
-  
-
   LabG_TextRect(wid).width = 0;
   LabG_TextRect(wid).height = 0;
   

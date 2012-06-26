@@ -913,8 +913,8 @@ XmTabbedStackListCompare(list1, list2)
     XmTabResult result = XmTAB_CMP_EQUAL;
     int         i;
 
-    if( list1 == NULL && list2 != NULL ||
-        list1 != NULL && list2 == NULL ||
+    if( (list1 == NULL && list2 != NULL) ||
+        (list1 != NULL && list2 == NULL) ||
         list1->used != list2->used ) return( XmTAB_CMP_SIZE );
 
     for( i = 0; i < list1->used; ++i )

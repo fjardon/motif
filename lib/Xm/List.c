@@ -452,6 +452,14 @@ static void GetPreeditPosition(XmListWidget lw, XPoint *xmim_point);
 static void ScrollBarDisplayPolicyDefault(Widget widget,
 					  int offset,
 					  XrmValue *value);
+static void ListScrollUp(Widget wid,
+			 XEvent *event,
+			 String *params,
+			 Cardinal *num_params);
+static void ListScrollDown(Widget wid,
+			   XEvent *event,
+			   String *params,
+			   Cardinal *num_params);
 
 /********    End Static Function Declarations    ********/
 
@@ -538,6 +546,8 @@ static XtActionsRec ListActions[] = {
   { "ListLeave",		  ListLeave		},
   { "ListScrollCursorVertically", ListItemVisible	},
   { "ListScrollCursorVisible",	  ListItemVisible	},
+  { "ListScrollUp",		  ListScrollUp		},
+  { "ListScrollDown",		  ListScrollDown	},
   /* name above is correct; maintain this one for 1.2.0 compatibility */
   { "ListCopyToClipboard",	  ListCopyToClipboard	},
   { "ListProcessDrag",		  ListProcessDrag	},
@@ -9347,6 +9357,46 @@ XmListGetMatchPos(Widget w,
 
   _XmAppUnlock(app);
   return TRUE;
+}
+
+void
+ListScrollUp(Widget wid, XEvent *event, String *params, Cardinal *num_params)
+{
+  XmListWidget  lw = (XmListWidget) wid;
+  int value;
+  int slider_size;
+  int increment;
+  int page_increment;
+  if (lw->list.vScrollBar) {
+    int new_value;
+    XmScrollBarGetValues(((Widget)(lw->list.vScrollBar)), &value, &slider_size,
+        &increment, &page_increment);
+    new_value = value-increment;
+    if (new_value < lw->list.vScrollBar->scrollBar.minimum)
+      new_value = lw->list.vScrollBar->scrollBar.minimum;
+    XmScrollBarSetValues(((Widget)(lw->list.vScrollBar)), new_value, slider_size,
+        increment, page_increment, True);
+  }
+}
+
+void
+ListScrollDown(Widget wid, XEvent *event, String *params, Cardinal *num_params)
+{
+  XmListWidget lw = (XmListWidget)wid;
+  int value;
+  int slider_size;
+  int increment;
+  int page_increment;
+  if (lw->list.vScrollBar) {
+    int new_value;
+    XmScrollBarGetValues(((Widget)(lw->list.vScrollBar)), &value, &slider_size,
+        &increment, &page_increment);
+    new_value = value+increment;
+    if (new_value > lw->list.vScrollBar->scrollBar.maximum - slider_size)
+      new_value = lw->list.vScrollBar->scrollBar.maximum - slider_size;
+    XmScrollBarSetValues(((Widget)(lw->list.vScrollBar)), new_value, slider_size,
+        increment, page_increment, True);
+  }
 }
 
 /************************************************************************
