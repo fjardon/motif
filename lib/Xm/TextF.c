@@ -3712,20 +3712,17 @@ PrintableString(XmTextFieldWidget tf,
       cache_ptr = tmp = XmStackAlloc(buf_size, cache);
    
       tmp_str = (wchar_t *)str;
-      ret_val = wctomb(tmp, *tmp_str);
+      // Fixed MZ BZ#1257: by Brad Despres <brad@sd.aonix.com>
       count = 0;
-      while ( (ret_val > 0)&& (buf_size >= MB_CUR_MAX) && (count < n) )
-	{
-	  count += 1;
-	  tmp += ret_val;
-	  buf_size -= ret_val;
-	  tmp_str++;
-	  ret_val = wctomb(tmp, *tmp_str);
-	}
-         
+      do {
+	ret_val = wctomb(tmp, *tmp_str);
+	count += 1;
+	tmp += ret_val;
+	buf_size -= ret_val;
+	tmp_str++;
+      } while ( (ret_val > 0)&& (buf_size >= MB_CUR_MAX) && (count < n) ) ;
       if (ret_val == -1)    /* bad character */
 	return (False);
- 
       is_printable = XTextWidth(TextF_Font(tf), cache_ptr, tmp - cache_ptr);
       XmStackFree(cache_ptr, cache);
       return (is_printable);
