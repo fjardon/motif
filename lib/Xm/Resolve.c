@@ -136,11 +136,11 @@ XmeResolvePartOffsets(
     *  Update the part size value (initially, it is the size of this part)
     */
    w_class->core_class.widget_size =
-       _ALIGN(w_class->core_class.widget_size) + super->core_class.widget_size;
+       _ALIGN(w_class->core_class.widget_size) + _ALIGN(super->core_class.widget_size);
    if (cc && scc)
        cc->constraint_class.constraint_size =
 	   _ALIGN(cc->constraint_class.constraint_size) +
-	       scc->constraint_class.constraint_size;
+	       _ALIGN(scc->constraint_class.constraint_size);
 
    /*
     *  Count the number of superclasses and allocate the offset record(s)
@@ -173,7 +173,7 @@ XmeResolvePartOffsets(
 	    scc = (ConstraintWidgetClass)(scc->core_class.superclass), i--)
 	   if (IsConstraintClass((WidgetClass)scc))
 	       (*constraint_offset)[i] = 
-		   scc->constraint_class.constraint_size;
+		   _ALIGN(scc->constraint_class.constraint_size);
 	   else
 	       (*constraint_offset)[i] = 0;
 	
