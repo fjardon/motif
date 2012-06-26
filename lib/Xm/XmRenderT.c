@@ -2403,21 +2403,13 @@ XmRenderTableCvtToProp(Widget widget, /* unused */
     size = strlen(str);
     CVTaddString(buffer, str, size);
 
-    if (_XmRendBG(rendition) == XmAS_IS)
-      str = "-1, ";
-    else {
-      sprintf(temp, "%ld, ", _XmRendBG(rendition));
-      str = temp;
-    }
+    sprintf(temp, "%ld, ", _XmRendBG(rendition));
+    str = temp;
     size = strlen(str);
     CVTaddString(buffer, str, size);
 
-    if (_XmRendFG(rendition) == XmAS_IS)
-      str = "-1, ";
-    else {
-      sprintf(temp, "%ld, ", _XmRendFG(rendition));
-      str = temp;
-    }
+    sprintf(temp, "%ld, ", _XmRendFG(rendition));
+    str = temp;
     size = strlen(str);
     CVTaddString(buffer, str, size);
 
