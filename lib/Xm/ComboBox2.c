@@ -2459,9 +2459,10 @@ SetTextFromList(Widget w)
 	String ptr;
 	wchar_t temp[BUFSIZ];
 
-	ptr = _XmGetMBStringFromXmString(items[i]);
+        ptr = XmStringUnparse(items[i], NULL, XmCHARSET_TEXT, XmMULTIBYTE_TEXT,
+                NULL, 0, XmOUTPUT_ALL);
 
-	if (ptr == NULL) {
+	if (mbstowcs(NULL, ptr, 0) == (ssize_t)(-1)) {
 	    XmeWarning((Widget) cbw, XmNstringGetFailedMsg);
 	    i++;
 	    continue;
