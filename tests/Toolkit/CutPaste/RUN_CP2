@@ -30,8 +30,8 @@
 cp Cutpaste2a Cutpaste2a1
 cp Cutpaste2a Cutpaste2a2
 
-Cutpaste2a1 -geometry +0+0 $* 1>/dev/null &
-Cutpaste2a2 -geometry +0+200 $* 1>/dev/null &
+Cutpaste2a1 -geometry +0+0 $* &
+Cutpaste2a2 -geometry +0+200 $* &
 
 Cutpaste2b $*
 
