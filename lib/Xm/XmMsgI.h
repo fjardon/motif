@@ -188,6 +188,7 @@ externalref nl_catd Xm_catd;
 #define _XmMMsgResource_0010        _XmCatgets(Xm_catd, MS_Resources, MSG_Resource_0010, _XmMsgResource_0010)
 #define _XmMMsgResource_0011        _XmCatgets(Xm_catd, MS_Resources, MSG_Resource_0011, _XmMsgResource_0011)
 #define _XmMMsgResource_0012        _XmCatgets(Xm_catd, MS_Resources, MSG_Resource_0012, _XmMsgResource_0012)
+#define _XmMMsgResource_0013        _XmCatgets(Xm_catd, MS_Resources, MSG_Resource_0013, _XmMsgResource_0013)
 #define _XmMMsgBaseClass_0000       _XmCatgets(Xm_catd, MS_BaseClass, MSG_BaseClass_0000, _XmMsgBaseClass_0000)
 #define _XmMMsgBaseClass_0001       _XmCatgets(Xm_catd, MS_BaseClass, MSG_BaseClass_0001, _XmMsgBaseClass_0001)
 #define _XmMMsgDisplay_0001         _XmCatgets(Xm_catd, MS_Display, MSG_Display_0001, _XmMsgDisplay_0001)

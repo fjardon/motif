@@ -271,6 +271,7 @@ externalref _XmConst char *_XmMsgResource_0009 ;
 externalref _XmConst char *_XmMsgResource_0010 ;
 externalref _XmConst char *_XmMsgResource_0011 ;
 externalref _XmConst char *_XmMsgResource_0012 ;
+externalref _XmConst char *_XmMsgResource_0013 ;
 externalref _XmConst char *_XmMsgGeoUtils_0000 ;
 externalref _XmConst char *_XmMsgGeoUtils_0001 ;
 externalref _XmConst char *_XmMsgGeoUtils_0002 ;

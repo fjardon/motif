@@ -992,6 +992,9 @@ externaldef(messages) _XmConst char *_XmMsgResource_0012 =
  ">";
 /***+$ command-line prompt in the Command widget. */
 
+externaldef(messages) _XmConst char *_XmMsgResource_0013 =
+ "Find";
+
 /*===========================================================================
  * New for 1.2
  *===========================================================================*/

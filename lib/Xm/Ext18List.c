@@ -33,6 +33,7 @@
 #include <stdio.h>
 
 #include "XmI.h"
+#include "MessagesI.h"
 #include <Xm/Ext18ListP.h>
 #include <Xm/Frame.h>
 #include <Xm/Label.h>
@@ -51,6 +52,8 @@
 
 #define H_MARGIN 5
 #define V_MARGIN 5
+
+#define FIND_STRING   _XmMMsgResource_0013
 
 /************************************************************
 *	MACROS
@@ -302,7 +305,7 @@ static void Initialize(Widget req, Widget set,
 	XmExt18List_find_label(elist) = XmStringCopy(XmExt18List_find_label(elist));
 	else 
 	XmExt18List_find_label(elist) = 
-		XmStringGenerate("Find", NULL, XmCHARSET_TEXT, NULL);
+		XmStringGenerate(FIND_STRING, NULL, XmCHARSET_TEXT, NULL);
 
     XmExt18List_title_wid(elist) = CreateTitle(set, 
 					    (XmExt18List_title_string(elist) ? 
@@ -542,7 +545,7 @@ SetValues(Widget current, Widget request, Widget set,
 		XmStringCopy(XmExt18List_find_label(e_set));
 	else 
 	    XmExt18List_find_label(e_set) = 
-		XmStringCreateLtoR("Find", XmFONTLIST_DEFAULT_TAG);
+		XmStringCreateLocalized(FIND_STRING);
 
 	XtSetArg(args[0], XmNlabelString, XmExt18List_find_label(e_set));
 	XtSetValues(XmExt18List_find(e_set), args, 1);
