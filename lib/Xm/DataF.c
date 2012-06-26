@@ -8722,7 +8722,7 @@ df_ValidateString(
 	    curr_str++;
 	    i++;
 	 } else {
-	    wchar_t tmp;
+	    wchar_t tmp[XmTextF_max_char_size(tf)+1];
 	    int num_conv;
 	    num_conv = mbtowc(&tmp, curr_str, XmTextF_max_char_size(tf));
             if (num_conv >= 0 && df_FindPixelLength(tf, (char*) &tmp, 1)) {
