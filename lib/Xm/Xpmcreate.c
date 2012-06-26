@@ -947,6 +947,8 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
 	return (XpmNoMemory);
 
 #ifndef FOR_MSW
+    if (height != 0 && (*image_return)->bytes_per_line >= SIZE_MAX / height)
+         return (XpmNoMemory);
     /* now that bytes_per_line must have been set properly alloc data */
     (*image_return)->data =
 	(char *) XpmMalloc((*image_return)->bytes_per_line * height);
