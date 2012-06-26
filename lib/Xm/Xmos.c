@@ -1624,6 +1624,7 @@ _XmOSKeySymToCharacter(KeySym keysym,
 /* ****************************************************** **
 ** Threading stuff. Stuck here to allow easier debugging.
 ** ****************************************************** */
+/*
 static unsigned int _lockCounter = 0;
 static unsigned int _unlockCounter = 0;
 static int _outstandingLockCounter = 0;
@@ -1657,3 +1658,4 @@ void _XmProcessUnlock()
             _unlockCounter, _outstandingLockCounter);
     }
 }
+*/
