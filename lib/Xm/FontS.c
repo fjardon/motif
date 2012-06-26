@@ -2882,7 +2882,7 @@ ToggleScaling(Widget w, XtPointer fsw_ptr, XtPointer data)
 
     XmFontS_use_scaling(fsw) = info->set;
     if (!info->set) {
-	Boolean map_bad = (map = SizeMapping(cf->point_size) == 0);
+	Boolean map_bad = (map = SizeMapping(cf->point_size)) == 0;
 	Boolean bad_75 = (CheckFlag(XmFontS_user_state(fsw), DPI_75) && 
 			  !CheckLongFlag(family->sizes_75, map));
 	Boolean bad_100 = (CheckFlag(XmFontS_user_state(fsw), DPI_100) && 
