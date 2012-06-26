@@ -1857,7 +1857,9 @@ PopdownOne(
 
     if (ms && !XmIsMenuShell(ms))
     {
-       _XmDismissTearOff((Widget) ms, (XtPointer) event, (XtPointer) NULL);
+       /* prevent coredumps when pulldown menu isn't realized yet */
+       if (ms->core.managed)
+           _XmDismissTearOff((Widget) ms, (XtPointer) event, (XtPointer) NULL);
        return;
     }
 
