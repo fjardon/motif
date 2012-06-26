@@ -64,15 +64,11 @@
 #include <limits.h>
 #include <string.h>
 
-#ifndef NL_TEXTMAX
-#define NL_TEXTMAX 8192
-#endif
-
 #ifndef PATH_MAX
 #define PATH_MAX 1024
 #endif
 
-#define MAXLINELEN NL_TEXTMAX
+#define MAXLINELEN 8192
 #define KEY_START '$'
 #define MAXIDLEN 64
 #ifdef _D_NAME_MAX
