@@ -3570,7 +3570,7 @@ XmClipboardCopyByName(
 	ClipboardReplaceItem(display, 
 			     formatheader->formatDataId,
 			     formatdataptr,
-			     length,
+			     formatdatalength,
 			     PropModeReplace,
 			     format,
 			     True,
