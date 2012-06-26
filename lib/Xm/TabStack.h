@@ -33,12 +33,6 @@
 extern "C" {
 #endif
 
-typedef struct _XmTabStackCallbackStruct {
-    int 	reason;
-    XEvent      *event;
-    Widget      selected_child;
-} XmTabStackCallbackStruct;
-
 typedef struct _XmTabStackRec      *XmTabStackWidget;
 typedef struct _XmTabStackClassRec *XmTabStackWidgetClass;
 extern WidgetClass                 xmTabStackWidgetClass;

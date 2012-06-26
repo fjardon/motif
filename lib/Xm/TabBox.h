@@ -31,13 +31,6 @@
 extern "C" {
 #endif
 
-typedef struct _XmTabBoxCallbackStruct {
-    int       reason;
-    XEvent    *event;
-    int       tab_index;
-    int       old_index;
-} XmTabBoxCallbackStruct;
-
 typedef struct _XmTabBoxRec      *XmTabBoxWidget;
 typedef struct _XmTabBoxClassRec *XmTabBoxWidgetClass;
 

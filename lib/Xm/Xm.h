@@ -506,6 +506,13 @@ typedef struct _XmTabStackCallbackStruct {
     Widget      selected_child;
 } XmTabStackCallbackStruct;
 
+typedef struct _XmTabBoxCallbackStruct {
+    int       reason;
+    XEvent    *event;
+    int       tab_index;
+    int       old_index;
+} XmTabBoxCallbackStruct;
+
 /****************************************************************************
  *  Callback reasons 
  ****************************************************************************/
