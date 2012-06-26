@@ -198,9 +198,12 @@ printf("call XmeGetDefaultRenderTable\n");
 
   if (!XmStringInitContext(&StrContext, tmp_str))
     printf("ERROR: XmStringContext failed to initialize\n");
-  if (XmStringGetNextTriple(StrContext, &length, &value)
-      != XmSTRING_COMPONENT_DIRECTION)
-    printf("ERROR: incorrect XmString component encountered\n");
+  int tmp = XmStringGetNextTriple(StrContext, &length, &value);
+  if (tmp != XmSTRING_COMPONENT_CHARSET)
+    printf("ERROR: incorrect XmString component encountered, expected XmSTRING_COMPONENT_CHARSET");
+  tmp = XmStringGetNextTriple(StrContext, &length, &value);
+  if (tmp != XmSTRING_COMPONENT_DIRECTION)
+    printf("ERROR: incorrect XmString component encountered, expected XmSTRING_COMPONENT_DIRECTION");
   XtSetArg(args[n], XmNlabelString, tmp_str);  n++;
   XtSetValues(label, args, n);
   CommonPause();
