@@ -65,6 +65,7 @@ DataType
     vertical_integer;
     horizontal_float;
     vertical_float;
+
 
 !
 ! UIL character sets
@@ -536,6 +537,7 @@ ControlList
         XmTemplateDialog;
         XmText;
         XmTextField;
+        XmDataField;
         XmToggleButton;
         XmToggleButtonGadget;
 	XmTree;
@@ -615,6 +617,7 @@ ControlList
         XmTemplateDialog;
         XmText;
         XmTextField;
+        XmDataField;
         XmToggleButton;
 	XmTree;
         XmWarningDialog;
@@ -5355,6 +5358,9 @@ Resource
   XmNdefaultEntryLabelFontList : Argument {
     Type = font_table;
   };
+  XmNdefaultEntryLabelRenderTable : Argument {
+    Type = font_table;
+  };
   XmNdefaultEntryLabelAlignment : Argument {
     Type = integer;
     EnumerationSet = XmAlignment;
@@ -5380,6 +5386,10 @@ Resource
 
 ! --- XmColumn Constraints
   XmNentryLabelFontList : Constraint {
+    Type = font_table;
+    Default = "Null";
+  };
+  XmNentryLabelRenderTable : Constraint {
     Type = font_table;
     Default = "Null";
   };
@@ -5422,6 +5432,7 @@ Class XmColumn : Widget {
   ConvenienceFunction = XmCreateColumn;
   Resources {
     XmNdefaultEntryLabelFontList;
+    XmNdefaultEntryLabelRenderTable;
     XmNdefaultEntryLabelAlignment;
 !   XmNdefaultEntryLabelPosition;
     XmNdefaultFillStyle;
@@ -5431,6 +5442,7 @@ Class XmColumn : Widget {
     XmNdistribution;
     ! -- Constraint Resources
     XmNentryLabelFontList;
+    XmNentryLabelRenderTable;
     XmNentryLabelAlignment;
 !   XmNentryLabelPosition;
     XmNfillStyle;
@@ -5460,14 +5472,7 @@ Class XmButtonBox : Widget {
   SuperClass = "XmManager";
   ConvenienceFunction = XmCreateButtonBox;
   Resources {
-    XmNbottomShadowColor;
-    XmNbottomShadowPixmap;
-    XmNforeground;
-    XmNhighlightColor;
-    XmNhighlightPixmap;
-    XmNshadowThickness;
-    XmNtopShadowColor;
-    XmNtopShadowPixmap;
+    XmNdefaultButton;
     XmNequalSize;
     XmNfillOption;
     XmNmarginHeight;
@@ -5488,6 +5493,9 @@ Class XmButtonBox : Widget {
   XmNsashTranslations : Argument {
     Type = translation_table;
   };
+  XmNallowUnusedSpace : Argument {
+    Type = boolean;
+  };
   XmNpreferredPaneSize : Constraint {
     Type = integer;
   };
@@ -5502,14 +5510,7 @@ Class XmPaned : Widget {
   SuperClass = "XmManager";
   ConvenienceFunction = XmCreatePaned;
   Resources {
-    XmNbottomShadowColor;
-    XmNbottomShadowPixmap;
-    XmNforeground;
-    XmNhighlightColor;
-    XmNhighlightPixmap;
-    XmNshadowThickness;
-    XmNtopShadowColor;
-    XmNtopShadowPixmap;
+    XmNallowUnusedSpace;
     XmNspacing;
     XmNmarginWidth;
     XmNmarginHeight;
@@ -5634,6 +5635,7 @@ Child
   Xm_Label : XmLabel;
   Xm_Arrow : XmArrowButton;
 
+
 !
 ! Resources for XmIconBox
 !
@@ -5661,16 +5663,8 @@ Class XmIconBox : Widget {
   SuperClass = "XmManager";
   ConvenienceFunction = XmCreateIconBox;
   Resources {
-    XmNbottomShadowColor;
-    XmNbottomShadowPixmap;
-    XmNforeground;
-    XmNhighlightColor;
-    XmNhighlightPixmap;
-    XmNshadowThickness;
-    XmNtopShadowColor;
-    XmNtopShadowPixmap;
     XmNhorizontalMargin;
-    XmNverticalMargin;
+    XmNverticalMargin;    
     XmNminimumHorizontalCells;
     XmNminimumVerticalCells;
     XmNminimumCellWidth;
@@ -5703,6 +5697,18 @@ Resource
   };
   XmNdoubleClickCallback : Reason {
   };
+  XmNpixmapHeight : Argument {
+    Type = vertical_float;
+    Default = "0";
+  };
+  XmNpixmapWidth : Argument {
+    Type = horizontal_float;
+    Default = "0";
+  };
+  XmNpixmapDepth : Argument {
+    Type = integer;
+    Default = "0";
+  };
 
 Class XmIconButton : Widget {
   SuperClass = "XmPrimitive";
@@ -5713,7 +5719,11 @@ Class XmIconButton : Widget {
     XmNlabelString;
     XmNpixmap;
     XmNfontList;
+    XmNrenderTable;
     XmNiconPlacement;
+    XmNpixmapWidth;
+    XmNpixmapHeight;
+    XmNpixmapDepth;
     XmNrecomputeSize;
     XmNarmColor;
     XmNset;
@@ -5898,11 +5908,11 @@ Class XmFontSelector : Widget {
     XmN75DPIstring {
       Default = "75 dpi";
     };
-    XmNanyLowerString {
-      Default = "any";
-    };
     XmNanyString {
       Default = "Any";
+    };
+    XmNanyLowerString {
+      Default = "any";
     };
     XmNboldString {
       Default = "Bold";
@@ -5921,6 +5931,9 @@ Class XmFontSelector : Widget {
     };
     XmNitalicString {
       Default = "Italic";
+    };
+    XmNmarginHeight {
+      Default = "0";
     };
     XmNmonoSpaceString  {
       Default = "Fixed Width Fonts";
@@ -6093,9 +6106,10 @@ Resource
   XmNinsertBefore : Constraint {
     Type = widget_ref;
   };
-
   XmNindentSpace : Argument {
     Type = integer;
+  };
+  XmNnodeStateCallback : Reason {
   };
 
 Class XmOutline : Widget {
@@ -6110,6 +6124,9 @@ Class XmOutline : Widget {
     XmNhorizontalMargin;
     XmNnodeOpenFolderPixmap;
     XmNnodeCloseFolderPixmap;
+    XmNnodeStateCallback;
+    XmNhorizontalMargin;
+    XmNverticalMargin;
     XmNnodeState;
     XmNnodeStateChangedCallback;
     XmNnodeStateBegEndCallback;
@@ -6143,6 +6160,9 @@ Resource
   XmNcolumnTitles : Argument {
     Type = string_table;
     Related = XmNnumColumns;
+  };
+  XmNentryBackground : Argument {
+    Type = color;
   };
   XmNentryData : Argument {
     Type = identifier;
@@ -6193,8 +6213,10 @@ Class XmExt18List : Widget {
     XmNselectedColumn;
     XmNcolumnTitles;
     XmNentryData;
+    XmNentryBackground;
     XmNfirstColumnPixmaps;
     XmNfontList;
+    XmNrenderTable;
     XmNfirstRow;
     XmNfirstColumn;
     XmNsortFunctions;
@@ -6313,8 +6335,10 @@ Class XmTabBox : Widget {
     XmNtabOffset;
     XmNtabStyle;
     XmNfontList;
+    XmNrenderTable;
     XmNorientation;
     XmNtabMarginWidth;
+    XmNnumStacks;
   };
   Controls {
     XmPopupMenu;
@@ -6378,6 +6402,7 @@ Class XmTabStack : Widget {
     XmNtabOrientation;
     XmNtabStyle;
     XmNfontList;
+    XmNrenderTable;
     XmNtabSide;
     XmNtabMarginWidth;
     XmNtabLabelPixmap;
@@ -6399,3 +6424,33 @@ Class XmTabStack : Widget {
     AllWidgetsAndGadgets;
   };
 };
+
+!
+! Resources for XmDataField
+
+Resource
+    XmNpicture : Argument
+        { Type = compound_string;
+          Default = "Null"; };
+    XmNautoFill : Argument
+        { Type = boolean;
+          Default = "True"; };
+    XmNpictureErrorCallback : Reason
+	{ };
+    XmNvalidateCallback : Reason
+	{ };
+
+Class
+    XmDataField : Widget
+        {
+        SuperClass = XmTextField;
+        ConvenienceFunction = XmCreateDataField;
+        Resources
+            {
+		XmNpicture;
+		XmNautoFill;
+		XmNalignment;
+		XmNpictureErrorCallback;
+		XmNvalidateCallback;
+            };
+        };
