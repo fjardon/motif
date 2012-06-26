@@ -169,7 +169,7 @@ typedef struct _XmColorSelectorConstraintRec
  *       EXTERNAL DECLARATIONS
  ************************************************************/
 
-extern XmColorSelectorClassRec	xiColorSelectorClassRec;
+extern XmColorSelectorClassRec	xmColorSelectorClassRec;
 
 /************************************************************
  *       STATIC DECLARATIONS

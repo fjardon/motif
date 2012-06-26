@@ -3423,26 +3423,6 @@ XmCreateToggleButton(
   return XtCreateWidget(name, xmToggleButtonWidgetClass, parent,
 			arglist, argCount);
 }
-  
-/***********************************************************************
- *
- * XmCreateToggleButton()
- * XmVaCreateToggleButton()
- * XmVaCreateManagedToggleButton()
- *   Creates an instance of a togglebutton and returns the widget id.
- *
- ************************************************************************/
-Widget 
-XmCreateToggleButton(
-        Widget parent,
-        char *name,
-        Arg *arglist,
-        Cardinal argCount )
-{
-  return XtCreateWidget(name, xmToggleButtonWidgetClass, parent,
-			arglist, argCount);
-}
-
 
 Widget 
 XmVaCreateToggleButton(

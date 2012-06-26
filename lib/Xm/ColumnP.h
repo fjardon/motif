@@ -46,7 +46,7 @@ typedef struct _XmColumnClassRec {
     XmColumnClassPart	     column_class;
 } XmColumnClassRec;
 
-externalref XmColumnClassRec xiColumnClassRec;
+externalref XmColumnClassRec xmColumnClassRec;
 
 typedef struct _XmColumnConstraintPart {
 

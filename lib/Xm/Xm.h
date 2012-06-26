@@ -46,6 +46,7 @@
 #include <X11/extensions/Print.h>
 #include <Xm/XmStrDefs.h>
 #include <Xm/XmStrDefs22.h>
+#include <Xm/XmStrDefs23.h>
 #include <Xm/VirtKeys.h>
 #include <Xm/Transfer.h>
 #include <Xm/Primitive.h>

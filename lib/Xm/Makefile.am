@@ -34,7 +34,8 @@ EXTRA_SRCS = XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
              Ext18List.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
              Hierarchy.c Outline.c TabBox.c TabList.c TabStack.c \
-             DrawUtils.c Tree.c ComboBox2.c XmStrDefs.ht  XmStrDefs22.ht  XmStrDefsI.ht
+             DrawUtils.c Tree.c ComboBox2.c \
+             XmStrDefs.ht XmStrDefs22.ht XmStrDefs23.ht XmStrDefsI.ht
 
 SLIDE_HDRS = SlideC.h SlideCP.h
 SLIDE_SRCS = SlideC.c
@@ -169,8 +170,8 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         TextP.h         TextStrSoP.h    ToggleB.h       ToggleBG.h \
         ToggleBGP.h     ToggleBP.h      Xm.h            XmP.h \
         BaseClassP.h    ManagerP.h      PrimitiveP.h    GadgetP.h \
-        XmStrDefs.h     XmStrDefs22.h   VaSimpleP.h     VirtKeys.h \
-        VirtKeysP.h \
+        XmStrDefs.h     XmStrDefs22.h   XmStrDefs23.h \
+        VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
         ExtObjectP.h    Display.h       DisplayP.h      Screen.h \
         ScreenP.h       ShellEP.h       VendorS.h       VendorSP.h \
         VendorSEP.h     DesktopP.h      AtomMgr.h \
@@ -252,7 +253,7 @@ libXm_la_SOURCES = $(SRCS1) $(SRCS2) $(OBSO_SRCS) $(XPM_SRCS) $(NEW_WID_SRCS) $(
 
 EXTRA_libXm_la_SOURCES = $(SLIDE_SRCS) $(TIP_SRCS)
 
-STRING_FILES = XmStrDefs.h XmStrDefs22.h XmStrDefsI.h XmStrDefs.c
+STRING_FILES = XmStrDefs.h XmStrDefs22.h XmStrDefs23.h XmStrDefsI.h XmStrDefs.c
 
 BUILT_SOURCES = $(STRING_FILES) $(CAT_FILES)
 
@@ -263,6 +264,7 @@ $(STRING_FILES): Makefile xmstring.list XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct 
 	test -f xmstring.list || $(LN_S) $(srcdir)/xmstring.list xmstring.list
 	test -f XmStrDefs.ht || $(LN_S) $(srcdir)/XmStrDefs.ht XmStrDefs.ht
 	test -f XmStrDefs22.ht || $(LN_S) $(srcdir)/XmStrDefs22.ht XmStrDefs22.ht
+	test -f XmStrDefs23.ht || $(LN_S) $(srcdir)/XmStrDefs23.ht XmStrDefs23.ht
 	test -f XmStrDefsI.ht || $(LN_S) $(srcdir)/XmStrDefsI.ht XmStrDefsI.ht
 	test -f XmStrDefs.ct || $(LN_S) $(srcdir)/XmStrDefs.ct XmStrDefs.ct
 	$(top_builddir)/config/util/makestrs -f xmstring.list >XmStrDefs.c

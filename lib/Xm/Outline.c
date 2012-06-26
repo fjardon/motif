@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <Xm/OutlineP.h>
 #include <Xm/DropSMgr.h>
-#include "XmStrDefsI.h"
+#include "XmI.h"
 
 /************************************************************
 *	TYPEDEFS AND DEFINES

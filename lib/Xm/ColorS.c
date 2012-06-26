@@ -185,7 +185,7 @@ static XmSyntheticResource get_resources[] = {
 
 #undef offset
 
-XmColorSelectorClassRec xiColorSelectorClassRec = {
+XmColorSelectorClassRec xmColorSelectorClassRec = {
   { /* core fields */
     /* superclass               */      SUPERCLASS,
     /* class_name               */      "XmColorSelector",
@@ -250,7 +250,7 @@ XmColorSelectorClassRec xiColorSelectorClassRec = {
   }
 };
 
-WidgetClass xmColorSelectorWidgetClass = (WidgetClass)&xiColorSelectorClassRec;
+WidgetClass xmColorSelectorWidgetClass = (WidgetClass)&xmColorSelectorClassRec;
 
 XmOffsetPtr XmColorS_offsets;
 XmOffsetPtr XmColorSC_offsets;
@@ -268,7 +268,7 @@ XmOffsetPtr XmColorSC_offsets;
 static void 
 ClassInitialize(void)
 {
-    XmColorSelectorClassRec *wc = &xiColorSelectorClassRec;
+    XmColorSelectorClassRec *wc = &xmColorSelectorClassRec;
     int i;
 
     XmResolveAllPartOffsets(xmColorSelectorWidgetClass,

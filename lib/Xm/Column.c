@@ -279,7 +279,7 @@ ConstraintClassExtensionRec xiColumnConstraintExtension = {
     ConstraintGetValues		         /* get_values_hook */
 };
 
-XmColumnClassRec xiColumnClassRec = {
+XmColumnClassRec xmColumnClassRec = {
   {
     /* core_class members      */
     /* superclass         */	(WidgetClass) &xmBulletinBoardClassRec,
@@ -353,7 +353,7 @@ XmColumnClassRec xiColumnClassRec = {
   }
 };
 
-WidgetClass xmColumnWidgetClass = (WidgetClass) &xiColumnClassRec;
+WidgetClass xmColumnWidgetClass = (WidgetClass) &xmColumnClassRec;
 
 XmOffsetPtr XmColumn_offsets;
 XmOffsetPtr XmColumnC_offsets;
@@ -373,7 +373,7 @@ XmOffsetPtr XmColumnC_offsets;
 static void
 ClassInitialize(void)
 {
-    XmColumnClassRec* wc = &xiColumnClassRec;
+    XmColumnClassRec* wc = &xmColumnClassRec;
     int i;
 
     XmResolveAllPartOffsets(xmColumnWidgetClass,
