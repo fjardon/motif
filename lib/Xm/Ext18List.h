@@ -80,6 +80,7 @@ typedef struct _Xm18ExtListCallbackStruct {
     String string;	/* The search string used to do find */
     int column;		/* The column index into row values */
     Xm18RowInfo *row;	/* The row info structure of the matching row */
+    wchar_t *wc_string; /* The search wcs string used to do find */
 } XmExt18ListCallbackStruct;
 
 typedef int (*Xm18SortFunction)(

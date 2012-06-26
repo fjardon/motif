@@ -719,11 +719,13 @@ ActivateTextSearch(Widget w, XtPointer elist_ptr, XtPointer client)
     Xm18RowInfo *match;
 
     char * ptr;
+    wchar_t *wc_string;
 
     if (!XmExt18List_show_find(elist))
         return;
 
     ptr = XmTextFieldGetString(XmExt18List_find_text(elist));
+    wc_string = XmTextFieldGetStringWcs(XmExt18List_find_text(elist));
 
     if (XmExt18List_last_search(elist))
       reset = !streq(ptr, XmExt18List_last_search(elist));
@@ -734,6 +736,7 @@ ActivateTextSearch(Widget w, XtPointer elist_ptr, XtPointer client)
 
     find_info.event = cbs->event;
     find_info.string = ptr;
+    find_info.wc_string = wc_string;
     find_info.row = match;
 
     if (!match)
@@ -753,7 +756,8 @@ ActivateTextSearch(Widget w, XtPointer elist_ptr, XtPointer client)
 			   (XtPointer) &find_info);
     }
 
-    XtFree( XmExt18List_last_search(elist));
+    XtFree((XtPointer)wc_string);
+    XtFree(XmExt18List_last_search(elist));
     XmExt18List_last_search(elist) = ptr;
 }
 
