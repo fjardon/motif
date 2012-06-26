@@ -1038,7 +1038,6 @@ private_value
  									sar_private_error( &$$ );
  								  }
 							}
-    ;
      | value							{ $$ = $1; 
  								  if ($$.b_type != sym_k_error_value)
  								  {
