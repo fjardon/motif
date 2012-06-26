@@ -143,6 +143,9 @@ _XmGrabPointer(
 				  cursor, time)) == GrabSuccess)
 	 break;
 
+      if (status == GrabInvalidTime)
+	time = CurrentTime;
+
       XmeMicroSleep(1000);
    }
    if (status != GrabSuccess)
