@@ -114,6 +114,8 @@ static XmPartResource resources[] = {
 
   {XmNdoubleClickCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
      offset(double_click), XmRImmediate, (XtPointer) NULL},
+  {"pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
+     offset(check_set_select_callback), XmRImmediate, (XtPointer) False},
   {XmNselectCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
      offset(single_select), XmRImmediate, (XtPointer) NULL},
   /* this is the old name for the above */
@@ -350,6 +352,8 @@ Destroy(Widget w)
     XmStringFree(XmExt18List_title(elist));
     XmStringFree(XmExt18List_title_string(elist));
     XmStringFree(XmExt18List_find_label(elist));
+
+    XtRemoveAllCallbacks(w, XmNsingleSelectionCallback);
 }
 
 /*	Function Name: Resize
@@ -1062,6 +1066,28 @@ CreateFrame(Widget parent, ArgList args, Cardinal num_args)
     return(w);
 }
 
+/*
+ * XmRCallProc routine for checking select_callback before setting it to NULL
+ * If constrainit's "check_set_select_callback" is True, then function has 
+ * been called twice on same widget, thus resource needs to be set NULL, 
+ * otherwise leave it alone.
+ */
+
+/*ARGSUSED*/
+static void 
+CheckSetSelectCallback(Widget wid, int offs, XrmValue *value)
+{
+    XmExt18ListWidget elist = (XmExt18ListWidget) wid;
+ 
+    /* Check if been here before */
+    if (elist->ext_list.check_set_select_callback)
+        value->addr = NULL;
+    else {
+        elist->ext_list.check_set_select_callback = True;
+        value->addr = (char*)&(XmI18List_single_select(XmExt18List_ilist(elist)));
+    }
+}
+
 /************************************************************
  *
  * Public Functions.
@@ -1355,6 +1381,3 @@ XmExt18ListMakeRowVisible(Widget w, int row)
 
     _XmAppUnlock(app); 
 }
-
-
-

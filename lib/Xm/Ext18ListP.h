@@ -284,6 +284,7 @@ typedef struct {
     int visible_rows;		/* visible items (mirrored in XmI18ListPart) */
     XmString title_string;	/* (preferred use) Title for the list */
 
+    Boolean check_set_select_callback;
 } XmExt18ListPart;
 
 typedef struct _XmExt18ListRec {
