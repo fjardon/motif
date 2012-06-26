@@ -500,6 +500,12 @@ typedef enum {XmTAB_VALUE_COPY, XmTAB_VALUE_SHARE} XmTabValueMode;
 
 typedef enum {XmTAB_CMP_VISUAL, XmTAB_CMP_SIZE, XmTAB_CMP_EQUAL} XmTabResult;
 
+typedef struct _XmTabStackCallbackStruct {
+    int 	reason;
+    XEvent      *event;
+    Widget      selected_child;
+} XmTabStackCallbackStruct;
+
 /****************************************************************************
  *  Callback reasons 
  ****************************************************************************/
