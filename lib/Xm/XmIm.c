@@ -1644,6 +1644,8 @@ ImPreeditCaretCallback(XIC xic,
     case XIMAbsolutePosition:
 	pb->caret = data->position;
 	break;
+    default:
+	break;    
   }
 
   proc = get_real_callback((Widget)client_data, PREEDIT_CARET, &real);
