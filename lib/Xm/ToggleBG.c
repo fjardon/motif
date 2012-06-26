@@ -1536,12 +1536,12 @@ Select(
    * button is still set. (Hint this allows for the
    * XmNvalueChangedCallback to use XmToggleButtonSetState
    * to reset a different button to be the active one) */
-  if ( (radio && always) &&
-       (tb->toggle.set == XmSET) &&
-       ((TBG_IndType(tb) == XmONE_OF_MANY_ROUND)||
-       (TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND)||
-       (TBG_IndType(tb) == XmONE_OF_MANY)))
-    return;
+//rasta  if ( (radio && always) &&
+//       (tb->toggle.set == XmSET) &&
+//       ((TBG_IndType(tb) == XmONE_OF_MANY_ROUND)||
+//       (TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND)||
+//       (TBG_IndType(tb) == XmONE_OF_MANY)))
+//    return;
   
   /* CR 8068: Verify that this is in fact a button event. */
   /* CR 9181: Consider clipping when testing visibility. */
@@ -1664,11 +1664,12 @@ ArmAndActivate(
     XmNradioAlwaysOne, &always,
     NULL);
   }
-  no_change = ( (radio && always) &&
-          (tb->toggle.set == XmSET) &&
-          ((TBG_IndType(tb) == XmONE_OF_MANY_ROUND) ||
-          (TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND) ||
-          (TBG_IndType(tb) == XmONE_OF_MANY)));
+//  no_change = ( (radio && always) &&
+//          (tb->toggle.set == XmSET) &&
+//          ((TBG_IndType(tb) == XmONE_OF_MANY_ROUND) ||
+//          (TBG_IndType(tb) == XmONE_OF_MANY_DIAMOND) ||
+//          (TBG_IndType(tb) == XmONE_OF_MANY)));
+no_change = False; //rasta
   
   menuSTrait = (XmMenuSystemTrait) 
     XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
@@ -4067,7 +4068,6 @@ XmCreateToggleButtonGadget(
   return XtCreateWidget(name,xmToggleButtonGadgetClass,parent,arglist,argCount);
 }
 
-
 Widget 
 XmVaCreateToggleButtonGadget(
         Widget parent,
@@ -4092,6 +4092,7 @@ XmVaCreateToggleButtonGadget(
     return w;
     
 }
+
 Widget 
 XmVaCreateManagedToggleButtonGadget(
         Widget parent,
@@ -4115,9 +4116,6 @@ XmVaCreateManagedToggleButtonGadget(
     return w;
     
 }
-
-
-
 
 /*********************************************************
  *   Functions for manipulating Secondary Resources.
