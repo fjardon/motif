@@ -45,6 +45,7 @@
 #include <X11/Xatom.h>
 #include <X11/extensions/Print.h>
 #include <Xm/XmStrDefs.h>
+#include <Xm/XmStrDefs22.h>
 #include <Xm/VirtKeys.h>
 #include <Xm/Transfer.h>
 #include <Xm/Primitive.h>
@@ -56,10 +57,10 @@ extern "C" {
 #endif
 
 #define XmVERSION	2
-#define XmREVISION	3
-#define XmUPDATE_LEVEL	0
+#define XmREVISION	2
+#define XmUPDATE_LEVEL	4
 #define XmVersion	(XmVERSION * 1000 + XmREVISION)
-#define XmVERSION_STRING "@(#)Motif Version 2.3.0"
+#define XmVERSION_STRING "@(#)Motif Version 2.2.4"
 
 externalref int xmUseVersion;
 
@@ -372,7 +373,7 @@ enum{	XmPOPUP_DISABLED = 0,	XmPOPUP_KEYBOARD = 1,
  *  Color Selector defines
  ************************************************************************/
 
-typedef enum {XmListMode = 0, XmScaleMode = 1} XmColorMode;
+typedef enum { XmListMode = 0, XmScaleMode = 1 } XmColorMode;
 
 /************************************************************************
  *  Column defines
@@ -381,7 +382,6 @@ typedef enum {XmListMode = 0, XmScaleMode = 1} XmColorMode;
 enum { XmFILL_UNSPECIFIED, XmFILL_FLUSH, XmFILL_RAGGED };
 
 enum { XmDISTRIBUTE_TIGHT, XmDISTRIBUTE_SPREAD };
-
 
 /************************************************************************
  *  ComboBox defines
@@ -398,6 +398,7 @@ enum{   XmZERO_BASED,		XmONE_BASED
         } ;
 
 #define XmINVALID_POSITION -1
+
 /************************************************************************
  *  Icon & Button Box defines
  ************************************************************************/
@@ -413,6 +414,18 @@ typedef enum { XmFillNone,
                XmFillMinor, 
                XmFillAll } XmFillOption;
 
+/************************************************************************
+ * Hierarchy/Tree/Outline defines
+ ************************************************************************/
+typedef enum {XmAlwaysOpen, 
+              XmOpen, 
+              XmClosed, XmHidden,
+	      XmNotInHierarchy} XmHierarchyNodeState;
+
+typedef enum { XmTreeLadder, XmTreeDirect } XmTreeConnectStyle;
+
+typedef enum { XmTreeCompressNone=0, XmTreeCompressLeaves=1,
+               XmTreeCompressAll=2 } XmTreeCompressStyle;
 
 /************************************************************************
  *  Label/Frame defines
@@ -429,20 +442,6 @@ enum{   XmALIGNMENT_BASELINE_TOP,    /* XmALIGNMENT_CENTER, */
    widget top/bottom attachment */
 #define XmALIGNMENT_CHILD_TOP XmALIGNMENT_WIDGET_BOTTOM
 #define XmALIGNMENT_CHILD_BOTTOM XmALIGNMENT_WIDGET_TOP
-
-/************************************************************************
- * Hierarchy/Tree/Outline defines
- ************************************************************************/
-typedef enum {XmAlwaysOpen, 
-              XmOpen, 
-              XmClosed, XmHidden,
-	      XmNotInHierarchy} XmHierarchyNodeState;
-
-typedef enum { XmTreeLadder, XmTreeDirect } XmTreeConnectStyle;
-
-typedef enum { XmTreeCompressNone=0, XmTreeCompressLeaves=1,
-               XmTreeCompressAll=2 } XmTreeCompressStyle;
-
 
 /************************************************************************
  *  Frame defines
@@ -474,6 +473,7 @@ enum{	XmRESIZE_NONE,			XmRESIZE_GROW,
 /************************************************************************
  *  TabBox/TabStack defines
  ************************************************************************/
+
 typedef enum {XmTABS_SQUARED, XmTABS_ROUNDED, XmTABS_BEVELED} XmTabStyle;
 typedef enum {XmTABS_BASIC, XmTABS_STACKED, XmTABS_STACKED_STATIC,
               XmTABS_SCROLLED, XmTABS_OVERLAYED} XmTabMode;
@@ -498,8 +498,6 @@ typedef enum {XmPIXMAP_TOP, XmPIXMAP_BOTTOM, XmPIXMAP_RIGHT, XmPIXMAP_LEFT,
 typedef enum {XmTAB_VALUE_COPY, XmTAB_VALUE_SHARE} XmTabValueMode;
 
 typedef enum {XmTAB_CMP_VISUAL, XmTAB_CMP_SIZE, XmTAB_CMP_EQUAL} XmTabResult;
-
-
 
 /****************************************************************************
  *  Callback reasons 

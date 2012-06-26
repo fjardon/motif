@@ -56,8 +56,8 @@ extern "C" {
 #endif
 
 
-#define ASSIGN_MAX(x,y)		if ((y) > (x)) x = (y)
-#define ASSIGN_MIN(x,y)		if ((y) < (x)) x = (y)
+#define ASSIGN_MAX(a, b) 	((a) = ((a) > (b) ? (a) : (b)))
+#define ASSIGN_MIN(a, b) 	((a) = ((a) < (b) ? (a) : (b)))
 
 #ifndef MAX
 #define MAX(x,y)	((x) > (y) ? (x) : (y))
