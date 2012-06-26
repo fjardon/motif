@@ -53,7 +53,7 @@ char **argv;
   char               *image_name;
   int                depth;
   Pixel              foreground, background;
-  int                hot_x, hot_y;
+  int                hot_x = -1, hot_y = -1;
   unsigned int       width, height;
 
   CommonTestInit(argc, argv);
