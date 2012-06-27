@@ -2,7 +2,7 @@ XMSTRING_LIST = xmstring.list
 
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = xmstring.list xmstring.list.compat Xm.msg Imakefile \
+EXTRA_DIST = xmstring.list Xm.msg Imakefile \
              XmStrDefs.ct
 
 INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
@@ -30,7 +30,8 @@ EXTRA_HDRS = Ext.h ExtP.h  \
              Hierarchy.h HierarchyP.h Outline.h OutlineP.h \
              TabBox.h TabBoxP.h TabStack.h TabStackP.h \
              TabList.h DrawUtils.h Tree.h TreeP.h \
-             ComboBox2.h ComboBox2P.h DropDown.h DropDownP.h
+             ComboBox2.h ComboBox2P.h DropDown.h DropDownP.h \
+             ToolTipT.h ToolTipCT.h
 
 EXTRA_SRCS = XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \

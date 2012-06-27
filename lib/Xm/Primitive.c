@@ -903,10 +903,6 @@ Destroy(
 
    _XmNavigDestroy(w);
    _XmToolTipLeave(w, NULL, NULL, NULL);
-   if (pw->primitive.tool_tip_string)
-   {
-      XmStringFree(pw->primitive.tool_tip_string);
-   }
    XtReleaseGC( w, pw->primitive.top_shadow_GC);
    XtReleaseGC( w, pw->primitive.bottom_shadow_GC);
    XtReleaseGC( w, pw->primitive.highlight_GC);
