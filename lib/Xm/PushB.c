@@ -1330,7 +1330,7 @@ DrawPushButtonBackground(
   else
     tmp_gc = pb->pushbutton.background_gc;
   /* really need to fill with background if not armed ? */
-  
+
   if (tmp_gc)
     XFillRectangle (XtDisplay(pb), XtWindow(pb), tmp_gc,
 		    box.x, box.y, box.width, box.height);
@@ -1349,6 +1349,7 @@ DrawPushButtonLabel(
 {  
   GC tmp_gc = NULL;
   Boolean replaceGC = False;
+  Boolean replaceBg = False;
   Boolean deadjusted = False;
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(pb));
   Boolean etched_in = dpy->display.enable_etched_in_menu;
@@ -1357,6 +1358,8 @@ DrawPushButtonLabel(
       ((! Lab_IsMenupane(pb) && pb->pushbutton.fill_on_arm) ||
        (Lab_IsMenupane(pb) && etched_in)))
     {
+      XSetWindowBackground(XtDisplay(pb), XtWindow(pb), pb->pushbutton.arm_color);
+      replaceBg = True;
       if ((pb->label.label_type == XmSTRING ||
            pb->label.label_type == XmPIXMAP_AND_STRING) && 
 	  (pb->pushbutton.arm_color == pb->primitive.foreground))
@@ -1412,7 +1415,13 @@ DrawPushButtonLabel(
   
   if (replaceGC)
       pb->label.normal_GC = tmp_gc;    
-  
+  if (replaceBg) {
+      XSetWindowBackground(XtDisplay(pb), XtWindow(pb), XtBackground(pb));
+      if (pb->core.background_pixmap != XmUNSPECIFIED_PIXMAP) {
+          XSetWindowBackgroundPixmap(XtDisplay(pb), XtWindow(pb),
+	      pb->core.background_pixmap);
+      }
+  }
 }
 
 
