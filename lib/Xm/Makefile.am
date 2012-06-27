@@ -148,6 +148,8 @@ XmosI.h \
 XpmI.h \
 regexpI.h \
 EditresComI.h \
+$(JPEG_HDRS) \
+$(PNG_HDRS) \
 $(TIP_HDRS)
 
 xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
@@ -249,10 +251,12 @@ XPM_SRCS = \
 
 if OM_LIBJPEG
   JPEG_SRCS = Jpeg.c
+  JPEG_HDRS = JpegI.h
 endif
 
 if OM_LIBPNG
   PNG_SRCS = Png.c
+  PNG_HDRS = PngI.h
 endif
 
 NEW_WID_SRCS =         IconH.c        Container.c     IconG.c  \
