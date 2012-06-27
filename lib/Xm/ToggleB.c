@@ -2639,11 +2639,8 @@ Redisplay(
   if (Lab_IsPixmap(tb))
     SetAndDisplayPixmap(tb, event, region);
   else
-#ifndef USE_XFT
     if (!tb->toggle.ind_on && tb->toggle.fill_on_select)
-#endif
     DrawToggleLabel (tb);
-#ifndef USE_XFT
   else
   {
     XtExposeProc expose;
@@ -2652,7 +2649,6 @@ Redisplay(
     _XmProcessUnlock();
     (* expose) (w, event, region);
   }
-#endif
   
   if (tb->toggle.ind_on)
     {

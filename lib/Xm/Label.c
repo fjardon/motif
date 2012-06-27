@@ -1423,6 +1423,18 @@ Redisplay(
       XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
     } else
       XSetClipMask (XtDisplay (lw), clipgc, None);
+
+#ifdef USE_XFT
+    /* it is needed to clear anti-aliased text before draw it again */
+    if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)) 
+      {
+        XClearArea(XtDisplay(lw), XtWindow(lw),
+			lp->TextRect.x,
+			lp->TextRect.y,
+ 			lp->TextRect.width,
+			lp->TextRect.height, False);
+     }
+#endif
   
   if (Lab_IsPixmap(lw) || Lab_IsPixmapAndText(lw))
     {
