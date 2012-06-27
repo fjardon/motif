@@ -53,16 +53,16 @@ if OM_LIBJPEG
 JPEG_SRCS = Jpeg.c
 JPEG_HDRS = JpegI.h
 else
-JPEG_SRCS = 
-JPEG_HDRS = 
+JPEG_SRCS =
+JPEG_HDRS =
 endif
 
 if OM_LIBPNG
 PNG_SRCS = Png.c
 PNG_HDRS = PngI.h
 else
-JPEG_SRCS = 
-JPEG_HDRS = 
+PNG_SRCS =
+PNG_HDRS =
 endif
 
 libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt ${X_PRE_LIBS} -lXext -lXp -lX11 ${X_EXTRA_LIBS}
