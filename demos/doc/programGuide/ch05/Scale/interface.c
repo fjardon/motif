@@ -76,7 +76,7 @@ CreateMenus(Widget parent_of_menu_bar)
     XtVaSetValues(menubar, XmNmenuHelpWidget, Help1, NULL);
     overview = XtVaCreateManagedWidget("Overview", xmPushButtonGadgetClass, 
                                     HelpPullDown, NULL);
-    XtAddCallback(overview, XmNactivateCallback, HelpCB, (XtPointer)1);
+    XtAddCallback(overview, XmNactivateCallback, HelpCB, NULL);
 
     XmStringFree(file);
     XmStringFree(help);
@@ -96,10 +96,9 @@ HelpCB(Widget   w,
        XtPointer cb
       )
 {
- int       what_kind_of_help = (int)cd;  
  char      help_string[400]; 
  XmString  hs_as_cs; 
- Widget    dialog_general_help; 
+ static Widget dialog_general_help = NULL; 
  Arg       arg[3];
 
  sprintf(help_string, 
@@ -110,17 +109,12 @@ In addition, it demonstrates how an XmScale can contain tic marks.");
                                  XmFONTLIST_DEFAULT_TAG);
    
    XtSetArg(arg[0], XmNmessageString, hs_as_cs);
-   dialog_general_help = (Widget)XmCreateMessageDialog(top_level, 
-                                             "message", arg, 1);
+   if(dialog_general_help == NULL)
+       dialog_general_help = (Widget)XmCreateMessageDialog(top_level, 
+                                                 "message", arg, 1);
    XmStringFree(hs_as_cs);
  
-   switch (what_kind_of_help)  {
-     case 1: XtManageChild(dialog_general_help);
-             break;
-     default: /* no other help */
-             break; 
-   }
-          
+   XtManageChild(dialog_general_help);
 }
 
 
