@@ -108,9 +108,14 @@ long time to search through all these directories for pixmaps
 and bitmaps\&. Applications that use a lot of pixmaps and bitmaps
 will probably run more quickly if
 \fBXBMLANGPATH\fP is set to a short list of directories\&.
-In addition to X bitmap files (XBM), Motif also supports XPM (X
-Pixmap) file formats\&. The \fBXBMLANGPATH\fP specifies the path for
-both XBM and XPM files\&. XPM files are described in more detail later
+In addition to X bitmap files (XBM), OpenMotif also supports XPM (X
+Pixmap) file formats, and, from version 2.3, JPEG and PNG image formats\&.
+(Note that support of JPEG and PNG image format is an optional feature
+of OpenMotif, in order to check if current version supports PNG ang JPEG
+image formats the PNG_SUPPORT and JPEG_SUPPORT macros should be checked
+correspondingly.)
+The \fBXBMLANGPATH\fP specifies the path for
+both XBM, XPM, PNG and JPEG files\&. XPM files are described in more detail later
 in this reference page\&.
 .PP
 The \fBXBMLANGPATH\fP environment variable specifies a search path
