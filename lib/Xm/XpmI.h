@@ -110,6 +110,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <X11/Xmd.h>
 /* stdio.h doesn't declare popen on a Sequent DYNIX OS */
 #ifdef sequent
 extern FILE *popen();
