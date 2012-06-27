@@ -1,5 +1,5 @@
 %define _unpackaged_files_terminate_build 0
-%define intern_name openMotif
+%define intern_name openmotif
 
 Summary: Open Motif runtime libraries and executables.
 Name: openmotif
