@@ -804,6 +804,9 @@ XpmCreateImageFromXpmImage(display, image,
 
     ErrorStatus = XpmSuccess;
 
+    if (image->ncolors >= SIZE_MAX / sizeof(Pixel)) 
+	return (XpmNoMemory);
+
     /* malloc pixels index tables */
     image_pixels = (Pixel *) XpmMalloc(sizeof(Pixel) * image->ncolors);
     if (!image_pixels)
@@ -948,7 +951,7 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
 
 #ifndef FOR_MSW
     if (height != 0 && (*image_return)->bytes_per_line >= SIZE_MAX / height)
-         return (XpmNoMemory);
+        return (XpmNoMemory);
     /* now that bytes_per_line must have been set properly alloc data */
     (*image_return)->data =
 	(char *) XpmMalloc((*image_return)->bytes_per_line * height);
@@ -1994,6 +1997,9 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	xpmGetCmt(data, &colors_cmt);
 
     /* malloc pixels index tables */
+    if (ncolors >= SIZE_MAX / sizeof(Pixel)) 
+	return XpmNoMemory;
+
     image_pixels = (Pixel *) XpmMalloc(sizeof(Pixel) * ncolors);
     if (!image_pixels)
 	RETURN(XpmNoMemory);
@@ -2209,6 +2215,9 @@ ParseAndPutPixels(dc, data, width, height, ncolors, cpp, colorTable, hashtable,
 	{
 	    unsigned short colidx[256];
 
+ 	    if (ncolors > 256)
+ 		return (XpmFileInvalid);
+
 	    bzero((char *)colidx, 256 * sizeof(short));
 	    for (a = 0; a < ncolors; a++)
 		colidx[(unsigned char)colorTable[a].string[0]] = a + 1;
@@ -2306,6 +2315,9 @@ if (cidx[f]) XpmFree(cidx[f]);}
 	{
 	    char *s;
 	    char buf[BUFSIZ];
+
+	    if (cpp >= sizeof(buf))
+		return (XpmFileInvalid);
 
 	    buf[cpp] = '\0';
 	    if (USE_HASHTABLE) {

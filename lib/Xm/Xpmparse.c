@@ -46,6 +46,25 @@
 
 #include "XpmI.h"
 #include <ctype.h>
+#include <string.h>
+ 
+#ifdef HAS_STRLCAT
+# define STRLCAT(dst, src, dstsize) { \
+       if (strlcat(dst, src, dstsize) >= (dstsize)) \
+           return (XpmFileInvalid); }
+# define STRLCPY(dst, src, dstsize) { \
+       if (strlcpy(dst, src, dstsize) >= (dstsize)) \
+           return (XpmFileInvalid); }
+#else
+# define STRLCAT(dst, src, dstsize) { \
+       if ((strlen(dst) + strlen(src)) < (dstsize)) \
+           strcat(dst, src); \
+       else return (XpmFileInvalid); }
+# define STRLCPY(dst, src, dstsize) { \
+       if (strlen(src) < (dstsize)) \
+           strcpy(dst, src); \
+       else return (XpmFileInvalid); }
+#endif
 
 LFUNC(ParsePixels, int, (xpmData *data, unsigned int width,
 			 unsigned int height, unsigned int ncolors,
@@ -215,7 +234,7 @@ xpmParseValues(data, width, height, ncolors, cpp,
     unsigned int *extensions;
 {
     unsigned int l;
-    char buf[BUFSIZ];
+    char buf[BUFSIZ + 1];
 
     if (!data->format) {		/* XPM 2 or 3 */
 
@@ -324,10 +343,10 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     XpmColor **colorTablePtr;
     xpmHashTable *hashtable;
 {
-    unsigned int key, l, a, b;
+    unsigned int key, l, a, b, len;
     unsigned int curkey;		/* current color key */
     unsigned int lastwaskey;		/* key read */
-    char buf[BUFSIZ];
+    char buf[BUFSIZ + 1];
     char curbuf[BUFSIZ];		/* current buffer */
     char **sptr, *s;
     XpmColor *color;
@@ -335,6 +354,8 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     char **defaults;
     int ErrorStatus;
 
+    if (ncolors >= SIZE_MAX / sizeof(XpmColor))
+        return (XpmNoMemory);
     colorTable = (XpmColor *) XpmCalloc(ncolors, sizeof(XpmColor));
     if (!colorTable)
 	return (XpmNoMemory);
@@ -346,6 +367,10 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    /*
 	     * read pixel value
 	     */
+	    if (cpp >= SIZE_MAX - 1) {
+	        xpmFreeColorTable(colorTable, ncolors);
+		return (XpmNoMemory);
+	    }
 	    color->string = (char *) XpmMalloc(cpp + 1);
 	    if (!color->string) {
 		xpmFreeColorTable(colorTable, ncolors);
@@ -383,13 +408,14 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 		}
 		if (!lastwaskey && key < NKEYS) {	/* open new key */
 		    if (curkey) {	/* flush string */
-			s = (char *) XpmMalloc(strlen(curbuf) + 1);
+		        len = strlen(curbuf) + 1;
+			s = (char *) XpmMalloc(len);
 			if (!s) {
 			    xpmFreeColorTable(colorTable, ncolors);
 			    return (XpmNoMemory);
 			}
 			defaults[curkey] = s;
-			strcpy(s, curbuf);
+			memcpy(s, curbuf, len);
 		    }
 		    curkey = key + 1;	/* set new key  */
 		    *curbuf = '\0';	/* reset curbuf */
@@ -400,9 +426,9 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 			return (XpmFileInvalid);
 		    }
 		    if (!lastwaskey)
-			strcat(curbuf, " ");	/* append space */
+		        STRLCAT(curbuf, " ", sizeof(curbuf)); /* append space */
 		    buf[l] = '\0';
-		    strcat(curbuf, buf);/* append buf */
+		    STRLCAT(curbuf, buf, sizeof(curbuf));/* append buf */
 		    lastwaskey = 0;
 		}
 	    }
@@ -410,12 +436,13 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 		xpmFreeColorTable(colorTable, ncolors);
 		return (XpmFileInvalid);
 	    }
-	    s = defaults[curkey] = (char *) XpmMalloc(strlen(curbuf) + 1);
+	    len = strlen(curbuf) + 1;
+	    s = defaults[curkey] = (char *) XpmMalloc(len);
 	    if (!s) {
 		xpmFreeColorTable(colorTable, ncolors);
 		return (XpmNoMemory);
 	    }
-	    strcpy(s, curbuf);
+	    memcpy(s, curbuf, len);
 	}
     } else {				/* XPM 1 */
 	/* get to the beginning of the first string */
@@ -428,6 +455,10 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    /*
 	     * read pixel value
 	     */
+	    if (cpp >= SIZE_MAX - 1) {
+	        xpmFreeColorTable(colorTable, ncolors);
+		return (XpmNoMemory);
+	    }
 	    color->string = (char *) XpmMalloc(cpp + 1);
 	    if (!color->string) {
 		xpmFreeColorTable(colorTable, ncolors);
@@ -456,16 +487,17 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    *curbuf = '\0';		/* init curbuf */
 	    while ((l = xpmNextWord(data, buf, BUFSIZ))) {
 		if (*curbuf != '\0')
-		    strcat(curbuf, " ");/* append space */
+		    STRLCAT(curbuf, " ", sizeof(curbuf));/* append space */
 		buf[l] = '\0';
-		strcat(curbuf, buf);	/* append buf */
+		STRLCAT(curbuf, buf, sizeof(curbuf));   /* append buf */
 	    }
-	    s = (char *) XpmMalloc(strlen(curbuf) + 1);
+	    len = strlen(curbuf) + 1;
+	    s = (char *) XpmMalloc(len);
 	    if (!s) {
 		xpmFreeColorTable(colorTable, ncolors);
 		return (XpmNoMemory);
 	    }
-	    strcpy(s, curbuf);
+	    memcpy(s, curbuf, len);
 	    color->c_color = s;
 	    *curbuf = '\0';		/* reset curbuf */
 	    if (a < ncolors - 1)
@@ -490,6 +522,9 @@ ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
     unsigned int *iptr, *iptr2;
     unsigned int a, x, y;
 
+    if ((height > 0 && width >= SIZE_MAX / height) ||
+	width * height >= SIZE_MAX / sizeof(unsigned int)) 
+        return XpmNoMemory;
 #ifndef FOR_MSW
     iptr2 = (unsigned int *) XpmMalloc(sizeof(unsigned int) * width * height);
 #else
@@ -512,6 +547,9 @@ ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
 					 * colors */
 	{
 	    unsigned short colidx[256];
+
+	    if (ncolors > 256)
+	        return (XpmFileInvalid);
 
 	    bzero((char *)colidx, 256 * sizeof(short));
 	    for (a = 0; a < ncolors; a++)
@@ -589,6 +627,9 @@ if (cidx[f]) XpmFree(cidx[f]);}
 	{
 	    char *s;
 	    char buf[BUFSIZ];
+
+	    if (cpp >= sizeof(buf))
+	        return (XpmFileInvalid);
 
 	    buf[cpp] = '\0';
 	    if (USE_HASHTABLE) {
