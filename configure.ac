@@ -124,6 +124,7 @@ then
 fi
 AM_CONDITIONAL(MessageCatalog, test x$enable_message_catalog = xyes)
 
+AC_FIND_XFT
 AC_IMAGE_SUPPORT
 
 AC_ARG_ENABLE(themes, [  --enable-themes         Enable themes (default=no)])
