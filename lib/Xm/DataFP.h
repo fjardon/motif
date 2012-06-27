@@ -83,7 +83,7 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_value(w) (((XmDataFieldWidget)(w))->text.value)
 #define XmTextF_wc_value(w) (((XmDataFieldWidget)(w))->text.wc_value)
 #define XmTextF_font_list(w) (((XmDataFieldWidget)(w))->text.font_list)
-#define XmTextF_font(w) (((XmDataFieldWidget)(w))->text.font)
+#define XmTextF_font(w) ((XFontStruct*)(((XmDataFieldWidget)(w))->text.font))
 #define XmTextF_selection_array(w) (((XmDataFieldWidget)(w))->text.selection_array)
 #define XmTextF_highlight(w) (((XmDataFieldWidget)(w))->text.highlight)
 #define XmTextF_gc(w) (((XmDataFieldWidget)(w))->text.gc)
@@ -165,10 +165,8 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_redisplay(w) (((XmDataFieldWidget)(w))->text.redisplay)
 #define XmTextF_have_fontset(w) (((XmDataFieldWidget)(w))->text.have_fontset)
 #ifdef USE_XFT
-#define XmTextF_use_xft(w)		\
-	XmTextFField(w, use_xft, Boolean)
-#define	XmTextF_xft_font(w)		\
-	((XftFont*)(XmTextFField(w, font, XPointer*)))
+#define XmTextF_use_xft(w) (((XmDataFieldWidget)(w))->text.use_xft)
+#define	XmTextF_xft_font(w) (((XftFont*)((XmDataFieldWidget)(w))->text.font))
 #endif
 #define XmTextF_changed_visible(w) (((XmDataFieldWidget)(w))->text.changed_visible)
 
