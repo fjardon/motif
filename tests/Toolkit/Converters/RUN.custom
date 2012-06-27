@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Converters
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Converters
+endif
 
 # The following needed for Vista usage
 setenv TOP ../../..

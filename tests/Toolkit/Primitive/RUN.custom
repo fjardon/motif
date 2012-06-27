@@ -22,8 +22,11 @@
 #
 # HISTORY
 
-
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Primitive
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Primitive
+endif
 
 # The following needed for Vista and Purify usage
 setenv TOP ../../..

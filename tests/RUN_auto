@@ -34,16 +34,34 @@ set TESTS_HOME = $cwd
 
 echo  $#DIR_LIST " directories of automated tests to be run..."
 
+setenv LIBRARY_PATH /usr/X11R6/lib:$TESTS_HOME/Manual/lib/Common:$TESTS_HOME/../lib/Xm/.libs:$TESTS_HOME/Auto/lib/Common:$TESTS_HOME/Auto/lib/Create:$TESTS_HOME/Auto/lib/Script:$TESTS_HOME/Auto/lib/Synth:$TESTS_HOME/Auto/lib/Util:$TESTS_HOME/Auto/lib/Visual:
+setenv LD_LIBRARY_PATH /usr/X11R6/lib:$TESTS_HOME/Manual/lib/Common:$TESTS_HOME/../lib/Xm/.libs:$TESTS_HOME/Auto/lib/Common:$TESTS_HOME/Auto/lib/Create:$TESTS_HOME/Auto/lib/Script:$TESTS_HOME/Auto/lib/Synth:$TESTS_HOME/Auto/lib/Util:$TESTS_HOME/Auto/lib/Visual:
+setenv C_INCLUDE_PATH $TESTS_HOME/../lib
+setenv C_PATH $TESTS_HOME/../lib
+setenv MOTIF_HOME $TESTS_HOME/..
+
+# Go to the Geberal dir nad change permision to execute
+cd $TESTS_HOME/General/bin && chmod +x *
+cd $TESTS_HOME/General && chmod +x RUN_template
+
 # Go to the lib dir and build the Motif libraries local
+
+if (-d environment) then
+	cp -f -r environment ~/
+endif
+
 
 cd $TESTS_HOME/../lib
 echo "I am in " $cwd
 
 set DIR = $cwd:t
 if (-e make.$DIR) then
-	mv  make.$DIR make.$DIR.bak
+	mv -f  make.$DIR make.$DIR.bak
 endif
 make -i >& make.$DIR
+
+# Go to Auto and Manual directories and build libs
+cd $TESTS_HOME && ./BUILD_libs
 
 # Go to each automated test directory
 
@@ -55,23 +73,23 @@ foreach dir ($DIR_LIST)
 # Make all the automated tests and supporting files in this directory
 
         if (-e make.$DIR) then
-                mv  make.$DIR make.$DIR.bak
+                mv -f  make.$DIR make.$DIR.bak
         endif
-        make IMAKE_DEFINES=-DAUTOMATION Makefile
-        make -i >& make.$DIR
-
+	imake -DUseInstalled -DAUTOMATION -I$TESTS_HOME/../config/cf -TMotif.tmpl -TImake.tmpl  -DTOPDIR=$TESTS_HOME/..
+	make Makefiles
+        make -i 
 # Use the generated RUN script to run all of the tests
 
         if (-e RUN.$DIR) then
             if (-e RUN.$DIR.bak) then
                 rm -f RUN.$DIR.bak
             endif
-            mv RUN.$DIR RUN.$DIR.bak
+            mv -f RUN.$DIR RUN.$DIR.bak
         endif
-        RUN -T -D 1 -genrep -Dir -d :0.0 >& RUN.$DIR
+	setenv PATH $PATH":"$cwd
+        ./RUN -T -D 0 -genrep -Dir -d :0.0 >& RUN.$DIR
 
 # Clean up the directory before leaving
-
         make clean
 
 end

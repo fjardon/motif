@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/uil/widgets
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/uil/widgets
+endif
 
 # The following needed for Vista usage
 

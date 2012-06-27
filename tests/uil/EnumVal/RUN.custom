@@ -30,7 +30,11 @@ set displayUid4 = 'displayUid -u EnumVal4 -I EnumVal4.Dat -S EnumVal4.Scr -V Enu
 set displayUid5 = 'displayUid -u EnumVal5 -I EnumVal5.Dat -S EnumVal5.Scr -V EnumVal5.vis -O EnumVal5.prt'
 set displayUid6 = 'displayUid -u EnumVal6 -I EnumVal6.Dat -S EnumVal6.Scr -V EnumVal6.vis -O EnumVal6.prt'
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/uil/EnumVal
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/uil/EnumVal
+endif
 
 
 foreach test ("$displayUid1" \

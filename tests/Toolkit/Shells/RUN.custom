@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Shells
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Shells
+endif
 
 # The following needed for Vista usage 
 setenv TOP ../../..

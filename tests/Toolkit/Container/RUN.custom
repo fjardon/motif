@@ -23,7 +23,11 @@
 # 
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Container
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Container
+endif
 
 setenv XFILESEARCHPATH ./Container.defaults
 

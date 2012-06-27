@@ -31,7 +31,11 @@ set displayUid = 'ForRef -O ForRef.prt'
 set displayUid2 = 'displayUid -u ForRef2 -I ForRef2.Dat -S ForRef2.Scr -V ForRef2.vis -O ForRef2.prt'
 set displayUid3 = 'displayUid -u ForRef3 -I ForRef3.Dat -S ForRef3.Scr -V ForRef3.vis -O ForRef3.prt'
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/uil/ForRef
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/uil/ForRef
+endif
 
 
 foreach test ("$displayUid" "$displayUid2" "$displayUid3") 

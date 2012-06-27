@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Form
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Form
+endif
 
 set TOP = ../../..
 

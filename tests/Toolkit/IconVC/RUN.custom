@@ -21,7 +21,11 @@
 # Floor, Boston, MA 02110-1301 USA
 #
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/IconVC
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/IconVC
+endif
 
 # The following needed for Vista and Purify usage
 setenv TOP ../../..

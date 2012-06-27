@@ -34,7 +34,11 @@ else
 endif
 set resolution=`$xdpyinfo_com | grep resolution | awk '{print $2}'`
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/ResInd/$resolution
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/ResInd/$resolution
+endif
 
 # The following needed for Vista and Purify usage
 setenv TOP ../../..

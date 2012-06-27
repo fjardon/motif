@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Scrollbar
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Scrollbar
+endif
 # The following needed for Vista and Purify usage 
 setenv TOP ../../..
 

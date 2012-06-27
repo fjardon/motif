@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Text
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Text
+endif
 setenv XFILESEARCHPATH ./Text.defaults
 
 # The following needed for Vista and Purify usage

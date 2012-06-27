@@ -22,7 +22,11 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Notebook
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Notebook
+endif
 setenv TOP ../../..
 
 set Notebook1a = 'Notebook1 -u 1 -I Notebook1a.Dat -S Notebook1a.Scr -O Notebook1a.prt -V Notebook1a.vis'

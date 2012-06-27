@@ -33,7 +33,11 @@ set SpinBox3c = 'SpinBox3 -u XmBulletinBoard,XmTextField -I SpinBox3.Dat -S Spin
 set SpinBox3d = 'SpinBox3 -u XmRowColumn,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3d.prt' 
 
 setenv XFILESEARCHPATH ./SpinBox.defaults
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/SpinBox
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/SpinBox
+endif
 
 # The following needed for Vista and Purify usage
 setenv TOP ../../..

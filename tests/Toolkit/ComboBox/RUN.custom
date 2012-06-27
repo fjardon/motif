@@ -22,7 +22,12 @@
 #
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/ComboBox
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/ComboBox
+endif
+
 setenv TOP ../../..
 setenv XFILESEARCHPATH ./ComboBox.defaults
 

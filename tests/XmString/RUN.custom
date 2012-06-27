@@ -23,7 +23,11 @@
 # 
 # HISTORY
 
+if ( $MOTIF_HOME != "" ) then
+setenv AUTOVPATH $MOTIF_HOME/tests/visuals/XmString
+else
 setenv AUTOVPATH /proj/motif/tests/visuals/XmString
+endif
 
 # The following needed for Vista and Purify
 setenv TOP ../..
