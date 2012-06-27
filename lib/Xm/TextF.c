@@ -8043,7 +8043,7 @@ SetValues(Widget old,
        * continue with the action.
        */
       char *temp, *old;
-      int free_insert;
+      int free_insert = (int)False;
       XmTextPosition fromPos = 0, toPos;
       int ret_val = 0;
 
@@ -8060,9 +8060,18 @@ SetValues(Widget old,
 			   (new_tf->text.string_length + 1) * 
 			   new_tf->text.max_char_size);
 	if (ret_val < 0) temp[0] = '\0';
+
+/* Fixed bug #1214. ModifyVerify needs wchar_t*, not char*. */
+/* old code:
 	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos, &temp,
 				   &new_tf->text.string_length, &newInsert,
 				   &free_insert);
+*/
+	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos,
+	                           (char**)&TextF_WcValue(new_tf),
+				   &ret_val, &newInsert, &free_insert);
+/* end if fix of bug #1214 */
+
 	if (old != temp) XtFree (old);
       }
       if (free_insert) XtFree(temp);
@@ -9628,7 +9637,6 @@ void
 XmTextFieldSetStringWcs(Widget w,
 			wchar_t *wc_value)
 {
-  
   XmTextFieldWidget tf = (XmTextFieldWidget) w;
   char * tmp;
   wchar_t *tmp_wc;
@@ -10010,11 +10018,6 @@ XmTextFieldGetSelectionPosition(Widget w,
   }
   _XmAppUnlock(app);
   return tf->text.has_primary;
-
-
-
-
-
 }
 
 char * 
