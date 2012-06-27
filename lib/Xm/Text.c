@@ -991,7 +991,8 @@ _XmTextFindScroll(XmTextWidget tw,
     while (t_index <= max_index &&
 	   line_table[t_index].start_pos < (unsigned int) start) t_index++;
 	   /* special handling if last lines of text are blank */
-	   if ((line_table[t_index].start_pos == tw->text.last_position) &&
+           if (t_index <= max_index &&
+                (line_table[t_index].start_pos == tw->text.last_position) &&
 	  	(tw->text.number_lines == -delta) && t_index == max_index)
 	  	t_index++;
   } else
