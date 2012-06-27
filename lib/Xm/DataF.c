@@ -64,6 +64,11 @@
 #include "XmStringI.h"
 #include "ImageCachI.h"
 
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#include "XmRenderTI.h"
+#endif
+
 /*
  * Stuff from various internal motif headers that we need to declare
  */
@@ -2530,6 +2535,10 @@ df_XmSetMarginGC(
   XRectangle ClipRect;
 
   df_GetRect(tf, &ClipRect);
+#ifdef USE_XFT
+  if (XmTextF_use_xft(tf))
+    _XmXftSetClipRectangles((Widget)tf, 0, 0, &ClipRect, 1);
+#endif
   XSetClipRectangles(XtDisplay(tf), gc, 0, 0, &ClipRect, 1,
                      Unsorted);
 }
@@ -2591,7 +2600,12 @@ _XmDataFieldSetClipRect(
  /* Restore cached text gc to state correct for this instantiation */
 
   if (XmTextF_gc(tf)){
+#if USE_XFT
+     if (!XmTextF_have_fontset(tf) && !XmTextF_use_xft(tf)
+         && (XmTextF_font(tf) != NULL)) {
+#else
      if (!XmTextF_have_fontset(tf) && (XmTextF_font(tf) != NULL)){
+#endif
         valuemask |= GCFont;
         values.font = XmTextF_font(tf)->fid;
      }
@@ -2706,6 +2720,29 @@ df_DrawText(
          XmbDrawString (XtDisplay(tf), XtWindow(tf), (XFontSet)XmTextF_font(tf),
 			gc, x, y, string, length);
 
+#ifdef USE_XFT
+  } else if (XmTextF_use_xft(tf)) {
+    if (XmTextF_max_char_size(tf) != 1) { /* was passed a wchar_t*  */
+      char stack_cache[400], *tmp;
+      wchar_t tmp_wc;
+      wchar_t *wc_string = (wchar_t*)string;
+      int num_bytes = 0;
+      /* ptr = tmp = XtMalloc((int)(length + 1)*sizeof(wchar_t)); */
+      tmp = (char *)XmStackAlloc((Cardinal) ((length + 1)*sizeof(wchar_t)),
+				 stack_cache);
+      tmp_wc = wc_string[length];
+      wc_string[length] = 0L;
+      num_bytes = wcstombs(tmp, wc_string,
+			   (int)((length + 1) * sizeof(wchar_t)));
+      wc_string[length] = tmp_wc;
+      if (num_bytes >= 0)
+        _XmXftDrawString2(XtDisplay(tf), XtWindow(tf), gc, XmTextF_xft_font(tf),
+			1, x, y, tmp, num_bytes);
+      XmStackFree(tmp, stack_cache);
+    } else /* one byte chars */
+        _XmXftDrawString2(XtDisplay(tf), XtWindow(tf), gc, XmTextF_xft_font(tf),
+			1, x, y, string, length);
+#endif
    } else { /* have a font struct, not a font set */
       if (XmTextF_max_char_size(tf) != 1) { /* was passed a wchar_t*  */
 	 char stack_cache[400], *tmp;
@@ -2747,6 +2784,30 @@ df_FindPixelLength(
                                    (wchar_t *) string, length));
       else /* one byte chars */
          return (XmbTextEscapement((XFontSet)XmTextF_font(tf), string, length));
+#ifdef USE_XFT
+  } else if (XmTextF_use_xft(tf)) {
+    XGlyphInfo	ext;
+    if (XmTextF_max_char_size(tf) != 1) { /* was passed a wchar_t*  */
+      wchar_t *wc_string = (wchar_t*)string;
+      wchar_t wc_tmp = wc_string[length];
+      char stack_cache[400], *tmp;
+      int num_bytes;
+      
+      wc_string[length] = 0L;
+      tmp = (char*)XmStackAlloc((Cardinal)((length + 1) * sizeof(wchar_t)),
+				stack_cache);
+      num_bytes = wcstombs(tmp, wc_string, 
+			   (int)((length + 1)*sizeof(wchar_t)));
+      wc_string[length] = wc_tmp;
+      XftTextExtentsUtf8(XtDisplay(tf), XmTextF_xft_font(tf), tmp, num_bytes,
+          &ext);
+      XmStackFree(tmp, stack_cache);
+    } else /* one byte chars */
+      XftTextExtentsUtf8(XtDisplay(tf), XmTextF_xft_font(tf), string, length,
+          &ext);
+
+    return ext.xOff;
+#endif
    } else { /* have font struct, not a font set */
       if (XmTextF_max_char_size(tf) != 1) { /* was passed a wchar_t*  */
 	 wchar_t *wc_string = (wchar_t*)string;

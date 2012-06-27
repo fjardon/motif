@@ -606,6 +606,12 @@ Redisplay(
 	    XFillRectangle(XtDisplay(cb), XtWindow(cb),
 		           CB_IsArmed(cb) ? CB_ArmGC(cb) : CB_BackgroundGC(cb),
 			   0, 0, cb->core.width, cb->core.height);
+#ifdef USE_XFT
+	} else if (Lab_MenuType(cb) != XmWORK_AREA) { /* adeed with XFT support */
+	    XFillRectangle(XtDisplay(cb), XtWindow(cb),
+		           CB_BackgroundGC(cb),
+			   0, 0, cb->core.width, cb->core.height);
+#endif
 	}
 	if (etched_in && CB_IsArmed(cb)) {
 	    Pixel junk, select_pix;
