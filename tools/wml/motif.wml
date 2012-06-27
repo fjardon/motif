@@ -151,6 +151,8 @@ CharacterSet
     ksc_hangul_gr
                 { XmStringCharsetName = "KSC5601.1987-1";
                   CharacterSize = TwoByte; };
+    utf8
+		{ XmStringCharsetName = "UTF-8"; };
     XmFONTLIST_DEFAULT_TAG
         { FontListElementTag = XmFONTLIST_DEFAULT_TAG; };
 
@@ -420,7 +422,7 @@ EnumerationSet
     ScaleShowValue : integer
         { XmNONE; XmNEAR_SLIDER; XmNEAR_BORDER; FALSE; TRUE; };
     FontType : integer
-        { XmAS_IS; XmFONT_IS_FONT; XmFONT_IS_FONTSET; };
+        { XmAS_IS; XmFONT_IS_FONT; XmFONT_IS_FONTSET; XmFONT_IS_XFT; };
     LoadModel : integer
         { XmAS_IS; XmLOAD_IMMEDIATE; XmLOAD_DEFERRED; };
     LineType : integer
