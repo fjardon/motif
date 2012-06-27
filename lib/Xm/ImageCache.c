@@ -57,10 +57,10 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #include <Xm/PrintSP.h>         /* for pixmap resolution */
 #include <Xm/XpmP.h>
 #include <X11/Xresource.h>
-#ifdef USE_LIBJPEG
+#ifdef JPEG_SUPPORTED
 #include "JpegI.h"
 #endif
-#ifdef USE_LIBPNG
+#ifdef PNG_SUPPORTED
 #include "PngI.h"
 #endif
 
@@ -866,7 +866,7 @@ GetImage(
     ImageData *entry;
     char *file_name;
     XtEnum return_value;
-#if defined (USE_LIBPNG) || defined (USE_LIBJPEG)
+#if defined (USE_PNG_SUPPORTED) || defined (JPEG_SUPPORTED)
     FILE *infile;
     int rc;
 #endif
@@ -931,19 +931,19 @@ GetImage(
         return FALSE;
     }
 
-#if defined (USE_LIBJPEG) || defined (USE_LIBPNG)
+#if defined (JPEG_SUPPORTED) || defined (PNG_SUPPORTED)
     if (!(infile = fopen(file_name, "rb"))) {
         fclose(infile);
         return FALSE;
     }
 
-#ifdef USE_LIBJPEG
+#ifdef JPEG_SUPPORTED
     rc = _XmJpegGetImage(screen, infile, image);
 #endif
-#if defined (USE_LIBJPEG) && defined (USE_LIBPNG)
+#if defined (JPEG_SUPPORTED) && defined (PNG_SUPPORTED)
     if (rc == 1) { /* not a jpeg file */
 #endif
-#ifdef USE_LIBPNG
+#ifdef PNG_SUPPORTED
         Pixel background;
 
         if (acc_color)
@@ -954,13 +954,13 @@ GetImage(
         if (background == XmUNSPECIFIED_PIXEL)
             background = 0; /* XXX is if OK? */
 #endif
-#if defined (USE_LIBJPEG) && defined (USE_LIBPNG)
+#if defined (JPEG_SUPPORTED) && defined (PNG_SUPPORTED)
         rewind(infile);
 #endif
-#ifdef USE_LIBPNG
+#ifdef PNG_SUPPORTED
         rc = _XmPngGetImage(screen, infile, background, image);
 #endif
-#if defined (USE_LIBJPEG) && defined (USE_LIBPNG)
+#if defined (JPEG_SUPPORTED) && defined (PNG_SUPPORTED)
     }
 #endif
 
@@ -975,7 +975,7 @@ GetImage(
         return_value =
             GetXpmImage(screen, image_name, file_name, acc_color,
                     image, pixmap_resolution, pixels, npixels);
-#if defined (USE_LIBJPEG) || defined (USE_LIBPNG)
+#if defined (JPEG_SUPPORTED) || defined (PNG_SUPPORTED)
     }
 #endif
 

@@ -29,6 +29,14 @@
 #undef OM22_COMPATIBILITY
 #endif
 
+#ifndef JPEG_SUPPORTED
+#undef JPEG_SUPPORTED
+#endif
+
+#ifndef PNG_SUPPORTED
+#undef PNG_SUPPORTED
+#endif
+ 
 #if    !defined(__STDC__) \
     && !defined(__cplusplus) && !defined(c_plusplus) \
     && !defined(FUNCPROTO) && !defined(XTFUNCPROTO) && !defined(XMFUNCPROTO)

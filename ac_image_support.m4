@@ -1,7 +1,7 @@
 AC_DEFUN([AC_IMAGE_SUPPORT],
 [
-AH_TEMPLATE([USE_LIBJPEG], [Use libjpeg library])
-AH_TEMPLATE([USE_LIBPNG], [Use libpng library])
+AH_TEMPLATE([JPEG_SUPPORTED], [Use libjpeg library])
+AH_TEMPLATE([PNG_SUPPORTED], [Use libpng library])
 
 AC_ARG_ENABLE(jpeg,           [  --enable-jpeg           Enable JPEG support],,[enable_jpeg=yes])
 AC_ARG_WITH(libjpeg_includes, [  --with-libjpeg-includes=DIR   Use libjpeg includes in DIR], libjpeg_includes=$withval)
@@ -39,7 +39,7 @@ then
     then
         AC_SUBST(LIBS)	
 	use_libjpeg=yes
-        AC_DEFINE(USE_LIBJPEG, 1, We have discovered the libjpeg library)
+        AC_DEFINE(JPEG_SUPPORTED, 1, We have discovered the libjpeg library)
     else
         CFLAGS="$saved_CFLAGS"
         LIBS="$saved_LIBS"
@@ -76,7 +76,7 @@ then
     then
         AC_SUBST(LIBS)	
 	use_libpng=yes
-        AC_DEFINE(USE_LIBPNG, 1, We have discovered the libpng library)
+        AC_DEFINE(PNG_SUPPORTED, 1, We have discovered the libpng library)
     else
 	CFLAGS="$saved_CFLAGS"
 	LIBS="$saved_LIBS"
