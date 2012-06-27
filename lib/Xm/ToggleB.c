@@ -1106,19 +1106,6 @@ Select(
     XmNradioAlwaysOne, &always,
     NULL);
   }
-  /* Skip processing if 1) the toggle type (ind_type)
-   * is one of the ONE_OF_MANY*, and 2) if the toggle
-   * button is still set. (Hint this allows for the
-   * XmNvalueChangedCallback to use XmToggleButtonSetState
-   * to reset a different button to be the active one) */
-//rasta  if ( (radio && always) &&
-//       ((tb->toggle.set == XmSET) &&
-//       ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND)||
-//       (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND)||
-//       (tb->toggle.ind_type == XmONE_OF_MANY))))
-//       return;
-
-
 
   /* CR 8068: Verify that this is in fact a button event. */
   /* CR 9181: Consider clipping when testing visibility. */
@@ -1246,12 +1233,7 @@ ArmAndActivate(
     NULL);
   }
 
-//  no_change = ( (radio && always) &&
-//          (tb->toggle.set == XmSET) &&
-//          ((tb->toggle.ind_type == XmONE_OF_MANY_ROUND) ||
-//          (tb->toggle.ind_type == XmONE_OF_MANY_DIAMOND) ||
-//          (tb->toggle.ind_type == XmONE_OF_MANY)));
-no_change = False; //rasta
+  no_change = False;
   
   menuSTrait = (XmMenuSystemTrait) 
     XmeTraitGet((XtPointer) XtClass(XtParent(tb)), XmQTmenuSystem);
