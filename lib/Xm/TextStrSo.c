@@ -1370,7 +1370,7 @@ GetSelection(XmTextSource source,
 {
   XmSourceData data = source->data;
   
-  if (data->hasselection && data->left <= data->right && data->left >= 0) {
+  if (data->hasselection && data->left < data->right && data->left >= 0) {
     *left = data->left;
     *right = data->right;
     return True;
