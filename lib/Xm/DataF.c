@@ -4870,6 +4870,152 @@ df_GetServerTime(
   return (event.xproperty.time);
 }
 
+PrintableString(XmDataFieldWidget tf,
+		char* str, 
+		int n, 
+		Boolean use_wchar) /* sometimes unused */
+{
+#ifdef SUPPORT_ZERO_WIDTH
+  /* some locales (such as Thai) have characters that are
+   * printable but non-spacing. These should be inserted,
+   * even if they have zero width.
+   */
+  if (tf->text.max_char_size == 1) {
+    int i;
+    if (!use_wchar) {
+      for (i = 0; i < n; i++) {
+	if (!isprint((unsigned char)str[i])) {
+	  return False;
+	}
+      }
+    } else {
+      char scratch[8];
+      wchar_t *ws = (wchar_t *) str;
+      for (i = 0; i < n; i++) {
+	if (wctomb(scratch, ws[i]) <= 0)
+	  return False;
+	if (!isprint((unsigned char)scratch[0])) {
+	  return False;
+	}
+      }
+    }
+    return True;
+  } else {
+    /* tf->text.max_char_size > 1 */
+#ifdef HAS_WIDECHAR_FUNCTIONS
+    if (use_wchar) {
+      int i;
+      wchar_t *ws = (wchar_t *) str;
+      for (i = 0; i < n; i++) {
+	if (!iswprint(ws[i])) {
+	  return False;
+	}
+      }
+      return True;
+    } else {
+      int i, csize;
+      wchar_t wc;
+#ifndef NO_MULTIBYTE
+      for (i = 0, csize = mblen(str, tf->text.max_char_size);
+	   i < n;
+	   i += csize, csize=mblen(&(str[i]), tf->text.max_char_size))
+#else
+      for (i = 0, csize = *str ? 1 : 0; i < n;
+	   i += csize, csize = str[i] ? 1 : 0)
+#endif
+	{
+	  if (csize < 0) 
+	    return False;
+	  if (mbtowc(&wc, &(str[i]), tf->text.max_char_size) <= 0)
+	    return False;
+	  if (!iswprint(wc)) {
+	    return False;
+	  }
+	}
+    }
+#else /* HAS_WIDECHAR_FUNCTIONS */ 
+    /*
+     * This will only check if any single-byte characters are non-
+     * printable. Better than nothing...
+     */
+    int i, csize;
+    if (!use_wchar) {
+#ifndef NO_MULTIBYTE
+      for (i = 0, csize = mblen(str, tf->text.max_char_size);
+	   i < n;
+	   i += csize, csize=mblen(&(str[i]), tf->text.max_char_size))
+#else
+      for (i = 0, csize = *str ? 1 : 0; i < n;
+	   i += csize, csize = str[i] ? 1 : 0)
+#endif
+	{
+	  if (csize < 0)
+	    return False;
+	  if (csize == 1 && !isprint((unsigned char)str[i])) {
+	    return False;
+	  }
+	}
+    } else {
+      char scratch[8];
+      wchar_t *ws = (wchar_t *) str;
+      for (i = 0; i < n; i++) {
+	if ((csize = wctomb(scratch, ws[i])) <= 0)
+	  return False;
+	if (csize == 1 && !isprint((unsigned char)scratch[0])) {
+	  return False;
+	}
+      }
+    }
+#endif /* HAS_WIDECHAR_FUNCTIONS */
+    return True;
+  }
+#else /* SUPPORT_ZERO_WIDTH */
+  if (TextF_UseFontSet(tf)) {
+      if(use_wchar) 
+	  return (XwcTextEscapement((XFontSet)TextF_Font(tf), (wchar_t *)str, n) != 0);
+      else
+	  return (XmbTextEscapement((XFontSet)TextF_Font(tf), str, n) != 0);
+#ifdef USE_XFT
+  } else if (TextF_UseXft(tf)) {
+    XGlyphInfo	ext;
+
+    XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), str, n, &ext);
+
+    return ext.xOff != 0;
+#endif
+  }
+  else {
+    if (use_wchar) {
+      char cache[100];
+      char *tmp, *cache_ptr; 
+      wchar_t *tmp_str;
+      int ret_val, buf_size, count;
+      Boolean is_printable;
+      buf_size = (n * MB_CUR_MAX) + 1;
+      cache_ptr = tmp = XmStackAlloc(buf_size, cache);
+   
+      tmp_str = (wchar_t *)str;
+      // Fixed MZ BZ#1257: by Brad Despres <brad@sd.aonix.com>
+      count = 0;
+      do {
+	ret_val = wctomb(tmp, *tmp_str);
+	count += 1;
+	tmp += ret_val;
+	buf_size -= ret_val;
+	tmp_str++;
+      } while ( (ret_val > 0)&& (buf_size >= MB_CUR_MAX) && (count < n) ) ;
+      if (ret_val == -1)    /* bad character */
+	return (False);
+      is_printable = XTextWidth(TextF_Font(tf), cache_ptr, tmp - cache_ptr);
+      XmStackFree(cache_ptr, cache);
+      return (is_printable);
+    }
+    else {
+      return (XTextWidth(TextF_Font(tf), str, n) != 0);
+    }
+  }
+#endif /* SUPPORT_ZERO_WIDTH */ 
+}
 
 /****************************************************************
  *
@@ -4930,15 +5076,9 @@ df_InsertChar(
      if (insert_string[i] == 0) insert_length = 0; /* toss out input string */
      
   if (insert_length > 0) {
-   /* do not insert non-printing characters */
-    if (XmTextF_have_fontset(tf)){
-       if (!XmbTextEscapement((XFontSet)XmTextF_font(tf), insert_string, 
-			      insert_length)) 
-          return;
-    } else {
-      if (!XTextWidth(XmTextF_font(tf), insert_string, insert_length)) 
-	 return;
-    }
+    /* do not insert non-printing characters */
+    if (!PrintableString(tf, insert_string, insert_length, False))
+      return;
 
     _XmDataFieldDrawInsertionPoint(tf, False);
     if (df_NeedsPendingDeleteDisjoint(tf)){
