@@ -5365,6 +5365,7 @@ KbdToggleAddMode(Widget wid,
     {
       XmListSetAddMode((Widget) lw,
 		       !(lw->list.SelectionMode == XmADD_MODE));
+      ClickElement(lw, event, FALSE);
     }
   lw->list.Event = 0;
 }
