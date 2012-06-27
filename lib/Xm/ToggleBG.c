@@ -1315,7 +1315,7 @@ ActionDraw(XmToggleButtonGadget w,
 	    DrawToggleLabel(w);
 	}
 
-      if (LabG_IsPixmap(w))
+      if (LabG_IsPixmap(w) || LabG_IsPixmapAndText(w))
 	SetAndDisplayPixmap(w, event, NULL);
     }
 }
@@ -1491,7 +1491,7 @@ Arm(
       if (TBG_FillOnSelect(w) && !LabG_IsPixmap(w)) DrawToggleLabel (tb);
     }
 
-  if (LabG_IsPixmap(tb))
+  if (LabG_IsPixmap(tb) || LabG_IsPixmapAndText(tb))
     SetAndDisplayPixmap(tb, event, NULL);
   
   if (TBG_ArmCB(tb))
@@ -1704,7 +1704,7 @@ ArmAndActivate(
       else if (TBG_FillOnSelect(tb) && !LabG_IsPixmap(tb))
 	DrawToggleLabel (tb);
 
-      if (LabG_IsPixmap(tb))
+      if (LabG_IsPixmap(tb) || LabG_IsPixmapAndText(tb))
 	SetAndDisplayPixmap(tb, NULL, NULL);
     }
   else
@@ -1719,7 +1719,7 @@ ArmAndActivate(
 	    DrawToggleLabel (tb);
 	}
       
-      if (LabG_IsPixmap(tb))
+      if (LabG_IsPixmap(tb) || LabG_IsPixmapAndText(tb))
 	SetAndDisplayPixmap(tb, event, NULL);
     }
   
@@ -1963,7 +1963,7 @@ BtnUp(
 	      else if (TBG_FillOnSelect(tb) && !LabG_IsPixmap(tb))
 		DrawToggleLabel (tb);
 
-	      if (LabG_IsPixmap(tb))
+	      if (LabG_IsPixmap(tb) || LabG_IsPixmapAndText(tb))
 		SetAndDisplayPixmap( tb, event, NULL);
 	      
 	      if (TBG_ArmCB(tb))
@@ -2236,7 +2236,7 @@ Initialize(
     }
   
   /* BEGIN OSF Fix pir 1778 */
-  if (LabG_IsPixmap(new_w) &&
+  if ((LabG_IsPixmap(new_w) ||LabG_IsPixmapAndText(new_w)) &&
       (!IsNull(PixmapOff(new_w)) || !IsNull(PixmapInsenOff(new_w)) ||
        !IsNull(PixmapOn(new_w)) || !IsNull(PixmapInsenOn(new_w)) ||
        !IsNull(PixmapInd(new_w)) || !IsNull(PixmapInsenInd(new_w))))
@@ -2253,7 +2253,7 @@ Initialize(
     if (TBG_IndOn(new_w))
       {
 	/* Determine how high the toggle indicator should be. */
-	if LabG_IsPixmap(new_w) 
+	if (LabG_IsPixmap(new_w) || LabG_IsPixmapAndText(new_w))
 	  {
 	    /* Set indicatorSize proportional to size of pixmap. */
             if (!IsNull(PixmapOff(new_w)) || !IsNull(PixmapInsenOff(new_w)) ||
@@ -2940,7 +2940,7 @@ KeySelect(
       else if (TBG_FillOnSelect(tb) && !LabG_IsPixmap(tb))
 	DrawToggleLabel (tb);
 
-      if (LabG_IsPixmap(tb))
+      if (LabG_IsPixmap(tb) || LabG_IsPixmapAndText(tb))
 	SetAndDisplayPixmap( tb, NULL, NULL);
       
       TBG_Armed(tb) = FALSE;
@@ -3076,7 +3076,7 @@ Redisplay(
   
   ComputeSpace(tb);
   
-  if (LabG_IsPixmap (tb))
+  if (LabG_IsPixmap (tb) || LabG_IsPixmapAndText(tb))
     SetAndDisplayPixmap(tb, event, region);
   else
     {
@@ -3130,7 +3130,7 @@ Resize(
 {
   register XmToggleButtonGadget tb = (XmToggleButtonGadget) w;
 
-  if (LabG_IsPixmap(w)) 
+  if (LabG_IsPixmap(w) || LabG_IsPixmapAndText(w)) 
     SetToggleSize(tb);
   else {
     XtWidgetProc resize;
@@ -3472,7 +3472,7 @@ SetValues(
   /* BEGIN OSF Fix pir 1778 */
   /* Have to reset the TextRect width because label's resize will have
      mucked with it. */
-  if (LabG_IsPixmap(newcbox) &&
+  if ((LabG_IsPixmap(newcbox) || LabG_IsPixmapAndText(newcbox)) &&
       (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
        !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
        !IsNull(PixmapInd(newcbox)) || !IsNull(PixmapInsenInd(newcbox))))
@@ -3505,7 +3505,8 @@ SetValues(
       (PixmapInsenInd(newcbox) != PixmapInsenInd(curcbox)) ||
       (TBG_IndOn(newcbox) != TBG_IndOn(curcbox)) ||
       (TBG_IndicatorDim(newcbox) != TBG_IndicatorDim(curcbox)) ||
-      (LabG_IsPixmap(newcbox) != LabG_IsPixmap(curcbox)))
+      (LabG_IsPixmap(newcbox) != LabG_IsPixmap(curcbox)) ||
+      (LabG_IsPixmapAndText(newcbox) != LabG_IsPixmapAndText(curcbox)))
     {
       int right_delta = 0;	/* Our desired margin adjustments. */
       int left_delta = 0;
@@ -3520,7 +3521,7 @@ SetValues(
             newcbox->rectangle.height = 0;
 	}
       
-      if (LabG_IsPixmap(newcbox) &&
+      if ((LabG_IsPixmap(newcbox) || LabG_IsPixmapAndText(newcbox)) &&
 	  ((PixmapOn(newcbox) != PixmapOn(curcbox)) ||
 	  (PixmapInsenOn(newcbox) != PixmapInsenOn(curcbox)) ||
 	  (PixmapInd(newcbox) != PixmapInd(curcbox)) ||
@@ -3542,12 +3543,13 @@ SetValues(
 	  (TBG_IndicatorDim(newcbox) == TBG_IndicatorDim(curcbox)))
 	{
 	  if ((LabG_IsPixmap(newcbox) != LabG_IsPixmap(curcbox)) ||
+	      (LabG_IsPixmapAndText(newcbox) != LabG_IsPixmapAndText(curcbox)) ||
 	      (LabG__label(newcbox) != LabG__label(curcbox)) ||
 	      (PixmapOff(newcbox) != PixmapOff(curcbox)) ||
 	      (LabG_Font(newcbox) != LabG_Font(curcbox)) ||
 	      (TBG_IndOn(newcbox) != TBG_IndOn(curcbox)))
 	    {
-	      if LabG_IsPixmap(newcbox)
+	      if (LabG_IsPixmap(newcbox) || LabG_IsPixmapAndText(newcbox))
 		{
                 if (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
                  !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
@@ -3812,7 +3814,7 @@ SetValues(
 				DrawToggleShadow (newcbox);
 			if (TBG_FillOnSelect(newcbox)&& !LabG_IsPixmap(newcbox))
 				DrawToggleLabel (newcbox);
-			if (LabG_IsPixmap(newcbox))
+			if ((LabG_IsPixmap(newcbox)) || LabG_IsPixmapAndText(newcbox))
 				{
 				SetAndDisplayPixmap(newcbox, NULL, NULL);
 				flag = True;
@@ -3929,7 +3931,7 @@ XmToggleButtonGadgetSetState(
 	      if (TBG_FillOnSelect(tg) && !LabG_IsPixmap(tg))
 		DrawToggleLabel (tg);
 	    }
-	  if (LabG_IsPixmap(tg))
+	  if (LabG_IsPixmap(tg) || LabG_IsPixmapAndText(tg))
 	    SetAndDisplayPixmap(tg, NULL, NULL);
 	}
 
@@ -4010,7 +4012,7 @@ XmToggleButtonGadgetSetValue(
 	      if (TBG_FillOnSelect(tg) && !LabG_IsPixmap(tg))
 		DrawToggleLabel (tg);
 	    }
-	  if (LabG_IsPixmap(tg))
+	  if (LabG_IsPixmap(tg) || LabG_IsPixmapAndText(tg))
 	    SetAndDisplayPixmap(tg, NULL, NULL);
 	}
       if (notify)
