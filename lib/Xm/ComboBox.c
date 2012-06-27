@@ -2596,13 +2596,11 @@ DoLayout(Widget widg)
 
       /* CR 7676: These numbers don't make sense, but they work? */
       listW = XtWidth(cb) - 2 * CB_HighlightThickness(cb);
+      if(XtWidth(cb) <= 2 * CB_HighlightThickness(cb)) listW=1;
       nargs = 0;
       XtSetArg(args[nargs], XmNwidth, listW), nargs++;
-      if (listW == 65535)
-        XtSetArg(args[0], XmNwidth, 0);
       assert(nargs <= XtNumber(args));
       XtSetValues(CB_ListShell(cb), args, nargs);
-      fprintf(stderr, "set width to %d\n", listW); //rasta
     }
   else
     {
