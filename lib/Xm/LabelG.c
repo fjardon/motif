@@ -2183,7 +2183,9 @@ LRectangle *background_box)
     switch (lw->label.fill_bg_box)
     {
         case _XmPLAIN_BG_BOX:
+#ifndef USE_XFT
             return;
+#endif
 
         case _XmFILL_BG_BOX:
         case _XmALWAYS_FILL_BG_BOX:

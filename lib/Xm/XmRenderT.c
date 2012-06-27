@@ -61,6 +61,9 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include "XmRenderTI.h"
 #include "XmStringI.h"
 #include "XmTabListI.h"
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 /* Warning Messages */
 #define NO_NULL_TAG_MSG			_XmMMsgXmRenderT_0000
@@ -187,6 +190,13 @@ static void SetDefault(XmRendition rend);
 #define DEFAULT_strikethruType		XmAS_IS
 #define DEFAULT_backgroundState		XmAS_IS
 #define DEFAULT_foregroundState		XmAS_IS
+#ifdef USE_XFT
+#define DEFAULT_xftFont			(XtPointer)XmAS_IS
+#define DEFAULT_fontStyle		(String)NULL
+#define DEFAULT_fontFoundry		(String)NULL
+#define DEFAULT_fontEncoding		(String)NULL
+#define DEFAULT_fontSize		0
+#endif
 
 static XtResource _XmRenditionResources[] = {
   { 
@@ -219,16 +229,54 @@ static XtResource _XmRenditionResources[] = {
     sizeof(XmTabList), XtOffsetOf(_XmRenditionRec, tabs),
     XmRImmediate, (XtPointer) DEFAULT_tabs
   },
-  { 
+#if USE_XFT
+  {
+    XmNxftFont, XmCXftFont, XmRPointer,
+    sizeof (XtPointer), XtOffsetOf (_XmRenditionRec, xftFont),
+    XmRImmediate, (XtPointer) DEFAULT_xftFont
+  },
+  {
     XmNrenditionBackground, XmCRenditionBackground, XmRRenditionPixel,
-    sizeof(Pixel), XtOffsetOf(_XmRenditionRec, background),
+    sizeof (Pixel), XtOffsetOf (_XmRenditionRec, xftBackground.pixel),
     XmRImmediate, (XtPointer) DEFAULT_background
   },
-  { 
+  {
     XmNrenditionForeground, XmCRenditionForeground, XmRRenditionPixel,
-    sizeof(Pixel), XtOffsetOf(_XmRenditionRec, foreground),
+    sizeof (Pixel), XtOffsetOf (_XmRenditionRec, xftForeground.pixel),
     XmRImmediate, (XtPointer) DEFAULT_foreground
   },
+  {
+    XmNfontStyle, XmCFontStyle, XmRString,
+    sizeof(String), XtOffsetOf (_XmRenditionRec, fontStyle),
+    XmRImmediate, (XtPointer) DEFAULT_fontStyle
+  },
+  {
+    XmNfontFoundry, XmCFontFoundry, XmRString,
+    sizeof(String), XtOffsetOf (_XmRenditionRec, fontFoundry),
+    XmRImmediate, (XtPointer) DEFAULT_fontFoundry
+  },
+  {
+    XmNfontEncoding, XmCFontEncoding, XmRString,
+    sizeof(String), XtOffsetOf (_XmRenditionRec, fontEncoding),
+    XmRImmediate, (XtPointer) DEFAULT_fontEncoding
+  },
+  {
+    XmNfontSize, XmCFontSize, XmRInt,
+    sizeof(int), XtOffsetOf (_XmRenditionRec, fontSize),
+    XmRImmediate, (XtPointer) DEFAULT_fontSize
+  },
+#else
+  {
+    XmNrenditionBackground, XmCRenditionBackground, XmRRenditionPixel,
+    sizeof (Pixel), XtOffsetOf (_XmRenditionRec, background),
+    XmRImmediate, (XtPointer) DEFAULT_background
+  },
+  {
+    XmNrenditionForeground, XmCRenditionForeground, XmRRenditionPixel,
+    sizeof (Pixel), XtOffsetOf (_XmRenditionRec, foreground),
+    XmRImmediate, (XtPointer) DEFAULT_foreground
+  },
+#endif
   { 
     XmNunderlineType, XmCUnderlineType, XmRLineType,
     sizeof(unsigned char), XtOffsetOf(_XmRenditionRec, underlineType),
@@ -554,6 +602,11 @@ SetDefault(XmRendition rend)
 
   if (rend == NULL) return;
 
+#ifdef	USE_XFT
+  memset (&(_XmRendXftFG(rend)), 0, sizeof (XftColor));
+  memset (&(_XmRendXftBG(rend)), 0, sizeof (XftColor));
+#endif
+
   /* Leave _XmRendFontOnly unchanged.	 */
   /* Leave _XmRendRefcount unchanged.	 */
   _XmRendLoadModel(rend)      = DEFAULT_loadModel;
@@ -573,6 +626,21 @@ SetDefault(XmRendition rend)
   _XmRendStrikethruType(rend) = DEFAULT_strikethruType;
   _XmRendBGState(rend)	      = DEFAULT_backgroundState;
   _XmRendFGState(rend)	      = DEFAULT_foregroundState;
+
+#ifdef	USE_XFT
+  _XmRendXftFG (rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
+  _XmRendXftBG (rend).color.alpha = 0xFFFF; /*TODO: it is really needed? (yura)*/
+  _XmRendXftFont(rend) = DEFAULT_xftFont;
+  _XmRendPattern(rend) = NULL;
+  _XmRendFontStyle(rend) = DEFAULT_fontStyle;
+  _XmRendFontFoundry(rend) = DEFAULT_fontFoundry;
+  _XmRendFontEncoding(rend) = DEFAULT_fontEncoding;
+  _XmRendFontSize(rend) = DEFAULT_fontSize;
+  _XmRendPixelSize(rend) = 0;
+  _XmRendFontSlant(rend) = 0;
+  _XmRendFontSpacing(rend) = 0;
+  _XmRendFontWeight(rend) = 0;
+#endif
 }
 
 /* Extern function to pick out display from rendertable. */
@@ -621,7 +689,7 @@ _XmRenderTableFindRendition(XmRenderTable table,
 	    {
 	      hit = TRUE;
 	  
-	      if ((_XmRendFont(rend) == NULL) &&
+	      if ((_XmRendFont(rend) == NULL) && (_XmRendXftFont (rend) == NULL) &&
 		  NameIsString(_XmRendFontName(rend)))
 		{
 		  if (_XmRendLoadModel(rend) == XmLOAD_DEFERRED)
@@ -629,7 +697,9 @@ _XmRenderTableFindRendition(XmRenderTable table,
 
 		  ValidateAndLoadFont(rend, _XmRendDisplay(rend));
 	      
-		  if (need_font && (_XmRendFont(rend) == NULL)) break;
+		  if (need_font && (_XmRendFont(rend) == NULL &&
+                      _XmRendXftFont(rend) == NULL))
+		    break;
 		}
 	  
 	      if (index != NULL) *index = i;
@@ -709,12 +779,54 @@ SetRend(XmRendition to,
   if (ListIsList(_XmRendTabs(from)) &&
       !ListIsList(_XmRendTabs(to)))
     _XmRendTabs(to) = _XmRendTabs(from);
+#if USE_XFT
   if ((_XmRendFG(from) != XmUNSPECIFIED_PIXEL) &&
       (_XmRendFG(to) == XmUNSPECIFIED_PIXEL))
-    _XmRendFG(to) = _XmRendFG(from);
+    {
+      XColor xcolor;
+      _XmRendFG(to) = _XmRendFG(from);
+      xcolor.pixel = _XmRendFG(to);
+      XQueryColor(_XmRendDisplay(to), DefaultColormapOfScreen(
+                  DefaultScreenOfDisplay(_XmRendDisplay(to))), &xcolor);
+      /* doesn't needed  (_XmRendXftFG (to)).pixel = xcolor.pixel; */
+      (_XmRendXftFG(to)).color.red = xcolor.red;
+      (_XmRendXftFG(to)).color.green = xcolor.green;
+      (_XmRendXftFG(to)).color.blue = xcolor.blue;
+      (_XmRendXftFG(to)).color.alpha = 0xFFFF;
+    }
   if ((_XmRendBG(from) != XmUNSPECIFIED_PIXEL) &&
       (_XmRendBG(to) == XmUNSPECIFIED_PIXEL))
-    _XmRendBG(to) = _XmRendBG(from);
+    {
+      XColor xcolor;
+      _XmRendBG(to) = _XmRendBG (from);
+      xcolor.pixel = _XmRendBG (to);
+      XQueryColor(_XmRendDisplay(to), DefaultColormapOfScreen(
+                  DefaultScreenOfDisplay(_XmRendDisplay(to))), &xcolor);
+      /* doesn't needed  (_XmRendXftBG (to)).pixel = xcolor.pixel; */
+      (_XmRendXftBG(to)).color.red = xcolor.red;
+      (_XmRendXftBG(to)).color.green = xcolor.green;
+      (_XmRendXftBG(to)).color.blue = xcolor.blue;
+      (_XmRendXftBG(to)).color.alpha = 0xFFFF;
+    }
+  if ((_XmRendXftFont (from) != NULL) &&
+      ((unsigned int) (unsigned long) _XmRendXftFont (to) == XmAS_IS))
+    _XmRendXftFont (to) = _XmRendXftFont (from);
+  if ((_XmRendFontStyle (from) != NULL) && _XmRendFontStyle (to) == NULL)
+    _XmRendFontStyle (to) = _XmRendFontStyle (from);
+  if ((_XmRendFontFoundry (from) != NULL) && _XmRendFontFoundry (to) == NULL)
+    _XmRendFontFoundry (to) = _XmRendFontFoundry (from);
+  if ((_XmRendFontEncoding (from) != NULL) && _XmRendFontEncoding (to) == NULL)
+    _XmRendFontEncoding (to) = _XmRendFontEncoding (from);
+  if (_XmRendFontSize (to) == 0)
+    _XmRendFontSize (to) = _XmRendFontSize (from);
+#else
+  if ((_XmRendFG(from) != XmUNSPECIFIED_PIXEL) &&
+      (_XmRendFG(to) == XmUNSPECIFIED_PIXEL))
+    _XmRendFG(to) = _XmRendFG (from);
+  if ((_XmRendBG(from) != XmUNSPECIFIED_PIXEL) &&
+      (_XmRendBG(to) == XmUNSPECIFIED_PIXEL))
+    _XmRendBG(to) = _XmRendBG (from);
+#endif
   if ((_XmRendUnderlineType(from) != XmAS_IS) &&
       (_XmRendUnderlineType(to) == XmAS_IS))
     _XmRendUnderlineType(to) = _XmRendUnderlineType(from);
@@ -730,7 +842,12 @@ RendComplete(XmRendition rend)
   return(((unsigned int)(unsigned long)_XmRendFontName(rend) != XmAS_IS) &&
 	 (_XmRendFontType(rend) != XmAS_IS) &&
 	 (_XmRendLoadModel(rend) != XmAS_IS) &&
-	 ((unsigned int)(unsigned long)_XmRendFont(rend) != XmAS_IS) &&
+	 (
+	  ((unsigned int) (unsigned long) _XmRendFont (rend) != XmAS_IS)
+#ifdef USE_XFT
+            || ((unsigned int) (unsigned long) _XmRendXftFont (rend) != XmAS_IS)
+#endif
+         ) &&
 	 ((unsigned int)(unsigned long)_XmRendTabs(rend) != XmAS_IS) &&
 	 (_XmRendFG(rend) != XmUNSPECIFIED_PIXEL) &&
 	 (_XmRendBG(rend) != XmUNSPECIFIED_PIXEL) &&
@@ -799,7 +916,11 @@ _XmRenditionMerge(Display *d,	/* unused */
       SetRend(rend, base_rend);
   
       if (_XmRendFGState(base_rend) == XmFORCE_COLOR)
+#if USE_XFT
+	_XmRendXftFG(rend) = _XmRendXftFG(base_rend);
+#else
 	_XmRendFG(rend) = _XmRendFG(base_rend);
+#endif
   
       if (_XmRendBGState(base_rend) == XmFORCE_COLOR)
 	_XmRendBG(rend) = _XmRendBG(base_rend);
@@ -908,6 +1029,9 @@ _XmRenderTableFindFirstFont(XmRenderTable rendertable,
 			    XmRendition *rend_ptr)
 {
   int i, f_idx = -1, fs_idx = -1;
+#ifdef USE_XFT
+  int xft_idx = -1;
+#endif
 
   for (i = _XmRTCount(rendertable) - 1; i >= 0; i--)
     {
@@ -917,8 +1041,20 @@ _XmRenderTableFindFirstFont(XmRenderTable rendertable,
       {
 	if (_XmRendFontType(*rend_ptr) == XmFONT_IS_FONT) f_idx = i;
 	else if (_XmRendFontType(*rend_ptr) == XmFONT_IS_FONTSET) fs_idx = i;
+#ifdef USE_XFT
+      } else if (_XmRendXftFont(*rend_ptr) != NULL) {
+        if (_XmRendFontType(*rend_ptr) == XmFONT_IS_XFT) xft_idx = i;
+#endif
       }
   }
+#ifdef USE_XFT
+  if (xft_idx >= 0)
+    {
+      *rend_ptr = _XmRTRenditions (rendertable)[xft_idx];
+      *indx = xft_idx;
+    }
+  else
+#endif
   if (fs_idx >= 0)
     {
       *rend_ptr = _XmRTRenditions(rendertable)[fs_idx];
@@ -963,8 +1099,18 @@ CopyInto(XmRendition toRend,
     _XmRendTabs(toRend) = NULL;
   else
     _XmRendTabs(toRend) = XmTabListCopy(_XmRendTabs(fromRend), 0, 0);
-  _XmRendBG(toRend) = _XmRendBG(fromRend);
-  _XmRendFG(toRend) = _XmRendFG(fromRend);
+#if USE_XFT
+  _XmRendXftFont (toRend) = _XmRendXftFont (fromRend);
+  _XmRendXftBG (toRend) = _XmRendXftBG (fromRend);
+  _XmRendXftFG (toRend) = _XmRendXftFG (fromRend);
+  _XmRendFontStyle (toRend) = _XmRendFontStyle (fromRend);
+  _XmRendFontFoundry (toRend) = _XmRendFontFoundry (fromRend);
+  _XmRendFontEncoding (toRend) = _XmRendFontEncoding (fromRend);
+  _XmRendFontSize (toRend) = _XmRendFontSize (fromRend);
+#else
+  _XmRendBG (toRend) = _XmRendBG (fromRend);
+  _XmRendFG (toRend) = _XmRendFG (fromRend);
+#endif
   _XmRendUnderlineType(toRend) = _XmRendUnderlineType(fromRend);
   _XmRendStrikethruType(toRend) = _XmRendStrikethruType(fromRend);
 }
@@ -989,10 +1135,27 @@ MergeInto(XmRendition toRend,
   if (!ListIsList(_XmRendTabs(toRend)) && 
       ListIsList(_XmRendTabs(fromRend)))
     _XmRendTabs(toRend) = XmTabListCopy(_XmRendTabs(fromRend), 0, 0);
+#if USE_XFT
+  if (_XmRendXftFont(toRend) == NULL)
+    _XmRendXftFont(toRend) = _XmRendXftFont(fromRend);
   if (_XmRendBG(toRend) == XmUNSPECIFIED_PIXEL)
-    _XmRendBG(toRend) = _XmRendBG(fromRend);
+    _XmRendXftBG(toRend) = _XmRendXftBG(fromRend);
   if (_XmRendFG(toRend) == XmUNSPECIFIED_PIXEL)
-    _XmRendFG(toRend) = _XmRendFG(fromRend);
+    _XmRendXftFG(toRend) = _XmRendXftFG(fromRend);
+  if (_XmRendFontStyle(toRend) == NULL)
+    _XmRendFontStyle(toRend) = _XmRendFontStyle(fromRend);
+  if (_XmRendFontFoundry(toRend) == NULL)
+    _XmRendFontFoundry(toRend) = _XmRendFontFoundry(fromRend);
+  if (_XmRendFontEncoding(toRend) == NULL)
+    _XmRendFontEncoding(toRend) = _XmRendFontEncoding(fromRend);
+  if (_XmRendFontSize(toRend) == 0)
+    _XmRendFontSize(toRend) = _XmRendFontSize(fromRend);
+#else
+  if (_XmRendBG(toRend) == XmUNSPECIFIED_PIXEL)
+    _XmRendBG(toRend) = _XmRendBG (fromRend);
+  if (_XmRendFG(toRend) == XmUNSPECIFIED_PIXEL)
+    _XmRendFG(toRend) = _XmRendFG (fromRend);
+#endif
   if (_XmRendUnderlineType(toRend) == XmAS_IS)
     _XmRendUnderlineType(toRend) = _XmRendUnderlineType(fromRend);
   if (_XmRendUnderlineType(toRend) == XmAS_IS)
@@ -1770,6 +1933,11 @@ CleanupResources(XmRendition rend,
   else if (_XmRendFontType(rend) == XmAS_IS)
     _XmRendFontType(rend) = XmFONT_IS_FONT;
 
+#ifdef USE_XFT
+  if ((unsigned int)(unsigned long)_XmRendXftFont (rend) == XmAS_IS)
+    _XmRendXftFont (rend) = NULL;
+#endif
+
   if (((unsigned int)(unsigned long)_XmRendFontName(rend) == XmAS_IS) ||
       (strcmp(_XmRendFontName(rend), XmSXmAS_IS) == 0))
     _XmRendFontName(rend) = NULL;
@@ -1817,6 +1985,9 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
       XmDisplayCallbackStruct	cb;
 
       if ((_XmRendFont(rend) == NULL) &&
+#ifdef USE_XFT
+          (_XmRendXftFont (rend) == NULL) &&
+#endif
 	  (_XmRendFontName(rend) != NULL))
 	{
 	  if (_XmRendFontType(rend) != XmAS_IS)
@@ -1855,6 +2026,46 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 		  result = XtCallConverter (display, XtCvtStringToFontSet, args,
 					    num_args, &fromVal, &toVal, NULL);
 		  break;
+#ifdef USE_XFT
+		case XmFONT_IS_XFT:
+		  {
+		    XftResult res;
+		    XftPattern *p;
+		    
+		    _XmRendPattern(rend) = FcPatternCreate();
+		    if (_XmRendFontName(rend))
+		      FcPatternAddString(_XmRendPattern(rend), FC_FAMILY,
+		                         _XmRendFontName(rend));
+		    if (_XmRendFontFoundry(rend))
+		      FcPatternAddString(_XmRendPattern(rend), FC_FOUNDRY,
+		                         _XmRendFontFoundry(rend));
+		    if (_XmRendFontEncoding(rend))
+		      FcPatternAddString(_XmRendPattern(rend), XFT_ENCODING,
+		                         _XmRendFontEncoding(rend));
+		    if (_XmRendFontStyle(rend))
+		      FcPatternAddString(_XmRendPattern(rend), FC_STYLE,
+		                         _XmRendFontStyle(rend));
+		    if (_XmRendFontSize(rend))
+		      FcPatternAddInteger(_XmRendPattern(rend), FC_SIZE,
+		                         _XmRendFontSize(rend));
+		    if (_XmRendPixelSize(rend))
+		      FcPatternAddInteger(_XmRendPattern(rend), FC_PIXEL_SIZE,
+		                         _XmRendPixelSize(rend));
+		    if (_XmRendFontSlant(rend))
+		      FcPatternAddInteger(_XmRendPattern(rend), FC_SLANT,
+		                         _XmRendFontSlant(rend));
+		    if (_XmRendFontWeight(rend))
+		      FcPatternAddInteger(_XmRendPattern(rend), FC_WEIGHT,
+		                         _XmRendFontWeight(rend));
+		    if (_XmRendFontSpacing(rend))
+		      FcPatternAddInteger(_XmRendPattern(rend), FC_SPACING,
+		                         _XmRendFontSpacing(rend));
+                    p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
+                    _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
+		  }
+		  result = _XmRendXftFont(rend) != NULL;
+		  break;
+#endif
 		default:
 		  RenditionWarning(_XmRendTag(rend), "INVALID_TYPE",
 				   INVALID_TYPE_MSG,
@@ -1891,7 +2102,10 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 		}
 	      else
 		{
-		  _XmRendFont(rend) = font;
+#ifdef USE_XFT
+		  if (_XmRendFontType(rend) != XmFONT_IS_XFT)
+#endif
+		    _XmRendFont(rend) = font;
 		}
 	    }
 	  else
@@ -1903,6 +2117,9 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 	}
       else if ((_XmRendLoadModel(rend) == XmLOAD_IMMEDIATE) &&
 	       (_XmRendFont(rend) == NULL) &&
+#ifdef USE_XFT
+	       (_XmRendXftFont (rend) == NULL) &&
+#endif
 	       (_XmRendFontName(rend) == NULL))
 	{
 	  RenditionWarning(_XmRendTag(rend), "NULL_LOAD_IMMEDIATE",
@@ -2088,6 +2305,19 @@ FreeRendition(XmRendition rendition)
 	XmTabListFree(_XmRendTabs(rendition));
       if (_XmRendTagCount(rendition) != 0)
 	XtFree((char *)_XmRendTags(rendition));
+#ifdef USE_XFT
+      if (_XmRendXftFont(rendition))
+        {
+          XftFontClose(_XmRendDisplay(rendition),
+              _XmRendXftFont(rendition));
+          _XmRendXftFont(rendition) = NULL;
+        }
+      if (_XmRendPattern(rendition))
+        {
+          FcPatternDestroy(_XmRendPattern(rendition));
+          _XmRendPattern(rendition) = NULL;
+        }
+#endif
   
       XtFree((char *)GetPtr(rendition));
       return(TRUE);
@@ -2142,13 +2372,20 @@ XmRenditionRetrieve(XmRendition rendition,
 	      if (strcmp(res->resource_name, XmNfont) == 0)
 		{
 		  if ((_XmRendFont(rendition) == NULL) &&
+#ifdef USE_XFT
+		      (_XmRendXftFont (rendition) == NULL) &&
+#endif
 		      (_XmRendFontName(rendition) != NULL))
 		    {
 		      if (_XmRendLoadModel(rendition) == XmLOAD_DEFERRED)
 			_XmRendLoadModel(rendition) = XmLOAD_IMMEDIATE;
 		      ValidateAndLoadFont(rendition, _XmRendDisplay(rendition));
 		    }
-		  if (_XmRendFont(rendition) == NULL)
+		  if (_XmRendFont (rendition) == NULL
+#ifdef USE_XFT
+		      && _XmRendXftFont (rendition) == NULL
+#endif
+		     )
 		    CopyToArg((char*)&as_is, &(arg->value), sizeof(char*));
 		  else CopyToArg(((char *)GetPtr(rendition) + 
 				  res->resource_offset),
@@ -2403,13 +2640,21 @@ XmRenderTableCvtToProp(Widget widget, /* unused */
     size = strlen(str);
     CVTaddString(buffer, str, size);
 
-    sprintf(temp, "%ld, ", _XmRendBG(rendition));
-    str = temp;
+    if (_XmRendBG(rendition) == XmAS_IS)
+      str = "-1, ";
+    else {
+      sprintf(temp, "%ld, ", _XmRendBG(rendition));
+      str = temp;
+    }
     size = strlen(str);
     CVTaddString(buffer, str, size);
 
-    sprintf(temp, "%ld, ", _XmRendFG(rendition));
-    str = temp;
+    if (_XmRendFG(rendition) == XmAS_IS)
+      str = "-1, ";
+    else {
+      sprintf(temp, "%ld, ", _XmRendFG(rendition));
+      str = temp;
+    }
     size = strlen(str);
     CVTaddString(buffer, str, size);
 
@@ -2547,6 +2792,269 @@ ReadToken(char *string, int *position)
   *position = pos;
   return(new_token);
 }
+
+#ifdef	USE_XFT
+static struct _XmXftDrawCacheStruct {
+	Display	*display;
+	Window	window;
+	XftDraw	*draw;
+} *_XmXftDrawCache = NULL;
+static int _XmXftDrawCacheSize = 0;
+
+static XErrorHandler           oldErrorHandler;
+static int xft_error;
+
+static int 
+_XmXftErrorHandler(
+        Display *display,
+        XErrorEvent *error )
+{
+   (void) fprintf(stderr,
+   "Ignoring Xlib error: error code %d request code %d\n",
+   error->error_code,
+   error->request_code) ;
+   xft_error = BadWindow;
+
+    /* No exit! - but keep lint happy */
+
+    return 0 ;
+}
+
+XftDraw *
+_XmXftDrawCreate(Display *display, Window window)
+{
+	XftDraw			*draw;
+	XWindowAttributes	wa;
+	int			i;
+	Status status;
+
+	for (i=0; i<_XmXftDrawCacheSize; i++) {
+		if (_XmXftDrawCache[i].display == display &&
+		    _XmXftDrawCache[i].window == window) {
+			return _XmXftDrawCache[i].draw;
+		}
+	}
+        oldErrorHandler = XSetErrorHandler (_XmXftErrorHandler);
+	xft_error = 0;
+	XGetWindowAttributes(display, window, &wa);
+	if (xft_error != BadWindow) {
+	    draw = XftDrawCreate(display, window,
+	        DefaultVisual(display, DefaultScreen(display)),
+	        DefaultColormap(display, DefaultScreen(display)));
+	} else {
+            draw = XftDrawCreateBitmap(display, window);
+        }
+
+	/* Store it in the cache. Look for an empty slot first */
+	for (i=0; i<_XmXftDrawCacheSize; i++)
+		if (_XmXftDrawCache[i].display == NULL) {
+			_XmXftDrawCache[i].display = display;
+			_XmXftDrawCache[i].draw = draw;
+			_XmXftDrawCache[i].window = window;
+			return draw;
+		}
+	i = _XmXftDrawCacheSize;	/* Next free index */
+	_XmXftDrawCacheSize = _XmXftDrawCacheSize * 2 + 8;
+	_XmXftDrawCache = (struct _XmXftDrawCacheStruct *)
+		XtRealloc((char *)_XmXftDrawCache,
+		sizeof(struct _XmXftDrawCacheStruct) * _XmXftDrawCacheSize);
+
+	_XmXftDrawCache[i].display = display;
+	_XmXftDrawCache[i].draw = draw;
+	_XmXftDrawCache[i].window = window;
+	
+	return draw;
+}
+
+void
+_XmXftDrawDestroy(Display *display, Window window, XftDraw *draw)
+{
+    int i;
+
+    for (i=0; i<_XmXftDrawCacheSize; i++)
+	if (_XmXftDrawCache[i].display == display &&
+	    _XmXftDrawCache[i].window == window) {
+	        _XmXftDrawCache[i].display = NULL;
+	        _XmXftDrawCache[i].draw = NULL;
+	        _XmXftDrawCache[i].window = None;
+	        XftDrawDestroy(draw);
+	        return;
+        }
+    XmeWarning(NULL, "_XmXftDrawDestroy() this should not happen\n");
+}
+
+void
+_XmXftDrawString2(Display *display, Window window, GC gc, XftFont *font, int bpc,
+#if NeedWidePrototypes
+                int x, int y,
+#else
+                Position x, Position y,
+#endif
+                char *s, int len)
+{
+    XftDraw	*draw = _XmXftDrawCreate(display, window);
+    XGCValues gc_val;
+    XColor xcol;
+    XftColor xftcol;
+    
+    XGetGCValues(display, gc, GCForeground, &gc_val);
+
+    xcol.pixel = gc_val.foreground;
+    XQueryColor(display, DefaultColormap(display,
+        DefaultScreen(display)), &xcol);
+    xftcol.color.red = xcol.red;
+    xftcol.color.blue = xcol.blue;
+    xftcol.color.green = xcol.green;
+    xftcol.color.alpha = 0xFFFF;
+
+    switch (bpc)
+    {
+	case 1:
+		XftDrawStringUtf8(draw, &xftcol, font,
+			x, y, s, len);
+		break;
+	case 2:
+		XftDrawString16(draw, &xftcol, font,
+			x, y, (XftChar16 *)s, len);
+		break;
+	case 4:
+		XftDrawString32(draw, &xftcol, font,
+			x, y, (XftChar32 *)s, len);
+		break;
+	default:
+		XmeWarning(NULL, "_XmXftDrawString(unsupported bpc)\n");
+    }
+}
+
+void
+_XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
+#if NeedWidePrototypes
+                int x, int y,
+#else
+                Position x, Position y,
+#endif
+                char *s, int len,
+#if NeedWidePrototypes
+		int image
+#else
+		Boolean image
+#endif
+		)
+{
+    XftDraw	*draw = _XmXftDrawCreate(display, window);
+    XftColor    fg_color = _XmRendXftFG(rend);
+
+    if (image)
+    {
+        XftColor bg_color = _XmRendXftBG(rend);
+	XGlyphInfo ext;
+	ext.xOff = 0;
+	
+	switch (bpc)
+	{
+	    case 1:
+	        XftTextExtentsUtf8(display, _XmRendXftFont(rend),
+		                (FcChar8*)s, len, &ext);
+		break;
+	    case 2:
+	        XftTextExtents16(display, _XmRendXftFont(rend),
+		                 (FcChar16*)s, len, &ext);
+		break;
+	    case 4:
+	        XftTextExtents32(display, _XmRendXftFont(rend),
+		                 (FcChar32*)s, len, &ext);
+		break;
+	}
+	
+	if (_XmRendBG(rend) == XmUNSPECIFIED_PIXEL)
+	{
+	    XGCValues gc_val;
+	    XColor xcol;
+
+	    XGetGCValues(display, _XmRendGC(rend), GCBackground, &gc_val);
+	    xcol.pixel = gc_val.background;
+            XQueryColor(display, DefaultColormapOfScreen(
+                  DefaultScreenOfDisplay(display)), &xcol);
+	    bg_color.pixel = xcol.pixel;
+	    bg_color.color.red = xcol.red;
+	    bg_color.color.green = xcol.green;
+	    bg_color.color.blue = xcol.blue;
+	    bg_color.color.alpha = 0xFFFF;
+	}
+
+        XftDrawRect(draw, &bg_color, x - 10, y - _XmRendXftFont(rend)->ascent - 10,
+	            ext.xOff +20,
+		    _XmRendXftFont(rend)->ascent +
+		    _XmRendXftFont(rend)->descent + 20);
+    }
+
+    if (_XmRendFG(rend) == XmUNSPECIFIED_PIXEL)
+    {
+        XGCValues gc_val;
+	XColor xcol;
+	XGetGCValues(display, _XmRendGC(rend), GCForeground, &gc_val);
+	xcol.pixel = gc_val.foreground;
+        XQueryColor(display, DefaultColormapOfScreen(
+              DefaultScreenOfDisplay(display)), &xcol);
+	fg_color.pixel = xcol.pixel;
+	fg_color.color.red = xcol.red;
+	fg_color.color.green = xcol.green;
+	fg_color.color.blue = xcol.blue;
+	fg_color.color.alpha = 0xFFFF;
+    }
+
+    switch (bpc)
+    {
+	case 1:
+		XftDrawStringUtf8(draw, &fg_color, _XmRendXftFont(rend),
+			x, y, s, len);
+		break;
+	case 2:
+		XftDrawString16(draw, &fg_color, _XmRendXftFont(rend),
+			x, y, (XftChar16 *)s, len);
+		break;
+	case 4:
+		XftDrawString32(draw, &fg_color, _XmRendXftFont(rend),
+			x, y, (XftChar32 *)s, len);
+		break;
+	default:
+		XmeWarning(NULL, "_XmXftDrawString(unsupported bpc)\n");
+    }
+}
+
+void
+_XmXftSetClipRectangles(Widget w, Position x, Position y, XRectangle *rects, int n)
+{
+	XftDraw	*d = _XmXftDrawCreate(XtDisplay(w), XtWindow(w));
+
+	XftDrawSetClipRectangles(d, x, y, rects, n);
+}
+
+void
+_XmXftSetClipRectangles2(Display *display, Window window, Position x, Position y, XRectangle *rects, int n)
+{
+	XftDraw	*d = _XmXftDrawCreate(display, window);
+
+	XftDrawSetClipRectangles(d, x, y, rects, n);
+}
+
+XftColor
+_XmXftGetXftColor(Display *display, Pixel color)
+{
+    XColor xcol;
+    XftColor xftcol;
+    
+    xcol.pixel = color;
+    XQueryColor(display, DefaultColormap(display,
+        DefaultScreen(display)), &xcol);
+    xftcol.pixel = color;
+    xftcol.color.red = xcol.red;
+    xftcol.color.blue = xcol.blue;
+    xftcol.color.green = xcol.green;
+    xftcol.color.alpha = 0xFFFF;
+    return xftcol;
+}
+#endif
 
 /*ARGSUSED*/
 XmRenderTable
@@ -2726,3 +3234,78 @@ XmRenderTableCvtFromProp(Widget w,
   goto finish;
 }
 
+void
+XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
+                                    int *height,
+				    int *ascent,
+				    int *descent)
+{
+    XmStringTag	    tag = XmFONTLIST_DEFAULT_TAG;
+    XmRendition     rend;
+    Boolean         success;
+    short           indx;
+    int             h,a,d;
+  
+#ifdef XTHREADS
+  XtAppContext	       app=NULL;
+
+  if ( _XmRTDisplay(rendertable) )
+    app = XtDisplayToApplicationContext(_XmRTDisplay(rendertable));
+
+  if (app)
+    _XmAppLock(app);
+  else
+    _XmProcessLock();
+#endif
+
+    a = d = h = 0;
+    /* Get default rendition */
+    success = _XmRenderTableFindFallback(rendertable, tag, FALSE, &indx, &rend);
+
+    /* For backward compatibility we must try to return something for */
+    /* any non-null charset, not just XmFONTLIST_DEFAULT_TAG. */
+    if (rendertable && tag && !success)
+      success = _XmRenderTableFindFirstFont(rendertable, &indx, &rend);
+
+    /* Find font height */
+    switch (_XmRendFontType(rend)) {
+      case XmFONT_IS_FONT:
+        if (_XmRendFont(rend)) {
+	    a = ((XFontStruct*)_XmRendFont(rend))->ascent;
+	    d = ((XFontStruct*)_XmRendFont(rend))->descent;
+	    h = a + d;
+	}
+	break;
+      case XmFONT_IS_FONTSET:
+        if (_XmRendFont(rend)) {
+          XFontStruct **font_struct_list;
+          char **font_name_list;
+
+          if (XFontsOfFontSet((XFontSet)_XmRendFont(rend),
+			  &font_struct_list, &font_name_list))
+	    a = font_struct_list[0]->ascent;
+	    d = font_struct_list[0]->descent;
+	    h = a + d;
+	}
+	break;
+#ifdef USE_XFT
+      case XmFONT_IS_XFT:
+        if (_XmRendXftFont(rend))
+          a = _XmRendXftFont(rend)->ascent;
+	  d = _XmRendXftFont(rend)->descent;
+	  h = a + d;
+	break;
+#endif
+    }
+
+#ifdef XTHREADS
+  if (app)
+    _XmAppUnlock(app);
+  else
+    _XmProcessUnlock();
+#endif
+
+  if (ascent) *ascent = a;
+  if (descent) *descent = d;
+  if (height) *height = h;
+}

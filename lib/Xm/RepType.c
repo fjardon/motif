@@ -350,10 +350,10 @@ static XmConst unsigned char FileTypeMaskMap[] =
 {   XmFILE_DIRECTORY, XmFILE_REGULAR, XmFILE_ANY_TYPE
     } ;
 static XmConst char *XmConst FontTypeNames[] =
-{   "font_is_font", "font_is_fontset", "as_is"
+{   "font_is_font", "font_is_fontset", "as_is", "font_is_xft"
    } ; 
 static XmConst unsigned char FontTypeMap[] =
-{   XmFONT_IS_FONT, XmFONT_IS_FONTSET, XmAS_IS
+{   XmFONT_IS_FONT, XmFONT_IS_FONTSET, XmAS_IS, XmFONT_IS_XFT
    } ; 
 static XmConst char *XmConst IconAttachmentNames[] =
 {   "attach_north_west", "attach_north", "attach_north_east", "attach_east",

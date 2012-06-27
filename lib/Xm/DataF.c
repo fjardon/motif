@@ -6988,7 +6988,7 @@ df_StartDrag(
 #endif /* _NO_PROTO */
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
-    Atom targets[4];
+    Atom targets[5];
     char * tmp_string = "ABC";  /* these are characters in XPCS, so... safe */
     XTextProperty tmp_prop;
     int status = 0;
@@ -7010,6 +7010,7 @@ df_StartDrag(
                                         */
     if (tmp_prop.value != NULL) XFree((char *)tmp_prop.value);
 
+    targets[num_targets++] = XmInternAtom(XtDisplay(w), "UTF8_STRING", False);
     targets[num_targets++] = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
     targets[num_targets++] = XA_STRING;
     targets[num_targets++] = XmInternAtom(XtDisplay(w), "TEXT", False);
@@ -7227,6 +7228,7 @@ df_DoStuff(
        }
 
        if (*type == XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False) ||
+           *type == XmInternAtom(XtDisplay(w), "UTF8_STRING", False) ||
            *type == XA_STRING) {
 	  tmp_prop.value = (unsigned char *) value;
 	  tmp_prop.encoding = *type;
@@ -7603,9 +7605,11 @@ df_HandleTargets(
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     Atom CS_OF_LOCALE; /* to be initialized by XmbTextListToTextProperty */
     Atom COMPOUND_TEXT = XmInternAtom(XtDisplay(w),"COMPOUND_TEXT", False);
+    Atom UTF8_STRING = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
     XmTextPosition left, right;
     Boolean supports_locale_data = False;
     Boolean supports_CT = False;
+    Boolean supports_utf8_string = False;
     Atom *atom_ptr;
     _XmTextActionRec *tmp_action = (_XmTextActionRec *) closure;
     _XmTextPrimSelect *prim_select;
@@ -7645,6 +7649,8 @@ df_HandleTargets(
       }
       if (*atom_ptr == COMPOUND_TEXT)
          supports_CT = True;
+      if (*atom_ptr == UTF8_STRING)
+         supports_utf8_string = True;
     }
 
 
@@ -7683,6 +7689,8 @@ df_HandleTargets(
    if (supports_locale_data)
       prim_select->target = targets[0] = XmInternAtom(XtDisplay(w), "TEXT",
 						      False);
+   else if (supports_utf8_string)
+       prim_select->target = targets[0] = UTF8_STRING;
    else if (supports_CT)
       prim_select->target = targets[0] = COMPOUND_TEXT;
    else
@@ -8618,6 +8626,9 @@ df_LoadFontMetrics(
     XtPointer tmp_font;
     Boolean have_font_struct = False;
     Boolean have_font_set = False;
+#ifdef USE_XFT
+    Boolean have_xft_font = False;
+#endif
     XFontSetExtents *fs_extents;
     XFontStruct *font;
     unsigned long charwidth = 0;
@@ -8637,6 +8648,9 @@ df_LoadFontMetrics(
                                    * case we don't find a default tag set.
                                    */
 	        XmTextF_have_fontset(tf) = True;
+#ifdef USE_XFT
+	        XmTextF_use_xft(tf) = False;
+#endif
 	        XmTextF_font(tf) = (XFontStruct *)tmp_font;
 	        have_font_struct = True; /* we have a font set, so no need to 
                                           * consider future font structs */
@@ -8650,18 +8664,34 @@ df_LoadFontMetrics(
 	        have_font_set = True;    /* we have a font set. */
 	        break; /* Break out!  We've found the one we want. */
 	     }
-          } else if (!have_font_struct){/* return_type must be XmFONT_IS_FONT */
+          } else if (type_return == XmFONT_IS_FONT && !have_font_struct) {
+	     /* return_type must be XmFONT_IS_FONT */
 	     XmTextF_have_fontset(tf) = False;
+#ifdef USE_XFT
+	     XmTextF_use_xft(tf) = False;
+#endif
 	     XmTextF_font(tf)=(XFontStruct*)tmp_font; /* save the first font
                                                      * struct in case no font 
                                                      * set is found */
 	     have_font_struct = True;                     
+#ifdef USE_XFT
+          } else if (type_return == XmFONT_IS_XFT && !have_xft_font) {
+	     XmTextF_have_fontset(tf) = False;
+             XmTextF_use_xft(tf) = True;
+	     have_xft_font = True;
+	     XmTextF_xft_font(tf) = (XftFont*)tmp_font;
+#endif
           }
        }
     } while(next_entry != NULL);
 
-    if (!have_font_struct && !have_font_set)
+#if USE_XFT
+    if (!have_font_struct && !have_font_set && !have_xft_font) {
+#else
+    if (!have_font_struct && !have_font_set) {
+#endif
           XmeWarning ((Widget)tf, MSG4);
+    }
 
     if (XmTextF_max_char_size(tf) > 1 && !have_font_set){
      /*XmeWarning((Widget)tf, MSGnnn); */
@@ -8683,6 +8713,10 @@ df_LoadFontMetrics(
        XmTextF_font_ascent(tf) = -fs_extents->max_ink_extent.y;
        XmTextF_font_descent(tf) = fs_extents->max_ink_extent.height +
                                fs_extents->max_ink_extent.y;
+#ifdef USE_XFT
+    } else if (XmTextF_use_xft(tf)) {
+        charwidth = XmTextF_xft_font(tf)->max_advance_width;
+#endif
     } else {
        font = XmTextF_font(tf);
        if ((!XGetFontProperty(font, XA_QUAD_WIDTH, &charwidth)) ||
@@ -9167,7 +9201,11 @@ df_LoadGCs(
    * Get GC for drawing text.
    */
 
-   if (!XmTextF_have_fontset(tf)){
+#if USE_XFT
+   if (!XmTextF_have_fontset(tf) && !XmTextF_use_xft(tf)) {
+#else
+   if (!XmTextF_have_fontset(tf)) {
+#endif
       value_mask |= GCFont | GCGraphicsExposures;
       values.font = XmTextF_font(tf)->fid;
    } else {
@@ -9538,6 +9576,7 @@ df_DropTransferCallback(
     _XmTextDropTransferRec *transfer_rec = (_XmTextDropTransferRec *) closure;
     XmDataFieldWidget tf = (XmDataFieldWidget) transfer_rec->widget;
     Atom COMPOUND_TEXT = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
+    Atom UTF8_STRING = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
     Atom CS_OF_LOCALE;
     XmTextPosition insertPosLeft, insertPosRight, left, right, cursorPos;
     int max_length = 0;
@@ -9589,7 +9628,7 @@ df_DropTransferCallback(
     if (tmp_prop.value != NULL) XFree((char *)tmp_prop.value);
 
     if (!value || (*type != CS_OF_LOCALE && *type != COMPOUND_TEXT &&
-                   *type != XA_STRING )) {
+                   *type != XA_STRING && *type != UTF8_STRING)) {
         n = 0;
         XtSetArg(args[n], XmNtransferStatus, XmTRANSFER_FAILURE); n++;
         XtSetArg(args[n], XmNnumDropTransfers, 0); n++;
@@ -9603,7 +9642,8 @@ df_DropTransferCallback(
 
     insertPosLeft = insertPosRight = transfer_rec->insert_pos;
 
-    if (*type == XA_STRING || *type == COMPOUND_TEXT) {
+    if (*type == XA_STRING || *type == COMPOUND_TEXT
+            || *type == UTF8_STRING) {
        /* value NEEDS TO BE FREED */
        tmp_prop.value = (unsigned char *) value; 
        tmp_prop.encoding = *type;
@@ -9755,6 +9795,7 @@ df_HandleDrop(
        XmDropTransferEntryRec *transferList = NULL;
        Atom TEXT = XmInternAtom(display, "TEXT", False);
        Atom COMPOUND_TEXT = XmInternAtom(display, "COMPOUND_TEXT", False);
+       Atom UTF8_STRING = XmInternAtom(display, "UTF8_STRING", False);
        Atom CS_OF_LOCALE;
        char * tmp_string = "ABC"; /* these are characters in XPCS, so... safe */
        XTextProperty tmp_prop;
@@ -9762,6 +9803,7 @@ df_HandleDrop(
        Cardinal numTransfers = 0;
        Boolean locale_found = False;
        Boolean c_text_found = False;
+       Boolean utf8_string_found = False;
        Boolean string_found = False;
        Boolean text_found = False;
        int status;
@@ -9804,6 +9846,7 @@ df_HandleDrop(
 	   break;
 	 }
 	 if (exportTargets[n] == COMPOUND_TEXT) c_text_found = True;
+	 if (exportTargets[n] == UTF8_STRING) utf8_string_found = True;
 	 if (exportTargets[n] == XA_STRING) string_found = True;
 	 if (exportTargets[n] == TEXT) text_found = True;
        }
@@ -9811,7 +9854,9 @@ df_HandleDrop(
        n = 0;
        if (locale_found || c_text_found || string_found || text_found) {
 	 if (!locale_found) {
-	   if (c_text_found)
+           if (utf8_string_found)
+	     transferEntries[0].target = UTF8_STRING;
+	   else if (c_text_found)
 	     transferEntries[0].target = COMPOUND_TEXT;
 	   else if (string_found)
 	     transferEntries[0].target = XA_STRING;
@@ -9857,7 +9902,7 @@ df_DragProcCallback(
 {
     XmDragProcCallbackStruct *cb = (XmDragProcCallbackStruct *)call;
     Widget drag_cont;
-    Atom targets[4];
+    Atom targets[5];
     char * tmp_string = "ABC";  /* these are characters in XPCS, so... safe */
     XTextProperty tmp_prop;
     Arg args[10];
@@ -9879,6 +9924,7 @@ df_DragProcCallback(
     targets[1] = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
     targets[2] = XA_STRING;
     targets[3] = XmInternAtom(XtDisplay(w), "TEXT", False);
+    targets[4] = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 
     drag_cont = cb->dragContext;
 
@@ -9944,7 +9990,7 @@ df_RegisterDropSite(
         Widget w )
 #endif /* _NO_PROTO */
 {
-    Atom targets[4];
+    Atom targets[5];
     Arg args[10];
     int n;
     char * tmp_string = "ABC";  /* these are characters in XPCS, so... safe */
@@ -9965,6 +10011,7 @@ df_RegisterDropSite(
     targets[1] = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
     targets[2] = XA_STRING;
     targets[3] = XmInternAtom(XtDisplay(w), "TEXT", False);
+    targets[4] = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 
     n = 0;
     XtSetArg(args[n], XmNimportTargets, targets); n++;
@@ -12117,6 +12164,7 @@ XmDataFieldPaste(
     Display *display = XtDisplay(w);
     Window window = XtWindow(w);
     Boolean get_ct = False;
+    Boolean get_us = False;
     XTextProperty tmp_prop;
     int malloc_size = 0;
     int num_vals;
@@ -12144,20 +12192,31 @@ XmDataFieldPaste(
 					  &length);
 	if (status == ClipboardNoData || length == 0) 
 	{
-	  _XmAppUnlock(app);
-	  return False;
-	}
-	get_ct = True;
+          status = XmClipboardInquireLength(display, window,
+                                            XmSUTF8_STRING, &length);
+          if (status == ClipboardNoData || length == 0)
+          {
+            _XmAppUnlock(app);
+            return False;
+          }
+          get_us = True;
+	} else {
+	  get_ct = True;
+        }
    }
 
    /* malloc length of clipboard data */
    buffer = XtMalloc((unsigned) length);
 
-   if (!get_ct) 
+   if (!get_ct && !get_us) 
    {
        status = XmClipboardRetrieve(display, window, "STRING", buffer,
 				    length, &outlength, &private_id);
    } 
+   else if (!get_ct && get_us) {
+       status = XmClipboardRetrieve(display, window, XmSUTF8_STRING, buffer,
+				    length, &outlength, &private_id);
+   }
    else 
    {
        status = XmClipboardRetrieve(display, window, "COMPOUND_TEXT", buffer,

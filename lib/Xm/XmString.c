@@ -369,6 +369,7 @@ static void DrawLine(Display *d,
 		     ); 
 static void _calc_align_and_clip( 
                         Display *d,
+			Window w,
                         GC gc,
                         Position *x,
 #if NeedWidePrototypes
@@ -391,7 +392,8 @@ static void _calc_align_and_clip(
                         unsigned char align,
 #endif /* NeedWidePrototypes */
                         int descender,
-                        int *restore) ;
+                        int *restore,
+			XmFontType font_type) ;
 static void _draw( 
                         Display *d,
                         Window w,
@@ -484,7 +486,8 @@ static void ComputeMetrics(XmRendition rend,
 			   Dimension *width,
 			   Dimension *height,
 			   Dimension *ascent,
-			   Dimension *descent); 
+			   Dimension *descent,
+                           Boolean utf8); 
 static Dimension ComputeWidth(unsigned char which,
 			      XCharStruct char_ret); 
 static void _parse_locale( 
@@ -2300,7 +2303,8 @@ OptLineMetrics(XmRenderTable 	r,
 	rend = _XmRenderTableFindRendition(r, _XmStrRendTagGet(opt), 
 					   TRUE, FALSE, TRUE, &rend_index);
 
-      if ((rend == NULL) || (_XmRendFont(rend) == NULL))
+      if ((rend == NULL) ||
+          (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL))
 	rend = _XmRenderTableFindRendition(r, _XmStrTagGet(opt), 
 					   TRUE, FALSE, TRUE, &rend_index);
     }
@@ -2323,7 +2327,8 @@ OptLineMetrics(XmRenderTable 	r,
     }
   
   /* 3. Default rendition. */
-  if ((rend == NULL) || (_XmRendFont(rend) == NULL))
+  if ((rend == NULL) ||
+      (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL))
     {
       tags[0] = ((_XmStrTextType(opt) == XmCHARSET_TEXT) ?
 		 XmFONTLIST_DEFAULT_TAG :
@@ -2331,7 +2336,8 @@ OptLineMetrics(XmRenderTable 	r,
 
       rend = _XmRenderTableFindRendition(r, tags[0],
 					 TRUE, FALSE, FALSE, NULL);
-      if ((rend != NULL) && (_XmRendFont(rend) == NULL) && 
+      if ((rend != NULL) &&
+          (_XmRendFont(rend) == NULL) && (_XmRendXftFont(rend) == NULL) &&
 	  (((base_rend != NULL) && (_XmRendDisplay(base_rend) != NULL)) ||
 	   (_XmRendDisplay(rend) != NULL)))
 	/* Call noFontCallback. */
@@ -2362,7 +2368,8 @@ OptLineMetrics(XmRenderTable 	r,
 	      _XmRendRefcount(rend) = rt_ref_cnt;
 	    }
 
-	  if (_XmRendFont(rend) == NULL) rend = NULL;
+	  if (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL)
+	    rend = NULL;
 	}
   
       /* 4a. Take the first one */
@@ -2373,7 +2380,8 @@ OptLineMetrics(XmRenderTable 	r,
 	  (r != NULL) && (_XmRTCount(r) > 0))
 	_XmRenderTableFindFirstFont(r, &rend_index, &rend);
 	
-      if ((rend != NULL) &&(_XmRendFont(rend) == NULL) &&
+      if ((rend != NULL) &&
+          (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL) &&
 	  (((base_rend != NULL) && (_XmRendDisplay(base_rend) != NULL)) ||
 	   (_XmRendDisplay(rend) != NULL)))
 	/* Call noFontCallback. */
@@ -2404,11 +2412,13 @@ OptLineMetrics(XmRenderTable 	r,
 	      _XmRendRefcount(rend) = rt_ref_cnt;
 	    }
 
-	  if (_XmRendFont(rend) == NULL) rend = NULL;
+	  if (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL)
+	    rend = NULL;
 	}
 
       /* 4b/5a. Emit warning and don't render. */
-      if ((rend == NULL) || (_XmRendFont(rend) == NULL))
+      if ((rend == NULL) ||
+          (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL))
 	{
 	  /* Don't emit warning if no tags, e.g. just a dir component. */
 	  if (_XmStrRendBegin(opt) ||
@@ -2422,6 +2432,9 @@ OptLineMetrics(XmRenderTable 	r,
       else if (rend_io != NULL)
 	{
 	  _XmRendFont(*rend_io) = _XmRendFont(rend);
+#ifdef USE_XFT
+	  _XmRendXftFont(*rend_io) = _XmRendXftFont(rend);
+#endif
 	  _XmRendFontName(*rend_io) = _XmRendFontName(rend);
 	  _XmRendFontType(*rend_io) = _XmRendFontType(rend);
 	}
@@ -2432,7 +2445,11 @@ OptLineMetrics(XmRenderTable 	r,
     ComputeMetrics(rend,
 		   (XtPointer)_XmStrText(opt),
 		   _XmStrByteCount(opt), (XmTextType) _XmStrTextType(opt),
-		   XmSTRING_SINGLE_SEG, width, height, ascent, descent);
+		   XmSTRING_SINGLE_SEG, width, height, ascent, descent,
+                   _XmStrTextType(opt) == XmCHARSET_TEXT &&
+                   (_XmStrTagIndex(opt) == XmFONTLIST_DEFAULT_TAG
+                    && _XmStringIsCurrentCharset("UTF-8")
+                    || (strcmp(_XmStrTagGet(opt), "UTF-8") == 0)));
 
   if (rend != NULL) tl = _XmRendTabs(rend);
   d = (_XmRTDisplay(r) == NULL) ? _XmGetDefaultDisplay() : _XmRTDisplay(r);
@@ -3458,7 +3475,8 @@ SubStringPosition(
   
   max = (seg_len - under_seg_len);
   
-  if (_XmRendFontType(entry) == XmFONT_IS_FONT) {
+  if (_XmRendFontType(entry) == XmFONT_IS_FONT
+      || _XmRendFontType(entry) == XmFONT_IS_XFT) {
     XFontStruct *font_struct = (XFontStruct *)_XmRendFont(entry);
     
     if (one_byte) {
@@ -3476,12 +3494,30 @@ SubStringPosition(
 	  if (begin == 0)
 	    *under_begin = x;
 	  else
-	    *under_begin = x + abs(XTextWidth (font_struct, a, begin));
-	  
+	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
+	      *under_begin = x + abs(XTextWidth (font_struct, a, begin));
+#ifdef USE_XFT
+	    else {
+	      XGlyphInfo ext;
+	      XftTextExtentsUtf8(_XmRendDisplay(entry), _XmRendXftFont(entry),
+	                      a, begin, &ext);
+	      *under_begin = x + ext.xOff;
+	    }
+#endif
+
 	  width = _XmEntryWidthGet((_XmStringEntry)under_seg, rt);
 	  
 	  if (width == 0) {
-	    width = abs(XTextWidth(font_struct, b, under_seg_len));
+	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
+	      width = abs(XTextWidth(font_struct, b, under_seg_len));
+#ifdef USE_XFT
+	    else {
+	      XGlyphInfo ext;
+	      XftTextExtentsUtf8(_XmRendDisplay(entry), _XmRendXftFont(entry),
+	                      b, under_seg_len, &ext);
+	      width = ext.xOff;
+	    }
+#endif
 	    _XmEntryWidthSet((_XmStringEntry)under_seg, rt, width);
 	  }
 	  
@@ -3517,14 +3553,32 @@ SubStringPosition(
 	  if (begin == 0)
 	    *under_begin = x;
 	  else
-	    *under_begin = 
-	      x + abs(XTextWidth16 (font_struct, (XChar2b *) a, begin/2));
+	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
+	      *under_begin = 
+	        x + abs(XTextWidth16 (font_struct, (XChar2b *) a, begin/2));
+#ifdef USE_XFT
+	    else {
+	      XGlyphInfo ext;
+	      XftTextExtents16(_XmRendDisplay(entry), _XmRendXftFont(entry),
+	                      (FcChar16*)a, begin, &ext);
+	      *under_begin = x + ext.xOff;
+	    }
+#endif
 	  
 	  width = _XmEntryWidthGet((_XmStringEntry)under_seg, rt);
 	  
 	  if (width == 0) {
-	    width = abs(XTextWidth16(font_struct, (XChar2b *) b, 
-				     under_seg_len/2));
+	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
+	      width = abs(XTextWidth16(font_struct, (XChar2b *) b, 
+				       under_seg_len/2));
+#ifdef USE_XFT
+	    else {
+	      XGlyphInfo ext;
+	      XftTextExtents16(_XmRendDisplay(entry), _XmRendXftFont(entry),
+	                      (FcChar16*)b, under_seg_len, &ext);
+	      width = ext.xOff;
+	    }
+#endif
 	    _XmEntryWidthSet((_XmStringEntry)under_seg, rt, width);
 	  }
 	  
@@ -3583,15 +3637,25 @@ SubStringPosition(
       }
       
       if (!fail) {          /* found it */
+        Boolean utf8 = ((_XmEntryTextTypeGet(seg) == XmCHARSET_TEXT) &&
+              (((_XmEntryTagIndex((_XmStringEntry)seg) ==
+                 XmFONTLIST_DEFAULT_TAG) &&
+                _XmStringIsCurrentCharset("UTF-8")) ||
+               (strcmp(seg_tag, "UTF-8") == 0)));
 	if (begin == 0) 
 	  *under_begin = x;
-	else if (type == XmWIDECHAR_TEXT)
+	else if (type == XmWIDECHAR_TEXT) {
 	  *under_begin =
 	    x + abs(XwcTextEscapement(font_set, (wchar_t *)a, 
 				      begin/sizeof(wchar_t)));
-	else
-	  *under_begin =
-	    x + abs(XmbTextEscapement(font_set, a, begin));
+        } else {
+            if (utf8)
+                *under_begin =
+                    x + abs(Xutf8TextEscapement(font_set, a, begin));
+            else
+                *under_begin =
+                    x + abs(XmbTextEscapement(font_set, a, begin));
+        }
 	
 	width = _XmEntryWidthGet((_XmStringEntry)under_seg, rt);
 	
@@ -3599,7 +3663,9 @@ SubStringPosition(
 	  width = (type == XmWIDECHAR_TEXT) 
 	    ? abs(XwcTextEscapement(font_set, (wchar_t *)b, 
 				  under_seg_len / sizeof(wchar_t)))
-	    : abs(XmbTextEscapement(font_set, b, under_seg_len));
+	    : (utf8
+                    ? abs(Xutf8TextEscapement(font_set, b, under_seg_len))
+                    : abs(XmbTextEscapement(font_set, b, under_seg_len)));
 	  
 	  _XmEntryWidthSet((_XmStringEntry)under_seg, rt, width);
 	}
@@ -3816,7 +3882,7 @@ _XmStringDrawSegment(Display *d,
 #endif /* NeedWidePrototypes */
 		     )
 {
-  Boolean 		text16 = False, multibyte, widechar;
+  Boolean 		text16 = False, multibyte, widechar, utf8;
   Font    		oldfont = (Font) 0;
   GC			gc; 
   XGCValues 		xgcv;
@@ -3845,6 +3911,15 @@ _XmStringDrawSegment(Display *d,
       widechar = ((_XmEntryTextTypeGet((_XmStringEntry)seg) == 
 		   XmWIDECHAR_TEXT) &&
 		  (_XmRendFontType(rend) == XmFONT_IS_FONTSET));
+		  
+      utf8 = ((_XmEntryTextTypeGet((_XmStringEntry)seg) == XmCHARSET_TEXT) &&
+		   (_XmRendFontType(rend) == XmFONT_IS_FONTSET ||
+		   _XmRendFontType(rend) == XmFONT_IS_XFT) &&
+              (((_XmEntryTagIndex((_XmStringEntry)seg) ==
+                 XmFONTLIST_DEFAULT_TAG) &&
+                (_XmStringIsCurrentCharset("UTF-8")) ||
+               (_XmEntryTagIndex(seg) != TAG_INDEX_UNSET
+	       && strcmp(_XmEntryTag((_XmStringEntry)seg), "UTF-8") == 0))));
     
       gc = _XmRendGC(rend);
 
@@ -3874,7 +3949,7 @@ _XmStringDrawSegment(Display *d,
 	    }
 	}
     
-      if (!multibyte && !widechar)
+      if (!multibyte && !widechar && _XmRendFontType(rend) != XmFONT_IS_XFT)
 	{
 	  XFontStruct *f = (XFontStruct *)_XmRendFont(rend);
 
@@ -4019,11 +4094,22 @@ _XmStringDrawSegment(Display *d,
 	  }
 	}
   
+#ifdef USE_XFT
+      if (_XmRendFontType(rend) == XmFONT_IS_XFT)
+        {
+	    _XmXftDrawString(d, w, rend, 1, x, y, draw_text, seg_len, image);
+        }
+      else /* TODO: fix indentation */
+#endif
+        {
       if (image)
 	{
 	  if (text16) 
 	    XDrawImageString16(d, w, gc, x, y, (XChar2b*)draw_text, 
 			       Half(seg_len));
+          else if (utf8)
+            Xutf8DrawImageString(d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
+                                 draw_text, seg_len);
 	  else if (multibyte) 
 	    XmbDrawImageString (d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
 				draw_text, seg_len);
@@ -4039,6 +4125,9 @@ _XmStringDrawSegment(Display *d,
 	  if (text16) 
 	    XDrawString16 (d, w, gc, x, y, (XChar2b *)draw_text,
 			   Half(seg_len));
+          else if (utf8)
+	    Xutf8DrawString(d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
+                            draw_text, seg_len);
 	  else if (multibyte)
 	    XmbDrawString (d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
 			   draw_text, seg_len);
@@ -4048,6 +4137,7 @@ _XmStringDrawSegment(Display *d,
 			   (seg_len / sizeof(wchar_t)));
 	  else 
 	    XDrawString(d, w, gc, x, y, draw_text, seg_len);
+	}
 	}
 
       /* Draw lines */
@@ -4761,6 +4851,7 @@ DrawLine(
 static void 
 _calc_align_and_clip(
         Display *d,
+	Window w,
         GC gc,
         Position *x,
 #if NeedWidePrototypes
@@ -4783,7 +4874,8 @@ _calc_align_and_clip(
         unsigned char align,
 #endif /* NeedWidePrototypes */
         int descender,
-        int *restore )
+        int *restore,
+	XmFontType font_type)
 {
 
     Boolean l_to_r = XmDirectionMatch(lay_dir, XmSTRING_DIRECTION_L_TO_R);
@@ -4813,6 +4905,11 @@ _calc_align_and_clip(
 	     (y + descender) > (clip->y + clip->height))
 	{
 	    *restore = TRUE;
+#ifdef USE_XFT
+            if (font_type == XmFONT_IS_XFT)
+	      _XmXftSetClipRectangles2(d, w, 0, 0, clip, 1);
+	    else
+#endif
             XSetClipRectangles (d, gc, 0, 0, clip, 1, YXBanded);
 	}
 
@@ -4930,9 +5027,9 @@ _render(Display *d,
         if (line_width != 0)
           {   
             draw_x = base_x ; /* most left position */
-            _calc_align_and_clip( d, gc, &draw_x, y, width, line_width, 
+            _calc_align_and_clip( d, w, gc, &draw_x, y, width, line_width, 
                                 lay_dir, clip, align, descender, 
-                                &restore_clip) ;
+                                &restore_clip, _XmRendFontType(rend));
 
             DrawLine(d, w, &screen, draw_x, y, (_XmStringEntry)string, 
 		     &rend2, rend, rendertable, lay_dir, image, 
@@ -4971,9 +5068,9 @@ _render(Display *d,
 	  {
 	    draw_x = base_x;			  /* most left position */
 
-	    _calc_align_and_clip(d, gc, &draw_x, y, width, line_width, 
+	    _calc_align_and_clip(d, w, gc, &draw_x, y, width, line_width, 
 				 direction, clip, align, descender, 
-				 &restore_clip);
+				 &restore_clip, _XmRendFontType(rend));
 
 	    DrawLine(d, w, &screen, draw_x, y, line, &rend1, rend,
 		     rendertable, lay_dir, image, &underline,
@@ -6046,7 +6143,8 @@ ComputeMetrics(XmRendition rend,
 	       Dimension *width,
 	       Dimension *height,
 	       Dimension *ascent,
-	       Dimension *descent)
+	       Dimension *descent,
+               Boolean utf8)
 {
   Dimension	wid, hi;
   int		dir, asc, desc;
@@ -6056,7 +6154,8 @@ ComputeMetrics(XmRendition rend,
   asc = 0;
   desc = 0;
   
-  if (_XmRendFontType(rend) == XmFONT_IS_FONT)
+  switch (_XmRendFontType(rend)) {
+    case XmFONT_IS_FONT:
     {
       XFontStruct *font_struct = (XFontStruct *)_XmRendFont(rend);
       XCharStruct	char_ret;
@@ -6093,7 +6192,8 @@ ComputeMetrics(XmRendition rend,
 	    }
 	}
     }
-  else if (_XmRendFontType(rend) == XmFONT_IS_FONTSET)
+    break;
+    case XmFONT_IS_FONTSET:
     {
       if (byte_count >= 1) 
 	{
@@ -6104,9 +6204,14 @@ ComputeMetrics(XmRendition rend,
 	    XwcTextExtents(font_set, (wchar_t *)text,
 			   byte_count/sizeof(wchar_t),
 			   &ink, &logical);
-	  else
-	    XmbTextExtents(font_set, (char *)text, byte_count,
-			   &ink, &logical);
+	  else {
+              if (utf8)
+                  Xutf8TextExtents(font_set, (char *)text, byte_count,
+                          &ink, &logical);
+              else
+                  XmbTextExtents(font_set, (char *)text, byte_count,
+                          &ink, &logical);
+          }
 
 	  if (logical.height == 0)
 	    { 
@@ -6119,6 +6224,27 @@ ComputeMetrics(XmRendition rend,
 	  desc = logical.height + logical.y;
 	}
     }
+    break;
+#ifdef USE_XFT
+    case XmFONT_IS_XFT:
+	asc = _XmRendXftFont(rend)->ascent;
+	desc = _XmRendXftFont(rend)->descent;
+	/* FIXME
+	 * Following Keith Packard comments it should be
+	 *  hi = _XmRendXftFont(rend)->height;
+	 * but is looking ascent + descent better. Is it a bug?
+	 */
+	hi = asc+desc;
+    {
+	XGlyphInfo	info;
+	XftTextExtentsUtf8(_XmRendDisplay(rend),
+		_XmRendXftFont(rend),
+		text, byte_count,
+		&info);
+	wid = info.xOff;
+    }
+#endif
+  }
 
   /* Adjust for underlining. Add one pixel for line and one pixel at bottom so
    * that line doesn't bleed into background with select color of 
@@ -6292,7 +6418,8 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 	}
   
       /* 3. Default rendition. */
-      if (_XmRendFont(*rend_in_out) == NULL)
+      if (_XmRendFont(*rend_in_out) == NULL &&
+          _XmRendXftFont(*rend_in_out) == NULL)
 	{
 	  def_tag = ((_XmEntryTextTypeGet(entry) == XmCHARSET_TEXT) ?
 		     XmFONTLIST_DEFAULT_TAG :
@@ -6302,7 +6429,7 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 				   def_tag, NULL, 0, (render_cache != NULL));
       
 	  if ((rend != NULL) &&
-	      (_XmRendFont(rend) == NULL) &&
+	      (_XmRendFont(rend) == NULL) && (_XmRendXftFont(rend) == NULL) &&
 	      ((def_rend = _XmRenderTableFindRendition(rendertable, def_tag,
 						       TRUE, FALSE, FALSE, NULL))
 	       != NULL))
@@ -6336,6 +6463,13 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
 		  _XmRendFont(rend) = _XmRendFont(def_rend);
 		}
+#ifdef USE_XFT
+              else if (_XmRendXftFont(def_rend) != NULL)
+	        {
+		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
+		  _XmRendXftFont(rend) = _XmRendXftFont(def_rend);
+		}
+#endif
 	      else rend = NULL;
 	    }
   
@@ -6348,7 +6482,8 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 	    rend = _XmRenditionMerge(d, rend_in_out, base, rendertable,
 				     NULL, NULL, 0, (render_cache != NULL));
 	
-	  if ((rend != NULL) && (_XmRendFont(rend) == NULL))
+	  if ((rend != NULL) &&
+	      (_XmRendFont(rend) == NULL) && (_XmRendXftFont(rend) == NULL))
 	    /* Call noFontCallback. */
 	    {
 	      XmDisplay			dsp;
@@ -6379,11 +6514,19 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
 		  _XmRendFont(rend) = _XmRendFont(def_rend);
 		}
+#ifdef USE_XFT
+              else if (_XmRendXftFont(def_rend) != NULL)
+	        {
+		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
+		  _XmRendXftFont(rend) = _XmRendXftFont(def_rend);
+		}
+#endif
 	      else rend = NULL;
 	    }
 
 	  /* 4b/5a. Emit warning and don't render. */
-	  if ((rend == NULL) || (_XmRendFont(rend) == NULL))
+	  if ((rend == NULL) ||
+	      (_XmRendFont(rend) == NULL && _XmRendXftFont(rend) == NULL))
 	    {
 	      /* No warning if no tags, e.g. just dir component. */
 	      if ((tag_count > 0) || (entry_tag != NULL))
@@ -6423,7 +6566,12 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
       ComputeMetrics(*rend_in_out, _XmEntryTextGet(entry),
 		     _XmEntryByteCountGet(entry),
 		     (XmTextType) _XmEntryTextTypeGet(entry),
-		     which_seg, &w, &h, &asc, &dsc);
+		     which_seg, &w, &h, &asc, &dsc,
+                   _XmEntryType(entry) == XmCHARSET_TEXT &&
+                   (_XmEntryTagIndex(entry) == XmFONTLIST_DEFAULT_TAG
+                    && (_XmStringIsCurrentCharset("UTF-8")
+                    || (_XmEntryTagIndex(entry) !=  TAG_INDEX_UNSET
+		    && strcmp(_XmEntryTag(entry), "UTF-8") == 0))));
 
       /* If cache exists, set it. */
       if (render_cache != NULL)

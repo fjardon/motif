@@ -1424,10 +1424,17 @@ ComputeVizCount(XmListWidget lw)
     }
   else /* Have to guess by getting height of default font. */
     {
+#if USE_XFT
+      XmRenderTableGetDefaultFontExtents(lw->list.font,
+                                         &lineheight, NULL, NULL);
+      if (lineheight == 0)
+        lineheight = 1;
+#else
       if (XmeRenderTableGetDefaultFont(lw->list.font, &font_struct))
 	lineheight = font_struct->ascent + font_struct->descent;
       else
 	lineheight = 1;
+#endif
     }
 
   viz = ((int)(listheight + lw->list.spacing) /
@@ -2462,6 +2469,10 @@ DrawItems(XmListWidget lw,
 	}
 
       _XmRendGC(lw->list.scratchRend) = gc;
+#ifdef USE_XFT
+      _XmRendXftFG(lw->list.scratchRend) =
+          _XmXftGetXftColor(XtDisplay(lw), _XmRendFG(lw->list.scratchRend));
+#endif
 
       /* CR 9204: Let _XmStringRender handle right-to-left drawing. */
       _XmStringRender(XtDisplay(lw),
@@ -2587,6 +2598,11 @@ SetClipRect(XmListWidget widget)
   rect.width = w;
   rect.height = h;
 
+#ifdef USE_XFT
+    _XmXftSetClipRectangles2(XtDisplay(lw), XtWindow(lw), x, y,
+	                    &rect, 1);
+#endif      
+
   if (lw->list.NormalGC)
     XSetClipRectangles(XtDisplay(lw), lw->list.NormalGC, x, y,
 		       &rect, 1, Unsorted);
@@ -2634,10 +2650,20 @@ SetDefaultSize(XmListWidget lw,
 
   if (lw->list.itemCount == 0)
     {
+#if USE_XFT
+      int height;
+
+      XmRenderTableGetDefaultFontExtents(lw->list.font, &height, NULL, NULL);
+					 
+      lw->list.MaxItemHeight = (Dimension)height;
+      if (lw->list.MaxItemHeight)
+        lw->list.MaxItemHeight = 1;
+#else
       if (XmeRenderTableGetDefaultFont(lw->list.font, &fs))
 	lw->list.MaxItemHeight = fs->ascent + fs->descent;
       else
 	lw->list.MaxItemHeight = 1;
+#endif
     }
   else if (reset_max_width || reset_max_height)
     {
@@ -7440,11 +7466,13 @@ ListConvert(Widget w, XtPointer client_data,
   enum { XmA_MOTIF_COMPOUND_STRING, XmACOMPOUND_TEXT, XmATEXT,
 	 XmATARGETS, XmA_MOTIF_DROP, XmA_MOTIF_LOSE_SELECTION,
 	 XmA_MOTIF_EXPORT_TARGETS, XmA_MOTIF_CLIPBOARD_TARGETS,
+	 XmAUTF8_STRING,
 	 NUM_ATOMS };
   static char *atom_names[] = { 
     XmS_MOTIF_COMPOUND_STRING, XmSCOMPOUND_TEXT, XmSTEXT,
     XmSTARGETS, XmS_MOTIF_DROP, XmS_MOTIF_LOSE_SELECTION,
-    XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS };
+    XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS,
+    XmSUTF8_STRING };
 
   Atom atoms[XtNumber(atom_names)];
   Atom C_ENCODING = XmeGetEncodingAtom(w);
@@ -7468,6 +7496,7 @@ ListConvert(Widget w, XtPointer client_data,
       targs[target_count++] = atoms[XmA_MOTIF_COMPOUND_STRING];
       targs[target_count++] = atoms[XmACOMPOUND_TEXT];
       targs[target_count++] = atoms[XmATEXT];
+      targs[target_count++] = atoms[XmAUTF8_STRING];
       targs[target_count++] = C_ENCODING;
       if (XA_STRING != C_ENCODING)
 	targs[target_count++] = XA_STRING;
@@ -7497,7 +7526,8 @@ ListConvert(Widget w, XtPointer client_data,
 	   cs->target == atoms[XmA_MOTIF_COMPOUND_STRING] ||
 	   cs->target == XA_STRING ||
 	   cs->target == C_ENCODING ||
-	   cs->target == atoms[XmATEXT])
+	   cs->target == atoms[XmATEXT] ||
+	   cs->target == atoms[XmAUTF8_STRING])
     {
       XmString concat;
       XmString sep = XmStringSeparatorCreate();
@@ -7591,6 +7621,15 @@ ListConvert(Widget w, XtPointer client_data,
 		  type = C_ENCODING;
 		}
 	    }
+	}
+      else if (cs->target = atoms[XmAUTF8_STRING])
+	{
+	    type = atoms[XmAUTF8_STRING];
+	    value = XmCvtXmStringToUTF8String(concat);
+	    if (value != NULL)
+	        size = strlen((char*) value);
+	    else
+	        size = 0;
 	}
       else
 	{

@@ -30,6 +30,9 @@
 
 #include <Xm/PrimitiveP.h>
 #include <Xm/TextF.h>
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,7 +105,11 @@ typedef struct _XmTextFieldPart {
 				   wchar_t * */
 
     XmFontList font_list;	/* Uses only the font portion of fontlist */
+#if USE_XFT
+    XPointer *font;	        /* font retrieved from the fontlist */
+#else
     XFontStruct *font;	        /* font retrieved from the fontlist */
+#endif
     XmTextScanType *selection_array; /* Description of what to cycle
 					through on selections */
     _XmHighlightData highlight;      /* Info on the highlighting regions. */
@@ -237,6 +244,9 @@ typedef struct _XmTextFieldPart {
 
     Boolean check_set_render_table; /* used for MT safe work */
     Boolean programmatic_highlights;	/* XmTextFieldSetHighlight called */
+#ifdef USE_XFT
+    Boolean use_xft;
+#endif
 } XmTextFieldPart;
 
 typedef struct _XmTextFieldRec {
@@ -285,11 +295,23 @@ typedef struct _XmTextFieldRec {
 #define TextF_FontList(tfg)		\
 	(((XmTextFieldWidget)(tfg)) -> text.font_list)
 #define TextF_Font(tfg)			\
-	(((XmTextFieldWidget)(tfg)) -> text.font)
+	((XFontStruct*)(((XmTextFieldWidget)(tfg)) -> text.font))
+#ifdef	USE_XFT
+#define TextF_FontAscent(tfg)			\
+	(TextF_UseXft(tfg) ? 			\
+		(TextF_XftFont(tfg)->ascent) :	\
+		(((XmTextFieldWidget)(tfg)) -> text.font_ascent))
+
+#define TextF_FontDescent(tfg)			\
+	(TextF_UseXft(tfg) ?			\
+		(TextF_XftFont(tfg)->descent) :	\
+		(((XmTextFieldWidget)(tfg)) -> text.font_descent))
+#else
 #define TextF_FontAscent(tfg)		\
 	(((XmTextFieldWidget)(tfg)) -> text.font_ascent)
 #define TextF_FontDescent(tfg)		\
 	(((XmTextFieldWidget)(tfg)) -> text.font_descent)
+#endif
 #define TextF_SelectionArray(tfg)	\
 	(((XmTextFieldWidget)(tfg)) -> text.selection_array)
 #define TextF_SelectionArrayCount(tfg)	\
@@ -306,6 +328,12 @@ typedef struct _XmTextFieldRec {
 	(((XmTextFieldWidget)(tfg)) -> text.threshold)
 #define TextF_UseFontSet(tfg)		\
 	(((XmTextFieldWidget)(tfg)) -> text.have_fontset)
+#ifdef USE_XFT
+#define TextF_UseXft(tfg)		\
+	(((XmTextFieldWidget)(tfg)) -> text.use_xft)
+#define	TextF_XftFont(tfg)		\
+	((XftFont*)(((XmTextFieldWidget)(tfg)) -> text.font))
+#endif
 
 /*
  * On the spot support.

@@ -1336,6 +1336,12 @@ extern XmString XmeGetLocalizedString(
                         char *resource,
                         String string) ;
 
+extern void XmRenderTableGetDefaultFontExtents(
+                        XmRenderTable rendertable,
+			int *height,
+			int *ascent,
+			int *descent) ;
+
 /********    End Function Declarations for Xme        ********/
 
 /********        ********/

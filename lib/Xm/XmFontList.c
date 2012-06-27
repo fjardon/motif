@@ -176,6 +176,9 @@ XmFontListEntryGetFont(
         XmFontType *typeReturn )
 {
   XtPointer 	ret_val;
+#ifdef USE_XFT
+  XtPointer     ret_val2;
+#endif
   Arg		args[2];
   Cardinal	n;
   XtAppContext  app=NULL;
@@ -196,7 +199,15 @@ XmFontListEntryGetFont(
   n = 0;
   XtSetArg(args[n], XmNfontType, typeReturn); n++;
   XtSetArg(args[n], XmNfont, &ret_val); n++; 
+#ifdef USE_XFT
+  XtSetArg(args[n], XmNxftFont, &ret_val2); n++; 
+#endif
   XmRenditionRetrieve(entry, args, n);
+
+#ifdef USE_XFT
+  if (*typeReturn == XmFONT_IS_XFT) 
+      ret_val = ret_val2;
+#endif
   
   if (*typeReturn == XmAS_IS) 
       *typeReturn = XmFONT_IS_FONT;

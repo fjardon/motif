@@ -2638,8 +2638,12 @@ Redisplay(
   
   if (Lab_IsPixmap(tb))
     SetAndDisplayPixmap(tb, event, region);
-  else if (!tb->toggle.ind_on && tb->toggle.fill_on_select)
+  else
+#ifndef USE_XFT
+    if (!tb->toggle.ind_on && tb->toggle.fill_on_select)
+#endif
     DrawToggleLabel (tb);
+#ifndef USE_XFT
   else
   {
     XtExposeProc expose;
@@ -2648,6 +2652,7 @@ Redisplay(
     _XmProcessUnlock();
     (* expose) (w, event, region);
   }
+#endif
   
   if (tb->toggle.ind_on)
     {
@@ -3531,7 +3536,11 @@ DrawToggleLabel(
       fill_gc = tb->toggle.unselect_GC;
       break;
     case XmSET:
-      fill_gc = tb->toggle.select_GC;
+#if USE_XFT
+      fill_gc = tb->toggle.unselect_GC;
+#else
+      fill_gc = tb->toggle.select_GC; /* TODO: only XmUNSET can be here? */
+#endif
       break;
     case XmINDETERMINATE:
       {

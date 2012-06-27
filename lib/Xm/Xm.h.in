@@ -145,7 +145,7 @@ extern Boolean XmDirectionMatchPartial(XmDirection d1,
  * becaused they are used later on.
  *
  ****************/
-typedef enum{ XmFONT_IS_FONT, XmFONT_IS_FONTSET
+typedef enum{ XmFONT_IS_FONT, XmFONT_IS_FONTSET, XmFONT_IS_XFT
 	      } XmFontType;
 
 enum { XmSTRING_DIRECTION_L_TO_R,

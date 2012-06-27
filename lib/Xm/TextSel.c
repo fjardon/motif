@@ -205,6 +205,7 @@ InsertSelection(
   XmTextPosition right = 0;
   Boolean dest_disjoint = False;
   Atom COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False);
+  Atom UTF8_STRING = XInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
   char * total_value = NULL;
   XmTextBlockRec block, newblock;
   XmTextPosition cursorPos;
@@ -250,7 +251,7 @@ InsertSelection(
   
   block.format = XmFMT_8_BIT;
   
-  if (*type == COMPOUND_TEXT || *type == XA_STRING) {
+  if (*type == COMPOUND_TEXT || *type == XA_STRING || *type == UTF8_STRING) {
     if ((total_value =
 	 _XmTextToLocaleText(w, value, *type, *format, 
 			     *length, NULL)) != NULL) {
@@ -324,8 +325,8 @@ HandleInsertTargets(
         int *format,
 	XtPointer tid )
 {
-  enum { XmATEXT, XmACOMPOUND_TEXT, NUM_ATOMS };
-  static char *atom_names[] = { XmSTEXT, XmSCOMPOUND_TEXT };
+  enum { XmATEXT, XmACOMPOUND_TEXT, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] = { XmSTEXT, XmSCOMPOUND_TEXT, XmSUTF8_STRING };
 
   _XmInsertSelect *insert_select = (_XmInsertSelect *) closure;
   Atom atoms[XtNumber(atom_names)];
@@ -335,6 +336,7 @@ HandleInsertTargets(
   Boolean supports_encoding_data = False;
   Boolean supports_CT = False;
   Boolean supports_text = False;
+  Boolean supports_utf8_string = False;
   int i;
   
   if (0 == *length) {
@@ -357,10 +359,15 @@ HandleInsertTargets(
     
     if (*atom_ptr == atoms[XmACOMPOUND_TEXT]) 
       supports_CT = True;
+
+    if (*atom_ptr == atoms[XmAUTF8_STRING]) 
+      supports_utf8_string = True;
   }
 
   if (supports_text && supports_encoding_data)
     target = atoms[XmATEXT];
+  else if (supports_utf8_string)
+    target = atoms[XmAUTF8_STRING];
   else if (supports_CT)
     target = atoms[XmACOMPOUND_TEXT];
   else if (supports_encoding_data)
@@ -388,11 +395,12 @@ _XmTextConvert(
 {
   enum { XmA_MOTIF_DESTINATION, XmAINSERT_SELECTION, XmADELETE,
 	 XmATARGETS, XmATEXT, XmACOMPOUND_TEXT, XmATIMESTAMP,
-	 XmA_MOTIF_DROP, XmACLIPBOARD, XmANULL, NUM_ATOMS };
+	 XmA_MOTIF_DROP, XmACLIPBOARD, XmANULL, XmAUTF8_STRING,
+	 NUM_ATOMS };
   static char *atom_names[] = {
     XmS_MOTIF_DESTINATION, XmSINSERT_SELECTION, XmSDELETE,
     XmSTARGETS, XmSTEXT, XmSCOMPOUND_TEXT, XmSTIMESTAMP,
-    XmS_MOTIF_DROP, XmSCLIPBOARD, XmSNULL };
+    XmS_MOTIF_DROP, XmSCLIPBOARD, XmSNULL, XmSUTF8_STRING };
 
   XmTextWidget tw = (XmTextWidget) w;
   XmTextSource source;
@@ -463,6 +471,7 @@ _XmTextConvert(
       targs[target_count] = atoms[XmACOMPOUND_TEXT];  target_count++;
       targs[target_count] = atoms[XmATEXT];  target_count++;
       targs[target_count] = XA_STRING;  target_count++;
+      targs[target_count] = atoms[XmAUTF8_STRING];  target_count++;
     }
     if (is_primary || is_drop) {
       targs[target_count] = atoms[XmADELETE]; target_count++;
@@ -525,6 +534,27 @@ _XmTextConvert(
     tmp_value =_XmStringSourceGetString(tw, left, right, False);
     status = XmbTextListToTextProperty(XtDisplay(tw), &tmp_value, 1,
 				       (XICCEncodingStyle)XCompoundTextStyle,
+				       &tmp_prop);
+    XtFree(tmp_value);
+    if (status == Success || status > 0) {
+      /* NOTE: casting tmp_prop.nitems could result in a truncated long. */
+      *value = (XtPointer) XtMalloc((unsigned) tmp_prop.nitems);
+      memcpy((void*)*value, (void*)tmp_prop.value,(size_t)tmp_prop.nitems);
+      if (tmp_prop.value != NULL) XFree((char*)tmp_prop.value);
+      *length = tmp_prop.nitems;
+    } else {
+      *value =  NULL;
+      *length = 0;
+      return False;
+    }
+  } else if (*target == atoms[XmAUTF8_STRING]) {
+    *type = atoms[XmAUTF8_STRING];
+    *format = 8;
+    if (is_destination || !has_selection) return False;
+    tmp_prop.value = NULL;
+    tmp_value =_XmStringSourceGetString(tw, left, right, False);
+    status = XmbTextListToTextProperty(XtDisplay(tw), &tmp_value, 1,
+				       (XICCEncodingStyle)XUTF8StringStyle,
 				       &tmp_prop);
     XtFree(tmp_value);
     if (status == Success || status > 0) {
@@ -662,14 +692,15 @@ HandleDrop(Widget w,
        left != right && insert_pos >= left && insert_pos <= right)) {
     XmTransferDone(tid, XmTRANSFER_DONE_FAIL);
   } else {
-    enum { XmATEXT, XmACOMPOUND_TEXT, NUM_ATOMS };
-    static char *atom_names[] = { XmSTEXT, XmSCOMPOUND_TEXT };
+    enum { XmATEXT, XmACOMPOUND_TEXT, XmAUTF8_STRING, NUM_ATOMS };
+    static char *atom_names[] = { XmSTEXT, XmSCOMPOUND_TEXT, XmSUTF8_STRING };
     Atom atoms[XtNumber(atom_names)];
     Atom CS_OF_ENCODING = XmeGetEncodingAtom(w);
     Boolean encoding_found = False;
     Boolean c_text_found = False;
     Boolean string_found = False;
     Boolean text_found = False;
+    Boolean utf8_string_found = False;
     
     assert(XtNumber(atom_names) == NUM_ATOMS);
     XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
@@ -694,16 +725,20 @@ HandleDrop(Widget w,
 	encoding_found = True;
 	break;
       }
+      if (exportTargets[n] == atoms[XmAUTF8_STRING]) utf8_string_found = True;
       if (exportTargets[n] == atoms[XmACOMPOUND_TEXT]) c_text_found = True;
       if (exportTargets[n] == XA_STRING) string_found = True;
       if (exportTargets[n] == atoms[XmATEXT]) text_found = True;
     }
     
     n = 0;
-    if (encoding_found || c_text_found || string_found || text_found) {
+    if (encoding_found || c_text_found || string_found || text_found
+        || utf8_string_found) {
       if (!encoding_found) {
 	if (c_text_found)
 	  desiredTarget = atoms[XmACOMPOUND_TEXT];
+	else if (utf8_string_found)
+	  desiredTarget = atoms[XmAUTF8_STRING];
 	else if (string_found)
 	  desiredTarget = XA_STRING;
 	else
@@ -743,8 +778,9 @@ HandleTargets(Widget w,
 	      XtPointer closure,
 	      XmSelectionCallbackStruct *ds)
 {
-  enum { XmACOMPOUND_TEXT, XmACLIPBOARD, XmATEXT, NUM_ATOMS };
-  static char *atom_names[] =  { XmSCOMPOUND_TEXT, XmSCLIPBOARD, XmSTEXT };
+  enum { XmACOMPOUND_TEXT, XmACLIPBOARD, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] =  { XmSCOMPOUND_TEXT, XmSCLIPBOARD, XmSTEXT,
+      XmSUTF8_STRING };
 
   XmTextWidget tw = (XmTextWidget) w;
   Atom CS_OF_ENCODING;
@@ -752,6 +788,7 @@ HandleTargets(Widget w,
   Boolean supports_encoding_data = False;
   Boolean supports_CT = False;
   Boolean supports_text = False;
+  Boolean supports_utf8_string = False;
   Atom *atom_ptr;
   XPoint *point = (XPoint *)closure;
   Atom targets[2];
@@ -780,6 +817,9 @@ HandleTargets(Widget w,
 
     if (*atom_ptr == atoms[XmACOMPOUND_TEXT])
       supports_CT = True;
+
+    if (*atom_ptr == atoms[XmAUTF8_STRING])
+      supports_utf8_string = True;
   }
   
   
@@ -824,6 +864,8 @@ HandleTargets(Widget w,
   
   if (supports_text && supports_encoding_data)
     prim_select->target = targets[0] = atoms[XmATEXT];
+  else if (supports_utf8_string)
+    prim_select->target = targets[0] = atoms[XmAUTF8_STRING];
   else if (supports_CT)
     prim_select->target = targets[0] = atoms[XmACOMPOUND_TEXT];
   else if (supports_encoding_data)
@@ -847,9 +889,10 @@ DoStuff(Widget w,
 	XtPointer closure, 
 	XmSelectionCallbackStruct *ds)
 {
-  enum { XmANULL, XmACLIPBOARD, XmATEXT, XmACOMPOUND_TEXT, NUM_ATOMS };
+  enum { XmANULL, XmACLIPBOARD, XmATEXT, XmACOMPOUND_TEXT, XmAUTF8_STRING,
+      NUM_ATOMS };
   static char *atom_names[] =  { 
-    XmSNULL, XmSCLIPBOARD, XmSTEXT, XmSCOMPOUND_TEXT };
+    XmSNULL, XmSCLIPBOARD, XmSTEXT, XmSCOMPOUND_TEXT, XmSUTF8_STRING };
 
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
@@ -909,6 +952,7 @@ DoStuff(Widget w,
     block.format = XmFMT_8_BIT;
     
     if (ds->type == atoms[XmACOMPOUND_TEXT] ||
+        ds->type == atoms[XmAUTF8_STRING] ||
 	ds->type == XA_STRING) {
       if ((total_value = 
 	   _XmTextToLocaleText(w, ds->value, ds->type, ds->format,
@@ -1050,8 +1094,9 @@ DropTransferProc(Widget w,
 		 XtPointer closure, 
 		 XmSelectionCallbackStruct *ds)
 {
-  enum { XmACOMPOUND_TEXT, XmANULL, XmADELETE, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSNULL, XmSDELETE };
+  enum { XmACOMPOUND_TEXT, XmANULL, XmADELETE, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSNULL, XmSDELETE,
+      XmSUTF8_STRING };
 
   _XmTextDropTransferRec *transfer_rec = (_XmTextDropTransferRec *) closure;
   XmTextWidget tw = (XmTextWidget) transfer_rec->widget;
@@ -1091,7 +1136,8 @@ DropTransferProc(Widget w,
   }
   
   if (!ds->value || 
-      (ds->type != atoms[XmACOMPOUND_TEXT] && 
+      (ds->type != atoms[XmAUTF8_STRING] && 
+       ds->type != atoms[XmACOMPOUND_TEXT] && 
        ds->type != CS_OF_ENCODING &&
        ds->type != XA_STRING)) {
     XmTransferDone(ds->transfer_id, XmTRANSFER_DONE_FAIL);
@@ -1104,7 +1150,8 @@ DropTransferProc(Widget w,
   
   insertPosLeft = insertPosRight = transfer_rec->insert_pos;
   
-  if (ds->type == XA_STRING || ds->type == atoms[XmACOMPOUND_TEXT]) {
+  if (ds->type == XA_STRING || ds->type == atoms[XmACOMPOUND_TEXT]
+      || ds->type == atoms[XmAUTF8_STRING]) {
     if ((total_value = _XmTextToLocaleText(w, ds->value, ds->type, 
 					   8, ds->length, NULL)) != NULL) {
       block.ptr = total_value;
@@ -1260,10 +1307,12 @@ TextConvertCallback(Widget w,
 {
   enum { XmADELETE, XmA_MOTIF_LOSE_SELECTION,
 	 XmA_MOTIF_EXPORT_TARGETS, XmATEXT, XmACOMPOUND_TEXT,
-	 XmATARGETS, XmA_MOTIF_CLIPBOARD_TARGETS, XmACLIPBOARD, NUM_ATOMS };
+	 XmATARGETS, XmA_MOTIF_CLIPBOARD_TARGETS, XmACLIPBOARD,
+	 XmAUTF8_STRING, NUM_ATOMS };
   static char *atom_names[] = { XmSDELETE, XmS_MOTIF_LOSE_SELECTION,
 	 XmS_MOTIF_EXPORT_TARGETS, XmSTEXT, XmSCOMPOUND_TEXT,
-	 XmSTARGETS, XmS_MOTIF_CLIPBOARD_TARGETS, XmSCLIPBOARD };
+	 XmSTARGETS, XmS_MOTIF_CLIPBOARD_TARGETS, XmSCLIPBOARD,
+	 XmSUTF8_STRING };
 
   Atom XA_CS_OF_ENCODING = XmeGetEncodingAtom(w);
   XtPointer value;
@@ -1318,10 +1367,11 @@ TextConvertCallback(Widget w,
   
   if (cs->target == atoms[XmA_MOTIF_EXPORT_TARGETS] ||
       cs->target == atoms[XmA_MOTIF_CLIPBOARD_TARGETS]) {
-    Atom *targs = (Atom *) XtMalloc(sizeof(Atom) * 4);
+    Atom *targs = (Atom *) XtMalloc(sizeof(Atom) * 5);
     int n = 0;
     
     value = (XtPointer) targs;
+    targs[n] = atoms[XmAUTF8_STRING]; n++;
     targs[n] = atoms[XmACOMPOUND_TEXT]; n++;
     targs[n] = atoms[XmATEXT]; n++;
     targs[n] = XA_STRING; n++;

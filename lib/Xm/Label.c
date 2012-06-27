@@ -2462,11 +2462,12 @@ _XmLabelConvert(Widget w,
   enum { XmA_MOTIF_COMPOUND_STRING, XmACOMPOUND_TEXT, XmATEXT,
 	 XmATARGETS, XmA_MOTIF_DROP, XmABACKGROUND, XmAFOREGROUND,
 	 XmAPIXEL, XmA_MOTIF_EXPORT_TARGETS,
-	 XmA_MOTIF_CLIPBOARD_TARGETS, NUM_ATOMS };
+	 XmA_MOTIF_CLIPBOARD_TARGETS, XmAUTF8_STRING, NUM_ATOMS };
   static char *atom_names[] = {
     XmS_MOTIF_COMPOUND_STRING, XmSCOMPOUND_TEXT, XmSTEXT,
     XmSTARGETS, XmS_MOTIF_DROP, XmIBACKGROUND, XmIFOREGROUND,
-    XmIPIXEL, XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS };
+    XmIPIXEL, XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS,
+    XmSUTF8_STRING };
 
   Atom atoms[XtNumber(atom_names)];
   Atom C_ENCODING;
@@ -2542,7 +2543,7 @@ _XmLabelConvert(Widget w,
 	  targs[target_count] = atoms[XmA_MOTIF_COMPOUND_STRING]; target_count++;
 	  targs[target_count] = atoms[XmACOMPOUND_TEXT]; target_count++;
 	  targs[target_count] = atoms[XmATEXT]; target_count++;
-	  if (C_ENCODING != XA_STRING) {
+	  if (C_ENCODING != XA_STRING && C_ENCODING != atoms[XmAUTF8_STRING]) {
 	    temp = ConvertToEncoding(w, ctext, C_ENCODING, &length, &success);
 	    if (success) {
 	      targs[target_count] = C_ENCODING; 
@@ -2556,6 +2557,12 @@ _XmLabelConvert(Widget w,
 	    target_count++;
 	  }
 	  XtFree((char*) temp);
+	  XtFree((char*) ctext);
+	  ctext = XmCvtXmStringToUTF8String(label_string);
+	  if (ctext) {
+	    targs[target_count] = atoms[XmAUTF8_STRING];
+	    target_count++;
+	  }
 	  XtFree((char*) ctext);
 	}
       type = XA_ATOM;
@@ -2629,6 +2636,14 @@ _XmLabelConvert(Widget w,
 	      type = atoms[XmACOMPOUND_TEXT];
 	    }
 	}
+    } else if (cs->target == atoms[XmAUTF8_STRING]) {
+      type = atoms[XmAUTF8_STRING];
+      format = 8;
+      value = XmCvtXmStringToUTF8String(label_string);
+      if (value != NULL)
+	size = strlen((char*) value);
+      else
+	size = 0;
     }
   
   if (cs->target == XA_PIXMAP) 
@@ -2714,6 +2729,7 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
   XtPointer rval = NULL;
   XTextProperty tmp_prop;
   Atom COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False);
+  Atom UTF8_STRING = XInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
   int ret_status;
 
   if (encoding == XA_STRING) {
@@ -2735,6 +2751,25 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
       }
 
     *flag = (ret_status == Success);
+  } else if (encoding == UTF8_STRING) {
+    /* convert value to UTF8 */
+    ret_status = 
+      Xutf8TextListToTextProperty(XtDisplay(w), (char**) &str, 1, 
+				(XICCEncodingStyle)XUTF8StringStyle,
+				&tmp_prop);
+
+    if (ret_status == Success || ret_status > 0) 
+      {
+	rval = (XtPointer) tmp_prop.value;
+	*length = tmp_prop.nitems;
+      } 
+    else
+      {
+	rval = NULL;
+	*length = 0;
+      }
+
+    *flag = (ret_status >= Success);
   } else {
     /* Locale encoding */
     /* Fix for Bug 1117 - if str is null then a SEGVIOLATION occures

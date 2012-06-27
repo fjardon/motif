@@ -75,6 +75,10 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include "VendorSEI.h"
 #include "XmStringI.h"
 #include <Xm/PrintSP.h>         /* for XmIsPrintShell */
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#include "XmRenderTI.h"
+#endif
 
 
 #if (defined(__FreeBSD__) && (__FreeBSD__ < 4)) || \
@@ -1879,6 +1883,11 @@ SetMarginGC(XmTextFieldWidget tf,
   XRectangle ClipRect;
   
   GetRect(tf, &ClipRect);
+
+#ifdef USE_XFT
+  if (TextF_UseXft(tf))
+    _XmXftSetClipRectangles((Widget)tf, 0, 0, &ClipRect, 1);
+#endif
   XSetClipRectangles(XtDisplay(tf), gc, 0, 0, &ClipRect, 1,
                      Unsorted);
 }
@@ -1900,7 +1909,11 @@ _XmTextFieldSetClipRect(XmTextFieldWidget tf)
   /* Restore cached text gc to state correct for this instantiation */
   
   if (tf->text.gc) {
+#if USE_XFT
+    if (!TextF_UseFontSet(tf) && !TextF_UseXft(tf) && (TextF_Font(tf) != NULL)) {
+#else
     if (!TextF_UseFontSet(tf) && (TextF_Font(tf) != NULL)) {
+#endif
       valueMask |= GCFont;
       values.font = TextF_Font(tf)->fid;
     }
@@ -1972,6 +1985,29 @@ DrawText(XmTextFieldWidget tf,
       XmbDrawString (XtDisplay(tf), XtWindow(tf), (XFontSet)TextF_Font(tf),
 		     gc, x, y, string, length);
     
+#ifdef USE_XFT
+  } else if (TextF_UseXft(tf)) {
+    if (tf->text.max_char_size != 1) { /* was passed a wchar_t*  */
+      char stack_cache[400], *tmp;
+      wchar_t tmp_wc;
+      wchar_t *wc_string = (wchar_t*)string;
+      int num_bytes = 0;
+      /* ptr = tmp = XtMalloc((int)(length + 1)*sizeof(wchar_t)); */
+      tmp = (char *)XmStackAlloc((Cardinal) ((length + 1)*sizeof(wchar_t)),
+				 stack_cache);
+      tmp_wc = wc_string[length];
+      wc_string[length] = 0L;
+      num_bytes = wcstombs(tmp, wc_string,
+			   (int)((length + 1) * sizeof(wchar_t)));
+      wc_string[length] = tmp_wc;
+      if (num_bytes >= 0)
+        _XmXftDrawString2(XtDisplay(tf), XtWindow(tf), gc, TextF_XftFont(tf),
+			1, x, y, tmp, num_bytes);
+      XmStackFree(tmp, stack_cache);
+    } else /* one byte chars */
+        _XmXftDrawString2(XtDisplay(tf), XtWindow(tf), gc, TextF_XftFont(tf),
+			1, x, y, string, length);
+#endif
   } else { /* have a font struct, not a font set */
     if (tf->text.max_char_size != 1) { /* was passed a wchar_t*  */
       char stack_cache[400], *tmp;
@@ -2005,6 +2041,28 @@ FindPixelLength(XmTextFieldWidget tf,
 				(wchar_t *) string, length));
     else /* one byte chars */
       return (XmbTextEscapement((XFontSet)TextF_Font(tf), string, length));
+#ifdef USE_XFT
+  } else if (TextF_UseXft(tf)) {
+    XGlyphInfo	ext;
+    if (tf->text.max_char_size != 1) { /* was passed a wchar_t*  */
+      wchar_t *wc_string = (wchar_t*)string;
+      wchar_t wc_tmp = wc_string[length];
+      char stack_cache[400], *tmp;
+      int num_bytes;
+      
+      wc_string[length] = 0L;
+      tmp = (char*)XmStackAlloc((Cardinal)((length + 1) * sizeof(wchar_t)),
+				stack_cache);
+      num_bytes = wcstombs(tmp, wc_string, 
+			   (int)((length + 1)*sizeof(wchar_t)));
+      wc_string[length] = wc_tmp;
+      XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), tmp, num_bytes, &ext);
+      XmStackFree(tmp, stack_cache);
+    } else /* one byte chars */
+      XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), string, length, &ext);
+
+    return ext.xOff;
+#endif
   } else { /* have font struct, not a font set */
     if (tf->text.max_char_size != 1) { /* was passed a wchar_t*  */
       wchar_t *wc_string = (wchar_t*)string;
@@ -3700,6 +3758,14 @@ PrintableString(XmTextFieldWidget tf,
 	  return (XwcTextEscapement((XFontSet)TextF_Font(tf), (wchar_t *)str, n) != 0);
       else
 	  return (XmbTextEscapement((XFontSet)TextF_Font(tf), str, n) != 0);
+#ifdef USE_XFT
+  } else if (TextF_UseXft(tf)) {
+    XGlyphInfo	ext;
+
+    XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), str, n, &ext);
+
+    return ext.xOff != 0;
+#endif
   }
   else {
     if (use_wchar) {
@@ -6739,6 +6805,9 @@ LoadFontMetrics(XmTextFieldWidget tf)
   XtPointer tmp_font;
   Boolean have_font_struct = False;
   Boolean have_font_set = False;
+#ifdef USE_XFT
+  Boolean have_xft_font = False;
+#endif
   XFontSetExtents *fs_extents;
   XFontStruct *font;
   unsigned long charwidth = 0;
@@ -6757,6 +6826,9 @@ LoadFontMetrics(XmTextFieldWidget tf)
 			       * case we don't find a default tag set.
 			       */
 	  TextF_UseFontSet(tf) = True;
+#ifdef USE_XFT
+	  TextF_UseXft(tf) = False;
+#endif
 	  TextF_Font(tf) = (XFontStruct *)tmp_font;
 	  have_font_struct = True; /* we have a font set, so no need to 
 				    * consider future font structs */
@@ -6773,19 +6845,34 @@ LoadFontMetrics(XmTextFieldWidget tf)
 	  break; /* Break out!  We've found the one we want. */
 	}
 	if (font_tag) XtFree(font_tag);
-      } else if (!have_font_struct) {/* return_type must be XmFONT_IS_FONT */
+      } else if (type_return == XmFONT_IS_FONT && !have_font_struct) {
+        /* return_type must be XmFONT_IS_FONT */
 	TextF_UseFontSet(tf) = False;
+#ifdef USE_XFT
+	TextF_UseXft(tf) = False;
+#endif
 	TextF_Font(tf)=(XFontStruct*)tmp_font; /* save the first font
 						* struct in case no font 
 						* set is found */
 	have_font_struct = True;                     
+#ifdef USE_XFT
+      } else if (type_return == XmFONT_IS_XFT && !have_xft_font) {
+	TextF_UseFontSet(tf) = False;
+	TextF_UseXft(tf) = True;
+	have_xft_font = True;
+	TextF_XftFont(tf) = (XftFont*)tmp_font;
+#endif
       }
     }
   } while(next_entry != NULL);
   
   XmFontListFreeFontContext(context);
 
+#if USE_XFT
+  if (!have_font_struct && !have_font_set && !have_xft_font) {
+#else
   if (!have_font_struct && !have_font_set) {
+#endif
     XmeWarning ((Widget)tf, MSG4);
     return False;
   }
@@ -6798,6 +6885,10 @@ LoadFontMetrics(XmTextFieldWidget tf)
     TextF_FontAscent(tf) = -fs_extents->max_logical_extent.y;
     TextF_FontDescent(tf) = fs_extents->max_logical_extent.height +
       fs_extents->max_logical_extent.y;
+#ifdef USE_XFT
+  } else if (TextF_UseXft(tf)) {
+    charwidth = TextF_XftFont(tf)->max_advance_width;
+#endif
   } else {
     font = TextF_Font(tf);
     if (!XGetFontProperty(font, XA_QUAD_WIDTH, &charwidth) ||
@@ -7227,7 +7318,11 @@ LoadGCs(XmTextFieldWidget tf,
    * Get GC for drawing text.
    */
   
+#if USE_XFT
+  if (!TextF_UseFontSet(tf) && !TextF_UseXft(tf)) {
+#else
   if (!TextF_UseFontSet(tf)) {
+#endif
     valueMask |= GCFont;
     values.font = TextF_Font(tf)->fid;
   } 
@@ -7504,12 +7599,12 @@ DragProcCallback(Widget w,
 		 XtPointer client,
 		 XtPointer call)
 {
-  enum { XmACOMPOUND_TEXT, XmATEXT, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT };
+  enum { XmACOMPOUND_TEXT, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT, XmSUTF8_STRING };
 
   XmDragProcCallbackStruct *cb = (XmDragProcCallbackStruct *)call;
   Widget drag_cont;
-  Atom targets[4];
+  Atom targets[5];
   Arg args[10];
   Atom *exp_targets;
   Cardinal num_exp_targets, n;
@@ -7522,6 +7617,7 @@ DragProcCallback(Widget w,
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
+  targets[4] = atoms[XmAUTF8_STRING];
   
   drag_cont = cb->dragContext;
   
@@ -7558,10 +7654,10 @@ DragProcCallback(Widget w,
 static void
 RegisterDropSite(Widget w)
 {
-  enum { XmACOMPOUND_TEXT, XmATEXT, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT };
+  enum { XmACOMPOUND_TEXT, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT, XmSUTF8_STRING };
 
-  Atom targets[4];
+  Atom targets[5];
   Arg args[10];
   int n;
   Atom atoms[XtNumber(atom_names)];
@@ -7573,10 +7669,11 @@ RegisterDropSite(Widget w)
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
+  targets[4] = atoms[XmAUTF8_STRING];
   
   n = 0;
   XtSetArg(args[n], XmNimportTargets, targets); n++;
-  XtSetArg(args[n], XmNnumImportTargets, 4); n++;
+  XtSetArg(args[n], XmNnumImportTargets, 5); n++;
   XtSetArg(args[n], XmNdragProc, DragProcCallback); n++;
   XmeDropSink(w, args, n);
 }
@@ -9301,6 +9398,15 @@ TextFieldResetIC(Widget w)
                         insert_length, &overall_ink, NULL );
             if ( escapement == 0 && overall_ink.width == 0 )
                 return;
+#ifdef USE_XFT
+        } else if (TextF_UseXft(tf)) {
+          XGlyphInfo	ext;
+
+          XftTextExtentsUtf8(XtDisplay((Widget)tf), TextF_XftFont(tf), mb, insert_length, &ext);
+
+          if (!ext.xOff)
+	      return;
+#endif
         } else {
             if (!XTextWidth(TextF_Font(tf), mb, insert_length))
                 return;

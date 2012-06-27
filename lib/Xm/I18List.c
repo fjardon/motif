@@ -2300,6 +2300,13 @@ SetVisibleSize(Widget w, Boolean set_width)
     /* If we have no rows, guess at row size with font struct info... */
     if (XmI18List_num_rows(ilist) == 0)
     {
+#if USE_XFT
+        XmRenderTableGetDefaultFontExtents(XmI18List_font_list(ilist),
+	                                   &height, NULL, NULL);
+	
+	if (height == 0)
+	    height = VERTICAL_SPACE * XmI18List_visible_rows(ilist);
+#else
 	XFontStruct	*font = (XFontStruct *) NULL;
 
 	XmeRenderTableGetDefaultFont(XmI18List_font_list(ilist), &font);
@@ -2309,6 +2316,7 @@ SetVisibleSize(Widget w, Boolean set_width)
 		XmI18List_visible_rows(ilist);
 	else
 	    height = VERTICAL_SPACE * XmI18List_visible_rows(ilist);
+#endif
     }
     else
     {
@@ -3676,11 +3684,13 @@ ListConvert(Widget w, XtPointer client_data,
     enum { XmA_MOTIF_COMPOUND_STRING, XmACOMPOUND_TEXT, XmATEXT,
 	   XmATARGETS, XmA_MOTIF_DROP, XmA_MOTIF_LOSE_SELECTION,
 	   XmA_MOTIF_EXPORT_TARGETS, XmA_MOTIF_CLIPBOARD_TARGETS,
+	   XmAUTF8_STRING,
 	   NUM_ATOMS };
     static char *atom_names[] = { 
 	   XmS_MOTIF_COMPOUND_STRING, XmSCOMPOUND_TEXT, XmSTEXT,
 	   XmSTARGETS, XmS_MOTIF_DROP, XmS_MOTIF_LOSE_SELECTION,
-	   XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS };
+	   XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS,
+	   XmSUTF8_STRING };
 
     Atom atoms[XtNumber(atom_names)];
     Atom C_ENCODING = XmeGetEncodingAtom(w);
@@ -3704,6 +3714,7 @@ ListConvert(Widget w, XtPointer client_data,
 	targs[target_count++] = atoms[XmA_MOTIF_COMPOUND_STRING];
 	targs[target_count++] = atoms[XmACOMPOUND_TEXT];
 	targs[target_count++] = atoms[XmATEXT];
+	targs[target_count++] = atoms[XmAUTF8_STRING];
 	targs[target_count++] = C_ENCODING;
 	if (XA_STRING != C_ENCODING)
 	    targs[target_count++] = XA_STRING;
@@ -3737,7 +3748,8 @@ ListConvert(Widget w, XtPointer client_data,
 	   cs->target == atoms[XmA_MOTIF_COMPOUND_STRING] ||
 	   cs->target == XA_STRING ||
 	   cs->target == C_ENCODING ||
-	   cs->target == atoms[XmATEXT])
+	   cs->target == atoms[XmATEXT] ||
+	   cs->target == atoms[XmAUTF8_STRING])
     {
 	XmString concat;
 	XmString sep = XmStringSeparatorCreate();
@@ -3838,6 +3850,15 @@ ListConvert(Widget w, XtPointer client_data,
 		    type = C_ENCODING;
 		}
 	    }
+	}
+	else if (cs->target = atoms[XmAUTF8_STRING])
+	{
+	    type = atoms[XmAUTF8_STRING];
+	    value = XmCvtXmStringToUTF8String(concat);
+	    if (value != NULL)
+	        size = strlen((char*) value);
+	    else
+	        size = 0;
 	}
 	else
 	{

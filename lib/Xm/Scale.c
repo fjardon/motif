@@ -1005,11 +1005,12 @@ GetForegroundGC(
    XGCValues values;
    XtGCMask  valueMask;
 
-   valueMask = GCForeground | GCBackground | GCFont | GCGraphicsExposures;
+   valueMask = GCForeground | GCBackground | GCGraphicsExposures;
    values.foreground = sw->manager.foreground;
    values.background = sw->core.background_pixel;
    values.graphics_exposures = False;
-   values.font = sw->scale.font_struct->fid;
+   if (sw->scale.font_struct)
+     values.font = sw->scale.font_struct->fid, valueMask |= GCFont;
 
 /*   if ((sw->core.background_pixmap != None) && 
        (sw->core.background_pixmap != XmUNSPECIFIED_PIXMAP)) {
@@ -1056,11 +1057,13 @@ Initialize(
         if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list,
 					  &new_w->scale.font_struct))
 	    new_w->scale.font_struct = NULL;
+#ifndef USE_XFT
     } else {
 	new_w->scale.font_struct = 
 	  XLoadQueryFont (XtDisplay (new_w), XmDEFAULT_FONT);
 	if (new_w->scale.font_struct == NULL)
 	    new_w->scale.font_struct = XLoadQueryFont (XtDisplay (new_w), "*");
+#endif
     }
     
     (void) CreateScaleTitle(new_w);
@@ -1394,9 +1397,11 @@ SetValues(
 
     if (DIFF(scale.font_list)) {
 
+#ifndef USE_XFT
 	if ((cur->scale.font_list == NULL) && 
 	    (cur->scale.font_struct != NULL))
 	    XFreeFont(XtDisplay (cur), cur->scale.font_struct);
+#endif
 
         if (cur->scale.font_list) XmFontListFree(cur->scale.font_list);
 		
@@ -1410,12 +1415,15 @@ SetValues(
 	    if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list,
 					      &new_w->scale.font_struct))
 	        new_w->scale.font_struct = NULL;
+#ifdef USE_XFT
+        /* TODO: should it be ifndef? */
 	} else {
 	    new_w->scale.font_struct =
 		XLoadQueryFont(XtDisplay(new_w), XmDEFAULT_FONT);
 	    if (new_w->scale.font_struct == NULL)
 		new_w->scale.font_struct =
 		    XLoadQueryFont(XtDisplay(new_w), "*");
+#endif
 	}
 
 	XtReleaseGC ((Widget) new_w, new_w->scale.foreground_GC);
@@ -1550,8 +1558,10 @@ Destroy(
 
     XtReleaseGC ((Widget) sw, sw->scale.foreground_GC);
 
+#ifdef USE_XFT
     if (sw->scale.font_list == NULL && sw->scale.font_struct != NULL)
 	XFreeFont (XtDisplay (sw), sw->scale.font_struct);
+#endif
 
     if (sw->scale.font_list) XmFontListFree(sw->scale.font_list);
 
@@ -1776,6 +1786,14 @@ static Dimension
 ValueTroughHeight(
         XmScaleWidget sw)
 {
+#if USE_XFT
+    int ret_val = 0;
+    if (sw->scale.show_value) {
+        XmRenderTableGetDefaultFontExtents(sw->scale.font_list,
+                                           &ret_val, NULL, NULL);
+    }
+    return (Dimension)ret_val;
+#else
     char buff[15];
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
@@ -1803,12 +1821,21 @@ ValueTroughHeight(
     else
 	return (0);
 #undef GET_MAX
+#endif
 }
 
 static Dimension 
 ValueTroughAscent(
         XmScaleWidget sw)
 {
+#if USE_XFT
+    int ret_val = 0;
+    if (sw->scale.show_value) {
+        XmRenderTableGetDefaultFontExtents(sw->scale.font_list,
+                                           NULL, &ret_val, NULL);
+    }
+    return (Dimension)ret_val;
+#else
     char buff[15];
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
@@ -1836,12 +1863,21 @@ ValueTroughAscent(
     else
 	return (0);
 #undef GET_MAX
+#endif
 }
 
 static Dimension 
 ValueTroughDescent(
         XmScaleWidget sw)
 {
+#if USE_XFT
+    int ret_val = 0;
+    if (sw->scale.show_value) {
+        XmRenderTableGetDefaultFontExtents(sw->scale.font_list,
+                                           NULL, NULL, &ret_val);
+    }
+    return (Dimension)ret_val;
+#else
     char buff[15];
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
@@ -1869,6 +1905,7 @@ ValueTroughDescent(
     else
 	return (0);
 #undef GET_MAX
+#endif
 }
 
 static Dimension 
@@ -1880,6 +1917,19 @@ ValueTroughWidth(
     int direction, ascent, descent;
     XCharStruct overall_return;
     
+#if USE_XFT
+#define GET_MAX(tmp, max_or_min_value) {\
+    XmString tmp_str;\
+    if (sw->scale.decimal_points)\
+	    sprintf(buff, "%d%c", max_or_min_value,\
+		    nl_langinfo(RADIXCHAR)[0]);\
+	else\
+	    sprintf(buff, "%d", max_or_min_value);\
+	    \
+    tmp = XmStringWidth(sw->scale.font_list, tmp_str = XmStringCreateSimple(buff));\
+    XmStringFree(tmp_str);\
+}
+#else
 #define GET_MAX(tmp, max_or_min_value) {\
     if (sw->scale.decimal_points)\
 	    sprintf(buff, "%d%c", max_or_min_value,\
@@ -1892,6 +1942,7 @@ ValueTroughWidth(
 	    \
 	    tmp = overall_return.rbearing - overall_return.lbearing;\
 	    }
+#endif
 	
     if (sw->scale.show_value) {
 	GET_MAX(tmp_max, sw->scale.maximum) ;
@@ -2777,13 +2828,18 @@ static void
 ShowValue(
         XmScaleWidget sw)
 {
+#if USE_XFT
+    Dimension x, y, width, height;
+#else
     int x, y, width, height;
+#endif
     XCharStruct width_return;
     char buffer[256];
     int direction, descent;
     XmScrollBarWidget scrollbar;
     Region value_region = sw->scale.value_region;
     XRectangle value_rect;
+    XmString tmp_str;
     
     if (!XtIsRealized((Widget)sw)) return;
     
@@ -2832,52 +2888,97 @@ ShowValue(
 
     /*  Calculate the x, y, width, and height of the string to display  */
     
+#if USE_XFT
+    XmStringExtent(sw->scale.font_list, tmp_str = XmStringCreateSimple(buffer),
+		  &width, &height);
+    XmStringFree(tmp_str);
+    sw->scale.show_value_width = width;
+    sw->scale.show_value_height = height;
+#else
     XTextExtents (sw->scale.font_struct, buffer, strlen(buffer),
 		  &direction, &height, &descent, &width_return);
     width = width_return.rbearing - width_return.lbearing;
     sw->scale.show_value_width = width;
     sw->scale.show_value_height = height + descent;
-    
+#endif
+
     scrollbar = (XmScrollBarWidget) sw->composite.children[1];
     
     if (sw->scale.orientation == XmHORIZONTAL) {
+#if USE_XFT
+	x = scrollbar->core.x
+	    + scrollbar->scrollBar.slider_x;
+	    + scrollbar->scrollBar.slider_width / 2;
+	if (sw->scale.show_value == XmNEAR_BORDER) 
+	    /*tmp: should store the max */ 
+	    y = scrollbar->core.y - MaxLabelHeight(sw) - height - 3;
+	else /* NEAR_SLIDER or NONE */ 
+	    y = scrollbar->core.y - height - 3;  
+#else
 	x = scrollbar->core.x
 	    + scrollbar->scrollBar.slider_x
 	    + ((sw->scale.sliding_mode)?
 		scrollbar->scrollBar.slider_width: 0)
 		- (width_return.rbearing - SLIDER_SIZE( sw)) / 2;
-
 	if (sw->scale.show_value == XmNEAR_BORDER) 
 	    /*tmp: should store the max */ 
 	    y = scrollbar->core.y - MaxLabelHeight(sw) - 3;
 	else /* NEAR_SLIDER or NONE */ 
 	    y = scrollbar->core.y - 3;  
+#endif
     } else {
 	if (sw->scale.show_value == XmNEAR_BORDER) {
 	    if (LayoutIsRtoLM(sw))
 		x = scrollbar->core.x + scrollbar->core.width + 
 		    MaxLabelWidth(sw);
 	    else
+#if USE_XFT
+		x = scrollbar->core.x - MaxLabelWidth(sw) -
+		    sw->scale.show_value_width - SCALE_VALUE_MARGIN;
+#else
 		x = scrollbar->core.x - MaxLabelWidth(sw) - 
 		    width_return.rbearing - SCALE_VALUE_MARGIN;
+#endif
 	} else { /* NEAR_SLIDER or NONE */
 	    if (LayoutIsRtoLM(sw))
 		x = scrollbar->core.x + scrollbar->core.width;
 	    else
+#if USE_XFT
+		x = scrollbar->core.x - sw->scale.show_value_width;
+#else
 		x = scrollbar->core.x - width_return.rbearing;
+#endif
 	}
+#if USE_XFT
+	y = scrollbar->core.y + scrollbar->scrollBar.slider_y
+	    + SLIDER_SIZE(sw)/2 - height/2;
+#else
 	y = scrollbar->core.y + scrollbar->scrollBar.slider_y
 	    + SLIDER_SIZE(sw) + ((height - SLIDER_SIZE( sw)) / 2) - 3;
+#endif
     }
     
+#ifndef USE_XFT
     sw->scale.show_value_x = x + width_return.lbearing;
+#endif
     sw->scale.show_value_y = y - height + 1;
     
     
     /*  Display the string  */
     XSetClipMask(XtDisplay(sw), sw->scale.foreground_GC, None);
+#if USE_XFT
+    XClearWindow(XtDisplay(sw), XtWindow(sw));
+    XmStringDraw(XtDisplay(sw), XtWindow(sw), sw->scale.font_list,
+                    tmp_str = XmStringCreateSimple(buffer),
+		    sw->scale.foreground_GC,
+		    x, y, width, XmALIGNMENT_CENTER,
+		    sw->manager.string_direction,
+		    NULL);
+    XmStringFree(tmp_str);
+#else
     XDrawImageString (XtDisplay(sw), XtWindow(sw),
 		 sw->scale.foreground_GC, x, y, buffer, strlen(buffer));
+#endif
 }
 
 
@@ -3106,10 +3207,10 @@ DragConvertCallback (Widget w,
 		     XmConvertCallbackStruct *cs)
 {
    enum { XmACOMPOUND_TEXT, XmATARGETS, XmA_MOTIF_EXPORT_TARGETS,
-	  XmA_MOTIF_CLIPBOARD_TARGETS, NUM_ATOMS };
+	  XmA_MOTIF_CLIPBOARD_TARGETS, XmAUTF8_STRING, NUM_ATOMS };
    static char *atom_names[] = { 
      XmSCOMPOUND_TEXT, XmSTARGETS, XmS_MOTIF_EXPORT_TARGETS,
-     XmS_MOTIF_CLIPBOARD_TARGETS };
+     XmS_MOTIF_CLIPBOARD_TARGETS, XmSUTF8_STRING };
 
    char	         tmpstring[100];
    char         *strlist;
@@ -3136,21 +3237,23 @@ DragConvertCallback (Widget w,
      Atom *targs;
 
      if (cs -> target == atoms[XmATARGETS]) 
-       targs = XmeStandardTargets(w, 2, &count);
+       targs = XmeStandardTargets(w, 3, &count);
      else
-       targs = (Atom *) XtMalloc(sizeof(Atom) * 2);
+       targs = (Atom *) XtMalloc(sizeof(Atom) * 3);
 
      value = (XtPointer) targs;
      targs[count] = XA_STRING; count++;
      targs[count] = atoms[XmACOMPOUND_TEXT]; count++;
+     targs[count] = atoms[XmAUTF8_STRING]; count++;
      size = count;
      type = XA_ATOM;
      format = 32;
    } 
 
-   if (cs -> target == XA_STRING) {
-     /* handle plain STRING first */
-     type = XA_STRING;
+   if (cs -> target == XA_STRING ||
+       cs -> target == atoms[XmAUTF8_STRING]) {
+     /* handle plain STRING and UTF8_STRING first */
+     type = cs -> target;
      value = (XtPointer) XtNewString(tmpstring);
      size = strlen((char*) value);
      format = 8;

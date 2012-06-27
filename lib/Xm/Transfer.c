@@ -2264,6 +2264,7 @@ _XmTextToLocaleText(Widget w,
 		    Boolean *success)
 {
   Atom COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False);
+  Atom UTF8_STRING = XInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
   XTextProperty text_prop;
   int status;
   char ** values;
@@ -2272,7 +2273,7 @@ _XmTextToLocaleText(Widget w,
   int malloc_size = 0;
   int i;
 
-  if (type == XA_STRING || type == COMPOUND_TEXT) {
+  if (type == XA_STRING || type == COMPOUND_TEXT || type == UTF8_STRING) {
     text_prop.value = (unsigned char *) value;
     text_prop.encoding = type;
     text_prop.format = format;

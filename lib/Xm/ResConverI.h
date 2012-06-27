@@ -42,6 +42,9 @@ extern char * _XmConvertCSToString(
 extern Boolean _XmCvtXmStringToCT( 
                         XrmValue *from,
                         XrmValue *to) ;
+extern Boolean _XmCvtXmStringToUTF8String( 
+                        XrmValue *from,
+                        XrmValue *to) ;
 
 /********    End Private Function Declarations    ********/
 

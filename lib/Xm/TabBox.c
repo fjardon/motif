@@ -44,6 +44,10 @@
 #include <Xm/TabStackP.h>
 #include <Xm/DrawUtils.h>
 
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
+
 #define _XiBoolean Boolean
 
 typedef enum {XiQUAD_1, XiQUAD_2, XiQUAD_3, XiQUAD_4} XiQuadrant;
@@ -4939,6 +4943,13 @@ CalcCornerSize(tab)
 	    tmp = font->ascent + font->descent;
 	    AssignMax(size, tmp);
 	}
+#ifdef USE_XFT
+        else if (font_type == XmFONT_IS_XFT)
+	{
+	    tmp = ((XftFont*)value)->ascent + ((XftFont*)value)->descent;
+	    AssignMax(size, tmp);
+	}
+#endif
 	else
 	{
 	    XFontSetExtents *extents;

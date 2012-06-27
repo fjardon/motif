@@ -29,6 +29,9 @@
 #define _XmRenderTI_h
 
 #include <Xm/XmP.h>
+#ifdef	USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,8 +56,26 @@ extern "C" {
 #define _XmRendFont(r)		((_XmRendition)*(r))->font
 #define _XmRendDisplay(r)	((_XmRendition)*(r))->display
 #define _XmRendTabs(r)		((_XmRendition)*(r))->tabs
+#if USE_XFT
+#define _XmRendBG(r)		((_XmRendition)*(r))->xftBackground.pixel
+#define _XmRendFG(r)		((_XmRendition)*(r))->xftForeground.pixel
+#define _XmRendXftFont(r)       ((_XmRendition)*(r))->xftFont
+#define _XmRendXftFG(r)         ((_XmRendition)*(r))->xftForeground
+#define _XmRendXftBG(r)         ((_XmRendition)*(r))->xftBackground
+#define _XmRendPattern(r)       ((_XmRendition)*(r))->pattern
+#define _XmRendFontStyle(r)     ((_XmRendition)*(r))->fontStyle
+#define _XmRendFontFoundry(r)   ((_XmRendition)*(r))->fontFoundry
+#define _XmRendFontEncoding(r)  ((_XmRendition)*(r))->fontEncoding
+#define _XmRendFontSize(r)      ((_XmRendition)*(r))->fontSize
+#define _XmRendPixelSize(r)     ((_XmRendition)*(r))->pixelSize
+#define _XmRendFontSlant(r)     ((_XmRendition)*(r))->fontSlant
+#define _XmRendFontSpacing(r)   ((_XmRendition)*(r))->fontSpacing
+#define _XmRendFontWeight(r)    ((_XmRendition)*(r))->fontWeight
+#else
 #define _XmRendBG(r)		((_XmRendition)*(r))->background
 #define _XmRendFG(r)		((_XmRendition)*(r))->foreground
+#define _XmRendXftFont(r)       (NULL)
+#endif
 #define _XmRendBGState(r)	((_XmRendition)*(r))->backgroundState
 #define _XmRendFGState(r)	((_XmRendition)*(r))->foregroundState
 #define _XmRendUnderlineType(r)	((_XmRendition)*(r))->underlineType
@@ -91,6 +112,15 @@ typedef struct __XmRenditionRec
   unsigned char backgroundState;
   unsigned char foregroundState;
   
+#ifdef	USE_XFT
+	char *fontStyle,
+/*			*family,	Use font_name instead. */
+	*fontFoundry, *fontEncoding;
+	int fontSize, pixelSize, fontSlant, fontSpacing, fontWeight;
+	XftPattern *pattern;
+	XftFont *xftFont;
+	XftColor xftForeground, xftBackground;
+#endif
 } _XmRenditionRec, *_XmRendition;
 
 typedef struct __XmFontRenditionRec
@@ -210,6 +240,42 @@ extern XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
 #endif /* NeedWidePrototypes */
 						    XmFontType type,
 						    XtPointer font);
+
+#ifdef	USE_XFT
+/*
+ * XftDraw cache functions, implemented in lib/Xm/FontList.c
+ */
+XftDraw * _XmXftDrawCreate(Display *display, Window window);
+
+void _XmXftDrawDestroy(Display *display, Window window, XftDraw *d);
+
+void _XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
+#if NeedWidePrototypes
+                      int x, int y,
+#else
+                      Position x, Position y,
+#endif				/* NeedWidePrototypes */
+                      char *s, int len,
+#if NeedWidePrototypes
+                      int image
+#else
+                      Boolean image
+#endif				/* NeedWidePrototypes */
+		     );
+
+void _XmXftDrawString2(Display *display, Window window, GC gc, XftFont *font, int bpc,
+#if NeedWidePrototypes
+                int x, int y,
+#else
+                Position x, Position y,
+#endif
+                char *s, int len);
+
+void _XmXftSetClipRectangles(Widget w, Position x, Position y, XRectangle *rects, int n);
+void _XmXftSetClipRectangles2(Display *display, Window window, Position x, Position y, XRectangle *rects, int n);
+
+XftColor _XmXftGetXftColor(Display *display, Pixel color);
+#endif
 
 /********    End Private Function Declarations    ********/
 

@@ -1581,7 +1581,7 @@ ChangeManaged(
 	    PostMenuShell((XmMenuShellWidget) w, XtGrabExclusive, True);
 	    _XmFastExpose((XmManagerWidget) rowcol);
 	      
-	    /* Removed fixing bug #1260 (yura, 2004-07-29)
+	    /* Removed fixing bug #1260 (Yuriy Syrota, 2004-07-29)
 	    _XmMenuFocus(XtParent(rowcol), XmMENU_BEGIN, _time); */
 
                     /**the real grab *****/

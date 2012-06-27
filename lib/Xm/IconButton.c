@@ -632,6 +632,12 @@ Redisplay(Widget w, XEvent * event, Region region)
 	bottomgc = iw->primitive.top_shadow_GC;
     }
     else {
+#ifdef USE_XFT
+	if ((fill_width != 0) && (fill_height != 0))
+	    XFillRectangle(XtDisplay(w), XtWindow(w), XmIconButton_background_gc(iw),
+			   FILL_SPACE(iw), FILL_SPACE(iw),
+			   fill_width, fill_height);
+#endif
 	icon_gc  = XmIconButton_gc(iw);
 	icon_stippled_gc = XmIconButton_stippled_unset_gc(iw);
 	topgc     = iw->primitive.top_shadow_GC;

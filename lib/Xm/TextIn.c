@@ -74,6 +74,9 @@ static char rcsid[] = "$TOG: TextIn.c /main/36 1999/01/27 16:10:29 mgreess $"
 #include "TextStrSoI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 #define MSG1	        _XmMMsgTextIn_0000
 #define GRABKBDERROR	_XmMMsgRowColText_0024
@@ -1339,6 +1342,12 @@ PrintableString(XmTextWidget tw,
   OutputData o_data = tw->text.output->data;
   if (o_data->use_fontset) {
     return (XmbTextEscapement((XFontSet)o_data->font, str, n) != 0);
+#ifdef USE_XFT
+  } else if (o_data->use_xft) {
+    XGlyphInfo ext;
+    XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, str, n, &ext);
+    return ext.xOff != 0;    
+#endif
   } else {
     return (XTextWidth(o_data->font, str, n) != 0);
   }
@@ -5906,12 +5915,12 @@ DragProcCallback(Widget w,
 		 XtPointer client,
 		 XtPointer call)
 {
-  enum { XmACOMPOUND_TEXT, XmATEXT, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT };
+  enum { XmACOMPOUND_TEXT, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT, XmSUTF8_STRING };
 
   XmDragProcCallbackStruct *cb = (XmDragProcCallbackStruct *)call;
   Widget drag_cont;
-  Atom targets[4];
+  Atom targets[5];
   Arg args[10];
   Atom *exp_targets;
   Cardinal num_exp_targets, n;
@@ -5924,6 +5933,7 @@ DragProcCallback(Widget w,
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
+  targets[4] = atoms[XmAUTF8_STRING];
   
   drag_cont = cb->dragContext;
   
@@ -5960,10 +5970,10 @@ DragProcCallback(Widget w,
 static void
 RegisterDropSite(Widget w)
 {
-  enum { XmACOMPOUND_TEXT, XmATEXT, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT };
+  enum { XmACOMPOUND_TEXT, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT, XmSUTF8_STRING };
 
-  Atom targets[4];
+  Atom targets[5];
   Arg args[10];
   int n;
   Atom atoms[XtNumber(atom_names)];
@@ -5975,10 +5985,11 @@ RegisterDropSite(Widget w)
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
+  targets[4] = atoms[XmAUTF8_STRING];
   
   n = 0;
   XtSetArg(args[n], XmNimportTargets, targets); n++;
-  XtSetArg(args[n], XmNnumImportTargets, 4); n++;
+  XtSetArg(args[n], XmNnumImportTargets, 5); n++;
   XtSetArg(args[n], XmNdragProc, DragProcCallback); n++;
   XmeDropSink(w, args, n);
 }

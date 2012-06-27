@@ -1679,6 +1679,20 @@ CPixmapPlacement
 RPixmapPlacement
 NpixmapTextPadding
 
+#table _XmStrings230
+
+NfontStyle
+CFontStyle
+NfontSize
+CFontSize
+NfontFoundry
+CFontFoundry
+NfontEncoding
+CFontEncoding
+NxftFont
+CXftFont
+SUTF8_STRING
+
 #file XmStrDefsI.h
 #table _XmStringsI
 #htmpl XmStrDefsI.ht

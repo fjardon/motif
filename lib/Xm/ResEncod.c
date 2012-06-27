@@ -37,6 +37,8 @@
 #endif
 #include <string.h>
 #include <ctype.h>
+#include <iconv.h>
+#include <errno.h>
 #include <Xm/XmosP.h>
 #include "MessagesI.h"
 #include "ResEncodI.h"
@@ -149,7 +151,7 @@ static XmConst char CS_JISX0208_0[] = "JISX0208.1983-0" ;
 static XmConst char CS_JISX0208_1[] = "JISX0208.1983-1" ;
 static XmConst char CS_KSC5601_0[] = "KSC5601.1987-0" ;
 static XmConst char CS_KSC5601_1[] = "KSC5601.1987-1" ;
-
+static XmConst char CS_UTF_8[] = "UTF-8" ;
 
 
 
@@ -212,6 +214,17 @@ static XmConst Octet CTEXT_SET_JISX0208_0[] = "\033\044\050\102\033\044\051\102"
 static XmConst Octet CTEXT_SET_KSC5601_0[] = "\033\044\050\103\033\044\051\103";
 #define CTEXT_SET_KSC5601_0_LEN		sizeof(CTEXT_SET_KSC5601_0)-1
 
+static XmConst char UTF8_NEWLINESTRING[] = "\012";
+#define UTF8_NEWLINESTRING_LEN		sizeof(UTF8_NEWLINESTRING)-1
+
+static XmConst char UTF8_TABSTRING[] = "\011";
+#define UTF8_TABSTRING_LEN		sizeof(UTF8_TABSTRING)-1
+
+static XmConst char UTF8_L_TO_R[] = "\342\200\216";
+#define UTF8_L_TO_R_LEN		sizeof(UTF8_L_TO_R)-1
+
+static XmConst char UTF8_R_TO_L[] = "\342\200\217";
+#define UTF8_R_TO_L_LEN		sizeof(UTF8_R_TO_L)-1
 
 #define CTVERSION 1
 #define _IsValidC0(ctx, c)	(((c) == HT) || ((c) == NL) || ((ctx)->version > CTVERSION)) 
@@ -265,8 +278,10 @@ static XmConst Octet CTEXT_SET_KSC5601_0[] = "\033\044\050\103\033\044\051\103";
 
 /* Define the MIT registered charset */
 
+static SegmentEncoding _mit_UTF_8_registry = 
+{ "UTF-8", "UTF-8", NULL};
 static SegmentEncoding _mit_KSC5601_1987_1_registry = 
-{ "KSC5601.1987-1", "KSC5601.1987-1", NULL};
+{ "KSC5601.1987-1", "KSC5601.1987-1", &_mit_UTF_8_registry};
 static SegmentEncoding _mit_KSC5601_1987_0_registry = 
 { "KSC5601.1987-0", "KSC5601.1987-0", &_mit_KSC5601_1987_1_registry};
 static SegmentEncoding _mit_JISX0208_1983_1_registry = 
@@ -310,6 +325,16 @@ static SegmentEncoding *_encoding_registry_ptr = &_encoding_registry;
 static SegmentEncoding * FindEncoding( 
                         char *fontlist_tag) ;
 static Boolean processCharsetAndText(XmStringCharSet tag,
+				     OctetPtr	ctext,
+#if NeedWidePrototypes
+				     int 	separator,
+#else
+				     Boolean	separator,
+#endif /* NeedWidePrototypes */
+				     OctetPtr	*outc,
+				     unsigned int	*outlen,
+				     ct_Charset	*prev);
+static Boolean processCharsetAndTextUtf8(XmStringCharSet tag,
 				     OctetPtr	ctext,
 #if NeedWidePrototypes
 				     int 	separator,
@@ -412,6 +437,21 @@ static OctetPtr ctextConcat(
                         unsigned int str1len,
                         const_OctetPtr str2,
                         unsigned int str2len) ;
+
+static Boolean  cvtXmStringToUTF8String(
+        XrmValue *from,
+        XrmValue *to ) ;
+
+static char* Convert(
+        const char     *str,
+        unsigned int    len,  
+        const char      *to_codeset,
+        const char      *from_codeset);
+
+static char* ConvertWithIconv(
+        const char      *str,
+        unsigned int    len,
+        iconv_t converter);
 
 /********    End Static Function Declarations    ********/
  
@@ -1944,6 +1984,39 @@ XmCvtXmStringToCT(
   return( (char *) to_val.addr) ;
   }
 
+/************************************************************************
+ *
+ *  XmCvtXmStringToUTF8String
+ *	Convert an XmString to a compound utf8 string directly.
+ *	This is the public version of the resource converter and only
+ *	requires the XmString as an argument.
+ *
+ ************************************************************************/
+char * 
+XmCvtXmStringToUTF8String(
+        XmString string )
+{
+  Boolean	ok;
+  /* Dummy up some XrmValues to pass to cvtXmStringToText. */
+  XrmValue	from_val;
+  XrmValue	to_val;
+  
+  if (string == NULL)
+    return ( (char *) NULL );
+  
+  from_val.addr = (char *) string;
+  
+  ok = cvtXmStringToUTF8String(&from_val, &to_val);
+  
+  if (!ok)
+  {
+    XtWarningMsg( "conversionError","compoundText", "XtToolkitError",
+		 MSG8, NULL, NULL) ;
+    return( (char *) NULL ) ;
+    }
+  return( (char *) to_val.addr) ;
+  }
+
 /***************************************************************************
  *                                                                       *
  * _XmConvertCSToString - Converts compound string to corresponding      * 
@@ -1971,6 +2044,20 @@ _XmCvtXmStringToCT(
         XrmValue *to )
 {
     return (cvtXmStringToText( from, to ));
+}
+
+/***************************************************************************
+ *									   *
+ * _XmCvtXmStringToUTF8String - public wrapper for the widgets to use.	   *
+ *   This returns the length info as well - critical for the list widget   *
+ * 									   *
+ ***************************************************************************/
+Boolean 
+_XmCvtXmStringToUTF8String(
+        XrmValue *from,
+        XrmValue *to )
+{
+    return (cvtXmStringToUTF8String( from, to ));
 }
 
 /************************************************************************
@@ -2005,6 +2092,157 @@ XmCvtXmStringToText(
     return(ok);
 }
   
+
+/************************************************************************
+ *
+ *  cvtXmStringToUTF8String
+ *    Convert an XmString to a compound text string.  This is the 
+ *    underlying conversion routine for XmCvtXmStringToUTF8String,
+ *    _XmCvtXmStringToUTF8String.
+ *
+ ************************************************************************/
+static Boolean 
+cvtXmStringToUTF8String(
+        XrmValue *from,
+        XrmValue *to )
+{
+  Boolean		ok;
+  OctetPtr		outc = NULL;
+  unsigned int		outlen = 0;
+  _XmStringContextRec	stack_context;
+  XmStringCharSet	ct_encoding = NULL, cset_save = NULL;
+  ct_Direction		prev_direction = ct_Dir_LeftToRight;
+  ct_Charset		prev_charset = cs_Latin1;
+  XmStringComponentType	comp;
+  unsigned int		len;
+  XtPointer		val = NULL;
+  Octet			tmp_buf[256];
+  OctetPtr		tmp;
+  
+  /* Initialize the return parameters. */
+  to->addr = (XPointer) NULL;
+  to->size = 0;
+
+  if (!from->addr) 
+    return(False);
+
+  _XmStringContextReInit(&stack_context, (XmString) from->addr);
+
+/* BEGIN OSF Fix CR 7403 */
+  while ((comp = XmeStringGetComponent(&stack_context, True, False, 
+				       &len, &val)) !=
+	 XmSTRING_COMPONENT_END)
+    {
+      switch (comp)
+	{
+	case XmSTRING_COMPONENT_LOCALE_TEXT:
+	  cset_save = XmFONTLIST_DEFAULT_TAG;
+	  /* Fall through */
+	case XmSTRING_COMPONENT_TEXT:
+	  if (cset_save != NULL) {
+	    /* Check Registry */
+	    if (ct_encoding)
+	      XtFree((char *)ct_encoding);
+	    ct_encoding = XmMapSegmentEncoding(cset_save);
+	  }
+
+	  /* We must duplicate val because the routines we want to */
+	  /*	call don't take a length parameter. */
+	  tmp = (OctetPtr) XmStackAlloc(len + 1, tmp_buf);
+	  memcpy((char*)tmp, val, len);
+	  tmp[len] = EOS;
+
+	  if (ct_encoding != NULL) {
+	    /* We have a mapping. */
+	    ok = processCharsetAndTextUtf8(ct_encoding, tmp, FALSE, 
+				       &outc, &outlen, &prev_charset);
+	  } else {
+	    /* No mapping.  Vendor dependent. */
+	    ok = processCharsetAndTextUtf8(cset_save, tmp, FALSE, 
+						    &outc, &outlen, 
+						    &prev_charset);
+	  }
+
+	  /* Free our local copy of val. */
+	  XmStackFree((char*) tmp, tmp_buf);
+
+	  if (!ok)
+	    {
+	      _XmStringContextFree(&stack_context);
+	      return(False);
+	    }
+	  break;
+	
+	case XmSTRING_COMPONENT_CHARSET:
+	  cset_save = (XmStringCharSet)val;
+	  break;
+	
+	case XmSTRING_COMPONENT_DIRECTION:
+	  /* Output the direction, if changed */
+	  if (*(XmStringDirection *)val == XmSTRING_DIRECTION_L_TO_R) {
+	    if (prev_direction != ct_Dir_LeftToRight) {
+	      outc = ctextConcat(outc, outlen, 
+				 (unsigned char *) UTF8_L_TO_R,
+				 (unsigned int)UTF8_L_TO_R_LEN);
+	      outlen += UTF8_L_TO_R_LEN;
+	      prev_direction = ct_Dir_LeftToRight;
+	    }
+	  } else {
+	    if (prev_direction != ct_Dir_RightToLeft) {
+	      outc = ctextConcat(outc, outlen, 
+				 (unsigned char *) UTF8_R_TO_L,
+				 (unsigned int)UTF8_R_TO_L_LEN);
+	      outlen += UTF8_R_TO_L_LEN;
+	      prev_direction = ct_Dir_RightToLeft;
+	    }
+	  };
+	  break;
+	
+	case XmSTRING_COMPONENT_SEPARATOR:
+	  if (ct_encoding != NULL) {		  /* We have a mapping. */
+	    ok = processCharsetAndTextUtf8(ct_encoding, NULL, TRUE, 
+				       &outc, &outlen, &prev_charset);
+	  }
+	  else 
+	    {
+	      /* No mapping.  Vendor dependent. */
+	      ok = processCharsetAndTextUtf8(cset_save, NULL, TRUE,
+                                    &outc, &outlen, &prev_charset);
+	    }
+
+	  if (!ok)
+	    {
+	      _XmStringContextFree(&stack_context);
+	      return(False);
+	    }
+	  break;
+	
+	case XmSTRING_COMPONENT_TAB:
+	  outc = ctextConcat(outc, outlen, 
+			     (unsigned char *)UTF8_TABSTRING, 
+			     (unsigned int)UTF8_TABSTRING_LEN);
+	  outlen++;
+	  break;
+
+	default:
+	  /* Just ignore it. */
+	  break;
+	}
+  } /* end while */
+
+  if (ct_encoding)
+    XtFree((char *)ct_encoding);
+
+/* END OSF Fix CR 7403 */
+  if (outc != NULL) {
+    to->addr = (char *) outc;
+    to->size = outlen;
+  }
+
+  _XmStringContextFree(&stack_context);
+
+  return(True);
+}
 
 /************************************************************************
  *
@@ -2165,6 +2403,103 @@ cvtXmStringToText(
 
   _XmStringContextFree(&stack_context);
 
+  return(True);
+}
+
+static Boolean
+processCharsetAndTextUtf8(XmStringCharSet tag,
+		      OctetPtr		ctext,
+#if NeedWidePrototypes
+		      int		separator,
+#else
+		      Boolean		separator,
+#endif /* NeedWidePrototypes */
+		      OctetPtr		*outc,
+		      unsigned int	*outlen,
+		      ct_Charset	*prev)
+{
+  unsigned int		ctlen = 0, len;
+
+  if (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0) {
+      if (_XmStringIsCurrentCharset("UTF-8")) {
+          ctlen = strlen((char *)ctext);
+
+          if (ctlen > 0) {
+              *outc = ctextConcat(*outc, *outlen, ctext, ctlen);
+              *outlen += ctlen;
+          };
+      } else {
+          XTextProperty	prop_rtn;
+          int		ret_val;
+          String	msg;
+     
+         /* Call XmbTextListToTextProperty */
+          ret_val = 
+              XmbTextListToTextProperty(_XmGetDefaultDisplay(),
+                      (char **)&ctext,
+                      1, XUTF8StringStyle, &prop_rtn);
+
+          if (ret_val) {
+              switch (ret_val) {
+                  case XNoMemory:
+                      msg = MSG9;
+                      break;
+                  case XLocaleNotSupported:
+                      msg = MSG10;
+                      break;
+                  default:
+                      msg = MSG11;
+                      break;
+              }
+
+              XtWarningMsg("conversionError", "textProperty",
+                      "XtToolkitError", msg, NULL, 0);
+
+              return(False);
+          }
+	
+          ctlen = strlen((char *)prop_rtn.value);
+
+          /* Now copy in the text */
+          if (ctlen > 0) {
+              *outc = ctextConcat(*outc, *outlen, prop_rtn.value, ctlen);
+              *outlen += ctlen;
+          };
+
+          XFree(prop_rtn.value);
+      }
+
+      /* Finally, add the separator if any */
+      if (separator) {
+	*outc = ctextConcat(*outc, *outlen, 
+			    (unsigned char *)UTF8_NEWLINESTRING, 
+			    (unsigned int)UTF8_NEWLINESTRING_LEN);
+	(*outlen)++;
+      };
+
+      *prev = cs_none;
+
+      return(True);
+  }
+	
+  if (ctext)
+    ctlen = strlen((char *)ctext);
+
+  /* Now copy in the text */
+  if (ctlen > 0) {
+    char *text = Convert(ctext, ctlen, "UTF-8", tag);
+    *outc = ctextConcat(*outc, *outlen, text, strlen(text));
+    *outlen += ctlen;
+    XtFree(text);
+  };
+
+  /* Finally, add the separator if any */
+  if (separator) {
+    *outc = ctextConcat(*outc, *outlen, 
+			(unsigned char *)UTF8_NEWLINESTRING, 
+			(unsigned int)UTF8_NEWLINESTRING_LEN);
+    (*outlen)++;
+  }
   return(True);
 }
 
@@ -2425,3 +2760,111 @@ ctextConcat(
 	str1[str1len+str2len] = EOS;
 	return(str1);
 }
+
+char*
+Convert(const char     *str,
+        unsigned int    len,  
+        const char      *to_codeset,
+        const char      *from_codeset)
+{
+    char *res;
+    iconv_t cd;
+
+    if (str == NULL || to_codeset == NULL || from_codeset == NULL)
+        return NULL;
+  
+    cd = iconv_open(to_codeset, from_codeset);
+    if (cd == (iconv_t) -1) {
+        char msg[255];
+      
+        snprintf(msg, sizeof(msg),
+                "Could not open converter from '%s' to '%s'",
+                from_codeset, to_codeset);
+        
+        XmeWarning(NULL, msg);
+        
+        return NULL;
+    }
+
+    res = ConvertWithIconv(str, len, cd);
+  
+    iconv_close(cd);
+
+    return res;
+}
+
+char*
+ConvertWithIconv(const char  *str,
+        unsigned int    len,
+        iconv_t converter)
+{
+    char *dest;
+    char *outp;
+    const char *p;
+    size_t inbytes_remaining;
+    size_t outbytes_remaining;
+    size_t err;
+    size_t outbuf_size;
+    Boolean have_error = FALSE;
+  
+    if (str == NULL || converter == (iconv_t) -1)
+        return NULL;
+    
+   if (len < 0)
+       len = strlen(str);
+
+   p = str;
+   inbytes_remaining = len;
+   outbuf_size = len + 1; /* + 1 for nul in case len == 1 */
+
+   outbytes_remaining = outbuf_size - 1; /* -1 for nul */
+   outp = dest = XtMalloc(outbuf_size);
+
+again:
+  
+   err = iconv(converter, (char **)&p, &inbytes_remaining, &outp,
+           &outbytes_remaining);
+
+   if (err == (size_t) -1) {
+      switch (errno) {
+	case EINVAL:
+            /* Incomplete text, do not report an error */
+            break;
+	case E2BIG:
+            {
+                size_t used = outp - dest;
+
+                outbuf_size *= 2;
+                dest = XtRealloc(dest, outbuf_size);
+		
+                outp = dest + used;
+                outbytes_remaining = outbuf_size - used - 1; /* -1 for nul */
+
+                goto again;
+            }
+        case EILSEQ:
+            XmeWarning(NULL, "Invalid byte sequence in conversion input");
+            have_error = TRUE;
+            break;
+        default:
+            {
+                char msg[255];
+                snprintf(msg, sizeof(msg), "Error during conversion: %s",
+		       strerror(errno));
+                XmeWarning(NULL, msg);
+                have_error = TRUE;
+                break;
+            }
+      }
+   }
+
+   *outp = '\0';
+  
+   if (have_error) {
+      XtFree(dest);
+      dest = NULL;
+   }
+
+   return dest;
+}
+
