@@ -577,10 +577,16 @@ XmCvtTextPropertyToXmStringTable(Display *display,
 				 XmStringTable *string_table_return,
 				 int *count_return)
 {
-    enum { XmACOMPOUND_TEXT, XmA_MOTIF_COMPOUND_STRING, XmAUTF8_STRING,
+    enum { XmACOMPOUND_TEXT, XmA_MOTIF_COMPOUND_STRING,
+#ifdef UTF8_SUPPORTED
+        XmAUTF8_STRING,
+#endif
         NUM_ATOMS };
     static char* atom_names[] = { XmSCOMPOUND_TEXT, XmS_MOTIF_COMPOUND_STRING,
-        XmSUTF8_STRING };
+#ifdef UTF8_SUPPORTED
+        XmSUTF8_STRING
+#endif
+	};
 
     char **text_list;
     int i, result, elements = 0;
@@ -664,11 +670,13 @@ XmCvtTextPropertyToXmStringTable(Display *display,
 	tag = "ISO8859-1";
 	type = XmCHARSET_TEXT;
     }
+#ifdef UTF8_SUPPORTED
     else if (text_prop->encoding == atoms[XmAUTF8_STRING])
     {
 	tag = "UTF-8";
 	type = XmCHARSET_TEXT;
     }
+#endif
     else {
 	_XmAppUnlock(app);
         return(XLocaleNotSupported);

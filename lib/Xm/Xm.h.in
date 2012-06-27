@@ -36,6 +36,10 @@
 #ifndef PNG_SUPPORTED
 #undef PNG_SUPPORTED
 #endif
+
+#ifndef UTF8_SUPPORTED
+#undef UTF8_SUPPORTED
+#endif
  
 #if    !defined(__STDC__) \
     && !defined(__cplusplus) && !defined(c_plusplus) \
@@ -1461,9 +1465,10 @@ extern Boolean XmCvtXmStringToText(
                         XrmValue *from_val,
                         XrmValue *to_val,
                         XtPointer *converter_data) ;
+#ifdef UTF8_SUPPORTED
 extern char * XmCvtXmStringToUTF8String(
                         XmString string) ;
-
+#endif
 /********    End Public Function Declarations    ********/
 
 /********    Public Function Declarations for ResInd.c    ********/

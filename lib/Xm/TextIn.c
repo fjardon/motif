@@ -5915,8 +5915,16 @@ DragProcCallback(Widget w,
 		 XtPointer client,
 		 XtPointer call)
 {
-  enum { XmACOMPOUND_TEXT, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT, XmSUTF8_STRING };
+  enum { XmACOMPOUND_TEXT, XmATEXT,
+#ifdef UTF8_SUPPORTED
+      XmAUTF8_STRING,
+#endif
+      NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT,
+#ifdef UTF8_SUPPORTED
+      XmSUTF8_STRING
+#endif
+      };
 
   XmDragProcCallbackStruct *cb = (XmDragProcCallbackStruct *)call;
   Widget drag_cont;
@@ -5933,7 +5941,9 @@ DragProcCallback(Widget w,
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
+#ifdef UTF8_SUPPORTED
   targets[4] = atoms[XmAUTF8_STRING];
+#endif
   
   drag_cont = cb->dragContext;
   
@@ -5944,8 +5954,13 @@ DragProcCallback(Widget w,
   
   switch(cb->reason) {
   case XmCR_DROP_SITE_ENTER_MESSAGE:
+#ifdef UTF8_SUPPORTED
+    if (XmTargetsAreCompatible(XtDisplay(drag_cont), exp_targets,
+			       num_exp_targets, targets, 5))
+#else
     if (XmTargetsAreCompatible(XtDisplay(drag_cont), exp_targets,
 			       num_exp_targets, targets, 4))
+#endif
       cb->dropSiteStatus = XmVALID_DROP_SITE;
     else
       cb->dropSiteStatus = XmINVALID_DROP_SITE;
@@ -5970,8 +5985,16 @@ DragProcCallback(Widget w,
 static void
 RegisterDropSite(Widget w)
 {
-  enum { XmACOMPOUND_TEXT, XmATEXT, XmAUTF8_STRING, NUM_ATOMS };
-  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT, XmSUTF8_STRING };
+  enum { XmACOMPOUND_TEXT, XmATEXT,
+#ifdef UTF8_SUPPORTED
+      XmAUTF8_STRING,
+#endif
+      NUM_ATOMS };
+  static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT,
+#ifdef UTF8_SUPPORTED
+      XmSUTF8_STRING
+#endif
+      };
 
   Atom targets[5];
   Arg args[10];
@@ -5985,11 +6008,17 @@ RegisterDropSite(Widget w)
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
+#ifdef UTF8_SUPPORTED
   targets[4] = atoms[XmAUTF8_STRING];
+#endif
   
   n = 0;
   XtSetArg(args[n], XmNimportTargets, targets); n++;
+#ifdef UTF8_SUPPORTED
   XtSetArg(args[n], XmNnumImportTargets, 5); n++;
+#else
+  XtSetArg(args[n], XmNnumImportTargets, 4); n++;
+#endif
   XtSetArg(args[n], XmNdragProc, DragProcCallback); n++;
   XmeDropSink(w, args, n);
 }

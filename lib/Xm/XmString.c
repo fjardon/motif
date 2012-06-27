@@ -2446,10 +2446,15 @@ OptLineMetrics(XmRenderTable 	r,
 		   (XtPointer)_XmStrText(opt),
 		   _XmStrByteCount(opt), (XmTextType) _XmStrTextType(opt),
 		   XmSTRING_SINGLE_SEG, width, height, ascent, descent,
+#ifdef UTF8_SUPPORTED
                    _XmStrTextType(opt) == XmCHARSET_TEXT &&
                    (_XmStrTagIndex(opt) == XmFONTLIST_DEFAULT_TAG
                     && _XmStringIsCurrentCharset("UTF-8")
-                    || (strcmp(_XmStrTagGet(opt), "UTF-8") == 0)));
+                    || (strcmp(_XmStrTagGet(opt), "UTF-8") == 0))
+#else
+                   False
+#endif
+		    );
 
   if (rend != NULL) tl = _XmRendTabs(rend);
   d = (_XmRTDisplay(r) == NULL) ? _XmGetDefaultDisplay() : _XmRTDisplay(r);
@@ -3637,11 +3642,15 @@ SubStringPosition(
       }
       
       if (!fail) {          /* found it */
+#ifdef UTF8_SUPPORTED
         Boolean utf8 = ((_XmEntryTextTypeGet(seg) == XmCHARSET_TEXT) &&
               (((_XmEntryTagIndex((_XmStringEntry)seg) ==
                  XmFONTLIST_DEFAULT_TAG) &&
                 _XmStringIsCurrentCharset("UTF-8")) ||
                (strcmp(seg_tag, "UTF-8") == 0)));
+#else
+        Boolean utf8;
+#endif
 	if (begin == 0) 
 	  *under_begin = x;
 	else if (type == XmWIDECHAR_TEXT) {
@@ -3649,10 +3658,12 @@ SubStringPosition(
 	    x + abs(XwcTextEscapement(font_set, (wchar_t *)a, 
 				      begin/sizeof(wchar_t)));
         } else {
+#ifdef UTF8_SUPPRTED
             if (utf8)
                 *under_begin =
                     x + abs(Xutf8TextEscapement(font_set, a, begin));
             else
+#endif
                 *under_begin =
                     x + abs(XmbTextEscapement(font_set, a, begin));
         }
@@ -3660,13 +3671,19 @@ SubStringPosition(
 	width = _XmEntryWidthGet((_XmStringEntry)under_seg, rt);
 	
 	if (width == 0) {
+#ifdef UTF8_SUPPORTED
 	  width = (type == XmWIDECHAR_TEXT) 
 	    ? abs(XwcTextEscapement(font_set, (wchar_t *)b, 
 				  under_seg_len / sizeof(wchar_t)))
 	    : (utf8
                     ? abs(Xutf8TextEscapement(font_set, b, under_seg_len))
                     : abs(XmbTextEscapement(font_set, b, under_seg_len)));
-	  
+#else
+	  width = (type == XmWIDECHAR_TEXT) 
+	    ? abs(XwcTextEscapement(font_set, (wchar_t *)b, 
+				  under_seg_len / sizeof(wchar_t)))
+	    : abs(XmbTextEscapement(font_set, b, under_seg_len));
+#endif	  
 	  _XmEntryWidthSet((_XmStringEntry)under_seg, rt, width);
 	}
 	
@@ -3912,6 +3929,7 @@ _XmStringDrawSegment(Display *d,
 		   XmWIDECHAR_TEXT) &&
 		  (_XmRendFontType(rend) == XmFONT_IS_FONTSET));
 		  
+#ifdef UTF8_SUPPORTED
       utf8 = ((_XmEntryTextTypeGet((_XmStringEntry)seg) == XmCHARSET_TEXT) &&
 		   (_XmRendFontType(rend) == XmFONT_IS_FONTSET ||
 		   _XmRendFontType(rend) == XmFONT_IS_XFT) &&
@@ -3920,6 +3938,9 @@ _XmStringDrawSegment(Display *d,
                 (_XmStringIsCurrentCharset("UTF-8")) ||
                (_XmEntryTagIndex(seg) != TAG_INDEX_UNSET
 	       && strcmp(_XmEntryTag((_XmStringEntry)seg), "UTF-8") == 0))));
+#else
+      utf8 = False;
+#endif
     
       gc = _XmRendGC(rend);
 
@@ -4107,9 +4128,11 @@ _XmStringDrawSegment(Display *d,
 	  if (text16) 
 	    XDrawImageString16(d, w, gc, x, y, (XChar2b*)draw_text, 
 			       Half(seg_len));
+#ifdef UTF8_SUPPORTED
           else if (utf8)
             Xutf8DrawImageString(d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
                                  draw_text, seg_len);
+#endif
 	  else if (multibyte) 
 	    XmbDrawImageString (d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
 				draw_text, seg_len);
@@ -4125,9 +4148,11 @@ _XmStringDrawSegment(Display *d,
 	  if (text16) 
 	    XDrawString16 (d, w, gc, x, y, (XChar2b *)draw_text,
 			   Half(seg_len));
+#ifdef UTF8_SUPPORTED
           else if (utf8)
 	    Xutf8DrawString(d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
                             draw_text, seg_len);
+#endif
 	  else if (multibyte)
 	    XmbDrawString (d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
 			   draw_text, seg_len);
@@ -6205,10 +6230,12 @@ ComputeMetrics(XmRendition rend,
 			   byte_count/sizeof(wchar_t),
 			   &ink, &logical);
 	  else {
+#ifdef UTF8_SUPPORTED
               if (utf8)
                   Xutf8TextExtents(font_set, (char *)text, byte_count,
                           &ink, &logical);
               else
+#endif
                   XmbTextExtents(font_set, (char *)text, byte_count,
                           &ink, &logical);
           }
@@ -6567,11 +6594,16 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 		     _XmEntryByteCountGet(entry),
 		     (XmTextType) _XmEntryTextTypeGet(entry),
 		     which_seg, &w, &h, &asc, &dsc,
+#ifdef UTF8_SUPPORTED
                    _XmEntryType(entry) == XmCHARSET_TEXT &&
                    (_XmEntryTagIndex(entry) == XmFONTLIST_DEFAULT_TAG
                     && (_XmStringIsCurrentCharset("UTF-8")
                     || (_XmEntryTagIndex(entry) !=  TAG_INDEX_UNSET
-		    && strcmp(_XmEntryTag(entry), "UTF-8") == 0))));
+		    && strcmp(_XmEntryTag(entry), "UTF-8") == 0)))
+#else
+                   False
+#endif
+		    );
 
       /* If cache exists, set it. */
       if (render_cache != NULL)

@@ -5135,13 +5135,18 @@ ContainerConvertProc(
     XmA_MOTIF_CLIPBOARD_TARGETS,	XmA_COMPOUND_TEXT, 
     XmA_MOTIF_COMPOUND_STRING,		XmA_MOTIF_DRAG_OFFSET,
     XmA_MOTIF_DROP,			XmA_TARGETS,
-    XmAUTF8_STRING,			NUM_ATOMS };
+#ifdef UTF8_SUPPORTED
+    XmAUTF8_STRING,
+#endif
+    NUM_ATOMS };
   static char *atom_names[] = {
     XmS_MOTIF_LOSE_SELECTION,		XmS_MOTIF_EXPORT_TARGETS,
     XmS_MOTIF_CLIPBOARD_TARGETS,	XmSCOMPOUND_TEXT,
     XmS_MOTIF_COMPOUND_STRING,		XmS_MOTIF_DRAG_OFFSET,
     XmS_MOTIF_DROP,			XmSTARGETS,
+#ifdef UTF8_SUPPORTED
     XmSUTF8_STRING,
+#endif
   };
 
   XmContainerWidget	cw = (XmContainerWidget)wid;
@@ -5178,7 +5183,9 @@ ContainerConvertProc(
       else
 	targargs  = (Atom*) XtMalloc(sizeof(Atom) * 6);
       targargs[n++] = XA_PIXMAP;
+#ifdef UTF8_SUPPORTED
       targargs[n++] = atoms[XmAUTF8_STRING];
+#endif
       targargs[n++] = atoms[XmA_COMPOUND_TEXT];
       targargs[n++] = atoms[XmA_MOTIF_COMPOUND_STRING];
       if (cw->container.drag_context != (Widget) NULL)
@@ -5200,7 +5207,9 @@ ContainerConvertProc(
 	type = XA_INTEGER;
       } else if ((cs->target == XA_PIXMAP) ||
 		 (cs->target == atoms[XmA_MOTIF_COMPOUND_STRING]) ||
+#ifdef UTF8_SUPPORTED
 		 (cs->target == atoms[XmAUTF8_STRING]) ||
+#endif
 		 (cs->target == atoms[XmA_COMPOUND_TEXT]))
 	{
 	  if ((cs->selection == atoms[XmA_MOTIF_DROP]) && (cs->location_data))
@@ -5275,12 +5284,14 @@ ContainerConvertProc(
 	    value = XmCvtXmStringToCT(return_xmstr);
 	    length = strlen((char*) value);
 	  }
+#ifdef UTF8_SUPPORTED
 	else if (cs->target == atoms[XmAUTF8_STRING])
 	  {
 	    type = atoms[XmAUTF8_STRING];
 	    value = XmCvtXmStringToUTF8String(return_xmstr);
 	    length = strlen((char*) value);
 	  }
+#endif
 	XmStringFree(return_xmstr);
       }
   if (items)

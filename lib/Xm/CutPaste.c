@@ -4526,8 +4526,10 @@ XmClipboardRegisterFormat(
 	RegIfMatch( display, format_name, XmITASK, XM_INTEGER ) ||
 	RegIfMatch( display, format_name, XmICLASS, XM_TEXT ) ||
 	RegIfMatch( display, format_name, XmINAME, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmSCLIENT_WINDOW, XM_WINDOW ) ||
-	RegIfMatch( display, format_name, XmSUTF8_STRING, XM_UTF8_STRING )
+	RegIfMatch( display, format_name, XmSCLIENT_WINDOW, XM_WINDOW )
+#ifdef UTF8_SUPPORTED
+	|| RegIfMatch( display, format_name, XmSUTF8_STRING, XM_UTF8_STRING )
+#endif
 	 )  {
 	    _XmAppUnlock(app);
 	    return ClipboardSuccess;
@@ -4562,7 +4564,11 @@ GetTypeFromTarget(Display *display, Atom target)
     XmALINK_SELECTION, XmAMULTIPLE, XmATARGETS, XmATEXT, XmATIMESTAMP,
     XmA_MOTIF_CLIPBOARD_TARGETS, XmA_MOTIF_DEFERRED_CLIPBOARD_TARGETS,
     XmA_MOTIF_ENCODING_REGISTRY, XmA_MOTIF_EXPORT_TARGETS,
-    XmA_MOTIF_RENDER_TABLE, XmAUTF8_STRING, NUM_ATOMS };
+    XmA_MOTIF_RENDER_TABLE,
+#ifdef UTF8_SUPPORTED
+    XmAUTF8_STRING,
+#endif
+    NUM_ATOMS };
   static char *atom_names[] = { 
     XmIATOM_PAIR, XmIBACKGROUND, XmICHARACTER_POSITION, XmICLASS,
     XmICOLUMN_NUMBER, XmIFOREGROUND, XmIHOST_NAME, XmILINE_NUMBER,
@@ -4573,7 +4579,11 @@ GetTypeFromTarget(Display *display, Atom target)
     XmSLINK_SELECTION, XmSMULTIPLE, XmSTARGETS, XmSTEXT, XmSTIMESTAMP,
     XmS_MOTIF_CLIPBOARD_TARGETS, XmS_MOTIF_DEFERRED_CLIPBOARD_TARGETS,
     XmS_MOTIF_ENCODING_REGISTRY, XmS_MOTIF_EXPORT_TARGETS,
-    XmS_MOTIF_RENDER_TABLE, XmSUTF8_STRING };
+    XmS_MOTIF_RENDER_TABLE,
+#ifdef UTF8_SUPPORTED
+    XmSUTF8_STRING
+#endif
+    };
   Atom atoms[XtNumber(atom_names)];
 
   assert(XtNumber(atom_names) == NUM_ATOMS);
