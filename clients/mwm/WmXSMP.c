@@ -446,10 +446,14 @@ getNewRestartCmd(void)
 static void
 freeNewRestartCmd(char **restartCmd)
 {
-    while (*restartCmd != (char *)NULL)
-	XtFree(*(restartCmd++));
+    if(restartCmd)
+    {
+	char **tmp = restartCmd;
+    	while (*restartCmd != (char *)NULL)
+		XtFree(*(restartCmd++));
 
-    XtFree((char *)restartCmd);
+	XtFree((char *)tmp);
+    }  
 }
 
 #endif /* ! WSM */
