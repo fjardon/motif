@@ -3,10 +3,10 @@ AC_DEFUN([AC_IMAGE_SUPPORT],
 AH_TEMPLATE([USE_LIBJPEG], [Use libjpeg library])
 AH_TEMPLATE([USE_LIBPNG], [Use libpng library])
 
-AC_ARG_ENABLE(jpeg,           [  --enable-jpeg           Enable JPEG support])
+AC_ARG_ENABLE(jpeg,           [  --enable-jpeg           Enable JPEG support],,[enable_jpeg=yes])
 AC_ARG_WITH(libjpeg_includes, [  --with-libjpeg-includes=DIR   Use libjpeg includes in DIR], libjpeg_includes=$withval)
 AC_ARG_WITH(libjpeg_lib,      [  --with-libjpeg-lib=DIR        Use libjpeg library in DIR], libjpeg_lib=$withval)
-AC_ARG_ENABLE(png,            [  --enable-png            Enable PNG support])
+AC_ARG_ENABLE(png,            [  --enable-png            Enable PNG support],,[enable_png=yes])
 AC_ARG_WITH(libpng_includes,  [  --with-libpng-includes=DIR    Use libpng includes in DIR], libpng_includes=$withval)
 AC_ARG_WITH(libpng_lib,       [  --with-libpng-lib=DIR         Use libpng library in DIR], libpng_lib=$withval)
 

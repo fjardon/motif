@@ -7,7 +7,7 @@ AH_TEMPLATE([FC_DEFAULT_FONTS], [We have the fontconfig library])
 AH_TEMPLATE([CONFDIR], [We have the fontconfig library])
 AH_TEMPLATE([USE_XFT], [Use XFT])
 
-AC_ARG_ENABLE(xft,             [  --enable-xft            Enable XFT support (font anti aliasing)])
+AC_ARG_ENABLE(xft,             [  --enable-xft            Enable XFT support (font anti aliasing)],,[enable_xft=yes])
 AC_ARG_WITH(freetype_includes, [  --with-freetype-includes=DIR  Use FreeType includes in DIR], freetype_includes=$withval, freetype_includes=yes)
 AC_ARG_WITH(freetype_lib,      [  --with-freetype-lib=DIR       Use FreeType library in DIR], freetype_lib=$withval, freetype_lib=yes)
 AC_ARG_WITH(freetype_config,   [  --with-freetype-config=PROG   Use FreeType configuration program PROG], freetype_config=$withval, freetype_config=yes)
