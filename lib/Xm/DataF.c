@@ -2947,7 +2947,7 @@ df_RedisplayText(
 {
   _XmHighlightRec *l = XmTextF_highlight(tf).list;
   XRectangle rect;
-  int x, y, i;
+  int x, y, i, startx;
   Dimension margin_width = XmTextF_margin_width(tf) +
 	                   tf->primitive.shadow_thickness +
 			   tf->primitive.highlight_thickness;
@@ -2997,6 +2997,7 @@ df_RedisplayText(
 
       /* PWC - alignment requires we draw all characters to the left of end */
       start = 0;
+      startx = x;
   }
   else
       x = (int) XmTextF_h_offset(tf);
@@ -3058,10 +3059,16 @@ df_RedisplayText(
 			      XmTextF_string_length(tf) - (int)l[i].position);
   }
 
-  if (x < (int)(rect.x + rect.width)) {
-     df_XmSetInvGC(tf, XmTextF_gc(tf));
-     XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_gc(tf), x, rect.y,
+  if (x < (int)(rect.x + rect.width)
+      && XmDataField_alignment(tf) == XmALIGNMENT_BEGINNING) {
+    df_XmSetInvGC(tf, XmTextF_gc(tf));
+    XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_gc(tf), x, rect.y,
                     rect.x + rect.width - x, rect.height);
+  } else if (XmTextF_h_offset(tf) < startx
+        && XmDataField_alignment(tf) == XmALIGNMENT_END) {
+    df_XmSetInvGC(tf, XmTextF_gc(tf));
+    XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_gc(tf), XmTextF_h_offset(tf), rect.y,
+                    startx - XmTextF_h_offset(tf), rect.height);
   }
 
   XmTextF_refresh_ibeam_off(tf) = True;
@@ -11433,7 +11440,7 @@ XmDataFieldSetString(
     
     _XmDataFieldDrawInsertionPoint(tf, True);
     if (free_insert) XtFree(value);
-
+    
     _XmAppUnlock(app);
 }
 

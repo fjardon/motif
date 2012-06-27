@@ -93,7 +93,8 @@ typedef	struct	_XmContainerConstraintPart
 	int		cell_idx;
 	Boolean		visible_in_outline;
 	Position	user_x;
-	Position	user_y;
+//rasta	Position	user_y;
+	int	user_y;
 	unsigned char	outline_state;		/* XmNoutlineState */
 	unsigned char	selection_visual;
 	unsigned char	selection_state;
