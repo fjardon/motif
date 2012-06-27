@@ -186,6 +186,7 @@ _XmResizeHashTable(XmHashTable table, Cardinal new_size)
 	  table -> buckets[index] = current;
 	}
       }
+      else last = current;
       current = next;
     }
   }
