@@ -519,6 +519,8 @@ DuplicateMenuItems (MenuItem *menuItems)
 	newMenuItem->wmFunction = curMenuItem->wmFunction;
 
 	if ((curMenuItem->wmFunction == F_Send_Msg)
+	    || (curMenuItem->wmFunction == F_Circle_Up)
+	    || (curMenuItem->wmFunction == F_Circle_Down)
 #ifdef WSM
 	    || (curMenuItem->wmFunction == F_Set_Context)
 # ifdef PANELIST
