@@ -872,7 +872,7 @@ ActionDraw(XmToggleButtonWidget w,
 	    DrawToggleLabel(w);
 	}
 
-      if (Lab_IsPixmap(w))
+      if (Lab_IsPixmap(w) || Lab_IsPixmapAndText(w))
 	SetAndDisplayPixmap(w, event, NULL);
     }
 }
@@ -1062,7 +1062,7 @@ Arm(
 	DrawToggleLabel(tb);
     }
   
-  if (Lab_IsPixmap(tb))
+  if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
     SetAndDisplayPixmap(tb, event, NULL);
   
   if (tb->toggle.arm_CB)
@@ -1282,7 +1282,7 @@ ArmAndActivate(
       else if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 	DrawToggleLabel(tb);
 
-      if (Lab_IsPixmap(tb))
+      if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
 	SetAndDisplayPixmap( tb, event, NULL);
     }
   else
@@ -1296,7 +1296,7 @@ ArmAndActivate(
 	  if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 	    DrawToggleLabel (tb);
 	}
-      if (Lab_IsPixmap(tb))
+      if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
 	SetAndDisplayPixmap( tb, event, NULL);
     }
   
@@ -1562,7 +1562,7 @@ BtnUp(
 		  else if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 		    DrawToggleLabel(tb);
 
-		  if (Lab_IsPixmap(tb))
+		  if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
 		    SetAndDisplayPixmap( tb, event, NULL);
 
 		  if (tb->toggle.arm_CB) 
@@ -1829,7 +1829,7 @@ Initialize(
   
 
   /* BEGIN OSF Fix pir 1778 */
-  if (Lab_IsPixmap(new_w) &&
+  if ((Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w)) &&
       (!IsNull(PixmapOff(new_w)) || !IsNull(PixmapInsenOff(new_w)) ||
        !IsNull(PixmapOn(new_w)) || !IsNull(PixmapInsenOn(new_w)) ||
        !IsNull(PixmapInd(new_w)) || !IsNull(PixmapInsenInd(new_w))))
@@ -1846,7 +1846,7 @@ Initialize(
     if (new_w->toggle.ind_on)
       {
 	/* Determine how high the toggle indicator should be. */
-	if Lab_IsPixmap(new_w) 
+	if (Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w))
 	  {
 	    /* Set indicator size proportional to size of pixmap. */
             if ( !IsNull(PixmapOn(new_w)) || !IsNull(PixmapInsenOn(new_w)) ||
@@ -2504,7 +2504,7 @@ KeySelect(
       else if (tb->toggle.fill_on_select && !Lab_IsPixmap(tb))
 	DrawToggleLabel(tb);
 
-      if (Lab_IsPixmap(tb))
+      if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
 	SetAndDisplayPixmap( tb, event, NULL);
 
       tb->toggle.Armed = FALSE;
@@ -2636,7 +2636,7 @@ Redisplay(
   
   ComputeSpace (tb);
   
-  if (Lab_IsPixmap(tb))
+  if (Lab_IsPixmap(tb) || Lab_IsPixmapAndText(tb))
     SetAndDisplayPixmap(tb, event, region);
   else
     if (!tb->toggle.ind_on && tb->toggle.fill_on_select)
@@ -2815,7 +2815,7 @@ SetValues(
   /* BEGIN OSF Fix pir 1778 */
   /* Have to reset the TextRect width because label's resize will have
    * mucked with it. */
-  if (Lab_IsPixmap(newcbox) &&
+  if ((Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox)) &&
       (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
        !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
        !IsNull(PixmapInd(newcbox)) || !IsNull(PixmapInsenInd(newcbox))))
@@ -2848,7 +2848,8 @@ SetValues(
       (PixmapInsenInd(newcbox) != PixmapInsenInd(curcbox)) ||
       (newcbox->toggle.ind_on != curcbox->toggle.ind_on) ||
       (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim) ||
-      (Lab_IsPixmap(newcbox) != Lab_IsPixmap(curcbox)))
+      (Lab_IsPixmap(newcbox) != Lab_IsPixmap(curcbox)) || 
+      (Lab_IsPixmapAndText(newcbox) != Lab_IsPixmapAndText(curcbox)))
     {
       int right_delta = 0;	/* Our desired margin adjustments. */
       int left_delta = 0;
@@ -2863,7 +2864,7 @@ SetValues(
             new_w->core.height = 0;
 	}
       
-      if (Lab_IsPixmap(newcbox) && 
+      if ((Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox)) && 
 	  ((PixmapOn(newcbox) != PixmapOn(curcbox)) ||
 	  (PixmapInsenOn(newcbox) != PixmapInsenOn(curcbox)) ||
 	  (PixmapInd(newcbox) != PixmapInd(curcbox)) ||
@@ -2888,12 +2889,13 @@ if (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim)
 	  (newcbox->toggle.indicator_dim == curcbox->toggle.indicator_dim))
 	{
 	  if ((Lab_IsPixmap(newcbox) != Lab_IsPixmap(curcbox)) ||
+	      (Lab_IsPixmapAndText(newcbox) != Lab_IsPixmapAndText(curcbox)) ||
 	      (newcbox->label._label != curcbox->label._label) ||
 	      (PixmapOff(newcbox) != PixmapOff(curcbox)) ||
 	      (newcbox->label.font != curcbox->label.font) ||
 	      (newcbox->toggle.ind_on != curcbox->toggle.ind_on)) 
 	    {
-	      if Lab_IsPixmap(new_w)
+	      if (Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w))
 		{
                 if (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
                  !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
@@ -3156,7 +3158,7 @@ if (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim)
 	      if (newcbox->toggle.ind_on)
 		{
 		  DrawToggle (newcbox);
-		  if (Lab_IsPixmap(newcbox))
+		  if (Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox))
 		    SetAndDisplayPixmap(newcbox, NULL, NULL);
 		}
 	      else
@@ -3166,7 +3168,7 @@ if (newcbox->toggle.indicator_dim != curcbox->toggle.indicator_dim)
 		    DrawToggleShadow (newcbox);
 		  if (newcbox->toggle.fill_on_select && !Lab_IsPixmap(newcbox))
 		    DrawToggleLabel (newcbox);
-		  if (Lab_IsPixmap(newcbox))
+		  if (Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox))
 		    {
 		    SetAndDisplayPixmap(newcbox, NULL, NULL);
 		    flag = True; 
@@ -3277,7 +3279,7 @@ XmToggleButtonSetState(
 		DrawToggleLabel (tw);
 	    }
 
-	  if (Lab_IsPixmap(tw))
+	  if (Lab_IsPixmap(tw) || Lab_IsPixmapAndText(tw))
             SetAndDisplayPixmap( tw, NULL, NULL);
 	}
 
@@ -3359,7 +3361,7 @@ XmToggleButtonSetValue(
 	      if (tw->toggle.fill_on_select && !Lab_IsPixmap(tw))
 		DrawToggleLabel (tw);
 	    }
-	  if (Lab_IsPixmap(tw))
+	  if (Lab_IsPixmap(tw) || Lab_IsPixmapAndText(tw))
             SetAndDisplayPixmap( tw, NULL, NULL);
 	}
 
@@ -3532,11 +3534,7 @@ DrawToggleLabel(
       fill_gc = tb->toggle.unselect_GC;
       break;
     case XmSET:
-#if USE_XFT
-      fill_gc = tb->toggle.unselect_GC;
-#else
-      fill_gc = tb->toggle.select_GC; /* TODO: only XmUNSET can be here? */
-#endif
+      fill_gc = tb->toggle.select_GC;
       break;
     case XmINDETERMINATE:
       {
