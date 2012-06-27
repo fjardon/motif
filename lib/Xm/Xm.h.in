@@ -1453,6 +1453,8 @@ extern Boolean XmCvtXmStringToText(
                         XrmValue *from_val,
                         XrmValue *to_val,
                         XtPointer *converter_data) ;
+extern char * XmCvtXmStringToUTF8String(
+                        XmString string) ;
 
 /********    End Public Function Declarations    ********/
 
