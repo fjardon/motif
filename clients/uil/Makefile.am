@@ -64,14 +64,14 @@ UilSrcDef.h
 
 lib_LTLIBRARIES = libUil.la
 
+uil_SOURCES = $(SRCS2)
+uil_CFLAGS = $(AM_CFLAGS)
+
 libUil_la_SOURCES = $(SRCS)
-
 libUil_la_DEPENDENCIES = UilDBDef.h UilParser.lo
-
+     
 UilDBDef.h:
 	$(LN_S) $(srcdir)/../../tools/wml/UilDBDef.h UilDBDef.h
-
-uil_SOURCES = $(SRCS2)
 
 if MessageCatalog
 

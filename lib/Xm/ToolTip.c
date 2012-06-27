@@ -33,6 +33,7 @@
 #include <Xm/ToolTipCT.h>
 #include <Xm/ToolTipT.h>
 #include "BaseClassI.h"
+#include "ToolTipI.h"
 
 static XmToolTipConfigTrait
 ToolTipGetData (Widget w)

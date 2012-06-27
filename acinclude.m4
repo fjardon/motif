@@ -7,7 +7,7 @@ dnl
 
 dnl This should be the canonical approach to check for XTHREADS.
 dnl (see "man XtToolkitThreadInitialize")
-AC_DEFUN(LT_LIB_XTHREADS,
+AC_DEFUN([LT_LIB_XTHREADS],
 [AC_REQUIRE([AC_PATH_X])
 AC_CACHE_CHECK(whether libXt was compiled with -DXTHREADS, lt_cv_xthreads,
 [lt_save_CFLAGS="$CFLAGS"
@@ -46,7 +46,7 @@ fi
 ])
 
 dnl This test is not very reliable probably ...
-AC_DEFUN(AM_FUNC_VOID_SPRINTF,
+AC_DEFUN([AM_FUNC_VOID_SPRINTF],
 [AC_CACHE_CHECK(whether sprintf returns void, ac_cv_func_void_sprintf,
 [AC_TRY_RUN([#include <stdio.h>
 int sprintf(); main() { exit(sprintf(".")); }],
