@@ -2388,7 +2388,9 @@ LRectangle *background_box)
 
     if ((LabG_IsText(lw) || LabG_IsPixmapAndText(lw)) && (LabG__label(lw) != NULL))
     {
-        LabelDrawBackground((Widget)lw, event, region, background_box);
+        /* this clears the pixmap, doe it really needed? */
+        /* LabelDrawBackground((Widget)lw, event, region, background_box); */
+	
         if (LabG_Mnemonic(lw) != XK_VoidSymbol)
         {
             /* CR 5181: Convert the mnemonic keysym to a character string. */
