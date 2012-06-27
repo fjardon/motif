@@ -68,7 +68,6 @@ static char rcsid[] = "$TOG: VendorSE.c /main/21 1997/10/13 14:58:18 cshi $"
 #include "TraversalI.h"
 #include "VendorSEI.h"
 #include "XmI.h"
-#include "ToolTipI.h"
 
 #define NOTVENDORSHELL	_XmMMsgProtocols_0000
 
@@ -288,21 +287,6 @@ static XtResource extResources[] =
     {
         XmNverifyPreedit, XmCVerifyPreedit, XmRBoolean,
         sizeof (Boolean), Offset (verify_preedit),
-        XmRImmediate, (XtPointer) False,
-    },
-    {
-        XmNtoolTipPostDelay, XmCToolTipPostDelay, XmRInt,
-        sizeof (int), Offset (post_delay),
-        XmRImmediate, (XtPointer) 5000,
-    },
-    {
-        XmNtoolTipPostDuration, XmCToolTipPostDuration, XmRInt,
-        sizeof (int), Offset (post_duration),
-        XmRImmediate, (XtPointer) 5000,
-    },
-    {
-        XmNtoolTipEnable, XmCToolTipEnable, XmRBoolean,
-        sizeof (Boolean), Offset (enable),
         XmRImmediate, (XtPointer) False,
     },
 };

@@ -77,10 +77,6 @@ static void GetYFromShell(
 			 Widget wid,
 			 int resource_offset,
 			 XtArgVal *value) ;
-static void GetToolTipString( 
-			 Widget wid,
-			 int resource_offset,
-			 XtArgVal *value) ;
 
 static void ClassInitialize( void ) ;
 static void BuildPrimitiveResources(
@@ -125,6 +121,14 @@ static XmDirection GetDirection(Widget);
 static void GetColors(Widget widget, 
 		       XmAccessColorData color_data);
 static unsigned char GetUnitType(Widget);
+static void GetToolTipString(
+                         Widget wid,
+                         int resource, /* unused */
+                         XtArgVal * value);
+static XmImportOperator SetToolTipString(
+                         Widget wid,
+                         int resource, /* unused */
+                         XtArgVal * value);
 
 /********    End Static Function Declarations    ********/
 
@@ -346,12 +350,6 @@ static XtResource resources[] =
      XmRCallProc, (XtPointer) _XmDirectionDefault
    },
 #endif
-   {
-     XmNtoolTipString, XmCToolTipString, XmRXmString,
-     sizeof(XmString), 
-     XtOffsetOf(XmPrimitiveRec, primitive.tool_tip_string),
-     XmRImmediate, (XtPointer) NULL
-   },
 };
 
 #ifdef XM_PART_BC
@@ -394,10 +392,10 @@ static XmSyntheticResource syn_resources[] =
      XtOffsetOf(XmPrimitiveRec, primitive.shadow_thickness), 
      XmeFromHorizontalPixels, XmeToHorizontalPixels },
 
-   { XmNtoolTipString, 
-     sizeof (XmString),
-     XtOffsetOf(XmPrimitiveRec, primitive.tool_tip_string), 
-     GetToolTipString, NULL },
+   { XmNtoolTipString,
+     0,
+     0,
+     GetToolTipString, SetToolTipString }
 };
 
 
@@ -582,21 +580,6 @@ GetYFromShell(
 	 XmeFromVerticalPixels(wid,  resource_offset, value);
     }
 }
-static void 
-GetToolTipString(Widget wid,
-	       int resource,	/* unused */
-	       XtArgVal *value)
-{
-  XmPrimitiveWidget pw = (XmPrimitiveWidget) wid;
-  XmString string;
- 
-  string = XmStringCopy(pw->primitive.tool_tip_string);
-
-  *value = (XtArgVal) string;
-}
-
-
-
 
 /************************************************************************
  *
@@ -763,22 +746,28 @@ Initialize(
     XmPrimitiveWidget request = (XmPrimitiveWidget) rw ;
     XmPrimitiveWidget pw = (XmPrimitiveWidget) nw ;
     XtTranslations translations ;
+    XmString tool_tip_string;
+
+    static XtResource subresources[] =
+    {
+        {
+            XmNtoolTipString, XmCToolTipString, XmRXmString,
+            sizeof(XmString), 0,
+            XmRImmediate, (XtPointer) NULL
+        },
+    };
 
     _XmProcessLock();
     translations = (XtTranslations) ((XmPrimitiveClassRec *) XtClass( pw))
 	->primitive_class.translations ;
     _XmProcessUnlock();
-    if (pw->primitive.tool_tip_string)
-    {
-	if (!XmStringEmpty(pw->primitive.tool_tip_string))
-	{
-	    pw->primitive.tool_tip_string = XmStringCopy(pw->primitive.tool_tip_string);
-	}
-	else
-	{
-	    pw->primitive.tool_tip_string = NULL;
-	}
-    }
+
+    XtGetSubresources(nw, &tool_tip_string, NULL, NULL,
+         subresources, XtNumber(subresources),
+	 args, *num_args);
+
+    XmSetToolTipString(nw, (XmString) tool_tip_string);
+
     if(    pw->primitive.traversal_on
        && translations  &&  pw->core.tm.translations
        && !XmIsLabel( pw)    )
@@ -952,13 +941,10 @@ SetValues(
 	    _XmToolTipLeave(new_w, NULL, NULL, NULL);
     	}
     }
-    if (newpw->primitive.tool_tip_string != curpw->primitive.tool_tip_string)
+
+    if (XmGetToolTipString(new_w) != XmGetToolTipString(current))
     {
-	if (curpw->primitive.tool_tip_string)
-	{
-	    XmStringFree(curpw->primitive.tool_tip_string);
-	}
-	newpw->primitive.tool_tip_string = XmStringCopy(newpw->primitive.tool_tip_string);
+        XmSetToolTipString(current, XmGetToolTipString (new_w));
     }
 
    /* CR 7124: XmNlayoutDirection is a CG resource. */
@@ -1506,3 +1492,20 @@ _XmButtonTakeFocus(
     XmProcessTraversal(wid, XmTRAVERSE_CURRENT);
 }
 
+static void
+GetToolTipString(Widget wid,
+                 int resource, /* unused */
+                 XtArgVal * value)
+{
+    XmString string = XmGetToolTipString (wid);
+    *value = (XtArgVal) string;
+}
+
+XmImportOperator 
+SetToolTipString(Widget wid,
+                 int resource, /* unused */
+                 XtArgVal * value)
+{
+    XmSetToolTipString (wid, (XmString)*value);
+    return XmSYNTHETIC_NONE;
+}

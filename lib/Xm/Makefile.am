@@ -1,6 +1,8 @@
+XMSTRING_LIST = xmstring.list
+
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = xmstring.list Xm.msg Imakefile \
+EXTRA_DIST = xmstring.list xmstring.list.compat Xm.msg Imakefile \
              XmStrDefs.ct
 
 INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
@@ -260,14 +262,14 @@ BUILT_SOURCES = $(STRING_FILES) $(CAT_FILES)
 $(top_builddir)/config/util/makestrs:
 	( cd $(top_builddir)/config/util && $(MAKE) $(AM_MAKEFLAGS) makestrs )
 
-$(STRING_FILES): Makefile xmstring.list XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/config/util/makestrs
-	test -f xmstring.list || $(LN_S) $(srcdir)/xmstring.list xmstring.list
+$(STRING_FILES): Makefile $(XMSTRING_LIST) XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/config/util/makestrs
+	test -f $(XMSTRING_LIST) || $(LN_S) $(srcdir)/$(XMSTRING_LIST) $(XMSTRING_LIST)
 	test -f XmStrDefs.ht || $(LN_S) $(srcdir)/XmStrDefs.ht XmStrDefs.ht
 	test -f XmStrDefs22.ht || $(LN_S) $(srcdir)/XmStrDefs22.ht XmStrDefs22.ht
 	test -f XmStrDefs23.ht || $(LN_S) $(srcdir)/XmStrDefs23.ht XmStrDefs23.ht
 	test -f XmStrDefsI.ht || $(LN_S) $(srcdir)/XmStrDefsI.ht XmStrDefsI.ht
 	test -f XmStrDefs.ct || $(LN_S) $(srcdir)/XmStrDefs.ct XmStrDefs.ct
-	$(top_builddir)/config/util/makestrs -f xmstring.list >XmStrDefs.c
+	$(top_builddir)/config/util/makestrs -f $(XMSTRING_LIST) >XmStrDefs.c
 
 if MessageCatalog
 

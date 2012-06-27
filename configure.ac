@@ -3,7 +3,9 @@ AC_INIT
 AC_CONFIG_SRCDIR([lib/Xm/Form.c])
 AC_PREREQ(2.52)
 AC_CONFIG_AUX_DIR(.)
-AC_PREFIX_DEFAULT(/usr/X11R6)
+AC_CHECK_FILE(/usr/X/include/X11/X.h,
+  AC_PREFIX_DEFAULT(/usr/X),
+  AC_PREFIX_DEFAULT(/usr/X11R6))
 AM_MAINTAINER_MODE
 AC_CANONICAL_TARGET
 
@@ -25,7 +27,7 @@ dnl Override a default in libtool.
 dnl
 AC_DISABLE_STATIC
 
-AM_CONFIG_HEADER(include/config.h)
+AM_CONFIG_HEADER(include/config.h lib/Xm/Xm.h)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -49,6 +51,11 @@ dnl Checks for libraries.
 AC_PATH_X
 AC_PATH_XTRA
 LT_LIB_XTHREADS
+
+dnl Checks for Xos_r.h
+
+AC_CHECK_HEADERS([X11/Xos_r.h])
+AC_CHECK_HEADERS([X11/Xpoll.h])
 
 dnl Compile in EditRes support if we can find Xmu
 
@@ -162,10 +169,37 @@ AC_SUBST(INCDIR)
 XMBINDDIR_FALLBACK="${libdir}/X11/bindings"
 AC_SUBST(XMBINDDIR_FALLBACK)
 
-case "$target_os" in
+AC_ARG_ENABLE(motif22-compatibility, [  --disable-motif22-compatibility
+                       Disable binary compatibility with OpenMotif 2.2])
+
+case "$host_os" in
     freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";;
-    cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI"
+    cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
+    solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
+        if test x$enable_motif22_compatibility = x
+        then
+            enable_motif22_compatibility="no"
+        fi;;
 esac
+
+if test x$enable_motif22_compatibility = x
+then
+    enable_motif22_compatibility="yes"
+fi
+
+if test "$enable_motif22_compatibility" = "yes"
+then
+  AC_DEFINE([OM22_COMPATIBILITY], [1], [Compatibility with OpenMotif 2.2])
+  OM22_COMPATIBILITY_FALSE=!
+  OM22_COMPATIBILITY_TRUE=
+else
+  OM22_COMPATIBILITY_FALSE=
+  OM22_COMPATIBILITY_TRUE=!
+fi
+AC_SUBST(OM22_COMPATIBILITY_FALSE)
+AC_SUBST(OM22_COMPATIBILITY_TRUE)
+
+# AM_CONDITIONAL(Motif22Compatibility, test x$enable_motif22_compatibility = xyes)
 
 AC_CONFIG_FILES([Makefile \
 bindings/Makefile \
@@ -279,5 +313,6 @@ demos/doc/programGuide/ch16/Makefile \
 demos/doc/programGuide/ch17/Makefile \
 demos/doc/programGuide/ch17/simple_drop/Makefile \
 demos/doc/programGuide/ch17/simple_drag/Makefile \
+lib/Xm/xmstring.list \
 ])
 AC_OUTPUT

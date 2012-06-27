@@ -85,6 +85,8 @@ externaldef(traits) XrmQuark XmQTtraversalControl = NULLQUARK;
 externaldef(traits) XrmQuark XmQTspecifyUnhighlight = NULLQUARK;
 externaldef(traits) XrmQuark XmQTpointIn = NULLQUARK;
 externaldef(traits) XrmQuark _XmQTclipWindow = NULLQUARK;
+externaldef(traits) XrmQuark XmQTtoolTipConfig = NULLQUARK;
+externaldef(traits) XrmQuark XmQTtoolTip = NULLQUARK;
 
 /* 
  * Initialize traits system
@@ -158,6 +160,10 @@ void _XmInitializeTraits()
 
   /* PointIn trait */
   XmQTpointIn = XrmPermStringToQuark("XmTpointIn");
+
+  /* ToolTip traits */
+  XmQTtoolTipConfig = XrmPermStringToQuark("XmTtoolTipConfig");
+  XmQTtoolTip = XrmPermStringToQuark("XmTtoolTip");
 }
 
 XtPointer

@@ -53,6 +53,7 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include <Xm/VendorSEP.h>
 #include <Xm/VendorSP.h>
 #include <Xm/XmosP.h>		/* for bzero */
+#include <Xm/ToolTipCT.h>
 #include "BaseClassI.h"
 #include "CallbackI.h"
 #include "ExtObjectI.h"
@@ -404,6 +405,24 @@ static XtResource resources[] =
 };	
 #undef Offset
 
+static XtResource subresources[] =
+{
+    {
+        XmNtoolTipPostDelay, XmCToolTipPostDelay, XmRInt,
+        sizeof(unsigned int), XtOffsetOf(XmToolTipConfigTraitRec, post_delay),
+        XmRImmediate, (XtPointer) 5000,
+    },
+    {
+        XmNtoolTipPostDuration, XmCToolTipPostDuration, XmRInt,
+        sizeof(unsigned int), XtOffsetOf(XmToolTipConfigTraitRec, post_duration),
+        XmRImmediate, (XtPointer) 5000,
+    },
+    {
+        XmNtoolTipEnable, XmCToolTipEnable, XmRBoolean,
+        sizeof(Boolean), XtOffsetOf(XmToolTipConfigTraitRec, enable),
+        XmRImmediate, (XtPointer) False,
+    },
+};
 
 static CompositeClassExtensionRec compositeClassExtRec = {
     NULL,
@@ -1535,6 +1554,33 @@ InitializePrehook(
 {
     XmBaseClassExt		*cePtr;
     XtInitProc         		secondaryCreate;
+    XmToolTipConfigTrait        ttp;           /* ToolTip pointer */
+    XmToolTipConfigTraitRec     base;
+
+    ttp = (XmToolTipConfigTrait) XmeTraitGet (new_w, XmQTtoolTipConfig);
+
+    if (ttp == NULL)
+    {
+        ttp = (XmToolTipConfigTrait) XtMalloc (sizeof (XmToolTipConfigTraitRec));
+
+        ttp->post_delay = 5000;
+        ttp->post_duration = 5000;
+        ttp->enable = False;
+        ttp->timer = (int) NULL;
+        ttp->duration_timer = (int) NULL;
+        ttp->leave_time = 0;
+        ttp->slider = ttp->label = NULL;
+ 
+        XtGetSubresources(new_w, &base, NULL, NULL,
+ 		subresources, XtNumber(subresources),
+ 		args, *num_args);
+ 
+        ttp->post_delay = base.post_delay;
+        ttp->post_duration = base.post_duration;
+        ttp->enable = base.enable;
+ 
+        XmeTraitSet ((XtPointer) new_w, XmQTtoolTipConfig, (XtPointer) ttp);
+    }
 
     cePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
 
@@ -2070,6 +2116,30 @@ SetValues(
     VendorShellWidget		vw = (VendorShellWidget)new_w;
     XmWidgetExtData		extData;
     XmVendorShellExtObject	vse;
+    int i;
+    XmToolTipConfigTrait ttp;
+
+    ttp = (XmToolTipConfigTrait) XmeTraitGet (new_w, XmQTtoolTipConfig);
+    if (ttp != NULL)
+    {
+        _XmProcessLock ();
+        for (i = 0; i < *num_args; i++)
+        {
+            if (strcmp (args[i].name, XmNtoolTipPostDelay) == 0)
+            {
+                ttp->post_delay = args[i].value;
+            }
+            else if (strcmp (args[i].name, XmNtoolTipPostDuration) == 0)
+            {
+                ttp->post_duration = args[i].value;
+            }
+            else if (strcmp (args[i].name, XmNtoolTipEnable) == 0)
+            {
+                ttp->enable = (Boolean) args[i].value;
+            }
+        }
+        _XmProcessUnlock ();
+    }
 
     if ((extData = _XmGetWidgetExtData( (Widget) vw, XmSHELL_EXTENSION)) &&
 	 (vse = (XmVendorShellExtObject) extData->widget))
@@ -2149,6 +2219,36 @@ GetValuesHook(
     XmWidgetExtData	ext;
     XmBaseClassExt      *cePtr;
     WidgetClass         ec;
+    int i;
+    int *ip;
+    Boolean *bp;
+    XmToolTipConfigTrait ttp;
+
+    ttp = (XmToolTipConfigTrait) XmeTraitGet (w, XmQTtoolTipConfig);
+
+    if (ttp != NULL)
+    {
+        _XmProcessLock ();
+        for (i = 0; i < *num_args; i++)
+        {
+            if (strcmp (args[i].name, XmNtoolTipPostDelay) == 0)
+            {
+                ip = (int *) args[i].value;
+                *ip = ttp->post_delay;
+            }
+            else if (strcmp (args[i].name, XmNtoolTipPostDuration) == 0)
+            {
+                ip = (int *) args[i].value;
+                *ip = ttp->post_duration;
+            }
+            else if (strcmp (args[i].name, XmNtoolTipEnable) == 0)
+            {
+                bp = (Boolean *) args[i].value;
+                *bp = ttp->enable;
+            }
+        }
+        _XmProcessUnlock ();
+    }
 
     cePtr = _XmGetBaseClassExtPtr(XtClass(w), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;

@@ -54,12 +54,10 @@
 
 #define X_INCLUDE_TIME_H
 #define XOS_USE_XT_LOCKING
-
-#ifndef NEED_XOS_R_H
-#include <X11/Xos_r.h> /* Must precede Mrm/MrmAppl.h and Mrm/Mrm.h to avoid
-			  possible redefinitions of MIN() and MAX(). */
+#ifdef HAVE_X11_XOS_R_H
+#include <X11/Xos_r.h>
 #else
- #include <Xm/Xmos_r.h> 
+#include <Xm/Xmos_r.h>
 #endif
 
 #include <Mrm/MrmAppl.h>
