@@ -2490,6 +2490,9 @@ unset_current_xic(XmImXICInfo	  xic_info,
 			xim_info->current_xics);
   
   /* Remove this widget as a reference to this XIC. */
+  if (im_info->current_widget == widget)
+    im_info->current_widget = NULL;
+
   if (remove_ref(&xic_info->widget_refs, widget) == 0)
     {
       /* Remove this xic_info from the master list. */
@@ -2501,9 +2504,6 @@ unset_current_xic(XmImXICInfo	  xic_info,
 	    break;
 	  }
       
-      if (im_info->current_widget == widget)
-	im_info->current_widget = NULL;
-
       /* Don't let anyone share this XIC. */
       if (xic_info->source != NULL)
 	*(xic_info->source) = NULL;
