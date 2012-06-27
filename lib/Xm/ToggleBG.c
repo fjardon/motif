@@ -3844,7 +3844,16 @@ SetValues(
 	  flag = True;
 	}
     }
-  
+
+    /* Fix br 1211:  we need to compare and set label cache of new_w
+       if differs from current.*/
+    if(!_XmLabelCacheCompare(LabG_Cache(new_w), LabG_Cache(current)))
+    {
+	_XmCacheCopy((XtPointer)LabG_Cache(new_w),
+	    (XtPointer)LabG_Cache(current), sizeof(XmLabelGCacheObjPart));
+    }
+    /* End of fix br 1251 */
+		  
   /* BEGIN OSF Fix pir 2097 */
   newcbox->gadget.event_mask = XmARM_EVENT | XmACTIVATE_EVENT |
     XmMULTI_ARM_EVENT | XmMULTI_ACTIVATE_EVENT | XmHELP_EVENT |
