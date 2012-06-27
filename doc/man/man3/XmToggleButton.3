@@ -203,14 +203,16 @@ background is set to \fBXmNselectColor\fP\&. For the other
 \fBXmNselectColor\fP\&.
 .IP "\fBXmNindeterminateInsensitivePixmap\fP" 10
 Specifies the pixmap to be displayed as the button face when
-the Label \fBXmNlableType\fP resource is \fBXmPIXMAP\fP,
-the ToggleButton \fBXmNset\fP resource is \fBXmINDETERMINATE\fP,
+the Label \fBXmNlableType\fP resource is \fBXmPIXMAP\fP or
+\fBXmPIXMAP_AND_STRING\fP, the ToggleButton \fBXmNset\fP resource
+is \fBXmINDETERMINATE\fP,
 and the \fBCore\fP \fBXmNsensitive\fP resource is False\&.
 .IP "\fBXmNindeterminatePixmap\fP" 10
 Specifies the pixmap to be displayed as the button face when
-the Label \fBXmNlableType\fP resource is \fBXmPIXMAP\fP,
-the ToggleButton \fBXmNset\fP resource is \fBXmINDETERMINATE\fP,
-and the \fBCore\fP \fBXmNsensitive\fP resource is True\&.
+the Label \fBXmNlableType\fP resource is \fBXmPIXMAP\fP or
+\fBXmPIXMAP_AND_STRING\fP, the ToggleButton \fBXmNset\fP resource
+is \fBXmINDETERMINATE\fP, and the \fBCore\fP \fBXmNsensitive\fP
+resource is True\&.
 .IP "\fBXmNindicatorOn\fP" 10
 Specifies that if a toggle indicator is to be drawn, it will be drawn
 to one side of the toggle
@@ -345,7 +347,7 @@ Forces the fill color to use the highlight color\&.
 .IP "\fBXmNselectInsensitivePixmap\fP" 10
 Specifies a pixmap used as the button face when the ToggleButton is selected,
 the button is insensitive, and the Label resource
-\fBXmNlabelType\fP is set to \fBXmPIXMAP\fP\&.
+\fBXmNlabelType\fP is set to \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP\&.
 If the ToggleButton is unselected and the button is insensitive,
 the pixmap in
 \fBXmNlabelInsensitivePixmap\fP is used as the button face\&.
@@ -354,8 +356,8 @@ resource is set to the value specified for
 \fBXmNselectInsensitivePixmap\fP\&.
 .IP "\fBXmNselectPixmap\fP" 10
 Specifies the pixmap to be used as the button
-face when \fBXmNlabelType\fP is \fBXmPIXMAP\fP and
-the ToggleButton is selected\&.
+face when \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+and the ToggleButton is selected\&.
 When the ToggleButton is unselected,
 the pixmap specified in the Label\&'s \fBXmNlabelPixmap\fP is used\&.
 If no value is specified for \fBXmNlabelPixmap\fP, that resource is set
@@ -669,8 +671,8 @@ If \fBXmNindicatorOn\fP is False, it draws the
 button shadow so
 that the
 button looks pressed\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNselectPixmap\fP is
-used as the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNselectPixmap\fP is used as the button face\&.
 This action calls the \fBXmNarmCallback\fP callbacks\&.
 .IP "" 10
 If the button was previously set, this action does the following:
@@ -680,8 +682,8 @@ draws the indicator shadow so that the indicator looks raised; if
 background color\&.
 If \fBXmNindicatorOn\fP is False, it draws the button shadow
 so that the button looks raised\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNlabelPixmap\fP is
-used as the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNlabelPixmap\fP is used as the button face\&.
 This action calls the \fBXmNarmCallback\fP callbacks\&.
 .IP "ArmAndActivate():" 10
 If the ToggleButton was previously set, unsets it; if the ToggleButton
@@ -702,8 +704,8 @@ the indicator with the color specified by
 \fBXmNselectColor\fP\&.
 If \fBXmNindicatorOn\fP is False, it draws the button shadow so that the
 button looks pressed\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNselectPixmap\fP is
-used as the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNselectPixmap\fP is used as the button face\&.
 This action calls the \fBXmNarmCallback\fP, \fBXmNvalueChangedCallback\fP, and
 \fBXmNdisarmCallback\fP callbacks\&.
 .IP "" 10
@@ -715,8 +717,8 @@ draws the indicator shadow so that the indicator looks raised; if
 background color\&.
 If \fBXmNindicatorOn\fP is False, it draws the button shadow so that the
 button looks raised\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNlabelPixmap\fP is
-used as the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNlabelPixmap\fP is used as the button face\&.
 This action calls the \fBXmNarmCallback\fP, \fBXmNvalueChangedCallback\fP, and
 \fBXmNdisarmCallback\fP callbacks\&.
 .IP "BtnDown():" 10

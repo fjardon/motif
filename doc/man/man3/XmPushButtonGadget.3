@@ -161,7 +161,7 @@ foreground color, and any text in the label appears in the background
 color when the button is armed\&.
 .IP "\fBXmNarmPixmap\fP" 10
 Specifies the pixmap to be used as the button face if \fBXmNlabeltype\fP is
-\fBXmPIXMAP\fP and PushButtonGadget is armed\&.
+\fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP and PushButtonGadget is armed\&.
 This resource is disabled when the PushButtonGadget is in a menu\&.
 .IP "\fBXmNdefaultButtonShadowThickness\fP" 10
 This resource specifies the width of the default button indicator shadow\&.
@@ -398,8 +398,8 @@ armed state\&.
 If \fBXmNfillOnArm\fP is set
 to True, it fills the button with the color specified by
 \fBXmNarmColor\fP\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNarmPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNarmPixmap\fP is used for the button face\&.
 It calls the \fBXmNarmCallback\fP callbacks\&.
 .IP "\fB<Btn1>\fP\fB(2+)\fP:" 10
 If \fBXmNmultiClick\fP is \fBXmMULTICLICK_DISCARD\fP, this action does
@@ -410,8 +410,8 @@ draws the shadow in the armed state\&.
 If the button is not in a menu and if \fBXmNfillOnArm\fP is set
 to True, it fills the button with the color specified by
 \fBXmNarmColor\fP\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNarmPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNarmPixmap\fP is used for the button face\&.
 This action calls the \fBXmNarmCallback\fP callbacks\&.
 .IP "\fB<Btn1Up>\fP:" 10
 In a menu, this action unposts all menus in the menu hierarchy and
@@ -423,8 +423,8 @@ If the PushButtonGadget is not in a menu, this action draws the shadow in the
 unarmed state\&.
 If \fBXmNfillOnArm\fP is set to True, the background color reverts to
 the unarmed color\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNlabelPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNlabelPixmap\fP is used for the button face\&.
 If the pointer is still within the button,
 this action calls the callbacks for \fBXmNactivateCallback\fP
 and \fBXmNdisarmCallback\fP\&.
@@ -437,8 +437,8 @@ increments \fIclick_count\fP in the callback structure and
 draws the shadow in the unarmed state\&.
 If the button is not in a menu and if \fBXmNfillOnArm\fP is set to True,
 the background color reverts to the unarmed color\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, \fBXmNlabelPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+\fBXmNlabelPixmap\fP is used for the button face\&.
 If the pointer is within the PushButtonGadget, this action calls the
 callbacks for \fBXmNactivateCallback\fP
 and \fBXmNdisarmCallback\fP\&.
@@ -462,16 +462,16 @@ Outside a menu, this action
 draws the shadow in the armed state and, if
 \fBXmNfillOnArm\fP is set to True, fills the button with the color
 specified by \fBXmNarmColor\fP\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, \fBXmNarmPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+\fBXmNarmPixmap\fP is used for the button face\&.
 This action calls the \fBXmNarmCallback\fP callbacks\&.
 .IP "" 10
 Outside a menu, this action also arranges for the following to happen,
 either immediately or at a later time:
 the shadow is drawn in the unarmed state and, if \fBXmNfillOnArm\fP is set
 to True, the background color reverts to the unarmed color\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNlabelPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNlabelPixmap\fP is used for the button face\&.
 The \fBXmNactivateCallback\fP and \fBXmNdisarmCallback\fP callbacks are
 called\&.
 .IP "\fB<Key>\fP\fB<osfHelp>\fP:" 10
@@ -504,8 +504,8 @@ action draws the shadow in the armed state\&.
 If \fBXmNfillOnArm\fP is set
 to True, it also fills the button with the
 color specified by \fBXmNarmColor\fP\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNarmPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNarmPixmap\fP is used for the button face\&.
 .IP "\fB<Leave>\fP:" 10
 In a menu, if keyboard traversal is enabled, this action does nothing\&.
 Otherwise, it draws the shadow in the unarmed state and calls the
@@ -516,8 +516,8 @@ PushButtonGadget while the button is pressed, this action draws the
 shadow in the unarmed state\&.
 If \fBXmNfillOnArm\fP is set to True, the background color reverts to
 the unarmed color\&.
-If \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the \fBXmNlabelPixmap\fP is
-used for the button face\&.
+If \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the \fBXmNlabelPixmap\fP is used for the button face\&.
 .SS "Virtual Bindings"
 .PP
 The bindings for virtual keys are vendor specific\&.

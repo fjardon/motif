@@ -121,22 +121,25 @@ The widget transfers \fBXmNlabelString\fP as type \fBCOMPOUND_TEXT\fP\&.
 This target is supported only when \fBXmNlabelType\fP is \fBXmSTRING\fP\&.
 .IP "\fBPIXMAP\fP" 10
 The widget transfers \fBXmNlabelPixmap\fP as type \fBDRAWABLE\fP\&.
-This target is supported only when \fBXmNlabelType\fP is \fBXmPIXMAP\fP\&.
+This target is supported when \fBXmNlabelType\fP is \fBXmPIXMAP\fP or
+\fBXmPIXMAP_AND_STRING\fP\&.
 .IP "\fBSTRING\fP" 10
 The widget transfers \fBXmNlabelString\fP as type \fBSTRING\fP\&.
-This target is supported only when \fBXmNlabelType\fP is \fBXmSTRING\fP\&.
+This target is supported when \fBXmNlabelType\fP is \fBXmSTRING\fP or
+\fBXmPIXMAP_AND_STRING\fP\&.
 .IP "\fBTEXT\fP" 10
 If \fBXmNlabelString\fP is fully convertible to the encoding of the
 locale, the widget transfers \fBXmNlabelString\fP in the encoding of
 the locale\&.
 Otherwise, the widget transfers \fBXmNlabelString\fP as type
 \fBCOMPOUND_TEXT\fP\&.
-This target is supported only when \fBXmNlabelType\fP is \fBXmSTRING\fP\&.
+This target is supported when \fBXmNlabelType\fP is \fBXmSTRING\fP or
+\fBXmPIXMAP_AND_STRING\fP\&.
 .IP "\fB_MOTIF_CLIPBOARD_TARGETS\fP" 10
 The widget transfers, as type \fBATOM\fP, a list of the targets it
 supports for the \fBCLIPBOARD\fP selection\&.
-When \fBXmNlabelType\fP is \fBXmSTRING\fP, these include the following
-targets:
+When \fBXmNlabelType\fP is \fBXmSTRING\fP or \fBXmPIXMAP_AND_STRING\fP,
+these include the following targets:
 .RS
 .IP "   \(bu" 6
 \fB_MOTIF_COMPOUND_STRING\fP
@@ -150,22 +153,24 @@ to the encoding of the locale
 \fBSTRING\fP
 .RE
 .IP "" 10
-When \fBXmNlabelType\fP is \fBXmPIXMAP\fP, the targets include
-\fBPIXMAP\fP\&.
+When \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+the targets include \fBPIXMAP\fP\&.
 .IP "\fB_MOTIF_COMPOUND_STRING\fP" 10
 The widget transfers \fBXmNlabelString\fP as a compound string in Byte
 Stream format\&.
-This target is supported only when \fBXmNlabelType\fP is \fBXmSTRING\fP\&.
+This target is supported when \fBXmNlabelType\fP is \fBXmSTRING\fP or
+\fBXmPIXMAP_AND_STRING\fP\&.
 .IP "\fB_MOTIF_EXPORT_TARGETS\fP" 10
 The widget transfers, as type \fBATOM\fP, a list of the targets to be
 used as the value of the DragContext\&'s \fBXmNexportTargets\fP in a
 drag-and-drop transfer\&.
-When \fBXmNlabelType\fP is \fBXmSTRING\fP, these include
+When \fBXmNlabelType\fP is \fBXmSTRING\fP or \fBXmPIXMAP_AND_STRING\fP,
+these include
 \fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, the encoding of the
 locale, \fBSTRING\fP, \fBTEXT\fP, \fBBACKGROUND\fP, and
 \fBFOREGROUND\fP\&.
-When \fBXmNlabelType\fP is \fBXmPIXMAP\fP, these include \fBPIXMAP\fP,
-\fBBACKGROUND\fP, and \fBFOREGROUND\fP\&.
+When \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+these include \fBPIXMAP\fP, \fBBACKGROUND\fP, and \fBFOREGROUND\fP\&.
 .PP
 As a source of data, LabelGadget also supports the following standard
 Motif targets:
@@ -193,11 +198,12 @@ locale\&.
 The widget transfers, as type \fBATOM\fP, a list of the targets it
 supports\&.
 These include the standard targets in this list\&.
-When \fBXmNlabelType\fP is \fBXmSTRING\fP, these also include
+When \fBXmNlabelType\fP is \fBXmSTRING\fP or \fBXmPIXMAP_AND_STRING\fP,
+these also include
 \fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, the encoding of the
 locale, \fBSTRING\fP, and \fBTEXT\fP\&.
-When \fBXmNlabelType\fP is \fBXmPIXMAP\fP, these also include
-\fBPIXMAP\fP\&.
+When \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
+these also include \fBPIXMAP\fP\&.
 .IP "\fBTIMESTAMP\fP" 10
 The widget transfers the timestamp used to acquire the selection as type
 \fBINTEGER\fP\&.
@@ -354,14 +360,16 @@ found, the default is implementation dependent\&. Refer to
 structure of a font list\&.
 .IP "\fBXmNlabelInsensitivePixmap\fP" 10
 Specifies a pixmap used as the button face if \fBXmNlabelType\fP is
-\fBXmPIXMAP\fP and the button is insensitive\&.
+\fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP and the button is
+insensitive\&.
 The default value, \fBXmUNSPECIFIED_PIXMAP\fP, displays an empty label\&.
 .IP "\fBXmNlabelPixmap\fP" 10
 Specifies the pixmap when \fBXmNlabelType\fP is
-\fBXmPIXMAP\fP\&.
+\fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP\&.
 The default value, \fBXmUNSPECIFIED_PIXMAP\fP, displays an empty label\&.
 .IP "\fBXmNlabelString\fP" 10
-Specifies the compound string when \fBXmNlabelType\fP is \fBXmSTRING\fP\&.
+Specifies the compound string when \fBXmNlabelType\fP is \fBXmSTRING\fP or
+\fBXmPIXMAP_AND_STRING\fP\&.
 If the value of this resource is NULL, it is initialized to name of the
 gadget converted to a compound string\&.
 Refer to \fBXmString\fP(3)
@@ -375,6 +383,9 @@ Text displays \fBXmNlabelString\fP
 .IP "\fBXmPIXMAP\fP" 10
 Icon data in pixmap displays \fBXmNlabelPixmap\fP or
 \fBXmNlabelInsensitivePixmap\fP
+\fBXmPIXMAP_AND_STRING\fP
+Icon data in pixmap displays \fBXmNlabelPixmap\fP or
+\fBXmNlabelInsensitivePixmap\fP and text displays \fBXmNlabelString\fP
 .RE
 .IP "\fBXmNmarginBottom\fP" 10
 Specifies the amount of spacing between the bottom of the label text
