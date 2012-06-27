@@ -194,6 +194,10 @@ Each item transferred except the last includes a trailing separator\&.
 The widget transfers the selected list items as type
 \fBCOMPOUND_TEXT\fP\&.
 Each item transferred except the last includes a trailing separator\&.
+.IP "\fBUTF8_STRING\fP" 10
+The widget transfers the selected list items as type
+\fBUTF8_STRING\fP\&.
+Each item transferred except the last includes a trailing separator\&.
 .IP "\fBSTRING\fP" 10
 The widget transfers the selected list items as type \fBSTRING\fP\&.
 Each item transferred except the last includes a trailing separator\&.
@@ -210,7 +214,7 @@ supports for immediate transfer for the \fBCLIPBOARD\fP selection\&.
 These include \fB_MOTIF_COMPOUND_STRING\fP\&.
 If the selected list items are fully convertible to \fBSTRING\fP, these
 also include \fBSTRING\fP; otherwise, they also include
-\fBCOMPOUND_TEXT\fP\&.
+\fBCOMPOUND_TEXT\fP and \fBUTF8_STRING\fP\&.
 .IP "\fB_MOTIF_COMPOUND_STRING\fP" 10
 The widget transfers the selected list items as a compound string in
 Byte Stream format\&.
@@ -224,7 +228,8 @@ This widget currently supplies no targets for
 The widget transfers, as type \fBATOM\fP, a list of the targets to be
 used as the value of the DragContext\&'s \fBXmNexportTargets\fP in a
 drag-and-drop transfer\&.
-These include \fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, the
+These include \fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, 
+\fBUTF8_STRING\fP, the
 encoding of the locale, \fBSTRING\fP, \fBTEXT\fP, \fBBACKGROUND\fP, and
 \fBFOREGROUND\fP\&.
 .IP "\fB_MOTIF_LOSE_SELECTION\fP" 10
@@ -254,7 +259,7 @@ The widget transfers, as type \fBATOM\fP, a list of the targets it
 supports\&.
 These include the standard targets in this list\&.
 These also include \fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP,
-the encoding of the locale, \fBSTRING\fP, and \fBTEXT\fP\&.
+\fBUTF8_STRING\fP the encoding of the locale, \fBSTRING\fP, and \fBTEXT\fP\&.
 .IP "\fBTIMESTAMP\fP" 10
 The widget transfers the timestamp used to acquire the selection as type
 \fBINTEGER\fP\&.

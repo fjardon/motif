@@ -89,8 +89,8 @@ locale is required and if the locale is supported but no converter is
 available for the encoding specified in \fItext_prop\fP, the function
 returns \fBXConverterNotFound\fP\&. For supported locales, existence of
 a converter
-from \fBCOMPOUND_TEXT\fP, \fBSTRING\fP, or the encoding of the current
-locale is
+from \fBCOMPOUND_TEXT\fP, \fBSTRING\fP, \fBUTF8_STRING\fP, or the encoding
+of the current locale is
 guaranteed if \fBXSupportsLocale\fP returns True for the current locale (but
 the actual text may contain unconvertible characters)\&. Conversion of
 other encodings to the encoding of the current locale is implementation

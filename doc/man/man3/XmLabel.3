@@ -122,6 +122,10 @@ This target is supported when \fBXmNlabelType\fP is \fBXmSTRING\fP or
 The widget transfers \fBXmNlabelString\fP as type \fBCOMPOUND_TEXT\fP\&.
 This target is supported when \fBXmNlabelType\fP is \fBXmSTRING\fP or
 \fBXmPIXMAP_AND_STRING\fP\&.
+.IP "\fBUTF8_STRING\fP" 10
+The widget transfers \fBXmNlabelString\fP as type \fBUTF8_STRING\fP\&.
+This target is supported when \fBXmNlabelType\fP is \fBXmSTRING\fP or
+\fBXmPIXMAP_AND_STRING\fP\&.
 .IP "\fBPIXMAP\fP" 10
 The widget transfers \fBXmNlabelPixmap\fP as type \fBDRAWABLE\fP\&.
 This target is supported when \fBXmNlabelType\fP is \fBXmPIXMAP\fP or
@@ -149,6 +153,8 @@ these include the following targets:
 .IP "   \(bu" 6
 \fBCOMPOUND_TEXT\fP
 .IP "   \(bu" 6
+\fBUTF8_STRING\fP
+.IP "   \(bu" 6
 The encoding of the locale, if \fBXmNlabelString\fP is fully convertible
 to the encoding of the locale
 .IP "   \(bu" 6
@@ -169,8 +175,8 @@ used as the value of the DragContext\&'s \fBXmNexportTargets\fP in a
 drag-and-drop transfer\&.
 When \fBXmNlabelType\fP is \fBXmSTRING\fP or \fBXmPIXMAP_AND_STRING\fP,
 these include
-\fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, the encoding of the
-locale, \fBSTRING\fP, \fBTEXT\fP, \fBBACKGROUND\fP, and
+\fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, \fBUTF8_STRING\fP,
+the encoding of the locale, \fBSTRING\fP, \fBTEXT\fP, \fBBACKGROUND\fP, and
 \fBFOREGROUND\fP\&.
 When \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
 these include \fBPIXMAP\fP,
@@ -201,8 +207,8 @@ supports\&.
 These include the standard targets in this list\&.
 When \fBXmNlabelType\fP is \fBXmSTRING\fP or \fBXmPIXMAP_AND_STRING\fP,
 these also include
-\fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, the encoding of the
-locale, \fBSTRING\fP, and \fBTEXT\fP\&.
+\fB_MOTIF_COMPOUND_STRING\fP, \fBCOMPOUND_TEXT\fP, \fBUTF8_STRING\fP,
+the encoding of the locale, \fBSTRING\fP, and \fBTEXT\fP\&.
 When \fBXmNlabelType\fP is \fBXmPIXMAP\fP or \fBXmPIXMAP_AND_STRING\fP,
 these also include \fBPIXMAP\fP\&.
 .IP "\fBTIMESTAMP\fP" 10

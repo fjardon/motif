@@ -103,18 +103,21 @@ conversions of data to these targets:
 .IP "\fBCOMPOUND_TEXT\fP" 10
 The widget transfers a string representation of \fBXmNvalue\fP as type
 \fBCOMPOUND_TEXT\fP\&.
+.IP "\fBUTF8_STRING\fP" 10
+The widget transfers a string representation of \fBXmNvalue\fP as type
+\fBUTF8_STRING\fP\&.
 .IP "\fBSTRING\fP" 10
 The widget transfers a string representation of \fBXmNvalue\fP as type
 \fBSTRING\fP\&.
 .IP "\fB_MOTIF_CLIPBOARD_TARGETS\fP" 10
 The widget transfers, as type \fBATOM\fP, a list of the targets it
 supports for the \fBCLIPBOARD\fP selection\&.
-These include \fBSTRING\fP and \fBCOMPOUND_TEXT\fP\&.
+These include \fBSTRING\fP, \fBCOMPOUND_TEXT\fP and \fBUTF8_STRING\fP\&.
 .IP "\fB_MOTIF_EXPORT_TARGETS\fP" 10
 The widget transfers, as type \fBATOM\fP, a list of the targets to be
 used as the value of the DragContext\&'s \fBXmNexportTargets\fP in a
 drag-and-drop transfer\&.
-These include \fBSTRING\fP and \fBCOMPOUND_TEXT\fP\&.
+These include \fBSTRING\fP, \fBCOMPOUND_TEXT\fP and \fBUTF8_STRING\fP\&.
 .PP
 As a source of data, Scale also supports the following standard Motif
 targets:
@@ -139,7 +142,8 @@ locale\&.
 The widget transfers, as type \fBATOM\fP, a list of the targets it
 supports\&.
 These include the standard targets in this list\&.
-These also include \fBSTRING\fP and \fBCOMPOUND_TEXT\fP\&.
+These also include \fBSTRING\fP, \fBCOMPOUND_TEXT\fP and
+\fBUTF8_STRING\fP\&.
 .IP "\fBTIMESTAMP\fP" 10
 The widget transfers the timestamp used to acquire the selection as type
 \fBINTEGER\fP\&.

@@ -105,6 +105,8 @@ value of this member is the widget ID of the TextField widget\&.
 .PP
 As a source of data, TextField supports the following targets and
 associated conversions of data to these targets:
+.IP "\fBUTF8_STRING\fP" 10
+The widget transfers the selected text as type \fBUTF8_STRING\fP\&.
 .IP "\fIlocale\fP" 10
 If the \fIlocale\fP target matches the widget\&'s locale, the widget
 transfers the selected text in the encoding of the locale\&.
@@ -125,6 +127,8 @@ the widget can convert data to be placed on the clipboard immediately\&.
 These include the following targets:
 .RS
 .IP "   \(bu" 6
+\fBUTF8_STRING\fP
+.IP "   \(bu" 6
 \fBCOMPOUND_TEXT\fP
 .IP "   \(bu" 6
 The encoding of the locale, if the selected text is fully convertible to
@@ -137,7 +141,8 @@ The widget transfers, as type \fBATOM\fP, a list of the targets to be
 used as the value of the DragContext\&'s \fBXmNexportTargets\fP in a
 drag-and-drop transfer\&.
 These include \fBCOMPOUND_TEXT\fP, the encoding of the locale,
-\fBSTRING\fP, \fBTEXT\fP, \fBBACKGROUND\fP, and \fBFOREGROUND\fP\&.
+\fBSTRING\fP, \fBTEXT\fP, \fBUTF8_STRING\fP, \fBBACKGROUND\fP,
+and \fBFOREGROUND\fP\&.
 .IP "\fB_MOTIF_LOSE_SELECTION\fP" 10
 The widget takes the following actions:
 .RS
@@ -177,7 +182,7 @@ The widget transfers, as type \fBATOM\fP, a list of the targets it
 supports\&.
 These include the standard targets in this list\&.
 These also include \fBCOMPOUND_TEXT\fP, the encoding of the locale,
-\fBSTRING\fP, and \fBTEXT\fP\&.
+\fBSTRING\fP, \fBTEXT\fP and \fBUTF8_STRING\fP\&.
 .IP "\fBTIMESTAMP\fP" 10
 The widget transfers the timestamp used to acquire the selection as type
 \fBINTEGER\fP\&.
@@ -202,6 +207,8 @@ targets, TextField chooses a requested target from the available targets
 in the following order of preference:
 .IP "   1." 6
 \fBTEXT\fP
+.IP "   1." 6
+\fBUTF8_STRING\fP
 .IP "   2." 6
 \fBCOMPOUND_TEXT\fP
 .IP "   3." 6
@@ -212,6 +219,8 @@ The encoding of the locale
 If the encoding of the locale is not present in the list of available
 targets, TextField chooses a requested target from the available targets
 in the following order of preference:
+.IP "   1." 6
+\fBUTF8_STRING\fP
 .IP "   1." 6
 \fBCOMPOUND_TEXT\fP
 .IP "   2." 6
