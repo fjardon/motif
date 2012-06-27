@@ -57,6 +57,12 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #include <Xm/PrintSP.h>         /* for pixmap resolution */
 #include <Xm/XpmP.h>
 #include <X11/Xresource.h>
+#ifdef USE_LIBJPEG
+#include "JpegI.h"
+#endif
+#ifdef USE_LIBPNG
+#include "PngI.h"
+#endif
 
 /* additional value for GetImage return, FALSE, TRUE and */
 #define NOT_CACHED 2
@@ -172,6 +178,10 @@ static int GetOverrideColors(
 			    Screen *screen,
 			    XmAccessColorData acc_color,
 			    XpmColorSymbol *override_colors);
+static XtEnum GetXpmImage(Screen *screen, char *image_name, char *file_name,
+                          XmAccessColorData acc_color, XImage **image,
+                          unsigned short *pixmap_resolution,
+                          Pixel **pixels, int *npixels);
 static XtEnum GetImage(Screen *screen, char *image_name,
 		       XmAccessColorData acc_color, XImage **image,
 		       unsigned short * pixmap_resolution,
@@ -655,99 +665,30 @@ GetIconFileName(
 
 #endif
 
-/************************************************************************
- *
- *  GetImage
- *	Main routine of the image cache part.
- *
- ************************************************************************/
 static XtEnum
-GetImage(
-	 Screen *screen,
-	 char *image_name,
-         XmAccessColorData acc_color,
-	 XImage **image,
-	 unsigned short * pixmap_resolution,
-	 Pixel **pixels,	/* allocated pixels */
-	 int *npixels)
+GetXpmImage(
+        Screen *screen,
+        char *image_name, /* original image file name */
+        char *file_name,
+        XmAccessColorData acc_color,
+        XImage **image,
+        unsigned short *pixmap_resolution,
+        Pixel **pixels,
+        int *npixels)
 {
-    static XImage  * built_in_image = NULL;
-    register Display *display = DisplayOfScreen(screen);
-    int hot_x = 0 , hot_y = 0 ;
-    ImageData *entry;
-    char *file_name;
-    XImage * mask_image = NULL ;
-    XpmAttributes attrib ;
-    XpmColorSymbol override_colors[NUM_SYMBOLIC_COLORS]; /* max */
-    int num_override_colors;
+    XpmAttributes attrib;
+    int xpmStatus;
     Boolean useIconFileCache;
     Boolean useMask;
     Boolean useColor;
-    int xpmStatus;
+    XpmColorSymbol override_colors[NUM_SYMBOLIC_COLORS]; /* max */
+    int num_override_colors;
+    XImage * mask_image = NULL ;
+    int hot_x = 0 , hot_y = 0 ;
+    register Display *display = DisplayOfScreen(screen);
 
     /* init so that we can call safely XpmFreeAttributes. */
     attrib.valuemask = 0;
-
-    /* init for when we go thru the image cache first */
-    if (pixmap_resolution) *pixmap_resolution = 0 ;
-
-    if (pixels) *pixels = NULL;
-    if (npixels) *npixels = 0;
-
-    /***  Check for the initial allocation of the image set array  */
-    
-    if (image_set == NULL) InitializeImageSet();
-
-    if (!image_name) return FALSE ;
-
-
-    /*** look in the XImage cache first */
-    _XmProcessLock();
-    entry = (ImageData*) _XmGetHashEntry(image_set, image_name);
-    _XmProcessUnlock();
-    
-
-    if (entry) {
-
-	/*  If the image is a builtin image then get it.  */
-
-	if (entry->builtin_data) {
-	    /* there is one builtin XImage shared by all builtins,
-	       only the data part change every time a query is made */
-	    _XmProcessLock();
-	    if (!built_in_image) {
-		/* update that with new R6 init image stuff when out */
-		_XmCreateImage(built_in_image, display, NULL, 
-			       16, 16, MSBFirst);
-	    }
-	
-	    built_in_image->data = (char *) entry->builtin_data;
-	    _XmProcessUnlock();
-	    *image = built_in_image;
-	    
-	} else {   
-
-	    /* other entry found are just fine, set the image and return  */
-    
-	    *image = entry->image ;
-	}	
-
-	return TRUE ;
-    }
-
-    /*** if no entry, try to read a new file and cache it
-         only if it is a bitmap */
-
-#ifdef _ORIG_GET_ICON_FILE
-    file_name = GetIconFileName(screen, image_name);
-#else
-    file_name = XmGetIconFileName(screen, NULL, image_name, 
-				  NULL, XmUNSPECIFIED_ICON_SIZE) ;
-#endif
-
-    if (!file_name) {	
-	return FALSE ;
-    }
 
     /* Init the Xpm attributes to be passed to the reader */
     attrib.closeness = 40000;
@@ -802,7 +743,6 @@ GetImage(
 	*image = (XImage *) _XmReadImageAndHotSpotFromFile (display, 
 							    file_name,
 							    &hot_x, &hot_y);
-    XtFree(file_name);
 
     /* get the image "design" resolution */
     /* in the future: look in the file */
@@ -902,7 +842,146 @@ GetImage(
     if (xpmStatus >= 0)
 	XmeXpmFreeAttributes(&attrib);
 
-    return FALSE ;
+    return FALSE;
+}
+
+/************************************************************************
+ *
+ *  GetImage
+ *	Main routine of the image cache part.
+ *
+ ************************************************************************/
+static XtEnum
+GetImage(
+	 Screen *screen,
+	 char *image_name,
+         XmAccessColorData acc_color,
+	 XImage **image,
+	 unsigned short * pixmap_resolution,
+	 Pixel **pixels,	/* allocated pixels */
+	 int *npixels)
+{
+    static XImage  * built_in_image = NULL;
+    register Display *display = DisplayOfScreen(screen);
+    ImageData *entry;
+    char *file_name;
+    XtEnum return_value;
+#if defined (USE_LIBPNG) || defined (USE_LIBJPEG)
+    FILE *infile;
+    int rc;
+#endif
+
+    /* init for when we go thru the image cache first */
+    if (pixmap_resolution) *pixmap_resolution = 0 ;
+
+    if (pixels) *pixels = NULL;
+    if (npixels) *npixels = 0;
+
+    /***  Check for the initial allocation of the image set array  */
+    
+    if (image_set == NULL) InitializeImageSet();
+
+    if (!image_name) return FALSE ;
+
+    /*** look in the XImage cache first */
+    _XmProcessLock();
+    entry = (ImageData*) _XmGetHashEntry(image_set, image_name);
+    _XmProcessUnlock();
+    
+
+    if (entry) {
+
+	/*  If the image is a builtin image then get it.  */
+
+	if (entry->builtin_data) {
+	    /* there is one builtin XImage shared by all builtins,
+	       only the data part change every time a query is made */
+	    _XmProcessLock();
+	    if (!built_in_image) {
+		/* update that with new R6 init image stuff when out */
+		_XmCreateImage(built_in_image, display, NULL, 
+			       16, 16, MSBFirst);
+	    }
+	
+	    built_in_image->data = (char *) entry->builtin_data;
+	    _XmProcessUnlock();
+	    *image = built_in_image;
+	    
+	} else {   
+
+	    /* other entry found are just fine, set the image and return  */
+    
+	    *image = entry->image ;
+	}	
+
+	return TRUE;
+    }
+
+    /*** if no entry, try to read a new file and cache it
+         only if it is a bitmap */
+
+#ifdef _ORIG_GET_ICON_FILE
+    file_name = GetIconFileName(screen, image_name);
+#else
+    file_name = XmGetIconFileName(screen, NULL, image_name, 
+				  NULL, XmUNSPECIFIED_ICON_SIZE);
+#endif
+
+    if (!file_name) {	
+        return FALSE;
+    }
+
+#if defined (USE_LIBJPEG) || defined (USE_LIBPNG)
+    if (!(infile = fopen(file_name, "rb"))) {
+        fclose(infile);
+        return FALSE;
+    }
+
+#ifdef USE_LIBJPEG
+    rc = _XmJpegGetImage(screen, infile, image);
+#endif
+#if defined (USE_LIBJPEG) && defined (USE_LIBPNG)
+    if (rc == 1) { /* not a jpeg file */
+#endif
+#ifdef USE_LIBPNG
+        Pixel background;
+
+        if (acc_color)
+            background = acc_color->background;
+        else
+            background = 0;
+
+        if (background == XmUNSPECIFIED_PIXEL)
+            background = 0; /* XXX is if OK? */
+#endif
+#if defined (USE_LIBJPEG) && defined (USE_LIBPNG)
+        rewind(infile);
+#endif
+#ifdef USE_LIBPNG
+        rc = _XmPngGetImage(screen, infile, background, image);
+#endif
+#if defined (USE_LIBJPEG) && defined (USE_LIBPNG)
+    }
+#endif
+
+    fclose(infile);
+
+    if (rc > 1) {
+        return_value = FALSE;
+    } else if (rc == 0) {
+        return_value = NOT_CACHED;
+    } else {
+#endif
+        return_value =
+            GetXpmImage(screen, image_name, file_name, acc_color,
+                    image, pixmap_resolution, pixels, npixels);
+#if defined (USE_LIBJPEG) || defined (USE_LIBPNG)
+    }
+#endif
+
+    XtFree(file_name);
+
+    return return_value;
 } 
 
 /*** Keep this one in here, this is the only entry point to

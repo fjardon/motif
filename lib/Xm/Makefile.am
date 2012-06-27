@@ -247,6 +247,14 @@ XPM_SRCS = \
         XpmCrDatFrP.c  XpmCrPFrI.c    XpmRdFToP.c    Xpmdata.c \
         XpmCrIFrBuf.c  XpmImage.c     XpmWrFFrBuf.c  Xpmhashtab.c
 
+if OM_LIBJPEG
+  JPEG_SRCS = Jpeg.c
+endif
+
+if OM_LIBPNG
+  PNG_SRCS = Png.c
+endif
+
 NEW_WID_SRCS =         IconH.c        Container.c     IconG.c  \
         Notebook.c     ComboBox.c     GrabShell.c     SpinB.c  \
         SSpinB.c       TxtPropCv.c    XmStringSeg.c   TranslNew.c
