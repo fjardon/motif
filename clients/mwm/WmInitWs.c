@@ -1477,6 +1477,8 @@ InitWmScreen (WmScreenData *pSD, int sNum)
 	    ScreenOfDisplay(DISPLAY, sNum)); 	argnum++;
     XtSetArg (args[argnum], XtNcolormap, 
 	    DefaultColormap(DISPLAY, sNum)); 	argnum++;
+    XtSetArg (args[argnum], XtNvisual, 
+	    DefaultVisual(DISPLAY, sNum)); 	argnum++;
 
     pSD->screenTopLevelW = XtCreatePopupShell ((String) wmGD.screenNames[sNum],
 					       vendorShellWidgetClass,
