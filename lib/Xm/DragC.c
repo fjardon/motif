@@ -1489,7 +1489,6 @@ DropConvertIncrCallback(
       XmS_MOTIF_CANCEL_DROP_EFFECT, XmS_MOTIF_DROP, XmSTARGETS };
 
     XmDragContext	dc;
-    String		targetName = NULL;
     Time		dropTime;
     Boolean 		returnVal = True;
     Boolean 		success;
@@ -1562,7 +1561,6 @@ DropConvertIncrCallback(
 	returnVal = True;
     }
 
-    if (targetName) XtFree(targetName);
     return returnVal;
 }
 
@@ -1588,7 +1586,6 @@ DropConvertCallback(
       XmS_MOTIF_CANCEL_DROP_EFFECT, XmS_MOTIF_DROP, XmSTARGETS };
 
     XmDragContext	dc;
-    String		targetName = NULL;
     Time		dropTime;
     Boolean 		returnVal = True;
     Boolean		success;
@@ -1650,7 +1647,6 @@ DropConvertCallback(
 	returnVal = True;
     }
  
-    if (targetName) XtFree(targetName);
     return returnVal;
 }
 
