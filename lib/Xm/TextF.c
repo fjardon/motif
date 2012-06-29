@@ -6979,11 +6979,14 @@ ValidateString(XmTextFieldWidget tf,
 	int num_conv;
         Boolean printable;
         
+#ifdef USE_XFT
         if (TextF_UseXft(tf)) {
           num_conv = strlen(curr_str);
 	  printable = (num_conv >= 0
                   && PrintableString(tf, curr_str, num_conv, True));
-        } else {
+        } else
+#endif
+	{
 	  num_conv = mbtowc(&tmp, curr_str, tf->text.max_char_size);
 	  printable = (num_conv >= 0
                   && PrintableString(tf, (char*)&tmp, 1, True));
