@@ -7623,7 +7623,7 @@ ListConvert(Widget w, XtPointer client_data,
 	    }
 	}
 #ifdef UTF8_SUPPORTED
-      else if (cs->target = atoms[XmAUTF8_STRING])
+      else if (cs->target == atoms[XmAUTF8_STRING])
 	{
 	    type = atoms[XmAUTF8_STRING];
 	    value = XmCvtXmStringToUTF8String(concat);
