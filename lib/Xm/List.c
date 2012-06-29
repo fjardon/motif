@@ -4135,6 +4135,11 @@ SelectRange(XmListWidget lw,
       end = first;
     }
 
+  if (start < 0)
+    start = 0;
+  if (end >= lw->list.itemCount)
+    end = lw->list.itemCount - 1;
+
   for (; start <= end; start++)
     {
       lw->list.InternalList[start]->selected = select;
@@ -4163,6 +4168,11 @@ RestoreRange(XmListWidget lw,
       start = end;
       end = tmp;
     }
+
+  if (start < 0)
+    start = 0;
+  if (end >= lw->list.itemCount)
+    end = lw->list.itemCount - 1;
 
   tmp = lw->list.StartItem;
   for (; start <= end; start++)
@@ -4260,6 +4270,9 @@ HandleNewItem(XmListWidget lw,
   if (lw->list.LastHLItem == item)
     return;
 
+  if (item < 0 || item >= lw->list.itemCount)
+    return;
+
   switch(lw->list.SelectionPolicy)
     {
     case XmBROWSE_SELECT:
@@ -4293,7 +4306,10 @@ HandleNewItem(XmListWidget lw,
     case XmEXTENDED_SELECT:
       /* BEGIN OSF Fix CR 5954 */
       dir = (lw->list.LastHLItem < item) ? 1 : -1;
-      while (lw->list.LastHLItem != item)
+      while (lw->list.LastHLItem != item && 
+	     lw->list.StartItem >= 0 && lw->list.EndItem >= 0 && 
+	     lw->list.StartItem < lw->list.itemCount && 
+	     lw->list.EndItem < lw->list.itemCount)
 	{
 	  lw->list.LastHLItem += dir;
 
@@ -4331,6 +4347,9 @@ HandleExtendedItem(XmListWidget lw,
   int i, start, end;
 
   if (lw->list.LastHLItem == item) return;
+
+  if (item < 0 || item >= lw->list.itemCount)
+    return;
 
   /* First the non-addmode case */
   if (lw->list.SelectionMode == XmNORMAL_MODE)
@@ -5633,6 +5652,9 @@ ClickElement(XmListWidget lw,
 
   item = lw->list.LastHLItem;
   lw->list.DidSelection = TRUE;
+
+  if (item < 0 || item >= lw->list.itemCount)
+    return;
 
   /* If there's a drag timeout, remove it so we don't see two selections. */
   if (lw->list.DragID)

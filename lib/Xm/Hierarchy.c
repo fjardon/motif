@@ -485,6 +485,8 @@ Destroy(Widget w)
     XtFree((char *) XmHierarchy_node_table(hw));
     XtFree((char *) XmHierarchyC_children(XmHierarchy_top_node(hw)));
     XtFree((char *) XmHierarchy_top_node(hw));
+
+    XtRemoveAllCallbacks(w, XmNnodeStateBegEndCallback);
 }
 
 /*	Function Name: InsertChild
