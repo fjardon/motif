@@ -2721,7 +2721,7 @@ processCharsetAndText(XmStringCharSet tag,
       memcpy( temp, *outc, *outlen);
       XtFree((char *) *outc);
       *outc = temp;
-      temp = &(*outc[*outlen]);
+      temp = &((*outc)[*outlen]);
       /*
        ** Format is:
        **     01/11 02/05 02/15 03/nn M L tag 00/02 text
