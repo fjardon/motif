@@ -3827,7 +3827,6 @@ ClearSelectedPositions(XmListWidget lw)
 
   lw->list.selectedPositionCount = 0;
   lw->list.selectedPositions = NULL;
-  lw->list.selectedItemCount = 0;
 }
 
 /************************************************************************
