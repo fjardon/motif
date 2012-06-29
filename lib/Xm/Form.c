@@ -1677,11 +1677,13 @@ ConstraintSetValues(
     
     oldc = GetFormConstraint(old),
     newc = GetFormConstraint(new_w);
-    
+   
+   /* This fragment has been removed in order to fix bug #1298
     if (XtWidth(new_w) != XtWidth(old))
 	newc->preferred_width = XtWidth(new_w);
     if (XtHeight(new_w) != XtHeight(old))
 	newc->preferred_height = XtHeight(new_w);
+    */
 
     /*  Validate the attachement type.  */
     
