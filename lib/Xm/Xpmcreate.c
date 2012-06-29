@@ -1170,10 +1170,10 @@ PutImagePixels(image, width, height, pixelindex, pixels)
     register char *src;
     register char *dst;
     register unsigned int *iptr;
-    register unsigned int x, y, i;
+    register unsigned int x, y;
     register char *data;
     Pixel pixel, px;
-    int nbytes, depth, ibu, ibpp;
+    int nbytes, depth, ibu, ibpp, i;
 
     data = image->data;
     iptr = pixelindex;
