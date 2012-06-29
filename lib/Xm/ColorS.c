@@ -107,7 +107,7 @@ static void PrivateColormaps(XmColorSelectorWidget, Pixel, XColor, char *);
 static void CreateTypes(XmColorSelectorWidget, Widget, ArgList, Cardinal);
 #endif
 
-static int CmpColors(void *, void *);
+static int CmpColors(const void *, const void *);
 static char *find_name(char *);
 static int GetVisual(XmColorSelectorWidget);
 
@@ -1425,7 +1425,7 @@ read_rgb_file(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args, Bool
  */
 
 static int
-CmpColors(void * ptr_1, void * ptr_2) 
+CmpColors(const void * ptr_1, const void * ptr_2) 
 {
     ColorInfo *color1, *color2;
 
