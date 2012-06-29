@@ -199,7 +199,7 @@ radio3Text :		"WGBH";
 radio3Value :		897;
 
 pane1Text :		"The Open Group";
-pane2Text :		"Motif Release 2.2\n";
+pane2Text :		"Motif Release 2.3\n";
 
 popupWindowText :	compound_string ("Press", separate = true) &
 			compound_string ("Button 3", separate = true) &

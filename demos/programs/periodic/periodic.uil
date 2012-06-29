@@ -2204,10 +2204,10 @@ object cancelButton : XmPushButton {
 };
 object showDialog : XmInformationDialog {
     arguments {
-	XmNdialogTitle = "Motif Release 2.2";
+	XmNdialogTitle = "Motif Release 2.3";
 	XmNcancelLabelString = "Enjoy!";
 	XmNmessageString =
-		compound_string("Motif Release 2.2", separate = true) &
+		compound_string("Motif Release 2.3", separate = true) &
 		compound_string("", separate = true) &
 		compound_string("June 1994", separate = true) &
 		compound_string("", separate = true) &
