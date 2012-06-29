@@ -124,9 +124,6 @@ then
 fi
 AM_CONDITIONAL(MessageCatalog, test x$enable_message_catalog = xyes)
 
-AC_FIND_XFT
-AC_IMAGE_SUPPORT
-
 AC_ARG_ENABLE(themes, [  --enable-themes         Enable themes (default=no)])
 if test "$enable_themes" = "yes"
 then
@@ -184,10 +181,14 @@ case "$host_os" in
         if test x$enable_motif22_compatibility = x
         then
             enable_motif22_compatibility="no"
-        fi &&
+        fi;
         if test x$enable_utf8 = x
         then
             enable_utf8="no"
+        fi;
+        if test x$enable_xft = x
+        then
+            enable_xft="no"
         fi;;
 esac
 
@@ -217,6 +218,9 @@ if test "$enable_utf8" = "yes"
 then
   AC_DEFINE([UTF8_SUPPORTED], [1], [UTF8 is supported])
 fi
+
+AC_FIND_XFT
+AC_IMAGE_SUPPORT
 
 # AM_CONDITIONAL(Motif22Compatibility, test x$enable_motif22_compatibility = xyes)
 
