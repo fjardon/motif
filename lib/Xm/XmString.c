@@ -2448,9 +2448,10 @@ OptLineMetrics(XmRenderTable 	r,
 		   XmSTRING_SINGLE_SEG, width, height, ascent, descent,
 #ifdef UTF8_SUPPORTED
                    _XmStrTextType(opt) == XmCHARSET_TEXT &&
-                   (_XmStrTagIndex(opt) == XmFONTLIST_DEFAULT_TAG
-                    && _XmStringIsCurrentCharset("UTF-8")
-                    || (strcmp(_XmStrTagGet(opt), "UTF-8") == 0))
+                   ((_XmStrTagIndex(opt) == XmFONTLIST_DEFAULT_TAG
+                     && _XmStringIsCurrentCharset("UTF-8"))
+                    || (_XmStrTagGet(opt)
+		     && strcmp(_XmStrTagGet(opt), "UTF-8") == 0))
 #else
                    False
 #endif
