@@ -748,8 +748,6 @@ ClassPartInitialize(
 
     _XmProcessLock();
     scePtr = _XmGetBaseClassExtPtr(wc->core_class.superclass, XmQmotif);
-    _XmProcessUnlock();
-
 
     if ( (vc != (XmVendorShellWidgetClass)vendorShellWidgetClass) && 
 	scePtr && *scePtr && 
@@ -763,8 +761,6 @@ ClassPartInitialize(
 	    secondaryObjectClass;
 	_XmBuildExtResources((WidgetClass) (*wcePtr)->secondaryObjectClass);
 
-    _XmProcessLock();
-	
 	if (wceClass->desktop_class.insert_child == XtInheritInsertChild)
 	    wceClass->desktop_class.insert_child = 
 		sceClass->desktop_class.insert_child;
