@@ -1335,6 +1335,23 @@ enum{	XmMATCH_DEPTH, XmDYNAMIC_DEPTH } ;
 
 enum { XmPDM_NOTIFY_FAIL, XmPDM_NOTIFY_SUCCESS } ;
 
+/************************************************************************
+ *  MultiList defines
+ ************************************************************************/
+
+enum { XmMULTILIST_FOUND, XmMULTILIST_NOT_FOUND };
+
+/************************************************************************
+ *  DropDown defines
+ ************************************************************************/
+
+enum {
+    XmDROPDOWN_LABEL,
+    XmDROPDOWN_TEXT,
+    XmDROPDOWN_ARROW_BUTTON,
+    XmDROPDOWN_LIST
+};
+
 
 /* This one cannot be put at the beginning because it needs 
    XmStringTable */

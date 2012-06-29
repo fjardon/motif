@@ -21,45 +21,32 @@
  * Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef _XmCominationBox2_h
-#define _XmCominationBox2_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
-/************************************************************
- *	INCLUDE FILES
- ************************************************************/
-
-#include <Xm/Ext.h>
-
-#include <Xm/TextF.h>
-#include <Xm/List.h>
-#include <Xm/ArrowB.h>
-#include <Xm/Label.h>
-
-/************************************************************
- *	TYPEDEFS AND DEFINES
- ************************************************************/
+#ifndef _XmCominationBox2_h_
+#define _XmCominationBox2_h_
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-enum { XiCOMBINATIONBOX2_LABEL, XiCOMBINATIONBOX2_TEXT,
-       XiCOMBINATIONBOX2_ARROW_BUTTON, XiCOMBINATIONBOX2_LIST };
+#include <Xm/DropDown.h>
 
-typedef struct _XmCombinationBox2ClassRec	*XmCombinationBox2WidgetClass;
-typedef struct _XmCombinationBox2Rec		*XmCombinationBox2Widget;
+#if __GNUC__
+#  define deprecated  __attribute__((__deprecated__))
+#else
+#  define deprecated
+#endif
 
-/************************************************************
- *	MACROS
- ************************************************************/
+enum {
+    XiCOMBINATIONBOX2_LABEL = XmDROPDOWN_LABEL,
+    XiCOMBINATIONBOX2_TEXT  = XmDROPDOWN_TEXT,
+    XiCOMBINATIONBOX2_ARROW_BUTTON = XmDROPDOWN_ARROW_BUTTON,
+    XiCOMBINATIONBOX2_LIST  = XmDROPDOWN_LIST
+};
 
-/************************************************************
- *	GLOBAL DECLARATIONS
- ************************************************************/
+extern WidgetClass xmCombinationBox2WidgetClass;
+
+typedef XmDropDownWidgetClass	*XmCombinationBox2WidgetClass;
+typedef XmDropDownWidget	*XmCombinationBox2Widget;
 
 /*	Function Name: XmCombinationBox2GetValue
  *	Description:   Retreives the value from the combo box.
@@ -67,11 +54,7 @@ typedef struct _XmCombinationBox2Rec		*XmCombinationBox2Widget;
  *	Returns:       The value in the text widget.
  */
 
-String XmCombinationBox2GetValue(
-#ifndef _NO_PROTO
-Widget				/* Combination box widget. */
-#endif
-);
+extern String XmCombinationBox2GetValue(Widget w) deprecated;
 
 /*	Function Name: XmCreateCombinationBox2
  *	Description: Creation Routine for UIL and ADA.
@@ -81,11 +64,10 @@ Widget				/* Combination box widget. */
  *	Returns: The Widget created.
  */
 
-Widget XmCreateCombinationBox2(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+extern Widget XmCreateCombinationBox2(Widget w,
+                                      char *name,
+                                      ArgList args,
+                                      Cardinal argCount) deprecated;
 
 /*
  * Variable argument list functions
@@ -94,11 +76,11 @@ Widget, String, ArgList, Cardinal
 extern Widget XmVaCreateCombinationBox2(
                         Widget parent,
                         char *name,
-                        ...);
+                        ...) deprecated;
 extern Widget XmVaCreateManagedCombinationBox2(
                         Widget parent,
                         char *name,
-                        ...);
+                        ...) deprecated;
 
 /*      Function Name:  XmCombinationBox2GetLabel
  *      Description:    Returns the "label" child of the XmCombinationBox2
@@ -106,11 +88,7 @@ extern Widget XmVaCreateManagedCombinationBox2(
  *      Returns:        The specified child of the XmCombinationBox2
  */
 
-Widget XmCombinationBox2GetLabel(
-#ifndef _NO_PROTO
-Widget
-#endif
-);
+Widget XmCombinationBox2GetLabel(Widget w) deprecated;
 
 /*      Function Name:  XmCombinationBox2GetArrow
  *      Description:    Returns the "arrow" child of the XmCombinationBox2
@@ -118,11 +96,7 @@ Widget
  *      Returns:        The specified child of the XmCombinationBox2
  */
 
-Widget XmCombinationBox2GetArrow(
-#ifndef _NO_PROTO
-Widget
-#endif
-);
+Widget XmCombinationBox2GetArrow(Widget w) deprecated;
 
 /*      Function Name:  XmCombinationBox2GetText
  *      Description:    Returns the "text" child of the XmCombinationBox2
@@ -130,11 +104,7 @@ Widget
  *      Returns:        The specified child of the XmCombinationBox2
  */
 
-Widget XmCombinationBox2GetText(
-#ifndef _NO_PROTO
-Widget
-#endif
-);
+Widget XmCombinationBox2GetText(Widget w) deprecated;
 
 /*      Function Name:  XmCombinationBox2GetList
  *      Description:    Returns the "list" child of the XmCombinationBox2
@@ -142,36 +112,18 @@ Widget
  *      Returns:        The specified child of the XmCombinationBox2
  */
 
-Widget XmCombinationBox2GetList(
-#ifndef _NO_PROTO
-Widget
-#endif
-);
+Widget XmCombinationBox2GetList(Widget w) deprecated;
 
 /*      Function Name:  XmCombinationBox2GetChild
  *      Description:    Returns the child widget id of the XmCombinationBox2
  *      Arguments:      w - The XmCombinationBox2 Widget
  *      Returns:        The specified child of the XmCombinationBox2
  */
-Widget XmCombinationBox2GetChild(
-#ifndef _NO_PROTO
-Widget,
-int
-#endif
-);
+Widget XmCombinationBox2GetChild(Widget w, int child) deprecated;
 
-/************************************************************
- *	EXTERNAL DECLARATIONS
- ************************************************************/
-
-extern WidgetClass xmCombinationBox2WidgetClass;
 
 #if defined(__cplusplus)
 }
 #endif
 
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
-#endif /* _XmCombinationBox2_h */
+#endif /* _XmCombinationBox2_h_ */

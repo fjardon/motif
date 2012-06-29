@@ -22,21 +22,16 @@
  * 
  */
 
-/************************************************************
-*	INCLUDE FILES
-*************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "XmI.h"
 #include <Xm/XmP.h>
-#if (XmVERSION >= 2)
 #include <Xm/DrawP.h>
-#endif
-#include <Xm/Ext18ListP.h>
+#include <Xm/MultiListP.h>
 #ifdef VMS
 #include <bitmaps/gray.xbm>
 #else
@@ -109,7 +104,7 @@ static Widget global_current_widget;		/* static global to hold
  ******************************/
 
 Boolean XmI18ListDoSearch(Widget w, String str, Boolean reset);
-Xm18RowInfo *XmI18ListFindRow(Widget w, String str, int *found_column,
+XmMultiListRowInfo *XmI18ListFindRow(Widget w, String str, int *found_column,
 			      Boolean reset, Boolean do_visual);
 
 static void ClassInitialize();
@@ -146,10 +141,7 @@ static Boolean MakePositionVisible(Widget, short, short, short, int);
 static void ExtendedSelect(Widget, short);
 
 static int IsRowVisible(Widget, short);
-#ifdef UNUSED_FUNCTION
-static int IsColumnVisible(Widget, short);
-#endif
-static int QSortTest(Xm18RowInfo *, Xm18RowInfo *);
+static int QSortTest(XmMultiListRowInfo *, XmMultiListRowInfo *);
 
 static void UnselectRows(Widget, short);
 
@@ -351,7 +343,7 @@ static XtResource resources[] =
   {
     XmNvisibleItemCount, XmCVisibleItemCount, XmRInt,
     sizeof(int), XtOffsetOf(XmI18ListRec, ilist.visible_rows),
-    XmRImmediate, (XtPointer) XmExt18List_DEFAULT_VISIBLE_COUNT
+    XmRImmediate, (XtPointer) XmMultiList_DEFAULT_VISIBLE_COUNT
   },
 
   {
@@ -936,22 +928,20 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
 		break;
 	    default:
 	        {
-		    Cardinal num = 1;
-		    _XmWarningMsg(XtWidgetToApplicationContext(w),
-				    XmNbadActionParameters,
-				    XmNbadActionParametersMsg,
-				    params, &num);
+		    _XmWarningMsg(w,
+				XmNbadActionParameters,
+				XmNbadActionParametersMsg,
+				params, 1);
                 }
 	    }
 	}
     }
 	    
     if (event->type != ButtonPress) {
-        Cardinal num = 1;
         static String params[] = { "BtnDown" };
 
         _XmWarningMsg(w, XmNunexpectedEvent,
-                XmNunexpectedEventMsg, params, &num);
+                XmNunexpectedEventMsg, params, 1);
 
 	return;
     }
@@ -1042,11 +1032,10 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
     XmI18ListWidget ilist = (XmI18ListWidget) w;
 
     if (event->type != ButtonRelease) {
-	Cardinal num = 1;
 	static String params[] = { "BtnUp or BtnLeave" };
 	
 	_XmWarningMsg(w, XmNunexpectedEvent,
-		XmNunexpectedEventMsg, params, &num);
+		XmNunexpectedEventMsg, params, 1);
 	
 	return;
     }
@@ -1181,7 +1170,7 @@ SingleClick(XmI18ListWidget ilist)
     }
     else {
 	register short i, last;
-	Xm18RowInfo * ptr;
+	XmMultiListRowInfo * ptr;
 
 	last = XmI18List_num_rows(ilist);
 	if (!(XmI18List_state(ilist) & EXTEND)) {
@@ -1452,7 +1441,7 @@ ExtendedSelect(Widget w, short row)
     XmI18ListWidget ilist = (XmI18ListWidget) w;
     register short i, first, last, end, anchor, out_first, out_last;
     Boolean state;
-    Xm18RowInfo * ptr;
+    XmMultiListRowInfo * ptr;
 
     if (row >= XmI18List_num_rows(ilist))
 	row = XmI18List_num_rows(ilist) - 1;
@@ -2285,7 +2274,8 @@ static void
 SetVisibleSize(Widget w, Boolean set_width)
 {
     XmI18ListWidget	ilist = (XmI18ListWidget) w;
-    Dimension		title_height, height;
+    Dimension		title_height;
+    int			height;
 
     CalcColumnInfo(w, True);
 
@@ -2773,7 +2763,7 @@ UnselectRows(Widget w, short sel_row)
 {
     XmI18ListWidget ilist = (XmI18ListWidget) w;
     register short row;
-    Xm18RowInfo *ptr = XmI18List_row_data(ilist);
+    XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
 
     XmI18List_end(ilist) = XmI18List_anchor(ilist) = sel_row;
 
@@ -2824,8 +2814,10 @@ SortList(Widget w, Boolean redisplay)
 
     if (XmI18List_sort_functions(ilist) != NULL) {
 	global_current_widget = w;
-	qsort(XmI18List_row_data(ilist), XmI18List_num_rows(ilist),sizeof(Xm18RowInfo),
-	      QSortTest);
+	qsort(XmI18List_row_data(ilist),
+	        XmI18List_num_rows(ilist),
+		sizeof(XmMultiListRowInfo),
+	        QSortTest);
 	if (redisplay)
 	    RedrawList(w);
     }
@@ -2841,7 +2833,7 @@ SortList(Widget w, Boolean redisplay)
  */
 
 static int 
-QSortTest(Xm18RowInfo * row1, Xm18RowInfo * row2)
+QSortTest(XmMultiListRowInfo * row1, XmMultiListRowInfo * row2)
 {
     XmI18ListWidget ilist = (XmI18ListWidget) global_current_widget;
     short col = XmI18List_selected_header(ilist);
@@ -2973,46 +2965,6 @@ IsRowVisible(Widget w, short row)
    
     return(0);
 }
-
-#ifdef UNUSED_FUNCTION
-/*  Function Name: IsColumnVisible
- *  Description:   returns 0 if the column is visable. Otherwise returns
- *		the number of PIXELS right we have to scroll (- values for left)
- *		to make the column visible.
- *  Arguments:     w - the ilist widget.
- *                     column - the column to check.
- *  Returns:       none.
- */
-static int
-IsColumnVisible(Widget w, short column)
-{
-    XmI18ListWidget ilist = (XmI18ListWidget) w;
-	short r_col;	/* right-most column being displayed */
-	short col, r_row;
-	int pixel_shift = 0; /* return value */
-
-    if (column < XmI18List_first_col(ilist))
-      {
-	for (col = column; col < XmI18List_first_col(ilist); col++)
-	  pixel_shift -= XmI18List_column_widths(ilist)[col] + HORIZONTAL_SPACE;
-	
-	return (pixel_shift);
-      }
-
-    CvtPositionToRowColumn(w, (short) ilist->core.width, 0, &r_row, &r_col);
-
-
-    if (column >= r_col)
-      {
-    	for (col = r_col+1; col <= column; col++)
-	  pixel_shift += XmI18List_column_widths(ilist)[col] + HORIZONTAL_SPACE;
-	
-	return (pixel_shift);
-      }
-    
-    return(0);
-}
-#endif
 
 /*	Function Name: AdjustVisiblePosition
  *	Description:   makes the string found by find, visible
@@ -3187,12 +3139,12 @@ MakePositionVisible(Widget w, short row, short start, short last, int width)
  *                NULL is returned if nothing is selected.
  */
 
-Xm18RowInfo **
+XmMultiListRowInfo **
 XmI18ListGetSelectedRows(Widget w)
 {
     register int i, j;
-    register Xm18RowInfo *row_data, **ptr;
-    Xm18RowInfo **ret_rows = NULL;
+    register XmMultiListRowInfo *row_data, **ptr;
+    XmMultiListRowInfo **ret_rows = NULL;
     XmI18ListWidget ilist = (XmI18ListWidget) w;
 
     row_data = XmI18List_row_data(ilist);
@@ -3202,8 +3154,8 @@ XmI18ListGetSelectedRows(Widget w)
     }
     
     if (i != 0) {
-	ptr = ret_rows = (Xm18RowInfo **) XtMalloc(sizeof(Xm18RowInfo *) * 
-						   (i + 1));
+	ptr = ret_rows = (XmMultiListRowInfo **) XtMalloc(
+                sizeof(XmMultiListRowInfo *) * (i + 1));
 	ret_rows[i] = NULL;
 	
 	row_data = XmI18List_row_data(ilist);
@@ -3271,14 +3223,14 @@ XmI18ListDoSearch(Widget w, String str, Boolean reset)
  *                 reset - indicates if we are searching for
  *                         something new
  *		   do_visual - whether or not to toggle selected rows...
- *  Returns:       Xm18RowInfo of matching row (or NULL if no match found)
+ *  Returns:       XmMultiListRowInfo of matching row (or NULL if no match found)
  *
  */
-Xm18RowInfo *XmI18ListFindRow(Widget w, String str, int *found_column,
+XmMultiListRowInfo *XmI18ListFindRow(Widget w, String str, int *found_column,
 			      Boolean reset, Boolean do_visual)
 {
     XmI18ListWidget ilist = (XmI18ListWidget) w;
-    Xm18RowInfo *ptr = XmI18List_row_data(ilist);
+    XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
     Boolean foundit;
     XmString xms = XmStringCreateLocalized(str);
     int found_row, search_column;
@@ -3311,14 +3263,14 @@ Xm18RowInfo *XmI18ListFindRow(Widget w, String str, int *found_column,
 	    XmI18List_search_column(ilist) = -1;
     }
 
-    return (Xm18RowInfo *)(foundit ? &ptr[found_row] : NULL);
+    return (XmMultiListRowInfo *)(foundit ? &ptr[found_row] : NULL);
 }
 
 static int
 FirstSelectedRow(Widget w)
 {
     XmI18ListWidget ilist = (XmI18ListWidget) w;
-    Xm18RowInfo *ptr = XmI18List_row_data(ilist);
+    XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
 	int i;
 
 	for (i=0;i<XmI18List_num_rows(ilist);i++)
@@ -3425,7 +3377,7 @@ Xm18IListUnselectAllItems( Widget w )
 {
   register int row;
   XmI18ListWidget ilist = (XmI18ListWidget) w;
-  Xm18RowInfo *ptr = XmI18List_row_data(ilist);
+  XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
 
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
@@ -3445,11 +3397,11 @@ Xm18IListUnselectAllItems( Widget w )
  *  Returns:       none
  */
 void
-Xm18IListUnselectItem( Widget w, Xm18RowInfo *row_info )
+Xm18IListUnselectItem( Widget w, XmMultiListRowInfo *row_info )
 {
   register int row=0;
   XmI18ListWidget ilist = (XmI18ListWidget) w;
-  Xm18RowInfo *ptr = XmI18List_row_data(ilist);
+  XmMultiListRowInfo *ptr = XmI18List_row_data(ilist);
   Boolean done=False;
 
   while (row < XmI18List_num_rows(ilist) && !done){
@@ -3551,7 +3503,7 @@ FreeColumnTitles(XmI18ListWidget ilist)
 static int *
 GetSelectedRows(XmI18ListWidget i18list, int *num_rows)
 {
-    Xm18RowInfo	*row_info = XmI18List_row_data(i18list);
+    XmMultiListRowInfo	*row_info = XmI18List_row_data(i18list);
     int		*rows, i;
 
     rows = NULL;
@@ -3586,7 +3538,7 @@ static void
 SelectRow(XmI18ListWidget i18list, int row,
 	  Boolean select, Boolean notify)
 {
-    Xm18RowInfo	*rows = XmI18List_row_data(i18list);
+    XmMultiListRowInfo	*rows = XmI18List_row_data(i18list);
 
     if ((row >= 0) && (rows[row].selected != select))
     {
@@ -3612,7 +3564,7 @@ static void
 SelectItems(XmI18ListWidget i18list, XmString item,
 	    int column, Boolean select, Boolean notify)
 {
-    Xm18RowInfo	*rows = XmI18List_row_data(i18list);
+    XmMultiListRowInfo	*rows = XmI18List_row_data(i18list);
     int	i, j;
     int	rowcount, colcount, colstart;
 
@@ -3852,7 +3804,7 @@ ListConvert(Widget w, XtPointer client_data,
 	    }
 	}
 #ifdef UTF8_SUPPORTED
-	else if (cs->target = atoms[XmAUTF8_STRING])
+	else if (cs->target == atoms[XmAUTF8_STRING])
 	{
 	    type = atoms[XmAUTF8_STRING];
 	    value = XmCvtXmStringToUTF8String(concat);
@@ -3924,7 +3876,7 @@ ListPreDestProc(Widget w,
  *      with tabs between column values.
  * Input:
  *	w : Widget - the widget to copy titles
- *    row : Xm18RowInfo - the row to concatenate
+ *    row : XmMultiListRowInfo - the row to concatenate
  * Output:
  *	XmString - the concatenated string.
  */
