@@ -1135,7 +1135,7 @@ MixedIconSize(
 {
     Position		sourceX = 0, sourceY = 0;
     Position		minX = 0, minY = 0;
-    Position		stateX, stateY;
+    Position		stateX = 0, stateY = 0;
     Position		opX, opY;
     Position		maxX, maxY;
 
@@ -1146,7 +1146,7 @@ MixedIconSize(
     }
 
     if (opIcon) {
-	if (opIcon->drag.attachment == XmATTACH_HOT) {
+	if (opIcon->drag.attachment == XmATTACH_HOT && stateIcon) {
 	    opX = stateX + stateIcon->drag.hot_x - opIcon->drag.hot_x;
 	    opY = stateY + stateIcon->drag.hot_y - opIcon->drag.hot_y;
 	}
@@ -1293,7 +1293,7 @@ MixIcons(
      */
 
     if (opIcon) {
-	if (opIcon->drag.attachment == XmATTACH_HOT) {
+	if (opIcon->drag.attachment == XmATTACH_HOT && stateIcon) {
 	    opX = stateX + stateIcon->drag.hot_x - opIcon->drag.hot_x;
 	    opY = stateY + stateIcon->drag.hot_y - opIcon->drag.hot_y;
 	}
@@ -3319,18 +3319,21 @@ DragOverShellPunchHole(Widget w)
 
     /* shape the outside of the window */
     if (icon && icon -> drag.mask)
-      XShapeCombineMask (XtDisplay(dos), XtWindow(dos),
+    {
+        if (icon -> drag.mask)
+            XShapeCombineMask (XtDisplay(dos), XtWindow(dos),
 			 ShapeBounding, 0, 0, 
 			 icon -> drag.mask, ShapeSet);
 
-    /* punch a hole in the window */
-    XShapeCombineRectangles (XtDisplay(dos), XtWindow(dos),
+        /* punch a hole in the window */
+        XShapeCombineRectangles (XtDisplay(dos), XtWindow(dos),
 			     ShapeBounding,
 			     icon->drag.hot_x, icon->drag.hot_y,
 			     (XRectangle*)&pixelPunch, 1, 
 			     ShapeSubtract, YXBanded);
 
-    dos->drag.holePunched = TRUE;
+        dos->drag.holePunched = TRUE;
+    }
 }
 
 static void
