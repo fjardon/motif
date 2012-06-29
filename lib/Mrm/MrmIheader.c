@@ -215,9 +215,10 @@ Idb__HDR_GetHeader (IDBFile		file_id)
 
   {
     /* sscanf() may call ungetc(), which would write the XmConst string. */
-    char buf[XtNumber(idb__database_version) + 1];
+    char *buf = XtMalloc(strlen(idb__database_version) + 1);
     strcpy(buf, idb__database_version);
     sscanf(buf, "URM %d.%d", &db_major, &db_minor);
+    XtFree(buf);
   }
     
   if ((file_major > db_major) ||
