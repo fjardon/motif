@@ -260,7 +260,9 @@ Determines if all tabs should have a uniform major dimension,
 where the major dimension is width if the tab orientation is
 \fBXmTABS_LEFT_TO_RIGHT\fP or \fBXmTABS_RIGHT_TO_LEFT\fP or height if
 the tab orientation is \fBXmTABS_TOP_TO_BOTTOM\fP or
-\fBXmTABS_BOTTOM_TO_TOP\fP.
+\fBXmTABS_BOTTOM_TO_TOP\fP. When \fBXmNtabMode\fP is either
+\fBXmTABS_STACKED\fP or \fBXmTABS_STACKED_STATIC\fP, this resource is forced
+to True.
 .IP "\fBXmNuseImageCache\fP"
 Destermines if the Xmmages used for rotating text and pixmaps should
 be cached. This increases performance but uses up more memory.
