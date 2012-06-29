@@ -174,9 +174,17 @@ man_MANS = ApplicationShell.3 \
     XmDataFieldCopy.3 \
     XmDataFieldCut.3 \
     XmDataFieldPaste.3 \
+    XmDataFieldGetSelection.3 \
+    XmDataFieldGetSelectionPosition.3 \
     XmDataFieldGetString.3 \
-    XmDataFieldSetInsertionPosition.3 \
+    XmDataFieldGetStringWcs.3 \
+    XmDataFieldSetAddMode.3 \
     XmDataFieldSetEditable.3 \
+    XmDataFieldSetHighlight.3 \
+    XmDataFieldSetInsertionPosition.3 \
+    XmDataFieldSetSelection.3 \
+    XmDataFieldSetString.3 \
+    XmDataFieldXYToPos.3 \
     XmDeactivateProtocol.3 \
     XmDeactivateWMProtocol.3 \
     XmDestroyPixmap.3 \
