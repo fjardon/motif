@@ -185,7 +185,7 @@ EnumerationSet
         { XmSHADOW_IN; XmSHADOW_OUT;
           XmSHADOW_ETCHED_IN; XmSHADOW_ETCHED_OUT; };
     LabelType : integer
-        { XmSTRING; XmPIXMAP; };
+        { XmSTRING; XmPIXMAP; XmPIXMAP_AND_STRING; };
     StringDirection : integer
         { XmSTRING_DIRECTION_L_TO_R;  XmSTRING_DIRECTION_R_TO_L; };
     Alignment : integer
