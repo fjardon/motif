@@ -1958,9 +1958,9 @@ XmStringCompare(
     if (!((_XmStrTagGet(a) == _XmStrTagGet(b)) ||
 	  (_XmStrTagGet(a) == NULL) ||
 	  (_XmStrTagGet(b) == NULL) ||
-	  ((strcmp(_XmStrTagGet(a), XmFONTLIST_DEFAULT_TAG) == 0) &&
+	  ((strcmp(_XmStringIndexGetTag(_XmStrTagIndex(a)), XmFONTLIST_DEFAULT_TAG) == 0) &&
 	   _XmStringIsCurrentCharset(_XmStrTagGet(b))) ||
-	  ((strcmp(_XmStrTagGet(b), XmFONTLIST_DEFAULT_TAG) == 0) &&
+	  ((strcmp(_XmStringIndexGetTag(_XmStrTagIndex(b)), XmFONTLIST_DEFAULT_TAG) == 0) &&
 	   _XmStringIsCurrentCharset(_XmStrTagGet(a))))) {
       _XmProcessUnlock();
       return (FALSE);
@@ -2448,10 +2448,10 @@ OptLineMetrics(XmRenderTable 	r,
 		   XmSTRING_SINGLE_SEG, width, height, ascent, descent,
 #ifdef UTF8_SUPPORTED
                    _XmStrTextType(opt) == XmCHARSET_TEXT &&
-                   ((_XmStrTagIndex(opt) == XmFONTLIST_DEFAULT_TAG
+                   ((_XmStrTagGet(opt) == XmFONTLIST_DEFAULT_TAG
                      && _XmStringIsCurrentCharset("UTF-8"))
                     || (_XmStrTagGet(opt)
-		     && strcmp(_XmStrTagGet(opt), "UTF-8") == 0))
+		     && strcmp(_XmStringIndexGetTag(_XmStrTagIndex(opt)), "UTF-8") == 0))
 #else
                    False
 #endif
@@ -3506,7 +3506,7 @@ SubStringPosition(
 	    else {
 	      XGlyphInfo ext;
 	      XftTextExtentsUtf8(_XmRendDisplay(entry), _XmRendXftFont(entry),
-	                      a, begin, &ext);
+	                      (FcChar8*)a, begin, &ext);
 	      *under_begin = x + ext.xOff;
 	    }
 #endif
@@ -3520,7 +3520,7 @@ SubStringPosition(
 	    else {
 	      XGlyphInfo ext;
 	      XftTextExtentsUtf8(_XmRendDisplay(entry), _XmRendXftFont(entry),
-	                      b, under_seg_len, &ext);
+	                      (FcChar8*)b, under_seg_len, &ext);
 	      width = ext.xOff;
 	    }
 #endif
@@ -3645,7 +3645,7 @@ SubStringPosition(
       if (!fail) {          /* found it */
 #ifdef UTF8_SUPPORTED
         Boolean utf8 = ((_XmEntryTextTypeGet(seg) == XmCHARSET_TEXT) &&
-              (((_XmEntryTagIndex((_XmStringEntry)seg) ==
+              (((_XmEntryTag((_XmStringEntry)seg) ==
                  XmFONTLIST_DEFAULT_TAG) &&
                 _XmStringIsCurrentCharset("UTF-8")) ||
                (strcmp(seg_tag, "UTF-8") == 0)));
@@ -3934,11 +3934,10 @@ _XmStringDrawSegment(Display *d,
       utf8 = ((_XmEntryTextTypeGet((_XmStringEntry)seg) == XmCHARSET_TEXT) &&
 		   (_XmRendFontType(rend) == XmFONT_IS_FONTSET ||
 		   _XmRendFontType(rend) == XmFONT_IS_XFT) &&
-              (((_XmEntryTagIndex((_XmStringEntry)seg) ==
-                 XmFONTLIST_DEFAULT_TAG) &&
-                (_XmStringIsCurrentCharset("UTF-8")) ||
-               (_XmEntryTagIndex(seg) != TAG_INDEX_UNSET
-	       && strcmp(_XmEntryTag((_XmStringEntry)seg), "UTF-8") == 0))));
+              (((_XmEntryTag((_XmStringEntry)seg) == XmFONTLIST_DEFAULT_TAG &&
+                (_XmStringIsCurrentCharset("UTF-8"))) ||
+               ((_XmEntryTagIndex(seg) != TAG_INDEX_UNSET
+	       && strcmp(_XmEntryTag((_XmStringEntry)seg), "UTF-8") == 0)))));
 #else
       utf8 = False;
 #endif
@@ -6597,7 +6596,7 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 		     which_seg, &w, &h, &asc, &dsc,
 #ifdef UTF8_SUPPORTED
                    _XmEntryType(entry) == XmCHARSET_TEXT &&
-                   (_XmEntryTagIndex(entry) == XmFONTLIST_DEFAULT_TAG
+                   (_XmEntryTag(entry) == XmFONTLIST_DEFAULT_TAG
                     && (_XmStringIsCurrentCharset("UTF-8")
                     || (_XmEntryTagIndex(entry) !=  TAG_INDEX_UNSET
 		    && strcmp(_XmEntryTag(entry), "UTF-8") == 0)))
