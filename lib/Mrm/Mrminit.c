@@ -118,6 +118,8 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/DrawnBP.h>
 #include <Xm/Ext18List.h>
 #include <Xm/Ext18ListP.h>
+#include <Xm/ComboBox2.h>
+#include <Xm/ComboBox2P.h>
 #include <Xm/FileSB.h>
 #include <Xm/FileSBP.h>
 #include <Xm/FontS.h>
@@ -571,6 +573,9 @@ void MrmInitialize (void)
     (0, NULL, "_XmCreateTab", _XmCreateTab,
      (WidgetClass)NULL);
 
+  MrmRegisterClass
+    (0, NULL, "XmCreateCombinationBox2", XmCreateCombinationBox2,
+     (WidgetClass)&xmCombinationBox2ClassRec);  
 
   /*
    * Initialization complete
