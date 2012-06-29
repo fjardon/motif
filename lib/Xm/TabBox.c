@@ -6677,8 +6677,16 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
      * Now that the text is rotated lets snarf the label width and height
      * back from the image.
      */
-    label_width = XImageWidth(dst_ximage);
-    label_height = XImageHeight(dst_ximage);
+    if (dst_ximage)
+    {
+        label_width = XImageWidth(dst_ximage);
+        label_height = XImageHeight(dst_ximage);
+    }
+    else
+    {
+        label_width = 0;
+        label_height = 0;
+    }
 
     /*
      * Now we need to find out where we want to but the text.  We know that
@@ -6776,7 +6784,8 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
     }
     else
     {
-	XPutImage(XtDisplay(tab), XiCanvas(tab), gc, dst_ximage, 0, 0,
+        if (dst_ximage)
+            XPutImage(XtDisplay(tab), XiCanvas(tab), gc, dst_ximage, 0, 0,
 		  x, y, label_width, label_height);
     }
 
