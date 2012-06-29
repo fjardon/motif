@@ -2654,12 +2654,12 @@ SetDefaultSize(XmListWidget lw,
   if (lw->list.itemCount == 0)
     {
 #if USE_XFT
-      int height;
+      int height = 0;
 
       XmRenderTableGetDefaultFontExtents(lw->list.font, &height, NULL, NULL);
 					 
       lw->list.MaxItemHeight = (Dimension)height;
-      if (lw->list.MaxItemHeight)
+      if (lw->list.MaxItemHeight == 0)
         lw->list.MaxItemHeight = 1;
 #else
       if (XmeRenderTableGetDefaultFont(lw->list.font, &fs))
