@@ -43,6 +43,8 @@
 #endif
 
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #include "XpmI.h"
 
 #define MAXPRINTABLE 92			/* number of printable ascii chars
@@ -163,12 +165,12 @@ storeMaskPixel(pixel, pmap, index_return)
 /* function call in case of error, frees only locally allocated variables */
 #undef RETURN
 #define RETURN(status) \
-{ \
+do { \
     if (pmap.pixelindex) XpmFree(pmap.pixelindex); \
     if (pmap.pixels) XpmFree(pmap.pixels); \
     if (colorTable) xpmFreeColorTable(colorTable, pmap.ncolors); \
     return(status); \
-}
+} while(0)
 
 /*
  * This function scans the given image and stores the found informations in
@@ -226,15 +228,15 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
     else
 	cpp = 0;
 
-    if ((height > 0 && width >= SIZE_MAX / height) ||
-	width * height >= SIZE_MAX / sizeof(unsigned int))
+    if ((height > 0 && width >= UINT_MAX / height) ||
+	width * height >= UINT_MAX / sizeof(unsigned int))
 	RETURN(XpmNoMemory);
     pmap.pixelindex =
 	(unsigned int *) XpmCalloc(width * height, sizeof(unsigned int));
     if (!pmap.pixelindex)
 	RETURN(XpmNoMemory);
 
-    if (pmap.size >= SIZE_MAX / sizeof(Pixel)) 
+    if (pmap.size >= UINT_MAX / sizeof(Pixel)) 
 	RETURN(XpmNoMemory);
 
     pmap.pixels = (Pixel *) XpmMalloc(sizeof(Pixel) * pmap.size);
@@ -291,7 +293,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
      * get rgb values and a string of char, and possibly a name for each
      * color
      */
-    if (pmap.ncolors >= SIZE_MAX / sizeof(XpmColor))
+    if (pmap.ncolors >= UINT_MAX / sizeof(XpmColor))
 	RETURN(XpmNoMemory);
     colorTable = (XpmColor *) XpmCalloc(pmap.ncolors, sizeof(XpmColor));
     if (!colorTable)
@@ -340,7 +342,7 @@ ScanTransparentColor(color, cpp, attributes)
 
     /* first get a character string */
     a = 0;
-    if (cpp >= SIZE_MAX - 1)
+    if (cpp >= UINT_MAX - 1)
 	return (XpmNoMemory);
     if (!(s = color->string = (char *) XpmMalloc(cpp + 1)))
 	return (XpmNoMemory);
@@ -433,7 +435,7 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
     }
 
     /* first get character strings and rgb values */
-    if (ncolors >= SIZE_MAX / sizeof(XColor) || cpp >= SIZE_MAX - 1)
+    if (ncolors >= UINT_MAX / sizeof(XColor) || cpp >= UINT_MAX - 1)
 	return (XpmNoMemory);
     xcolors = (XColor *) XpmMalloc(sizeof(XColor) * ncolors);
     if (!xcolors)
@@ -590,7 +592,7 @@ GetImagePixels(image, width, height, pmap)
     char *dst;
     unsigned int *iptr;
     char *data;
-    int x, y, i;
+    unsigned int x, y, i;
     int bits, depth, ibu, ibpp, offset;
     unsigned long lbt;
     Pixel pixel, px;
@@ -692,7 +694,7 @@ GetImagePixels32(image, width, height, pmap)
     unsigned char *addr;
     unsigned char *data;
     unsigned int *iptr;
-    int x, y;
+    unsigned int x, y;
     unsigned long lbt;
     Pixel pixel;
     int depth;
@@ -757,7 +759,7 @@ GetImagePixels16(image, width, height, pmap)
     unsigned char *addr;
     unsigned char *data;
     unsigned int *iptr;
-    int x, y;
+    unsigned int x, y;
     unsigned long lbt;
     Pixel pixel;
     int depth;
@@ -802,7 +804,7 @@ GetImagePixels8(image, width, height, pmap)
 {
     unsigned int *iptr;
     unsigned char *data;
-    int x, y;
+    unsigned int x, y;
     unsigned long lbt;
     Pixel pixel;
     int depth;
@@ -835,7 +837,7 @@ GetImagePixels1(image, width, height, pmap, storeFunc)
     int (*storeFunc) ();
 {
     unsigned int *iptr;
-    int x, y;
+    unsigned int x, y;
     char *data;
     Pixel pixel;
     int xoff, yoff, offset, bpl;

@@ -108,8 +108,10 @@ extern "C" {
  * lets try to solve include files
  */
 
+#include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <X11/Xmd.h>
 /* stdio.h doesn't declare popen on a Sequent DYNIX OS */
 #ifdef sequent
@@ -178,18 +180,6 @@ extern FILE *popen();
 #define XpmRealloc(ptr, size) boundCheckingRealloc((ptr),(long)(size))
 #define XpmCalloc(nelem, elsize) \
 		boundCheckingCalloc((long)(nelem),(long) (elsize))
-#endif
-
-#if defined(SCO) || defined(__USLC__)
-#include <stdint.h>	/* For SIZE_MAX */
-#endif
-#include <limits.h>
-#ifndef SIZE_MAX
-# ifdef ULONG_MAX
-#  define SIZE_MAX ULONG_MAX
-# else 
-#  define SIZE_MAX UINT_MAX
-# endif
 #endif
 
 #define XPMMAXCMTLEN BUFSIZ

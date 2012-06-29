@@ -1497,13 +1497,13 @@ Redisplay(
  		 to do the stipple manually, since copyarea doesn't */
  	      if (pix_use == Pix(lw)) {
  		  /* need fill stipple, not opaque */
- 		  XSetFillStyle(XtDisplay(lw), gc, FillStippled);
- 		  XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
+ 		  XSetFillStyle(XtDisplay(lw), lp->normal_GC, FillStippled);
+ 		  XFillRectangle(XtDisplay(lw), XtWindow(lw), lp->normal_GC,
 			lp->TextRect.x + lp->PixmapRect.x,
 			lp->TextRect.y + lp->PixmapRect.y,
  			lp->PixmapRect.width,
 			lp->PixmapRect.height);
- 		  XSetFillStyle(XtDisplay(lw), gc, FillOpaqueStippled);
+ 		  XSetFillStyle(XtDisplay(lw), lp->normal_GC, FillOpaqueStippled);
  	      }
 	    }
 	}

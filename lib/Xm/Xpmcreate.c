@@ -44,6 +44,8 @@
 #endif
 
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #include "XpmI.h"
 #include <ctype.h>
 
@@ -565,7 +567,7 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
 	     */
 	} else {
 #endif
-	    int i;
+	    unsigned int i;
 
 	    ncols = visual->map_entries;
 	    cols = (XColor *) XpmCalloc(ncols, sizeof(XColor));
@@ -723,7 +725,7 @@ FreeColors(display, colormap, pixels, n, closure)
 /* function call in case of error, frees only locally allocated variables */
 #undef RETURN
 #define RETURN(status) \
-{ \
+do { \
     if (ximage) XDestroyImage(ximage); \
     if (shapeimage) XDestroyImage(shapeimage); \
     if (image_pixels) XpmFree(image_pixels); \
@@ -733,7 +735,7 @@ FreeColors(display, colormap, pixels, n, closure)
     if (alloc_pixels) XpmFree(alloc_pixels); \
     if (used_pixels) XpmFree(used_pixels); \
     return (status); \
-}
+} while(0)
 
 int
 XpmCreateImageFromXpmImage(display, image,
@@ -804,7 +806,7 @@ XpmCreateImageFromXpmImage(display, image,
 
     ErrorStatus = XpmSuccess;
 
-    if (image->ncolors >= SIZE_MAX / sizeof(Pixel)) 
+    if (image->ncolors >= UINT_MAX / sizeof(Pixel)) 
 	return (XpmNoMemory);
 
     /* malloc pixels index tables */
@@ -950,8 +952,12 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
 	return (XpmNoMemory);
 
 #ifndef FOR_MSW
-    if (height != 0 && (*image_return)->bytes_per_line >= SIZE_MAX / height)
+    if (height != 0 && (*image_return)->bytes_per_line >= INT_MAX / height) {
+  	XDestroyImage(*image_return);
         return (XpmNoMemory);
+    }
+    if((*image_return)->bytes_per_line == 0 ||  height == 0)
+        return XpmNoMemory;
     /* now that bytes_per_line must have been set properly alloc data */
     (*image_return)->data =
 	(char *) XpmMalloc((*image_return)->bytes_per_line * height);
@@ -980,7 +986,7 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
 LFUNC(_putbits, void, (register char *src, int dstoffset,
 		       register int numbits, register char *dst));
 
-LFUNC(_XReverse_Bytes, int, (register unsigned char *bpt, register int nb));
+LFUNC(_XReverse_Bytes, int, (register unsigned char *bpt, register unsigned int nb));
 
 static unsigned char Const _reverse_byte[0x100] = {
     0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
@@ -1020,12 +1026,12 @@ static unsigned char Const _reverse_byte[0x100] = {
 static int
 _XReverse_Bytes(bpt, nb)
     register unsigned char *bpt;
-    register int nb;
+    register unsigned int nb;
 {
     do {
 	*bpt = _reverse_byte[*bpt];
 	bpt++;
-    } while (--nb > 0);
+    } while (--nb > 0); /* is nb user-controled? */
     return 0;
 }
 
@@ -1164,7 +1170,7 @@ PutImagePixels(image, width, height, pixelindex, pixels)
     register char *src;
     register char *dst;
     register unsigned int *iptr;
-    register int x, y, i;
+    register unsigned int x, y, i;
     register char *data;
     Pixel pixel, px;
     int nbytes, depth, ibu, ibpp;
@@ -1174,8 +1180,8 @@ PutImagePixels(image, width, height, pixelindex, pixels)
     depth = image->depth;
     if (depth == 1) {
 	ibu = image->bitmap_unit;
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++, iptr++) {
+	for (y = 0; y < height; y++) /* how can we trust height */
+	    for (x = 0; x < width; x++, iptr++) { /* how can we trust width */
 		pixel = pixels[*iptr];
 		for (i = 0, px = pixel; i < sizeof(unsigned long);
 		     i++, px >>= 8)
@@ -1250,12 +1256,12 @@ PutImagePixels32(image, width, height, pixelindex, pixels)
 {
     unsigned char *data;
     unsigned int *iptr;
-    int y;
+    unsigned int y;
     Pixel pixel;
 
 #ifdef WITHOUT_SPEEDUPS
 
-    int x;
+    unsigned int x;
     unsigned char *addr;
 
     data = (unsigned char *) image->data;
@@ -1292,7 +1298,7 @@ PutImagePixels32(image, width, height, pixelindex, pixels)
 
 #else  /* WITHOUT_SPEEDUPS */
 
-    int bpl = image->bytes_per_line;
+    unsigned int bpl = image->bytes_per_line;
     unsigned char *data_ptr, *max_data;
 
     data = (unsigned char *) image->data;
@@ -1360,11 +1366,11 @@ PutImagePixels16(image, width, height, pixelindex, pixels)
 {
     unsigned char *data;
     unsigned int *iptr;
-    int y;
+    unsigned int y;
 
 #ifdef WITHOUT_SPEEDUPS
 
-    int x;
+    unsigned int x;
     unsigned char *addr;
 
     data = (unsigned char *) image->data;
@@ -1388,7 +1394,7 @@ PutImagePixels16(image, width, height, pixelindex, pixels)
 
     Pixel pixel;
 
-    int bpl = image->bytes_per_line;
+    unsigned int bpl = image->bytes_per_line;
     unsigned char *data_ptr, *max_data;
 
     data = (unsigned char *) image->data;
@@ -1441,11 +1447,11 @@ PutImagePixels8(image, width, height, pixelindex, pixels)
 {
     char *data;
     unsigned int *iptr;
-    int y;
+    unsigned int y;
 
 #ifdef WITHOUT_SPEEDUPS
 
-    int x;
+    unsigned int x;
 
     data = image->data;
     iptr = pixelindex;
@@ -1455,7 +1461,7 @@ PutImagePixels8(image, width, height, pixelindex, pixels)
 
 #else  /* WITHOUT_SPEEDUPS */
 
-    int bpl = image->bytes_per_line;
+    unsigned int bpl = image->bytes_per_line;
     char *data_ptr, *max_data;
 
     data = image->data;
@@ -1490,12 +1496,12 @@ PutImagePixels1(image, width, height, pixelindex, pixels)
 	PutImagePixels(image, width, height, pixelindex, pixels);
     else {
 	unsigned int *iptr;
-	int y;
+	unsigned int y;
 	char *data;
 
 #ifdef WITHOUT_SPEEDUPS
 
-	int x;
+	unsigned int x;
 
 	data = image->data;
 	iptr = pixelindex;
@@ -1673,6 +1679,9 @@ PutPixel1(ximage, x, y, pixel)
     Pixel px;
     int nbytes;
 
+    if(x < 0 || y < 0)
+    	return 0;
+
     for (i=0, px=pixel; i<sizeof(unsigned long); i++, px>>=8)
 	((unsigned char *)&pixel)[i] = px;
     src = &ximage->data[XYINDEX(x, y, ximage)];
@@ -1704,7 +1713,10 @@ PutPixel(ximage, x, y, pixel)
     register int i;
     register char *data;
     Pixel px;
-    int nbytes, ibpp;
+    unsigned int nbytes, ibpp;
+
+    if(x < 0 || y < 0)
+    	return 0;
 
     ibpp = ximage->bits_per_pixel;
     if (ximage->depth == 4)
@@ -1737,6 +1749,9 @@ PutPixel32(ximage, x, y, pixel)
 {
     unsigned char *addr;
 
+    if(x < 0 || y < 0)
+    	return 0;
+
     addr = &((unsigned char *)ximage->data) [ZINDEX32(x, y, ximage)];
     *((unsigned long *)addr) = pixel;
     return 1;
@@ -1750,6 +1765,9 @@ PutPixel32MSB(ximage, x, y, pixel)
     unsigned long pixel;
 {
     unsigned char *addr;
+
+    if(x < 0 || y < 0)
+    	return 0;
 
     addr = &((unsigned char *)ximage->data) [ZINDEX32(x, y, ximage)];
     addr[0] = pixel >> 24;
@@ -1768,6 +1786,9 @@ PutPixel32LSB(ximage, x, y, pixel)
 {
     unsigned char *addr;
 
+    if(x < 0 || y < 0)
+    	return 0;
+
     addr = &((unsigned char *)ximage->data) [ZINDEX32(x, y, ximage)];
     addr[3] = pixel >> 24;
     addr[2] = pixel >> 16;
@@ -1785,6 +1806,9 @@ PutPixel16MSB(ximage, x, y, pixel)
 {
     unsigned char *addr;
     
+    if(x < 0 || y < 0)
+    	return 0;
+
     addr = &((unsigned char *)ximage->data) [ZINDEX16(x, y, ximage)];
     addr[0] = pixel >> 8;
     addr[1] = pixel;
@@ -1800,6 +1824,9 @@ PutPixel16LSB(ximage, x, y, pixel)
 {
     unsigned char *addr;
     
+    if(x < 0 || y < 0)
+    	return 0;
+
     addr = &((unsigned char *)ximage->data) [ZINDEX16(x, y, ximage)];
     addr[1] = pixel >> 8;
     addr[0] = pixel;
@@ -1813,6 +1840,9 @@ PutPixel8(ximage, x, y, pixel)
     int y;
     unsigned long pixel;
 {
+    if(x < 0 || y < 0)
+    	return 0;
+
     ximage->data[ZINDEX8(x, y, ximage)] = pixel;
     return 1;
 }
@@ -1824,6 +1854,9 @@ PutPixel1MSB(ximage, x, y, pixel)
     int y;
     unsigned long pixel;
 {
+    if(x < 0 || y < 0)
+    	return 0;
+
     if (pixel & 1)
 	ximage->data[ZINDEX1(x, y, ximage)] |= 0x80 >> (x & 7);
     else
@@ -1838,6 +1871,9 @@ PutPixel1LSB(ximage, x, y, pixel)
     int y;
     unsigned long pixel;
 {
+    if(x < 0 || y < 0)
+    	return 0;
+
     if (pixel & 1)
 	ximage->data[ZINDEX1(x, y, ximage)] |= 1 << (x & 7);
     else
@@ -1997,8 +2033,8 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	xpmGetCmt(data, &colors_cmt);
 
     /* malloc pixels index tables */
-    if (ncolors >= SIZE_MAX / sizeof(Pixel)) 
-	return XpmNoMemory;
+    if (ncolors >= UINT_MAX / sizeof(Pixel)) 
+      RETURN (XpmNoMemory);
 
     image_pixels = (Pixel *) XpmMalloc(sizeof(Pixel) * ncolors);
     if (!image_pixels)
@@ -2258,11 +2294,11 @@ if (cidx[f]) XpmFree(cidx[f]);}
 
 	    /* array of pointers malloced by need */
 	    unsigned short *cidx[256];
-	    int char1;
+	    unsigned int char1;
 
 	    bzero((char *)cidx, 256 * sizeof(unsigned short *)); /* init */
 	    for (a = 0; a < ncolors; a++) {
-		char1 = colorTable[a].string[0];
+		char1 = (unsigned char) colorTable[a].string[0];
 		if (cidx[char1] == NULL) { /* get new memory */
 		    cidx[char1] = (unsigned short *)
 			XpmCalloc(256, sizeof(unsigned short));

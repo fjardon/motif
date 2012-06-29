@@ -38,13 +38,16 @@
 #endif
 
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #include "XpmI.h"
 
 LFUNC(CreateColors, int, (char **dataptr, unsigned int *data_size,
 			  XpmColor *colors, unsigned int ncolors,
 			  unsigned int cpp));
 
-LFUNC(CreatePixels, void, (char **dataptr, unsigned int width,
+LFUNC(CreatePixels, void, (char **dataptr, unsigned int data_size,
+			   unsigned int width,
 			   unsigned int height, unsigned int cpp,
 			   unsigned int *pixels, XpmColor *colors));
 
@@ -52,7 +55,8 @@ LFUNC(CountExtensions, void, (XpmExtension *ext, unsigned int num,
 			      unsigned int *ext_size,
 			      unsigned int *ext_nlines));
 
-LFUNC(CreateExtensions, void, (char **dataptr, unsigned int offset,
+LFUNC(CreateExtensions, void, (char **dataptr, unsigned int data_size,
+			       unsigned int offset,
 			       XpmExtension *ext, unsigned int num,
 			       unsigned int ext_nlines));
 
@@ -93,7 +97,7 @@ XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
 
 #undef RETURN
 #define RETURN(status) \
-{ \
+do { \
     if (header) { \
 	for (l = 0; l < header_nlines; l++) \
 	    if (header[l]) \
@@ -101,7 +105,7 @@ XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
 		XpmFree(header); \
     } \
     return(status); \
-}
+} while(0)
 
 int
 XpmCreateDataFromXpmImage(data_return, image, info)
@@ -133,8 +137,11 @@ XpmCreateDataFromXpmImage(data_return, image, info)
      * is the hints line + the color table lines
      */
     header_nlines = 1 + image->ncolors;
+    if(header_nlines <= image->ncolors ||
+       header_nlines >= UINT_MAX / sizeof(char *))
+      return(XpmNoMemory);
     header_size = sizeof(char *) * header_nlines;
-    if (header_size >= SIZE_MAX / sizeof(char *))
+    if (header_size >= UINT_MAX / sizeof(char *))
 	return (XpmNoMemory);
     header = (char **) XpmCalloc(header_size, sizeof(char *));
     if (!header)
@@ -180,8 +187,22 @@ XpmCreateDataFromXpmImage(data_return, image, info)
 
     /* now we know the size needed, alloc the data and copy the header lines */
     offset = image->width * image->cpp + 1;
-    data_size = header_size + (image->height + ext_nlines) * sizeof(char *)
-	+ image->height * offset + ext_size;
+
+    if(offset <= image->width || offset <= image->cpp)
+	RETURN(XpmNoMemory);
+
+    if( (image->height + ext_nlines) >= UINT_MAX / sizeof(char *))
+	RETURN(XpmNoMemory);
+    data_size = (image->height + ext_nlines) * sizeof(char *);
+
+    if (image->height > UINT_MAX / offset ||
+        image->height * offset > UINT_MAX - data_size)
+	RETURN(XpmNoMemory);
+    data_size += image->height * offset;
+
+    if( (header_size + ext_size) >= (UINT_MAX - data_size) )
+	RETURN(XpmNoMemory);
+    data_size += header_size + ext_size;
 
     data = (char **) XpmMalloc(data_size);
     if (!data)
@@ -189,8 +210,10 @@ XpmCreateDataFromXpmImage(data_return, image, info)
 
     data_nlines = header_nlines + image->height + ext_nlines;
     *data = (char *) (data + data_nlines);
+
+    /* can header have less elements then n suggests? */
     n = image->ncolors;
-    for (l = 0, sptr = data, sptr2 = header; l <= n; l++, sptr++, sptr2++) {
+    for (l = 0, sptr = data, sptr2 = header; l <= n && sptr && sptr2; l++, sptr++, sptr2++) {
 	strcpy(*sptr, *sptr2);
 	*(sptr + 1) = *sptr + strlen(*sptr2) + 1;
     }
@@ -199,12 +222,13 @@ XpmCreateDataFromXpmImage(data_return, image, info)
     data[header_nlines] = (char *) data + header_size
 	+ (image->height + ext_nlines) * sizeof(char *);
 
-    CreatePixels(data + header_nlines, image->width, image->height,
+    CreatePixels(data + header_nlines, data_size-header_nlines, image->width, image->height,
 		 image->cpp, image->data, image->colorTable);
 
     /* print extensions */
     if (extensions)
-	CreateExtensions(data + header_nlines + image->height - 1, offset,
+	CreateExtensions(data + header_nlines + image->height - 1,
+			 data_size - header_nlines - image->height + 1, offset,
 			 info->extensions, info->nextensions,
 			 ext_nlines);
 
@@ -226,23 +250,31 @@ CreateColors(dataptr, data_size, colors, ncolors, cpp)
     char *s, *s2;
     char **defaults;
 
+    /* can ncolors be trusted here? */
     for (a = 0; a < ncolors; a++, colors++, dataptr++) {
 
 	defaults = (char **) colors;
+ 	if(sizeof(buf) <= cpp)
+	    return(XpmNoMemory);
 	strncpy(buf, *defaults++, cpp);
 	s = buf + cpp;
 
+ 	if(sizeof(buf) <= (s-buf))
+	    return XpmNoMemory;
+ 
 	for (key = 1; key <= NKEYS; key++, defaults++) {
 	    if ((s2 = *defaults)) {
 #ifndef VOID_SPRINTF
 		s +=
 #endif
-		sprintf(s, "\t%s %s", xpmColorKeys[key - 1], s2);
+		/* assume C99 compliance */
+		snprintf(s, sizeof(buf)-(s-buf), "\t%s %s", xpmColorKeys[key - 1], s2);
 #ifdef VOID_SPRINTF
 		s += strlen(s);
 #endif
 	    }
 	}
+ 	/* what about using strdup()? */
 	l = s - buf + 1;
 	s = (char *) XpmMalloc(l);
 	if (!s)
@@ -254,8 +286,9 @@ CreateColors(dataptr, data_size, colors, ncolors, cpp)
 }
 
 static void
-CreatePixels(dataptr, width, height, cpp, pixels, colors)
+CreatePixels(dataptr, data_size, width, height, cpp, pixels, colors)
     char **dataptr;
+    unsigned int data_size;
     unsigned int width;
     unsigned int height;
     unsigned int cpp;
@@ -265,21 +298,38 @@ CreatePixels(dataptr, width, height, cpp, pixels, colors)
     char *s;
     unsigned int x, y, h, offset;
 
+    if(height <= 1)
+    	return;
+
     h = height - 1;
+
     offset = width * cpp + 1;
+
+    if(offset <= width || offset <= cpp)
+    	return;
+
+    /* why trust h? */
     for (y = 0; y < h; y++, dataptr++) {
 	s = *dataptr;
+	/* why trust width? */
 	for (x = 0; x < width; x++, pixels++) {
-	    strncpy(s, colors[*pixels].string, cpp);
+	    if(cpp > (data_size - (s - *dataptr)))
+	    	return;
+	    strncpy(s, colors[*pixels].string, cpp); /* why trust pixel? */
 	    s += cpp;
 	}
 	*s = '\0';
+	if(offset > data_size)
+		return;
 	*(dataptr + 1) = *dataptr + offset;
     }
     /* duplicate some code to avoid a test in the loop */
     s = *dataptr;
+    /* why trust width? */
     for (x = 0; x < width; x++, pixels++) {
-	strncpy(s, colors[*pixels].string, cpp);
+	if(cpp > data_size - (s - *dataptr))
+	    	return;
+	strncpy(s, colors[*pixels].string, cpp); /* why should we trust *pixel? */
 	s += cpp;
     }
     *s = '\0';
@@ -312,8 +362,9 @@ CountExtensions(ext, num, ext_size, ext_nlines)
 }
 
 static void
-CreateExtensions(dataptr, offset, ext, num, ext_nlines)
+CreateExtensions(dataptr, data_size, offset, ext, num, ext_nlines)
     char **dataptr;
+    unsigned int data_size;
     unsigned int offset;
     XpmExtension *ext;
     unsigned int num;
@@ -326,12 +377,12 @@ CreateExtensions(dataptr, offset, ext, num, ext_nlines)
     dataptr++;
     a = 0;
     for (x = 0; x < num; x++, ext++) {
-	sprintf(*dataptr, "XPMEXT %s", ext->name);
+	snprintf(*dataptr, data_size, "XPMEXT %s", ext->name);
 	a++;
 	if (a < ext_nlines)
 	    *(dataptr + 1) = *dataptr + strlen(ext->name) + 8;
 	dataptr++;
-	b = ext->nlines;
+	b = ext->nlines; /* can we trust these values? */
 	for (y = 0, line = ext->lines; y < b; y++, line++) {
 	    strcpy(*dataptr, *line);
 	    a++;

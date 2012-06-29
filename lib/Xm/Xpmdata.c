@@ -33,6 +33,8 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 /* Official version number */
 static char *RCS_Version = "$XpmVersion: 3.4i $";
 
@@ -279,7 +281,7 @@ xpmNextWord(mdata, buf, buflen)
 	}
 	ungetc(c, file);
     }
-    return (n);
+    return (n); /* this returns bytes read + 1 */
 }
 
 /*
@@ -376,8 +378,9 @@ xpmGetCmt(mdata, cmt)
 {
     if (!mdata->type)
 	*cmt = NULL;
-    else if (mdata->CommentLength != 0 && mdata->CommentLength < SIZE_MAX - 1) {
-	*cmt = (char *) XpmMalloc(mdata->CommentLength + 1);
+    else if (mdata->CommentLength != 0 && mdata->CommentLength < UINT_MAX - 1) {
+        if( (*cmt = (char *) XpmMalloc(mdata->CommentLength + 1)) == NULL)
+	    return XpmNoMemory;
 	strncpy(*cmt, mdata->Comment, mdata->CommentLength);
 	(*cmt)[mdata->CommentLength] = '\0';
 	mdata->CommentLength = 0;
@@ -405,7 +408,7 @@ int
 xpmParseHeader(mdata)
     xpmData *mdata;
 {
-    char buf[BUFSIZ];
+    char buf[BUFSIZ+1] = {0};
     int l, n = 0;
 
     if (mdata->type) {

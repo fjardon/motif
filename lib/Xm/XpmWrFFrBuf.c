@@ -38,6 +38,8 @@
 #endif
 
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #include "XpmI.h"
 
 int
@@ -55,7 +57,7 @@ XpmWriteFileFromBuffer(filename, buffer)
     fcheck = fwrite(buffer, len, 1, fp);
     fclose(fp);
     if (fcheck != 1)
-	return XpmOpenFailed;
+	return XpmOpenFailed; /* maybe use a better return value */
 
     return XpmSuccess;
 }

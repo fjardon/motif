@@ -7,6 +7,8 @@
 #include "XmI.h"
 #include "MessagesI.h"
 #include <Xm/MultiListP.h>
+#include <Xm/Ext18List.h>
+#include <Xm/Ext18ListP.h>
 #include <Xm/Frame.h>
 #include <Xm/Label.h>
 #include <Xm/PushB.h>

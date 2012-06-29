@@ -44,26 +44,28 @@
 #endif
 
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #include "XpmI.h"
 #include <ctype.h>
 #include <string.h>
  
 #ifdef HAS_STRLCAT
-# define STRLCAT(dst, src, dstsize) { \
+# define STRLCAT(dst, src, dstsize) do { \
        if (strlcat(dst, src, dstsize) >= (dstsize)) \
-           return (XpmFileInvalid); }
-# define STRLCPY(dst, src, dstsize) { \
+           return (XpmFileInvalid); } while(0)
+# define STRLCPY(dst, src, dstsize) do { \
        if (strlcpy(dst, src, dstsize) >= (dstsize)) \
-           return (XpmFileInvalid); }
+           return (XpmFileInvalid); } while(0)
 #else
-# define STRLCAT(dst, src, dstsize) { \
+# define STRLCAT(dst, src, dstsize) do { \
        if ((strlen(dst) + strlen(src)) < (dstsize)) \
            strcat(dst, src); \
-       else return (XpmFileInvalid); }
-# define STRLCPY(dst, src, dstsize) { \
+       else return (XpmFileInvalid); } while(0)
+# define STRLCPY(dst, src, dstsize) do { \
        if (strlen(src) < (dstsize)) \
            strcpy(dst, src); \
-       else return (XpmFileInvalid); }
+       else return (XpmFileInvalid); } while(0)
 #endif
 
 LFUNC(ParsePixels, int, (xpmData *data, unsigned int width,
@@ -83,14 +85,14 @@ char *xpmColorKeys[] = {
 /* function call in case of error, frees only locally allocated variables */
 #undef RETURN
 #define RETURN(status) \
-{ \
+do { \
     if (colorTable) xpmFreeColorTable(colorTable, ncolors); \
     if (pixelindex) XpmFree(pixelindex); \
     if (hints_cmt)  XpmFree(hints_cmt); \
     if (colors_cmt) XpmFree(colors_cmt); \
     if (pixels_cmt) XpmFree(pixels_cmt); \
     return(status); \
-}
+} while(0)
 
 /*
  * This function parses an Xpm file or data and store the found informations
@@ -354,7 +356,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     char **defaults;
     int ErrorStatus;
 
-    if (ncolors >= SIZE_MAX / sizeof(XpmColor))
+    if (ncolors >= UINT_MAX / sizeof(XpmColor))
         return (XpmNoMemory);
     colorTable = (XpmColor *) XpmCalloc(ncolors, sizeof(XpmColor));
     if (!colorTable)
@@ -367,7 +369,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    /*
 	     * read pixel value
 	     */
-	    if (cpp >= SIZE_MAX - 1) {
+	    if (cpp >= UINT_MAX - 1) {
 	        xpmFreeColorTable(colorTable, ncolors);
 		return (XpmNoMemory);
 	    }
@@ -426,9 +428,9 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 			return (XpmFileInvalid);
 		    }
 		    if (!lastwaskey)
-		        STRLCAT(curbuf, " ", sizeof(curbuf)); /* append space */
+		        STRLCAT(curbuf, " ", sizeof(curbuf));/* append space */
 		    buf[l] = '\0';
-		    STRLCAT(curbuf, buf, sizeof(curbuf));/* append buf */
+		    STRLCAT(curbuf, buf, sizeof(curbuf)); /* append buf */
 		    lastwaskey = 0;
 		}
 	    }
@@ -436,7 +438,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 		xpmFreeColorTable(colorTable, ncolors);
 		return (XpmFileInvalid);
 	    }
-	    len = strlen(curbuf) + 1;
+	    len = strlen(curbuf) + 1; /* integer overflow just theoretically possible */
 	    s = defaults[curkey] = (char *) XpmMalloc(len);
 	    if (!s) {
 		xpmFreeColorTable(colorTable, ncolors);
@@ -455,7 +457,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    /*
 	     * read pixel value
 	     */
-	    if (cpp >= SIZE_MAX - 1) {
+	    if (cpp >= UINT_MAX - 1) {
 	        xpmFreeColorTable(colorTable, ncolors);
 		return (XpmNoMemory);
 	    }
@@ -500,7 +502,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
 	    memcpy(s, curbuf, len);
 	    color->c_color = s;
 	    *curbuf = '\0';		/* reset curbuf */
-	    if (a < ncolors - 1)
+	    if (a < ncolors - 1)	/* can we trust ncolors -> leave data's bounds */
 		xpmNextString(data);	/* get to the next string */
 	}
     }
@@ -519,11 +521,11 @@ ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
     xpmHashTable *hashtable;
     unsigned int **pixels;
 {
-    unsigned int *iptr, *iptr2;
+    unsigned int *iptr, *iptr2 = NULL; /* found by Egbert Eich */
     unsigned int a, x, y;
 
-    if ((height > 0 && width >= SIZE_MAX / height) ||
-	width * height >= SIZE_MAX / sizeof(unsigned int)) 
+    if ((height > 0 && width >= UINT_MAX / height) ||
+	width * height >= UINT_MAX / sizeof(unsigned int)) 
         return XpmNoMemory;
 #ifndef FOR_MSW
     iptr2 = (unsigned int *) XpmMalloc(sizeof(unsigned int) * width * height);
@@ -548,8 +550,10 @@ ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
 	{
 	    unsigned short colidx[256];
 
-	    if (ncolors > 256)
+	    if (ncolors > 256) {
+ 		XpmFree(iptr2); /* found by Egbert Eich */
 	        return (XpmFileInvalid);
+	    }
 
 	    bzero((char *)colidx, 256 * sizeof(short));
 	    for (a = 0; a < ncolors; a++)
@@ -576,16 +580,20 @@ ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
 	{
 
 /* free all allocated pointers at all exits */
-#define FREE_CIDX {int f; for (f = 0; f < 256; f++) \
-if (cidx[f]) XpmFree(cidx[f]);}
+#define FREE_CIDX \
+do \
+{ \
+	int f; for (f = 0; f < 256; f++) \
+	if (cidx[f]) XpmFree(cidx[f]); \
+} while(0)
 
 	    /* array of pointers malloced by need */
 	    unsigned short *cidx[256];
-	    int char1;
+	    unsigned int char1;
 
 	    bzero((char *)cidx, 256 * sizeof(unsigned short *)); /* init */
 	    for (a = 0; a < ncolors; a++) {
-		char1 = colorTable[a].string[0];
+		char1 = (unsigned char) colorTable[a].string[0];
 		if (cidx[char1] == NULL) { /* get new memory */
 		    cidx[char1] = (unsigned short *)
 			XpmCalloc(256, sizeof(unsigned short));
@@ -628,8 +636,10 @@ if (cidx[f]) XpmFree(cidx[f]);}
 	    char *s;
 	    char buf[BUFSIZ];
 
-	    if (cpp >= sizeof(buf))
+	    if (cpp >= sizeof(buf)) {
+ 		XpmFree(iptr2); /* found by Egbert Eich */
 	        return (XpmFileInvalid);
+	    }
 
 	    buf[cpp] = '\0';
 	    if (USE_HASHTABLE) {
@@ -639,7 +649,7 @@ if (cidx[f]) XpmFree(cidx[f]);}
 		    xpmNextString(data);
 		    for (x = 0; x < width; x++, iptr++) {
 			for (a = 0, s = buf; a < cpp; a++, s++)
-			    *s = xpmGetC(data);
+			    *s = xpmGetC(data); /* int assigned to char, not a problem here */
 			slot = xpmHashSlot(hashtable, buf);
 			if (!*slot) {	/* no color matches */
 			    XpmFree(iptr2);
@@ -653,7 +663,7 @@ if (cidx[f]) XpmFree(cidx[f]);}
 		    xpmNextString(data);
 		    for (x = 0; x < width; x++, iptr++) {
 			for (a = 0, s = buf; a < cpp; a++, s++)
-			    *s = xpmGetC(data);
+			    *s = xpmGetC(data); /* int assigned to char, not a problem here */
 			for (a = 0; a < ncolors; a++)
 			    if (!strcmp(colorTable[a].string, buf))
 				break;
@@ -708,7 +718,7 @@ xpmParseExtensions(data, extensions, nextensions)
     while (!notstart && notend) {
 	/* there starts an extension */
 	ext = (XpmExtension *)
-	    XpmRealloc(exts, (num + 1) * sizeof(XpmExtension));
+	    XpmRealloc(exts, (num + 1) * sizeof(XpmExtension)); /* can the loop be forced to iterate often enough to make "(num + 1) * sizeof(XpmExtension)" wrapping? */
 	if (!ext) {
 	    XpmFree(string);
 	    XpmFreeExtensions(exts, num);
@@ -745,7 +755,7 @@ xpmParseExtensions(data, extensions, nextensions)
 	while ((notstart = strncmp("XPMEXT", string, 6))
 	       && (notend = strncmp("XPMENDEXT", string, 9))) {
 	    sp = (char **)
-		XpmRealloc(ext->lines, (nlines + 1) * sizeof(char *));
+		XpmRealloc(ext->lines, (nlines + 1) * sizeof(char *)); /* can we iterate enough for a wrapping? */
 	    if (!sp) {
 		XpmFree(string);
 		ext->nlines = nlines;
