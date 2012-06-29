@@ -214,6 +214,7 @@ static XmConst Octet CTEXT_SET_JISX0208_0[] = "\033\044\050\102\033\044\051\102"
 static XmConst Octet CTEXT_SET_KSC5601_0[] = "\033\044\050\103\033\044\051\103";
 #define CTEXT_SET_KSC5601_0_LEN		sizeof(CTEXT_SET_KSC5601_0)-1
 
+#ifdef UTF8_SUPPORTED
 static XmConst char UTF8_NEWLINESTRING[] = "\012";
 #define UTF8_NEWLINESTRING_LEN		sizeof(UTF8_NEWLINESTRING)-1
 
@@ -225,6 +226,7 @@ static XmConst char UTF8_L_TO_R[] = "\342\200\216";
 
 static XmConst char UTF8_R_TO_L[] = "\342\200\217";
 #define UTF8_R_TO_L_LEN		sizeof(UTF8_R_TO_L)-1
+#endif /* UTF8_SUPPORTED */
 
 #define CTVERSION 1
 #define _IsValidC0(ctx, c)	(((c) == HT) || ((c) == NL) || ((ctx)->version > CTVERSION)) 
@@ -334,6 +336,7 @@ static Boolean processCharsetAndText(XmStringCharSet tag,
 				     OctetPtr	*outc,
 				     unsigned int	*outlen,
 				     ct_Charset	*prev);
+#ifdef UTF8_SUPPORTED
 static Boolean processCharsetAndTextUtf8(XmStringCharSet tag,
 				     OctetPtr	ctext,
 #if NeedWidePrototypes
@@ -344,6 +347,8 @@ static Boolean processCharsetAndTextUtf8(XmStringCharSet tag,
 				     OctetPtr	*outc,
 				     unsigned int	*outlen,
 				     ct_Charset	*prev);
+#endif
+
 static Boolean processESCHack( 
                         ct_context *ctx,
 #if NeedWidePrototypes
@@ -438,6 +443,7 @@ static OctetPtr ctextConcat(
                         const_OctetPtr str2,
                         unsigned int str2len) ;
 
+#ifdef UTF8_SUPPORTED
 static Boolean  cvtXmStringToUTF8String(
         XrmValue *from,
         XrmValue *to ) ;
@@ -452,6 +458,7 @@ static char* ConvertWithIconv(
         const char      *str,
         unsigned int    len,
         iconv_t converter);
+#endif
 
 /********    End Static Function Declarations    ********/
  
@@ -1984,6 +1991,7 @@ XmCvtXmStringToCT(
   return( (char *) to_val.addr) ;
   }
 
+#ifdef UTF8_SUPPORTED
 /************************************************************************
  *
  *  XmCvtXmStringToUTF8String
@@ -2016,6 +2024,7 @@ XmCvtXmStringToUTF8String(
     }
   return( (char *) to_val.addr) ;
   }
+#endif
 
 /***************************************************************************
  *                                                                       *
@@ -2046,6 +2055,7 @@ _XmCvtXmStringToCT(
     return (cvtXmStringToText( from, to ));
 }
 
+#ifdef UTF8_SUPPORTED
 /***************************************************************************
  *									   *
  * _XmCvtXmStringToUTF8String - public wrapper for the widgets to use.	   *
@@ -2059,6 +2069,7 @@ _XmCvtXmStringToUTF8String(
 {
     return (cvtXmStringToUTF8String( from, to ));
 }
+#endif
 
 /************************************************************************
  *
@@ -2091,8 +2102,8 @@ XmCvtXmStringToText(
     }
     return(ok);
 }
-  
 
+#ifdef UTF8_SUPPORTED
 /************************************************************************
  *
  *  cvtXmStringToUTF8String
@@ -2243,6 +2254,7 @@ cvtXmStringToUTF8String(
 
   return(True);
 }
+#endif
 
 /************************************************************************
  *
@@ -2406,6 +2418,7 @@ cvtXmStringToText(
   return(True);
 }
 
+#ifdef UTF8_SUPPORTED
 static Boolean
 processCharsetAndTextUtf8(XmStringCharSet tag,
 		      OctetPtr		ctext,
@@ -2502,6 +2515,8 @@ processCharsetAndTextUtf8(XmStringCharSet tag,
   }
   return(True);
 }
+#endif
+
 
 static Boolean
 processCharsetAndText(XmStringCharSet tag,
@@ -2761,6 +2776,7 @@ ctextConcat(
 	return(str1);
 }
 
+#ifdef UTF8_SUPPORTED
 char*
 Convert(const char     *str,
         unsigned int    len,  
@@ -2867,4 +2883,4 @@ again:
 
    return dest;
 }
-
+#endif
