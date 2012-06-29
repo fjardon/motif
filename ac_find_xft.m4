@@ -254,9 +254,9 @@ dnl
 dnl if test "$LT_HAVE_XRENDER" = "yes" -a "$LT_HAVE_FREETYPE" = "yes"
 dnl then
  	AC_DEFINE(USE_XFT, 1, This means we will be using the Xft library)
-CFLAGS="$CFLAGS `xft-config --cflags`"
+CFLAGS="$CFLAGS `pkg-config xft --cflags`"
 AC_SUBST(CFLAGS)
-LIBS="$LIBS `xft-config --libs`"
+LIBS="$LIBS `pkg-config xft --libs`"
 AC_SUBST(LIBS)
 
 dnl fi
