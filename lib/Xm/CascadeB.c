@@ -2074,6 +2074,11 @@ SetValues(
   menuSTrait = (XmMenuSystemTrait) 
     XmeTraitGet((XtPointer) XtClass(XtParent(cw)), XmQTmenuSystem);
 
+  if (old->primitive.foreground != new_w->primitive.foreground
+    || old->core.background_pixel != new_w->core.background_pixel) {
+      GetBackgroundGC(new_w);
+  }
+
   if ((CB_Submenu(new_w)) &&
       ((! XmIsRowColumn(CB_Submenu(new_w))) ||
        (RC_Type(CB_Submenu(new_w)) != XmMENU_PULLDOWN)))
