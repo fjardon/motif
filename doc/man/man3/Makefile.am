@@ -333,6 +333,7 @@ man_MANS = ApplicationShell.3 \
     XmOptionButtonGadget.3 \
     XmOptionLabelGadget.3 \
     XmOutline.3 \
+    XmPanedGetPanes.3 \
     XmPanedWindow.3 \
     XmParseMapping.3 \
     XmParseMappingCreate.3 \
