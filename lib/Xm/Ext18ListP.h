@@ -36,6 +36,7 @@
 #include <Xm/PrimitiveP.h>
 
 #include <Xm/MultiListP.h>
+#include <Xm/XmP.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -71,10 +72,10 @@ typedef XmMultiListPart XmExt18ListPart;
 
 typedef XmMultiListRec XmExt18ListRec;
 
-extern XmExt18ListClassRec xmExt18ListClassRec;
+extern XmExt18ListClassRec xmExt18ListClassRec XM_DEPRECATED;
 
 extern XmI18ListClassRec xiI18ListClassRec;
-extern WidgetClass xmI18ListWidgetClass; 
+extern WidgetClass xmI18ListWidgetClass;
 
 #if defined(__cplusplus)
 }

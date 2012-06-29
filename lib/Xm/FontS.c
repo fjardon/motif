@@ -36,7 +36,7 @@
 #include <Xm/Text.h>
 #include <Xm/ToggleB.h>
 #include <Xm/MenuShell.h>
-#include <Xm/ComboBox2.h>
+#include <Xm/DropDown.h>
 #include <Xm/ButtonBox.h>
 #include <Xm/ExtP.h>
 #include "Xm/XmI.h"

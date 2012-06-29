@@ -342,10 +342,8 @@ XmDropDownClassRec xmDropDownClassRec = {
       NULL                      /* extension          */
   }
 };
-#pragma weak xmCombinationBox2ClassRec=xmDropDownClassRec
 
 WidgetClass xmDropDownWidgetClass = (WidgetClass)&xmDropDownClassRec;
-#pragma weak xmCombinationBox2WidgetClass=xmDropDownWidgetClass
 
 /************************************************************
 *	STATIC CODE
@@ -2472,7 +2470,6 @@ XmDropDownGetValue(Widget w)
     _XmAppUnlock(app);    
     return ptr;
 }
-#pragma weak XmCombinationBox2GetValue=XmDropDownGetValue
 
 /*	Function Name: XmCreateDropDown
  *	Description: Creation Routine for UIL and ADA.
@@ -2489,7 +2486,6 @@ XmCreateDropDown(Widget parent, String name,
     return(XtCreateWidget(name, xmDropDownWidgetClass,
 			  parent, args, num_args));
 }
-#pragma weak XmCreateCombinationBox2=XmCreateDropDown
 
 Widget 
 XmVaCreateDropDown(
@@ -2514,7 +2510,6 @@ XmVaCreateDropDown(
     va_end(var);   
     return w;
 }
-#pragma weak XmVaCreateCombinationBox2=XmVaCreateDropDown
 
 Widget
 XmVaCreateManagedDropDown(
@@ -2538,7 +2533,6 @@ XmVaCreateManagedDropDown(
     va_end(var);   
     return w;
 }
-#pragma weak XmVaCreateManagedCombinationBox2=XmVaCreateManagedDropDown
 
 /*      Function Name:  XmDropDownGetLabel
  *      Description:    Returns the "label" child of the XmDropDown
@@ -2552,7 +2546,6 @@ Widget XmDropDownGetLabel(Widget w)
 	return NULL;
     return XmDropDown_label(w);
 }
-#pragma weak XmCombinationBox2GetLabel=XmDropDownGetLabel
 
 
 /*      Function Name:  XmDropDownGetArrow
@@ -2567,7 +2560,6 @@ Widget XmDropDownGetArrow(Widget w)
 	return NULL;
     return XmDropDown_arrow(w);
 }
-#pragma weak XmCombinationBox2GetArrow=XmDropDownGetArrow
 
 
 /*      Function Name:  XmDropDownGetText
@@ -2582,7 +2574,6 @@ Widget XmDropDownGetText(Widget w)
 	return NULL;
     return XmDropDown_text(w);
 }
-#pragma weak XmCombinationBox2GetText=XmDropDownGetText
 
 
 /*      Function Name:  XmDropDownGetList
@@ -2597,7 +2588,6 @@ Widget XmDropDownGetList(Widget w)
 	return NULL;
     return XtNameToWidget(w, "*list");
 }
-#pragma weak XmCombinationBox2GetList=XmDropDownGetList
 
 
 /*      Function Name:  XmDropDownGetChild
@@ -2637,5 +2627,16 @@ Widget XmDropDownGetChild(Widget w, int num)
     _XmAppUnlock(app);    
     return child;
 }
-#pragma weak XmCombinationBox2GetChild=XmDropDownGetChild
 
+/* aliases for deprecated functions of XmComboBox2 */
+extern WidgetClass xmCombinationBox2WidgetClass XM_ALIAS(xmDropDownWidgetClass);
+String XmCombinationBox2GetValue(Widget) XM_ALIAS(XmDropDownGetValue);
+Widget XmCreateCombinationBox2(Widget, char *, ArgList, Cardinal) XM_ALIAS(XmCreateDropDown);
+Widget XmVaCreateCombinationBox2(Widget, char *, ...) XM_ALIAS(XmVaCreateDropDown);
+Widget XmVaCreateManagedCombinationBox2(Widget, char *, ...) XM_ALIAS(XmVaCreateManagedDropDown);
+Widget XmCombinationBox2GetLabel(Widget) XM_ALIAS(XmDropDownGetLabel);
+Widget XmCombinationBox2GetArrow(Widget) XM_ALIAS(XmDropDownGetArrow);
+Widget XmCombinationBox2GetText(Widget) XM_ALIAS(XmDropDownGetText);
+Widget XmCombinationBox2GetList(Widget) XM_ALIAS(XmDropDownGetList);
+Widget XmCombinationBox2GetChild(Widget, int) XM_ALIAS(XmDropDownGetChild);
+extern XmDropDownClassRec xmCombinationBox2ClassRec XM_ALIAS(xmDropDownClassRec);

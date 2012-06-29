@@ -306,10 +306,8 @@ XmMultiListClassRec xmMultiListClassRec = {
       NULL                      /* extension          */
   }
 };
-#pragma weak xmExt18ListClassRec=xmMultiListClassRec
 
 WidgetClass xmMultiListWidgetClass = (WidgetClass)&xmMultiListClassRec;
-#pragma weak xmExt18ListWidgetClass=xmMultiListWidgetClass
 
 /*      Function Name: ClassInitialize
  *      Description:   Initializes class-specific data (offsets)
@@ -1213,7 +1211,6 @@ XmMultiListGetSelectedRows(Widget w)
     _XmAppUnlock(app); 
     return ret_rows;
 }
-#pragma weak XmExt18ListGetSelectedRows=XmMultiListGetSelectedRows
 
 /*	Function Name: XmCreateMultiList
  *	Description: Creation Routine for UIL and ADA.
@@ -1230,8 +1227,6 @@ XmCreateMultiList(Widget parent, String name,
     return (XtCreateWidget(name, xmMultiListWidgetClass,
 			   parent, args, num_args));
 }
-#pragma weak XmCreateExtended18List=XmCreateMultiList
-#pragma weak XmCreateExt18List=XmCreateMultiList
 
 Widget 
 XmVaCreateMultiList(
@@ -1256,7 +1251,6 @@ XmVaCreateMultiList(
     va_end(var);   
     return w;
 }
-#pragma weak XmVaCreateExt18List=XmVaCreateMultiList
 
 Widget
 XmVaCreateManagedMultiList(
@@ -1280,7 +1274,6 @@ XmVaCreateManagedMultiList(
     va_end(var);   
     return w;
 }
-#pragma weak XmVaCreateManagedExt18List=XmVaCreateManagedMultiList
 
 /*  Function Name: XmMultiListUnselectAllItems
  *  Description:   Unselects all rows
@@ -1299,7 +1292,6 @@ XmMultiListUnselectAllItems(Widget w)
 
   _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListUnselectAllItems=XmMultiListUnselectAllItems
 
 
 /*  Function Name: XmMultiListUnselectItem
@@ -1320,7 +1312,6 @@ XmMultiListUnselectItem(Widget w, XmMultiListRowInfo *row_info)
 
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListUnselectItem=XmMultiListUnselectItem
 
 /*  Function Name: XmMultiListToggleRow
  *  Description:   Toggles the selection state of a specified row
@@ -1339,7 +1330,6 @@ XmMultiListToggleRow(Widget w, short row)
 
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListToggleRow=XmMultiListToggleRow
 
 /*  Function Name: XmMultiListSelectItems
  *  Description:   Set selection state by matching column entries to XmString
@@ -1362,7 +1352,6 @@ void XmMultiListSelectItems(Widget w, XmString item,
 
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListSelectItems=XmMultiListSelectItems
 
 /*  Function Name: XmMultiListDeselectItems
  *  Description:   Set selection state by matching column entries to XmString
@@ -1384,7 +1373,6 @@ XmMultiListDeselectItems(Widget w, XmString item, int column)
 
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListDeselectItems=XmMultiListDeselectItems
 
 /*  Function Name: XmMultiListSelectAllItems
  *  Description:   Set selection state of all rows
@@ -1402,7 +1390,6 @@ void XmMultiListSelectAllItems(Widget w, Boolean notify)
     XmI18ListSelectAllItems((XmI18ListWidget)XmMultiList_ilist(elist), notify);
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListSelectAllItems=XmMultiListSelectAllItems
 
 /*  Function Name: XmMultiListSelectRow
  *  Description:   Set selection state on all rows
@@ -1422,7 +1409,6 @@ XmMultiListSelectRow(Widget w, int row, Boolean notify)
     XmI18ListSelectRow((XmI18ListWidget)XmMultiList_ilist(elist), row, notify);
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListSelectRow=XmMultiListSelectRow
 
 /*  Function Name: XmMultiListDeselectRow
  *  Description:   Set selection state on all rows
@@ -1441,7 +1427,6 @@ XmMultiListDeselectRow(Widget w, int row)
     XmI18ListDeselectRow((XmI18ListWidget)XmMultiList_ilist(elist), row);
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListDeselectRow=XmMultiListDeselectItems
 
 
 /*  Function Name: XmMultiGetSelectedRowArray
@@ -1461,12 +1446,11 @@ XmMultiListGetSelectedRowArray(Widget w, int *num_rows)
     _XmAppLock(app);
 
     ret_val = XmI18ListGetSelectedRowArray(
-            (XmMultiListWidget)XmMultiList_ilist(elist),
+            (XmI18ListWidget)XmMultiList_ilist(elist),
 					num_rows);
     _XmAppUnlock(app);
     return ret_val;
 }
-#pragma weak XmExt18ListGetSelectedRowArray=XmMultiListGetSelectedRowArray
 
 /*  Function Name: XmMultiListMakeRowVisible
  *  Description:   Shifts the visible extended list rows as desired
@@ -1482,9 +1466,26 @@ XmMultiListMakeRowVisible(Widget w, int row)
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
 
-    XmI18ListMakeRowVisible((XmMultiListWidget)XmMultiList_ilist(elist), row);
+    XmI18ListMakeRowVisible((XmI18ListWidget)XmMultiList_ilist(elist), row);
 
     _XmAppUnlock(app); 
 }
-#pragma weak XmExt18ListMakeRowVisible=XmMultiListMakeRowVisible
 
+/* aliases of deprecated functiosn of XmExt18List */
+extern WidgetClass xmExt18ListWidgetClass XM_ALIAS(xmMultiListWidgetClass);
+XmMultiListRowInfo ** XmExt18ListGetSelectedRows(Widget) XM_ALIAS(XmMultiListGetSelectedRows);
+Widget XmCreateExtended18List(Widget, String, ArgList, Cardinal) XM_ALIAS(XmCreateMultiList);
+Widget XmCreateExt18List(Widget, String, ArgList, Cardinal) XM_ALIAS(XmCreateMultiList);
+Widget XmVaCreateExt18List(Widget, char *, ...) XM_ALIAS(XmVaCreateMultiList);
+Widget XmVaCreateManagedExt18List(Widget, char *, ...) XM_ALIAS(XmVaCreateManagedMultiList);
+void XmExt18ListUnselectAllItems(Widget) XM_ALIAS(XmMultiListUnselectAllItems);
+void XmExt18ListUnselectItem(Widget, XmMultiListRowInfo*) XM_ALIAS(XmMultiListUnselectItem);
+void XmExt18ListToggleRow(Widget, short) XM_ALIAS(XmMultiListToggleRow);
+void XmExt18ListSelectItems(Widget, XmString, int, Boolean) XM_ALIAS(XmMultiListSelectItems);
+void XmExt18ListDeselectItems(Widget, XmString, int) XM_ALIAS(XmMultiListDeselectItems);
+void XmExt18ListSelectAllItems(Widget, Boolean) XM_ALIAS(XmMultiListSelectAllItems);
+void XmExt18ListSelectRow(Widget, int, Boolean) XM_ALIAS(XmMultiListSelectRow);
+void XmExt18ListDeselectRow(Widget, int) XM_ALIAS(XmMultiListDeselectRow);
+int *XmExt18ListGetSelectedRowArray(Widget, int *) XM_ALIAS(XmMultiListGetSelectedRowArray);
+void XmExt18ListMakeRowVisible(Widget, int) XM_ALIAS(XmMultiListMakeRowVisible);
+extern XmMultiListClassRec xmExt18ListClassRec XM_ALIAS(xmMultiListClassRec);

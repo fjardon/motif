@@ -25,6 +25,7 @@
 #define _XmCombinationBox2P_h_
 
 #include <Xm/DropDownP.h>
+#include <Xm/XmP.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -98,7 +99,7 @@ typedef XmDropDownPart      XmCombinationBox2Part;
 
 typedef XmDropDownRec       XmCombinationBox2Rec;
 
-extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec;
+extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec XM_DEPRECATED;
 
 #ifdef __cplusplus
 }	/* Closes scope of 'extern "C"' declaration */
