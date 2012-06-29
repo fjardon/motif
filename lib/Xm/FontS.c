@@ -141,7 +141,7 @@ static Widget CreateEncodingMenu(XmFontSelectorWidget,
 
 static FontInfo * LoadFontInfo(XmFontSelectorWidget);
 
-static int FindResolution(Widget), CmpStrings(void *, void *);
+static int FindResolution(Widget), CmpStrings(const void *, const void *);
 
 static Boolean CheckFlag(Flag, Flag), CheckLongFlag(LongFlag, LongFlag);
 static Boolean FillData(XmFontSelectorWidget, FontData *, char *);
@@ -682,7 +682,7 @@ SortOtherFontData(FontInfo *font_info, String *list, int num)
  */
 
 static int
-CmpStrings(void * p1, void *p2)
+CmpStrings(const void * p1, const void *p2)
 {
     String *s1 = (String *) p1;
     String *s2 = (String *) p2;
