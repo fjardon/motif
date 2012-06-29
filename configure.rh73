@@ -1661,7 +1661,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=openMotif
- VERSION=2.2.3
+ VERSION=2.3.0
 
 
 cat >>confdefs.h <<_ACEOF

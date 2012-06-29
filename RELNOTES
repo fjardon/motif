@@ -79,9 +79,10 @@ In all cases the vendor's supplied compiler was used.
 
 The following platforms are supported operating systems:
 
-
-     FreeBSD          4.4
-     Linux            2.4  Redhat 7.2
+- Linux 2.4 (Redhat Enterprise 2.1)
+- Linux 2.6 (Redhat Enterprise 3.0)
+- Linux 2.6 (SuSe 9.1)
+- Linux 2.4 (Redhat Fedora Core 2)
 
 5 Filing Bug Reports
 
@@ -112,6 +113,16 @@ Motif 2.3 is not binary compatably with 2.2  or 2.1, existing applications
 will want to install the runtimes for older versions. 
 
 8. Change Log
+
+2.2.4 October 2004
+
+a. Fixed vulnerabilities in libXpm code [CVE numbers CAN-2004-0687 (integer
+overflows) and CAN-2004-0688 (stack overflows)].
+b. Fixed compilation under SUSE 9.1.
+c. Fixed building procedure under FreeBSD.
+d. Fixed building procedure in order to make it usable with new versions of
+autoconfig.
+
 
 2.2.3 August 2002
 
