@@ -371,7 +371,8 @@ String name ;
 }
 
 static String fallbacks[] = {
-    "*help_manager.helpFile: getsubres"
+    "*help_manager.helpFile: getsubres",
+    NULL
 };
 
 #define APP_CLASS "XmdGetsubres"
