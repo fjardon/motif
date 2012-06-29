@@ -201,6 +201,17 @@ man_MANS = ApplicationShell.3 \
     XmDropTransferAdd.3 \
     XmDropTransferStart.3 \
     XmMultiList.3 \
+    XmMultiListDeselectItems.3 \
+    XmMultiListDeselectRow.3 \
+    XmMultiListGetSelectedRowArray.3 \
+    XmMultiListGetSelectedRows.3 \
+    XmMultiListMakeRowVisible.3 \
+    XmMultiListSelectAllItems.3 \
+    XmMultiListSelectItems.3 \
+    XmMultiListSelectRow.3 \
+    XmMultiListToggleRow.3 \
+    XmMultiListUnselectAllItems.3 \
+    XmMultiListUnselectItem.3 \
     XmExt18List.3 \
     XmFileSelectionBox.3 \
     XmFileSelectionBoxGetChild.3 \
@@ -279,8 +290,8 @@ man_MANS = ApplicationShell.3 \
     XmListDeleteItemsPos.3 \
     XmListDeletePos.3 \
     XmListDeletePositions.3 \
-    XmListUnselectAllItems.3 \
-    XmListUnselectItem.3 \
+    XmListDeselectAllItems.3 \
+    XmListDeselectItem.3 \
     XmListDeselectPos.3 \
     XmListGetKbdItemPos.3 \
     XmListGetMatchPos.3 \
