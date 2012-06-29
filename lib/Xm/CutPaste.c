@@ -3908,7 +3908,7 @@ ClipboardRetrieve(Display *display, Window window,
 				  0,
 				  0 );
 
-		if ( matchformat == 0 ) 
+		if ( formatdata == 0 ) 
 		{
  		   CleanupHeader (display);
 		   ClipboardError( CLIPBOARD_CORRUPT, CORRUPT_DATA_STRUCTURE );
@@ -4486,54 +4486,54 @@ XmClipboardRegisterFormat(
     if ( format_name == 0  ||  strlen( format_name ) == 0 )
     {
     	XmeWarning ( NULL, BAD_FORMAT_NON_NULL );
-    }
+    } else {
 
-    /* make sure predefined formats are registered */
-    /* use dummy format as a test, if not found then register the rest */
-    if ( format_length != 0 )
-    {
-	ret_val = RegisterFormat( display, format_name, format_length );
-	_XmAppUnlock(app);
-	return ret_val;
-
-    }else{
-      /* caller asking to look through predefines for format name */
-      if (
-	RegIfMatch( display, format_name, XmSTARGETS, XM_ATOM ) ||
-	RegIfMatch( display, format_name, XmSMULTIPLE, XM_ATOM_PAIR ) ||
-	RegIfMatch( display, format_name, XmSTIMESTAMP, XM_INTEGER ) ||
-	RegIfMatch( display, format_name, "STRING", XM_STRING ) ||
-        RegIfMatch( display, format_name, XmSCOMPOUND_TEXT, XM_COMPOUND_TEXT) ||
-	RegIfMatch( display, format_name, XmILIST_LENGTH, XM_INTEGER ) ||
-	RegIfMatch( display, format_name, "PIXMAP", XM_DRAWABLE ) ||
-	RegIfMatch( display, format_name, "DRAWABLE", XM_DRAWABLE ) ||
-	RegIfMatch( display, format_name, "BITMAP", XM_BITMAP ) ||
-	RegIfMatch( display, format_name, XmIFOREGROUND, XM_PIXEL ) ||
-	RegIfMatch( display, format_name, XmIBACKGROUND, XM_PIXEL ) ||
-	RegIfMatch( display, format_name, "COLORMAP", XM_COLORMAP ) ||
-	RegIfMatch( display, format_name, XmIODIF, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmIOWNER_OS, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmSFILE_NAME, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmIHOST_NAME, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmICHARACTER_POSITION, XM_SPAN ) ||
-	RegIfMatch( display, format_name, XmILINE_NUMBER, XM_SPAN ) ||
-	RegIfMatch( display, format_name, XmICOLUMN_NUMBER, XM_SPAN ) ||
-	RegIfMatch( display, format_name, XmSLENGTH, XM_INTEGER ) ||
-	RegIfMatch( display, format_name, XmIUSER, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmIPROCEDURE, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmIMODULE, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmIPROCESS, XM_INTEGER ) ||
-	RegIfMatch( display, format_name, XmITASK, XM_INTEGER ) ||
-	RegIfMatch( display, format_name, XmICLASS, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmINAME, XM_TEXT ) ||
-	RegIfMatch( display, format_name, XmSCLIENT_WINDOW, XM_WINDOW )
-#ifdef UTF8_SUPPORTED
-	|| RegIfMatch( display, format_name, XmSUTF8_STRING, XM_UTF8_STRING )
-#endif
-	 )  {
+        /* make sure predefined formats are registered */
+        /* use dummy format as a test, if not found then register the rest */
+        if ( format_length != 0 )
+        {
+	    ret_val = RegisterFormat( display, format_name, format_length );
 	    _XmAppUnlock(app);
-	    return ClipboardSuccess;
-	    }
+	    return ret_val;
+        } else {
+          /* caller asking to look through predefines for format name */
+          if (
+	    RegIfMatch(display, format_name, XmSTARGETS, XM_ATOM) ||
+	    RegIfMatch(display, format_name, XmSMULTIPLE, XM_ATOM_PAIR) ||
+	    RegIfMatch(display, format_name, XmSTIMESTAMP, XM_INTEGER) ||
+	    RegIfMatch(display, format_name, "STRING", XM_STRING) ||
+            RegIfMatch(display, format_name, XmSCOMPOUND_TEXT, XM_COMPOUND_TEXT) ||
+	    RegIfMatch(display, format_name, XmILIST_LENGTH, XM_INTEGER) ||
+	    RegIfMatch(display, format_name, "PIXMAP", XM_DRAWABLE) ||
+	    RegIfMatch(display, format_name, "DRAWABLE", XM_DRAWABLE) ||
+	    RegIfMatch(display, format_name, "BITMAP", XM_BITMAP) ||
+	    RegIfMatch(display, format_name, XmIFOREGROUND, XM_PIXEL) ||
+	    RegIfMatch(display, format_name, XmIBACKGROUND, XM_PIXEL) ||
+	    RegIfMatch(display, format_name, "COLORMAP", XM_COLORMAP) ||
+	    RegIfMatch(display, format_name, XmIODIF, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmIOWNER_OS, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmSFILE_NAME, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmIHOST_NAME, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmICHARACTER_POSITION, XM_SPAN) ||
+	    RegIfMatch(display, format_name, XmILINE_NUMBER, XM_SPAN) ||
+	    RegIfMatch(display, format_name, XmICOLUMN_NUMBER, XM_SPAN) ||
+	    RegIfMatch(display, format_name, XmSLENGTH, XM_INTEGER) ||
+	    RegIfMatch(display, format_name, XmIUSER, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmIPROCEDURE, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmIMODULE, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmIPROCESS, XM_INTEGER) ||
+	    RegIfMatch(display, format_name, XmITASK, XM_INTEGER) ||
+	    RegIfMatch(display, format_name, XmICLASS, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmINAME, XM_TEXT) ||
+	    RegIfMatch(display, format_name, XmSCLIENT_WINDOW, XM_WINDOW)
+#ifdef UTF8_SUPPORTED
+	    || RegIfMatch(display, format_name, XmSUTF8_STRING, XM_UTF8_STRING)
+#endif
+	     )  {
+	        _XmAppUnlock(app);
+	        return ClipboardSuccess;
+	        }
+        }
     }
 
     _XmAppUnlock(app);
