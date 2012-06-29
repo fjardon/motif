@@ -21,7 +21,7 @@ typedef struct _XmDropDownRec		*XmDropDownWidget;
 
 /***** Public Function Declarations *****/
 
-/*	Function Name: XmCreateCombinationBox2
+/*	Function Name: XmCreateDropDown
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
  *                 name - the name of the widget.
@@ -29,78 +29,74 @@ typedef struct _XmDropDownRec		*XmDropDownWidget;
  *	Returns: The Widget created.
  */
 
-extern Widget XmCreateCombinationBox2(Widget parent,
-                                      char *name,
-                                      ArgList args,
-                                      Cardinal argCount);
+extern Widget XmCreateDropDown(Widget parent,
+                                char *name,
+                                ArgList args,
+                                Cardinal argCount);
 
-/*	Function Name: XmCombinationBox2GetValue
+/*	Function Name: XmDropDownGetValue
  *	Description:   Retreives the value from the combo box.
  *	Arguments:     w - the combination box.
  *	Returns:       The value in the text widget.
  */
 
-extern String XmCombinationBox2GetValue(Widget w);
+extern String XmDropDownGetValue(Widget w);
 
 /*
  * Variable argument list functions
  */
 
-extern Widget XmVaCreateCombinationBox2(
+extern Widget XmVaCreateDropDown(
                         Widget parent,
                         char *name,
                         ...);
-extern Widget XmVaCreateManagedCombinationBox2(
+extern Widget XmVaCreateManagedDropDown(
                         Widget parent,
                         char *name,
                         ...);
 
-/*      Function Name:  XmCombinationBox2GetLabel
- *      Description:    Returns the "label" child of the XmCombinationBox2
+/*      Function Name:  XmDropDownGetLabel
+ *      Description:    Returns the "label" child of the XmDropDown
  *      Arguments:      w - The XmCombinationBox2 Widget
- *      Returns:        The specified child of the XmCombinationBox2
+ *      Returns:        The specified child of the XmDropDown
  */
 
-extern Widget XmCombinationBox2GetLabel(Widget w);
+extern Widget XmDropDownGetLabel(Widget w);
 
-/*      Function Name:  XmCombinationBox2GetArrow
- *      Description:    Returns the "arrow" child of the XmCombinationBox2
+/*      Function Name:  XmDropDownGetArrow
+ *      Description:    Returns the "arrow" child of the XmDropDown
  *      Arguments:      w - The XmCombinationBox2 Widget
- *      Returns:        The specified child of the XmCombinationBox2
+ *      Returns:        The specified child of the XmDropDown
  */
 
-extern Widget XmCombinationBox2GetArrow(Widget w);
+extern Widget XmDropDownGetArrow(Widget w);
 
-/*      Function Name:  XmCombinationBox2GetText
- *      Description:    Returns the "text" child of the XmCombinationBox2
+/*      Function Name:  XmDropDownGetText
+ *      Description:    Returns the "text" child of the XmDropDown
  *      Arguments:      w - The XmCombinationBox2 Widget
- *      Returns:        The specified child of the XmCombinationBox2
+ *      Returns:        The specified child of the XmDropDown
  */
 
-extern Widget XmCombinationBox2GetText(Widget w);
+extern Widget XmDropDownGetText(Widget w);
 
-/*      Function Name:  XmCombinationBox2GetList
- *      Description:    Returns the "list" child of the XmCombinationBox2
+/*      Function Name:  XmDropDownGetList
+ *      Description:    Returns the "list" child of the XmDropDown
  *      Arguments:      w - The XmCombinationBox2 Widget
- *      Returns:        The specified child of the XmCombinationBox2
+ *      Returns:        The specified child of the XmDropDown
  */
 
-extern Widget XmCombinationBox2GetList(Widget w);
+extern Widget XmDropDownGetList(Widget w);
 
-/*      Function Name:  XmCombinationBox2GetChild
- *      Description:    Returns the child widget id of the XmCombinationBox2
+/*      Function Name:  XmDropDownGetChild
+ *      Description:    Returns the child widget id of the XmDropDown
  *      Arguments:      w - The XmDropDown widget
                         child - Teh component within the DropDown
- *      Returns:        The specified child of the XmCombinationBox2
+ *      Returns:        The specified child of the XmDropDown
  */
-extern Widget XmCombinationBox2GetChild(Widget w, int child);
+extern Widget XmDropDownGetChild(Widget w, int child);
 
 #if defined(__cplusplus)
 }
-#endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
 #endif
 
 #endif /* _XmDropDown_h_ */
