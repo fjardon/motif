@@ -2679,3 +2679,13 @@ XmImMbResetIC(
     _XmAppUnlock(app);
 }
 
+XIMResetState
+XmImGetXICResetState(Widget w)
+{
+    XmImXICInfo icp;
+    XIMResetState state = XIMInitialState;
+    icp = get_current_xic(get_xim_info(w), w);
+    if (icp != NULL && icp->xic != NULL)
+        XGetICValues(icp->xic, XNResetState, &state, NULL);
+    return state;
+}

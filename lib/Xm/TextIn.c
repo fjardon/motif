@@ -1436,6 +1436,7 @@ SelfInsert(Widget w,
 				      &newblock, False) != EditDone) {
 	RingBell(w, event, params, num_params);
       } else {
+	cursorPos = _XmTextSetPreeditPosition(w, cursorPos);
 	_XmTextSetCursorPosition(w, cursorPos);
 	CheckDisjointSelection(w, tw->text.cursor_position,
 			       event_time);

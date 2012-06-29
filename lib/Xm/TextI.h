@@ -115,7 +115,8 @@ extern void _XmTextValidate(XmTextPosition *start,
 		            XmTextPosition *end,
 		            int maxsize);
 
-
+extern XmTextPosition _XmTextSetPreeditPosition(Widget w,
+                                                XmTextPosition cursor_position);
 /********    End Private Function Declarations    ********/
 
 

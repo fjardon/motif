@@ -886,6 +886,8 @@ static void doSetHighlight(Widget w, XmTextPosition left, XmTextPosition right,
                          XmHighlightMode mode) ;
 static Boolean TrimHighlights(XmTextFieldWidget tf, int *low, int *high);
 
+static void ResetUnder(XmTextFieldWidget tf);
+
 /********    End Static Function Declarations    ********/
 
 static XmConst XmTextScanType sarray[] = {
@@ -3899,6 +3901,7 @@ InsertChar(Widget w,
 			     event->xkey.time);
       _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), 
 				    False, True);
+      PreeditSetCursorPosition(tf, cursorPos);
       cb.reason = XmCR_VALUE_CHANGED;
       cb.event = event;
       XtCallCallbackList((Widget) tf, TextF_ValueChangedCallback(tf),
@@ -9382,34 +9385,44 @@ TextFieldResetIC(Widget w)
     else 
     	XmImMbResetIC(w, &mb);
 
-    if (!mb)
+    if (!mb) {
+        ResetUnder(tf);
         return;
+    }
 
     if (!TextF_Editable(tf)) {
         if (tf->text.verify_bell) XBell(XtDisplay((Widget)tf), 0);
     }
 
-    if ((insert_length = strlen(mb)) > TEXT_MAX_INSERT_SIZE)
+    if ((insert_length = strlen(mb)) > TEXT_MAX_INSERT_SIZE) {
+        ResetUnder(tf);
         return;
+    }
 
     if (insert_length > 0) {
         if (TextF_UseFontSet(tf)){
             escapement = XmbTextExtents((XFontSet)TextF_Font(tf), mb,
                         insert_length, &overall_ink, NULL );
-            if ( escapement == 0 && overall_ink.width == 0 )
+            if ( escapement == 0 && overall_ink.width == 0 ) {
+                ResetUnder(tf);
                 return;
+	    }
 #ifdef USE_XFT
         } else if (TextF_UseXft(tf)) {
           XGlyphInfo	ext;
 
           XftTextExtentsUtf8(XtDisplay((Widget)tf), TextF_XftFont(tf), mb, insert_length, &ext);
 
-          if (!ext.xOff)
+          if (!ext.xOff) {
+              ResetUnder(tf);
 	      return;
+	  }
 #endif
         } else {
-            if (!XTextWidth(TextF_Font(tf), mb, insert_length))
+            if (!XTextWidth(TextF_Font(tf), mb, insert_length)) {
+                ResetUnder(tf);
                 return;
+	    }
         }
    }
 
@@ -9438,8 +9451,16 @@ TextFieldResetIC(Widget w)
     _XmTextFieldDrawInsertionPoint(tf, True);
     if (str) XtFree(str);
 
+    ResetUnder(tf);
 }
 
+
+static void 
+ResetUnder(XmTextFieldWidget tf)
+{
+    if (XmImGetXICResetState((Widget)tf) != XIMPreserveState)
+      tf->text.onthespot->under_preedit = False;
+}
 
 /***********************************<->***************************************
 

@@ -248,6 +248,7 @@ static void PreeditCaret(XIC xic,
                          XPointer client_data,
                          XIMPreeditCaretCallbackStruct *call_data);
 
+static void ResetUnder(XmTextWidget tw);
 
 /********    End Static Function Declarations    ********/
 
@@ -3752,6 +3753,13 @@ PreeditCaret(XIC xic,
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
 }
 
+static void 
+ResetUnder(XmTextWidget tw)
+{
+    if (XmImGetXICResetState((Widget)tw) != XIMPreserveState)
+        PreUnder(tw) = False;
+}
+
 /*
  * Resets input method context.
  *
@@ -3783,12 +3791,16 @@ _XmTextResetIC(Widget widget)
   else 
     XmImMbResetIC(widget, &mb);
      
-  if (!mb)
+  if (!mb) {
+    ResetUnder(tw);
     return;
+  }
   n = strlen(mb);
 
-  if (n > TEXT_MAX_INSERT_SIZE)
+  if (n > TEXT_MAX_INSERT_SIZE) {
+    ResetUnder(tw);
     return;
+  }
 
   if (n > 0) {
     (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, off);
@@ -3799,11 +3811,13 @@ _XmTextResetIC(Widget widget)
           strchr(mb, '\t') == 0 ) {
         (*tw->text.output->DrawInsertionPoint)(tw,
                                                tw->text.cursor_position, on);
+        ResetUnder(tw);
         return;
       }
     } else {
       (*tw->text.output->DrawInsertionPoint)(tw,
                                              tw->text.cursor_position, on);
+      ResetUnder(tw);
       return;
     }
     beginPos = nextPos = XmTextGetCursorPosition(widget);
@@ -3819,6 +3833,11 @@ _XmTextResetIC(Widget widget)
                                            XmsdRight, 1, TRUE);
       if (nextPos > lastPos) nextPos = lastPos;
     }
+    else if (PreUnder(tw) && PreStartTW(tw) < PreEndTW(tw)) {
+      beginPos = PreStartTW(tw);
+      nextPos = PreEndTW(tw);
+      XmTextSetHighlight(tw, beginPos, nextPos, XmHIGHLIGHT_NORMAL);
+    }
 
     _XmTextReplace(widget, beginPos, nextPos, mb, False);
     (*tw->text.output->DrawInsertionPoint)(tw,
@@ -3826,8 +3845,29 @@ _XmTextResetIC(Widget widget)
 
     XtFree(mb);
   }
+  ResetUnder(tw);
 }
 
+XmTextPosition
+_XmTextSetPreeditPosition(Widget w,
+                          XmTextPosition position)
+{
+  XmTextWidget tw = (XmTextWidget)w;
+  XmTextPosition cursorPos = position;
+  if (tw != NULL && tw->text.onthespot) {
+    if (PreUnder(tw) && PreStartTW(tw) < PreEndTW(tw)) {
+      int diff = PreEndTW(tw) - PreStartTW(tw);
+      PreStartTW(tw) = cursorPos;
+      cursorPos += diff;
+      PreEndTW(tw) = PreCursorTW(tw) = cursorPos;
+    }
+    else {
+      PreStartTW(tw) = PreEndTW(tw) = PreCursorTW(tw) =
+        cursorPos;
+    }
+  }
+  return cursorPos;
+}
 
 
 /****************************************************************

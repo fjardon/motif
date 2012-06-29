@@ -88,6 +88,9 @@ extern void XmImMbResetIC(
 			Widget w,
 			char **mb);
 
+extern XIMResetState XmImGetXICResetState(
+			Widget w);
+
 /********    End Public Function Declarations    ********/
 
 #ifdef __cplusplus
