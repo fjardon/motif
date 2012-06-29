@@ -1204,16 +1204,11 @@ _XmInitTargetsTable(
      */
 
     if (!ReadAtomsTable (display, GetAtomsTable (display))) {
-        if (!grabbed) {
-	    XGrabServer(display);
-            grabbed = True;
-            if (!ReadAtomsTable (display, GetAtomsTable (display))) {
-                WriteAtomsTable (display, CreateDefaultAtomsTable (display));
-	    }
-	}
-	else {
+        XGrabServer(display);
+        grabbed = True;
+        if (!ReadAtomsTable (display, GetAtomsTable (display))) {
             WriteAtomsTable (display, CreateDefaultAtomsTable (display));
-	}
+        }
     }
 
     if (!ReadTargetsTable (display, GetTargetsTable (display))) {
