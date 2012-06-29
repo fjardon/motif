@@ -171,6 +171,9 @@ man_MANS = ApplicationShell.3 \
     XmCvtXmStringToByteStream.3 \
     XmCvtXmStringToCT.3 \
     XmDataField.3 \
+    XmDataFieldCopy.3 \
+    XmDataFieldCut.3 \
+    XmDataFieldPaste.3 \
     XmDataFieldGetString.3 \
     XmDataFieldSetInsertionPosition.3 \
     XmDataFieldSetEditable.3 \
