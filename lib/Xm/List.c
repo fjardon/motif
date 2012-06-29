@@ -1437,8 +1437,11 @@ ComputeVizCount(XmListWidget lw)
 #endif
     }
 
-  viz = ((int)(listheight + lw->list.spacing) /
-	 (int)(lineheight + lw->list.spacing));
+  if (lineheight + lw->list.spacing != 0)
+    viz = ((int)(listheight + lw->list.spacing) /
+	   (int)(lineheight + lw->list.spacing));
+  else
+    viz = (int)(listheight + lw->list.spacing);
 
   if (!viz)
     viz++;			/* Always have at least one item visible */
