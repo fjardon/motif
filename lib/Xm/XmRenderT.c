@@ -3267,35 +3267,39 @@ XmRenderTableGetDefaultFontExtents(XmRenderTable rendertable,
     if (rendertable && tag && !success)
       success = _XmRenderTableFindFirstFont(rendertable, &indx, &rend);
 
-    /* Find font height */
-    switch (_XmRendFontType(rend)) {
-      case XmFONT_IS_FONT:
-        if (_XmRendFont(rend)) {
-	    a = ((XFontStruct*)_XmRendFont(rend))->ascent;
-	    d = ((XFontStruct*)_XmRendFont(rend))->descent;
-	    h = a + d;
-	}
-	break;
-      case XmFONT_IS_FONTSET:
-        if (_XmRendFont(rend)) {
-          XFontStruct **font_struct_list;
-          char **font_name_list;
+    if (success) {
+        /* Find font height */
+        switch (_XmRendFontType(rend)) {
+            case XmFONT_IS_FONT:
+                if (_XmRendFont(rend)) {
+                    a = ((XFontStruct*)_XmRendFont(rend))->ascent;
+                    d = ((XFontStruct*)_XmRendFont(rend))->descent;
+                    h = a + d;
+                }
+                break;
+            case XmFONT_IS_FONTSET:
+                if (_XmRendFont(rend)) {
+                    XFontStruct **font_struct_list;
+                    char **font_name_list;
 
-          if (XFontsOfFontSet((XFontSet)_XmRendFont(rend),
-			  &font_struct_list, &font_name_list))
-	    a = font_struct_list[0]->ascent;
-	    d = font_struct_list[0]->descent;
-	    h = a + d;
-	}
-	break;
+                    if (XFontsOfFontSet((XFontSet)_XmRendFont(rend),
+                                &font_struct_list, &font_name_list)) {
+                        a = font_struct_list[0]->ascent;
+                        d = font_struct_list[0]->descent;
+                        h = a + d;
+                    }
+                }
+                break;
 #ifdef USE_XFT
-      case XmFONT_IS_XFT:
-        if (_XmRendXftFont(rend))
-          a = _XmRendXftFont(rend)->ascent;
-	  d = _XmRendXftFont(rend)->descent;
-	  h = a + d;
-	break;
+                case XmFONT_IS_XFT:
+                    if (_XmRendXftFont(rend)) {
+                        a = _XmRendXftFont(rend)->ascent;
+                        d = _XmRendXftFont(rend)->descent;
+                        h = a + d;
+                    }
+                    break;
 #endif
+        }
     }
 
 #ifdef XTHREADS
