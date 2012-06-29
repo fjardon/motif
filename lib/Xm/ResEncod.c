@@ -84,7 +84,8 @@ typedef enum {
     cs_LatinCyrillic,
     cs_LatinGreek,
     cs_LatinHebrew,
-    cs_NonStandard
+    cs_NonStandard,
+    cs_ir111
 } ct_Charset; 
 
 /* Internal context block */
@@ -152,6 +153,7 @@ static XmConst char CS_JISX0208_1[] = "JISX0208.1983-1" ;
 static XmConst char CS_KSC5601_0[] = "KSC5601.1987-0" ;
 static XmConst char CS_KSC5601_1[] = "KSC5601.1987-1" ;
 static XmConst char CS_UTF_8[] = "UTF-8" ;
+static XmConst char CS_ISO_IR_111[] = "ISO-IR-111" ;
 
 
 
@@ -213,6 +215,9 @@ static XmConst Octet CTEXT_SET_JISX0208_0[] = "\033\044\050\102\033\044\051\102"
 
 static XmConst Octet CTEXT_SET_KSC5601_0[] = "\033\044\050\103\033\044\051\103";
 #define CTEXT_SET_KSC5601_0_LEN		sizeof(CTEXT_SET_KSC5601_0)-1
+
+static XmConst Octet CTEXT_SET_IR_111[] = "\033\050\102\033\055\100";
+#define CTEXT_SET_IR_111_LEN		sizeof(CTEXT_SET_IR_111)-1
 
 #ifdef UTF8_SUPPORTED
 static XmConst char UTF8_NEWLINESTRING[] = "\012";
@@ -280,8 +285,10 @@ static XmConst char UTF8_R_TO_L[] = "\342\200\217";
 
 /* Define the MIT registered charset */
 
+static SegmentEncoding _mit_ISO_IR_1111_registry = 
+{ "ISO-IR-111", "ISO-IR-111", NULL};
 static SegmentEncoding _mit_UTF_8_registry = 
-{ "UTF-8", "UTF-8", NULL};
+{ "UTF-8", "UTF-8", &_mit_ISO_IR_1111_registry};
 static SegmentEncoding _mit_KSC5601_1987_1_registry = 
 { "KSC5601.1987-1", "KSC5601.1987-1", &_mit_UTF_8_registry};
 static SegmentEncoding _mit_KSC5601_1987_0_registry = 
@@ -1923,6 +1930,9 @@ process96GR(
 #endif /* NeedWidePrototypes */
 {
     switch (final) {
+    case 0x40:				/* 04/00 - Right half, IR-111 */
+	_SetGR(ctx, CS_ISO_IR_111, 96, 1);
+	break;
     case 0x41:				/* 04/01 - Right half, Latin 1 */
 	_SetGR(ctx, CS_ISO8859_1, 96, 1);
 	break;
@@ -2709,6 +2719,15 @@ processCharsetAndText(XmStringCharSet tag,
 			    (unsigned int)CTEXT_SET_KSC5601_0_LEN);
 	*outlen += CTEXT_SET_KSC5601_0_LEN;
 	*prev = cs_KoreanGCS;
+      };
+    }
+    else if (strcmp(tag, CS_ISO_IR_111) == 0) {
+      if (*prev != cs_ir111) {
+	*outc = ctextConcat(*outc, *outlen, 
+			    (unsigned char *)CTEXT_SET_IR_111, 
+			    (unsigned int)CTEXT_SET_IR_111_LEN);
+	*outlen += CTEXT_SET_IR_111_LEN;
+	*prev = cs_ir111;
       };
     }
     else {
