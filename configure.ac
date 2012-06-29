@@ -175,7 +175,8 @@ AC_ARG_ENABLE(utf8, [  --disable-utf8
                        Disable UTF-8 support])
 
 case "$host_os" in
-    freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";;
+    freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";
+        LDFLAGS="$LDFLAGS=/usr/local/lib";;
     cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
     solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
         if test x$enable_motif22_compatibility = x
