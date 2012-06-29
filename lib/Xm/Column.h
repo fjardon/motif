@@ -41,13 +41,7 @@ typedef struct _XmColumnRec      * XmColumnWidget;
 #define XmIsColumn(w) (XtIsSubclass(w, xmColumnWidgetClass))
 #endif
 
-#if NeedFunctionPrototypes
 extern Widget XmCreateColumn(Widget, String, ArgList, Cardinal);
-extern Widget XmColumnGetChildLabel(Widget);
-#else
-extern Widget XmCreateColumn();
-extern Widget XmColumnGetChildLabel();
-#endif
 
 /*
  * Variable argument list functions
