@@ -1044,7 +1044,7 @@ ClipboardFindItem(
 
     ptr = (ClipboardPointer)(*outpointer);
 
-    if ( rec_type != 0 && ptr->header.recordType != rec_type )
+    if ( rec_type != 0 && ptr && ptr->header.recordType != rec_type )
     {
     	XtFree( (char *) *outpointer );
 	CleanupHeader (display);
