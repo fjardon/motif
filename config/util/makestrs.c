@@ -432,7 +432,10 @@ WriteSource(char* tagline, int abi)
 
     (*sourceproc[abi])(abi);
 
-    if (tmpl) CopyTmplEpilog (tmpl, stdout);
+    if (tmpl) {
+        CopyTmplEpilog (tmpl, stdout);
+        fclose(tmpl);
+    }
 }
 
 static void
