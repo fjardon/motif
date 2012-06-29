@@ -4756,7 +4756,7 @@ KeySelection(Widget w,
 	     char **params,
 	     Cardinal *num_params)
 {
-  XmTextPosition position, left, right;
+  XmTextPosition position = 0, left, right;
   XmTextFieldWidget tf = (XmTextFieldWidget) w;
   XmTextPosition cursorPos;
   int direction;
@@ -6964,8 +6964,18 @@ ValidateString(XmTextFieldWidget tf,
       } else {
 	wchar_t tmp;
 	int num_conv;
-	num_conv = mbtowc(&tmp, curr_str, tf->text.max_char_size);
-	if (num_conv >= 0 && PrintableString(tf, (char*)&tmp, 1, True)) {
+        Boolean printable;
+        
+        if (TextF_UseXft(tf)) {
+          num_conv = strlen(curr_str);
+	  printable = (num_conv >= 0
+                  && PrintableString(tf, curr_str, num_conv, True));
+        } else {
+	  num_conv = mbtowc(&tmp, curr_str, tf->text.max_char_size);
+	  printable = (num_conv >= 0
+                  && PrintableString(tf, (char*)&tmp, 1, True));
+        }
+	if (printable) {
 	  for (j = 0; j < num_conv; j++) {
 	    *temp_str = *curr_str;
 	    temp_str++;
