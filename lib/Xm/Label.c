@@ -2443,7 +2443,7 @@ ProcessDrag(Widget w,
        event -> xbutton.button == 2)) return;
 
   /* CR 5141: Don't allow multi-button drags; they just cause confusion. */
-  if (! (event->xbutton.state &
+  if (event && ! (event->xbutton.state &
 	 ~((Button1Mask >> 1) << event->xbutton.button) &
 	 (Button1Mask | Button2Mask | Button3Mask | Button4Mask | Button5Mask)))
     {

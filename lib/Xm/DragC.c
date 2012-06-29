@@ -1380,7 +1380,7 @@ DropLoseSelection(
       XmeWarning(w, MESSAGE2) ;
     }
 
-  if (dc->drag.dropFinishTime == 0) 
+  if (dc && dc->drag.dropFinishTime == 0) 
     {   
       XmeWarning(w, MESSAGE3) ;
     }

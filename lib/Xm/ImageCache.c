@@ -826,6 +826,7 @@ GetXpmImage(
 	   cache, since they need color lookup,
 	   which is done one level up in the pixmap cache */
 	if (((*image)->depth == 1)
+            && acc_color
 	    && (acc_color->foreground == 1)
 	    && (acc_color->background == 0)
 	    ) {

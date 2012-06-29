@@ -811,6 +811,7 @@ GeometryManager(
 	 }
          break;
    default:
+         return (XtGeometryNo);
 	 break;
    }
 
