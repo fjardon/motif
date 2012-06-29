@@ -65,7 +65,7 @@ PNG_SRCS =
 PNG_HDRS =
 endif
 
-libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt ${X_PRE_LIBS} -lXext -lXp -lX11 ${X_EXTRA_LIBS}
+libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt -lXext -lXp -lX11 ${X_EXTRA_LIBS}
 
 noinst_HEADERS = BaseClassI.h \
 BitmapsI.h \
