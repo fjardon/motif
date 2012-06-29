@@ -1,7 +1,7 @@
 -------------------------------------------------------
 
 
-                               Motif 2.3.0
+                             Motif 2.3.0 Beta
 
                               Release Notes
 
@@ -10,9 +10,22 @@
                      Integrated Computer Solutions
 
 
-This document provides Release notes for Motif 2.3.0
-This contains information on what is new in Motif 2.3.0
-Please see the COPYING file included with this release.
+This document provides Release notes for the Beta Release of Motif 2.3.0.
+This contains information on what is new in Motif 2.3.0. Please see the
+COPYRIGHT.MOTIF file included with this release.
+
+
+THIS IS A BETA RELEASE
+This is a Beta release of Motif 2.3. It is not intended for any production
+use. Developers are urged to test existing applications against this release and
+report any bugs they may find. Developers are also urged to try out the new
+features including:
+
+ * Client-side anti-aliased font support via XFT
+ * UTF-8 and UTF8_STRING atom support
+ * Ability to show text and pixmaps in Label, LabelGadget, and all
+   derived widgets
+ * Support of PNG and JPEG image formats in the same way as XPM is supported
 
 
 Introduction
@@ -21,12 +34,12 @@ This document and accompanying text files contain important
 information. Please read them carefully before starting the build and
 installation procedures.
 
-There are two ways to build Motif: (Imake and AutoTools)
+There are two ways to build Motif from source code: (Imake and AutoTools)
 
-IF you are using Imake please read INSTALL.imake for notes on how
+If you are using Imake please read INSTALL.imake for notes on how
 to build and install this product using Imake. This method is depricated
 due to lack of support. Users wishing to apply/test and patch the Imake system
-should join the development mailing list, all contributions are welcome. 
+should join the development mailing list; all contributions are welcome. 
 
 Please see the file INSTALL.configure on how to build and install
 this product using the autoconf tools. This method is now fully supported
@@ -36,16 +49,20 @@ and is the recommended build method.
 
 1 What is Motif 2.3
 
-Motif is the freely available source code distribution for a
+Motif is the freely available source code distribution for the Motif
 user interface component toolkit.  Motif is built on top
 of the standard X Toolkit(Xt) and X11 libraries.
 
 1.1 Overview of Motif
 
-Motif 2.3 is an updated version of 2.1.  Any applications
-built against a previous 2.X release of Motif will be
+Motif 2.3 is an updated version of 2.2.  Any applications
+built against a previous 2.X release of Motif will be binary
 compatible with this release.  This is a source code release.
-After downloading the distribution, it will need to be unpacked
+Pre-compiled versions are available for download at the MotifZone:
+
+http://www.openmotif.org
+
+After downloading this source distribution, it will need to be unpacked
 and compiled.  The distribution contains the following items:
 
      libXm source code and include files
@@ -54,28 +71,62 @@ and compiled.  The distribution contains the following items:
      Demo programs
 
 
-2 What is unchanged in Motif 2.3
+2 What is new in Motif 2.3
 
-This is an update release, with alls of the existing functional-
-ity (widgets, convenience functions, resources, etc) unchanged.
-There have been no widgets removed from the set, and several have
-been added.
+Motif 2.3 has the following feature improvements:
+ * Client-side anti-aliased fonts support via XFT
+ * UTF-8 and UTF8_STRING atom support
+ * Ability to show text and pixmaps in Label, LabelGadget and all
+   derived widgets
+ * Support of PNG and JPEG image formats in the same way as XPM is supported
+ * 26 bugs fixes
 
-3 What is new in Motif 2.3
+The following bugs were fixed:
+ * #1121 (TabBox translation error) - removed locking of he clipboard from
+          XmClipboardRetrieveStart()
+ * #1283 (TabBox translation error)
+ * #1249 (XmCombo crashes program when resized)
+ * #1286 (XmDataField error with XmALIGNMENT_END)
+ * #1211 (Crash on setting XmNlabelPixmap in a ToggleButtonGadget)
+ * #1264 (Crash in PutDSToStream due to bug in _XmResizeHashTable)
+ * #1276 (Changing AddMode in XmList selects/deselects items without callback)
+ * #1196 (Free memory read in XmIm.c/draw_separator())
+ * #1193 (MWM crashes when restarting by a session manager)
+ * #1202 (mwm crashes when duplicating a window menu containing f.circle_up)
+ * #1186 (Invalid replacing XmList selected items)
+ * #1214 (Cannot set a string to XmTextField with XtSetValues when
+          XmNmodifyVerifyCallback is set)
+ * #1279 (XmTextGetSelectionPosition returns incorrect values after deleting
+          selection)
+ * #1269 (popup menus fail on Tarantella/VNC)
+ * #1262 (Entering Esc key before pulldown menu realized crashes)
+ * #1268 (XmCvtXmStringToCT improperly handles empty string)
+ * Added DataField.h and TabBox.h to XmAll.h
+ * Added synthetic resolution independent conversion of width/height
+          resources to ExtendedList for MultiList
+ * Added wide character string value of search string to
+          ExtendedListCallbackStruct
+ * Made DropDown using XmGrabShell instead of TopLevelShell
+ * #1260 (option menu changes screen's focus to 'None')
+ * #1258 (XmDataField: data out-of-bounds bug in df_FindPixelLength)
+ * #1257 (XmTextField: "Character xxx not supported in font" errors, bug
+          in multibyte code)
+ * #1256 (Problem with XmNsingleSelectionCallback in XmExt18List widget)
+ * Fixed incorrect XmRenderTableToProp() behavior appeared in RendToProp test
+ * Fixed incorrect XmClipboardCopyByName() behavior appeared in CutPaste2 test
 
- << FILL IN >>
-
-4.2 Build Systems
+3 Build Systems
 
 Motif 2.3 was built and tested on the following systems:
 
+- Linux 2.4 (Redhat Enterprise 2.1)
+- Linux 2.6 (Redhat Enterprise 3.0)
+- Linux 2.6 (SuSe 9.1)
+- Linux 2.4 (Redhat Fedora Core 2)
 
-     FreeBSD 4.4
-     Linux 2.4 (Redhat 7.2)
+In all cases the compiler originally provided with the OS was used.
 
-In all cases the vendor's supplied compiler was used.
-
-4.3 OS Support
+3.1 OS Support
 
 The following platforms are supported operating systems:
 
@@ -83,36 +134,39 @@ The following platforms are supported operating systems:
 - Linux 2.6 (Redhat Enterprise 3.0)
 - Linux 2.6 (SuSe 9.1)
 - Linux 2.4 (Redhat Fedora Core 2)
+- Linux 2.6 (Madrake 10.1)
 
-5 Filing Bug Reports
+4 Filing Bug Reports
 
 If you find a reproducible bug in any of the Motif libraries
 or code, or an error in the documentation, please reference the
 BUGREPORT file and/or submit a bug report online at the Motif
 Development zone:
 
-http://bugs.motifzone.net
+http://bugs.openmotif.org
 
 The listing for the status of submitted bugs is maintained there.
 
-6. Documentation
+5 Documentation
 
-For postscript and pdf documentation (users guides
-and reference manuals), see URL
+For postscript and pdf documentation (users guides and reference
+manuals), see URL:
+
 http://www.opengroup.org/openmotif/docs/
 
-7. Compatibility Notice
+6 Compatibility Notice
 
-Some structures in existing widgets have been changed in
-Motif 2.3. This can cause binary incompatibility problems which require
-a recompile of your application. One recommended solution is to install
-the runtime libraries from Motif 2.1.x. Link all your new applications to
-the current Motif Shared Library.
+Motif 2.3 is binary compatible with Motif 2.2.x. Applications
+built against Motif 2.2 should work with Motif 2.3 without
+having to recompile it.
 
-Motif 2.3 is not binary compatably with 2.2  or 2.1, existing applications
-will want to install the runtimes for older versions. 
+Motif 2.3 is not binary compatible with Motif 2.1.30.
+Applications built against Motif 2.1.30 will need to be recompiled
+with the Motif 2.2+ header files.
 
-8. Change Log
+7 Change Log
+2.3.0 July 2005
+This release.
 
 2.2.4 October 2004
 
@@ -129,9 +183,9 @@ autoconfig.
 a. uil support for the new widgets was finished along with demonstrations in 
 the periodic demo.
 
-b. several bugs were fixed. 
+b. Several bugs were fixed. 
 
-c. automake building is supported in an object directory. 
+c. Automake building is supported in an object directory. 
 
 
 2.2.1 January 29, 2002
