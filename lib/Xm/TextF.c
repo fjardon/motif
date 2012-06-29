@@ -6832,7 +6832,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
 #ifdef USE_XFT
 	  TextF_UseXft(tf) = False;
 #endif
-	  TextF_Font(tf) = (XFontStruct *)tmp_font;
+	  tf->text.font = (XFontStruct *)tmp_font;
 	  have_font_struct = True; /* we have a font set, so no need to 
 				    * consider future font structs */
 	  have_font_set = True;    /* we have a font set. */
@@ -6842,7 +6842,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
 	    break; /* Break out!  We've found the one we want. */
 	  }
 	} else if (!strcmp(XmFONTLIST_DEFAULT_TAG, font_tag)) {
-	  TextF_Font(tf) = (XFontStruct *)tmp_font;
+	  tf->text.font = (XFontStruct *)tmp_font;
 	  have_font_set = True;    /* we have a font set. */
 	  if (font_tag) XtFree(font_tag);
 	  break; /* Break out!  We've found the one we want. */
@@ -6854,7 +6854,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
 #ifdef USE_XFT
 	TextF_UseXft(tf) = False;
 #endif
-	TextF_Font(tf)=(XFontStruct*)tmp_font; /* save the first font
+	tf->text.font=(XFontStruct*)tmp_font; /* save the first font
 						* struct in case no font 
 						* set is found */
 	have_font_struct = True;                     
@@ -6863,7 +6863,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
 	TextF_UseFontSet(tf) = False;
 	TextF_UseXft(tf) = True;
 	have_xft_font = True;
-	TextF_XftFont(tf) = (XftFont*)tmp_font;
+	tf->text.font = (XftFont*)tmp_font;
 #endif
       }
     }

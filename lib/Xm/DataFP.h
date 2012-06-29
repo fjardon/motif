@@ -131,14 +131,8 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_margin_top(w) (((XmDataFieldWidget)(w))->text.margin_top)
 #define XmTextF_margin_bottom(w) (((XmDataFieldWidget)(w))->text.margin_bottom)
 #if USE_XFT
-#define XmTextF_font_ascent(w) \
-	(XmTextF_use_xft(w) ? 			\
-		(XmTextF_xft_font(w)->ascent) :	\
-		(((XmDataFieldWidget)(w)) -> text.font_ascent))
-#define XmTextF_font_descent(w) \
-	(XmTextF_use_xft(w) ?			\
-		(XmTextF_xft_font(w)->descent) :	\
-		(((XmDataFieldWidget)(w)) -> text.font_descent))
+#define XmTextF_font_ascent(w) (XmTextF_xft_font(w)->ascent)
+#define XmTextF_font_descent(w) (XmTextF_xft_font(w)->descent) 
 #else
 #define XmTextF_font_ascent(w) (((XmDataFieldWidget)(w))->text.font_ascent)
 #define XmTextF_font_descent(w) (((XmDataFieldWidget)(w))->text.font_descent)

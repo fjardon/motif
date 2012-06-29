@@ -8808,7 +8808,7 @@ df_LoadFontMetrics(
 #ifdef USE_XFT
 	        XmTextF_use_xft(tf) = False;
 #endif
-	        XmTextF_font(tf) = (XFontStruct *)tmp_font;
+	        tf->text.font = (XFontStruct *)tmp_font;
 	        have_font_struct = True; /* we have a font set, so no need to 
                                           * consider future font structs */
 	        have_font_set = True;    /* we have a font set. */
@@ -8817,7 +8817,7 @@ df_LoadFontMetrics(
 	           break; /* Break out!  We've found the one we want. */
 
 	     } else if (!strcmp(XmFONTLIST_DEFAULT_TAG, font_tag)){
-                XmTextF_font(tf) = (XFontStruct *)tmp_font;
+                tf->text.font = (XFontStruct *)tmp_font;
 	        have_font_set = True;    /* we have a font set. */
 	        break; /* Break out!  We've found the one we want. */
 	     }
@@ -8827,7 +8827,7 @@ df_LoadFontMetrics(
 #ifdef USE_XFT
 	     XmTextF_use_xft(tf) = False;
 #endif
-	     XmTextF_font(tf)=(XFontStruct*)tmp_font; /* save the first font
+	     tf->text.font=(XFontStruct*)tmp_font; /* save the first font
                                                      * struct in case no font 
                                                      * set is found */
 	     have_font_struct = True;                     
@@ -8836,7 +8836,7 @@ df_LoadFontMetrics(
 	     XmTextF_have_fontset(tf) = False;
              XmTextF_use_xft(tf) = True;
 	     have_xft_font = True;
-	     XmTextF_xft_font(tf) = (XftFont*)tmp_font;
+	     tf->text.font = (XftFont*)tmp_font;
 #endif
           }
        }

@@ -297,15 +297,8 @@ typedef struct _XmTextFieldRec {
 #define TextF_Font(tfg)			\
 	((XFontStruct*)(((XmTextFieldWidget)(tfg)) -> text.font))
 #ifdef	USE_XFT
-#define TextF_FontAscent(tfg)			\
-	(TextF_UseXft(tfg) ? 			\
-		(TextF_XftFont(tfg)->ascent) :	\
-		(((XmTextFieldWidget)(tfg)) -> text.font_ascent))
-
-#define TextF_FontDescent(tfg)			\
-	(TextF_UseXft(tfg) ?			\
-		(TextF_XftFont(tfg)->descent) :	\
-		(((XmTextFieldWidget)(tfg)) -> text.font_descent))
+#define TextF_FontAscent(tfg) (TextF_XftFont(tfg)->ascent)
+#define TextF_FontDescent(tfg) (TextF_XftFont(tfg)->descent)
 #else
 #define TextF_FontAscent(tfg)		\
 	(((XmTextFieldWidget)(tfg)) -> text.font_ascent)
