@@ -3400,10 +3400,12 @@ TabToIndex(tab, child)
     Widget           child;
 #endif
 {
-    WidgetList kid = tab->composite.children;
+    WidgetList kid;
     int i;
 
     if( tab == NULL || child == NULL ) return( -1 );
+    
+    kid = tab->composite.children;
 
     for( i = 0; kid != NULL; kid++ )
     {
