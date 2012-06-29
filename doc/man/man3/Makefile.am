@@ -257,6 +257,7 @@ man_MANS = ApplicationShell.3 \
     XmHierarchyGetChildNodes.3 \
     XmHierarchyOpenAllAncestors.3 \
     XmIconBox.3 \
+    XmIconBoxIsCellEmpty.3 \
     XmIconButton.3 \
     XmIconGadget.3 \
     XmImCloseXIM.3 \

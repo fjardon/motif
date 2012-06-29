@@ -8,27 +8,30 @@
 .fi
 .SH DESCRIPTION
 .PP
-The Icon Box widget lays out its children on a grid with each child forced to be the 
-same size and with the location of each child specified as an X and Y location on the 
-grid.
+The Icon Box widget lays out its children on a grid with each child forced
+to be the same size and with the location of each child specified as an X
+and Y location on the grid.
 .PP
-The size of the Icon Box, its children, and the number of cells displayed are calculated 
-as described below. The general idea is that all children are always be shown and 
-should be given their desired size whenever possible. The user may add or delete cells 
-by resizing this window using the window manager widget.
+The size of the Icon Box, its children, and the number of cells displayed
+are calculated as described below. The general idea is that all children
+are always be shown and should be given their desired size whenever possible.
+The user may add or delete cells by resizing this window using the window
+manager widget.
 .PP
-The preferred size is calculated by using the maximum desired child height or 
-width and making sure that these are no smaller than the minimum sizes. This size 
-is multiplied by the number of cells along the axis and properly padded to come 
-up with a preferred size. The number of cells is the maximum of the largest cellX 
-or cellY value and the minimum number of horizontal or vertical cells.
+The preferred size is calculated by using the maximum desired child height
+or width and making sure that these are no smaller than the minimum sizes.
+This size is multiplied by the number of cells along the axis and properly
+padded to come up with a preferred size. The number of cells is the maximum
+of the largest cellX or cellY value and the minimum number of horizontal or
+vertical cells\&.
 .PP
-If the Icon box is forced larger than its preferred size more cells are added at the 
-bottom-right of the widget while the children all remain at their preferred sizes.
+If the Icon box is forced larger than its preferred size more cells are
+added at the bottom-right of the widget while the children all remain at
+their preferred sizes\&.
 .PP
-If the Icon box is forced smaller than its preferred size each cell is forced to be 
-smaller in order to allow all children to fit within the Icon Box. All children will 
-be forced to the same smaller size.
+If the Icon box is forced smaller than its preferred size each cell is
+forced to be smaller in order to allow all children to fit within the
+Icon Box. All children will be forced to the same smaller size.
 .SS "Classes"
 .PP
 Icon Box inherits behavior, resources, and traits from \fBCore\fP,
@@ -94,9 +97,9 @@ l| l| l| l| l.
 \fBXmIconBox Constraint Resource Set\fP
 \fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
 _____
-cellXCellXShortXmIconBoxAnyCellCSG
+XmNcellXXmCCellXShortXmIconBoxAnyCellCSG
 _____
-cellYCellYShortXmIconBoxAnyCellCSG
+XmNcellYXmCCellYShortXmIconBoxAnyCellCSG
 _____
 .TE
 .IP "\fBXmNcellX\fP" 10
