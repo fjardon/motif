@@ -187,6 +187,7 @@ man_MANS = ApplicationShell.3 \
     XmDrawingArea.3 \
     XmDrawnButton.3 \
     XmDropDown.3 \
+    XmDropDownGetChild.3 \
     XmDropSite.3 \
     XmDropSiteConfigureStackingOrder.3 \
     XmDropSiteEndUpdate.3 \
