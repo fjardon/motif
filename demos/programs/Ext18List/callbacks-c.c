@@ -20,10 +20,10 @@ extern Pixmap porsche_pix;
 extern Pixmap stopsign_pix; 
 extern Pixmap crab_pix;
 extern Pixmap clown_pix;
-static int  NothingSort(short , Xm18RowInfo *, Xm18RowInfo *);
-static int  ExtListAlphaSort(short , Xm18RowInfo *, Xm18RowInfo *);
-static int  ExtListIntSort(short , Xm18RowInfo *, Xm18RowInfo *);
-static int  ExtListDoubleSort(short , Xm18RowInfo *, Xm18RowInfo *);
+static int  NothingSort(short , XmMultiListRowInfo *, XmMultiListRowInfo *);
+static int  ExtListAlphaSort(short , XmMultiListRowInfo *, XmMultiListRowInfo *);
+static int  ExtListIntSort(short , XmMultiListRowInfo *, XmMultiListRowInfo *);
+static int  ExtListDoubleSort(short , XmMultiListRowInfo *, XmMultiListRowInfo *);
 
 
 /**************************************************************
@@ -37,7 +37,7 @@ CreateExtListCB( Widget parent )
 	Widget retWid;
     Arg args[MAX_ARGS];
     Cardinal argcnt;
-    Xm18RowInfo *row_info;
+    XmMultiListRowInfo *row_info;
     int i, j;
     XmString *col_title_str;
     static String col_titles[] = {
@@ -56,16 +56,16 @@ CreateExtListCB( Widget parent )
 
 
     /*
-     * Create the Xm18RowInfo "rows"
+     * Create the XmMultiListRowInfo "rows"
      *
-     * Create PLAYER_LIMIT Xm18RowInfo structs
+     * Create PLAYER_LIMIT XmMultiListRowInfo structs
      * Initially however, there are no rows
      */
 
-    row_info = (Xm18RowInfo *) XtMalloc(sizeof(Xm18RowInfo) * LINEUP_LIMIT);
+    row_info = (XmMultiListRowInfo *) XtMalloc(sizeof(XmMultiListRowInfo) * LINEUP_LIMIT);
 
     /*
-     * Each Xm18RowInfo contains an array of strings, which represent 
+     * Each XmMultiListRowInfo contains an array of strings, which represent 
      * the column data.
      *
      * In this example, the following columns are:
@@ -138,7 +138,7 @@ RemCB(Widget w, XtPointer client, XtPointer call )
     Arg args[5];
     Cardinal argcnt;
     DemoInfo demo_info = (DemoInfo)client;
-    Xm18RowInfo *items = NULL, *new_items = NULL;
+    XmMultiListRowInfo *items = NULL, *new_items = NULL;
     short items_count = 0, new_items_count = 0;
     int i, j, k;
     
@@ -162,7 +162,7 @@ RemCB(Widget w, XtPointer client, XtPointer call )
 	    new_items_count++;
 
     /* Allocate this amount of memory */
-    new_items = (Xm18RowInfo *) XtMalloc(sizeof(Xm18RowInfo) * LINEUP_LIMIT);
+    new_items = (XmMultiListRowInfo *) XtMalloc(sizeof(XmMultiListRowInfo) * LINEUP_LIMIT);
 
     for (i = 0; i < LINEUP_LIMIT; i++) {
 	new_items[i].values = (XmString *) 
@@ -256,7 +256,7 @@ UpdateRemLabelStr(Widget w,XtPointer client, XtPointer call )
   DemoInfo demo_info = (DemoInfo)client;
   Arg args[5];
   Cardinal argcnt;
-  Xm18RowInfo *row_info = (Xm18RowInfo *)call;
+  XmMultiListRowInfo *row_info = (XmMultiListRowInfo *)call;
     
   if (row_info && row_info->values)
   {
@@ -280,7 +280,7 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
     DemoInfo demo_info = (DemoInfo)client;
     Arg args[5];
     Cardinal argcnt;
-    Xm18RowInfo *row_info;
+    XmMultiListRowInfo *row_info;
     short num_rows;
     int i=0, playernum;
     char buf[BUFSIZ];
@@ -481,7 +481,7 @@ end ",
  *
  ************************************************************/
 static int 
-NothingSort( short column, Xm18RowInfo *row1, Xm18RowInfo *row2 )
+NothingSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *row2 )
 {
   return(0);
 }
@@ -508,7 +508,7 @@ StringFromXmString(XmString xms)
  *                                 equal to, or greater than 2.
  */
 static int
-ExtListAlphaSort( short column, Xm18RowInfo *row1, Xm18RowInfo *row2 )
+ExtListAlphaSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *row2 )
 {
   String str1 = StringFromXmString(row1->values[column]);
   String str2 = StringFromXmString(row2->values[column]);
@@ -537,7 +537,7 @@ ExtListAlphaSort( short column, Xm18RowInfo *row1, Xm18RowInfo *row2 )
  *                                 equal to, or greater than 2.
  */
 static int
-ExtListIntSort( short column,  Xm18RowInfo *row1, Xm18RowInfo *row2 )
+ExtListIntSort( short column,  XmMultiListRowInfo *row1, XmMultiListRowInfo *row2 )
 {
   String str1 = StringFromXmString(row1->values[column]);
   String str2 = StringFromXmString(row2->values[column]);
@@ -577,7 +577,7 @@ ExtListIntSort( short column,  Xm18RowInfo *row1, Xm18RowInfo *row2 )
  *                                 equal to, or greater than 2.
  */
 static int
-ExtListDoubleSort( short column, Xm18RowInfo *row1, Xm18RowInfo *row2 )
+ExtListDoubleSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *row2 )
 {
   String str1 = StringFromXmString(row1->values[column]);
   String str2 = StringFromXmString(row2->values[column]);
