@@ -323,6 +323,7 @@ class_attribute_name
 	| CONVFUNC		{ yytknval1 = CONVFUNC; }
 	| WIDGETCLASS		{ yytknval1 = WIDGETCLASS; }
 	| CTRLMAPSRESOURCE	{ yytknval1 = CTRLMAPSRESOURCE; }
+	| ALIAS			{ yytknval1 = ALIAS; }
 	;
 
 boolean_class_attribute_name

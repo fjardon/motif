@@ -197,6 +197,8 @@ typedef struct WmlSynClassDefStruct
     char		*convfunc;	/* convenience function name */
     char		*docname;	/* name for docs */
     char		*ctrlmapto;	/* resource controls map to */
+    short int		alias_cnt;	/* alias count */
+    char		**alias_list;	/* vector of aliass */
     WmlSynClassCtrlDefPtr
 			controls;	/* list of controlled classes */
     WmlSynClassResDefPtr

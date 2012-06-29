@@ -128,6 +128,8 @@ cdesc->int_lit = NULL;
 cdesc->convfunc = NULL;
 cdesc->docname = NULL;
 cdesc->ctrlmapto = NULL;
+cdesc->alias_cnt = 0;
+cdesc->alias_list = NULL;
 cdesc->controls = NULL;
 cdesc->resources = NULL;
 cdesc->children = NULL;
@@ -496,6 +498,7 @@ void wmlAddClassAttribute (attrid, val)
 {
 
 WmlSynClassDefPtr	cdesc;		/* the class descriptor */
+char			**synlist;	/* ALIAS pointer list */
 
 
 /*
@@ -548,6 +551,17 @@ switch ( attrid )
     case CTRLMAPSRESOURCE:
         cdesc->ctrlmapto = wmlAllocateString (val);
 	break;	
+    case ALIAS:
+	if ( cdesc->alias_cnt == 0 )
+	    synlist = (char **) malloc (sizeof(char *));
+	else
+	    synlist = (char **)
+		realloc (cdesc->alias_list,
+			 (cdesc->alias_cnt+1)*sizeof(char **));
+	synlist[cdesc->alias_cnt] = wmlAllocateString (val);
+	cdesc->alias_cnt += 1;
+	cdesc->alias_list = synlist;
+	break;
     }
 
 return;

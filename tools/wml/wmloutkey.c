@@ -316,6 +316,7 @@ void wmlKeyWClassTokens ()
 int			ndx;		/* loop index */
 WmlClassDefPtr		clsobj;		/* class object */
 WmlSynClassDefPtr	synobj;		/* syntactic object */
+int			alias_ndx;	/* alias loop index */
 
 
 /*
@@ -326,6 +327,10 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
     clsobj = (WmlClassDefPtr) wml_obj_class_ptr->hvec[ndx].objptr;
     synobj = clsobj->syndef;
     wmlKeyWMakeTokens (synobj->name, WmlTokenClassClass, (ObjectPtr)clsobj);
+    for ( alias_ndx=0 ; alias_ndx<synobj->alias_cnt ; alias_ndx++ )
+	wmlKeyWMakeTokens (synobj->alias_list[alias_ndx],
+			   WmlTokenClassClass,
+			   (ObjectPtr)clsobj);
     }
 
 }

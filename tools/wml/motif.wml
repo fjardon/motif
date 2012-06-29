@@ -482,6 +482,7 @@ ControlList
         XmCheckBox;
         XmColumn;
         XmColorSelector;
+	XmCombinationBox2;
         XmComboBox;
         XmCommand;
         XmCommandDialog;
@@ -567,6 +568,7 @@ ControlList
         XmCheckBox;
         XmColumn;
         XmColorSelector;
+	XmCombinationBox2;
         XmComboBox;
         XmCommand;
         XmCommandDialog;
@@ -658,6 +660,7 @@ ControlList
         XmButtonBox;
         XmCheckBox;
         XmColumn;
+	XmCombinationBox2;
         XmComboBox;
         XmContainer;
         XmDrawingArea;
@@ -5604,6 +5607,7 @@ Resource
 
 Class XmCombinationBox2: Widget {
   SuperClass = "XmManager";
+  Alias = XmDropDown;
   ConvenienceFunction = XmCreateCombinationBox2;
   Resources {
     XmNhorizontalMargin;
@@ -6232,6 +6236,7 @@ Resource
 
 Class XmExt18List : Widget {
   SuperClass = "XmManager";
+  Alias = XmMultiList;
   ConvenienceFunction = XmCreateExtended18List;
   Resources {
     XmNalignment;
