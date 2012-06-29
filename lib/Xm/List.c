@@ -3617,14 +3617,14 @@ ReplaceItem(XmListWidget lw,
 	    XmString item,
 	    int pos)
 {
+  int i;
   pos--;
 
   XmStringFree(lw->list.items[pos]);
   lw->list.items[pos] = XmStringCopy(item);
   /*Selected items should be replaced also*/
-  int i=0;
-  for(i=0;i<lw->list.selectedItemCount;i++)
-      if(lw->list.selectedPositions[i]==pos+1){
+  for(i=0; i<lw->list.selectedItemCount; i++)
+      if(lw->list.selectedPositions[i]==pos+1) {
          XmStringFree(lw->list.selectedItems[i]);
 	 lw->list.selectedItems[i]=XmStringCopy(item);
       }
