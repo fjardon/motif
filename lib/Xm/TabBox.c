@@ -830,6 +830,7 @@ Realize(Widget widget, XtValueMask *value_mask,
     XmTabBoxWidget   tb = (XmTabBoxWidget) widget;
     XGCValues        gcValues;
     XFontStruct      *font;
+    XtGCMask         gcMask;
 
     XtRealizeProc realize;
 
@@ -845,10 +846,14 @@ Realize(Widget widget, XtValueMask *value_mask,
      * attributes of it a, what seems like, random.
      */
     XmeRenderTableGetDefaultFont(XmTabBox_font_list(tb), &font);
-    gcValues.font = font->fid;
     gcValues.background = tb->core.background_pixel;
+    gcMask = GCBackground;
+    if (font) {
+        gcValues.font = font->fid;
+	gcMask |= GCFont;
+    }
     /* CR03128 */
-    XmTabBox__tab_GC(tb) = XmTabBox__text_GC(tb) = XtGetGC(widget, GCFont | GCBackground, &gcValues);
+    XmTabBox__tab_GC(tb) = XmTabBox__text_GC(tb) = XtGetGC(widget, gcMask, &gcValues);
 }
 
 static void

@@ -1855,7 +1855,7 @@ CreateGCs(Widget w)
 
     if (fs) {
         values.font = fs->fid;
-        mask |= mask | GCFont;
+        mask |= GCFont;
     }
 
     XmIconButton_gc(iw) = XtGetGC(w, mask, &values);
