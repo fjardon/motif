@@ -634,6 +634,7 @@ _XmTextFieldConvert(
       *length = 0;
       return False;
     }
+#ifdef UTF8_SUPPORTED
   } else if (*target == atoms[XmAUTF8_STRING]) {
     *type = atoms[XmAUTF8_STRING];
     *format = 8;
@@ -677,6 +678,7 @@ _XmTextFieldConvert(
       *length = 0;
       return False;
     }
+#endif
   } else if (*target == atoms[XmAINSERT_SELECTION]) {
     if (is_secondary) 
       return False;
