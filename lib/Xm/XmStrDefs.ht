@@ -2,6 +2,8 @@
 #ifndef _XmStrDefs_h_
 #define _XmStrDefs_h_
 
+#include <X11/Intrinsic.h>
+
 #ifndef _XmConst
 #define _XmConst /**/
 #endif

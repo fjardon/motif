@@ -29,6 +29,8 @@
 #ifndef _XmIconGI_h
 #define _XmIconGI_h
 
+#include <X11/Intrinsic.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

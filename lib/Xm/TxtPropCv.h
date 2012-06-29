@@ -29,6 +29,8 @@
 #ifndef _XmTxtPropCvP_h
 #define _XmTxtPropCvP_h
 
+#include "Xm.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

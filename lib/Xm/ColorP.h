@@ -28,6 +28,8 @@
 #ifndef _XmColorP_h
 #define _XmColorP_h
 
+#include <X11/Intrinsic.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

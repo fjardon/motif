@@ -24,6 +24,9 @@
 #ifndef _XmToolTip_h
 #define _XmToolTip_h
 
+#include <X11/Intrinsic.h>
+#include "Xm.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

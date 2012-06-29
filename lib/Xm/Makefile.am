@@ -296,3 +296,5 @@ $(CAT_FILES): Xm.msg
 	gencat Xm.cat $(top_builddir)/localized/C/msg/Xm.msg
 
 endif
+
+#include $(srcdir)/check_headers.am

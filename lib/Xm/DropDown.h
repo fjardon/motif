@@ -1,6 +1,8 @@
 #ifndef _XmDropDown_h
 #define _XmDropDown_h
 
+#include <X11/Intrinsic.h>
+
 #if defined(VMS) || defined(__VMS)
 #include <X11/apienvset.h>
 #endif

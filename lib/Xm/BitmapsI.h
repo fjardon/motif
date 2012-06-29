@@ -40,7 +40,7 @@
 #ifndef _XmBitmapsI_h
 #define _XmBitmapsI_h
 
-#include <Xm/Xm.h>
+#include <Xm/XmP.h>
 
 #ifdef __cplusplus
 extern "C" {

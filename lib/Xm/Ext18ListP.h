@@ -25,7 +25,7 @@
 #ifndef _XmExt18ListP_h_
 #define _XmExt18ListP_h_
 
-#define XmEXT18LIST_BIT	XmMULTI_LIST_BIT
+#include "XmP.h"
 
 #undef XmIsExt18List
 #define XmIsExt18List(w)  \

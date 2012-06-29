@@ -29,6 +29,8 @@
 #ifndef _XmDragOverSP_h
 #define _XmDragOverSP_h
 
+#include <X11/IntrinsicP.h>
+
 #include <X11/Shell.h>
 #include <X11/ShellP.h>
 #include <Xm/XmP.h>

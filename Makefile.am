@@ -19,7 +19,8 @@ MAINTAINERCLEANFILES = Makefile.in \
              aclocal.m4 \
              config.h.in \
              install-sh \
-             missing mkinstalldirs
+             missing mkinstalldirs \
+             compile
 
 SUBDIRS	= bindings bitmaps \
              config \

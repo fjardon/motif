@@ -31,6 +31,8 @@
 #ifndef _XmMessagesI_h
 #define _XmMessagesI_h
 
+#include <X11/Intrinsic.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

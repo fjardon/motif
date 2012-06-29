@@ -29,6 +29,7 @@
 #ifndef _XmMwmUtil_h
 #define _XmMwmUtil_h
 
+#include <X11/X.h>	/* for Window typedefs */
 #include <X11/Xmd.h>	/* for protocol typedefs */
 
 #ifdef __cplusplus

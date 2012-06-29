@@ -150,7 +150,7 @@ fi
 
 if test x$GCC = xyes
 then
-    CFLAGS="$CFLAGS -Wall -g -Wno-unused -Wno-comment"
+    CFLAGS="$CFLAGS -Wall -g -fno-strict-aliasing -Wno-unused -Wno-comment"
 fi
 AC_DEFINE(NO_OL_COMPAT, 1, "No OL Compatability")
 
