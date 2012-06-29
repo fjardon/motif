@@ -1222,6 +1222,7 @@ object tabFrame: XmFrame {
 object tabstack: XmTabStack{
    controls {
 	XmTree tree;
+	XmOutline outline;
         XmFrame commandFrame;
         XmFrame paneFrame;
         XmColumn column;
@@ -1246,8 +1247,27 @@ object tree: XmTree{
     };
 
 };
+object outline: XmOutline{
+    arguments {
+        XmNtabLabelString = "XmOutline";
+        XmNconnectNodes = true;
+    };
+    controls {
+        XmPushButton Germanic;
+        XmPushButton TEast;
+        XmPushButton TWest;
+        XmPushButton TNorth;
+        XmPushButton Burgundian;
+        XmPushButton Gothic;
+        XmPushButton Lombardic ;
+        XmPushButton Vandalic;
+        XmPushButton Ingaevonic;
+        XmPushButton High;
+    };
+
+};
 !
-! Nodes for our tree
+! Nodes for our tree and outline
 !
 object Germanic :XmPushButton { arguments {
             XmNlabelString = "Germanic";
