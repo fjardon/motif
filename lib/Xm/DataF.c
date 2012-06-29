@@ -2537,7 +2537,7 @@ df_XmSetMarginGC(
   df_GetRect(tf, &ClipRect);
 #ifdef USE_XFT
   if (XmTextF_use_xft(tf))
-    _XmXftSetClipRectangles((Widget)tf, 0, 0, &ClipRect, 1);
+    _XmXftSetClipRectangles(XtDisplay(tf), XtWindow(tf), 0, 0, &ClipRect, 1);
 #endif
   XSetClipRectangles(XtDisplay(tf), gc, 0, 0, &ClipRect, 1,
                      Unsorted);

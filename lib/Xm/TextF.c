@@ -1888,7 +1888,7 @@ SetMarginGC(XmTextFieldWidget tf,
 
 #ifdef USE_XFT
   if (TextF_UseXft(tf))
-    _XmXftSetClipRectangles((Widget)tf, 0, 0, &ClipRect, 1);
+    _XmXftSetClipRectangles(XtDisplay(tf), XtWindow(tf), 0, 0, &ClipRect, 1);
 #endif
   XSetClipRectangles(XtDisplay(tf), gc, 0, 0, &ClipRect, 1,
                      Unsorted);

@@ -271,8 +271,7 @@ void _XmXftDrawString2(Display *display, Window window, GC gc, XftFont *font, in
 #endif
                 char *s, int len);
 
-void _XmXftSetClipRectangles(Widget w, Position x, Position y, XRectangle *rects, int n);
-void _XmXftSetClipRectangles2(Display *display, Window window, Position x, Position y, XRectangle *rects, int n);
+void _XmXftSetClipRectangles(Display *display, Window window, Position x, Position y, XRectangle *rects, int n);
 
 XftColor _XmXftGetXftColor(Display *display, Pixel color);
 #endif

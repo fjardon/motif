@@ -3023,15 +3023,7 @@ _XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
 }
 
 void
-_XmXftSetClipRectangles(Widget w, Position x, Position y, XRectangle *rects, int n)
-{
-	XftDraw	*d = _XmXftDrawCreate(XtDisplay(w), XtWindow(w));
-
-	XftDrawSetClipRectangles(d, x, y, rects, n);
-}
-
-void
-_XmXftSetClipRectangles2(Display *display, Window window, Position x, Position y, XRectangle *rects, int n)
+_XmXftSetClipRectangles(Display *display, Window window, Position x, Position y, XRectangle *rects, int n)
 {
 	XftDraw	*d = _XmXftDrawCreate(display, window);
 

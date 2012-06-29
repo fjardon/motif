@@ -2599,7 +2599,7 @@ SetClipRect(XmListWidget widget)
   rect.height = h;
 
 #ifdef USE_XFT
-    _XmXftSetClipRectangles2(XtDisplay(lw), XtWindow(lw), x, y,
+    _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), x, y,
 	                    &rect, 1);
 #endif      
 

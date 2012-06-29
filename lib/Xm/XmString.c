@@ -4933,7 +4933,7 @@ _calc_align_and_clip(
 	    *restore = TRUE;
 #ifdef USE_XFT
             if (font_type == XmFONT_IS_XFT)
-	      _XmXftSetClipRectangles2(d, w, 0, 0, clip, 1);
+	      _XmXftSetClipRectangles(d, w, 0, 0, clip, 1);
 	    else
 #endif
             XSetClipRectangles (d, gc, 0, 0, clip, 1, YXBanded);

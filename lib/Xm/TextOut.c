@@ -556,7 +556,7 @@ SetMarginGC(XmTextWidget tw,
   GetRect(tw, &ClipRect);
 #ifdef USE_XFT
   if (tw->text.output->data->use_xft)
-    _XmXftSetClipRectangles((Widget)tw, 0, 0, &ClipRect, 1);
+    _XmXftSetClipRectangles(XtDisplay(tw), XtWindow(tw), 0, 0, &ClipRect, 1);
 #endif
   XSetClipRectangles(XtDisplay(tw), gc, 0, 0, &ClipRect, 1,
                      Unsorted);
