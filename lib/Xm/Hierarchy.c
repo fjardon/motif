@@ -1395,7 +1395,7 @@ AddChildToList(HierarchyConstraints ** list, Cardinal * num, Cardinal * alloc,
 
 	params[0] = XtName(XmHierarchyC_widget(child));
 	_XmWarningMsg(XmHierarchyC_widget(child), XmNinsertBeforeNotSibling,
-		XmNinsertBeforeNotSiblingMsg, params, &num);
+		XmNinsertBeforeNotSiblingMsg, params, num);
     }
     
     if (success != YES)		/* Stick it on the end of the list. */
