@@ -2799,12 +2799,12 @@ df_FindPixelLength(
       num_bytes = wcstombs(tmp, wc_string, 
 			   (int)((length + 1)*sizeof(wchar_t)));
       wc_string[length] = wc_tmp;
-      XftTextExtentsUtf8(XtDisplay(tf), XmTextF_xft_font(tf), tmp, num_bytes,
-          &ext);
+      XftTextExtentsUtf8(XtDisplay(tf), XmTextF_xft_font(tf),
+          (FcChar8*)tmp, num_bytes, &ext);
       XmStackFree(tmp, stack_cache);
     } else /* one byte chars */
-      XftTextExtentsUtf8(XtDisplay(tf), XmTextF_xft_font(tf), string, length,
-          &ext);
+      XftTextExtentsUtf8(XtDisplay(tf), XmTextF_xft_font(tf),
+          (FcChar8*)string, length, &ext);
 
     return ext.xOff;
 #endif
@@ -2947,7 +2947,7 @@ df_RedisplayText(
 {
   _XmHighlightRec *l = XmTextF_highlight(tf).list;
   XRectangle rect;
-  int x, y, i, startx;
+  int x, y, i, startx = 0;
   Dimension margin_width = XmTextF_margin_width(tf) +
 	                   tf->primitive.shadow_thickness +
 			   tf->primitive.highlight_thickness;
@@ -4877,6 +4877,7 @@ df_GetServerTime(
   return (event.xproperty.time);
 }
 
+static Boolean
 PrintableString(XmDataFieldWidget tf,
 		char* str, 
 		int n, 
@@ -4986,7 +4987,8 @@ PrintableString(XmDataFieldWidget tf,
   } else if (TextF_UseXft(tf)) {
     XGlyphInfo	ext;
 
-    XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), str, n, &ext);
+    XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf),
+            (FcChar8*)str, n, &ext);
 
     return ext.xOff != 0;
 #endif
@@ -6224,7 +6226,7 @@ df_KeySelection(
         Cardinal *num_params )
 #endif /* _NO_PROTO */
 {
-  XmTextPosition position, left, right;
+  XmTextPosition position = 0, left, right;
   XmDataFieldWidget tf = (XmDataFieldWidget) w;
   XmTextPosition cursorPos;
 
@@ -8836,7 +8838,7 @@ df_LoadFontMetrics(
 	     XmTextF_have_fontset(tf) = False;
              XmTextF_use_xft(tf) = True;
 	     have_xft_font = True;
-	     tf->text.font = (XftFont*)tmp_font;
+	     tf->text.font = tmp_font;
 #endif
           }
        }
@@ -8949,7 +8951,7 @@ df_ValidateString(
 	 } else {
 	    wchar_t tmp[XmTextF_max_char_size(tf)+1];
 	    int num_conv;
-	    num_conv = mbtowc(&tmp, curr_str, XmTextF_max_char_size(tf));
+	    num_conv = mbtowc(tmp, curr_str, XmTextF_max_char_size(tf));
             if (num_conv >= 0 && df_FindPixelLength(tf, (char*) &tmp, 1)) {
 	       for (j = 0; j < num_conv; j++) {
                   *temp_str = *curr_str;

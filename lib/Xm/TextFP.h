@@ -106,7 +106,7 @@ typedef struct _XmTextFieldPart {
 
     XmFontList font_list;	/* Uses only the font portion of fontlist */
 #if USE_XFT
-    XPointer *font;	        /* font retrieved from the fontlist */
+    XtPointer font;	        /* font retrieved from the fontlist */
 #else
     XFontStruct *font;	        /* font retrieved from the fontlist */
 #endif
