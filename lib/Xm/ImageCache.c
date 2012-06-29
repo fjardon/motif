@@ -867,7 +867,7 @@ GetImage(
     ImageData *entry;
     char *file_name;
     XtEnum return_value;
-#if defined (USE_PNG_SUPPORTED) || defined (JPEG_SUPPORTED)
+#if defined (PNG_SUPPORTED) || defined (JPEG_SUPPORTED)
     FILE *infile;
     int rc;
 #endif
