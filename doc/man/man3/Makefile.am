@@ -476,6 +476,9 @@ man_MANS = ApplicationShell.3 \
     XmTabListTabCount.3 \
     XmTabSetValue.3 \
     XmTabStack.3 \
+    XmTabStackGetSelectedTab.3 \
+    XmTabStackSelectTab.3 \
+    XmTabStackXYToWidget.3 \
     XmTargetsAreCompatible.3 \
     XmText.3 \
     XmTextClearSelection.3 \
