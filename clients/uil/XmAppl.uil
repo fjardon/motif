@@ -40,7 +40,7 @@
 
 /* Version information */
 value	XmVERSION :			2;
-value	XmREVISION :			2;
+value	XmREVISION :			3;
 value	XmVersion :			(XmVERSION * 1000 + XmREVISION);
 
 
