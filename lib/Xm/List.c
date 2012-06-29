@@ -7622,6 +7622,7 @@ ListConvert(Widget w, XtPointer client_data,
 		}
 	    }
 	}
+#ifdef UTF8_SUPPORTED
       else if (cs->target = atoms[XmAUTF8_STRING])
 	{
 	    type = atoms[XmAUTF8_STRING];
@@ -7631,6 +7632,7 @@ ListConvert(Widget w, XtPointer client_data,
 	    else
 	        size = 0;
 	}
+#endif
       else
 	{
 	  size = XmCvtXmStringToByteStream(concat, (unsigned char**) &value);

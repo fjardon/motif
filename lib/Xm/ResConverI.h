@@ -42,10 +42,11 @@ extern char * _XmConvertCSToString(
 extern Boolean _XmCvtXmStringToCT( 
                         XrmValue *from,
                         XrmValue *to) ;
+#ifdef UTF8_SUPPORTED
 extern Boolean _XmCvtXmStringToUTF8String( 
                         XrmValue *from,
                         XrmValue *to) ;
-
+#endif
 /********    End Private Function Declarations    ********/
 
 #ifdef __cplusplus
