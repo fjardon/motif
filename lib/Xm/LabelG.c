@@ -1235,6 +1235,8 @@ SetNormalGC(XmLabelGadget lw)
         dynamicMask, 0);
 
     valueMask |= GCFillStyle | GCStipple;
+    values.foreground = LabG_Background(lw); 
+    values.background = LabG_Foreground(lw);
     values.fill_style = FillOpaqueStippled;
 
     values.stipple = _XmGetInsensitiveStippleBitmap((Widget) lw);
