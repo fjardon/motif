@@ -1,0 +1,105 @@
+#!/bin/csh
+
+# COPYRIGHT NOTICE
+# Copyright (c) 1990, 1991, 1992, 1993 Open Software Foundation, Inc.
+# Copyright (c) 1996, 1997, 1998, 1999, 2000 The Open Group
+# ALL RIGHTS RESERVED (MOTIF).  See the file named COPYRIGHT.MOTIF for
+# the full copyright text.
+# 
+# This software is subject to an open license. It may only be
+# used on, with or for operating systems which are themselves open
+# source systems. You must contact The Open Group for a license
+# allowing distribution and sublicensing of this software on, with,
+# or for operating systems which are not Open Source programs.
+# 
+# See http://www.opengroup.org/openmotif/license for full
+# details of the license agreement. Any use, reproduction, or
+# distribution of the program constitutes recipient's acceptance of
+# this agreement.
+# 
+# EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, THE PROGRAM IS
+# PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY
+# WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY
+# OR FITNESS FOR A PARTICULAR PURPOSE
+# 
+# EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER RECIPIENT
+# NOR ANY CONTRIBUTORS SHALL HAVE ANY LIABILITY FOR ANY DIRECT,
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED
+# AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OR DISTRIBUTION OF THE PROGRAM OR THE
+# EXERCISE OF ANY RIGHTS GRANTED HEREUNDER, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGES.
+# 
+# 
+# HISTORY
+# @OPENGROUP_COPYRIGHT@
+#
+
+set TESTS_HOME = $cwd
+set DIR_LIST_AUTO = 'Auto/lib/Common \
+Auto/lib/Create/geometry \
+Auto/lib/Create/instances \
+Auto/lib/Create/other \
+Auto/lib/Create/resources \
+Auto/lib/Create/specific \
+Auto/lib/Create/widgets \
+Auto/lib/Create \
+Auto/lib/Script \
+Auto/lib/Synth/events \
+Auto/lib/Synth/info \
+Auto/lib/Synth/other \
+Auto/lib/Synth/primitives \
+Auto/lib/Synth \
+Auto/lib/Util \
+Auto/lib/Visual/visual \
+Auto/lib/Visual/other \
+Auto/lib/Visual \
+Auto/lib \
+Auto'
+
+set DIR_LIST_MANUAL = 'Manual/lib/Common \
+Manual/lib \
+Manual'
+
+set DIR_TEXT = 'Toolkit/Text/lib/Auto \
+Toolkit/Text/lib/Manual \
+Toolkit/Text/lib'
+
+# Go to each automated test directory
+
+foreach dir ($DIR_LIST_MANUAL)
+        cd $TESTS_HOME/$dir
+        echo "I am in " $cwd
+
+	if (-e Makefile) then
+		mv -f  Makefile Makefile.bak
+	endif
+	imake -DUseInstalled -DMANUAL -I$TESTS_HOME/../config/cf -TMotif.tmpl -TImake.tmpl -DTOPDIR=$TESTS_HOME/..
+end
+cd $TESTS_HOME/Manual && make -i
+
+foreach dir ($DIR_LIST_AUTO)
+        cd $TESTS_HOME/$dir
+        echo "I am in " $cwd
+
+	if (-e Makefile) then
+	mv -f Makefile Makefile.bak
+	endif
+	imake -DUseInstalled -DAUTOMATIC -I$TESTS_HOME/../config/cf -TMotif.tmpl -TImake.tmpl -DTOPDIR=$TESTS_HOME/..
+end
+
+cd $TESTS_HOME/Auto && make -i
+
+foreach dir ($DIR_TEXT)
+        cd $TESTS_HOME/$dir
+        echo "I am in " $cwd
+
+	if (-e Makefile) then
+	mv -f Makefile Makefile.bak
+	endif
+	imake -DUseInstalled -DAUTOMATIC -I$TESTS_HOME/../config/cf -TMotif.tmpl -TImake.tmpl -DTOPDIR=$TESTS_HOME/..
+	make
+end
