@@ -183,6 +183,10 @@ static void FSBGetDirectory(
                         Widget fs,
                         int resource,
                         XtArgVal *value) ;
+static void FSBGetDirSpec(
+                        Widget fs,
+                        int resource,
+                        XtArgVal *value) ;
 static void FSBGetNoMatchString( 
                         Widget fs,
                         int resource,
@@ -524,7 +528,7 @@ static XmSyntheticResource syn_resources[] =
   {	XmNdirSpec,
 	sizeof (XmString), 
 	XtOffsetOf( struct _XmFileSelectionBoxRec, selection_box.text_string),
-	_XmSelectionBoxGetTextString,
+	FSBGetDirSpec,
 	(XmImportProc)NULL
   },
   {	XmNfileListLabelString,
@@ -2716,6 +2720,31 @@ SetValues(
     return( FALSE) ;
     }
 
+/****************************************************************/
+/*ARGSUSED*/
+static void
+FSBGetDirSpec(
+            Widget fs,
+            int resource,
+            XtArgVal *value)
+{
+    if (FS_PathMode(fs) == XmPATH_MODE_RELATIVE)
+    {
+	XtArgVal	filename;
+    
+        _XmSelectionBoxGetTextString(fs, resource, &filename);
+  
+        *value = (XtArgVal)XmStringConcat(FS_Directory(fs),
+	        (XmString)filename);
+        XmStringFree((XmString)filename);
+    }
+    else
+    {
+        _XmSelectionBoxGetTextString(fs, resource, value);
+    }
+
+    return;
+}
 /****************************************************************/
 /*ARGSUSED*/
 static void
