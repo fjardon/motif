@@ -482,7 +482,7 @@ ControlList
         XmCheckBox;
         XmColumn;
         XmColorSelector;
-	XmCombinationBox2;
+	XmDropDown;
         XmComboBox;
         XmCommand;
         XmCommandDialog;
@@ -491,7 +491,7 @@ ControlList
         XmDrawingArea;
         XmDrawnButton;
         XmErrorDialog;
-        XmExt18List;
+        XmMultiList;
         XmFileSelectionBox;
         XmFileSelectionDialog;
         XmFontSelector;
@@ -568,7 +568,7 @@ ControlList
         XmCheckBox;
         XmColumn;
         XmColorSelector;
-	XmCombinationBox2;
+	XmDropDown;
         XmComboBox;
         XmCommand;
         XmCommandDialog;
@@ -577,7 +577,7 @@ ControlList
         XmDrawingArea;
         XmDrawnButton;
         XmErrorDialog;
-        XmExt18List;
+        XmMultiList;
         XmFileSelectionBox;
         XmFileSelectionDialog;
         XmFontSelector;
@@ -660,7 +660,7 @@ ControlList
         XmButtonBox;
         XmCheckBox;
         XmColumn;
-	XmCombinationBox2;
+	XmDropDown;
         XmComboBox;
         XmContainer;
         XmDrawingArea;
@@ -5605,10 +5605,10 @@ Resource
     Default = "True";
   };
 
-Class XmCombinationBox2: Widget {
+Class XmDropDown: Widget {
   SuperClass = "XmManager";
-  Alias = XmDropDown;
-  ConvenienceFunction = XmCreateCombinationBox2;
+  Alias = XmCombinationBox2;
+  ConvenienceFunction = XmCreateDropDown;
   Resources {
     XmNhorizontalMargin;
     XmNverticalMargin;
@@ -6181,7 +6181,7 @@ Class XmOutline : Widget {
   };
 };
 
-! resources for the Ext18List Widget
+! resources for the MultiList Widget
 Resource
   XmNnumRows : Argument {
     Type = integer;
@@ -6234,10 +6234,10 @@ Resource
 !  };
 !
 
-Class XmExt18List : Widget {
+Class XmMultiList : Widget {
   SuperClass = "XmManager";
-  Alias = XmMultiList;
-  ConvenienceFunction = XmCreateExtended18List;
+  Alias = XmExt18List;
+  ConvenienceFunction = XmCreateMultiList;
   Resources {
     XmNalignment;
     XmNtitleString;
