@@ -13,7 +13,7 @@ URL: http://www.motifzone.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 BuildPrereq: flex
-BuildPrereq: byacc
+BuildPrereq: /usr/bin/yacc
 
 Conflicts: lesstif <= 0.92.32-6
 
