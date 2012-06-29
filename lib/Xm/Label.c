@@ -2540,10 +2540,10 @@ _XmLabelConvert(Widget w,
       Atom *targs;
 
       if (cs->target == atoms[XmATARGETS]) {
-	targs = XmeStandardTargets(w, 5, &target_count);
+	targs = XmeStandardTargets(w, 6, &target_count);
       } else {
 	target_count = 0;
-	targs = (Atom *) XtMalloc(sizeof(Atom) * 5);
+	targs = (Atom *) XtMalloc(sizeof(Atom) * 6);
       }
       
       value = (XtPointer) targs;

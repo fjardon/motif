@@ -2950,7 +2950,8 @@ _XmTextFieldReplaceText(XmTextFieldWidget tf,
   int free_insert = (int)False;
   char *insert_orig;
   int insert_length_orig;
-  
+  int size = 0;
+
   VerifyBounds(tf, &replace_prev, &replace_next);
   
   if (!TextF_Editable(tf)) {
@@ -2995,8 +2996,12 @@ _XmTextFieldReplaceText(XmTextFieldWidget tf,
      */
     insert_length_orig = insert_length;
     if (insert_length > 0) {
-    	insert_orig = XtMalloc(insert_length * tf->text.max_char_size);
-    	bcopy(insert, insert_orig, insert_length * tf->text.max_char_size);
+        if (tf->text.max_char_size == 1)
+	    size = sizeof(char);
+	else
+	    size = sizeof(wchar_t);
+	insert_orig = XtMalloc(insert_length * size);
+	bcopy(insert, insert_orig, insert_length * size);
     } else
 	insert_orig = NULL;
     if (!ModifyVerify(tf, event, &replace_prev, &replace_next,
@@ -3011,8 +3016,7 @@ _XmTextFieldReplaceText(XmTextFieldWidget tf,
     } else {
       if (FUnderVerifyPreedit(tf))
 	if (insert_length != insert_length_orig ||
-          memcmp(insert, insert_orig, 
-		  insert_length * tf->text.max_char_size) != 0) {
+          memcmp(insert, insert_orig, insert_length * size) != 0) {
 	  FVerifyCommitNeeded(tf) = True;
 	  PreEnd(tf) += insert_length - insert_length_orig;
 	}

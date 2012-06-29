@@ -1176,13 +1176,14 @@ DoStuff(Widget w,
 	wchar_t * wc_value;
 	
 	wc_value = (wchar_t*)XtMalloc ((unsigned)
-				       (ds->length * sizeof(wchar_t)));
+				       ((ds->length + 1) * sizeof(wchar_t)));
 	_XmProcessLock();
 	prim_select->num_chars = mbstowcs(wc_value, (char *) ds->value,
 					  (size_t) ds->length);
 	if (prim_select->num_chars < 0) 
 	  prim_select->num_chars = 0;
-	else 
+	else {
+	  wc_value[prim_select->num_chars] = 0;
 	  replace_res = 
 	    _XmTextFieldReplaceText(tf, ds->event, 
 				    replace_from,
@@ -1190,6 +1191,7 @@ DoStuff(Widget w,
 				    (char*)wc_value, 
 				    prim_select->num_chars,
 				    ds->selection == atoms[XmACLIPBOARD]);
+	}
 	_XmProcessUnlock();
 	XtFree((char*)wc_value);
       }

@@ -165,7 +165,8 @@ static void SetNewSize(XmListWidget lw,
 		       Dimension old_max_height);
 static void ResetExtents(XmListWidget lw,
 			 Boolean recache_extents);
-static void FixStartEnd(int pos, int count, int *start, int *end);
+static void FixStartEnd(XmListWidget lw,
+			int pos, int count, int *start, int *end);
 static int AddInternalElements(XmListWidget lw,
 			       XmString *items,
 			       int nitems,
@@ -3109,7 +3110,8 @@ ResetExtents(XmListWidget lw,
  ************************************************************************/
 
 static void
-FixStartEnd(int pos,
+FixStartEnd(XmListWidget lw,
+	    int pos,
 	    int count,
 	    int *start,
 	    int *end)
@@ -3121,6 +3123,11 @@ FixStartEnd(int pos,
       *start = *end;
       *end = save;
     }
+
+  if (*start < 0)
+    *start = 0;
+  if (*end >= lw->list.itemCount)
+    *end = lw->list.itemCount - 1;
 
   /* No overlap, before the deleted range. */
   if (*end < pos)
@@ -3277,8 +3284,8 @@ DeleteInternalElements(XmListWidget lw,
 
   /* BEGIN OSF Fix CR 4656 */
   /* Fix selection delimiters. */
-  FixStartEnd(curpos, count, &lw->list.StartItem, &lw->list.EndItem);
-  FixStartEnd(curpos, count, &lw->list.OldStartItem, &lw->list.OldEndItem);
+  FixStartEnd(lw, curpos, count, &lw->list.StartItem, &lw->list.EndItem);
+  FixStartEnd(lw, curpos, count, &lw->list.OldStartItem, &lw->list.OldEndItem);
   /* END OSF Fix CR 4656 */
 
   if (lw->list.itemCount)
@@ -3350,10 +3357,11 @@ DeleteInternalElementPositions(XmListWidget  lw,
 
 	      /* BEGIN OSF Fix CR 4656 */
 	      /* Fix selection delimiters. */
-	      FixStartEnd(item_pos, 1, &lw->list.StartItem, &lw->list.EndItem);
+	      FixStartEnd(lw,
+			  item_pos, 1, &lw->list.StartItem, &lw->list.EndItem);
 
 	      /* Fix old selection delimiters. */
-	      FixStartEnd(item_pos, 1,
+	      FixStartEnd(lw, item_pos, 1,
 			  &lw->list.OldStartItem,
 			  &lw->list.OldEndItem);
 	      /* END OSF Fix CR 4656 */
@@ -3367,9 +3375,9 @@ DeleteInternalElementPositions(XmListWidget  lw,
    */
   if (oldItemCount > lw->list.itemCount)
     {
-      FixStartEnd(lw->list.itemCount, oldItemCount - lw->list.itemCount,
+      FixStartEnd(lw, lw->list.itemCount, oldItemCount - lw->list.itemCount,
 		  &lw->list.StartItem, &lw->list.EndItem);
-      FixStartEnd(lw->list.itemCount, oldItemCount - lw->list.itemCount,
+      FixStartEnd(lw, lw->list.itemCount, oldItemCount - lw->list.itemCount,
 		  &lw->list.OldStartItem, &lw->list.OldEndItem);
     }
 
@@ -4140,6 +4148,11 @@ SelectRange(XmListWidget lw,
   if (end >= lw->list.itemCount)
     end = lw->list.itemCount - 1;
 
+  if (start < 0)
+    start = 0;
+  if (end >= lw->list.itemCount)
+    end = lw->list.itemCount - 1;
+
   for (; start <= end; start++)
     {
       lw->list.InternalList[start]->selected = select;
@@ -4168,6 +4181,11 @@ RestoreRange(XmListWidget lw,
       start = end;
       end = tmp;
     }
+
+  if (start < 0)
+    start = 0;
+  if (end >= lw->list.itemCount)
+    end = lw->list.itemCount - 1;
 
   if (start < 0)
     start = 0;
@@ -4273,6 +4291,9 @@ HandleNewItem(XmListWidget lw,
   if (item < 0 || item >= lw->list.itemCount)
     return;
 
+  if (item < 0 || item >= lw->list.itemCount)
+    return;
+
   switch(lw->list.SelectionPolicy)
     {
     case XmBROWSE_SELECT:
@@ -4347,6 +4368,9 @@ HandleExtendedItem(XmListWidget lw,
   int i, start, end;
 
   if (lw->list.LastHLItem == item) return;
+
+  if (item < 0 || item >= lw->list.itemCount)
+    return;
 
   if (item < 0 || item >= lw->list.itemCount)
     return;
@@ -5066,9 +5090,10 @@ CtrlSelect(Widget wid,
    *
    ****************/
   i = MIN(lw->list.OldStartItem, lw->list.OldEndItem);
+  i = MAX(i, 0);
   j = MAX(lw->list.OldStartItem, lw->list.OldEndItem);
   if ((i != 0) || (j != 0))
-    for (; i <= j; i++)
+    for (; i <= j && i < lw->list.itemCount; i++)
       lw->list.InternalList[i]->last_selected =
 	lw->list.InternalList[i]->selected;
 
@@ -5214,9 +5239,10 @@ KbdCtrlSelect(Widget wid,
    *
    ****************/
   i = MIN(lw->list.OldStartItem, lw->list.OldEndItem);
+  i = MAX(i, 0);
   j = MAX(lw->list.OldStartItem, lw->list.OldEndItem);
   if ((i != 0) || (j != 0))
-    for (; i <= j; i++)
+    for (; i <= j && i < lw->list.itemCount; i++)
       lw->list.InternalList[i]->last_selected =
 	lw->list.InternalList[i]->selected;
 
@@ -5583,6 +5609,9 @@ DefaultAction(XmListWidget lw,
 
   item = lw->list.LastHLItem;
   lw->list.DidSelection = TRUE;
+
+  if (item < 0 || item >= lw->list.itemCount)
+    return;
 
   /* If there's a drag timeout, remove it so we don't see two selections. */
   if (lw->list.DragID)
@@ -7000,8 +7029,8 @@ ListItemVisible(Widget wid,
     {
       item = WhichItem(lw, event->xbutton.y);
       if (item > 0)
-	item -=lw->list.top_position;
-      if ((item < 0) || (item > lw->list.itemCount))
+	item -= lw->list.top_position;
+      if ((item < 0) || (item >= lw->list.itemCount))
 	return;
     }
   else
@@ -8204,7 +8233,7 @@ XmListDeletePositions(Widget    w,
 
 /************************************************************************
  *									*
- * XmDeletePos - delete the item at the specified position from the	*
+ * XmListDeletePos - delete the item at the specified position from the	*
  *	list.								*
  *									*
  ************************************************************************/
@@ -8227,7 +8256,7 @@ XmListDeletePos(Widget w,
 
 /************************************************************************
  *									*
- * XmDeleteItemsPos - delete the items at the specified position        *
+ * XmListDeleteItemsPos - delete the items at the specified position    *
  * from the list.							*
  *									*
  ************************************************************************/
@@ -8984,7 +9013,7 @@ XmListDeselectPos(Widget w,
 
 /************************************************************************
  *									*
- * XmDeselectAllItems - hose the entire selected list			*
+ * XmListDeselectAllItems - hose the entire selected list		*
  *									*
  ************************************************************************/
 
