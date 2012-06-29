@@ -116,10 +116,10 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
 #include <Xm/DrawingAP.h>
 #include <Xm/DrawnB.h>
 #include <Xm/DrawnBP.h>
-#include <Xm/Ext18List.h>
-#include <Xm/Ext18ListP.h>
-#include <Xm/ComboBox2.h>
-#include <Xm/ComboBox2P.h>
+#include <Xm/MultiList.h>
+#include <Xm/MultiListP.h>
+#include <Xm/DropDown.h>
+#include <Xm/DropDownP.h>
 #include <Xm/FileSB.h>
 #include <Xm/FileSBP.h>
 #include <Xm/FontS.h>
