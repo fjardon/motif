@@ -1485,7 +1485,7 @@ Destroy(
 
     XDestroyRegion(cw->container.cells_region);
 
-    if (scrollFrameTrait) {
+    if (scrollFrameTrait && cw->container.icon_header != NULL) {
 	/* only destroy the icon_header if not a child of the
 	   Container, the auto SW/DA case */
 	assert (XtParent(cw->container.icon_header) != wid);
