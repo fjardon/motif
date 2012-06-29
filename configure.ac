@@ -174,6 +174,8 @@ AC_SUBST(XMBINDDIR_FALLBACK)
 
 AC_ARG_ENABLE(motif22-compatibility, [  --disable-motif22-compatibility
                        Disable binary compatibility with OpenMotif 2.2])
+AC_ARG_ENABLE(utf8, [  --disable-utf8
+                       Disable UTF-8 support])
 
 case "$host_os" in
     freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";;
@@ -182,6 +184,10 @@ case "$host_os" in
         if test x$enable_motif22_compatibility = x
         then
             enable_motif22_compatibility="no"
+        fi &&
+        if test x$enable_utf8 = x
+        then
+            enable_utf8="no"
         fi;;
 esac
 
@@ -201,6 +207,16 @@ else
 fi
 AC_SUBST(OM22_COMPATIBILITY_FALSE)
 AC_SUBST(OM22_COMPATIBILITY_TRUE)
+
+if test x$enable_utf8 = x
+then
+    enable_utf8="yes"
+fi
+
+if test "$enable_utf8" = "yes"
+then
+  AC_DEFINE([UTF8_SUPPORTED], [1], [UTF8 is supported])
+fi
 
 # AM_CONDITIONAL(Motif22Compatibility, test x$enable_motif22_compatibility = xyes)
 
