@@ -82,6 +82,26 @@ Motif 2.3 has the following feature improvements:
  * 26 bugs fixes
 
 The following bugs were fixed:
+
+  2.3.0 Beta 2 January 2006 (This release) 
+
+ * Fixed vulnerabilities in the libXpm code [CAN-2004-0914 (multiple vulnerabilities) 
+   and CAN-2005-0605 (buffer overflow)] 
+ * Got rid of the obsolete tmpnam() call in imake 
+ * Fixed bug #1315 (Division by zero in List widget) 
+ * Fixed bug #1314 (Buffer overflow in MrmItop.c on 64-bit systems) 
+ * Fixed bug #1313 (getsubres.c has fallback resources defined that aren't
+   terminated with NULL.) 
+ * Fixed bug #1304 (Buffer overflow in MrmOpenHierarchy...()) 
+ * Fixed bug #1297 (Insensitive XmPIXMAP XmPushButtons are stippled with the
+   wrong color) 
+ * Fixed bug #1294 (XmFileSelectionBox's XmNdirSpec resource misbehaves when
+   pathMode is PATH_MODE_RELATIVE) 
+ * Fixed bug #1294 (XmFileSelectionBox's XmNdirSpec resource misbehaves when
+   pathMode is PATH_MODE_RELATIVE) 
+
+  2.3.0 Beta 1 November 2005 
+
  * #1121 (TabBox translation error) - removed locking of he clipboard from
           XmClipboardRetrieveStart()
  * #1283 (TabBox translation error)
@@ -134,7 +154,6 @@ The following platforms are supported operating systems:
 - Linux 2.6 (Redhat Enterprise 3.0)
 - Linux 2.6 (SuSe 9.1)
 - Linux 2.4 (Redhat Fedora Core 2)
-- Linux 2.6 (Madrake 10.1)
 
 4 Filing Bug Reports
 
