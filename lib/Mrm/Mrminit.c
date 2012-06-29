@@ -322,8 +322,8 @@ void MrmInitialize (void)
      (WidgetClass)&xmDrawingAreaClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateExtended18List", XmCreateExtended18List,
-     (WidgetClass)&xmExt18ListClassRec);
+    (0, NULL, "XmCreateMultiList", XmCreateMultiList,
+     (WidgetClass)&xmMultiListClassRec);
 
   MrmRegisterClass
     (0, NULL, "XmCreateDrawnButton", XmCreateDrawnButton,
@@ -574,8 +574,8 @@ void MrmInitialize (void)
      (WidgetClass)NULL);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateCombinationBox2", XmCreateCombinationBox2,
-     (WidgetClass)&xmCombinationBox2ClassRec);  
+    (0, NULL, "XmCreateDropDown", XmCreateDropDown,
+     (WidgetClass)&xmDropDownClassRec);  
 
   /*
    * Initialization complete
