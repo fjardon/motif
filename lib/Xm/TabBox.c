@@ -34,6 +34,10 @@
  * OVERLAYED_LAYOUT - Controls if the overlayed layout is supported
  *
  */
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdlib.h>
 #include "XmI.h"
 #include <Xm/TabBoxP.h>
@@ -829,7 +833,7 @@ Realize(Widget widget, XtValueMask *value_mask,
 {
     XmTabBoxWidget   tb = (XmTabBoxWidget) widget;
     XGCValues        gcValues;
-    XFontStruct      *font;
+    XFontStruct      *font = NULL;
     XtGCMask         gcMask;
 
     XtRealizeProc realize;
@@ -949,11 +953,16 @@ Redisplay(widget, event, region)
     else getNewGC = True;
     if (getNewGC)
     {
-      XFontStruct *font;
+      XFontStruct *font = NULL;
+      XtGCMask    gcMask;
       XmeRenderTableGetDefaultFont(XmTabBox_font_list(tab), &font);
-      gcValues.font = font->fid;
       gcValues.background = tab->core.background_pixel;
-      XmTabBox__tab_GC(tab) = XmTabBox__text_GC(tab) = XtGetGC((Widget)tab, GCFont | GCBackground, &gcValues);
+      gcMask = GCBackground;
+      if (font) {
+          gcValues.font = font->fid;
+	  gcMask |= GCFont;
+      }
+      XmTabBox__tab_GC(tab) = XmTabBox__text_GC(tab) = XtGetGC((Widget)tab, gcMask, &gcValues);
     } /* CR03218 end */
     if( XmTabBox__inited(tab) == False ) return;
 
@@ -3896,7 +3905,6 @@ DrawTab(tab, info, geometry, selected, keyboard)
 	    }
 	}
     }
-
     switch( XmTabBox_tab_style(tab) )
     {
     case XmTABS_SQUARED:
@@ -3916,6 +3924,7 @@ DrawTab(tab, info, geometry, selected, keyboard)
      * We have a lot of nifty routines to do this.  Maybe will add more
      * someday.
      */
+
     switch( XmTabBox_tab_style(tab) )
     {
     case XmTABS_SQUARED:
@@ -4949,7 +4958,7 @@ CalcCornerSize(tab)
 	    AssignMax(size, tmp);
 	}
 #ifdef USE_XFT
-        else if (font_type == XmFONT_IS_XFT)
+        else if (1/*font_type == XmFONT_IS_XFT*/)
 	{
 	    tmp = ((XftFont*)value)->ascent + ((XftFont*)value)->descent;
 	    AssignMax(size, tmp);
@@ -6020,8 +6029,9 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	     * We do not yet have either of the GC created so lets go
 	     * ahead and create them now.
 	     */
-	    XFontStruct *font;
+	    XFontStruct *font = NULL;
 	    XGCValues   gcValues;
+	    unsigned long gcMask;
 
 	    gcValues.foreground = 0;
 	    gcValues.background = 0;
@@ -6032,10 +6042,13 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	    XmeRenderTableGetDefaultFont(font_list, &font);
 	    gcValues.foreground = 1;
 	    gcValues.background = 0;
-	    gcValues.font = font->fid;
-	    XmTabBox__one_GC(tab) = XCreateGC(XtDisplay(tab), bitmap,
-					     GCForeground | GCBackground |
-					     GCFont, &gcValues);
+	    gcMask = GCForeground | GCBackground;
+	    if (font) {
+	        gcValues.font = font->fid;
+	        gcMask |= GCFont;
+	    }
+	    XmTabBox__one_GC(tab) = XCreateGC(XtDisplay(tab), bitmap, gcMask,
+	                                      &gcValues);
 	}
 
 	/*
@@ -6602,8 +6615,9 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	     * We do not yet have either of the GC created so lets go
 	     * ahead and create them now.
 	     */
-	    XFontStruct *font;
+	    XFontStruct *font = NULL;
 	    XGCValues   gcValues;
+	    unsigned long gcMask;
 
 	    gcValues.foreground = 0;
 	    gcValues.background = 0;
@@ -6614,10 +6628,13 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	    XmeRenderTableGetDefaultFont(font_list, &font);
 	    gcValues.foreground = 1;
 	    gcValues.background = 0;
-	    gcValues.font = font->fid;
-	    XmTabBox__one_GC(tab) = XCreateGC(XtDisplay(tab), bitmap,
-					     GCForeground | GCBackground |
-					     GCFont, &gcValues);
+	    gcMask = GCForeground | GCBackground;
+	    if (font) {
+	        gcValues.font = font->fid;
+		gcMask |= GCFont;
+	    }
+	    XmTabBox__one_GC(tab) = XCreateGC(XtDisplay(tab), bitmap, gcMask,
+	                                      &gcValues);
 	}
 
 	/*
