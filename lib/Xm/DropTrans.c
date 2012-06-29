@@ -44,7 +44,11 @@ static char rcsid[] = "$XConsortium: DropTrans.c /main/15 1996/05/02 13:50:19 pa
 #include <Xm/AtomMgr.h>
 #include <stdio.h>
 
-#define CR1146
+/* Deactivated the fix, since it causes crash.
+   For details see http://bugs.motifzone.net/long_list.cgi?buglist=1361
+   
+   #define CR1146
+*/
 
 #ifdef CR1146
 static int isValidStartDropTimerId = 0;
