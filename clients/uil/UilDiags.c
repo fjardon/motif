@@ -280,12 +280,12 @@ void	diag_issue_diagnostic
     va_start(ap, l_start_column);
 
 #ifndef NO_MESSAGE_CATALOG
-    vsprintf( msg_buffer, 
+    vsnprintf( msg_buffer, sizeof(msg_buffer),
 	      catgets(uil_catd, UIL_SET1, msg_cat_table[ message_number ],
 		      diag_rz_msg_table[ message_number ].ac_text), 
 	     ap );
 #else
-    vsprintf( msg_buffer, 
+    vsnprintf( msg_buffer, sizeof(msg_buffer),
 	      diag_rz_msg_table[ message_number ].ac_text, 
 	      ap );
 #endif

@@ -618,7 +618,8 @@ open_source_file( XmConst char           *c_file_name,
 
     /* place the file name in the expanded_name buffer */
 
-    strcpy(buffer, c_file_name);
+    strncpy(buffer, c_file_name, sizeof(buffer));
+    buffer[sizeof(buffer)-1] = '\0';
 
 /*    Determine if this is the main file or an include file.  */
 
