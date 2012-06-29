@@ -3836,7 +3836,7 @@ _XmTextResetIC(Widget widget)
     else if (PreUnder(tw) && PreStartTW(tw) < PreEndTW(tw)) {
       beginPos = PreStartTW(tw);
       nextPos = PreEndTW(tw);
-      XmTextSetHighlight(tw, beginPos, nextPos, XmHIGHLIGHT_NORMAL);
+      XmTextSetHighlight((Widget)tw, beginPos, nextPos, XmHIGHLIGHT_NORMAL);
     }
 
     _XmTextReplace(widget, beginPos, nextPos, mb, False);
