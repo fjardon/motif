@@ -25,7 +25,7 @@ LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 dnl
 dnl Override a default in libtool.
 dnl
-AC_DISABLE_STATIC
+dnl AC_DISABLE_STATIC
 
 AM_CONFIG_HEADER(include/config.h lib/Xm/Xm.h)
 
