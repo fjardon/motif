@@ -3901,7 +3901,6 @@ InsertChar(Widget w,
 			     event->xkey.time);
       _XmTextFieldSetCursorPosition(tf, event, TextF_CursorPosition(tf), 
 				    False, True);
-      PreeditSetCursorPosition(tf, cursorPos);
       cb.reason = XmCR_VALUE_CHANGED;
       cb.event = event;
       XtCallCallbackList((Widget) tf, TextF_ValueChangedCallback(tf),
@@ -6891,6 +6890,8 @@ LoadFontMetrics(XmTextFieldWidget tf)
 #ifdef USE_XFT
   } else if (TextF_UseXft(tf)) {
     charwidth = TextF_XftFont(tf)->max_advance_width;
+    TextF_FontAscent(tf) = TextF_XftFont(tf)->ascent;
+    TextF_FontDescent(tf) = TextF_XftFont(tf)->descent;
 #endif
   } else {
     font = TextF_Font(tf);

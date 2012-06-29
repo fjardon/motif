@@ -179,7 +179,7 @@ XmFontListEntryGetFont(
 #ifdef USE_XFT
   XtPointer     ret_val2;
 #endif
-  Arg		args[2];
+  Arg		args[3];
   Cardinal	n;
   XtAppContext  app=NULL;
 

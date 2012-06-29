@@ -1703,7 +1703,7 @@ DoSize(
             return;
         }
 
-        _XmRCPreferredSize (new_w, &w, &h);
+        _XmRCPreferredSize (old, &w, &h);
 
         XtWidth(new_w) = w;
         XtHeight(new_w) = h;
