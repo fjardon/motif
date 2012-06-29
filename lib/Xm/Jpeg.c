@@ -1,6 +1,6 @@
 #include "JpegI.h"
 #include <jerror.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <X11/Intrinsic.h>
 
 void
