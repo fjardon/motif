@@ -1092,6 +1092,8 @@ Class
             XmNmnemonicCharSet;
             XmNrecomputeSize;
             XmNstringDirection;
+	    XmNpixmapPlacement;
+            XmNpixmapTextPadding;
             ! inherited resources
             XmNshadowThickness {Default = "0"; };
             XmNtraversalOn { Default = "False"; };
@@ -1161,6 +1163,12 @@ Resource
         { Type = integer;
           EnumerationSet = StringDirection;
           Default = "XmSTRING_DIRECTION_L_TO_R"; };
+    XmNpixmapPlacement : Argument
+        { Type = integer;
+          EnumerationSet = XmPixmapPlacement; };
+    XmNpixmapTextPadding : Argument
+        { Type = integer;
+          Default = "2"; };
 
 Class
     XmTextField : Widget
@@ -1557,6 +1565,8 @@ Class
             XmNmarginWidth;
             XmNmnemonic;
             XmNmnemonicCharSet;
+	    XmNpixmapPlacement;
+            XmNpixmapTextPadding;
             XmNrecomputeSize;
             XmNstringDirection;
             ! inherited resources
@@ -4441,6 +4451,10 @@ Class
             XmNrenditionForeground;
             XmNunderlineType;
             XmNstrikethruType;
+	    XmNfontEncoding;
+	    XmNfontFoundry;
+	    XmNfontSize;
+	    XmNfontStyle;
             };
         Controls
             {
@@ -4477,6 +4491,18 @@ Resource
          { Type = integer;
            EnumerationSet = LineType;
            Default = "XmAS_IS"; };
+    XmNfontEncoding : Argument
+         { Type = string;
+           Default = "Null"; };
+    XmNfontFoundry : Argument
+         { Type = string;
+           Default = "Null"; };
+    XmNfontSize : Argument
+         { Type = integer;
+           Default = "0"; };
+    XmNfontStyle : Argument
+         { Type = string;
+           Default = "Null"; };
 
 Class
     XmTabList : Widget
