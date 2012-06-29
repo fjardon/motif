@@ -219,6 +219,12 @@ extern void _XmWarningMsg(Widget w,
 			  char **params,
 			  Cardinal num_params);
 extern Display *_XmGetDefaultDisplay(void);
+extern Boolean _XmIsISO10646(Display *dpy,
+                             XFontStruct *font);
+extern XChar2b* _XmUtf8ToUcs2(char *draw_text,
+                              size_t seg_len,
+			      size_t *ret_str_len);
+
 
 /********    End Private Function Declarations    ********/
 

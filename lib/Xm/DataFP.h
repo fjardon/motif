@@ -130,13 +130,8 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmTextF_average_char_width(w) (((XmDataFieldWidget)(w))->text.average_char_width)
 #define XmTextF_margin_top(w) (((XmDataFieldWidget)(w))->text.margin_top)
 #define XmTextF_margin_bottom(w) (((XmDataFieldWidget)(w))->text.margin_bottom)
-#if USE_XFT
-#define XmTextF_font_ascent(w) (XmTextF_xft_font(w)->ascent)
-#define XmTextF_font_descent(w) (XmTextF_xft_font(w)->descent) 
-#else
 #define XmTextF_font_ascent(w) (((XmDataFieldWidget)(w))->text.font_ascent)
 #define XmTextF_font_descent(w) (((XmDataFieldWidget)(w))->text.font_descent)
-#endif
 #define XmTextF_resize_width(w) (((XmDataFieldWidget)(w))->text.resize_width)
 #define XmTextF_pending_delete(w) (((XmDataFieldWidget)(w))->text.pending_delete)
 #define XmTextF_editable(w) (((XmDataFieldWidget)(w))->text.editable)

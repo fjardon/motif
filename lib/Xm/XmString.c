@@ -2447,7 +2447,8 @@ OptLineMetrics(XmRenderTable 	r,
 		   _XmStrByteCount(opt), (XmTextType) _XmStrTextType(opt),
 		   XmSTRING_SINGLE_SEG, width, height, ascent, descent,
 #ifdef UTF8_SUPPORTED
-                   _XmStrTextType(opt) == XmCHARSET_TEXT &&
+                   (_XmStrTextType(opt) == XmCHARSET_TEXT ||
+                    _XmStrTextType(opt) == XmMULTIBYTE_TEXT) &&
                    ((_XmStrTagGet(opt) == XmFONTLIST_DEFAULT_TAG
                      && _XmStringIsCurrentCharset("UTF-8"))
                     || (_XmStrTagGet(opt)
@@ -3650,7 +3651,7 @@ SubStringPosition(
                 _XmStringIsCurrentCharset("UTF-8")) ||
                (strcmp(seg_tag, "UTF-8") == 0)));
 #else
-        Boolean utf8;
+        Boolean utf8 = False;
 #endif
 	if (begin == 0) 
 	  *under_begin = x;
@@ -3912,28 +3913,31 @@ _XmStringDrawSegment(Display *d,
   XGCValues 		current_gcv;
   Dimension		under_begin, under_end;
   unsigned int		seg_len;
+  int			font_type;
+  int			text_type;
   
   old_fg = old_bg = XmUNSPECIFIED_PIXEL;
 
   _XmRendDisplay(rend) = d;
+  font_type = _XmRendFontType(rend);
+  text_type = _XmEntryTextTypeGet((_XmStringEntry)seg);
   
   seg_len = _XmEntryByteCountGet((_XmStringEntry)seg);
   if (seg_len  > 0)
     {
-      multibyte = (((_XmEntryTextTypeGet((_XmStringEntry)seg) == 
-		     XmMULTIBYTE_TEXT) ||
-		    (_XmEntryTextTypeGet((_XmStringEntry)seg) == 
-		     XmCHARSET_TEXT)) &&
-		   (_XmRendFontType(rend) == XmFONT_IS_FONTSET));
+      multibyte = (((text_type ==  XmMULTIBYTE_TEXT) ||
+		    (text_type == XmCHARSET_TEXT)) &&
+		   (font_type == XmFONT_IS_FONTSET));
     
-      widechar = ((_XmEntryTextTypeGet((_XmStringEntry)seg) == 
-		   XmWIDECHAR_TEXT) &&
-		  (_XmRendFontType(rend) == XmFONT_IS_FONTSET));
+      widechar = ((text_type == XmWIDECHAR_TEXT) &&
+		  (font_type == XmFONT_IS_FONTSET));
 		  
 #ifdef UTF8_SUPPORTED
-      utf8 = ((_XmEntryTextTypeGet((_XmStringEntry)seg) == XmCHARSET_TEXT) &&
-		   (_XmRendFontType(rend) == XmFONT_IS_FONTSET ||
-		   _XmRendFontType(rend) == XmFONT_IS_XFT) &&
+      utf8 = ((text_type == XmMULTIBYTE_TEXT | text_type == XmCHARSET_TEXT) &&
+		   (font_type == XmFONT_IS_FONTSET ||
+		    font_type == XmFONT_IS_XFT ||
+		    (font_type == XmFONT_IS_FONT
+		     && _XmIsISO10646(d, _XmRendFont(rend)))) &&
               (((_XmEntryTag((_XmStringEntry)seg) == XmFONTLIST_DEFAULT_TAG &&
                 (_XmStringIsCurrentCharset("UTF-8"))) ||
                ((_XmEntryTagIndex(seg) != TAG_INDEX_UNSET
@@ -3941,7 +3945,6 @@ _XmStringDrawSegment(Display *d,
 #else
       utf8 = False;
 #endif
-    
       gc = _XmRendGC(rend);
 
       fg = _XmRendFG(rend);
@@ -3969,7 +3972,7 @@ _XmStringDrawSegment(Display *d,
 	      XChangeGC(d, gc, GCBackground, &xgcv);
 	    }
 	}
-    
+   
       if (!multibyte && !widechar && _XmRendFontType(rend) != XmFONT_IS_XFT)
 	{
 	  XFontStruct *f = (XFontStruct *)_XmRendFont(rend);
@@ -4126,7 +4129,18 @@ _XmStringDrawSegment(Display *d,
       if (image)
 	{
 	  if (text16) 
-	    XDrawImageString16(d, w, gc, x, y, (XChar2b*)draw_text, 
+	    if (utf8)
+	    {
+		size_t  ucs_str_len;
+		XChar2b *ucs_str;
+
+		/* TODO: it is very unoptimized convert the same sting
+		 * twice - for getting extents and drawing */
+		ucs_str = _XmUtf8ToUcs2(draw_text, seg_len, &ucs_str_len);
+		XDrawImageString16(d, w, gc, x, y, ucs_str, ucs_str_len);
+		XFree(ucs_str);
+	    } else
+	        XDrawImageString16(d, w, gc, x, y, (XChar2b*)draw_text, 
 			       Half(seg_len));
 #ifdef UTF8_SUPPORTED
           else if (utf8)
@@ -4146,8 +4160,21 @@ _XmStringDrawSegment(Display *d,
       else
 	{
 	  if (text16) 
-	    XDrawString16 (d, w, gc, x, y, (XChar2b *)draw_text,
-			   Half(seg_len));
+	  {
+	    if (utf8)
+	    {
+		size_t  ucs_str_len;
+		XChar2b *ucs_str;
+
+		/* TODO: it is very unoptimized convert the same sting
+		 * twice - for getting extents and drawing */
+		ucs_str = _XmUtf8ToUcs2(draw_text, seg_len, &ucs_str_len);
+		XDrawString16(d, w, gc, x, y, ucs_str, ucs_str_len);
+		XFree(ucs_str);
+	    } else
+		    XDrawString16 (d, w, gc, x, y, (XChar2b *)draw_text,
+				    Half(seg_len));
+	  }
 #ifdef UTF8_SUPPORTED
           else if (utf8)
 	    Xutf8DrawString(d, w, (XFontSet)_XmRendFont(rend), gc, x, y,
@@ -6189,6 +6216,16 @@ ComputeMetrics(XmRendition rend,
 	{
 	  if (byte_count >= 2)
 	    {
+	      if (utf8)
+		{
+		  /* TODO: it is very unoptimized convert the same sting
+		   * twice - for getting extents and drawing */
+		  size_t  str_len = 0;
+		  XChar2b *str = _XmUtf8ToUcs2(text, byte_count, &str_len);
+
+		  XTextExtents16(font_struct, str, str_len,
+			     &dir, &asc, &desc, &char_ret);
+		} else
 	      XTextExtents16(font_struct, 
 			     (XChar2b *)text, Half(byte_count),
 			     &dir, &asc, &desc, &char_ret);

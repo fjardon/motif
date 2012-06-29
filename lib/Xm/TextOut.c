@@ -684,7 +684,14 @@ _FontStructFindWidth(XmTextWidget tw,
 	    result += font->min_bounds.width;
 	}
       } else {
-	XTextExtents(data->font, ptr, csize, &dummy, &dummy, &dummy,
+        if (_XmIsISO10646(XtDisplay(tw), data->font)) {
+          size_t ucsstr_len = 0;
+          XChar2b *ucsstr = _XmUtf8ToUcs2(ptr, csize, &ucsstr_len);
+          XTextExtents16(data->font, ucsstr, ucsstr_len,
+			&dummy, &dummy, &dummy, &overall);
+          XFree(ucsstr);
+        } else
+	  XTextExtents(data->font, ptr, csize, &dummy, &dummy, &dummy,
 		     &overall);
 	result += overall.width;
       }
@@ -763,7 +770,7 @@ FindWidth(XmTextWidget tw,
         if (data->use_xft) {
 	  XGlyphInfo	ext;
 	  XftTextExtentsUtf8(XtDisplay(tw), ((XftFont*)data->font),
-	                  ptr, csize, &ext);
+	                  (FcChar8*)ptr, csize, &ext);
 	  result += ext.xOff;
 	} else
 #endif
@@ -781,7 +788,7 @@ FindWidth(XmTextWidget tw,
         if (data->use_xft) {
 	  XGlyphInfo	ext;
 	  XftTextExtentsUtf8(XtDisplay(tw), ((XftFont*)data->font),
-	                  ptr, 1, &ext);
+	                  (FcChar8*)ptr, 1, &ext);
 	  result += ext.xOff;
 	} else
 #endif
@@ -858,7 +865,7 @@ _XftFindHeight(XmTextWidget tw,
 	  result += (data->tabheight -
 		     ((y + result - data->topmargin) % data->tabheight));
       } else {
-	XftTextExtentsUtf8(XtDisplay(tw), font, ptr, csize, &ext);
+	XftTextExtentsUtf8(XtDisplay(tw), font, (FcChar8*)ptr, csize, &ext);
 	result += ext.yOff;
       }
     }
@@ -869,7 +876,7 @@ _XftFindHeight(XmTextWidget tw,
 	result += (data->tabheight -
 		   ((y + result - data->topmargin) % data->tabheight));
       } else {
-	XftTextExtentsUtf8(XtDisplay(tw), font, ptr, 1, &ext);
+	XftTextExtentsUtf8(XtDisplay(tw), font, (FcChar8*)ptr, 1, &ext);
 	result += ext.yOff;
       }
     }
@@ -2240,7 +2247,14 @@ _FontStructPerCharExtents(XmTextWidget tw,
 	overall->descent = font->max_bounds.descent;
       }
     } else {
-      XTextExtents(data->font, str, length, &dummy, &dummy, &dummy, overall);
+      if (_XmIsISO10646(XtDisplay(tw), data->font)) {
+        size_t ucsstr_len = 0;
+        XChar2b *ucsstr = _XmUtf8ToUcs2(str, length, &ucsstr_len);
+        XTextExtents16(data->font, ucsstr, ucsstr_len,
+			&dummy, &dummy, &dummy, overall);
+        XFree(ucsstr);
+      } else
+        XTextExtents(data->font, str, length, &dummy, &dummy, &dummy, overall);
     }
   } else {
     c = (unsigned char) *str;
@@ -2559,7 +2573,14 @@ Draw(XmTextWidget tw,
 	      orig_x = wx - (int)((overall.rbearing - overall.lbearing) >> 1) -
 		       overall.lbearing;
 	      orig_y += overall.ascent;
-	      XDrawString(XtDisplay(tw),
+	      if (_XmIsISO10646(XtDisplay(tw), data->font)) {
+	        size_t ucsstr_len = 0;
+		XChar2b *ucsstr = _XmUtf8ToUcs2(p, csize, &ucsstr_len);
+		XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+				data->gc, orig_x, orig_y, ucsstr, ucsstr_len);
+		XFree(ucsstr);
+	      } else
+		XDrawString(XtDisplay(tw),
 			  XtWindow(tw->text.inner_widget), data->gc,
 			  orig_x, orig_y, p, csize);
 
@@ -2610,6 +2631,13 @@ Draw(XmTextWidget tw,
 	      orig_x = wx - (int)((overall.rbearing - overall.lbearing) >> 1) -
 		       overall.lbearing;
 	      orig_y += overall.ascent;
+	      if (_XmIsISO10646(XtDisplay(tw), data->font)) {
+	        size_t ucsstr_len = 0;
+		XChar2b *ucsstr = _XmUtf8ToUcs2(p, csize, &ucsstr_len);
+		XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+				data->gc, orig_x, orig_y, ucsstr, ucsstr_len);
+		XFree(ucsstr);
+	      } else
 	      XDrawString(XtDisplay(tw),
 			  XtWindow(tw->text.inner_widget), data->gc,
 			  orig_x, orig_y, p, csize);
@@ -2848,7 +2876,15 @@ Draw(XmTextWidget tw,
 			    x - data->hoffset, y, block.ptr, length);
 #endif
 	} else {
-	  XDrawString(XtDisplay(tw),
+	  if (_XmIsISO10646(XtDisplay(tw), data->font)) {
+	    size_t ucsstr_len = 0;
+	    XChar2b *ucsstr = _XmUtf8ToUcs2(block.ptr, length, &ucsstr_len);
+	    XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+				data->gc, x - data->hoffset, y, ucsstr,
+				ucsstr_len);
+	    XFree(ucsstr);
+	  } else
+	    XDrawString(XtDisplay(tw),
 		      XtWindow(tw->text.inner_widget), 
 		      data->gc, x - data->hoffset, y, 
 		      block.ptr, length);
@@ -2882,6 +2918,14 @@ Draw(XmTextWidget tw,
 			    x - data->hoffset, y, block.ptr, length);
 #endif
 	} else {
+	  if (_XmIsISO10646(XtDisplay(tw), data->font)) {
+	    size_t ucsstr_len = 0;
+	    XChar2b *ucsstr = _XmUtf8ToUcs2(block.ptr, length, &ucsstr_len);
+	    XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+				data->gc, x - data->hoffset, y, ucsstr,
+				ucsstr_len);
+	    XFree(ucsstr);
+	  } else
 	  XDrawString(XtDisplay(tw),
 		      XtWindow(tw->text.inner_widget), data->gc,
 		      x - data->hoffset, y, block.ptr, length);

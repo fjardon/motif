@@ -2757,8 +2757,17 @@ df_DrawText(
 	 num_bytes = wcstombs(tmp, wc_string,
 			      (int)((length + 1) * sizeof(wchar_t)));
 	 wc_string[length] = tmp_wc;
-	 if (num_bytes >= 0)
-            XDrawString (XtDisplay(tf), XtWindow(tf), gc, x, y, tmp, num_bytes);
+	 if (num_bytes >= 0) {
+	   if (_XmIsISO10646(XtDisplay(tf), XmTextF_font(tf))) {
+             size_t str_len = 0;
+	     XChar2b *str = _XmUtf8ToUcs2(tmp, num_bytes, &str_len);
+	     XDrawString16(XtDisplay(tf), XtWindow(tf), gc, x, y,
+			     str, str_len);
+	     XFree(str);
+	   } else
+             XDrawString(XtDisplay(tf), XtWindow(tf), gc, x, y,
+			     tmp, num_bytes);
+	 }
 	 XmStackFree((char *)tmp, stack_cache);
       } else /* one byte chars */
          XDrawString (XtDisplay(tf), XtWindow(tf), gc, x, y, string, length);
@@ -2821,8 +2830,15 @@ df_FindPixelLength(
          num_bytes = wcstombs(tmp, wc_string, 
 			      (int)((length + 1)*sizeof(wchar_t)));
 	 wc_string[length] = wc_tmp;
-	 if (num_bytes >= 0)
+	 if (num_bytes >= 0) {
+	   if (_XmIsISO10646(XtDisplay(tf), XmTextF_font(tf))) {
+	     size_t str_len = 0;
+	     XChar2b *str = _XmUtf8ToUcs2(tmp, num_bytes, &str_len);
+	     ret_len = XTextWidth16(XmTextF_font(tf), str, str_len);
+	     XFree(str);
+	   } else
             ret_len = XTextWidth(XmTextF_font(tf), tmp, num_bytes);
+	 }
          XmStackFree((char *)tmp, stack_cache);
 	 return (ret_len);
       } else /* one byte chars */

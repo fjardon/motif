@@ -272,6 +272,69 @@ _XmWarningMsg(Widget w,
     XtWarning(message);
 }
 
+/* ARGSUSED */
+Boolean
+_XmIsISO10646(Display *dpy, XFontStruct *font)
+{
+    Boolean ok;
+    int i;
+    char *regname;
+    Atom registry;
+    XFontProp *xfp;
+
+    ok = False;
+    registry = XInternAtom(dpy, "CHARSET_REGISTRY", False);
+
+    for (i = 0, xfp = font->properties;
+	 ok == False && i < font->n_properties; xfp++, i++) {
+	if (xfp->name == registry) {
+	    regname = XGetAtomName(dpy, (Atom) xfp->card32);
+	    if (strcmp(regname, "ISO10646") == 0 ||
+		strcmp(regname, "iso10646") == 0)
+	      ok = True;
+	    XFree(regname);
+	}
+    }
+    return ok;
+}
+
+XChar2b*
+_XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
+{
+    char *ep;
+    unsigned short codepoint;
+    XChar2b *ptr;
+    XChar2b *buf2b;
+
+    /*
+     * Convert to UCS2 string on the fly.
+     */
+
+     buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
+
+     ep = draw_text + seg_len;
+     for (ptr = buf2b; draw_text < ep; ptr++) {
+	if((draw_text[0]&0x80)==0) {
+	    codepoint=draw_text[0];
+	    draw_text++;
+	} else if((draw_text[0]&0x20)==0) {
+	    codepoint = (draw_text[0]&0x1F)<<6 | (draw_text[1]&0x3F);
+	    draw_text+=2;
+        } else if((draw_text[0]&0x10)==0) {
+	    codepoint = (draw_text[0]&0x0F)<<12
+			    | (draw_text[1]&0x3F)<<6
+			    | (draw_text[2]&0x3F);
+	    draw_text+=3;
+	} else {                    /* wrong UTF-8 */
+	    codepoint=(unsigned)'?';
+	    draw_text++;
+	}
+	ptr->byte1 = (codepoint >> 8) & 0xff;;
+	ptr->byte2 = codepoint & 0xff;
+     }
+     *ret_str_len = ptr - buf2b;
+     return buf2b;
+}
 
 
 /***************************************/
