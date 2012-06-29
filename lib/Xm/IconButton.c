@@ -1834,7 +1834,7 @@ CreateGCs(Widget w)
     Pixmap stipple;
     Arg args[2];
     Cardinal num_args = 0;                
-    XFontStruct *fs;
+    XFontStruct *fs = NULL;
 
     XtSetArg(args[num_args], XmNforeground, &fg); num_args++;
     XtSetArg(args[num_args], XmNbackground, &bg); num_args++;
@@ -1846,13 +1846,17 @@ CreateGCs(Widget w)
 
     values.foreground = fg;
     values.background = bg;
-    values.font = fs->fid;
     values.graphics_exposures = False;
     values.stipple = stipple;
     values.fill_style = FillStippled;
 
-    mask = GCForeground | GCFont | GCBackground | GCGraphicsExposures;
+    mask = GCForeground | GCBackground | GCGraphicsExposures;
     smask = mask | GCStipple | GCFillStyle;
+
+    if (fs) {
+        values.font = fs->fid;
+        mask |= mask | GCFont;
+    }
 
     XmIconButton_gc(iw) = XtGetGC(w, mask, &values);
     XmIconButton_stippled_text_gc(iw) = XtGetGC(w, smask, &values);
