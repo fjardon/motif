@@ -629,10 +629,12 @@ UrmIdbGetResourceId (IDBFile			file_id,
    *  Local variables
    */
   Cardinal	result ;		/* function results */
+  IDBResource resource_id;
 
   if ( (result=Idb__FIL_Valid((IDBFile)file_id)) != MrmSUCCESS ) return result ;
   result = Idb__RID_NextRID ((IDBFile)file_id, 
-			     (IDBResource *)resource_id_return) ;
+                             &resource_id) ;
+  *resource_id_return = resource_id;
   return result ;
 
 }
