@@ -1,7 +1,7 @@
 /* simple test program */
 
 #include <Xm/Xm.h>
-#include <Xm/ComboBox2.h>
+#include <Xm/DropDown.h>
 #include <Xm/XmAll.h>
 #include <stdio.h>
 
