@@ -5361,7 +5361,7 @@ Resource
     Type = font_table;
   };
   XmNdefaultEntryLabelRenderTable : Argument {
-    Type = font_table;
+    Type = widget_ref;
   };
   XmNdefaultEntryLabelAlignment : Argument {
     Type = integer;
@@ -5392,7 +5392,7 @@ Resource
     Default = "Null";
   };
   XmNentryLabelRenderTable : Constraint {
-    Type = font_table;
+    Type = widget_ref;
     Default = "Null";
   };
   XmNentryLabelAlignment : Constraint {
