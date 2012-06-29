@@ -1268,7 +1268,7 @@ _XmGetPixmapData(
 	*width = pix_entry->width;
 	*height = pix_entry->height;
 	/* try to get the hot spot data from the image cache */
-	if (image_name && image_set)  {
+	if (image_set)  {
 	    entry = (ImageData *) _XmGetHashEntry(image_set, *image_name);
 	    if (entry) {
 		*hot_x = entry->hot_x;
