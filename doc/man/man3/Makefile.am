@@ -171,6 +171,8 @@ man_MANS = ApplicationShell.3 \
     XmCvtXmStringToByteStream.3 \
     XmCvtXmStringToCT.3 \
     XmDataField.3 \
+    XmDataFieldGetString.3 \
+    XmDataFieldSetInsertionPosition.3 \
     XmDeactivateProtocol.3 \
     XmDeactivateWMProtocol.3 \
     XmDestroyPixmap.3 \
