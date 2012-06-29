@@ -718,10 +718,12 @@ IsDescendent(
         Widget parentW,
         Widget childW )
 {
-	Widget tmp = XtParent(childW);
+	Widget tmp;
 
 	if ((parentW == NULL) || (childW == NULL))
 		return(False);
+        
+	tmp = XtParent(childW);
 	
 	while (tmp != parentW)
 	{
