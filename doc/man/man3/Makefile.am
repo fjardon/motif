@@ -280,7 +280,7 @@ man_MANS = ApplicationShell.3 \
     XmListDeletePos.3 \
     XmListDeletePositions.3 \
     XmListDeselectAllItems.3 \
-    XmListDeselectItem.3 \
+    XmListUnselectItem.3 \
     XmListDeselectPos.3 \
     XmListGetKbdItemPos.3 \
     XmListGetMatchPos.3 \
