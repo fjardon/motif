@@ -10,7 +10,7 @@
 #include <Xm/MessageB.h>
 #include <Xm/ToggleB.h>
 #include <Xm/Text.h>
-#include <Xm/Ext18List.h>
+#include <Xm/MultiList.h>
 #include "extlist.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,7 +118,7 @@ CreateExtListCB( Widget parent )
     XtSetArg(args[argcnt], XmNselectionPolicy, XmSINGLE_SELECT);   argcnt++;
     XtSetArg(args[argcnt], XmNshowSash, False);   argcnt++;
 	retWid = XtCreateManagedWidget("ext18listWidget", 
-				  xmExt18ListWidgetClass, 
+				  xmMultiListWidgetClass, 
 				  parent, args, argcnt);    
 
       XmStringFree(tcs);
@@ -235,7 +235,7 @@ UnselCB(Widget w, XtPointer client, XtPointer call )
 {
   DemoInfo demo_info = (DemoInfo)client;
  
-  XmExt18ListUnselectAllItems( demo_info->extlist );
+  XmMultiListUnselectAllItems( demo_info->extlist );
   
 }
 

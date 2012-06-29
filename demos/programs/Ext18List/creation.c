@@ -8,7 +8,7 @@
 #include <Xm/Frame.h>
 #include <Xm/Form.h>
 #include <Xm/RowColumn.h>
-#include <Xm/Ext18List.h>
+#include <Xm/MultiList.h>
 #include <Xm/ButtonBox.h>
 #include <Xm/Paned.h>
 #include <Xm/MenuShell.h>
@@ -30,7 +30,7 @@ RegisterConverters()
     XtInitializeWidgetClass(xmFrameWidgetClass);
     XtInitializeWidgetClass(xmFormWidgetClass);
     XtInitializeWidgetClass(xmRowColumnWidgetClass);
-    XtInitializeWidgetClass(xmExt18ListWidgetClass);
+    XtInitializeWidgetClass(xmMultiListWidgetClass);
     XtInitializeWidgetClass(xmPanedWidgetClass);
     XtInitializeWidgetClass(xmButtonBoxWidgetClass);
     XtInitializeWidgetClass(topLevelShellWidgetClass);

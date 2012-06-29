@@ -5,7 +5,7 @@
  *
  * Author: Rick Umali
  *
- * Ext18List.c
+ * MultiList.c
  *
  */
 
@@ -18,7 +18,7 @@
 #include <Xm/Text.h>
 #include <Xm/PushB.h>
 #include <Xm/ToggleB.h>
-#include <Xm/Ext18List.h>
+#include <Xm/MultiList.h>
 #include "extlist.h"
 #include <pixmaps/crab.xpm>
 #include <pixmaps/stopsign.xpm>
@@ -84,8 +84,8 @@ static String fallbacks[] = {
     "*firstRowCol.labelString: Go to Row 2, 1",
     "*toggleFind.labelString: Toggle Finder",
     "*quit_pb.labelString: Quit",
-    "*Ext18List.title: Red Sox Line Up Card",
-    "*ext18listWidget*title: Line Up",
+    "*MultiList.title: Red Sox Line Up Card",
+    "*multilistWidget*title: Line Up",
     "*playerone.labelString: Mo Vaughn",
     "*playertwo.labelString: Tim Naehring",
     "*playerthree.labelString: Scott Cooper",
@@ -150,7 +150,7 @@ main(int argc, char **argv)
     
     top = XtOpenApplication(
             &app, 
-            "Ext18List", 
+            "MultiList", 
             NULL, 
             0,
             &argc, 
