@@ -50,9 +50,9 @@ extern void _XmAssignLabG_MarginHeight(
                         int value) ;
 #else
                         Dimension value) ;
+#endif /* NeedWidePrototypes */
 extern void _XmLabelGCalcTextRect( 
                         Widget wid) ;
-#endif /* NeedWidePrototypes */
 extern void _XmAssignLabG_MarginWidth( 
                         XmLabelGadget lw,
 #if NeedWidePrototypes
