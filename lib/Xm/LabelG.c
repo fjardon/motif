@@ -304,7 +304,7 @@ static XtResource resources[] =
     
     {
         XmNpixmapPlacement, XmCPixmapPlacement, XmRPixmapPlacement,
-        sizeof(unsigned int), XtOffsetOf(XmLabelGadgetRec, label.pixmap_placement),
+        sizeof(XmPixmapPlacement), XtOffsetOf(XmLabelGadgetRec, label.pixmap_placement),
         XmRImmediate, (XtPointer) XmPIXMAP_LEFT
     },
     
