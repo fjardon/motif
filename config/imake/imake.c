@@ -958,23 +958,38 @@ const char *libc_c=
 static void get_libc_version(inFile)
   FILE* inFile;
 {
-  char *aout = tmpnam (NULL);
+  char aout[PATH_MAX];
   FILE *fp;
   const char *format = "%s -o %s -x c -";
   char *cc;
   int len;
   char *command;
+  char *tmpdir;
+  int tmpfd;
+  
+  if((tmpdir = getenv("TMPDIR")) != NULL && strlen(tmpdir) < (PATH_MAX-13))
+    strcpy(aout, tmpdir);
+  else
+    strcpy(aout, "/tmp");
+  strcat(aout, "/imakeXXXXXX");
+  
+  if((tmpfd = mkstemp(aout)) == -1) {
+    perror("mkstemp");
+    abort();
+  }
 
   cc = getenv ("CC");
   if (cc == NULL)
     cc = "gcc";
   len = strlen (aout) + strlen (format) + strlen (cc);
   if (len < 128) len = 128;
-  command = alloca (len);
+  if((command = alloca (len)) == NULL)
+    abort();
 
   if (snprintf (command , len, format, cc, aout) == len)
     abort ();
 
+  close(tmpfd);
   fp = popen (command, "w");
   if (fp == NULL || fprintf (fp, "%s\n", libc_c) < 0
       || pclose (fp) != 0)
