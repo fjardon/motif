@@ -141,7 +141,7 @@ static Boolean MakePositionVisible(Widget, short, short, short, int);
 static void ExtendedSelect(Widget, short);
 
 static int IsRowVisible(Widget, short);
-static int QSortTest(XmMultiListRowInfo *, XmMultiListRowInfo *);
+static int QSortTest(const void *, const void *);
 
 static void UnselectRows(Widget, short);
 
@@ -2833,13 +2833,14 @@ SortList(Widget w, Boolean redisplay)
  */
 
 static int 
-QSortTest(XmMultiListRowInfo * row1, XmMultiListRowInfo * row2)
+QSortTest(const void * row1, const void * row2)
 {
     XmI18ListWidget ilist = (XmI18ListWidget) global_current_widget;
     short col = XmI18List_selected_header(ilist);
     Xm18SortFunction sort_f = XmI18List_sort_functions(ilist)[(int)col];
 
-    return ((*sort_f) (col, row1, row2));
+    return ((*sort_f) (col, (XmMultiListRowInfo*)row1,
+            (XmMultiListRowInfo*)row2));
 }    
 
 

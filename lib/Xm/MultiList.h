@@ -48,7 +48,7 @@ typedef struct _XmMultiListCallbackStruct {
 } XmMultiListCallbackStruct;
 
 typedef int (*Xm18SortFunction) \
-            (short, XmMultiListRowInfo *, XmMultiListRowInfo *);
+            (short, const XmMultiListRowInfo *, const XmMultiListRowInfo *);
 
 /************************************************************
 *	GLOBAL DECLARATIONS
