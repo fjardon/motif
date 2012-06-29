@@ -2058,10 +2058,12 @@ FindPixelLength(XmTextFieldWidget tf,
       num_bytes = wcstombs(tmp, wc_string, 
 			   (int)((length + 1)*sizeof(wchar_t)));
       wc_string[length] = wc_tmp;
-      XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), tmp, num_bytes, &ext);
+      XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf),
+              (FcChar8*)tmp, num_bytes, &ext);
       XmStackFree(tmp, stack_cache);
     } else /* one byte chars */
-      XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), string, length, &ext);
+      XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf),
+              (FcChar8*)string, length, &ext);
 
     return ext.xOff;
 #endif
@@ -2949,7 +2951,7 @@ _XmTextFieldReplaceText(XmTextFieldWidget tf,
 	** XmTextFieldSetHighlight called since last interaction here
 	** that resulted in clearing program-set highlights
 	*/
-	int low,high;
+	int low = 0, high = 0;
 	if (TrimHighlights(tf, &low, &high))
 		{
 	    	RedisplayText(tf, low, high);
@@ -3764,7 +3766,8 @@ PrintableString(XmTextFieldWidget tf,
   } else if (TextF_UseXft(tf)) {
     XGlyphInfo	ext;
 
-    XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf), str, n, &ext);
+    XftTextExtentsUtf8(XtDisplay(tf), TextF_XftFont(tf),
+            (FcChar8*)str, n, &ext);
 
     return ext.xOff != 0;
 #endif
@@ -6862,7 +6865,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
 	TextF_UseFontSet(tf) = False;
 	TextF_UseXft(tf) = True;
 	have_xft_font = True;
-	tf->text.font = (XftFont*)tmp_font;
+	tf->text.font = tmp_font;
 #endif
       }
     }
@@ -9412,7 +9415,8 @@ TextFieldResetIC(Widget w)
         } else if (TextF_UseXft(tf)) {
           XGlyphInfo	ext;
 
-          XftTextExtentsUtf8(XtDisplay((Widget)tf), TextF_XftFont(tf), mb, insert_length, &ext);
+          XftTextExtentsUtf8(XtDisplay((Widget)tf), TextF_XftFont(tf),
+	      (FcChar8*)mb, insert_length, &ext);
 
           if (!ext.xOff) {
               ResetUnder(tf);
