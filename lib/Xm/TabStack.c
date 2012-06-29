@@ -3539,8 +3539,8 @@ DrawStackedShadows(tab, top_GC, bottom_GC, x, y, base_width, base_height)
     Dimension  doffset;
     GC         gc;
     XRectangle rts[2];
-    Pixel      pixel;
-    Pixmap     pixmap;
+    Pixel      pixel = XmUNSPECIFIED_PIXEL;
+    Pixmap     pixmap = None;
 
     shadow = tab->manager.shadow_thickness;
     num_rows = XmTabBoxGetNumRows(XmTabStack_tab_box(tab));
