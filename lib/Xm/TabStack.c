@@ -1609,10 +1609,20 @@ QueryGeometry(widget, request, allowed)
      * Now that we know the bounding box of all the children lets add the
      * margin to that area.
      */
-    width = kid_width += 2 * (BBPart(tab).margin_width +
-			      tab->manager.shadow_thickness);
-    height = kid_height += 2 * (BBPart(tab).margin_height +
-				tab->manager.shadow_thickness);
+    width = kid_width += 2 * BBPart(tab).margin_width +
+			      tab->manager.shadow_thickness;
+    
+    height = kid_height += 2 * BBPart(tab).margin_height +
+				tab->manager.shadow_thickness;
+    if (XmTabStack_tab_side(tab) == XmTABS_ON_TOP
+            || XmTabStack_tab_side(tab) == XmTABS_ON_BOTTOM)
+    {
+        width += tab->manager.shadow_thickness;
+    } else /* if (XmTabStack_tab_side(tab) == XmTABS_ON_LEFT
+            || XmTabStack_tab_side(tab) == XmTABS_ON_RIGHT) */
+    {
+        height += tab->manager.shadow_thickness;
+    }
 
     if( LocalTabBox(tab) )
     {
