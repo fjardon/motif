@@ -2306,12 +2306,13 @@ LRectangle *background_box)
     XSetClipMask (XtDisplay (lw), clipgc, None);
 
     /*  Draw the pixmap or text  */
+    LabelDrawBackground((Widget)lw, event, region, background_box);
 
     if (LabG_IsPixmap(lw) || LabG_IsPixmapAndText(lw))
     {
         int depth;
 
-        LabelDrawBackground((Widget)lw, event, region, background_box);
+        /* moved before the condition: LabelDrawBackground((Widget)lw, event, region, background_box); */
         if (XtIsSensitive(wid))
         {
             if (Pix (lw) != XmUNSPECIFIED_PIXMAP)
@@ -2391,7 +2392,7 @@ LRectangle *background_box)
     if ((LabG_IsText(lw) || LabG_IsPixmapAndText(lw)) && (LabG__label(lw) != NULL))
     {
         /* TODO this clears the pixmap, but this is needed to draw background */
-        LabelDrawBackground((Widget)lw, event, region, background_box);
+        /* LabelDrawBackground((Widget)lw, event, region, background_box); */
 	
         if (LabG_Mnemonic(lw) != XK_VoidSymbol)
         {
