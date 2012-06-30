@@ -1544,6 +1544,18 @@ Redisplay(
 		       lp->StringRect.width,
 		       lp->alignment,
 		       XmPrim_layout_direction(lw), NULL);
+#ifdef USE_XFT
+      if (!XtIsSensitive(wid))
+        {
+          XSetFillStyle(XtDisplay(lw), lp->insensitive_GC, FillStippled);
+          XFillRectangle(XtDisplay(lw), XtWindow(lw), lp->insensitive_GC,
+			lp->TextRect.x + lp->StringRect.x,
+			lp->TextRect.y + lp->StringRect.y,
+ 			lp->StringRect.width,
+			lp->StringRect.height);
+          XSetFillStyle(XtDisplay(lw), lp->insensitive_GC, FillOpaqueStippled);
+        }
+#endif
     }
   
   if (lp->_acc_text != NULL) 
