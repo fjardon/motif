@@ -40,6 +40,8 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
  * (c) Copyright 1993, 1994 Novell, Inc.
  */
 
+#define FIX_1350    1
+
 /*
  * Included Files:
  */
@@ -1794,7 +1796,8 @@ void Do_Focus_Key (ClientData *pCD, Time focusTime, long flags)
 		   XSetInputFocus (DISPLAY, pcdFocus->clientBaseWin,
 				RevertToPointerRoot, CurrentTime);
 		  }
-		  else if ( !(flags & CLIENT_AREA_FOCUS)                   &&
+#ifndef FIX_1350
+                  else if ( !(flags & CLIENT_AREA_FOCUS)                   &&
 		       !(pcdFocus->protocolFlags & PROTOCOL_WM_TAKE_FOCUS) &&
 		        pcdFocus->inputFocusModel
 		     )
@@ -1802,7 +1805,8 @@ void Do_Focus_Key (ClientData *pCD, Time focusTime, long flags)
 		    XSetInputFocus (DISPLAY, focusWindow,
 				    RevertToPointerRoot, CurrentTime);
 		  }
-		  else
+#endif
+                  else
 		  {
 		    XSetInputFocus (DISPLAY, focusWindow,
 				      RevertToParent, CurrentTime);
