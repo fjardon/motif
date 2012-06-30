@@ -32,7 +32,6 @@ static char rcsid[] = "$TOG: TextOut.c /main/41 1999/08/12 11:37:30 vipin $"
 #include <config.h>
 #endif
 
-
 /* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 /* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 /*
@@ -4619,8 +4618,14 @@ NotifyResized(Widget w,
       data->number_lines /= (int) data->linewidth;
   
     if (tw->text.top_character)
+    {
       tw->text.top_line = CountLines(tw, 0,
 					 tw->text.top_character);
+    if (tw->text.total_lines >= data->number_lines &&
+	   (tw->text.total_lines - tw->text.top_line) < data->number_lines)
+		tw->text.top_line = tw->text.total_lines - data->number_lines;
+      tw->text.new_top = tw->text.line_table[tw->text.top_line].start_pos;
+    }
   } else {
   data->number_lines = tw->text.inner_widget->core.height -
     data->topmargin - data->bottommargin;
@@ -4630,8 +4635,14 @@ NotifyResized(Widget w,
     data->number_lines /= (int) data->lineheight;
   
   if (tw->text.top_character)
+  {
     tw->text.top_line = CountLines(tw, 0,
 				       tw->text.top_character);
+    if (tw->text.total_lines >= data->number_lines &&
+	   (tw->text.total_lines - tw->text.top_line) < data->number_lines)
+		tw->text.top_line = tw->text.total_lines - data->number_lines;
+    tw->text.new_top = tw->text.line_table[tw->text.top_line].start_pos;
+  }
   }
   
   if (data->vbar)

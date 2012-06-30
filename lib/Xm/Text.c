@@ -982,10 +982,16 @@ _XmTextFindScroll(XmTextWidget tw,
   register unsigned int t_index;
   register unsigned int max_index = 0;
   
+  if (tw->text.total_lines <= tw->text.table_index)
+    tw->text.table_index = tw->text.total_lines - 1;
+ 
+ 
   line_table = tw->text.line_table;
   t_index = tw->text.table_index;
   
   max_index = tw->text.total_lines - 1;
+  
+  
   
   /* look forward to find the current record */
   if (line_table[t_index].start_pos < (unsigned int) start) {
