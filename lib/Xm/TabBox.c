@@ -358,8 +358,8 @@ static char traversal_translations[] =
      <Key>osfLeft:     XmTabBoxTraverseLeft()\n\
      <Key>osfUp:       XmTabBoxTraverseUp()\n\
      <Key>osfDown:     XmTabBoxTraverseDown()\n\
-     ~c s <Key>Tab:    XmTabBoxTraversePrevious()\n\
-     ~c ~s <Key>Tab:   XmTabBoxTraverseNext()\n\
+     ~c s <Key>Tab:    PrimitivePrevTabGroup()\n\
+     ~c ~s <Key>Tab:   PrimitiveNextTabGroup()\n\
      c s <Key>Tab:     PrimitivePrevTabGroup()\n\
      c ~s <Key>Tab:    PrimitiveNextTabGroup()\n\
      <Key>osfHelp:     PrimitiveHelp()\n\
