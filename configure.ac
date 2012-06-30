@@ -150,7 +150,10 @@ fi
 
 if test x$GCC = xyes
 then
-    CFLAGS="$CFLAGS -Wall -g -fno-tree-ter -fno-strict-aliasing -Wno-unused -Wno-comment"
+    CFLAGS="$CFLAGS -Wall -g -fno-strict-aliasing -Wno-unused -Wno-comment"
+    if test ` gcc -dumpversion | sed -e 's/\(^.\).*/\1/'` == "4" ; then
+        CFLAGS="$CFLAGS -fno-tree-ter"
+    fi
 fi
 AC_DEFINE(NO_OL_COMPAT, 1, "No OL Compatability")
 
