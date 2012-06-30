@@ -1176,6 +1176,7 @@ Redisplay(widget, event, region)
 	XSetRegion(XtDisplay(tab), XmTabBox__tab_GC(tab), region);
 	XSetRegion(XtDisplay(tab), tab->manager.bottom_shadow_GC, region);
 	XSetRegion(XtDisplay(tab), tab->manager.top_shadow_GC, region);
+	XSetRegion(XtDisplay(tab), tab->manager.background_GC, region);
     }
 
     /*
@@ -3876,7 +3877,7 @@ DrawTab(tab, info, geometry, selected, keyboard)
 
     if( selected && XiSelectSpecified(tab) )
     {
-	SetSelectGC(tab, gc);
+	SetSelectGC(tab, tab->manager.background_GC);
     }
     else
     {
@@ -3890,7 +3891,7 @@ DrawTab(tab, info, geometry, selected, keyboard)
 	     * It appears that this tab wants its background filled in
 	     * to a specific color so lets do that.
 	     */
-	    SetBackgroundGC(tab, info, gc);
+	    SetBackgroundGC(tab, info, tab->manager.background_GC);
 	}
 	else
 	{
@@ -3908,14 +3909,14 @@ DrawTab(tab, info, geometry, selected, keyboard)
     switch( XmTabBox_tab_style(tab) )
     {
     case XmTABS_SQUARED:
-	XFillRectangle(XtDisplay(tab), XiCanvas(tab), gc, geometry->x,
+	XFillRectangle(XtDisplay(tab), XiCanvas(tab), tab->manager.background_GC, geometry->x,
 		       geometry->y, geometry->width, geometry->height);
 	break;
     case XmTABS_ROUNDED:
-	FillRoundedTab(tab, gc, geometry, edge);
+	FillRoundedTab(tab, tab->manager.background_GC, geometry, edge);
 	break;
     case XmTABS_BEVELED:
-	FillBeveledTab(tab, gc, geometry, edge);
+	FillBeveledTab(tab, tab->manager.background_GC, geometry, edge);
 	break;
     }
 
