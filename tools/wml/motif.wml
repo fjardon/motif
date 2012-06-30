@@ -153,6 +153,14 @@ CharacterSet
                   CharacterSize = TwoByte; };
     utf8
 		{ XmStringCharsetName = "UTF-8"; };
+    iso_ir_111
+                { XmStringCharsetName = "ISO-IR-111";
+                  Alias = "KOI8-R";
+                  Alias = "KOI8-U";
+                  Alias = "KOI8-RU";
+                  Alias = "KOI8R";
+                  Alias = "KOI8U";
+                  Alias = "KOI8RU"; };
     XmFONTLIST_DEFAULT_TAG
         { FontListElementTag = XmFONTLIST_DEFAULT_TAG; };
 
