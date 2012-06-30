@@ -115,7 +115,6 @@ CreateNode(Widget w_parent, Widget parent_node, char * name, \n\
  *		RESOURCE FALLBACKS
  **************************************************************/
 static String fallbacks[] = {
-    "*background: lightcoral",
     "*fontList: -*-helvetica-medium-r-*-*-*-140-*-*-*-*-*-*",
     "*hypelabel*fontList: -*-helvetica-bold-r-*-*-*-140-*-*-*-*-*-*",
     "*show_code*fontList: -*-courier-*-r-normal-*-*-*-*-*-*-*-*-*",

@@ -43,7 +43,6 @@ static String fallbacks[] = {
     /*
      * General fallback resources.
      */
-    "*background: lightcoral",
     "*fontList: -*-helvetica-medium-r-*-*-*-140-*-*-*-*-*-*",
     "*hype_label*fontList: -*-helvetica-bold-r-*-*-*-140-*-*-*-*-*-*",
     "*orient_label.labelString: Orientation:",
