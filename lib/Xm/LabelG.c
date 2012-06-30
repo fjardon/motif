@@ -2390,8 +2390,8 @@ LRectangle *background_box)
 
     if ((LabG_IsText(lw) || LabG_IsPixmapAndText(lw)) && (LabG__label(lw) != NULL))
     {
-        /* this clears the pixmap, doe it really needed? */
-        /* LabelDrawBackground((Widget)lw, event, region, background_box); */
+        /* TODO this clears the pixmap, but this is needed to draw background */
+        LabelDrawBackground((Widget)lw, event, region, background_box);
 	
         if (LabG_Mnemonic(lw) != XK_VoidSymbol)
         {
@@ -2421,6 +2421,19 @@ LRectangle *background_box)
             lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
             LabG_StringRect(lw).width,
             LabG_Alignment(lw), LayoutG(lw), NULL);
+#ifdef USE_XFT
+        if (!XtIsSensitive(wid)) {
+          XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillStippled);
+          XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_InsensitiveGC(lw),
+			lw->rectangle.x + LabG_TextRect(lw).x +
+				LabG_StringRect(lw).x,
+                        lw->rectangle.y + LabG_TextRect(lw).y +
+				LabG_StringRect(lw).y,
+                        LabG_StringRect(lw).width,
+                        LabG_StringRect(lw).height);
+          XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillOpaqueStippled);
+        }
+#endif
     }
 
     if (LabG__acceleratorText(lw) != NULL)
