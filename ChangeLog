@@ -1,4 +1,8 @@
-2007-08-15  Yuriy Syrota  <yura@ics.com>
+2007-09-13  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/ResEncod.c:
+	Fixed bug #1389 (A middle click on a tab lets nedit segfault)
+
+2007-09-13  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/TextP.h, lib/Xm/Text.c:
 	Fixed bug #1377 (XmText memory leak in InitializeHook)
 
