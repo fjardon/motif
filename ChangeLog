@@ -1,6 +1,11 @@
+2007-08-15  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/MultiList.c:
+	Fixed bug #1385 (core.self of XmMultiList is NULL, but must be pointer itself.)
+
 2007-08-13  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/ResEncod.c:
 	Fixed bug #1380 (Can not set title bar in 2.3)
+
 2006-12-27  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/List.c:
 	Fixed bugs #1369 and #1370 (XmList max item height problem)
