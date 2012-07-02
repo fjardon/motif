@@ -26,6 +26,8 @@
 
 #include <Xm/ExtP.h>
 
+#define FIX_1371
+
 /*
  * NOTE:  I use the same syntax for popup and popdown that Xt Uses. 
  *        so something is "up" if it is on the screen.  With combo
@@ -940,7 +942,9 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmDropDown_list_state(cbw) = XmDropDown_IN_PROGRESS;
 
     if (is_unposted) {
+#ifndef FIX_1371
 	if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
+#endif
 	    PopdownList((Widget) cbw);
 
 	if (!XmDropDown_customized_combo_box(cbw))
@@ -1601,7 +1605,7 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
      */
     if (XmDropDown_show_label(cbw)) 
     {
-	_XmConfigureWidget(label, label_x, //XmDropDown_h_space(cbw),
+	_XmConfigureWidget(label, label_x, /* XmDropDown_h_space(cbw), */
 			   XmDropDown_v_space(cbw), 
 			   label_width, 
 			   child_height - 2 * label_geom.border_width,
