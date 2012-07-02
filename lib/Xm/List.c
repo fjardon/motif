@@ -5807,7 +5807,7 @@ ClickElement(XmListWidget lw,
 	  if (cb.selected_items)
 	    for (i = 0; i < SLcount; i++)
 	      if (cb.selected_items[i])
-		XmStringFree(cb.selected_items[i])
+		XmStringFree(cb.selected_items[i]);
 	  DEALLOCATE_LOCAL((char *) cb.selected_items);
 	  DEALLOCATE_LOCAL((char *) cb.selected_item_positions);
 	}
