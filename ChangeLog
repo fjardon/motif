@@ -1,4 +1,8 @@
 2007-12-13  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/DropDown.c:
+        Fixed bug #1371 (XmComboBox problem on FC6)
+
+2007-12-13  Yuriy Syrota  <yura@ics.com>
 	* configure.ac:
 	Added /usr as possible prefix for toolkit installation
 
