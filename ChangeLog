@@ -1,3 +1,7 @@
+2007-12-13  Yuriy Syrota  <yura@ics.com>
+	* configure.ac:
+	Added /usr as possible prefix for toolkit installation
+
 2007-11-24  Yuriy Syrota  <yura@ics.com>
 	* lib/Mrm/Mrmappl.c:
 	Fixed bug #1161 (MrmOpenHierarchyPerDisplay causes core dump).
