@@ -541,11 +541,11 @@ XmeGetSetting(Display* display, char *name)
 	Display *disp;
 	XSettingsResult xr;
 
-	if (!client_init)
+	if (!client_inited)
 	{
 		disp = XOpenDisplay(NULL);
 		client = xsettings_client_new (display, DefaultScreen (display), NULL);
-		client_init = True;
+		client_inited = True;
 	}
 
 	if (!client)
