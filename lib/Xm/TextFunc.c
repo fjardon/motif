@@ -484,6 +484,10 @@ XmTextPaste(Widget widget)
 {
   Boolean status;
   InputData data;
+
+  if (XmIsTextField(widget))
+    return XmTextFieldPaste(widget);
+
   _XmWidgetToAppContext(widget);
 
   _XmAppLock(app);
