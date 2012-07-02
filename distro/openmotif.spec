@@ -18,7 +18,6 @@ BuildPrereq: /usr/bin/yacc
 Conflicts: lesstif <= 0.92.32-6
 
 Prefix: /usr
-Mandir: ${prefix}/share/man
 
 %description
 This is the Open Motif %{version} runtime environment. It includes the
@@ -67,11 +66,11 @@ mkdir -p $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d \
 
 install -m 755 %{SOURCE1} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/
 
-pushd $RPM_BUILD_ROOT/usr/include/
-ln -s ../X11R6/include/Xm .
-ln -s ../X11R6/include/Mrm .
-ln -s ../X11R6/include/uil .
-popd
+#pushd $RPM_BUILD_ROOT/usr/include/
+#ln -s ../X11R6/include/Xm .
+#ln -s ../X11R6/include/Mrm .
+#ln -s ../X11R6/include/uil .
+#popd
 
 rm -fr $RPM_BUILD_ROOT%{prefix}/%{_lib}/*.la \
        $RPM_BUILD_ROOT%{prefix}/share/Xm/doc
@@ -94,9 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/%{_lib}/libMrm.so.*
 %{prefix}/%{_lib}/libUil.so.*
 %{prefix}/%{_lib}/libXm.so.*
-%{Mandir}/man/man1/mwm*
-%{Mandir}/man/man1/xmbind*
-%{Mandir}/man/man4/mwmrc*
+%{prefix}/man/man1/mwm*
+%{prefix}/man/man1/xmbind*
+%{prefix}/man/man4/mwmrc*
 
 %files devel
 %defattr(-,root,root)
@@ -118,6 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/Xm/*
 
 %changelog
+* Sat May 03 2008 Ihor Hayvuk <ihayvuk@ics.com>
+- updated for OpenMotif 2.3.1
+
 * Thu Nov 14 2007 Yuriy Syrota <ysyrota@softservecom.com>
 - updated for OpenMotif 2.3.1
 

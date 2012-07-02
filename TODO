@@ -1,9 +1,2 @@
 TODO list for 2.3 release
 ----------------------------------------------------------------
-
-Things which will break Compatability:
-
-We need to fix xmstring.list to place the resources in 
-the correct XmString array. (This will break compatability
-so it must be held off)
-

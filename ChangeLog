@@ -1,5 +1,9 @@
 ================================ Open Motif 2.3.1 released ================================
 
+2008-05-03  Ihor Hayvuk <ihayvuk@ics.com>
+	* openmotif.spec, TODO, RELEASE:
+	Updated for OpenMotif 2.3.1
+
 2008-05-02  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELEASE:
 	Updated release date
