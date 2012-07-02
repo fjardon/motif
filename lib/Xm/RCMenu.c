@@ -2563,7 +2563,7 @@ _XmRC_UpdateOptionMenuCBG(
 {
    XmString xmstr = NULL;
    Pixmap pix, ipix;
-   Arg al[4];
+   Arg al[5];
    int ac = 0;
    
    /* If one of these is NULL then something is wrong. */
