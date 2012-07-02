@@ -1,3 +1,45 @@
+================================ Open Motif 2.3.1 released ================================
+
+2008-04-23  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmRenderT.c:
+	Refixed bug #1414 (XFT support slowness)
+
+2008-04-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DataF.c, lib/Xm/TextF.c, lib/Xm/XmRenderT.c, lib/Xm/XmRenderTI.h:
+	Fixed bug #1415 (XFT width calculation problem)
+	
+2008-04-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/RowColumn.c:
+	Fixed bug #1410 (setting XmNisHomogeneous to True without setting XmNentryClass causes sigfault)
+
+2008-04-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DrTog.c, lib/Xm/ToggleB.c, lib/Xm/ToggleBG.c, lib/Xm/XmI.h:
+	Fixed bug #1402 (Toggle button circular buttons can not mimic modern look)
+
+2008-04-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/CascadeBG.c, lib/Xm/ToggleB.c, lib/Xm/ToggleBG.c:
+	Refixed bug #1395 (Wrong label foreground for etched in menus)
+
+2008-04-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/List.c:
+	Fixed bug #1362 (Repeated calls to XmListReplaceItemsPos cause Error: Cannot perform malloc when using Extended_Select)
+
+2008-04-18  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/List.c:
+	Fixed bug #1365 (Top pixel of German character I with top '^' leaves trails)
+
+2008-04-17  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmRenderT.c:
+	Refixed bug #1414 (XFT support slowness)
+
+2008-04-17  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmRenderT.c:
+	Fixed bug #1414 (XFT support slowness)
+
+2008-04-17  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/RowColumn.c:
+	Fixed bug #1351 (Bad dynamic propagation of the sensitive state to popup menus)
+
 2008-04-15  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/TextF.c:
 	Fixed bug #1409 (XmTextField sometimes crashes if a string is set by
