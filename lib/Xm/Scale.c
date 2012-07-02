@@ -2907,8 +2907,9 @@ ShowValue(
     if (sw->scale.orientation == XmHORIZONTAL) {
 #if USE_XFT
 	x = scrollbar->core.x
-	    + scrollbar->scrollBar.slider_x;
-	    + scrollbar->scrollBar.slider_width / 2;
+	    + scrollbar->scrollBar.slider_x
+	    + scrollbar->scrollBar.slider_width / 2
+	    - width / 2;
 	if (sw->scale.show_value == XmNEAR_BORDER) 
 	    /*tmp: should store the max */ 
 	    y = scrollbar->core.y - MaxLabelHeight(sw) - height - 3;

@@ -1,4 +1,8 @@
 2007-09-13  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Scale.c:
+	Fixed bug #1387 (Scale Widget draws value text not centered to slider)
+
+2007-09-13  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/ResEncod.c:
 	Fixed bug #1389 (A middle click on a tab lets nedit segfault)
 
