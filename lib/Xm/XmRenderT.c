@@ -1965,6 +1965,7 @@ ValidateTag(XmRendition rend,
     }
 }
 
+#ifdef FIX_1414
 static int
 GetSameRenditions(XmRendition *rend_cache, XmRendition *rend, int count_rend)
 {
@@ -1974,12 +1975,12 @@ GetSameRenditions(XmRendition *rend_cache, XmRendition *rend, int count_rend)
 		if ( rend_cache && (rend_cache[i])
 				&& (((_XmRendFontName(rend) 	&& _XmRendFontName(rend_cache[i]) ) && !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))
 					|| 	(!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i])))
-				&& ((_XmRendFontFoundry(rend) && !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend)))
+				&& (((_XmRendFontFoundry(rend) && _XmRendFontFoundry(rend_cache[i])) && !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend)))
 					|| 	(!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i])))
-				&& ((_XmRendFontEncoding(rend) && !strcmp(_XmRendFontEncoding(rend_cache[i]), _XmRendFontEncoding(rend)))
+				&& (((_XmRendFontEncoding(rend) && _XmRendFontEncoding(rend_cache[i])) && !strcmp(_XmRendFontEncoding(rend_cache[i]), _XmRendFontEncoding(rend)))
 					|| 	(!_XmRendFontEncoding(rend) && !_XmRendFontEncoding(rend_cache[i])))
-				&& ((_XmRendFontStyle(rend) && !strcmp(_XmRendFontStyle(rend_cache[i]), _XmRendFontStyle(rend)))
-					|| 	(!_XmRendFontStyle(rend) && !_XmRendFontStyle(rend_cache[i])) )  
+				&& (((_XmRendFontStyle(rend) && _XmRendFontStyle(rend_cache[i])) && !strcmp(_XmRendFontStyle(rend_cache[i]), _XmRendFontStyle(rend)))
+					|| 	(!_XmRendFontStyle(rend) && !_XmRendFontStyle(rend_cache[i])) )
 				&& _XmRendFontSize(rend) == _XmRendFontSize(rend_cache[i])
 				&& _XmRendPixelSize(rend) == _XmRendPixelSize(rend_cache[i])
 				&& _XmRendFontSlant(rend) == _XmRendFontSlant(rend_cache[i])
@@ -1994,7 +1995,7 @@ GetSameRenditions(XmRendition *rend_cache, XmRendition *rend, int count_rend)
 	return -1;
 
 }
-
+#endif
 
 /* Make sure all the font related resources make sense together and */
 /* then load the font specified by fontName if necessary. */
