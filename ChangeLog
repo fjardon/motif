@@ -1,3 +1,8 @@
+2007-10-26  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Picture.c:
+	Added including of Xos.h in order to fix compilation on Solaris
+	and HP/UX.
+
 2007-10-25  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/ExtP.h:
 	Removed unnecessary including of nl_ctype.h on HP/UX.

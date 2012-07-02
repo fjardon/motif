@@ -21,6 +21,7 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 
+#include <X11/Xos.h>
 #include <Xm/PictureP.h>
 
 static XmPictureNode* _XiGetNewNode(XmPictureRec*);
