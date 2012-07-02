@@ -2777,8 +2777,13 @@ DrawToggle(
 	  break;
 
 	case XmONE_OF_MANY_ROUND:
+#ifdef FIX_1402
+	  XmeDrawCircle(dpy, drawable, top_gc, bot_gc, fill_gc, x, y,
+			edge, edge, w->toggle.detail_shadow_thickness, margin);
+#else
 	  XmeDrawCircle(dpy, drawable, top_gc, bot_gc, fill_gc, x, y,
 			edge, edge, w->toggle.detail_shadow_thickness, 1);
+#endif
 	  break;
 	}
     }

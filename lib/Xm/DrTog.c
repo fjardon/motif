@@ -393,6 +393,17 @@ XmeDrawCircle(Display *display,
       XChangeGC(display, top_gc, mask, &new_values);
       XChangeGC(display, bottom_gc, mask, &new_values);
 
+#ifdef FIX_1402
+      if (center_gc != NULL) {
+    	  int delta = MIN(line_width + margin, MIN(width, height) / 2) -1;
+    	  XFillArc(display, d, center_gc,
+    			  x + delta, y + delta,
+    			  MAX(width - 2 * delta, 1), 
+    			  MAX(height - 2 * delta, 1),
+    			  0, 360 * 64);
+      }
+#endif
+      
       XDrawArc(display, d, top_gc,
 	       x + line_width/2, y + line_width/2, 
 	       MAX(width - line_width, 1),
@@ -408,6 +419,18 @@ XmeDrawCircle(Display *display,
       XChangeGC(display, bottom_gc, mask, &bottom_values);
     }
 
+#ifdef FIX_1402
+  else {
+	  if (center_gc != NULL) {
+		  int delta = MIN(line_width + margin, MIN(width, height) / 2);
+		  XFillArc(display, d, center_gc,
+				  x + delta, y + delta,
+				  MAX(width - 2 * delta, 1), 
+				  MAX(height - 2 * delta, 1),
+				  0, 360 * 64);
+	  }
+  }
+#else
   if (center_gc != NULL)
     {
       /* Fill the center of the circle. */
@@ -418,5 +441,6 @@ XmeDrawCircle(Display *display,
 	       MAX(height - 2 * delta, 1),
 	       0, 360 * 64);
     }
+#endif
   _XmAppUnlock(app);
 }
