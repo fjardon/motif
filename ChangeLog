@@ -1,3 +1,7 @@
+2007-10-18  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/XmIm.c:
+	Fixed bug #1367 (XmText autoShowCursorPosition is not always honoured when selected text is deleted).
+
 2007-10-15  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/XmIm.c:
 	Fixed bug #1140 (Functions do not check _XmGetWidgetExtData() result).
