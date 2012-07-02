@@ -162,7 +162,6 @@ XpmI.h \
 regexpI.h \
 EditresComI.h \
 ReportsI.h \
-xsettings.h \
 $(JPEG_HDRS) \
 $(PNG_HDRS) \
 $(TIP_HDRS)
@@ -217,7 +216,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
-        TableLayout.h   TableLayoutP.h \
+        TableLayout.h   TableLayoutP.h  xsettings.h \
         ${SLIDE_HDRS}	${EXTRA_HDRS}
 
 SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \

@@ -11,7 +11,6 @@
 
 #define BYTES_LEFT(buffer) ((buffer)->data + (buffer)->len - (buffer)->pos)
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
-Boolean ClientStart=0;
 
 void
 xsettings_setting_free (XSettingsSetting *setting)
@@ -537,27 +536,33 @@ XmeGetSetting(Display* display, char *name)
 {
 	const char *display_str = NULL;
 	static XSettingsClient *client = NULL;
-    XSettingsSetting *setting;
+        static Boolean client_inited = False;
+        XSettingsSetting *setting = NULL;
 	Display *disp;
+	XSettingsResult xr;
 
-	if (!ClientStart)
+	if (!client_init)
 	{
 		disp = XOpenDisplay(NULL);
 		client = xsettings_client_new (display, DefaultScreen (display), NULL);
-		ClientStart=1;
+		client_init = True;
 	}
 
 	if (!client)
 	{
-		XtWarning ("Cannot create xsetting client. Motif will not use xsettings!");
 		return (0);
 	}
 
-    xsettings_client_get_setting(client, name, &setting);
-/* In case we will use Display which come as function parameter
-   we will uncomment this comment */
-/*	xsettings_client_destroy (client);*/
-    return (setting->data.v_int);
+        xr = xsettings_client_get_setting(client, name, &setting);
+	/* In case we will use Display which come as function parameter
+	   we will uncomment this comment */
+	/*	xsettings_client_destroy (client);*/
+	if (xr != XSETTINGS_SUCCESS) 
+	{
+		return (0);
+	}
+		
+	return (setting->data.v_int);
 
 }
 
