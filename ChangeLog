@@ -1,4 +1,8 @@
 2007-11-24  Yuriy Syrota  <yura@ics.com>
+	* lib/Mrm/Mrmappl.c:
+	Fixed bug #1161 (MrmOpenHierarchyPerDisplay causes core dump).
+
+2007-11-24  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/List.c:
 	Fixed bug #1210 (XmList XBell call when matchBehavior is XmQUICK_NAVIGATE).
 
