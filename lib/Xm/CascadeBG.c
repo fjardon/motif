@@ -1056,6 +1056,10 @@ Redisplay(
 	    Pixel	junk, select_pix;
 	    XmManagerWidget mw = (XmManagerWidget) XtParent(cb);
 	    Boolean replaceGC = False;
+#ifdef FIX_1395
+	    XGCValues values;
+	    GC tmp_bgc = NULL;
+#endif
 
 	    XmGetColors(XtScreen(mw), mw->core.colormap,
 		mw->core.background_pixel,
@@ -1067,12 +1071,28 @@ Redisplay(
 		tmpGC = LabG_NormalGC(cb);
 		LabG_NormalGC(cb) = CBG_BackgroundGC(cb);
 	    }
+#ifdef FIX_1395
+	    /* Fetch the select_color GetGC() actually used. */
+	    XGetGCValues(XtDisplay(cb), LabG_BackgroundGC(cb), GCBackground, &values);
+	    if (values.background != select_pix)
+	    {
+			values.background = select_pix;
+			XChangeGC(XtDisplay((Widget)cb), LabG_BackgroundGC(cb), GCBackground, &values);
+		}
+	    tmp_bgc = LabG_BackgroundGC(cb);
+	    LabG_BackgroundGC(cb) = CBG_ArmGC(cb);
+#endif
 
 
 	    _XmProcessLock();
 	    expose = xmLabelGadgetClassRec.rect_class.expose;
 	    _XmProcessUnlock();
 	    (* expose)((Widget)cb, event, region);
+
+#ifdef FIX_1395	    
+	    /* Restore default bg GC*/
+	    LabG_BackgroundGC(cb) = tmp_bgc;
+#endif
 
 	    if (replaceGC)
 		LabG_NormalGC(cb) = tmpGC;
