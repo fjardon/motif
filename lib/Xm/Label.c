@@ -2830,9 +2830,11 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
     /* Fix for Bug 1117 - if str is null then a SEGVIOLATION occures
      * in strlen.
      */
+    *length = str ? strlen(rval) : 0;
+
     rval = _XmTextToLocaleText(w, (XtPointer) str,
 			       COMPOUND_TEXT, 8, 
-			       (str)?strlen(str):0,
+			       *length,
 			       flag);
   }
 
@@ -2918,7 +2920,7 @@ LabelGetValue(Widget w, int type)
 {
   XmString value;
   
-  XtVaGetValues(w, XmNlabelString, &value, 0);
+  XtVaGetValues(w, XmNlabelString, &value, NULL);  
   
   if (type == XmFORMAT_XmSTRING) 
     {
