@@ -4655,6 +4655,9 @@ NotifyResized(Widget w,
     {
       int local_total, new_size;
       XmNavigatorDataRec nav_data;
+#ifdef FIX_1396      
+      int new_voffset = 0;
+#endif
       
       if(XmDirectionMatch(XmPrim_layout_direction(tw),
 			  XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
@@ -4662,10 +4665,17 @@ NotifyResized(Widget w,
 	  - (data->topmargin + data->bottommargin);
 	if (new_size < 1) new_size = 1;
 	if (new_size > data->scrollheight) new_size = data->scrollheight;
-
+#ifdef FIX_1396      
+        new_voffset = data->voffset;
+        if (new_voffset > data->scrollheight - new_size)
+    	    new_voffset = data->scrollheight - new_size;
+#endif
 	data->ignorevbar = True;
-      
+#ifdef FIX_1396
+	nav_data.value.y = new_voffset;
+#else
 	nav_data.value.y = data->voffset;
+#endif
 	nav_data.minimum.y = 0;
 	nav_data.maximum.y = data->scrollheight;
 	nav_data.slider_size.y = new_size;
@@ -4708,7 +4718,9 @@ NotifyResized(Widget w,
       XmNavigatorDataRec nav_data;
       int new_size = 0;
       int local_total = 0;
-
+#ifdef FIX_1396
+      int new_hoffset = 0;      
+#endif
       if(XmDirectionMatch(XmPrim_layout_direction(tw),
 			  XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
 	data->ignorehbar = True;
@@ -4737,10 +4749,17 @@ NotifyResized(Widget w,
 	- (data->leftmargin + data->rightmargin);
       if (new_size < 1) new_size = 1;
       if (new_size > data->scrollwidth) new_size = data->scrollwidth;
-
+#ifdef FIX_1396      
+      new_hoffset = data->hoffset;
+      if (new_hoffset > data->scrollwidth - new_size)
+        new_hoffset = data->scrollwidth - new_size;
+#endif
       data->ignorehbar = True;
-      
+#ifdef FIX_1396
+      nav_data.value.x = new_hoffset;
+#else
       nav_data.value.x = data->hoffset;
+#endif
       nav_data.minimum.x = 0;
       nav_data.maximum.x = data->scrollwidth;
       nav_data.slider_size.x = new_size;

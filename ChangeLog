@@ -1,3 +1,7 @@
+2008-02-11  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/ScrollBar.c, lib/Xm/TextOut.c, XmI.h:
+	Fixed bug #1396 (ScrollBar warning when XmNotebook resized)
+
 2007-02-07  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/Gadget.c, lib/Xm/Primitive.c, lib/Xm/ToolTipI.h, lib/Xm/XmI.h, lib/Xm/VendorS.c, lib/Xm/ToolTip.c:
 	Refixed bug #1388 (SEGV error moving mouse over window related to XmToolTipGetLabel).

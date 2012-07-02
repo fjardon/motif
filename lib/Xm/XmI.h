@@ -264,6 +264,7 @@ extern void (*_XtProcessLock)();
 #endif
 
 #define FIX_1381
+#define FIX_1396
 
 #ifdef FIX_1381
 #define RGB_GREY_VALUE 128
