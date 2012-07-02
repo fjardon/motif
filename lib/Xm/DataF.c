@@ -2356,7 +2356,7 @@ _XmDataFieldDrawInsertionPoint(
 
     if (turn_on == True) {
        XmTextF_cursor_on(tf) += 1;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
        if (Blink_rate_xsetting(tf) == 0 || !XmTextF_has_focus(tf))
 #else
        if (XmTextF_blink_rate(tf) == 0 || !XmTextF_has_focus(tf))
@@ -2414,7 +2414,7 @@ df_HandleTimer(
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) closure;
 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	unsigned long blink_rate;
 	blink_rate = (unsigned long)Blink_rate_xsetting(tf);
     if (blink_rate != 0)
@@ -2423,7 +2423,7 @@ df_HandleTimer(
 #endif
         XmTextF_timer_id(tf) =
 		 XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)tf),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 				 blink_rate,
 #else
 				 (unsigned long)XmTextF_blink_rate(tf),
@@ -2455,7 +2455,7 @@ df_ChangeBlinkBehavior(
 {
 
     if (turn_on) {
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 		unsigned long blink_rate;
 		blink_rate = (unsigned long) Blink_rate_xsetting(tf);
         if (blink_rate != 0 && XmTextF_timer_id(tf) == (XtIntervalId)0)
@@ -2464,7 +2464,7 @@ df_ChangeBlinkBehavior(
 #endif
             XmTextF_timer_id(tf) =
                 XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)tf),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 				 blink_rate,
 #else
 			        (unsigned long)XmTextF_blink_rate(tf),
@@ -6487,7 +6487,7 @@ df_SetScanIndex(
 	
 	
    if (sel_time > XmTextF_last_time(tf) &&
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	sel_time - XmTextF_last_time(tf) < XmeGetMultiClickTime(XtDisplay(tf))) {
 #else
 	sel_time - XmTextF_last_time(tf) < XtGetMultiClickTime(XtDisplay(tf))) {
@@ -10935,7 +10935,7 @@ df_SetValues(
        XtSetArg(im_args[n], XmNforeground, new_tf->primitive.foreground); n++;
     }
 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	unsigned long blink_rate;
 	blink_rate = (unsigned long) Blink_rate_xsetting(new_tf);
 
@@ -10957,7 +10957,7 @@ df_SetValues(
         } else if (XmTextF_timer_id(new_tf) == (XtIntervalId)0) {
            XmTextF_timer_id(new_tf) =
 		 XtAppAddTimeOut(XtWidgetToApplicationContext(new_w),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 				 blink_rate,
 #else
 				 (unsigned long)XmTextF_blink_rate(new_tf),

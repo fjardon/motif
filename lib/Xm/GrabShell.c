@@ -416,7 +416,7 @@ BtnUp (Widget w,
      we then ignore the event if it occured within the 
      click to post time */
   delta = event -> xbutton.time - grabshell -> grab_shell.post_time;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	if (delta <= XmeGetMultiClickTime(XtDisplay(w))) {
 #else 
   if (delta <= XtGetMultiClickTime(XtDisplay(w))) {

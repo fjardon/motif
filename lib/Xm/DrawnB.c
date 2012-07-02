@@ -538,7 +538,7 @@ MultiActivate(
     */
   if (db->drawnbutton.multiClick == XmMULTICLICK_KEEP)  
   { if ((buttonEvent->xbutton.time - db->drawnbutton.armTimeStamp) >
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
                   XmeGetMultiClickTime(XtDisplay(db)))
 #else
 	   XtGetMultiClickTime(XtDisplay(db)))

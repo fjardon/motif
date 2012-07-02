@@ -575,7 +575,7 @@ MultiActivate(
   if (aw->arrowbutton.multiClick == XmMULTICLICK_KEEP)
     {
       if ((buttonEvent->xbutton.time - aw->arrowbutton.armTimeStamp) > 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	XmeGetMultiClickTime(XtDisplay(aw)))
 #else 
 	  XtGetMultiClickTime(XtDisplay(aw)))

@@ -1004,7 +1004,7 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
      */
 
     notify_type = ((event->xbutton.time - XmI18List_time(ilist)) <=
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
                   XmeGetMultiClickTime(XtDisplay(w)));
 #else
                   XtGetMultiClickTime(XtDisplay(w)));
@@ -1061,7 +1061,7 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
      */
 
     notify_type = ((event->xbutton.time - XmI18List_time(ilist)) <=
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
                   XmeGetMultiClickTime(XtDisplay(w)));
 #else
 		   XtGetMultiClickTime(XtDisplay(w)));

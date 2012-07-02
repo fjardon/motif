@@ -130,7 +130,7 @@ extern "C" {
 #define XmUNSPECIFIED_COUNT	(~0)
 
 /*whether use or not use xsettings*/
-#define XSETTINS_ON 1
+#define XSETTINGS_ON 1
 
 /* Used by conversion routine in ResConvert.c, RepType.c, IconG.c, etc */
 

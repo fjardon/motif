@@ -1140,7 +1140,7 @@ Notify(Widget w, XEvent * event, String * params, Cardinal * num_params)
 
     if ((event->type == ButtonPress) || (event->type == ButtonRelease))
 	dclick = ((event->xbutton.time - XmIconButton_time(iw)) <=
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
                   XmeGetMultiClickTime(XtDisplay(w)));
 #else 
 		  XtGetMultiClickTime(XtDisplay(w)));
@@ -1979,7 +1979,7 @@ CheckSetRenderTable(Widget wid,
 
 /*	Function name: ChangeCB
  *	Description: add or remove the activate callback list.
- *	Arguments:   w - the child widget haÑ its list of callbacks modified
+ *	Arguments:   w - the child widget haï¿½ its list of callbacks modified
  *	             activCB - the callback to add or remove from
  *	             closure - additional data to be passed to the callback
  *	             setunset - set/unset flag

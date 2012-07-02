@@ -3429,7 +3429,7 @@ DrawInsertionPoint(XmTextWidget tw,
   
   if (onoroff == on) {
     data->cursor_on +=1;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
     if (Blink_rate_xsetting(tw) == 0 || !data->hasfocus)
 #else
     if (data->blinkrate == 0 || !data->hasfocus)
@@ -4519,7 +4519,7 @@ OutputSetValues(Widget oldw,
   }
   
   if (data->hasfocus && XtIsSensitive((Widget)newtw) && CK(blinkrate)) {
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	unsigned long blink_rate;
 	blink_rate = (unsigned long)Blink_rate_xsetting(newtw);
     if (blink_rate == 0) {
@@ -4534,7 +4534,7 @@ OutputSetValues(Widget oldw,
     } else if (data->timerid == (XtIntervalId)0) {
       data->timerid =
 	XtAppAddTimeOut(XtWidgetToApplicationContext(new_w),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	    	blink_rate,
 #else
 			(unsigned long) newdata->blinkrate,
@@ -4930,7 +4930,7 @@ HandleTimer(XtPointer closure,
 {
   XmTextWidget tw = (XmTextWidget) closure;
   OutputData data = tw->text.output->data;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	unsigned long blink_rate;
 	blink_rate = (unsigned long) Blink_rate_xsetting(tw);
     if (blink_rate != 0)
@@ -4939,7 +4939,7 @@ HandleTimer(XtPointer closure,
 #endif
     data->timerid =
       XtAppAddTimeOut(XtWidgetToApplicationContext((Widget) tw),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 		      blink_rate,
 #else
 		      (unsigned long)data->blinkrate,
@@ -4962,7 +4962,7 @@ _XmTextChangeBlinkBehavior(XmTextWidget tw,
   OutputData data = tw->text.output->data;
   
   if (newvalue) {
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	unsigned long blink_rate;
 	blink_rate = (unsigned long) Blink_rate_xsetting(tw);
     if (blink_rate != 0 && data->timerid == (XtIntervalId)0)
@@ -4971,7 +4971,7 @@ _XmTextChangeBlinkBehavior(XmTextWidget tw,
 #endif
       data->timerid =
 	XtAppAddTimeOut(XtWidgetToApplicationContext((Widget) tw),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 			blink_rate,
 #else
 			(unsigned long)data->blinkrate,

@@ -2031,7 +2031,7 @@ PopdownDone(
 	 event &&
 	 ((event->type == ButtonPress) || (event->type == ButtonRelease)) &&
 	 ((event->xbutton.time - mst->MS_LastManagedMenuTime) < 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 		XmeGetMultiClickTime(XtDisplay(ms))))	
 #else 
 	  XtGetMultiClickTime(XtDisplay(ms))))	/* or 150 ms? */

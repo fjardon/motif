@@ -1767,7 +1767,7 @@ _XmTextFieldDrawInsertionPoint(XmTextFieldWidget tf,
   if (turn_on == True) {
     tf->text.cursor_on += 1;
 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
     if (BlinkRate_xsetting(tf) == 0 || !tf->text.has_focus)
 #else
     if (TextF_BlinkRate(tf) == 0 || !tf->text.has_focus)
@@ -1811,7 +1811,7 @@ HandleTimer(XtPointer closure,
 	    XtIntervalId *id)
 {
   XmTextFieldWidget tf = (XmTextFieldWidget) closure;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
   unsigned long blink_rate;
   blink_rate = (unsigned long)BlinkRate_xsetting(tf);
   if (blink_rate != 0)
@@ -1820,7 +1820,7 @@ HandleTimer(XtPointer closure,
 #endif
     tf->text.timer_id =
       XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)tf),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 		      blink_rate,
 #else
 		      (unsigned long)TextF_BlinkRate(tf),
@@ -1844,7 +1844,7 @@ ChangeBlinkBehavior(XmTextFieldWidget tf,
 {
   
   if (turn_on) {
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	unsigned long blink_rate;
 	blink_rate = (unsigned long) BlinkRate_xsetting(tf);
     if (blink_rate != 0 && tf->text.timer_id == (XtIntervalId)0)
@@ -1853,7 +1853,7 @@ ChangeBlinkBehavior(XmTextFieldWidget tf,
 #endif
       tf->text.timer_id =
 	XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)tf),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 		      blink_rate,
 #else
 			(unsigned long)TextF_BlinkRate(tf),
@@ -5003,7 +5003,7 @@ SetScanIndex(XmTextFieldWidget tf,
   
   
   if (sel_time > tf->text.last_time &&
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
       sel_time - tf->text.last_time < XmeGetMultiClickTime(XtDisplay(tf))) {
 #else
       sel_time - tf->text.last_time < XtGetMultiClickTime(XtDisplay(tf))) {
@@ -5802,7 +5802,7 @@ ProcessBSelect(Widget w,
       if (!InSelection(w, event) ||
 	  (event_time > tf->text.last_time &&
 	   event_time - tf->text.last_time < 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 	    XmeGetMultiClickTime(XtDisplay(w)))) {
 #else
 	   XtGetMultiClickTime(XtDisplay(w)))) {
@@ -8358,7 +8358,7 @@ SetValues(Widget old,
     XtSetArg(im_args[n], XmNforeground, new_tf->primitive.foreground); n++;
   }
   
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
   unsigned long blink_rate;
   blink_rate  = (unsigned long) BlinkRate_xsetting(new_tf);
   if (new_tf->text.has_focus && XtIsSensitive((Widget)new_tf) &&
@@ -8380,7 +8380,7 @@ SetValues(Widget old,
     } else if (new_tf->text.timer_id == (XtIntervalId)0) {
       new_tf->text.timer_id =
 	XtAppAddTimeOut(XtWidgetToApplicationContext(new_w),
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 		      blink_rate,
 #else
 			(unsigned long)TextF_BlinkRate(new_tf),

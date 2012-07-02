@@ -3765,7 +3765,7 @@ SetScanType(Widget w,
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
   
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
   multi_click_time = XmeGetMultiClickTime(XtDisplay(w));
 #else
   multi_click_time = XtGetMultiClickTime(XtDisplay(w));
@@ -4000,7 +4000,7 @@ ProcessBSelect(Widget w,
     case ButtonPress:
       if (!InSelection(w, event) ||
 	  (event_time > data->lasttime &&
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
    event_time - data->lasttime < XmeGetMultiClickTime(XtDisplay(w)))){;
 #else
    event_time - data->lasttime < XtGetMultiClickTime(XtDisplay(w)))){;

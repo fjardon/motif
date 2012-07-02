@@ -7335,7 +7335,7 @@ SetupDrag(Widget wid,
   if ((current_cwid) && CtrOUTLINE_BUTTON(current_cwid))
     current_cwid = NULL;
 
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
   multi_click_time = XmeGetMultiClickTime(XtDisplay(wid));
 #else 
   multi_click_time = XtGetMultiClickTime(XtDisplay(wid));

@@ -1017,7 +1017,7 @@ Initialize(Widget request,
       XmeWarning((Widget) lw, ListMessage15);
     }
   lw->list.previous_top_position = 0;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
 
 #else
   if (lw->list.ClickInterval < 0)
@@ -4644,7 +4644,7 @@ SelectElement(Widget wid,
 
   if (!lw->list.itemCount)
     return;
-#ifdef XSETTINS_ON
+#ifdef XSETTINGS_ON
   interval = (Time) XmeGetMultiClickTime(XtDisplay(lw));
 #else
   interval = (Time) lw->list.ClickInterval;
