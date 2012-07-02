@@ -940,6 +940,7 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmDropDown_list_state(cbw) = XmDropDown_IN_PROGRESS;
 
     if (is_unposted) {
+	if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
 	    PopdownList((Widget) cbw);
 
 	if (!XmDropDown_customized_combo_box(cbw))
@@ -2232,7 +2233,7 @@ PopupList(Widget w)
         XSetInputFocus(XtDisplay(shell),
 		   XtWindow(shell), RevertToParent, CurrentTime);		   
     }
-		   
+
     return(True);
 }
 
