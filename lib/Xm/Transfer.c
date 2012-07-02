@@ -771,10 +771,13 @@ XmeClipboardSource(Widget w, XtEnum op, Time time)
 			      _XmConvertHandler, LoseProc, NULL);
     }
 
-    if (status) XtAddCallback(w, XmNdestroyCallback, DisownCallback,
-			      (XtPointer) atoms[XmACLIPBOARD]); {
-    _XmAppUnlock(app);
-    return True;
+    if (status)
+    {
+      XtAddCallback(w, XmNdestroyCallback, DisownCallback,
+			      (XtPointer) atoms[XmACLIPBOARD]);
+    } else {
+      _XmAppUnlock(app);
+      return True;
     }
   }
 

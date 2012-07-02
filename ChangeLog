@@ -1,3 +1,7 @@
+2007-01-02  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Transfer.c:
+	Fixed bug #1399 (cut and copy don't work in XmText widget)
+
 2007-12-31  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/CascadeB.c, lib/Xm/ToggleB.c, lib/Xm/XmI.h:
 	Fixed bug #1395 (Wrong label foreground for etched in menus)
