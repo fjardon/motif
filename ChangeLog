@@ -1,3 +1,7 @@
+2008-07-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorObj.c
+	Fixed bug #1400 (Corrupted per-display font cache)
+
 2008-07-09  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c
 	Fixed bug #1440 (Tags array size in Label widget is not enough)
