@@ -271,5 +271,7 @@ extern void (*_XtProcessLock)();
 extern Pixel _XmAssignInsensitiveColor(Widget w);
 #endif
 
+#define FIX_1375
+
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
