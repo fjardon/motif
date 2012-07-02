@@ -26,6 +26,7 @@
 
 #include <X11/Intrinsic.h>
 #include "Xm.h"
+#include "XmI.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +41,10 @@ void _XmToolTipLeave(Widget wid,
                      XEvent *event, 
                      String *params, 
                      Cardinal *num_params);
+
+#ifdef FIX_1388                     
+void _XmToolTipRemove(Widget wid);
+#endif
 
 XmString XmGetToolTipString (Widget w);
 
