@@ -1,4 +1,8 @@
 2007-11-01  Yuriy Syrota  <yura@ics.com>
+	* doc/man/man3/XmObject.3, doc/man/man3/XmShell.3, doc/man/man3/Makefile.am:
+	Implemented enhancement (There's no good way to see the man-page for Shell widget).
+
+2007-11-01  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/PushB.c, lib/Xm/PushBG.c, lib/Xm/XmI.h:
 	Fixed bug #1337 (XmPushButton's ArmAndActivate() has incorrect callback call).
 

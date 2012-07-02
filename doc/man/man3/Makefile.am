@@ -345,6 +345,7 @@ man_MANS = ApplicationShell.3 \
     XmMessageBoxGetChild.3 \
     XmNotebook.3 \
     XmNotebookGetPageInfo.3 \
+    XmObject.3 \
     XmObjectAtPoint.3 \
     XmOptionButtonGadget.3 \
     XmOptionLabelGadget.3 \
@@ -422,6 +423,7 @@ man_MANS = ApplicationShell.3 \
     XmSetMenuCursor.3 \
     XmSetProtocolHooks.3 \
     XmSetWMProtocolHooks.3 \
+    XmShell.3 \
     XmSimpleSpinBox.3 \
     XmSimpleSpinBoxAddItem.3 \
     XmSimpleSpinBoxDeletePos.3 \
