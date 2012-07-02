@@ -80,6 +80,7 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include "XmRenderTI.h"
 #endif
 
+#define FIX_1409
 
 #if (defined(__FreeBSD__) && (__FreeBSD__ < 4)) || \
     (defined(__APPLE__) || defined(__NetBSD__) || defined(__OpenBSD__))
@@ -8206,9 +8207,14 @@ SetValues(Widget old,
 				   &new_tf->text.string_length, &newInsert,
 				   &free_insert);
 */
+#ifdef FIX_1409
+	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos,
+	                           &temp, &ret_val, &newInsert, &free_insert);
+#else
 	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos,
 	                           (char**)&TextF_WcValue(new_tf),
 				   &ret_val, &newInsert, &free_insert);
+#endif
 /* end if fix of bug #1214 */
 
 	if (old != temp) XtFree (old);
