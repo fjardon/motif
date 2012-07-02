@@ -2541,6 +2541,9 @@ processCharsetAndText(XmStringCharSet tag,
 		      ct_Charset	*prev)
 {
   unsigned int		ctlen = 0, len;
+  
+  if (strcmp(tag, CS_UTF_8) == 0)
+    tag = XmFONTLIST_DEFAULT_TAG;
 
   if (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0)
     {
