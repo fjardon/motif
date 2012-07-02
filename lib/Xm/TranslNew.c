@@ -275,7 +275,7 @@ _XmConst char _XmSpinB_defaultAccelerators[] =
 <Key>osfEndLine:	SpinBLast()";
 
 /*** TableLayout.c **/
-_XmConst char _XmTableLaytout_defaultTranslations[] = "\
+_XmConst char _XmTableLayout_defaultTranslations[] = "\
 #augment			\n\
 ~c ~s ~m ~a <Btn1Down>:			XmTableLayoutClick()	\n\
 ~c ~s ~m ~a <Btn1Up>:			XmTableLayoutRelease()	\n\
