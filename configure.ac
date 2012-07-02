@@ -114,7 +114,7 @@ AC_CHECK_FUNCS(strcasecmp,,AC_DEFINE(NEED_STRCASECMP, 1, no strcasecmp))
 AC_CHECK_FUNCS(putenv,,AC_DEFINE(NO_PUTENV, 1, No PUTENV))
 AC_CHECK_FUNCS(regcomp,,AC_DEFINE(NO_REGCOMP, 1, no regcmp))
 AC_CHECK_FUNCS(memmove,,AC_DEFINE(NO_MEMMOVE, 1, no memmove))
-
+AC_CHECK_TYPE(XICProc,,AC_DEFINE(NO_XICPROC, 1, XICProc isn't defined), [#include <X11/Xlib.h>])
 
 AC_ARG_ENABLE(message-catalog, [  --enable-message-catalog
                           Enable building of the message catalog (default=no)])

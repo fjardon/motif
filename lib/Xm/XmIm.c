@@ -59,14 +59,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 # define Va_start(a,b) va_start(a,b)
 
 
-/*
-    On Sun XICProc is not defined. This should be dealt with
-    in the script: configure.ac however 1) not everyone uses that
-    2) AC_CHECK_TYPE(XICProc,,AC_DEFINE(...), include= ?) doesnt
-    work quite right/or is poorly documented and i cant get it to
-    work.
-*/
-#if defined(sun)
+#ifdef NO_XICPROC
 typedef Bool (*XICProc)( XIC, XPointer, XPointer);
 #endif
 
