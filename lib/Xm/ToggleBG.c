@@ -4282,6 +4282,10 @@ DrawEtchedInMenu(
   int fh = tb->rectangle.height - 2 * margin;
   Boolean restore_gc = False;
   GC tmp_gc = NULL;
+#ifdef FIX_1395
+  Boolean restore_bgc = False;
+  GC tmp_bgc = NULL;
+#endif  
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay((Widget) tb));
   Boolean etched_in = dpy->display.enable_etched_in_menu;
   
@@ -4316,6 +4320,25 @@ DrawEtchedInMenu(
 	      LabG_NormalGC(tb) = TBG_BackgroundGC(tb);
 	      restore_gc = True;
 	  }
+
+#ifdef FIX_1395
+	  {
+	    XGCValues values;
+	    /* Fetch the select_color GetGC() actually used. */
+	    XGetGCValues(XtDisplay(tb), TBG_SelectGC(tb), GCBackground, &values);
+	    /* Before label expose call we should change bgc
+	     to correct color and then restore it.
+	    */
+	    if (values.background != select_pix)
+	    {
+		XChangeGC(XtDisplay((Widget)tb), TBG_SelectGC(tb), 
+		  GCBackground, &values);
+		tmp_bgc = LabG_BackgroundGC(tb);
+		LabG_BackgroundGC(tb) = TBG_SelectGC(tb);
+		restore_bgc = True;
+	    }
+	 }
+#endif
     }
   
   {
@@ -4332,6 +4355,13 @@ DrawEtchedInMenu(
       XSetClipMask(XtDisplay(tb), TBG_BackgroundGC(tb), None);
       LabG_NormalGC(tb) = tmp_gc;
     }
+
+#ifdef FIX_1395
+  if (restore_bgc)
+  {
+      LabG_BackgroundGC(tb) = tmp_bgc;
+  }
+#endif
 }
 
 /*

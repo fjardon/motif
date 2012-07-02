@@ -3581,7 +3581,8 @@ DrawToggleLabel(
         (* expose) ((Widget) tb, NULL, NULL);
 #ifdef FIX_1395
 	/* restore default bg color */
-	XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
+	if (tb->toggle.visual_set == XmSET && !Lab_IsMenupane(tb) )
+	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
 #endif
    }
   
@@ -3653,15 +3654,18 @@ DrawEtchedInMenu(
        XtExposeProc expose;
 #ifdef FIX_1395
 	if (tb->toggle.Armed)
+	{
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), select_pix);
+	}
+	else
+	{
+	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tb->core.background_pixel); 
+	}
 #endif
 	_XmProcessLock();
 	expose = xmLabelClassRec.core_class.expose;
 	_XmProcessUnlock();
 	(* expose) ((Widget) tb, NULL, NULL);
-#ifdef FIX_1395
-	XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
-#endif
    }
   
   if (restore_gc)
