@@ -52,6 +52,7 @@ CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
 ./configure \
    --prefix=%{prefix} \
    --libdir=%{prefix}/%{_lib} \
+   --mandir=%{_mandir} \
    --enable-static
 
 make clean
