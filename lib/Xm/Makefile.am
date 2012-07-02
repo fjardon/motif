@@ -160,6 +160,7 @@ XmosI.h \
 XpmI.h \
 regexpI.h \
 EditresComI.h \
+ReportsI.h \
 $(JPEG_HDRS) \
 $(PNG_HDRS) \
 $(TIP_HDRS)
@@ -179,6 +180,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         MenuShellP.h    MessageB.h      MessageBP.h     PanedW.h \
         PanedWP.h       PushB.h         PushBG.h        PushBGP.h \
         PushBP.h        RCLayoutP.h     RowColumn.h     RowColumnP.h \
+        Stretch.h	StretchP.h \
         SashP.h         Scale.h         ScaleP.h        ScrollBar.h \
         ScrollBarP.h    ScrolledW.h     ScrolledWP.h    SelectioB.h \
         SelectioBP.h    SeparatoG.h     SeparatoGP.h    Separator.h \
@@ -198,6 +200,8 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         TearOffBP.h     MenuUtilP.h     MenuT.h         XmAll.h \
         TraitP.h        SpinB.h         SpinBP.h        SSpinB.h \
         SSpinBP.h \
+        Toolbar.h 	ToolbarP.h \
+        Panner.h	PannerP.h 	Porthole.h	PortholeP.h \
         Container.h     ContainerP.h    IconG.h         IconGP.h \
         Notebook.h      NotebookP.h     ContItemT.h     ContainerT.h \
         RCMenuP.h       ClipWindowP.h   TransferT.h \
@@ -224,7 +228,8 @@ SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c 
         List.c          MainW.c         MapEvents.c     MenuShell.c \
         MenuUtil.c      MessageB.c      PanedW.c        PushB.c \
         PushBG.c        ReadImage.c     Region.c        ResConvert.c \
-        ResInd.c        RowColumn.c     Sash.c          \
+        ResInd.c        RowColumn.c     Sash.c          Toolbar.c \
+        Panner.c	Porthole.c 	Stretch.c \
         Scale.c         ScrollBar.c     ScrolledW.c     SelectioB.c \
         SeparatoG.c     Separator.c     Simple.c        Text.c \
         TextIn.c        TextOut.c       TextStrSo.c     TextSel.c \

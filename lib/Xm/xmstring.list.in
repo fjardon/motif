@@ -1693,6 +1693,52 @@ NxftFont
 CXftFont
 SUTF8_STRING
 
+#table _XmStrings240
+
+CCanvasHeight
+CCanvasWidth
+CDefaultScale
+CEntryLabelString
+CGroupPosition
+CGroupSpacing
+CInternalSpace
+CMaxSize
+CMinSize
+CPopupDelay
+CPopupLabelEnabled
+CReportCallback
+CRubberBand
+CSliderHeight
+CSliderWidth
+CSliderX
+CSliderY
+CToolbarEntryData
+CToolbarGroup
+CWidgetSetError
+NcanvasHeight
+NcanvasWidth
+NdefaultScale
+NenterChildCallback
+NforceChildToFill
+NgroupPosition
+NgroupSpacing
+NinternalSpace
+NleaveChildCallback
+NpopupBackground
+NpopupDelay
+NpopupFontList
+NpopupForeground
+NpopupLabelEnabled
+NpopupRenderTable
+NreportCallback
+NrubberBand
+NsliderHeight
+NsliderWidth
+NsliderX
+NsliderY
+NtoolbarEntryData
+NtoolbarGroup         
+
 #file XmStrDefsI.h
 #table _XmStringsI
 #htmpl XmStrDefsI.ht
