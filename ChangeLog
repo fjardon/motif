@@ -1,3 +1,7 @@
+2007-10-15  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/XmIm.c:
+	Fixed bug #1140 (Functions do not check _XmGetWidgetExtData() result).
+
 2007-10-12  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/List.c:
 	Fixed bug #1383 (missing semi-colon at end of sentense).
