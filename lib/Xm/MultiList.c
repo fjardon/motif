@@ -21,6 +21,7 @@
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
+#define BUG_FIX_1385 1
 
 #define H_MARGIN 5
 #define V_MARGIN 5
@@ -137,7 +138,7 @@ static XtResource resources[] =
     sizeof(int), XtOffsetOf(XmMultiListRec, ext_list.visible_rows),
     XmRImmediate, (XtPointer) XmMultiList_DEFAULT_VISIBLE_COUNT
   },
-
+#ifndef BUG_FIX_1385
   {
     XmNnumColumns, XmCNumColumns, XmRShort,
     sizeof(short), 0,
@@ -227,6 +228,7 @@ static XtResource resources[] =
     sizeof(unsigned char), 0, 
     NULL, (XtPointer) NULL
   }
+#endif /* BUG_FIX_1385 */
 };
 
 static XmSyntheticResource syn_resources[] =
