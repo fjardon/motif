@@ -136,7 +136,6 @@ png_load_file(FILE *infile, unsigned long *pWidth,
     png_infop info_ptr = NULL;
     int bit_depth, color_type;
     png_uint_32 width, height;
-//    int rc;
     unsigned char sig[8];
     png_color_16p pBackground;
     double gamma;

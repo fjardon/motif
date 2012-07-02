@@ -204,7 +204,6 @@ static void XiMoveTabPanel _ARGS((Widget, Widget));
 #define IsValidChild(t, k) (XtIsManaged(k) && !(k)->core.being_destroyed && \
 			    !IsTabBox(t,k))
 
-//#define BBPart(w) (*(XmBulletinBoardPart*)((char*)(w) + XmTabStack_offsets[XmBulletinBoardIndex]))
 #define BBPart(w) (((XmBulletinBoardWidget)(w))->bulletin_board)
 
 
@@ -1330,10 +1329,6 @@ Redisplay(widget, event, region)
     (((XmBulletinBoardWidget) c_tab)->bulletin_board.f)
 #define bsfield(f) \
     (((XmBulletinBoardWidget) s_tab)->bulletin_board.f)
-//#define bcfield(f) ((XmBulletinBoardPart*) \
-//		    ((char*)c_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
-//#define bsfield(f) ((XmBulletinBoardPart*) \
-//		    ((char*)s_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
 static Boolean
 #ifndef _NO_PROTO
 SetValues(Widget current, Widget request, Widget set, ArgList arg_list,

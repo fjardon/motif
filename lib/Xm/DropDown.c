@@ -1601,7 +1601,7 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
      */
     if (XmDropDown_show_label(cbw)) 
     {
-	_XmConfigureWidget(label, label_x, //XmDropDown_h_space(cbw),
+	_XmConfigureWidget(label, label_x, /* XmDropDown_h_space(cbw), */
 			   XmDropDown_v_space(cbw), 
 			   label_width, 
 			   child_height - 2 * label_geom.border_width,

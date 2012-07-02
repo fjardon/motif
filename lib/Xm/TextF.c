@@ -3848,7 +3848,7 @@ PrintableString(XmTextFieldWidget tf,
       cache_ptr = tmp = XmStackAlloc(buf_size, cache);
    
       tmp_str = (wchar_t *)str;
-      // Fixed MZ BZ#1257: by Brad Despres <brad@sd.aonix.com>
+      /* Fixed MZ BZ#1257: by Brad Despres <brad@sd.aonix.com> */
       count = 0;
       do {
 	ret_val = wctomb(tmp, *tmp_str);
