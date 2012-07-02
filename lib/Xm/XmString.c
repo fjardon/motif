@@ -8033,6 +8033,10 @@ XmStringParseText(XtPointer    text,
 	      parse_unmatched(&result, &prev_ptr, type, ptr - prev_ptr);
 	      advanced = parse_pattern(&result, &ptr, end_ptr, tag,
 				       type, pat, len, call_data, &halt);
+#ifdef FIX_1398	      
+	      /* Insert the charset component after pattern insertion */
+	      result = XmStringConcatAndFree(result, XmStringComponentCreate(tag_type, strlen(tag), (XtPointer) tag));
+#endif	      
 	    }
 	}
 
