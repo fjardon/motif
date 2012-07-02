@@ -214,6 +214,8 @@ typedef struct _XmTextPart {
     int          hsbar_scrolling;/* scroring using the horizontal scrollbar */
 
     OnTheSpotDataTW onthespot;  /* On the spot preedit style support. */
+    
+    XtTranslations tm_table;
 } XmTextPart;
 
 typedef struct _XmTextRec {
