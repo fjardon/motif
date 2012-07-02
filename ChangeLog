@@ -1,4 +1,8 @@
 2007-10-31  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Container.c:
+	Fixed bug #1384 (Use of freed storage in XmContainer).
+
+2007-10-31  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/TabStack.c, lib/Xm/TextF.c, lib/Xm/DataF.c, lib/Xm/DropDown.c, lib/Xm/Png.c:
 	Removed C++-style comments from the code.
 
