@@ -1,3 +1,14 @@
+2007-11-14  Yuriy Syrota  <yura@ics.com>
+	* Imakefile:
+	* LICENSE:
+	* Makefile.imake-pure:
+	* RELEASE:
+	* configure.ac:
+	* openmotif.spec:
+	* lib/Xm/Xm.h.in:
+	* clients/mwm/version.c:
+	Changed version number to 2.3.1.
+
 2007-11-08  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/BaseClass.c:
 	Fixed bug #1392 (The label widgets can have their core class translations changed).

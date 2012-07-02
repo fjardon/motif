@@ -12,13 +12,13 @@ AC_CANONICAL_TARGET
 dnl The version of the OpenMotif libraries
 CURRENT=4
 REVISION=0
-AGE=0
+AGE=1
 AC_SUBST(CURRENT)
 AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(openmotif,2.3.0,no-define)
+AM_INIT_AUTOMAKE(openmotif,2.3.1,no-define)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
