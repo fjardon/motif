@@ -77,7 +77,7 @@ saved_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $FREETYPE_CFLAGS"
 AC_CHECK_HEADERS(freetype/freetype.h)
 
-LT_HAVE_FREETYPE="no"
+FINDXFT_HAVE_FREETYPE="no"
 case "$ac_cv_header_freetype_freetype_h" in
 no)
 	CPPFLAGS="$saved_CPPFLAGS"
@@ -91,7 +91,7 @@ yes)
 		LIBS="$saved_LIBS"
 		;;
 	yes)
-		LT_HAVE_FREETYPE="yes"
+		FINDXFT_HAVE_FREETYPE="yes"
 		AC_DEFINE(HAVE_FREETYPE, 1, Means we have discovered the FreeType library)
 		AC_SUBST(FREETYPE_CFLAGS)
 		;;
@@ -131,7 +131,7 @@ AC_SUBST(CONFDIR)
 #
 # Check X configuration
 #
-LT_HAVE_XRENDER="no"
+FINDXFT_HAVE_XRENDER="no"
 case "$have_x" in
 yes)
 	XRENDER_CFLAGS="-I$x_includes"
@@ -156,7 +156,7 @@ yes)
 			LIBS="$saved_LIBS"
 			;;
 		yes)
-			LT_HAVE_XRENDER="yes"
+			FINDXFT_HAVE_XRENDER="yes"
 			AC_DEFINE(HAVE_XRENDER, 1, Means we have discovered the Xrender library)
 			AC_SUBST(XRENDER_CFLAGS)
 			AC_SUBST(XRENDER_LIBS)
@@ -251,7 +251,7 @@ dnl
 dnl Should this be conditionally defined ?
 dnl
 
-dnl if test "$LT_HAVE_XRENDER" = "yes" -a "$LT_HAVE_FREETYPE" = "yes"
+dnl if test "$FINDXFT_HAVE_XRENDER" = "yes" -a "$FINDXFT_HAVE_FREETYPE" = "yes"
 dnl then
  	AC_DEFINE(USE_XFT, 1, This means we will be using the Xft library)
 CFLAGS="$CFLAGS `pkg-config xft --cflags`"
