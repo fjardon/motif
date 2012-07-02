@@ -1,9 +1,13 @@
 2006-12-27  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/List.c:
+	Fixed bugs #1369 and #1370 (XmList max item height problem)
+
+2006-12-27  Yuriy Syrota  <yura@ics.com>
 	* clients/mwm/WmFunction.c:
 	Fixed bug #1350 (A window on a different screen than the cursor can not aquire focus from another window closing)
 
 2006-12-26  Yuriy Syrota  <yura@ics.com>
-	* lib/Xm/LabelG.c:
+	* lib/Xm/Tabstack.c:
 	Fixed bug #1324 (Bad view of notebook tabs)
 
 2006-12-21  Yuriy Syrota  <yura@ics.com>
