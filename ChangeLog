@@ -1,6 +1,10 @@
 2008-01-03  Yuriy Syrota  <yura@ics.com>
-	* configure.ac:
+	* lib/Xm/Label.c:
 	Fixed bug #1296 (Drag-and-drop behaves incorrectly if XtSetLanguageProc() is present)
+
+2008-01-03  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Transfer.c:
+	Fixed bug #1399 (cut and copy don't work in XmText widget)
 
 2008-01-02  Yuriy Syrota  <yura@ics.com>
 	* configure.ac:
