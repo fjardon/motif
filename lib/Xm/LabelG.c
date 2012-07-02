@@ -2428,6 +2428,8 @@ LRectangle *background_box)
             lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
             LabG_StringRect(lw).width,
             LabG_Alignment(lw), LayoutG(lw), NULL);
+#ifdef FIX_1381
+#else
 #ifdef USE_XFT
         if (!XtIsSensitive(wid)) {
           XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillStippled);
@@ -2440,6 +2442,7 @@ LRectangle *background_box)
                         LabG_StringRect(lw).height);
           XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillOpaqueStippled);
         }
+#endif
 #endif
     }
 
