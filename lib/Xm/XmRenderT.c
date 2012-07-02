@@ -1967,7 +1967,7 @@ ValidateTag(XmRendition rend,
 
 #ifdef FIX_1414
 static int
-GetSameRenditions(XmRendition *rend_cache, XmRendition *rend, int count_rend)
+GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
 {
 	int i;
 	for (i=0; i<count_rend; i++){
@@ -2062,8 +2062,8 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 #ifdef USE_XFT
 		case XmFONT_IS_XFT:
 		  {
-		    XftResult res;
-		    XftPattern *p;
+		    FcResult res;
+		    FcPattern *p;
 		    
 #ifdef FIX_1414
 						  static XmRendition *rend_cache;
@@ -2078,16 +2078,16 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 		    _XmRendPattern(rend) = FcPatternCreate();
 		    if (_XmRendFontName(rend))
 		      FcPatternAddString(_XmRendPattern(rend), FC_FAMILY,
-		                         _XmRendFontName(rend));
+		                         (XftChar8 *)_XmRendFontName(rend));
 		    if (_XmRendFontFoundry(rend))
 		      FcPatternAddString(_XmRendPattern(rend), FC_FOUNDRY,
-		                         _XmRendFontFoundry(rend));
+		                         (XftChar8 *)_XmRendFontFoundry(rend));
 		    if (_XmRendFontEncoding(rend))
 		      FcPatternAddString(_XmRendPattern(rend), XFT_ENCODING,
-		                         _XmRendFontEncoding(rend));
+		                         (XftChar8 *)_XmRendFontEncoding(rend));
 		    if (_XmRendFontStyle(rend))
 		      FcPatternAddString(_XmRendPattern(rend), FC_STYLE,
-		                         _XmRendFontStyle(rend));
+		                         (XftChar8 *)_XmRendFontStyle(rend));
 		    if (_XmRendFontSize(rend))
 		      FcPatternAddInteger(_XmRendPattern(rend), FC_SIZE,
 		                         _XmRendFontSize(rend));
@@ -2106,7 +2106,8 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
                     p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
 #ifdef FIX_1414
                     _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
-							  rend_cache = XtRealloc(rend_cache, sizeof(XmRendition)*(count_rend+1));
+					    		  rend_cache = (XmRendition *) XtRealloc((char *)rend_cache, 
+					    		    (Cardinal)(sizeof(XmRendition) * (count_rend + 1)));
 							  rend_cache[count_rend] =_XmRenditionCopy(rend, TRUE);
 							  count_rend++;
 						  }
@@ -2963,7 +2964,7 @@ _XmXftDrawString2(Display *display, Window window, GC gc, XftFont *font, int bpc
     {
 	case 1:
 		XftDrawStringUtf8(draw, &xftcol, font,
-			x, y, s, len);
+			x, y, (XftChar8 *)s, len);
 		break;
 	case 2:
 		XftDrawString16(draw, &xftcol, font,
@@ -3059,7 +3060,7 @@ _XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
     {
 	case 1:
 		XftDrawStringUtf8(draw, &fg_color, _XmRendXftFont(rend),
-			x, y, s, len);
+			x, y, (XftChar8 *)s, len);
 		break;
 	case 2:
 		XftDrawString16(draw, &fg_color, _XmRendXftFont(rend),
