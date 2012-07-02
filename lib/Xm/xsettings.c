@@ -9,6 +9,8 @@
 #include "XmI.h"
 #include "xsettings.h"
 
+#define FIX_1416
+
 #define BYTES_LEFT(buffer) ((buffer)->data + (buffer)->len - (buffer)->pos)
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 
@@ -538,12 +540,13 @@ XmeGetSetting(Display* display, char *name)
 	static XSettingsClient *client = NULL;
         static Boolean client_inited = False;
         XSettingsSetting *setting = NULL;
-	Display *disp;
 	XSettingsResult xr;
+#ifdef FIX_1416
+	int data_v_int;
+#endif	
 
 	if (!client_inited)
 	{
-		disp = XOpenDisplay(NULL);
 		client = xsettings_client_new (display, DefaultScreen (display), NULL);
 		client_inited = True;
 	}
@@ -562,7 +565,17 @@ XmeGetSetting(Display* display, char *name)
 		return (0);
 	}
 		
+#ifdef FIX_1416
+	data_v_int = setting->data.v_int;
+	if (setting) 
+	{  	if (setting->name)
+	    free (setting->name);
+		free(setting); 
+	}
+	return (data_v_int);
+#else
 	return (setting->data.v_int);
+#endif
 
 }
 
