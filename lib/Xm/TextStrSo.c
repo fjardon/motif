@@ -715,6 +715,7 @@ _XmTextModifyVerify(XmTextWidget initiator,
   register long delta;
   register int block_num_chars;  /* number of characters in the block */
   XmTextPosition newInsert = initiator->text.cursor_position;
+  XmTextPosition cursorPositionBeforeCallbackCall = initiator->text.cursor_position;
   XmTextVerifyCallbackStruct tvcb;
   XmTextVerifyCallbackStructWcs wcs_tvcb;
   XmTextBlockRecWcs wcs_newblock;
@@ -917,9 +918,8 @@ _XmTextModifyVerify(XmTextWidget initiator,
   }  /* end if there are wide char modify verify callbacks */
   
   if (cursorPos)
-  {
-	  if (initiator->text.cursor_position != newInsert)	/* true only if we have callbacks */
-	  {
+  {	    
+	  if (newInsert != cursorPositionBeforeCallbackCall) {      /* true only if we have callbacks */
 	    if (newInsert > data->length + delta) {
 	      *cursorPos = data->length + delta;
 	    } else if (newInsert < 0) {
@@ -927,9 +927,11 @@ _XmTextModifyVerify(XmTextWidget initiator,
 	    } else {
 	      *cursorPos = newInsert;
 	    }
-	  }
-	  else
+	  } else if (initiator->text.cursor_position != cursorPositionBeforeCallbackCall) {
+	    *cursorPos = initiator->text.cursor_position;
+	  } else {
 	    *cursorPos = *start + block_num_chars;
+	  }
   }
   
   return True;
