@@ -43,7 +43,8 @@ foreach test ("$BBoard1" BBoard3 "$BBoard5a_1" \
 	      "$BBoard5a_2" "$BBoard5a_3" "$BBoard5b" \
 	      BBoard6 BBoard7 BBoard8 DrawArea2 "$DrawArea2a"\
 	      Frame1 Frame2 Frame3 Frame4 \
-	      RowCol1 RowCol3 RowCol5 \
+	      #RowCol1 RowCol3 RowCol5 \
+	      RowCol3 RowCol5 \
 	      Baseline1 "$Baseline1a" Baseline2 Visual1) 
 
 

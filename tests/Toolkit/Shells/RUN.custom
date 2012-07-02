@@ -34,8 +34,8 @@ setenv TOP ../../..
 set Display1 = 'Display -I Display.Dat -S Display.Scr -O Display1.prt -V Display1.vis -xrm "*enableThinThickness: False"'
 set Display2 = 'Display -I Display.Dat -S Display.Scr -O Display2.prt -V Display2.vis -xrm "*enableThinThickness: True"'
 
-foreach test (DiaShell1 \
-              DialogRes \
+#foreach test (DiaShell1 \
+foreach test (DialogRes \
               Protocol \
               OverShell1 \
               TopShell1 \
