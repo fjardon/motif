@@ -1,12 +1,18 @@
 2007-08-15  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/MultiList.c:
 	Fixed bug #1385 (core.self of XmMultiList is NULL, but must be pointer itself.)
+
 2007-08-13  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/ResEncod.c:
 	Fixed bug #1380 (Can not set title bar in 2.3)
+
 2007-07-25  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/TextStrSo.c:
 	Fixed bug #1366 (XmTextSetInsertionPosition does not work properly in modify/verify callback)
+
+2007-07-12  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Scale.c:
+	Fixed bug #1373 (Problem with XmScale)
 
 2006-12-27  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/List.c:
