@@ -1,4 +1,10 @@
 2008-04-15  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/TextF.c:
+	Fixed bug #1409 (XmTextField sometimes crashes if a string is set by
+	XtSetValues when XmNmodifyVerifyCallback is set (Only in multibyte
+	locale))
+
+2008-04-15  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/XmString.c, lib/Xm/XmI.h:
 	Fixed bug #1398 (newline not supported in UTF-8 mode)
 
