@@ -1,4 +1,8 @@
 2007-10-25  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/ExtP.h:
+	Removed unnecessary including of nl_ctype.h on HP/UX.
+
+2007-10-25  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/XmIm.c, configure.ac:
 	Added checking for XICProc type defined.
 
