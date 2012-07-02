@@ -2957,17 +2957,19 @@ ShowValue(
 	    + SLIDER_SIZE(sw) + ((height - SLIDER_SIZE( sw)) / 2) - 3;
 #endif
     }
-    
-#ifndef USE_XFT
+
+#if USE_XFT    
+    sw->scale.show_value_x = x;
+    sw->scale.show_value_y = y + 1;
+#else
     sw->scale.show_value_x = x + width_return.lbearing;
-#endif
     sw->scale.show_value_y = y - height + 1;
+#endif
     
     
     /*  Display the string  */
     XSetClipMask(XtDisplay(sw), sw->scale.foreground_GC, None);
 #if USE_XFT
-    XClearWindow(XtDisplay(sw), XtWindow(sw));
     XmStringDraw(XtDisplay(sw), XtWindow(sw), sw->scale.font_list,
                     tmp_str = XmStringCreateSimple(buffer),
 		    sw->scale.foreground_GC,
