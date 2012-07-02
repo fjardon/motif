@@ -1,3 +1,7 @@
+2007-01-28  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/DropDown.c:
+        Fixed incorrect parenthesis in if statement
+
 2007-01-16  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/DropDown.c:
         Fixed bug #1371 (XmComboBox problem on FC6)
