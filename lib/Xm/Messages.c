@@ -1587,6 +1587,38 @@ externaldef(messages) _XmConst char *_XmMsgSSpinB_0002 =
 externaldef(messages) _XmConst char *_XmMsgSSpinB_0003 =
    "Item does not exist.  XmNposition is unchanged.";
 
+/**************** TableLayout.c ****************/
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0001 =
+   "The specified axis size is less than 1.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0002 =
+   "The specified axis size is greater than 50.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0003 =
+   "Layout error, no constraint on child.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0004 =
+   "Child [%d, %d] out of sync.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0005 =
+   "No constraint on child.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0006 =
+   "Child request from within draw children.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0007 =
+   "Adjustment %d greater than span (%d to %d).";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0008 =
+   "Child off tablelayout (%d,%d).";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0009 =
+   "Attempt to add/delete 0 items.";
+
+externaldef(messages) _XmConst char *_XmMsgTableLayout_0010 =
+   "Find root failure.";
+
 /*
  * This one is not part of the message catalog
  */

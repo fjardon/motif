@@ -1738,6 +1738,23 @@ NsliderX
 NsliderY
 NtoolbarEntryData
 NtoolbarGroup         
+CChildrenNeedExpose
+NchildrenNeedExpose
+NclickCallback
+NdrawCellCallback
+Ncolumn
+NcolumnMargin
+NcolumnSpan
+NfillSpace
+Nignore
+NinheritHeights
+NinheritWidths
+Nrow
+NrowMargin
+NrowSpan
+NfirstScrollColumn
+NfirstScrollRow
+Ngravity
 
 #file XmStrDefsI.h
 #table _XmStringsI

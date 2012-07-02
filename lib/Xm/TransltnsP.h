@@ -88,6 +88,7 @@ externalref _XmConst char _XmScrolledW_WorkWindowTranslationTable[];
 externalref _XmConst char _XmSelectioB_defaultTextAccelerators[];
 externalref _XmConst char _XmSpinB_defaultTranslations[];
 externalref _XmConst char _XmSpinB_defaultAccelerators[];
+externalref _XmConst char _XmTableLayout_defaultTranslations[];
 externalref _XmConst char _XmTearOffB_overrideTranslations[];
 externalref _XmConst char _XmTextF_EventBindings1[];
 externalref _XmConst char _XmTextF_EventBindings2[]; 

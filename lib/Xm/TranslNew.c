@@ -274,3 +274,14 @@ _XmConst char _XmSpinB_defaultAccelerators[] =
 <Key>osfBeginLine:	SpinBFirst()\n\
 <Key>osfEndLine:	SpinBLast()";
 
+/*** TableLayout.c **/
+_XmConst char _XmTableLaytout_defaultTranslations[] = "\
+#augment			\n\
+~c ~s ~m ~a <Btn1Down>:			XmTableLayoutClick()	\n\
+~c ~s ~m ~a <Btn1Up>:			XmTableLayoutRelease()	\n\
+~Ctrl ~Shift ~Meta <Key>osfUp:		XmTableLayoutMove(up)	\n\
+~Ctrl ~Shift ~Meta <Key>osfDown:	XmTableLayoutMove(down)	\n\
+~Ctrl ~Shift ~Meta <Key>osfLeft:	XmTableLayoutMove(left)	\n\
+~Ctrl ~Shift ~Meta <Key>osfRight:	XmTableLayoutMove(right)\n\
+~Ctrl  Shift ~Meta ~Alt <Key>Tab:	PrevTabGroup()\n\
+~Ctrl ~Shift ~Meta ~Alt <Key>Tab:	NextTabGroup()";

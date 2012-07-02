@@ -815,6 +815,19 @@ MSG_SpinB_0008 Invalid value for XmNpositionType.  Using default value.
 MSG_SpinB_0009 XmNpositionType resource can only be set at creation time.
 $ MSG_SpinB_0009 message is obsolete - DO NOT localize this message.
 
+$set MS_TableLayout
+
+MSG_TableLayout_0001 The specified axis size is less than 1.
+MSG_TableLayout_0002 The specified axis size is greater than 50.
+MSG_TableLayout_0003 Layout error, no constraint on child.
+MSG_TableLayout_0004 Child [%d, %d] out of sync.
+MSG_TableLayout_0005 No constraint on child.
+MSG_TableLayout_0006 Child request from within draw children.
+MSG_TableLayout_0007 Adjustment %d greater than span (%d to %d).
+MSG_TableLayout_0008 Child off tablelayout (%d,%d).
+MSG_TableLayout_0009 Attempt to add/delete 0 items.
+MSG_TableLayout_0010 Find root failure.
+
 $set MS_Transfer
 
 MSG_Transfer_0000 Calling SelectionCallbackWrapper when transfers should be finished
