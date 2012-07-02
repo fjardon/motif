@@ -1829,7 +1829,7 @@ Initialize(
   
 
   /* BEGIN OSF Fix pir 1778 */
-  if ((Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w)) &&
+  if (Lab_IsPixmap(new_w) &&
       (!IsNull(PixmapOff(new_w)) || !IsNull(PixmapInsenOff(new_w)) ||
        !IsNull(PixmapOn(new_w)) || !IsNull(PixmapInsenOn(new_w)) ||
        !IsNull(PixmapInd(new_w)) || !IsNull(PixmapInsenInd(new_w))))
@@ -2815,7 +2815,7 @@ SetValues(
   /* BEGIN OSF Fix pir 1778 */
   /* Have to reset the TextRect width because label's resize will have
    * mucked with it. */
-  if ((Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox)) &&
+  if (Lab_IsPixmap(newcbox) &&
       (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
        !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
        !IsNull(PixmapInd(newcbox)) || !IsNull(PixmapInsenInd(newcbox))))
@@ -2864,7 +2864,7 @@ SetValues(
             new_w->core.height = 0;
 	}
       
-      if ((Lab_IsPixmap(newcbox) || Lab_IsPixmapAndText(newcbox)) && 
+      if (Lab_IsPixmap(newcbox) && 
 	  ((PixmapOn(newcbox) != PixmapOn(curcbox)) ||
 	  (PixmapInsenOn(newcbox) != PixmapInsenOn(curcbox)) ||
 	  (PixmapInd(newcbox) != PixmapInd(curcbox)) ||
@@ -3568,7 +3568,7 @@ DrawToggleLabel(
   {
 
 	XtExposeProc expose;
-#if FIX_1395
+#ifdef FIX_1395
        Pixel tmpc = tb->core.background_pixel; /* Save bg color */
        
        /* Changing label background color if button toggled */
@@ -3579,7 +3579,7 @@ DrawToggleLabel(
         expose = xmLabelClassRec.core_class.expose;
         _XmProcessUnlock();
         (* expose) ((Widget) tb, NULL, NULL);
-#if FIX_1395
+#ifdef FIX_1395
 	/* restore default bg color */
 	XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
 #endif
@@ -3651,7 +3651,7 @@ DrawEtchedInMenu(
 
   {
        XtExposeProc expose;
-#if FIX_1395
+#ifdef FIX_1395
 	if (tb->toggle.Armed)
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), select_pix);
 #endif
@@ -3659,7 +3659,7 @@ DrawEtchedInMenu(
 	expose = xmLabelClassRec.core_class.expose;
 	_XmProcessUnlock();
 	(* expose) ((Widget) tb, NULL, NULL);
-#if FIX_1395
+#ifdef FIX_1395
 	XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
 #endif
    }
