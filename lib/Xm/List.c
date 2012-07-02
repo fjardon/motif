@@ -76,6 +76,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 
 #define FIX_1390	1
 #define FIX_1210	1
+#define FIX_1365	1
 
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
@@ -2444,8 +2445,13 @@ DrawItems(XmListWidget lw,
       XFillRectangle(XtDisplay(lw), XtWindow(lw),
 		     ((lw->list.InternalList[pos]->selected) ?
 		      lw->list.NormalGC : lw->list.InverseGC),
+#ifdef FIX_1365
+			  lw->list.BaseX, y - 1,
+			  width + 1, lw->list.MaxItemHeight + 1);
+#else
 		     lw->list.BaseX, y,
 		     width + 1, lw->list.MaxItemHeight);
+#endif
 
       if (XtIsSensitive((Widget)lw))
 	gc = ((lw->list.InternalList[pos]->selected) ?
