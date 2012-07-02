@@ -2353,7 +2353,9 @@ ArmAndActivate(
   /* if the parent is menu system able, notify it about the select */
   if (menuSTrait != NULL)
     menuSTrait->entryCallback(XtParent(pb), (Widget)pb, &call_value);
-  
+#ifdef FIX_1375
+	pb->label.pixmap = pb->pushbutton.unarm_pixmap;
+#endif 
   if ((! pb->label.skipCallback) && (pb->pushbutton.activate_callback))
     {
       XFlush (XtDisplay (pb));

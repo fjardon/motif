@@ -1,3 +1,7 @@
+2007-11-01  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/PushB.c, lib/Xm/PushBG.c, lib/Xm/XmI.h:
+	Fixed bug #1337 (XmPushButton's ArmAndActivate() has incorrect callback call).
+
 2007-10-31  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/Container.c:
 	Fixed bug #1384 (Use of freed storage in XmContainer).
