@@ -85,6 +85,8 @@ static char rcsid[] = "$TOG: RowColumn.c /main/25 1998/07/22 15:41:49 mgreess $"
 #include "UniqueEvnI.h"
 #include "RCHookI.h"
 
+#define FIX_1351
+
 /********    Static Function Declarations    ********/
 
 static void Destroy( 
@@ -3216,6 +3218,9 @@ create(
             XtSetArg (s_al[s_ac], XmNheight,        5);     s_ac++;
             XtSetArg (s_al[s_ac], XmNallowShellResize, TRUE);   s_ac++;
             XtSetArg (s_al[s_ac], XtNoverrideRedirect, TRUE);   s_ac++;
+#ifdef FIX_1351            
+            XtSetArg (s_al[s_ac], XtNancestorSensitive, TRUE);  s_ac++;
+#endif
 
 	    b = XtMalloc(strlen(POPUP_PREFIX) + strlen(name) + 1);
             sprintf (b, POPUP_PREFIX, name);
