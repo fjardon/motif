@@ -1,3 +1,7 @@
+2007-11-08  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/BaseClass.c:
+	Fixed bug #1392 (The label widgets can have their core class translations changed).
+
 2007-11-01  Yuriy Syrota  <yura@ics.com>
 	* doc/man/man3/XmObject.3, doc/man/man3/XmShell.3, doc/man/man3/Makefile.am:
 	Implemented enhancement (There's no good way to see the man-page for Shell widget).

@@ -52,6 +52,8 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
 #include "XmI.h"
 
 
+#define FIX_1392
+
 #define MSG1	_XmMMsgBaseClass_0000
 #define MSG2	_XmMMsgBaseClass_0001
 
@@ -1949,9 +1951,15 @@ InitializeLeafWrapper(
 		init_proc = wrapperData->initializeLeaf;
 		post_proc = (*wcePtr)->initializePosthook;
 
-		if ((--(wrapperData->initializeLeafCount)) == 0)
+#ifdef FIX_1392
+		if (post_proc) {
+#endif
+		    if ((--(wrapperData->initializeLeafCount)) == 0)
 			wc->core_class.initialize = 
 				wrapperData->initializeLeaf;
+#ifdef FIX_1392
+		}
+#endif
 	   }
 	}
 	else {
@@ -1998,9 +2006,15 @@ CInitializeLeafWrapper(
 		init_proc = wrapperData->constraintInitializeLeaf;
 		post_proc = (*wcePtr)->initializePosthook;
 
-		if ((--(wrapperData->constraintInitializeLeafCount)) ==0)
+#ifdef FIX_1392
+		if (post_proc) {
+#endif
+		    if ((--(wrapperData->constraintInitializeLeafCount)) ==0)
 			cwc->constraint_class.initialize =
 				wrapperData->constraintInitializeLeaf;
+#ifdef FIX_1392
+		}
+#endif
 	}
 	else {
 		int depthDiff = leafDepth - depth;
@@ -2268,9 +2282,15 @@ SetValuesLeafWrapper(
 		setvalues_proc = wrapperData->setValuesLeaf;
 		post_proc = (*wcePtr)->setValuesPosthook;
 		
-		if ((--(wrapperData->setValuesLeafCount)) ==0)
+#ifdef FIX_1392
+		if (post_proc) {
+#endif
+		    if ((--(wrapperData->setValuesLeafCount)) ==0)
 			wc->core_class.set_values = 
 				wrapperData->setValuesLeaf;
+#ifdef FIX_1392
+		}
+#endif
 	   }
 	}
 	else {
@@ -2322,10 +2342,15 @@ CSetValuesLeafWrapper(
 		
 		setvalues_proc = wrapperData->constraintSetValuesLeaf;
 		post_proc = (*wcePtr)->setValuesPosthook;
-
-		if ((--(wrapperData->constraintSetValuesLeafCount)) ==0)
+#ifdef FIX_1392
+		if (post_proc) {
+#endif
+		    if ((--(wrapperData->constraintSetValuesLeafCount)) ==0)
 			cwc->constraint_class.set_values =
 				wrapperData->constraintSetValuesLeaf;
+#ifdef FIX_1392
+		}
+#endif
 	}
 	else {
 		int depthDiff = leafDepth - depth;
@@ -2569,9 +2594,15 @@ GetValuesLeafWrapper(
 	   getvalues_proc = wrapperData->getValuesLeaf;
 	   post_proc = ((*wcePtr)->getValuesPosthook);
 
-	   if ((--(wrapperData->getValuesLeafCount)) == 0)
+#ifdef FIX_1392
+	   if (post_proc) {
+#endif
+	    if ((--(wrapperData->getValuesLeafCount)) == 0)
 		wc->core_class.get_values_hook =
 			wrapperData->getValuesLeaf;
+#ifdef FIX_1392
+	   }
+#endif
 	}
 	else {
 		int depthDiff = leafDepth - depth;
