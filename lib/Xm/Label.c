@@ -2653,10 +2653,10 @@ _XmLabelConvert(Widget w,
       Atom *targs;
 
       if (cs->target == atoms[XmATARGETS]) {
-	targs = XmeStandardTargets(w, 6, &target_count);
+	targs = XmeStandardTargets(w, 7, &target_count);
       } else {
 	target_count = 0;
-	targs = (Atom *) XtMalloc(sizeof(Atom) * 6);
+	targs = (Atom *) XtMalloc(sizeof(Atom) * 7);
       }
       
       value = (XtPointer) targs;
