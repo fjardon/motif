@@ -2177,7 +2177,12 @@ MultiActivate(
   if (pb->pushbutton.multiClick == XmMULTICLICK_KEEP)
     {
       if ((buttonEvent->xbutton.time - pb->pushbutton.armTimeStamp) >
+#ifdef XSETTINS_ON
+		XmeGetMultiClickTime(XtDisplay(pb)))
+#else 
 	  XtGetMultiClickTime(XtDisplay(pb)))
+#endif
+
 	pb->pushbutton.click_count = 1;
       else
         pb->pushbutton.click_count++;

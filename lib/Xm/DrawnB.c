@@ -61,6 +61,7 @@ static char rcsid[] = "$TOG: DrawnB.c /main/20 1999/04/29 13:05:14 samborn $"
 #include "TravActI.h"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
+#include "XmP.h"
 
 
 #define DELAY_DEFAULT 100	
@@ -537,7 +538,12 @@ MultiActivate(
     */
   if (db->drawnbutton.multiClick == XmMULTICLICK_KEEP)  
   { if ((buttonEvent->xbutton.time - db->drawnbutton.armTimeStamp) >
+#ifdef XSETTINS_ON
+                  XmeGetMultiClickTime(XtDisplay(db)))
+#else
 	   XtGetMultiClickTime(XtDisplay(db)))
+#endif
+
      db->drawnbutton.click_count = 1;
    else
      db->drawnbutton.click_count++;

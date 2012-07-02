@@ -1012,9 +1012,13 @@ Initialize(Widget request,
       XmeWarning((Widget) lw, ListMessage15);
     }
   lw->list.previous_top_position = 0;
+#ifdef XSETTINS_ON
 
+#else
   if (lw->list.ClickInterval < 0)
     lw->list.ClickInterval = XtGetMultiClickTime(XtDisplay(lw));
+#endif
+
 
   if (lw->primitive.highlight_thickness)
     lw->list.HighlightThickness = lw->primitive.highlight_thickness + 1;
@@ -4624,8 +4628,11 @@ SelectElement(Widget wid,
 
   if (!lw->list.itemCount)
     return;
-
+#ifdef XSETTINS_ON
+  interval = (Time) XmeGetMultiClickTime(XtDisplay(lw));
+#else
   interval = (Time) lw->list.ClickInterval;
+#endif
 
   item = WhichItem(lw, event->xbutton.y);
 

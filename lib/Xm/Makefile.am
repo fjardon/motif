@@ -9,6 +9,7 @@ INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
            -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
            ${X_CFLAGS}
+       
 xmdir = $(includedir)/Xm
 
 LDFLAGS = -version-info @CURRENT@:@REVISION@:@AGE@
@@ -161,6 +162,7 @@ XpmI.h \
 regexpI.h \
 EditresComI.h \
 ReportsI.h \
+xsettings.h \
 $(JPEG_HDRS) \
 $(PNG_HDRS) \
 $(TIP_HDRS)
@@ -238,7 +240,8 @@ SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c 
         VaSimple.c      VirtKeys.c      XmString.c      ResEncod.c\
         TextF.c         TextFSel.c      AtomMgr.c \
         Cache.c         Protocols.c     Primitive.c     Manager.c \
-        Traversal.c     TravAct.c       TraversalI.c    BaseClass.c
+        Traversal.c     TravAct.c       TraversalI.c    BaseClass.c\
+        xsettings.c	
 
 SRCS2 = Desktop.c       Messages.c      Transltns.c     RepType.c \
         Xmos.c          Draw.c          TearOff.c       TearOffB.c \

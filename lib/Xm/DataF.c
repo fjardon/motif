@@ -1370,7 +1370,7 @@ static XtResource resources[] =
     {
       XmNblinkRate, XmCBlinkRate, XmRInt, sizeof(int),
       XtOffsetOf(XmDataFieldRec, text.blink_rate),
-      XmRImmediate, (XtPointer) 500
+      XmRImmediate, (XtPointer) -1
     },
     {
       "pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
@@ -2319,6 +2319,29 @@ df_PaintCursor(
     }
 }
 
+static int
+#ifdef _NO_PROTO
+Blink_rate_xsetting( tf )
+        XmDataFieldWidget tf ;
+#else
+Blink_rate_xsetting(
+        XmDataFieldWidget tf)
+#endif /* _NO_PROTO */
+{
+	int CursorBlinkTime = XmTextF_blink_rate(tf);
+	if (CursorBlinkTime == -1)
+	{
+		CursorBlinkTime = 0;
+		if (XmeGetSetting(XtDisplay((Widget)tf), "Net/CursorBlink"))
+		{
+			CursorBlinkTime = XmeGetSetting(XtDisplay((Widget)tf), "Net/CursorBlinkTime");
+			if (!CursorBlinkTime)
+				CursorBlinkTime = 500; /* default value */
+		}
+	}
+	return CursorBlinkTime;
+}
+
 void 
 #ifdef _NO_PROTO
 _XmDataFieldDrawInsertionPoint( tf, turn_on )
@@ -2333,7 +2356,11 @@ _XmDataFieldDrawInsertionPoint(
 
     if (turn_on == True) {
        XmTextF_cursor_on(tf) += 1;
+#ifdef XSETTINS_ON
+       if (Blink_rate_xsetting(tf) == 0 || !XmTextF_has_focus(tf))
+#else
        if (XmTextF_blink_rate(tf) == 0 || !XmTextF_has_focus(tf))
+#endif
 	  XmTextF_blink_on(tf) = True;
     } else {
        if (XmTextF_blink_on(tf) && (XmTextF_cursor_on(tf) == 0))
@@ -2387,10 +2414,20 @@ df_HandleTimer(
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) closure;
 
+#ifdef XSETTINS_ON
+	unsigned long blink_rate;
+	blink_rate = (unsigned long)Blink_rate_xsetting(tf);
+    if (blink_rate != 0)
+#else
     if (XmTextF_blink_rate(tf) != 0)
+#endif
         XmTextF_timer_id(tf) =
 		 XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)tf),
+#ifdef XSETTINS_ON
+				 blink_rate,
+#else
 				 (unsigned long)XmTextF_blink_rate(tf),
+#endif
                                  df_HandleTimer,
                                  (XtPointer) closure);
     if (XmTextF_has_focus(tf) && XtIsSensitive((Widget)tf))
@@ -2418,10 +2455,20 @@ df_ChangeBlinkBehavior(
 {
 
     if (turn_on) {
+#ifdef XSETTINS_ON
+		unsigned long blink_rate;
+		blink_rate = (unsigned long) Blink_rate_xsetting(tf);
+        if (blink_rate != 0 && XmTextF_timer_id(tf) == (XtIntervalId)0)
+#else
         if (XmTextF_blink_rate(tf) != 0 && XmTextF_timer_id(tf) == (XtIntervalId)0)
+#endif
             XmTextF_timer_id(tf) =
                 XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)tf),
+#ifdef XSETTINS_ON
+				 blink_rate,
+#else
 			        (unsigned long)XmTextF_blink_rate(tf),
+#endif
                                 df_HandleTimer,
                                 (XtPointer) tf);
         XmTextF_blink_on(tf) = True;
@@ -6440,7 +6487,12 @@ df_SetScanIndex(
 	
 	
    if (sel_time > XmTextF_last_time(tf) &&
+#ifdef XSETTINS_ON
+	sel_time - XmTextF_last_time(tf) < XmeGetMultiClickTime(XtDisplay(tf))) {
+#else
 	sel_time - XmTextF_last_time(tf) < XtGetMultiClickTime(XtDisplay(tf))) {
+#endif
+
 /*
  * Fix for HaL DTS 9841 - Increment the sarray_index first, then check to 
  *			  see if it is greater that the count.  Otherwise,
@@ -10879,10 +10931,20 @@ df_SetValues(
        XtSetArg(im_args[n], XmNforeground, new_tf->primitive.foreground); n++;
     }
 
+#ifdef XSETTINS_ON
+	unsigned long blink_rate;
+	blink_rate = (unsigned long) Blink_rate_xsetting(new_tf);
+
+    if (XmTextF_has_focus(new_tf) && XtIsSensitive((Widget)new_tf) &&
+		blink_rate != Blink_rate_xsetting(old_tf)) {
+
+        if (blink_rate == 0) {
+#else
     if (XmTextF_has_focus(new_tf) && XtIsSensitive((Widget)new_tf) &&
         XmTextF_blink_rate(new_tf) != XmTextF_blink_rate(old_tf)) {
 
         if (XmTextF_blink_rate(new_tf) == 0) {
+#endif
             XmTextF_blink_on(new_tf) = True;
             if (XmTextF_timer_id(new_tf)) {
                 XtRemoveTimeOut(XmTextF_timer_id(new_tf));
@@ -10891,7 +10953,11 @@ df_SetValues(
         } else if (XmTextF_timer_id(new_tf) == (XtIntervalId)0) {
            XmTextF_timer_id(new_tf) =
 		 XtAppAddTimeOut(XtWidgetToApplicationContext(new_w),
+#ifdef XSETTINS_ON
+				 blink_rate,
+#else
 				 (unsigned long)XmTextF_blink_rate(new_tf),
+#endif
                                  df_HandleTimer,
                                  (XtPointer) new_tf);
         }
