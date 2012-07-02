@@ -1237,9 +1237,9 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
     list_data = (XmListCallbackStruct *) list_data_ptr;
 
     if ((list_data->reason == XmCR_BROWSE_SELECT) &&
-	(((list_data->event == NULL) ||
-	  (list_data->event->xany.type != ButtonPress)) &&
-	 (list_data->event->xany.type != ButtonRelease)))
+	((list_data->event == NULL) ||
+	 ((list_data->event->xany.type != ButtonPress) &&
+	  (list_data->event->xany.type != ButtonRelease))))
     {
 	/* 
 	 * Do not popup list is browse select mode.

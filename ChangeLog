@@ -1,3 +1,7 @@
+2008-01-28  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/DropDown.c:
+	Fixed incorrect parenthesis in if statement
+
 2008-01-03  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/Label.c:
 	Fixed bug #1296 (Drag-and-drop behaves incorrectly if XtSetLanguageProc() is present)
