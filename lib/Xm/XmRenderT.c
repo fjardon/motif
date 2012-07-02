@@ -3098,6 +3098,21 @@ _XmXftGetXftColor(Display *display, Pixel color)
     xftcol.color.alpha = 0xFFFF;
     return xftcol;
 }
+
+#ifdef FIX_1415
+void _XmXftFontAverageWidth(Widget w, XtPointer f, int *width)
+{
+	XftFont *fp = (XftFont *)f;
+	static char	*s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	int l = 62; /* strlen(s) */
+	XGlyphInfo	ext;
+
+	XftTextExtents8(XtDisplay(w), fp, (unsigned char *)s, l, &ext);
+    if (width) 
+    	*width = ext.width / l;
+}
+#endif
+
 #endif
 
 /*ARGSUSED*/
