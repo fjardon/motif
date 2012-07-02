@@ -86,6 +86,7 @@ static char rcsid[] = "$TOG: RowColumn.c /main/25 1998/07/22 15:41:49 mgreess $"
 #include "RCHookI.h"
 
 #define FIX_1351
+#define FIX_1410
 
 /********    Static Function Declarations    ********/
 
@@ -1159,6 +1160,9 @@ InsertChild(
      * PushButton or PushButtonGadget, either of those classes are allowed.
      */
     if (XtIsRectObj(w) && RC_IsHomogeneous(m) && 
+#ifdef 	FIX_1410
+		RC_EntryClass(m) && 
+#endif		
 	(RC_EntryClass(m) != XtClass(w)))
     {
       /* CR 7807: using _XmIsFastSubclass checks is subtly wrong???
