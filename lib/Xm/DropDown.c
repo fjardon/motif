@@ -940,7 +940,6 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmDropDown_list_state(cbw) = XmDropDown_IN_PROGRESS;
 
     if (is_unposted) {
-        if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
 	    PopdownList((Widget) cbw);
 
 	if (!XmDropDown_customized_combo_box(cbw))
@@ -2044,8 +2043,8 @@ PopdownList(Widget w)
 	/*
 	 * The order is important here to keep from generating Xt Errors.
 	 */
-	
-	XtRemoveGrab(XmDropDown_arrow(cbw));
+	if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
+	    XtRemoveGrab(XmDropDown_arrow(cbw));
 	XtUngrabKeyboard(w, XtLastTimestampProcessed(XtDisplay(w)));
 	XtPopdown(XmDropDown_popup_shell(cbw));
     }
