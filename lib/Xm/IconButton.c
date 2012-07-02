@@ -1856,7 +1856,11 @@ CreateGCs(Widget w)
     values.fill_style = FillStippled;
 
     mask = GCForeground | GCBackground | GCGraphicsExposures;
+#ifdef FIX_1381
+	smask = mask | GCFillStyle;
+#else
     smask = mask | GCStipple | GCFillStyle;
+#endif
 
     if (fs) {
         values.font = fs->fid;
@@ -1864,6 +1868,12 @@ CreateGCs(Widget w)
     }
 
     XmIconButton_gc(iw) = XtGetGC(w, mask, &values);
+
+#ifdef FIX_1381
+	/*added for gray insensitive foreground (instead stipple)*/
+    values.foreground = _XmAssignInsensitiveColor(w);
+#endif
+
     XmIconButton_stippled_text_gc(iw) = XtGetGC(w, smask, &values);
 
     /*

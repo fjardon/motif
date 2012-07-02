@@ -1233,9 +1233,15 @@ SetNormalGC(XmLabelGadget lw)
 
     LabG_NormalGC(lw) = XtAllocateGC((Widget) mw, 0, valueMask, &values,
         dynamicMask, 0);
-
+#ifdef FIX_1381
+/*added for gray insensitive foreground (instead stipple)*/
+  	valueMask |= GCFillStyle;
+	values.foreground = _XmAssignInsensitiveColor((Widget)mw);
+#else
     valueMask |= GCFillStyle | GCStipple;
     values.foreground = LabG_Background(lw); 
+#endif
+
     values.background = LabG_Foreground(lw);
     values.fill_style = FillOpaqueStippled;
 

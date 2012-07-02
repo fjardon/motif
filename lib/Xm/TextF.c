@@ -1989,9 +1989,14 @@ SetNormGC(XmTextFieldWidget tf,
   if (change_stipple) {
     valueMask |= GCFillStyle;
     if (stipple) {
+#ifdef FIX_1381
+		  /*added for gray insensitive foreground (instead stipple)*/
+		  values.foreground = _XmAssignInsensitiveColor((Widget)tf);
+#else
       values.fill_style = FillStippled;
       valueMask |= GCStipple;
       values.stipple = tf->text.stipple_tile;
+#endif
     } else 
       values.fill_style = FillSolid;
   }

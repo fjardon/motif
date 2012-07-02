@@ -2111,7 +2111,12 @@ CreateGCs(Widget w)
     values.graphics_exposures = False;
 
     mask = GCForeground | GCBackground | GCFont | GCGraphicsExposures;
+
+#ifdef FIX_1381
+	smask = mask | GCFillStyle;
+#else
     smask = mask | GCStipple | GCFillStyle;
+#endif
     
     XmI18List_gc(ilist) = XtGetGC(w, mask, &values);
 
@@ -2141,6 +2146,11 @@ CreateGCs(Widget w)
 	/* same as XmI18List_gc */
     	XmI18List_entry_background_gc(ilist) = XtGetGC(w, mask, &values);
     }
+
+#ifdef FIX_1381
+	/*added for gray insensitive foreground (instead stipple)*/
+    values.foreground=_XmAssignInsensitiveColor(w);
+#endif
 
     XmI18List_stippled_gc(ilist) = XtGetGC(w, smask, &values);
 

@@ -2749,9 +2749,16 @@ MakeGC(XmListWidget lw)
   lw->list.InverseGC = XtAllocateGC((Widget) lw, lw->core.depth,
 				    valueMask, &values, modifyMask, 0);
 
-  values.foreground = lw->primitive.foreground;
   values.background = lw->core.background_pixel;
+#ifdef FIX_1381
+/*added for gray insensitive foreground (instead stipple)*/
+  values.foreground = _XmAssignInsensitiveColor(lw);
+  valueMask |=  GCFillStyle;
+#else
+  values.foreground = lw->primitive.foreground;
   valueMask |= GCStipple | GCFillStyle;
+#endif
+
   values.fill_style = FillOpaqueStippled;
   values.stipple = _XmGetInsensitiveStippleBitmap((Widget) lw);
 

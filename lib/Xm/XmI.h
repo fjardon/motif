@@ -263,5 +263,13 @@ extern void (*_XtProcessLock)();
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 
+#define FIX_1381
+
+#ifdef FIX_1381
+#define RGB_GREY_VALUE 128
+#define RGB_GREY_PRESISE 50
+extern Pixel _XmAssignInsensitiveColor(Widget w);
+#endif
+
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
