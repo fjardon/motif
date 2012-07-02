@@ -1,4 +1,8 @@
-================================ Open Motif 2.3.1 released ================================
+========================= Open Motif 2.3.1 beta 1 released ================================
+
+2008-05-29  Ihor Hayvuk <ihayvuk@ics.com>
+	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:
+	Updated for OpenMotif 2.3.1 beta 1
 
 2008-05-03  Ihor Hayvuk <ihayvuk@ics.com>
 	* openmotif.spec, TODO, RELEASE:

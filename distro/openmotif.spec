@@ -4,7 +4,7 @@
 Summary: Open Motif runtime libraries and executables.
 Name: openmotif
 Version: 2.3.1
-Release: 1
+Release: 0.1.beta1
 License: Open Group Public License
 Group: System Environment/Libraries
 Source:  ftp://ftp.ics.com/pub/Products/Motif/%{intern_name}-%{version}.tar.gz
