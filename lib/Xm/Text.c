@@ -69,6 +69,7 @@ static char rcsid[] = "$TOG: Text.c /main/47 1999/01/26 15:18:26 mgreess $"
 #include "XmI.h"
 #include "XmStringI.h"
 
+#define FIX_1367
 /* Resolution independence conversion functions */
 
 #define MESSAGE2	_XmMMsgText_0000
@@ -1729,6 +1730,24 @@ _XmTextUpdateLineTable(Widget widget,
     if (tw->text.table_index > tw->text.total_lines)
       tw->text.table_index = tw->text.total_lines;
     
+#ifdef FIX_1367
+    if (tw->text.on_or_off == on) {
+      XmTextPosition cursorPos = tw->text.cursor_position;    
+      if (start < tw->text.cursor_position) {
+        if (tw->text.cursor_position < end) {
+	  if (tw->text.cursor_position - start <= block_num_chars)
+	    cursorPos = tw->text.cursor_position;
+	  else
+	    cursorPos = start + block_num_chars;
+        } else {
+	  cursorPos = tw->text.cursor_position - (end - start) + block_num_chars;
+        }
+        _XmTextSetCursorPosition(widget, cursorPos);
+      } else if (start == tw->text.cursor_position && tw->text.auto_show_cursor_position) {
+        _XmTextShowPosition(tw, cursorPos);
+      }
+    }
+#else
     if (start < tw->text.cursor_position && tw->text.on_or_off == on) {
       XmTextPosition cursorPos = tw->text.cursor_position;
       if (tw->text.cursor_position < end) {
@@ -1742,6 +1761,7 @@ _XmTextUpdateLineTable(Widget widget,
       }
       _XmTextSetCursorPosition(widget, cursorPos);
     }
+#endif
   }
 }
 
