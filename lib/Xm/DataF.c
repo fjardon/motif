@@ -8942,7 +8942,11 @@ df_LoadFontMetrics(
                                fs_extents->max_ink_extent.y;
 #ifdef USE_XFT
     } else if (XmTextF_use_xft(tf)) {
+#ifdef FIX_1415
+	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), &charwidth);
+#else
         charwidth = XmTextF_xft_font(tf)->max_advance_width;
+#endif
 #endif
     } else {
        font = XmTextF_font(tf);
