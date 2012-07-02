@@ -1,3 +1,7 @@
+2008-02-29  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Label.c, lib/Xm/LabelG.c:
+	Fixed bug #1406 (Insensitive icon on XmPushButton black instead of grayed out)
+
 2008-02-11  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/ScrollBar.c, lib/Xm/TextOut.c, XmI.h:
 	Fixed bug #1396 (ScrollBar warning when XmNotebook resized)
