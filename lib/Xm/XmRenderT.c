@@ -1966,6 +1966,7 @@ ValidateTag(XmRendition rend,
 }
 
 #ifdef FIX_1414
+#ifdef USE_XFT
 static int
 GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
 {
@@ -1995,6 +1996,7 @@ GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
 	return -1;
 
 }
+#endif
 #endif
 
 /* Make sure all the font related resources make sense together and */
