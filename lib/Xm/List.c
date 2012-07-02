@@ -74,6 +74,8 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include "XmStringI.h"
 #include "ToolTipI.h"
 
+#define FIX_1390	1
+
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
 #define	CTRLDOWN	4
@@ -3645,12 +3647,16 @@ ReplaceItem(XmListWidget lw,
   XmStringFree(lw->list.items[pos]);
   lw->list.items[pos] = XmStringCopy(item);
   /*Selected items should be replaced also*/
+#ifdef FIX_1390
+  UpdateSelectedPositions(lw, lw->list.selectedItemCount);
+#endif
   for(i=0; i<lw->list.selectedItemCount; i++)
+  {
       if(lw->list.selectedPositions[i]==pos+1) {
          XmStringFree(lw->list.selectedItems[i]);
 	 lw->list.selectedItems[i]=XmStringCopy(item);
       }
-		      
+  }
 }
 
 
