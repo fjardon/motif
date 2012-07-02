@@ -76,6 +76,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 
 #define FIX_1390	1
 #define FIX_1365	1
+#define FIX_1362	1
 
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
@@ -4164,11 +4165,6 @@ SelectRange(XmListWidget lw,
       start = last;
       end = first;
     }
-
-  if (start < 0)
-    start = 0;
-  if (end >= lw->list.itemCount)
-    end = lw->list.itemCount - 1;
 
   if (start < 0)
     start = 0;
@@ -8615,7 +8611,15 @@ APIReplaceItemsPos(Widget w,
 	(lw->list.InternalList[position - 1]->height == old_max_height);
 
       ReplaceItem(lw, new_items[i], position);
+#ifdef FIX_1362
+	  if (lw->list.selectedItems && lw->list.selectedItemCount > 0)
+	  {
+		  BuildSelectedList(lw,TRUE);
+		  nsel += ReplaceInternalElement(lw, position, select);
+	  }
+#else
       nsel += ReplaceInternalElement(lw, position, select);
+#endif
     }
 
   if (select || (nsel != lw->list.selectedPositionCount))
