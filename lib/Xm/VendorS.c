@@ -69,6 +69,7 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include "XmImI.h"
 #include "VendorSI.h"
 #include "EditresComI.h"
+#include "XmI.h"
 
 #ifndef NO_MESSAGE_CATALOG
 #if !defined(NL_CAT_LOCALE)
@@ -85,8 +86,6 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #define MSG4	_XmMMsgVendor_0003
 
 #define DONT_CARE -1
-
-#define FIX_1388    1
 
 typedef struct {   
     XmVendorShellExtObject ve ;
@@ -2921,11 +2920,11 @@ Destroy(
 	 }
 	 XtFree((char *) ext);
     }    
-
+    
 #ifdef FIX_1388
-    if (XmeTraitGet((XtPointer) wid, XmQTtoolTipConfig) != NULL) 
-	XmeTraitSet((XtPointer) wid, XmQTtoolTipConfig, (XtPointer) NULL);
-#endif
+    if (XmeTraitGet((XtPointer) wid, XmQTtoolTipConfig) != NULL)
+            XmeTraitSet((XtPointer) wid, XmQTtoolTipConfig, (XtPointer) NULL);
+#endif    
 
     /*
      * If all VendorShells have been destroyed, destroy the XmDisplay object

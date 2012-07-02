@@ -34,6 +34,24 @@
 #include <Xm/ToolTipT.h>
 #include "BaseClassI.h"
 #include "ToolTipI.h"
+#include "XmI.h"
+
+#ifdef FIX_1388
+static void ToolTipLabelDestroyCallback(Widget w, XtPointer client_data, XtPointer call_data)
+{
+    XmToolTipConfigTrait ttcp;
+    
+    ttcp = (XmToolTipConfigTrait) XmeTraitGet(w, XmQTtoolTipConfig);
+    
+    if (ttcp != NULL)
+	if (ttcp->label != NULL) {
+	    Widget shell = XtParent(ttcp->label);
+	    XtDestroyWidget(ttcp->label);
+	    ttcp->label = NULL;
+	    XtDestroyWidget(shell);
+	}
+}
+#endif /* FIX_1388 */
 
 static XmToolTipConfigTrait
 ToolTipGetData (Widget w)
@@ -48,7 +66,7 @@ ToolTipGetData (Widget w)
 
    ttp = (XmToolTipConfigTrait) XmeTraitGet (top, XmQTtoolTipConfig);
 
-   if (ttp->label == NULL)
+   if (ttp->label == NULL && !top->core.being_destroyed)
    {
       Widget shell;
 
@@ -58,6 +76,9 @@ ToolTipGetData (Widget w)
 
       ttp->label = XmCreateLabel (shell, "TipLabel", NULL, 0);
       XtManageChild (ttp->label);
+#ifdef FIX_1388
+      XtAddCallback(top, XmNdestroyCallback, (XtCallbackProc) ToolTipLabelDestroyCallback, (XtPointer) NULL);
+#endif
    }
    return ttp;
 }
@@ -84,7 +105,7 @@ ToolTipUnpost (XtPointer client_data,
       ttp->slider = NULL;
    }
 
-   if (!XtParent (ttp->label)->core.being_destroyed)
+   if (ttp->label != NULL && !XtParent (ttp->label)->core.being_destroyed)
    {
       XtPopdown (XtParent (ttp->label));
    }
@@ -282,6 +303,20 @@ _XmToolTipLeave (Widget w,
    }
 
 }
+
+#ifdef FIX_1388
+void _XmToolTipRemove(Widget w)
+{
+    XmToolTipTrait ttp;
+    
+    _XmToolTipLeave(w, NULL, NULL, NULL);
+    ttp = (XmToolTipTrait) XmeTraitGet(w, XmQTtoolTip);
+    if (ttp != NULL) {
+	XmStringFree(ttp->tool_tip_string); 
+	XmeTraitSet(w, XmQTtoolTip, (XtPointer) NULL); 
+    }
+}
+#endif /* FIX_1388 */
 
 Widget 
 XmToolTipGetLabel(Widget wid)
