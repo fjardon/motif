@@ -4102,6 +4102,9 @@ WhichItem(XmListWidget w,
   if (y >= (Position)(lw->core.height - lw->list.BaseY))
     return (lw->list.itemCount + 1);
 
+  if ((int) (lw->list.MaxItemHeight + lw->list.spacing) == 0)
+    return(-1);
+
   /* Calculate the line offset directly, since lines are fixed height. */
   lines = (((int) (y + lw->list.spacing) -
 	    (int) (lw->list.BaseY + lw->list.HighlightThickness + 1)) /
@@ -5677,8 +5680,10 @@ ClickElement(XmListWidget lw,
 	     Boolean default_action)
 {
   int item, SLcount, i;
+  unsigned char selection_policy;
   XmListCallbackStruct cb;
 
+  bzero((char*) &cb, sizeof(XmListCallbackStruct));
   item = lw->list.LastHLItem;
   lw->list.DidSelection = TRUE;
 
@@ -5711,8 +5716,12 @@ ClickElement(XmListWidget lw,
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
   SLcount = lw->list.selectedItemCount;
 
-  if ((lw->list.SelectionPolicy == XmMULTIPLE_SELECT) ||
-      (lw->list.SelectionPolicy == XmEXTENDED_SELECT))
+  /* A callback can change the policy. Use the saved value for alloc and free 
+     of the selected_items list. */
+  selection_policy = lw->list.SelectionPolicy;
+
+  if ((selection_policy == XmMULTIPLE_SELECT) ||
+      (selection_policy == XmEXTENDED_SELECT))
     {
       if (lw->list.selectedItems && lw->list.selectedItemCount)
     	{
@@ -5739,7 +5748,7 @@ ClickElement(XmListWidget lw,
     }
   else
     {
-      switch(lw->list.SelectionPolicy)
+      switch(selection_policy)
 	{
 	case XmSINGLE_SELECT:
 	  cb.reason = XmCR_SINGLE_SELECT;
@@ -5770,12 +5779,15 @@ ClickElement(XmListWidget lw,
    * let's reset it in all cases just to be sure everthing remains clean. */
   lw->list.AutoSelectionType = XmAUTO_UNSET;
 
-  if ((lw->list.SelectionPolicy == XmMULTIPLE_SELECT) ||
-      (lw->list.SelectionPolicy == XmEXTENDED_SELECT))
+  if ((selection_policy == XmMULTIPLE_SELECT) ||
+      (selection_policy == XmEXTENDED_SELECT))
     {
       if (SLcount)
     	{
-	  for (i = 0; i < SLcount; i++) XmStringFree(cb.selected_items[i]);
+	  if (cb.selected_items)
+	    for (i = 0; i < SLcount; i++)
+	      if (cb.selected_items[i])
+		XmStringFree(cb.selected_items[i])
 	  DEALLOCATE_LOCAL((char *) cb.selected_items);
 	  DEALLOCATE_LOCAL((char *) cb.selected_item_positions);
 	}
