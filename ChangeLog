@@ -1,3 +1,7 @@
+2007-10-31  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/Container.c:
+	Fixed bug #1384 (Use of freed storage in XmContainer).
+
 2007-10-19  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/TextFunc.c:
 	Fixed bug #1209 (XmTextPaste crashes using XmTextField).

@@ -68,6 +68,8 @@
 #include "ClipWindTI.h"
 #include <Xm/XmosP.h>                /* for bzero et al */
 
+#define FIX_1384
+
 #define	ZERO_DIM	0
 #define	DEFAULT_INDENTATION	40
 #define	NO_CELL	-1
@@ -3089,9 +3091,11 @@ ConstraintDestroy(
 	if (!CtrICON(cwid))
 	    return;
 
+#ifdef FIX_1384
+		cw->container.icon_header = NULL;
+#endif
 	{
 		CwidNode 	node = c->node_ptr->child_ptr;
-
 		while (node)
 		{
 			Widget child = node->widget_ptr;
