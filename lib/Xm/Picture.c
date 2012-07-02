@@ -50,7 +50,7 @@ XmParsePicture(char *input)
 
     picture = XtNew(XmPictureRec);
 
-    picture->source = strdup(input);
+    picture->source = XtNewString(input);
     picture->num_nodes = 0;
     picture->nodes_alloced = NODE_START_COUNT;
     picture->nodes = (XmPictureNode**)

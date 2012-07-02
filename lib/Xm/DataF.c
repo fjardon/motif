@@ -1719,7 +1719,7 @@ PictureVerifyCallback(
 
     cbs->startPos = 0;
     /* CR03686 cbs->endPos = strlen(newptr); */
-    cbs->text->ptr = strdup(changed);
+    cbs->text->ptr = XtNewString(changed);
     cbs->text->length = strlen(changed);
 
     XtFree(newptr);
