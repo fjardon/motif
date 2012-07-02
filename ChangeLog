@@ -1,3 +1,7 @@
+2007-09-14  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/I18List.c, lib/Xm/IconButton.c, lib/Xm/IconG.c, lib/Xm/Label.c, lib/Xm/LabelG.c, lib/Xm/List.c, lib/Xm/TextF.c, lib/Xm/TextOut.c, lib/Xm/Xm.c, lib/Xm/XmI.h:
+	Fixed bug #1381 (Sensitivity invisible with antialiased fonts)
+
 2007-09-13  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/ResEncod.c:
 	Fixed bug #1389 (A middle click on a tab lets nedit segfault)

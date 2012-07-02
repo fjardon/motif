@@ -1233,9 +1233,15 @@ SetNormalGC(XmLabelGadget lw)
 
     LabG_NormalGC(lw) = XtAllocateGC((Widget) mw, 0, valueMask, &values,
         dynamicMask, 0);
-
+#ifdef FIX_1381
+/*added for gray insensitive foreground (instead stipple)*/
+  	valueMask |= GCFillStyle;
+	values.foreground = _XmAssignInsensitiveColor((Widget)mw);
+#else
     valueMask |= GCFillStyle | GCStipple;
     values.foreground = LabG_Background(lw); 
+#endif
+
     values.background = LabG_Foreground(lw);
     values.fill_style = FillOpaqueStippled;
 
@@ -2422,6 +2428,8 @@ LRectangle *background_box)
             lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
             LabG_StringRect(lw).width,
             LabG_Alignment(lw), LayoutG(lw), NULL);
+#ifdef FIX_1381
+#else
 #ifdef USE_XFT
         if (!XtIsSensitive(wid)) {
           XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillStippled);
@@ -2434,6 +2442,7 @@ LRectangle *background_box)
                         LabG_StringRect(lw).height);
           XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillOpaqueStippled);
         }
+#endif
 #endif
     }
 

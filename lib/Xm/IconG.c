@@ -3121,9 +3121,21 @@ UpdateGCs(
 
 
     /** insensitive gc **/
+
+#ifdef FIX_1381
+	/*added for gray insensitive foreground (instead stipple)*/
+	values.foreground = _XmAssignInsensitiveColor( XtParent(wid));
+#else
     values.foreground = IG_Foreground(wid) ;
+#endif
+
     values.background = IG_Background(wid) ; 
+#ifdef FIX_1381
+    valueMask |= GCFillStyle;
+#else
     valueMask |= GCFillStyle | GCStipple;
+#endif
+
     values.fill_style = FillOpaqueStippled;
     values.stipple = _XmGetInsensitiveStippleBitmap(wid);
 

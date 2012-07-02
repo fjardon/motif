@@ -413,3 +413,53 @@ XmObjectAtPoint(
     _XmAppUnlock(app);
     return return_wid;
 }
+
+#ifdef FIX_1381
+/************************************************************************
+ *
+ *  _XmAssignInsensitiveColor
+ *  Allocate the Gray color for display widget like insensitive.
+ *
+ *
+ ************************************************************************/
+
+Pixel
+_XmAssignInsensitiveColor(Widget w)
+{
+	static XColor screen_in_out;
+	int status;
+	Pixel p;
+
+	p = w->core.background_pixel;
+	XQueryColor(XtDisplay(w), w->core.colormap, &screen_in_out);
+	if (		 (abs(screen_in_out.red-RGB_GREY_VALUE)<RGB_GREY_PRESISE)
+			&& (abs(screen_in_out.green-RGB_GREY_VALUE)<RGB_GREY_PRESISE)
+			&& (abs(screen_in_out.blue-RGB_GREY_VALUE)<RGB_GREY_PRESISE) )
+	{
+		/*text color have to be more light for wosn't be invisible*/
+		screen_in_out.red=(RGB_GREY_VALUE+RGB_GREY_VALUE/2)<<8;
+		screen_in_out.green=(RGB_GREY_VALUE+RGB_GREY_VALUE/2)<<8;
+		screen_in_out.blue=(RGB_GREY_VALUE+RGB_GREY_VALUE/2)<<8;
+
+		status = XAllocColor(XtDisplay(w), w->core.colormap, &screen_in_out);
+		if (status)
+		{
+			p = screen_in_out.pixel;
+		}
+	}
+	else
+	{    /*gray color*/
+		screen_in_out.red=RGB_GREY_VALUE<<8;
+		screen_in_out.green=RGB_GREY_VALUE<<8;
+		screen_in_out.blue=RGB_GREY_VALUE<<8;
+
+		status = XAllocColor(XtDisplay(w), w->core.colormap, &screen_in_out);
+		if (status)
+		{
+			p = screen_in_out.pixel;
+		}
+	}
+
+	return p;
+}
+#endif

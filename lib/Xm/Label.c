@@ -675,8 +675,15 @@ SetNormalGC(XmLabelWidget lw)
   lw->label.normal_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
 				     dynamicMask, 0);
   
+#ifdef FIX_1381
+/*added for gray insensitive foreground (instead stipple)*/
+  valueMask |= GCFillStyle;
+  values.foreground =  _XmAssignInsensitiveColor((Widget)lw);
+#else
   valueMask |= GCFillStyle | GCStipple;
   values.foreground = lw->core.background_pixel;
+#endif
+
   values.background = lw->primitive.foreground;
   values.fill_style = FillOpaqueStippled;
   values.stipple = _XmGetInsensitiveStippleBitmap((Widget) lw);
@@ -1544,6 +1551,9 @@ Redisplay(
 		       lp->StringRect.width,
 		       lp->alignment,
 		       XmPrim_layout_direction(lw), NULL);
+
+#ifdef FIX_1381
+#else
 #ifdef USE_XFT
       if (!XtIsSensitive(wid))
         {
@@ -1556,6 +1566,8 @@ Redisplay(
           XSetFillStyle(XtDisplay(lw), lp->insensitive_GC, FillOpaqueStippled);
         }
 #endif
+#endif
+
     }
   
   if (lp->_acc_text != NULL) 
