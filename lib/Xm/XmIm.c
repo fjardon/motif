@@ -474,16 +474,19 @@ XmImSetFocusValues(Widget w,
   xic_info->has_focus = True;
   
   extData = _XmGetWidgetExtData((Widget)p, XmSHELL_EXTENSION);
-  ve = (XmVendorShellExtObject) extData->widget;
-  
-  if (ve->vendor.im_height)
+  if (extData)
     {
-      im_info = (XmImShellInfo)ve->vendor.im_info;
-      im_info->current_widget = w;
-      XtVaGetValues(w, XmNbackground, &bg, NULL);
-      XtVaSetValues(p, XmNbackground, bg, NULL);
-      ImGeoReq(p);
-      draw_separator(p);
+      ve = (XmVendorShellExtObject) extData->widget;
+  
+      if (ve->vendor.im_height)
+        {
+          im_info = (XmImShellInfo)ve->vendor.im_info;
+          im_info->current_widget = w;
+          XtVaGetValues(w, XmNbackground, &bg, NULL);
+          XtVaSetValues(p, XmNbackground, bg, NULL);
+          ImGeoReq(p);
+          draw_separator(p);
+        }
     }
   _XmAppUnlock(app);
 }
@@ -881,22 +884,24 @@ _XmImChangeManaged(
   register int height, old_height;
   
   extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
-  ve = (XmVendorShellExtObject) extData->widget;
+  if (extData) {
+    ve = (XmVendorShellExtObject) extData->widget;
 
-  old_height = ve->vendor.im_height;  
+    old_height = ve->vendor.im_height;  
 
-  height = ImGetGeo(vw, NULL);
-  if (!ve->vendor.im_vs_height_set) {
-    Arg args[1];
-    int base_height;
-    XtSetArg(args[0], XtNbaseHeight, &base_height);
-    XtGetValues(vw, args, 1);
-    if (base_height > 0) {
-      base_height += (height - old_height);
-      XtSetArg(args[0], XtNbaseHeight, base_height);
-      XtSetValues(vw, args, 1);
+    height = ImGetGeo(vw, NULL);
+    if (!ve->vendor.im_vs_height_set) {
+      Arg args[1];
+      int base_height;
+      XtSetArg(args[0], XtNbaseHeight, &base_height);
+      XtGetValues(vw, args, 1);
+      if (base_height > 0) {
+        base_height += (height - old_height);
+        XtSetArg(args[0], XtNbaseHeight, base_height);
+        XtSetValues(vw, args, 1);
+      }
+      vw->core.height += (height - old_height);
     }
-    vw->core.height += (height - old_height);
   }
 }
 
@@ -911,8 +916,6 @@ _XmImRealize(
   XmImShellInfo im_info;
   XmImDisplayInfo xim_info;
   
-  extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
-  ve = (XmVendorShellExtObject) extData->widget;
   xim_info = get_xim_info(vw);
   im_info = get_im_info(vw, False);
   
@@ -933,7 +936,12 @@ _XmImRealize(
       XSetICValues(icp->xic, XNClientWindow, XtWindow(vw), NULL);
     }
   
-  if (ve->vendor.im_height == 0) {
+  extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
+  if (extData)
+    ve = (XmVendorShellExtObject) extData->widget;
+  else
+    ve = NULL;
+  if (ve && ve->vendor.im_height == 0) {
     ShellWidget shell = (ShellWidget)(vw);
     Boolean resize = shell->shell.allow_shell_resize;
 
@@ -946,7 +954,7 @@ _XmImRealize(
   /* For some reason we need to wait till now before we set the 
    * initial background pixmap.
    */
-  if (ve->vendor.im_height && im_info->current_widget)
+  if (ve && ve->vendor.im_height && im_info->current_widget)
     {
       XtVaGetValues(im_info->current_widget, XmNbackground, &bg, NULL);
       XtVaSetValues(vw, XmNbackground, bg, NULL);
@@ -1946,11 +1954,14 @@ ImGetGeo(Widget  vw,
   XVaNestedList set_list, get_list;
   
   extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
-  ve = (XmVendorShellExtObject) extData->widget;
+  if (extData)
+    ve = (XmVendorShellExtObject) extData->widget;
+  else
+    ve = NULL;
   
   im_info = get_im_info(vw, False);
   
-  if ((im_info == NULL) || (im_info->iclist == NULL)) {
+  if (ve && ((im_info == NULL) || (im_info->iclist == NULL))) {
     ve->vendor.im_height = 0;
     return 0;
   }
@@ -2004,7 +2015,8 @@ ImGetGeo(Widget  vw,
   if (height)
     height += SEPARATOR_HEIGHT;
   
-  ve->vendor.im_height = height;
+  if (ve)
+    ve->vendor.im_height = height;
   return height;
 }
 
@@ -2030,6 +2042,7 @@ ImSetGeo(Widget  vw,
     return;
   
   extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
+  if (!extData) return;
   ve = (XmVendorShellExtObject) extData->widget;
   
   if (ve->vendor.im_height == 0)
@@ -2113,6 +2126,7 @@ ImGeoReq(Widget vw )
     return;
   
   extData = _XmGetWidgetExtData(vw, XmSHELL_EXTENSION);
+  if (!extData) return;
   ve = (XmVendorShellExtObject) extData->widget;
   
   old_height = ve->vendor.im_height;
@@ -2322,6 +2336,7 @@ draw_separator(Widget vw )
   XmImShellInfo im_info;
   
   extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
+  if (!extData) return;
   ve = (XmVendorShellExtObject) extData->widget;
   if ((im_info = (XmImShellInfo)ve->vendor.im_info) == NULL)
     return; 
