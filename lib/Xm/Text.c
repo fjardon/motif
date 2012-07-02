@@ -2158,6 +2158,7 @@ Initialize(Widget rw,
    newtw->text.onthespot->under_preedit = False;
    newtw->text.onthespot->under_verify_preedit = False;
    newtw->text.onthespot->verify_commit = False;
+   newtw->text.tm_table = (XtTranslations)NULL;
 }
 
 /*
@@ -2265,14 +2266,13 @@ InitializeHook(Widget wid,
   if (XmDirectionMatch(XmPrim_layout_direction(tw),
 		       XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
     char *vevent_bindings;
-    XtTranslations tm_table;
     
     vevent_bindings =
 		(String)XtMalloc(strlen(_XmTextIn_XmTextVEventBindings) + 1);
     strcpy(vevent_bindings, _XmTextIn_XmTextVEventBindings);
-    tm_table = (XtTranslations)XtParseTranslationTable(vevent_bindings);
+    tw->text.tm_table = (XtTranslations)XtParseTranslationTable(vevent_bindings);
     XtFree(vevent_bindings);
-    XtOverrideTranslations(wid, tm_table);
+    XtOverrideTranslations(wid, tw->text.tm_table);
   }
   
   /* Initialize table */
@@ -2424,6 +2424,9 @@ Destroy(Widget w)
   
   if (tw->text.onthespot != NULL)
     XtFree((char *)tw->text.onthespot);
+    
+  if (tw->text.tm_table != NULL)
+    XtFree((char *)tw->text.tm_table);
 }
 
 static void 

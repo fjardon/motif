@@ -1,4 +1,8 @@
 2007-08-15  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/TextP.h, lib/Xm/Text.c:
+	Fixed bug #1377 (XmText memory leak in InitializeHook)
+
+2007-08-15  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/MultiList.c:
 	Fixed bug #1385 (core.self of XmMultiList is NULL, but must be pointer itself.)
 
