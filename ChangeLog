@@ -1,3 +1,7 @@
+2007-10-03  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/VendorS.c:
+	Fixed bug #1388 (SEGV error moving mouse over window related to XmToolTipGetLabel).
+
 2007-10-01  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/Picture.c, lib/Xm/DataF.c:
 	Got rid of using strdup().

@@ -86,6 +86,8 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 
 #define DONT_CARE -1
 
+#define FIX_1388    1
+
 typedef struct {   
     XmVendorShellExtObject ve ;
     Widget shell ;
@@ -2919,6 +2921,11 @@ Destroy(
 	 }
 	 XtFree((char *) ext);
     }    
+
+#ifdef FIX_1388
+    if (XmeTraitGet((XtPointer) wid, XmQTtoolTipConfig) != NULL) 
+	XmeTraitSet((XtPointer) wid, XmQTtoolTipConfig, (XtPointer) NULL);
+#endif
 
     /*
      * If all VendorShells have been destroyed, destroy the XmDisplay object
