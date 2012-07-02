@@ -17,7 +17,8 @@ BuildPrereq: /usr/bin/yacc
 
 Conflicts: lesstif <= 0.92.32-6
 
-Prefix: /usr/X11R6
+Prefix: /usr
+Mandir: ${prefix}/share/man
 
 %description
 This is the Open Motif %{version} runtime environment. It includes the
@@ -93,9 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/%{_lib}/libMrm.so.*
 %{prefix}/%{_lib}/libUil.so.*
 %{prefix}/%{_lib}/libXm.so.*
-%{prefix}/man/man1/mwm*
-%{prefix}/man/man1/xmbind*
-%{prefix}/man/man4/mwmrc*
+%{Mandir}/man/man1/mwm*
+%{Mandir}/man/man1/xmbind*
+%{Mandir}/man/man4/mwmrc*
 
 %files devel
 %defattr(-,root,root)

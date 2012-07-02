@@ -93,6 +93,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/%{_lib}/X11/bindings
 %{prefix}/%{_lib}/libMrm.so.*
 %{prefix}/%{_lib}/libUil.so.*
+%{prefix}/%{_lib}/libXm.so
 %{prefix}/%{_lib}/libXm.so.*
 %{_mandir}/man1/mwm*
 %{_mandir}/man1/xmbind*
