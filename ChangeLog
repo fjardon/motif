@@ -1,5 +1,9 @@
 ================================ Open Motif 2.3.1 released ================================
 
+2008-05-02  Ihor Hayvuk <ihayvuk@ics.com>
+	* RELEASE:
+	Updated release date
+
 2008-04-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac:
 	Updated libtool version number
