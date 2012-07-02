@@ -1,4 +1,8 @@
 2007-10-03  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/List.c:
+	Fixed bug #1390 (out of range in array read in ReplaceItem).
+
+2007-10-03  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/VendorS.c:
 	Fixed bug #1388 (SEGV error moving mouse over window related to XmToolTipGetLabel).
 
