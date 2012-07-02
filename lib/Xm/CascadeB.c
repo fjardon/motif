@@ -628,11 +628,30 @@ Redisplay(
 		((XmCascadeButtonWidget)cb)->label.normal_GC = 
 		    CB_BackgroundGC(cb);
 	    }
+#if FIX_1395
+	    /* 1395:
+	     By default (if not etched and not armed) window (widget) have 
+	     background color that used to draw widget bg. When widget is 
+	     etched, background selected correctly (as selected color), 
+	     but label exposr method will use default background color 
+	     to fill area bellow lable text. Result is ugly menus.
+	     We should replace colors before expose from label
+	     and change it back after repainting.
+	    */
+            Pixel tmpc = cb->core.background_pixel;
+            XSetWindowBackground(XtDisplay(cb), XtWindow(cb), select_pix);
+#endif
 
 	    _XmProcessLock();
 	    expose = xmLabelClassRec.core_class.expose;
 	    _XmProcessUnlock();
-	    (*expose)(cb, event, region);
+	    (*expose)((Widget) cb, event, region);
+#if FIX_1395
+	    /*
+	     Set correct window background (label is repainted, role back)
+	    */
+	    XSetWindowBackground(XtDisplay(cb), XtWindow(cb), tmpc);
+#endif
 
 	    if (replaceGC)
 		((XmCascadeButtonWidget)cb)->label.normal_GC = tmpGC;

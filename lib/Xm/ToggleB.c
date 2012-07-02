@@ -3566,11 +3566,23 @@ DrawToggleLabel(
     }
   
   {
-       XtExposeProc expose;
-       _XmProcessLock();
-       expose = xmLabelClassRec.core_class.expose;
-       _XmProcessUnlock();
-       (* expose) ((Widget) tb, NULL, NULL);
+
+	XtExposeProc expose;
+#if FIX_1395
+       Pixel tmpc = tb->core.background_pixel; /* Save bg color */
+       
+       /* Changing label background color if button toggled */
+       if (tb->toggle.visual_set == XmSET && !Lab_IsMenupane(tb))
+        XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tb->toggle.select_color);
+#endif
+        _XmProcessLock();
+        expose = xmLabelClassRec.core_class.expose;
+        _XmProcessUnlock();
+        (* expose) ((Widget) tb, NULL, NULL);
+#if FIX_1395
+	/* restore default bg color */
+	XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
+#endif
    }
   
   if (restore_gc)
@@ -3602,6 +3614,7 @@ DrawEtchedInMenu(
   GC tmp_gc = None;
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(tb));
   Boolean etched_in = dpy->display.enable_etched_in_menu;
+  Pixel select_pix, tmpc;
   
   if (tb->primitive.top_shadow_color == tb->toggle.select_color ||
       tb->primitive.bottom_shadow_color == tb->toggle.select_color)
@@ -3622,8 +3635,8 @@ DrawEtchedInMenu(
   
   if (tb->toggle.Armed) 
     {
-	Pixel select_pix;
-
+	tmpc = tb->core.background_pixel;
+	
 	XmGetColors(XtScreen(tb), tb->core.colormap,
 		    tb->core.background_pixel,
 		    NULL, NULL, NULL, &select_pix);
@@ -3638,10 +3651,17 @@ DrawEtchedInMenu(
 
   {
        XtExposeProc expose;
-       _XmProcessLock();
-       expose = xmLabelClassRec.core_class.expose;
-       _XmProcessUnlock();
-       (* expose) ((Widget) tb, NULL, NULL);
+#if FIX_1395
+	if (tb->toggle.Armed)
+	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), select_pix);
+#endif
+	_XmProcessLock();
+	expose = xmLabelClassRec.core_class.expose;
+	_XmProcessUnlock();
+	(* expose) ((Widget) tb, NULL, NULL);
+#if FIX_1395
+	XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
+#endif
    }
   
   if (restore_gc)
