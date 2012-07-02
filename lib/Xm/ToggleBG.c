@@ -2236,7 +2236,7 @@ Initialize(
     }
   
   /* BEGIN OSF Fix pir 1778 */
-  if ((LabG_IsPixmap(new_w) ||LabG_IsPixmapAndText(new_w)) &&
+  if (LabG_IsPixmap(new_w) &&
       (!IsNull(PixmapOff(new_w)) || !IsNull(PixmapInsenOff(new_w)) ||
        !IsNull(PixmapOn(new_w)) || !IsNull(PixmapInsenOn(new_w)) ||
        !IsNull(PixmapInd(new_w)) || !IsNull(PixmapInsenInd(new_w))))
@@ -3130,7 +3130,7 @@ Resize(
 {
   register XmToggleButtonGadget tb = (XmToggleButtonGadget) w;
 
-  if (LabG_IsPixmap(w) || LabG_IsPixmapAndText(w)) 
+  if (LabG_IsPixmap(w)) 
     SetToggleSize(tb);
   else {
     XtWidgetProc resize;
@@ -3472,7 +3472,7 @@ SetValues(
   /* BEGIN OSF Fix pir 1778 */
   /* Have to reset the TextRect width because label's resize will have
      mucked with it. */
-  if ((LabG_IsPixmap(newcbox) || LabG_IsPixmapAndText(newcbox)) &&
+  if (LabG_IsPixmap(newcbox) &&
       (!IsNull(PixmapOff(newcbox)) || !IsNull(PixmapInsenOff(newcbox)) ||
        !IsNull(PixmapOn(newcbox)) || !IsNull(PixmapInsenOn(newcbox)) ||
        !IsNull(PixmapInd(newcbox)) || !IsNull(PixmapInsenInd(newcbox))))
@@ -3521,7 +3521,7 @@ SetValues(
             newcbox->rectangle.height = 0;
 	}
       
-      if ((LabG_IsPixmap(newcbox) || LabG_IsPixmapAndText(newcbox)) &&
+      if (LabG_IsPixmap(newcbox) &&
 	  ((PixmapOn(newcbox) != PixmapOn(curcbox)) ||
 	  (PixmapInsenOn(newcbox) != PixmapInsenOn(curcbox)) ||
 	  (PixmapInd(newcbox) != PixmapInd(curcbox)) ||
