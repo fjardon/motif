@@ -1,3 +1,6 @@
+2007-08-13  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/ResEncod.c:
+	Fixed bug #1380 (Can not set title bar in 2.3)
 2007-07-25  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/TextStrSo.c:
 	Fixed bug #1366 (XmTextSetInsertionPosition does not work properly in modify/verify callback)
