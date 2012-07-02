@@ -1,3 +1,7 @@
+2008-06-25  Ihor Hayvuk <ihayvuk@ics.com>
+	* ac_find_xft.m4
+	Fixed bug #1429 (Build failure with libtool-2.2.4)
+
 2008-05-14  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ArrowB.c, lib/Xm/Container.c, lib/Xm/DataF.c, lib/Xm/DrawnB.c, lib/Xm/GrabShell.c, lib/Xm/I18List.c, lib/Xm/IconButton.c, 
 	lib/Xm/List.c, lib/Xm/MenuShell.c, lib/Xm/PushB.c, lib/Xm/TextF.c, lib/Xm/TextIn.c, lib/Xm/TextOut.c, lib/Xm/XmP.h:
