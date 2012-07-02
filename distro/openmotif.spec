@@ -88,8 +88,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/bin/mwm
 %{prefix}/bin/xmbind
 %{prefix}/include/X11/bitmaps/*
-%{prefix}/lib/X11/system.mwmrc
-%{prefix}/lib/X11/bindings
+%{prefix}/%{_lib}/X11/system.mwmrc
+%{prefix}/%{_lib}/X11/bindings
 %{prefix}/%{_lib}/libMrm.so.*
 %{prefix}/%{_lib}/libUil.so.*
 %{prefix}/%{_lib}/libXm.so.*
