@@ -84,6 +84,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
   (((tablist) != NULL) && \
    ((unsigned int)(unsigned long)(tablist) != XmAS_IS))
 
+#define  FIX_1414
 /**********************************************************************
  *	      IMPORTANT NOTE: IMPLEMENTATION OF SHARING
  *
@@ -1964,6 +1965,37 @@ ValidateTag(XmRendition rend,
     }
 }
 
+static int
+GetSameRenditions(XmRendition *rend_cache, XmRendition *rend, int count_rend)
+{
+	int i;
+	for (i=0; i<count_rend; i++){
+
+		if ( rend_cache && (rend_cache[i])
+				&& (((_XmRendFontName(rend) 	&& _XmRendFontName(rend_cache[i]) ) && !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))
+					|| 	(!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i])))
+				&& ((_XmRendFontFoundry(rend) && !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend)))
+					|| 	(!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i])))
+				&& ((_XmRendFontEncoding(rend) && !strcmp(_XmRendFontEncoding(rend_cache[i]), _XmRendFontEncoding(rend)))
+					|| 	(!_XmRendFontEncoding(rend) && !_XmRendFontEncoding(rend_cache[i])))
+				&& ((_XmRendFontStyle(rend) && !strcmp(_XmRendFontStyle(rend_cache[i]), _XmRendFontStyle(rend)))
+					|| 	(!_XmRendFontStyle(rend) && !_XmRendFontStyle(rend_cache[i])) )  
+				&& _XmRendFontSize(rend) == _XmRendFontSize(rend_cache[i])
+				&& _XmRendPixelSize(rend) == _XmRendPixelSize(rend_cache[i])
+				&& _XmRendFontSlant(rend) == _XmRendFontSlant(rend_cache[i])
+				&& _XmRendFontWeight(rend) == _XmRendFontWeight(rend_cache[i])
+				&& _XmRendFontSpacing(rend) == _XmRendFontSpacing(rend_cache[i]))
+	   	   )
+		{
+			return i;
+		}
+
+	}
+	return -1;
+
+}
+
+
 /* Make sure all the font related resources make sense together and */
 /* then load the font specified by fontName if necessary. */
 static void
@@ -2032,6 +2064,16 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 		    XftResult res;
 		    XftPattern *p;
 		    
+#ifdef FIX_1414
+						  static XmRendition *rend_cache;
+						  static int count_rend=0, num_rend;
+						  num_rend = GetSameRenditions(rend_cache, rend, count_rend);
+
+						  if (num_rend>=0)
+							  _XmRendXftFont(rend) = _XmRendXftFont(rend_cache[num_rend]);
+						  else
+						  {
+#endif
 		    _XmRendPattern(rend) = FcPatternCreate();
 		    if (_XmRendFontName(rend))
 		      FcPatternAddString(_XmRendPattern(rend), FC_FAMILY,
@@ -2061,7 +2103,16 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
 		      FcPatternAddInteger(_XmRendPattern(rend), FC_SPACING,
 		                         _XmRendFontSpacing(rend));
                     p = XftFontMatch(display, 0, _XmRendPattern(rend), &res);
+#ifdef FIX_1414
                     _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
+							  rend_cache = XtRealloc(rend_cache, sizeof(XmRendition)*(count_rend+1));
+							  rend_cache[count_rend] =_XmRenditionCopy(rend, TRUE);
+							  count_rend++;
+						  }
+
+#else
+						  _XmRendXftFont(rend) = XftFontOpenPattern(display, p);
+#endif
 		  }
 		  result = _XmRendXftFont(rend) != NULL;
 		  break;
