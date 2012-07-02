@@ -1,3 +1,7 @@
+2007-12-31  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/CascadeB.c, lib/Xm/ToggleB.c, lib/Xm/XmI.h:
+	Fixed bug #1395 (Wrong label foreground for etched in menus)
+
 2007-11-14  Yuriy Syrota  <yura@ics.com>
 	* Imakefile:
 	* LICENSE:
