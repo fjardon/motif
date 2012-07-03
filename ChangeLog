@@ -1,3 +1,49 @@
+2008-10-31  Ihor Hayvuk <ihayvuk@ics.com>
+	* clients/mwm/Makefile.am,
+	  clients/mwm/WmWsmLib/Makefile.am,
+	  clients/xmbind/Makefile.am,
+	  demos/lib/Exm/Makefile.am,
+	  demos/lib/Wsm/Makefile.am,
+	  demos/lib/Xmd/Makefile.am,
+	  demos/programs/Exm/app_in_c/Makefile.am,
+	  demos/programs/Exm/app_in_uil/Makefile.am,
+	  demos/programs/Exm/simple_app/Makefile.am,
+	  demos/programs/airport/Makefile.am,
+	  demos/programs/animate/Makefile.am,
+	  demos/programs/drag_and_drop/Makefile.am,
+	  demos/programs/draw/Makefile.am,
+	  demos/programs/earth/Makefile.am,
+	  demos/programs/filemanager/Makefile.am,
+	  demos/programs/fileview/Makefile.am,
+	  demos/programs/getsubres/Makefile.am,
+	  demos/programs/hellomotif/Makefile.am,
+	  demos/programs/hellomotifi18n/Makefile.am,
+	  demos/programs/i18ninput/Makefile.am,
+	  demos/programs/panner/Makefile.am,
+	  demos/programs/periodic/Makefile.am,
+	  demos/programs/piano/Makefile.am,
+	  demos/programs/popups/Makefile.am,
+	  demos/programs/sampler2_0/Makefile.am,
+	  demos/programs/setdate/Makefile.am,
+	  demos/programs/todo/Makefile.am,
+	  demos/programs/tooltips/Makefile.am,
+	  demos/programs/workspace/Makefile.am,
+	  demos/unsupported/Exm/Makefile.am,
+	  demos/unsupported/aicon/Makefile.am,
+	  demos/unsupported/dainput/Makefile.am,
+	  demos/unsupported/dogs/Makefile.am,
+	  demos/unsupported/hellomotif/Makefile.am,
+	  demos/unsupported/motifshell/Makefile.am,
+	  demos/unsupported/uilsymdump/Makefile.am,
+	  demos/unsupported/xmapdef/Makefile.am,
+	  demos/unsupported/xmfonts/Makefile.am,
+	  demos/unsupported/xmforc/Makefile.am,
+	  demos/unsupported/xmform/Makefile.am,
+	  lib/Xm/Makefile.am,
+	  lib/Xm/TabList.h,
+	  lib/Xm/TxtPropCv.h:
+	Fixed in order to allow build out of source tree
+
 2008-09-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* tools/wml/Makefile.am:
 	Added wml_DEPENDENCIES
@@ -31,7 +77,7 @@
 
 2008-08-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac, lib/Xm/ResEncod.c:
-	Fixed bug #1443 (Build failure on FreeBSD: undefined reference to `libiconv_open')
+	Fixed bug #1423 (Build failure on FreeBSD: undefined reference to `libiconv_open')
 
 2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/IconFile.c:

@@ -29,7 +29,7 @@
 #ifndef _XmTxtPropCvP_h
 #define _XmTxtPropCvP_h
 
-#include "Xm.h"
+#include <Xm/Xm.h>
 
 #ifdef __cplusplus
 extern "C" {
