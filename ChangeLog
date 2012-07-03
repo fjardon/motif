@@ -1,3 +1,7 @@
+2009-02-17  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DropSMgr.c:
+	Fixed bug #1212 (XmDropSiteRetrieve frees XRectangles before caller can use them)
+
 2009-02-13  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ComboBox.c:
 	Fixed bug #1473 (When we set XmNvisibleItemCount resource available in 
