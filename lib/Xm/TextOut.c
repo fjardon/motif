@@ -610,6 +610,9 @@ SetNormGC(XmTextWidget tw,
   values.background = tw->core.background_pixel;
   if (change_stipple) {
     valueMask |= GCFillStyle;
+#ifdef FIX_1381    
+    values.fill_style = FillStippled;
+#endif    
     if (stipple) {
 #ifdef FIX_1381
 		/*added for gray insensitive foreground (instead stipple)*/
