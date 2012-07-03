@@ -1667,6 +1667,14 @@ RXmLineStyle
 CPopupOffset
 CUseTextField
 CVerify
+NcolorValue
+NhueValue
+NsatValue
+NbrightnessValue
+NredValue
+NgreenValue
+NblueValue
+NhelpOn
 
 #file XmStrDefs23.h
 #table _XmStrings23

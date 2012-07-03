@@ -310,6 +310,7 @@ demos/programs/tooltips/Makefile \
 demos/programs/FontSel/Makefile \
 demos/programs/ButtonBox/Makefile \
 demos/programs/ColorSel/Makefile \
+demos/programs/ColorSelBox/Makefile \
 demos/programs/Column/Makefile \
 demos/programs/Combo2/Makefile \
 demos/programs/Ext18List/Makefile \

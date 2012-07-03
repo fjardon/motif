@@ -99,6 +99,7 @@
 #include <Xm/VirtKeys.h>
 #include <Xm/XmIm.h>
 #include <Xm/XmStrDefs.h>
+#include <Xm/ColorSB.h>
 
 #endif /* _XmAll_h */
  /* DON'T ADD STUFF AFTER THIS #endif */

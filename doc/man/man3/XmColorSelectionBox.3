@@ -1,0 +1,444 @@
+.DT
+.TH XmColorSelectionBox 3X ""
+.SH NAME
+The ColorSelectionBox widget
+.SH SYNOPSIS
+#include <Xm/ColorSB.h>
+.SH DESCRIPTION
+.PP
+.TS
+tab(%);
+l l.
+.TE
+.PP
+The ColorSelectionBox widget allows users to choose a color by using ColorMatrix or specify
+it in digit mode such as RGB or HSV mode. A "Basic color" palette with standard colors is available.
+A user can select a custom palette which will be saved in home directory as file ".custom_colors".
+
+ColorSelectionBox is divided into the following parts:
+
+.IP "   \(bu" 6
+"Basic colors" palette is 48 colored XmFrame widgets situated under XmLabel widget named like "Basic colors".
+
+.IP "   \(bu" 6
+"Custom colors" palette is 16 XmFrame widgets situated under XmLabel widget named "Custom colors".
+That is widgets can have background colors that a custumer want.
+
+.IP "   \(bu" 6
+"ColorMatrix" is instance of XmDrawingArea widget and exist for visual choise of a color by clicking a mouse.
+
+.IP "   \(bu" 6
+XmDrawingArea widget which is situated to the right of "ColorMatrix" shows a chosen color gradient and a marker which shows
+current volume of value (it equals the value in the field labled "Val") for a change of color volume.
+
+.IP "   \(bu" 6
+Under "ColorMatrix" the XmFrame widget is situated and it shows a ow chosen color.
+
+.IP "   \(bu" 6
+A user can see digit color value in XmTextField widgets labeled by XmLabel widgets. All changes are shown in it, and
+if a user changes digit value, other visual widget will be changed.
+
+.IP "   \(bu" 6
+"\fBAdd to Custom Colors\fP" button can be used, which allows to fill "Custom color" palette.
+
+.IP "   \(bu" 6
+The default button labels are \fBOK\fP, \fBCancel\fP, and \fBHelp\fP\&.
+Although the Help button is also created, it can be unmanaged at a user's will.
+
+
+.PP
+
+
+.PP
+.SS A procedure of adding colors to custom colors
+.PP
+
+When ColorSelectionBox widget is started for the first time or file ".custom_colors" was erased or not yet created,
+"Custom colors" palette is empty, with all colors white.
+After each pressing "\fBAdd to Custom Colors\fP" button, a color from XmFrame widget, which shows a chosen color,
+is copied to the first not in use custom frame. When all 16 frame wigets are used, the first frame widget will be colored by loop.
+As soon as colors are chosen and "\fBOk\fP" button is pressed (saving process is activated only after "\fBOk\fP" button is pressed)
+all custom colors are saved in home directory in the file ".custom_colors".
+
+When ColorSelectionBox widget started and file ".custom_colors" exist, colors saved in that file are recovered
+at custom colors palette but all white colors are not recovered. Therefore, free space for new colors
+can be reserved in "Custom colors" widgets by white color.
+
+.SS "Descendants"
+.PP
+ColorSelectionBox automatically creates descendants shown in the
+following table\&.
+An application can use \fBXtNameToWidget\fP to gain access
+to the named descendant\&. In addition, a user or an application
+can use the named descendant when specifying resource values\&.
+.TS
+tab() box;
+l| l| l.
+\fBNamed Descendant\fP\fBClass\fP\fBIdentity\fP
+___
+\fBCancel\fP\fBXmPushButtonGadget\fPCancel button
+___
+\fBHelp\fP\fBXmPushButtonGadget\fPHelp button
+___
+\fBOK\fP\fBXmPushButtonGadget\fPOK button
+___
+\fBSeparator\fP\fBXmSeparatorGadget\fPT{
+Optional dividing line
+T}
+___
+\fBPaletteBox\fP\fBXmBulletinBoard\fPT{
+Area which contain color plettes
+T}
+___
+\fBMatrixBox\fP\fBXmBulletinBoard\fPT{
+Area which contain color matrix and all color manage widgets
+T}
+___
+\fBFrameMatrix\fP\fBXmFrame\fPT{
+Frame wich contain ColorMatrix
+T}
+___
+\fBFrameVolume\fP\fBXmFrame\fPT{
+Frame wich contain Volume
+T}
+___
+\fBColorMatrix\fP\fBXmDrawingArea\fPT{
+Color matrix
+T}
+___
+\fBVolume\fP\fBXmDrawingArea\fPT{
+Volume gradient.
+T}
+___
+\fBColor\fP\fBXmFrame\fPT{
+Frame wich contain chosen color
+T}
+___
+\fBLabelHue\fP\fBXmLabel\fPT{
+Hue label
+T}
+___
+\fBLabelSat\fP\fBXmLabel\fPT{
+Sat label
+T}
+___
+\fBLabelVal\fP\fBXmLabel\fPT{
+Val label
+T}
+___
+\fBLabelR\fP\fBXmLabel\fPT{
+Red label
+T}
+___
+\fBLabelG\fP\fBXmLabel\fPT{
+Green label
+T}
+___
+\fBLabelB\fP\fBXmLabel\fPT{
+Blue label
+T}
+___
+\fBHueF\fP\fBXmTexField\fPT{
+Hue field value
+T}
+___
+\fBSatF\fP\fBXmTexField\fPT{
+Sat field value
+T}
+___
+\fBBrightnessF\fP\fBXmTexField\fPT{
+Brightness field value
+T}
+___
+\fBRedF\fP\fBXmTexField\fPT{
+Red field value
+T}
+___
+\fBGreenF\fP\fBXmTexField\fPT{
+Green field value
+T}
+___
+\fBBlueF\fP\fBXmTexField\fPT{
+Blue field value
+T}
+___
+\fBAddColor\fP\fBXmPushButton\fP"Add to Custom Color" button
+.TE
+
+.SS "Classes"
+.PP
+ColorSelectionBox inherits behavior, resources, and traits from \fBCore\fP,
+\fBComposite\fP, \fBConstraint\fP, \fBXmManager\fP,
+and \fBXmBulletinBoard\fP\&.
+.PP
+The class pointer is \fBxmColorSelectionBoxWidgetClass\fP\&.
+.PP
+The class name is \fBXmColorSelectionBox\fP\&.
+
+.SS "New Resources"
+.PP
+The following table defines a set of widget resources used by the programmer
+to specify data\&. A programmer can also set resource values for
+inherited classes to set attributes for this widget\&. To refer to a
+resource by name or by class in a \fB\&.Xdefaults\fP file, remove the \fBXmN\fP or
+\fBXmC\fP prefix and use remaining letters\&. To specify one of the defined
+values for a resource in a \fB\&.Xdefaults\fP file, remove the \fBXm\fP prefix and use
+the remaining letters (in either lowercase or uppercase, but include any
+underscores between words)\&.
+The codes in the access column indicate if the given resource can be
+set at creation time (C),
+set by using \fBXtSetValues\fP (S),
+retrieved by using \fBXtGetValues\fP (G), or is not applicable (N/A)\&.
+
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBXmColorSelectionBox Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNokCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNcancelCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNcolorValueXmRPixelPixel0x00CSG
+_____
+XmNhueValueXmRIntint0CG
+_____
+XmNsatValueXmRIntint0CG
+_____
+XmNbrightnessValueXmRIntint0CG
+_____
+XmNredValueXmRIntint0CG
+_____
+XmNgreenValueXmRIntint0CG
+_____
+XmNblueValueXmRIntint0CG
+_____
+XmNhelpOnXmRIntint1CG
+.TE
+
+.IP "\fBXmNokCallback\fP" 10
+Specifies the list of callbacks called
+when a user activates the \fBOk\fP
+button\&. The callback reason is \fBXmCR_OK\fP\&.
+
+.IP "\fBXmNcancelCallback\fP" 10
+Specifies the list of callbacks called
+when a user activates
+the \fBCancel\fP button\&. The callback reason is \fBXmCR_CANCEL\fP\&.
+.IP "\fBXmNcolorValue\fP" 10
+Specifies the chosen color value\&.
+.IP "\fBXmNhueValue\fP" 10
+Specifies the chosen color hue value\&.
+.IP "\fBXmNsatValue\fP" 10
+Specifies the chosen color saturation value\&.
+.IP "\fBXmNbrightnessValue\fP" 10
+Specifies the chosen color brightness value\&.
+.IP "\fBXmNredValue\fP" 10
+Specifies the chosen red color component value\&.
+.IP "\fBXmNgreenValue\fP" 10
+Specifies the chosen green color component value\&.
+.IP "\fBXmNblueValue\fP" 10
+Specifies the chosen blue color component value\&.
+.IP "\fBXmNhelpOnValue\fP" 10
+Set a presence \fBHelp\fP button\&.
+If True, the \fBHelp\fP button will be present at the ColorSelectinBox widget.
+
+All color properties are connected. Therefore you should remember that setting
+a few properties at the same time can lead to unpredicted results. So, change in
+same time only XmNhueValue,XmNsatValue, XmNbrightnessValue or
+XmNredValue, XmNgreenValue, XmNblueValue or XmNcolorValue.
+
+.SS "Inherited Resources"
+.PP
+ColorSelectionBox inherits behavior and resources from the
+superclasses in the following tables\&.
+For a complete description of each resource, refer to the
+reference page for that superclass\&.
+.PP
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBXmBulletinBoard Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNallowOverlapXmCAllowOverlapBooleanTrueCSG
+_____
+XmNautoUnmanageXmCAutoUnmanageBooleanTrueCG
+_____
+XmNbuttonFontListXmCButtonFontListXmFontListdynamicCSG
+_____
+XmNbuttonRenderTableXmCButtonRenderTableXmRenderTabledynamicCSG
+_____
+XmNcancelButtonXmCWidgetWidgetdynamicSG
+_____
+XmNdefaultButtonXmCWidgetWidgetdynamicSG
+_____
+XmNdefaultPositionXmCDefaultPositionBooleanTrueCSG
+_____
+XmNdialogStyleXmCDialogStyleunsigned chardynamicCSG
+_____
+XmNdialogTitleXmCDialogTitleXmStringNULLCSG
+_____
+XmNfocusCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNlabelFontListXmCLabelFontListXmFontListdynamicCSG
+_____
+XmNlabelRenderTableXmCLabelRenderTableXmRenderTabledynamicCSG
+_____
+XmNmapCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNmarginHeightXmCMarginHeightDimension10CSG
+_____
+XmNmarginWidthXmCMarginWidthDimension10CSG
+_____
+XmNnoResizeXmCNoResizeBooleanFalseCSG
+_____
+XmNresizePolicyXmCResizePolicyunsigned charXmRESIZE_ANYCSG
+_____
+XmNshadowTypeXmCShadowTypeunsigned charXmSHADOW_OUTCSG
+_____
+XmNtextFontListXmCTextFontListXmFontListdynamicCSG
+_____
+XmNtextRenderTableXmCTextRenderTableXmRenderTabledynamicCSG
+_____
+XmNtextTranslationsXmCTranslationsXtTranslationsNULLC
+_____
+XmNunmapCallbackXmCCallbackXtCallbackListNULLC
+.TE
+.PP
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBXmManager Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNbottomShadowColorXmCBottomShadowColorPixeldynamicCSG
+_____
+XmNbottomShadowPixmapXmCBottomShadowPixmapPixmapXmUNSPECIFIED_PIXMAPCSG
+_____
+XmNforegroundXmCForegroundPixeldynamicCSG
+_____
+XmNhelpCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNhighlightColorXmCHighlightColorPixeldynamicCSG
+_____
+XmNhighlightPixmapXmCHighlightPixmapPixmapdynamicCSG
+_____
+XmNinitialFocusXmCInitialFocusWidgetdynamicCSG
+_____
+XmNlayoutDirectionXmCLayoutDirectionXmDirectiondynamicCG
+_____
+XmNnavigationTypeXmCNavigationTypeXmNavigationTypeXmTAB_GROUPCSG
+_____
+XmNpopupHandlerCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNshadowThicknessXmCShadowThicknessDimensiondynamicCSG
+_____
+XmNstringDirectionXmCStringDirectionXmStringDirectiondynamicCG
+_____
+XmNtopShadowColorXmCTopShadowColorPixeldynamicCSG
+_____
+XmNtopShadowPixmapXmCTopShadowPixmapPixmapdynamicCSG
+_____
+XmNtraversalOnXmCTraversalOnBooleanTrueCSG
+_____
+XmNunitTypeXmCUnitTypeunsigned chardynamicCSG
+_____
+XmNuserDataXmCUserDataXtPointerNULLCSG
+.TE
+.PP
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBComposite Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNchildrenXmCReadOnlyWidgetListNULLG
+_____
+XmNinsertPositionXmCInsertPositionXtOrderProcNULLCSG
+_____
+XmNnumChildrenXmCReadOnlyCardinal0G
+.TE
+.PP
+.TS
+tab() box;
+c s s s s
+l| l| l| l| l.
+\fBCore Resource Set\fP
+\fBName\fP\fBClass\fP\fBType\fP\fBDefault\fP\fBAccess\fP
+_____
+XmNacceleratorsXmCAcceleratorsXtAcceleratorsdynamicN/A
+_____
+XmNancestorSensitiveXmCSensitiveBooleandynamicG
+_____
+XmNbackgroundXmCBackgroundPixeldynamicCSG
+_____
+XmNbackgroundPixmapXmCPixmapPixmapXmUNSPECIFIED_PIXMAPCSG
+_____
+XmNborderColorXmCBorderColorPixelXtDefaultForegroundCSG
+_____
+XmNborderPixmapXmCPixmapPixmapXmUNSPECIFIED_PIXMAPCSG
+_____
+XmNborderWidthXmCBorderWidthDimension0CSG
+_____
+XmNcolormapXmCColormapColormapdynamicCG
+_____
+XmNdepthXmCDepthintdynamicCG
+_____
+XmNdestroyCallbackXmCCallbackXtCallbackListNULLC
+_____
+XmNheightXmCHeightDimensiondynamicCSG
+_____
+XmNinitialResourcesPersistentXmCInitialResourcesPersistentBooleanTrueC
+_____
+XmNmappedWhenManagedXmCMappedWhenManagedBooleanTrueCSG
+_____
+XmNscreenXmCScreenScreen *dynamicCG
+_____
+XmNsensitiveXmCSensitiveBooleanTrueCSG
+_____
+XmNtranslationsXmCTranslationsXtTranslationsdynamicCSG
+_____
+XmNwidthXmCWidthDimensiondynamicCSG
+_____
+XmNxXmCPositionPosition0CSG
+_____
+XmNyXmCPositionPosition0CSG
+.TE
+
+.SS "Callback Information"
+.PP
+A pointer to the following structure is passed to each callback:
+.PP
+.nf
+typedef struct
+{
+    int reason;
+    XEvent *event;
+    Pixel pixel;
+} XmColorSelectionBoxCallbackStruct;
+.fi
+.IP "\fIreason\fP" 10
+Indicates why the callback was invoked
+.IP "\fIevent\fP" 10
+Points to the \fBXEvent\fP that triggered the callback
+.IP "\fIpixel\fP" 10
+Indicates the pixel value selected by a user from the ColorSelectionBox
+.SS "Translations"
+.PP
+\fBXmColorSelectionBox\fP inherits translations from \fBXmBulletinBoard\fP\&.
+.SH "RELATED"
+.PP
+\fBXmCreateColorSelectionBox\fP(3),
+\fBXmCreateColorSelectionDialog\fP(3),
+\fBCore\fP(3),
+\fBComposite\fP(3),
+\fBConstraint\fP(3),
+\fBXmManager\fP(3),
+\fBXmBulletinBoard\fP(3)
+...\" created by Fri 06 Jun 2008, 18:45

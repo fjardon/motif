@@ -28,6 +28,7 @@ SUBDIRS = airport \
          TabStack \
          Tree \
          ColorSel \
+         ColorSelBox \
          Combo2 \
          Ext18List \
          IconB \

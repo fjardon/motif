@@ -320,6 +320,15 @@ externalref nl_catd Xm_catd;
 #define _XmMMsgDataF_0006       	_XmCatgets(Xm_catd, MS_DataF, MSG_DataF_0006, _XmMsgDataF_0006)
 #define _XmMMsgDataFWcs_0000       	_XmCatgets(Xm_catd, MS_DataFWcs, MSG_DatFWcs_0000, _XmMsgDataFWcs_0000)
 #define _XmMMsgDataFWcs_0001       	_XmCatgets(Xm_catd, MS_DataFWcs, MSG_DataFWcs_0001, _XmMsgDataFWcs_0001)
+#define _XmMMsgColorSB_0001  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0001, _XmMsgColorSB_0001)
+#define _XmMMsgColorSB_0002  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0002, _XmMsgColorSB_0002)
+#define _XmMMsgColorSB_0003  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0003, _XmMsgColorSB_0003)
+#define _XmMMsgColorSB_0004  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0004, _XmMsgColorSB_0004)
+#define _XmMMsgColorSB_0005  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0005, _XmMsgColorSB_0005)
+#define _XmMMsgColorSB_0006  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0006, _XmMsgColorSB_0006)
+#define _XmMMsgColorSB_0007  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0007, _XmMsgColorSB_0007)
+#define _XmMMsgColorSB_0008  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0008, _XmMsgColorSB_0008)
+#define _XmMMsgColorSB_0009  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0009, _XmMsgColorSB_0009)
 
 /*
 #define _XmMMsgTableLayout_0001     _XmCatgets(Xm_catd, MS_TableLayout, MSG_TableLayout_0001, _XmMsgTableLayout_0001)

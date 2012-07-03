@@ -310,8 +310,8 @@ externalref _XmConst char *_XmMsgXmRenderT_0002 ;
 externalref _XmConst char *_XmMsgXmRenderT_0003 ;
 externalref _XmConst char *_XmMsgXmRenderT_0004 ;
 externalref _XmConst char *_XmMsgXmRenderT_0005 ;
-externalref _XmConst char *_XmMsgXmString_0000 ; 
-externalref _XmConst char *_XmMsgXmTabList_0000 ; 
+externalref _XmConst char *_XmMsgXmString_0000 ;
+externalref _XmConst char *_XmMsgXmTabList_0000 ;
 externalref _XmConst char *_XmMsgScrollFrameT_0000 ;
 externalref _XmConst char *_XmMsgScrollFrameT_0001 ;
 externalref _XmConst char *_XmMsgTransfer_0000 ;
@@ -351,6 +351,15 @@ externalref _XmConst char *_XmMsgDataF_0005 ;
 externalref _XmConst char *_XmMsgDataF_0006 ;
 externalref _XmConst char *_XmMsgDataFWcs_0000 ;
 externalref _XmConst char *_XmMsgDataFWcs_0001 ;
+externalref _XmConst char *_XmMsgColorSB_0001 ;
+externalref _XmConst char *_XmMsgColorSB_0002 ;
+externalref _XmConst char *_XmMsgColorSB_0003 ;
+externalref _XmConst char *_XmMsgColorSB_0004 ;
+externalref _XmConst char *_XmMsgColorSB_0005 ;
+externalref _XmConst char *_XmMsgColorSB_0006 ;
+externalref _XmConst char *_XmMsgColorSB_0007 ;
+externalref _XmConst char *_XmMsgColorSB_0008 ;
+externalref _XmConst char *_XmMsgColorSB_0009 ;
 
 externalref _XmConst char *XME_WARNING;
 

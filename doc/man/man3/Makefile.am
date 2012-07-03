@@ -66,6 +66,7 @@ man_MANS = ApplicationShell.3 \
     XmClipboardUndoCopy.3 \
     XmClipboardUnlock.3 \
     XmClipboardWithdrawFormat.3 \
+    XmColorSelectionBox.3 \
     XmColorSelector.3 \
     XmColumn.3 \
     XmComboBox.3 \
@@ -98,6 +99,8 @@ man_MANS = ApplicationShell.3 \
     XmCreateCascadeButton.3 \
     XmCreateCascadeButtonGadget.3 \
     XmCreateDropDown.3 \
+    XmCreateColorSelectionBox.3 \
+    XmCreateColorSelectionDialog.3 \
     XmCreateComboBox.3 \
     XmCreateCombinationBox2.3 \
     XmCreateCommand.3 \

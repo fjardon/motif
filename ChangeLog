@@ -1,3 +1,18 @@
+2008-10-07  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c, lib/Xm/ColorSB.h, lib/Xm/ColorSBP.h,
+	  lib/Xm/Makefile.am, lib/Xm/Imakefile, lib/Xm/xmstring.list.in,
+	  lib/Xm/XmAll.h, lib/Xm/XmMsgI.h, lib/Xm/MessagesI.h, lib/Xm/Messages.c,
+	  doc/man/man3/Makefile.am, doc/man/man3/Imakefile,
+	  doc/man/man3/XmColorSelectionBox.3,
+	  doc/man/man3/XmCreateColorSelectionBox.3,
+	  doc/man/man3/XmCreateColorSelectionDialog.3,
+	  demos/programs/ColorSelBox/Makefile.am,
+	  demos/programs/ColorSelBox/Imakefile,
+	  demos/programs/ColorSelBox/colorselboxdemo.c,
+	  demos/programs/Makefile.am, demos/programs/Imakefile, 
+	  configure.ac:
+	Added ColorSelectionBox widget
+
 2008-08-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* demos/programs/ButtonBox/Makefile.am, demos/programs/ColorSel/Makefile.am,
 	  demos/programs/Column/Makefile.am, demos/programs/Combo2/Makefile.am,

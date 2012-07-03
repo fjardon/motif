@@ -1,0 +1,9 @@
+EXTRA_INCLUDES = -I.
+
+SRCS = colorselboxdemo.c
+OBJS = colorselboxdemo.o
+LOCAL_LIBRARIES = -lXm -lXt -lXp -lX11 -lXext
+
+ComplexProgramTarget(colorselboxdemo)
+
+
