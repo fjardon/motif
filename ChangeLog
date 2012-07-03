@@ -1,4 +1,8 @@
 2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/TextF.c, lib/XmTextOut.c:
+	Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+
+2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Xmos.c:
 	Fixed bug #1359 (File dialog filter problem with * or [ in directory)
 
