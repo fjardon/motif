@@ -1,3 +1,8 @@
+2009-02-13  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ComboBox.c:
+	Fixed bug #1473 (When we set XmNvisibleItemCount resource available in 
+	XmComboBox, the widget displays the wrong number of items)
+
 2009-02-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ColorSB.c:
 	Removed some unnecessary comments 
