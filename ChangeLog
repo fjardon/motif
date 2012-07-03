@@ -1,6 +1,10 @@
 2008-08-20  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/GrabShell.c, TranslNew.c, XmI.h:
+	Fixed bug #1445 (PopupShell is closing  on MouseWheel)
+
+2008-08-20  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DropDown.c:
-    Refixed bug #1371 (XmComboBox problem on FC6)
+	Refixed bug #1371 (XmComboBox problem on FC6)
 
 2008-08-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/RenderT.c
