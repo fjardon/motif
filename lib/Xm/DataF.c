@@ -69,6 +69,8 @@
 #include "XmRenderTI.h"
 #endif
 
+
+#include "MessagesI.h"
 /*
  * Stuff from various internal motif headers that we need to declare
  */
@@ -81,16 +83,16 @@
 /*
  * Various DataField messages macro
  */
-#define MSG1	        _XmMsgDataF_0000
-#define MSG2	        _XmMsgDataF_0001
-#define MSG3	        _XmMsgDataF_0002
-#define MSG4	        _XmMsgDataF_0003
-#define MSG5	        _XmMsgDataF_0004
-#define MSG6	        _XmMsgDataF_0005
-#define MSG7	        _XmMsgDataF_0006
-#define WC_MSG1	        _XmMsgDataFWcs_0000
-#define WC_MSG2	        _XmMsgDataFWcs_0001
-#define GRABKBDERROR	_XmMsgRowColText_0024
+#define MSG1	        _XmMMsgDataF_0000
+#define MSG2	        _XmMMsgDataF_0001
+#define MSG3	        _XmMMsgDataF_0002
+#define MSG4	        _XmMMsgDataF_0003
+#define MSG5	        _XmMMsgDataF_0004
+#define MSG6	        _XmMMsgDataF_0005
+#define MSG7	        _XmMMsgDataF_0006
+#define WC_MSG1	        _XmMMsgDataFWcs_0000
+#define WC_MSG2	        _XmMMsgDataFWcs_0001
+#define GRABKBDERROR	_XmMMsgRowColText_0024
 
 #ifdef _XmConst
        #undef _XmConst
@@ -98,36 +100,6 @@
 #else
        #define _XmConst
 #endif
-
-static _XmConst char _XmMsgRowColText_0024[] =
-   "XtGrabKeyboard failed";
-
-static _XmConst char _XmMsgDataF_0000[] =
-   "Invalid cursor position, must be >= 0.";
-
-static _XmConst char _XmMsgDataF_0001[] =
-   "Invalid columns, must be > 0.";
-
-static _XmConst char _XmMsgDataF_0002[] =
-   "XmFontListInitFontContext Failed.";
-
-static _XmConst char _XmMsgDataF_0003[] =
-   "XmFontListGetNextFont Failed.";
-
-static _XmConst char _XmMsgDataF_0004[] =
-   "Character '%c', not supported in font.  Discarded.";
-
-static _XmConst char _XmMsgDataF_0005[] =
-   "Traversal_on must always be true.";
-
-static _XmConst char _XmMsgDataF_0006[] =
-   "Invalid columns, must be >= 0.";
-
-static _XmConst char _XmMsgDataFWcs_0000[] =
-   "Character '%s', not supported in font.  Discarded.";
-
-static _XmConst char _XmMsgDataFWcs_0001[] =
-   "Cannot use multibyte locale without a fontset.  Value discarded.";
 
 #ifdef _NO_PROTO
 extern Boolean _XmParentProcess();

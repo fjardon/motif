@@ -1619,6 +1619,35 @@ externaldef(messages) _XmConst char *_XmMsgTableLayout_0009 =
 externaldef(messages) _XmConst char *_XmMsgTableLayout_0010 =
    "Find root failure.";
 
+/**************** DataF.c ****************/
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0000 =
+   "Invalid cursor position, must be >= 0.";
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0001 =
+   "Invalid columns, must be > 0.";
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0002 =
+   "XmFontListInitFontContext Failed.";
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0003 =
+   "XmFontListGetNextFont Failed.";
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0004 =
+   "Character '%c', not supported in font.  Discarded.";
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0005 =
+   "Traversal_on must always be true.";
+
+externaldef(messages) _XmConst char *_XmMsgDataF_0006 =
+   "Invalid columns, must be >= 0.";
+
+externaldef(messages) _XmConst char *_XmMsgDataFWcs_0000 =
+   "Character '%s', not supported in font.  Discarded.";
+
+externaldef(messages) _XmConst char *_XmMsgDataFWcs_0001 =
+   "Cannot use multibyte locale without a fontset.  Value discarded.";
+
 /*
  * This one is not part of the message catalog
  */

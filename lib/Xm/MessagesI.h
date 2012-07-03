@@ -342,6 +342,15 @@ externalref _XmConst char *_XmMsgTableLayout_0007 ;
 externalref _XmConst char *_XmMsgTableLayout_0008 ;
 externalref _XmConst char *_XmMsgTableLayout_0009 ;
 externalref _XmConst char *_XmMsgTableLayout_0010 ;
+externalref _XmConst char *_XmMsgDataF_0000 ;
+externalref _XmConst char *_XmMsgDataF_0001 ;
+externalref _XmConst char *_XmMsgDataF_0002 ;
+externalref _XmConst char *_XmMsgDataF_0003 ;
+externalref _XmConst char *_XmMsgDataF_0004 ;
+externalref _XmConst char *_XmMsgDataF_0005 ;
+externalref _XmConst char *_XmMsgDataF_0006 ;
+externalref _XmConst char *_XmMsgDataFWcs_0000 ;
+externalref _XmConst char *_XmMsgDataFWcs_0001 ;
 
 externalref _XmConst char *XME_WARNING;
 
