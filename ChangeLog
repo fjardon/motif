@@ -1,3 +1,7 @@
+2008-09-19  Ihor Hayvuk <ihayvuk@ics.com>
+	* Makefile.am:
+	Added ACLOCAL_AMFLAGS
+
 2008-09-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:
 	Updated for OpenMotif 2.3.1

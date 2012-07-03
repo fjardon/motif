@@ -32,3 +32,4 @@ SUBDIRS	= bindings bitmaps \
              doc \
              demos
 AUTOMAKE_OPTIONS = 1.4
+ACLOCAL_AMFLAGS = -I .
