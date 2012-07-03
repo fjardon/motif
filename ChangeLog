@@ -1,4 +1,8 @@
 2008-09-19  Ihor Hayvuk <ihayvuk@ics.com>
+	* tools/wml/Makefile.am:
+	Added wml_DEPENDENCIES
+
+2008-09-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* Makefile.am:
 	Added ACLOCAL_AMFLAGS
 
