@@ -1,3 +1,7 @@
+2009-02-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c, lib/Xm/ColorSBP.h:
+	Fixed bug #1464 (XmColorSelectionBox selection cursor is too small) 
+
 2009-02-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ColorSB.c:
 	Fixed bug #1471 (Wrong pointer check in ColorSelectionBox (includes fix)) 

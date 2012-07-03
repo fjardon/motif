@@ -31,7 +31,7 @@ extern "C" {
 
 #define XmColorSelectionBox_COLOR_NAME_SIZE 100
 #define XmColorSelectionBox_NUM_TOGGLES 2
-#define S_len 255
+#define S_len 256
 #define H_len 240
 #define widgetN 15
 #define COUNT_PALETTE_COLORS 48
@@ -41,6 +41,9 @@ extern "C" {
 #define MIN_CORE_WIDTH 540
 #define COLOR_FRAME_WIDTH 24
 #define COLOR_FRAME_HEIGHT 23
+#define CROSS_SIZE			    10
+#define CROSS_CENTER_SIZE    1
+#define CROSS_LINE_WIDTH     2
 
 typedef struct _ColorSelectionBoxClassPart
 {
@@ -131,7 +134,7 @@ typedef struct _XmColorSelectionBoxPart
 	int y;
 	GC gc;
 	GC gc2;
-	col arr_col[S_len+1][H_len];
+	col arr_col[S_len][H_len];
 	Boolean first_expose;
 	
 } XmColorSelectionBoxPart;
