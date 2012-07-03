@@ -1,4 +1,8 @@
 2008-08-21  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ComboBox.c:
+	Fixed bug #1250 (XmCombo glyph is unexpectedly shifted when setting XmNvisibleItemCount)
+
+2008-08-21  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Container.c:
 	Fixed bug #1401 (Specifying state pixmaps in Container causes crash)
 
