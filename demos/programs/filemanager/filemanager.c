@@ -105,7 +105,7 @@ main(int argc, char* argv[])
 
   XtSetArg(args[n], XmNallowShellResize, True);  n++;
   toplevel = XtVaAppInitialize(&app_context, APP_CLASS, NULL, 0, &argc, argv,
-			       fallback_resources, 0);
+			       fallback_resources, NULL);
 
   app_class_quark = XrmStringToQuark(APP_CLASS);
   app_quark = XrmStringToQuark(argv[0]);
