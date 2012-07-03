@@ -71,9 +71,9 @@ static char defSashTranslations[] =
      None<Key>osfRight: SashAction(K,1,Right)\n\
      s~m~a<Key>Tab: PrevTabGroup()\n\
      ~m~a<Key>Tab: NextTabGroup()\n\
-     None<Btn1Down>: SashAction(S)\n\
-     None<Btn1Motion>: SashAction(M)\n\
-     <BtnUp>: SashAction(C)\n\
+     ~c ~s ~m ~a <Btn1Down>: SashAction(S)\n\
+     ~c ~s ~m ~a <Btn1Motion>: SashAction(M)\n\
+     ~c ~s ~m ~a <BtnUp>: SashAction(C)\n\
      <FocusIn>: SashFocusIn()\n\
      <FocusOut>: SashFocusOut()\n\
      <Unmap>: PrimitiveUnmap()\n\
