@@ -1,4 +1,8 @@
 2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Xmos.c:
+	Fixed bug #1359 (File dialog filter problem with * or [ in directory)
+
+2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DropDown.c, lib/Xm/DropDownP.h:
 	Fixed bug #1446 (Arrow button in DropDown widget issue.)
 
