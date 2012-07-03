@@ -11,6 +11,8 @@ simpleDemo_SOURCES = simpleDemo.c
 EXTRA_DIST = simpleDemo.man README Imakefile
 
 INCLUDES = -I$(srcdir)/../../../../lib \
-           -I$(srcdir)/../../../lib ${X_CFLAGS} 
+           -I$(srcdir)/../../../lib \
+           -I$(top_builddir)/lib \
+           ${X_CFLAGS} 
 LDADD = ../../../../lib/Xm/libXm.la \
         ../../../lib/Exm/libExm.a

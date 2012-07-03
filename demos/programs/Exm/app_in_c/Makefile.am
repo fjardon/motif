@@ -10,6 +10,8 @@ exm_in_c_SOURCES = exm_in_c.c
 EXTRA_DIST = exm_in_c.man Imakefile
 
 INCLUDES = -I$(srcdir)/../../../../lib \
-           -I$(srcdir)/../../../lib ${X_CFLAGS} 
+           -I$(srcdir)/../../../lib \
+           -I$(top_builddir)/lib \
+            ${X_CFLAGS} 
 LDADD = ../../../lib/Exm/libExm.a \
 	../../../../lib/Xm/libXm.la

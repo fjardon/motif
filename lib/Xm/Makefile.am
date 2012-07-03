@@ -8,6 +8,7 @@ EXTRA_DIST = xmstring.list Xm.msg Imakefile \
 INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
            -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
+           -I$(top_builddir)/lib \
            ${X_CFLAGS}
        
 xmdir = $(includedir)/Xm

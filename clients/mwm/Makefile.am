@@ -15,6 +15,7 @@ INCLUDES = -DLARGECURSORS -DR2_COMPAT -DUNMAP_ON_RESTART \
            -DCDE_INSTALLATION_TOP=\"@CDE_INSTALLATION_TOP@\" \
            -DCDE_CONFIGURATION_TOP=\"@CDE_CONFIGURATION_TOP@\" \
            -DBITMAPDIR=\"@INCDIR@/bitmaps\" \
+           -I$(top_builddir)/lib \
            -I$(srcdir)/../../lib ${X_CFLAGS}
 
 SRCS1=	WmCDInfo.c	WmCDecor.c	WmCEvent.c\

@@ -24,7 +24,7 @@
 #ifndef _Xm_TabList_h_
 #define _Xm_TabList_h_
 
-#include "Xm.h"
+#include <Xm/Xm.h>
 
 #ifdef __cplusplus
 extern "C" {

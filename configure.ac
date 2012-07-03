@@ -31,7 +31,7 @@ dnl Override a default in libtool.
 dnl
 dnl AC_DISABLE_STATIC
 
-AM_CONFIG_HEADER(include/config.h lib/Xm/Xm.h)
+AM_CONFIG_HEADER(include/config.h $(top_builddir)lib/Xm/Xm.h)
 
 dnl Checks for programs.
 AC_PROG_CC
