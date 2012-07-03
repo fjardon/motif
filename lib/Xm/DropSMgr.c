@@ -98,6 +98,8 @@ static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
 #include "PixConvI.h"
 #include "RegionI.h"
 #include "TraversalI.h"		/* for _XmIntersectionOf() */
+
+#define FIX_1212
   
 #define MESSAGE1 _XmMMsgDropSMgr_0001
 #define MESSAGE2 _XmMMsgDropSMgr_0002
@@ -3573,7 +3575,12 @@ RetrieveInfo(
 {
 	XmDSFullInfoRec full_info_rec;
 	XmDSInfo	info;
+#ifdef FIX_1212
+	int i;
+	Boolean freeRects;
+#else
 	XRectangle	*rects;
+#endif
 
 	if (XmIsDragContext(widget))
 	{
@@ -3593,11 +3600,20 @@ RetrieveInfo(
 	XtGetSubvalues((XtPointer)(&full_info_rec),
 	      (XtResourceList)(_XmDSResources), (Cardinal)(_XmNumDSResources),
 	      (ArgList)(args), (Cardinal)(argCount));
-
+#ifdef FIX_1212
+	freeRects = True;
+	for (i = 0 ; i < argCount; i++) {
+	    if (strcmp(args[i].name, "dropRectangles") == 0)
+		freeRects = False;
+	}
+	if (freeRects && full_info_rec.rectangles)
+	    XtFree((char *) full_info_rec.rectangles);
+#else
 	rects = full_info_rec.rectangles;
 
 	if (rects)
 		XtFree((char *) rects);
+#endif
 }
 
 /*ARGSUSED*/
