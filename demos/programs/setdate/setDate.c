@@ -82,7 +82,7 @@ int main(int argc, char **argv)
   char *str;
 
   shell     = XtVaAppInitialize(&context, APP_CLASS, NULL, 0, &argc, argv,
-				fallback_resources, 0);
+				fallback_resources, NULL);
 
   time(&timer);
   thetime = localtime(&timer);

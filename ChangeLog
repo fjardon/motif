@@ -1,4 +1,10 @@
 2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* demos/programs/filemanager/filemanager.c,
+	demos/programs/setdate/setDate.c,
+	demos/programs/todo/todo.c:
+	Fixed bug #1431 (openmotif 2.3 and xorg 7.1.0 64bit problems)
+
+2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Container.c:
 	Fixed bug #1432 (XmContainer incorrect GC allocation)
 

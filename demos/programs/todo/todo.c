@@ -137,7 +137,7 @@ main(int argc, char* argv[])
   shell		= XtVaAppInitialize(&context, APP_CLASS,
 				    optionDesc, XtNumber(optionDesc), 
 				    &argc, argv,
-				    fallback_resources, 0);
+				    fallback_resources, NULL);
 
   XtGetApplicationResources(shell, (XtPointer) &options,
 			    resources, XtNumber(resources), (Arg *) NULL, 0);
