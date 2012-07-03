@@ -899,7 +899,25 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
  * Actions and Callbacks.
  *
  ************************************************************/
-
+#ifdef FIX_1446
+/*	Function Name: CheckUnpost
+ *	Description:   This is called when the arrow button is armed.
+ *	Arguments:     w - the arrow button widget.
+ *                     combo_ptr - the combination box pointer.
+ *                     info_ptr - a pointer to the arrow button info.
+ *	Returns:       none.
+ */
+/* ARGSUSED */
+static void
+CheckUnpost(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
+{
+    XmDropDownWidget cbw = (XmDropDownWidget) combo_ptr;
+    XmArrowButtonCallbackStruct *arrow = (XmArrowButtonCallbackStruct *) info_ptr;
+	XmGrabShellWidget gs = (XmGrabShellWidget) XmDropDown_popup_shell(cbw) ;
+	if (gs && arrow && arrow->event->xbutton.time == gs->grab_shell.unpost_time)
+		XmDropDown_list_state(cbw) = XmDropDown_AFTER_UNPOST;
+}
+#endif
 /*	Function Name: ArrowClicked
  *	Description:   This is called when the arrow button is selected.
  *	Arguments:     w - the arrow button widget.
@@ -925,6 +943,12 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     if (XmDropDown_list_state(cbw) == XmDropDown_IN_PROGRESS)
 	return;
 
+#ifdef FIX_1446
+	if (XmDropDown_list_state(cbw) == XmDropDown_AFTER_UNPOST ) {
+		XmDropDown_list_state(cbw) = XmDropDown_POSTED;
+		return;
+	}
+#endif
     /*
      * DANGER:  Do not return early from this function w/o setting
      *          XmDropDown_list_state(cbw) back to either XmDropDown_UNPOSTED or XmDropDown_POSTED or
@@ -1000,6 +1024,26 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     else
 	XmDropDown_list_state(cbw) = XmDropDown_UNPOSTED;
 }
+
+#ifdef FIX_1446
+/*	Function Name: PopdownDone
+ *	Description:   This is called when the popup_shell is poped down.
+ *	Arguments:     w - the popup_shell widget.
+ *                     combo_ptr - the combination box pointer.
+ *                     info_ptr - a pointer to the popup_shell info.
+ *	Returns:       none.
+ */
+
+/* ARGSUSED */
+
+static void
+PopdownDone(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
+{
+    XmDropDownWidget cbw = (XmDropDownWidget) combo_ptr;
+
+    ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
+}
+#endif
 
 /*	Function Name: CheckExtensions
  *	Description:   Verifies that the extension is of the correct
@@ -1253,7 +1297,10 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
     /*
      * Same thing happens as when the arrow is clicked.
      */
+
+#ifndef FIX_1446
     ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
+#endif
 }
 
 /*	Function Name: ShellButtonEvent
@@ -1362,7 +1409,9 @@ LoseFocusHandler(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
 	return;
     }
 
+#ifndef FIX_1446
     ArrowClicked(XmDropDown_arrow(cbw), cbw_ptr, NULL);
+#endif
 }
 
 /*	Function Name: ComboUnpost
@@ -1912,6 +1961,10 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
 
     XtAddCallback(XmDropDown_arrow(cbw), XmNactivateCallback, 
 		  ArrowClicked, (XtPointer) w);
+
+#ifdef FIX_1446
+    XtAddCallback(XmDropDown_arrow(cbw), XmNarmCallback, CheckUnpost, (XtPointer) w);
+#endif
 }
 
 /*
@@ -1984,6 +2037,9 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 						num_largs + num_args);
     XtFree((char *) new_list);
 
+#ifdef FIX_1446
+   	XtAddCallback(XmDropDown_popup_shell(cbw), XmNpopdownCallback, PopdownDone , (XtPointer) w);
+#endif
     /*
      * Set the visible item count of the list child widget
      */
