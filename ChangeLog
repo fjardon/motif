@@ -1,3 +1,7 @@
+2008-12-04  Ihor Hayvuk <ihayvuk@ics.com>
+	* distro/openmotif-f8.spec:
+	Added spec file for Fedora 8 and similar distros 
+
 2008-10-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac:
 	Refixed in order to allow build out of source tree 
