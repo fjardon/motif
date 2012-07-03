@@ -69,6 +69,7 @@
 #include <Xm/XmosP.h>                /* for bzero et al */
 
 #define FIX_1384
+#define FIX_1401
 
 #define	ZERO_DIM	0
 #define	DEFAULT_INDENTATION	40
@@ -2297,8 +2298,14 @@ SetValues(
 	ncw->container.ideal_width = 0;
 	ncw->container.ideal_height = 0;
 	GetSize(nw,&ncw->container.ideal_width,&ncw->container.ideal_height);
+#ifdef FIX_1401
+	if (ncw->container.ideal_width && ncw->container.ideal_height && GetFirstNode(ncw)) {
+#endif	
 	ncw->core.width = ncw->container.ideal_width;
 	ncw->core.height = ncw->container.ideal_height;
+#ifdef FIX_1401
+	}
+#endif
 	Layout(nw);
 
 	/* 
