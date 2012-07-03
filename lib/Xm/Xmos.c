@@ -113,6 +113,7 @@ extern int regex();
 #endif
 
 #define FILE_LIST_BLOCK 64
+#define FIX_1359
 
 typedef struct {   
   unsigned char type ; 
@@ -391,6 +392,15 @@ _XmOSFindPatternPart(String fileSpec)
  *   which contains a wildcard or which is not followed by a '/'.
  ****************/
 {
+#ifdef FIX_1359
+    String ret;
+    
+	if (strlen(fileSpec)) {
+		if ((ret = strrchr(fileSpec, '/')))
+			fileSpec = ret + 1;
+	}
+	return fileSpec;
+#else
   char *          lookAheadPtr = fileSpec;
   char *          maskPtr;
   Boolean         hasWildcards;
@@ -431,6 +441,7 @@ _XmOSFindPatternPart(String fileSpec)
     ++maskPtr;
   
   return(maskPtr);
+#endif
 }
 
 /****************************************************************/
