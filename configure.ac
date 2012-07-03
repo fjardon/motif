@@ -225,7 +225,8 @@ fi
 if test "$enable_utf8" = "yes"
 then
   AC_DEFINE([UTF8_SUPPORTED], [1], [UTF8 is supported])
-  AC_CHECK_LIB([iconv], [iconv_open])
+  AC_SEARCH_LIBS([iconv_open], [iconv], ,
+    AC_SEARCH_LIBS([libiconv_open], [iconv]))
 fi
 
 AC_FIND_XFT
