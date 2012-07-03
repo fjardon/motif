@@ -1,3 +1,7 @@
+2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DropDown.c, lib/Xm/DropDownP.h:
+	Fixed bug #1446 (Arrow button in DropDown widget issue.)
+
 2008-08-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/MenuUil.c:
 	Fixed bug #1328 (Desktop hang: motif application in XGrabPointer)
