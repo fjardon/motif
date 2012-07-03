@@ -59,6 +59,7 @@
 #include "XmStringI.h"
 
 #define FIX_1250
+#define FIX_1473
 
 #define	NOKIDS		_XmMMsgComboBox_0000
 #define	TYPEWARNING	_XmMMsgComboBox_0001
@@ -503,9 +504,11 @@ Initialize(Widget    request,	/* unused */
 {
   XmComboBoxWidget newcb = (XmComboBoxWidget)new_w;
   Widget	   ancestor;
-  int i; 
+  int i;
+#ifdef FIX_1473
   Cardinal num_child_args;
   ArgList child_args;
+#endif
 
   /* Setup internal state. */
   CB_ShellState(newcb) = POPPED_DOWN;
@@ -578,6 +581,7 @@ Initialize(Widget    request,	/* unused */
     CB_RenderTable(newcb) = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
   CB_RenderTable(newcb) = XmFontListCopy(CB_RenderTable(newcb));
 
+#ifdef FIX_1473
   /* Ignore XmNheight resource value for descedants */
   num_child_args = 0;
   child_args = (ArgList) XtMalloc(sizeof(Arg) * *num_args);
@@ -589,6 +593,10 @@ Initialize(Widget    request,	/* unused */
   /* Create the widgets that make up a ComboBox. */
   CreateChildren(new_w, child_args, &num_child_args);
   XtFree((char *) child_args);
+#else
+  /* Create the widgets that make up a ComboBox. */
+  CreateChildren(new_w, args, num_args);
+#endif
 
   /* Walk up hierarchy to find vendor shell. */
   ancestor = XtParent(new_w);
