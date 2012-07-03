@@ -1,3 +1,7 @@
+2008-08-28  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/MenuUil.c:
+	Fixed bug #1328 (Desktop hang: motif application in XGrabPointer)
+
 2008-08-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Container.c:
 	Fixed bug #1425 (Resetting entryParent causes crash)
