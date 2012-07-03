@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/todo
 datadir = ${prefix}/share/Xm/todo
 
 EXTRA_DIST = README XmdTodo.ad example.todo todo.man todo.help Imakefile

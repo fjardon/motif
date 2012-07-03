@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/Paned2
 datadir = ${prefix}/share/Xm/Paned2
 
 EXTRA_DIST = Imakefile

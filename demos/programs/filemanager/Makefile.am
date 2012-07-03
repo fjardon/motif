@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/filemanager
 datadir = ${prefix}/share/Xm/filemanager
 
 bin_PROGRAMS = filemanager

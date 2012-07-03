@@ -4,7 +4,7 @@
 Summary: Open Motif runtime libraries and executables.
 Name: openmotif
 Version: 2.3.1
-Release: 0.1.beta1
+Release: 0.2
 License: Open Group Public License
 Group: System Environment/Libraries
 Source:  ftp://ftp.ics.com/pub/Products/Motif/%{intern_name}-%{version}.tar.gz
@@ -113,42 +113,13 @@ rm -rf $RPM_BUILD_ROOT
 %files demos
 %defattr(-,root,root)
 %{prefix}/share/Xm/*
-%{prefix}/bin/DNDDemo
-%{prefix}/bin/airport
-%{prefix}/bin/autopopups
-%{prefix}/bin/bboxdemo
-%{prefix}/bin/colordemo
-%{prefix}/bin/column
-%{prefix}/bin/combo
-%{prefix}/bin/draw
-%{prefix}/bin/earth
-%{prefix}/bin/ext18list
-%{prefix}/bin/filemanager
-%{prefix}/bin/fileview
-%{prefix}/bin/fontsel
-%{prefix}/bin/getsubres
-%{prefix}/bin/helloint
-%{prefix}/bin/hellomotif
-%{prefix}/bin/i18ninput
-%{prefix}/bin/iconbuttondemo
-%{prefix}/bin/outline
-%{prefix}/bin/paned
-%{prefix}/bin/panner
-%{prefix}/bin/periodic
-%{prefix}/bin/piano
-%{prefix}/bin/sampler2_0
-%{prefix}/bin/setDate
-%{prefix}/bin/simpledrop
-%{prefix}/bin/tabstack
-%{prefix}/bin/todo
-%{prefix}/bin/tooltips
-%{prefix}/bin/tree
-%{prefix}/bin/wsm
-%{prefix}/bin/xmanimate
 %{_mandir}/manm/exm_in_c.man.gz
 %{_mandir}/manm/simpleDemo.man.gz
 
 %changelog
+* Sat Aug 30 2008 Ihor Hayvuk <ihayvuk@ics.com>
+- fixed in order to put demos binaries in %{prefix}/share/Xm
+
 * Sat Apr 26 2008 Yuriy Syrota <ysyrota@softservecom.com>
 - adopted for Fedora 8 and similar distros
 

@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/fontsel
 datadir = ${prefix}/share/Xm/fontsel
 
 bin_PROGRAMS = fontsel

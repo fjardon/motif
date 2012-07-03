@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/Outline
 datadir = ${prefix}/share/Xm/Outline
 
 EXTRA_DIST = Imakefile

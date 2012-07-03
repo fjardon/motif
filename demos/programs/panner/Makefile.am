@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/panner
 datadir = ${prefix}/share/Xm/panner
 
 bin_PROGRAMS = panner

@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/tooltips
 datadir = ${prefix}/share/Xm/tooltips
 
 EXTRA_DIST = Imakefile

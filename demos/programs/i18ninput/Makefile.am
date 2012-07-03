@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/i18ninput
 datadir = ${prefix}/share/Xm/i18ninput
 
 bin_PROGRAMS = i18ninput

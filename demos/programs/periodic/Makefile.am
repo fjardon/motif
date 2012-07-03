@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/periodic
 datadir = ${prefix}/share/Xm/periodic
 
 bin_PROGRAMS = periodic

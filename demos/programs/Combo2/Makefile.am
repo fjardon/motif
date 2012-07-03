@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/combo2
 datadir = ${prefix}/share/Xm/combo2
 
 bin_PROGRAMS = combo

@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/getsubres
 datadir = ${prefix}/share/Xm/getsubres
 
 bin_PROGRAMS = getsubres

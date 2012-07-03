@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/setDate
 datadir = ${prefix}/share/Xm/setDate
 
 bin_PROGRAMS = setDate

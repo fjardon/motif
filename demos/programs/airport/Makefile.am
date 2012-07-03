@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/airport
 datadir = ${prefix}/share/Xm/airport
 
 bin_PROGRAMS = airport

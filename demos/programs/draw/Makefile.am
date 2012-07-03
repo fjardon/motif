@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/draw
 datadir = ${prefix}/share/Xm/draw
 
 bin_PROGRAMS = draw
