@@ -37,7 +37,9 @@
 #endif
 #include <string.h>
 #include <ctype.h>
+#ifdef UTF8_SUPPORTED
 #include <iconv.h>
+#endif
 #include <errno.h>
 #include <Xm/XmosP.h>
 #include "MessagesI.h"

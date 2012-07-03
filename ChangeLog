@@ -1,3 +1,7 @@
+2008-08-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* configure.ac, lib/Xm/ResEncod.c:
+	Fixed bug #1443 (Build failure on FreeBSD: undefined reference to `libiconv_open')
+
 2008-08-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/IconFile.c:
 	Fixed bug #1427 (_xrm '*.iconPixmap:SDtErrors.l' produces bogus error messages)
