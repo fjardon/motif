@@ -228,6 +228,11 @@ static XtResource resources[] =
 		XtOffsetOf(struct _XmColorSelectionBoxRec, cs.cancel_callback),
 		XmRImmediate, (XtPointer) NULL
 	},
+	{
+		XmNautoUnmanage, XmCAutoUnmanage, XmRBoolean,
+		sizeof(Boolean), XtOffsetOf(struct _XmColorSelectionBoxRec, bulletin_board.auto_unmanage),
+		XmRImmediate, (XtPointer) False
+	},
 };
 
 static XmSyntheticResource get_resources[] =
@@ -1418,8 +1423,7 @@ void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget csb)
 
 	XmColorSB_pButtonCancel(csb)= _XmBB_CreateButtonG( (Widget) csb, csb->cs.cancel_label_string, "Cancel",
 			XmCancelStringLoc);
-	XtRemoveAllCallbacks( XmColorSB_pButtonCancel(csb), XmNactivateCallback) ;
-
+	
 	XtAddCallback(XmColorSB_pButtonCancel(csb), XmNactivateCallback,
 	ColorSelectionBoxCallback, (XtPointer) XmDIALOG_CANCEL_BUTTON);
 
@@ -1428,7 +1432,6 @@ void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget csb)
 	XtRemoveAllCallbacks( XmColorSB_pButtonHelp(csb), XmNactivateCallback) ;
 	XtAddCallback(XmColorSB_pButtonHelp(csb), XmNactivateCallback,
 	ColorSelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON);
-
 	Arg args[10];
 	Cardinal ac=0;
 	XtSetArg(args[ac],XmNx,100); ac++;

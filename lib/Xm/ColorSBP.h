@@ -112,7 +112,6 @@ typedef struct _XmColorSelectionBoxPart
 	Widget color;
 	Widget pButtonAddColor;
 	Widget pButtonOk;
-	Widget pButtonCancel;
 	Widget pButtonHelp;
 	Widget labelPalette;
 	Widget labelCustomColors;
@@ -192,7 +191,7 @@ externalref XmBulletinBoardClassRec xmBulletinBoardClassRec;
 #define XmColorSB_labelVal(w) (((XmColorSelectionBoxWidget)(w))->cs.labelVal)
 #define XmColorSB_pButtonAddColor(w) (((XmColorSelectionBoxWidget)(w))->cs.pButtonAddColor)
 #define XmColorSB_pButtonOk(w) (((XmColorSelectionBoxWidget)(w))->cs.pButtonOk)
-#define XmColorSB_pButtonCancel(w) (((XmColorSelectionBoxWidget)(w))->cs.pButtonCancel)
+#define XmColorSB_pButtonCancel(w) (((XmColorSelectionBoxWidget)(w))->bulletin_board.cancel_button)
 #define XmColorSB_pButtonHelp(w) (((XmColorSelectionBoxWidget)(w))->cs.pButtonHelp)
 #define XmColorSB_color(w) (((XmColorSelectionBoxWidget)(w))->cs.color)
 #define XmColorSB_brightness_volume(w) (((XmColorSelectionBoxWidget)(w))->cs.brightness_volume)
