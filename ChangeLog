@@ -1,4 +1,8 @@
 2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Data.c, lib/Xm/TranslNew.c, TransltnsP.h:
+	Fixed bug #1419 (Bindings of DataField defined in DataF.c instead of TranslNew.c)
+
+2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
 	* demos/programs/filemanager/filemanager.c,
 	demos/programs/setdate/setDate.c,
 	demos/programs/todo/todo.c:
