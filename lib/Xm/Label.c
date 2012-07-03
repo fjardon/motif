@@ -74,6 +74,7 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #include <Xm/XpmP.h>
 #include <string.h>
 
+#define FIX_1442
 
 #define Pix(w)			((w)->label.pixmap)
 #define Pix_insen(w)		((w)->label.pixmap_insen)
@@ -2919,7 +2920,11 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
     /* Fix for Bug 1117 - if str is null then a SEGVIOLATION occures
      * in strlen.
      */
+#ifdef FIX_1442
+    *length = str ? strlen(str) : 0;
+#else
     *length = str ? strlen(rval) : 0;
+#endif
 
     rval = _XmTextToLocaleText(w, (XtPointer) str,
 			       COMPOUND_TEXT, 8, 
