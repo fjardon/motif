@@ -1,3 +1,8 @@
+2009-02-19  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Form.c:
+	Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
+	if widgets are inter-attachmed in vertical/horizontal directions)
+
 2009-02-18  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Paned.c:
 	Fixed bug #1277 (paned widget does not work under Fedora Core 2 with openmotif 2.2.3-4.1)
