@@ -1,3 +1,7 @@
+2008-08-15  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/RenderT.c
+	Fixed bug #1444 (Function _XmXftDrawCreate() does not work correct with the pixmap)
+
 2008-08-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c
 	Fixed bug #1434 (single character utf8 sting is not displayed)

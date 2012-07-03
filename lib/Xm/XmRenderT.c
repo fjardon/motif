@@ -85,6 +85,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
    ((unsigned int)(unsigned long)(tablist) != XmAS_IS))
 
 #define  FIX_1414
+#define  FIX_1444
 /**********************************************************************
  *	      IMPORTANT NOTE: IMPLEMENTATION OF SHARING
  *
@@ -2890,6 +2891,13 @@ _XmXftDrawCreate(Display *display, Window window)
 		}
 	}
         oldErrorHandler = XSetErrorHandler (_XmXftErrorHandler);
+
+#ifdef FIX_1444
+	if (!(draw = XftDrawCreate(display, window,
+	    DefaultVisual(display, DefaultScreen(display)),
+	    DefaultColormap(display, DefaultScreen(display))))) 
+            	draw = XftDrawCreateBitmap(display, window);
+#else
 	xft_error = 0;
 	XGetWindowAttributes(display, window, &wa);
 	if (xft_error != BadWindow) {
@@ -2899,7 +2907,7 @@ _XmXftDrawCreate(Display *display, Window window)
 	} else {
             draw = XftDrawCreateBitmap(display, window);
         }
-
+#endif
 	/* Store it in the cache. Look for an empty slot first */
 	for (i=0; i<_XmXftDrawCacheSize; i++)
 		if (_XmXftDrawCache[i].display == NULL) {
