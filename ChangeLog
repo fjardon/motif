@@ -1,4 +1,8 @@
 2009-02-07  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c:
+	Removed some unnecessary comments 
+
+2009-02-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ColorSB.c, lib/Xm/ColorSBP.h:
 	Fixed bug #1465 (XmColorSelectionBox selected color does not have a selection indication rectangle) 
 

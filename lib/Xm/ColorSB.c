@@ -686,7 +686,6 @@ static void StorePixel(Visual *visual, Screen *screen, int r, int g, int b, int 
 	}
 }
 
-/*{{{ create color matrix*/
 static void CreateColorMatrix(XmColorSelectionBoxWidget w, Visual *visual)
 {
 	int R, G, B, r, g, b;
@@ -769,7 +768,6 @@ static void CreateColorMatrix(XmColorSelectionBoxWidget w, Visual *visual)
 		}
 	}
 }
-/*}}}*/
 
 /*!	Function Name: Start
  *	Description: Called when ColorSelectionBox is start the work.
@@ -1747,7 +1745,6 @@ static void cb_AppearCursor(Widget w, XtPointer csb_ptr, XtPointer call_data)
  *      Returns:       	none.
  */
 
-/*{{{ CHANGE COLOR*/
 static void cb_ChangeColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
 {
 	XmColorSelectionBoxWidget csb;
@@ -1905,7 +1902,6 @@ static void cb_ChangeColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
 		LoadColorValues(csb);
 	}
 }
-/*}}}*/
 
 static void cb_ChangeCoordinateColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
 {
