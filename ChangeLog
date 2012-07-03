@@ -1,4 +1,8 @@
 2008-08-21  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Container.c:
+	Fixed bug #1401 (Specifying state pixmaps in Container causes crash)
+
+2008-08-21  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ResEncod.c:
 	Refixed bug #1442 (Crash on Drag'n'Drop)
 
