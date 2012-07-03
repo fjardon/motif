@@ -70,6 +70,7 @@
 
 #define FIX_1384
 #define FIX_1401
+#define FIX_1425
 
 #define	ZERO_DIM	0
 #define	DEFAULT_INDENTATION	40
@@ -633,6 +634,9 @@ static void			ScrollProc(
 					XtPointer	closure,
 					XtIntervalId*   id);
 static void 			ContainerResetDepths (XmContainerConstraint c);
+#ifdef FIX_1425
+static void FindMaxDepths (XmContainerConstraint c, Widget cw);
+#endif
 static Boolean			ContainerIsDescendant (Widget containerChild, Widget newEntryParent);
 static void			ContainerResequenceNodes(XmContainerWidget cw, Widget entryParent);
 
@@ -3228,7 +3232,12 @@ ConstraintSetValues(
             pc = GetContainerConstraint(nc->entry_parent);
             nc->depth = pc->depth +1;
 	    ContainerResetDepths(nc);
+
+#ifdef FIX_1425
+		FindMaxDepths(cc, cw);
+#else
 	    cw->container.max_depth = MAX(cw->container.max_depth,nc->depth);
+#endif
             if (pc->outline_state == XmEXPANDED)
             	nc->visible_in_outline = pc->visible_in_outline;
 	    else
@@ -7157,6 +7166,20 @@ static void ContainerResetDepths
 	}
 }
 
+#ifdef FIX_1425
+static void FindMaxDepths(XmContainerConstraint	c, Widget w)
+{
+	XmContainerWidget cw = (XmContainerWidget)w;
+	CwidNode node = c->node_ptr->child_ptr;
+	while (node) {
+		Widget child = node->widget_ptr;
+		XmContainerConstraint cc = GetContainerConstraint(child);
+		cw->container.max_depth = MAX(cw->container.max_depth, cc->depth);
+		FindMaxDepths(cc, cw);
+		node = node->next_ptr;
+	}
+}
+#endif
 /* true if newEntryParent (or any other widget) is a descendant of the target;
 ** determine by looking upward in the tree for a match. Returns True for the
 ** widget itself.
