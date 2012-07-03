@@ -7483,7 +7483,7 @@ HorizontalStackedBottomEdgeRedisplay(XmTabBoxWidget tab)
     GC		    gc = XmTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
 #define _NUM_RECTS 10
-    XRectangle      rect[_NUM_RECTS], top, bottom;
+    XRectangle      rect[_NUM_RECTS], top = {0, 0, 0, 0}, bottom = {0, 0, 0, 0};
 
     /*
      * What we need to do in this mode is to extend the right most tab
@@ -7875,7 +7875,7 @@ HorizontalStackedTopEdgeRedisplay(XmTabBoxWidget tab)
     GC		    gc = XmTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
 #define _NUM_RECTS 10
-    XRectangle      rect[_NUM_RECTS], top, bottom;
+    XRectangle      rect[_NUM_RECTS], top = {0, 0, 0, 0}, bottom = {0, 0, 0, 0};
 
     offset = XmTabBox_tab_offset(tab);
     geom = XmTabBox__actual(tab);
@@ -8244,7 +8244,7 @@ VerticalStackedRightEdgeRedisplay(XmTabBoxWidget tab)
     GC		    gc = XmTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
 #define _NUM_RECTS 10
-    XRectangle      rect[_NUM_RECTS], top, bottom;
+    XRectangle      rect[_NUM_RECTS], top = {0, 0, 0, 0}, bottom = {0, 0, 0, 0};
 
     /*
      * What we need to do in this mode is to extend the right most tab
@@ -8545,7 +8545,7 @@ VerticalStackedLeftEdgeRedisplay(XmTabBoxWidget tab)
     GC		    gc = XmTabBox__tab_GC(tab);
     Boolean	    do_top, do_bottom;
 #define _NUM_RECTS 10
-    XRectangle      rect[_NUM_RECTS], top, bottom;
+    XRectangle      rect[_NUM_RECTS], top = {0, 0, 0, 0}, bottom = {0, 0, 0, 0};
 
     offset = XmTabBox_tab_offset(tab);
     geom = XmTabBox__actual(tab);
