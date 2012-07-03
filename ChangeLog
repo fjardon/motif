@@ -1,3 +1,7 @@
+2008-08-05  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmRenderT.c
+	Fixed bug #1442 (Crash on Drag'n'Drop)
+
 2008-08-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmRenderT.c
 	Fixed bug #1436 (Definition of GetSameRenditions in XmRenderT.c needs USE_XFT conditional)
