@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/sampler2_0
 datadir = ${prefix}/share/Xm/sampler2_0
 
 EXTRA_DIST = bee.xpm bomb.xpm cherry.xpm da.xpm girlface.xpm k7.xpm \

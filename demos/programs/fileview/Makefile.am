@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/fileview
 datadir = ${prefix}/share/Xm/fileview
 
 bin_PROGRAMS = fileview

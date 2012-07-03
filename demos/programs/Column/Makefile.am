@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/Column
 datadir = ${prefix}/share/Xm/Column
 
 bin_PROGRAMS = column

@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/autopopups
 datadir = ${prefix}/share/Xm/autopopups
 
 bin_PROGRAMS = autopopups

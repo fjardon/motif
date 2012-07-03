@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/earth
 datadir = ${prefix}/share/Xm/earth
 
 bin_PROGRAMS = earth

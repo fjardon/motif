@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/Tree
 datadir = ${prefix}/share/Xm/Tree
 
 EXTRA_DIST = Imakefile

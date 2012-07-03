@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/Ext18list
 datadir = ${prefix}/share/Xm/Ext18list
 
 bin_PROGRAMS = ext18list

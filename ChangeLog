@@ -1,4 +1,23 @@
 2008-08-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* demos/programs/ButtonBox/Makefile.am, demos/programs/ColorSel/Makefile.am,
+	  demos/programs/Column/Makefile.am, demos/programs/Combo2/Makefile.am,
+	  demos/programs/Ext18List/Makefile.am, demos/programs/FontSel/Makefile.am,
+	  demos/programs/IconB/Makefile.am, demos/programs/Outline/Makefile.am,
+	  demos/programs/Paned/Makefile.am, demos/programs/TabStack/Makefile.am,
+	  demos/programs/Tree/Makefile.am, demos/programs/airport/Makefile.am,
+	  demos/programs/animate/Makefile.am, demos/programs/drag_and_drop/Makefile.am,
+	  demos/programs/draw/Makefile.am, demos/programs/earth/Makefile.am,
+	  demos/programs/filemanager/Makefile.am, demos/programs/fileview/Makefile.am,
+	  demos/programs/getsubres/Makefile.am, demos/programs/hellomotif/Makefile.am,
+	  demos/programs/hellomotifi18n/Makefile.am, demos/programs/i18ninput/Makefile.am,
+	  demos/programs/panner/Makefile.am, demos/programs/periodic/Makefile.am,
+	  demos/programs/piano/Makefile.am, demos/programs/pixmaps/Makefile.am,
+	  demos/programs/popups/Makefile.am, demos/programs/sampler2_0/Makefile.am,
+	  demos/programs/setdate/Makefile.am, demos/programs/todo/Makefile.am,
+	  demos/programs/tooltips/Makefile.am, demos/programs/workspace/Makefile.am:
+	Fixed in order to put demos binaries in ${prefix}/share/Xm
+
+2008-08-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac, lib/Xm/ResEncod.c:
 	Fixed bug #1443 (Build failure on FreeBSD: undefined reference to `libiconv_open')
 

@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/piano
 datadir = ${prefix}/share/Xm/piano
 
 bin_PROGRAMS = piano

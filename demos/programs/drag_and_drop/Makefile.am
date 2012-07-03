@@ -1,15 +1,15 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/drag_and_drop
+datadir = ${prefix}/share/Xm/drag_and_drop
+
 bin_PROGRAMS = DNDDemo simpledrop
-
-INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 
-
-LDADD = ../../../lib/Xm/libXm.la
+EXTRA_DIST = Imakefile simpledrop.man DNDDemo.man README
 
 DNDDemo_SOURCES = DNDDemo.c DNDDraw.c
-
 simpledrop_SOURCES = simpledrop.c
-
-EXTRA_DIST = Imakefile
-
+data_DATA = $(EXTRA_DIST) $(DNDDemo_SOURCES) $(simpledrop_SOURCES)
 noinst_HEADERS = DNDDemo.h
+LDADD = ../../../lib/Xm/libXm.la
+
+INCLUDES = -I$(srcdir)/../../../lib ${X_CFLAGS} 

@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/hellomotif
 datadir = ${prefix}/share/Xm/hellomotif
 
 bin_PROGRAMS = hellomotif

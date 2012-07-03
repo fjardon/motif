@@ -1,5 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
+bindir = ${prefix}/share/Xm/helloint
 datadir = ${prefix}/share/Xm/helloint
 
 SUBDIRS = C english french hebrew japan japanese swedish
