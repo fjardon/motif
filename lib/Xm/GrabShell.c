@@ -54,7 +54,12 @@
 		 ButtonPressMask | ButtonReleaseMask)
 
 /********    Static Function Declarations    ********/
-
+#ifdef FIX_1445
+static void MouseWheel (Widget grabshell,
+		     XEvent *event,
+		     String *params,
+		     Cardinal *num_params);
+#endif
 static void BtnUp (Widget grabshell,
 		     XEvent *event,
 		     String *params,
@@ -101,6 +106,10 @@ static XtActionsRec actionsList[] =
   { "GrabShellBtnDown", BtnDown },
   { "GrabShellBtnUp",   BtnUp },
   { "GrabShellPopdown", Popdown }
+#ifdef FIX_1445
+  ,
+  { "GrabShellMouseWheel", MouseWheel }
+#endif
 };
 
 
@@ -390,6 +399,14 @@ MapNotifyHandler(Widget shell, XtPointer client_data,
   XSync(XtDisplay(shell), False);
   XSetErrorHandler(old_handler);
 }
+
+#ifdef FIX_1445
+static void MouseWheel (Widget w, XEvent *event, String *params, Cardinal *num_params)
+{
+	XmGrabShellWidget grabshell = (XmGrabShellWidget) w;
+	GSAllowEvents(w, SyncPointer, event -> xbutton.time);
+}
+#endif
 
 /* 
  * For BtnUp and BtnDown events we need to decide whether to
