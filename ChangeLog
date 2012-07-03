@@ -1,3 +1,7 @@
+2008-10-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* configure.ac:
+	Refixed in order to allow build out of source tree 
+
 2008-10-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac,
 	  clients/mwm/Makefile.am,
