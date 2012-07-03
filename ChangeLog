@@ -1,3 +1,7 @@
+2008-08-21  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ResEncod.c:
+	Refixed bug #1442 (Crash on Drag'n'Drop)
+
 2008-08-20  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/GrabShell.c, TranslNew.c, XmI.h:
 	Fixed bug #1445 (PopupShell is closing  on MouseWheel)
@@ -7,35 +11,35 @@
 	Refixed bug #1371 (XmComboBox problem on FC6)
 
 2008-08-15  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/RenderT.c
+	* lib/Xm/RenderT.c:
 	Fixed bug #1438 (Missing XSetErrorHandler call in XmXftDrawCreate)
 
 2008-08-15  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/RenderT.c
+	* lib/Xm/RenderT.c:
 	Fixed bug #1444 (Function _XmXftDrawCreate() does not work correct with the pixmap)
 
 2008-08-06  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/XmString.c
+	* lib/Xm/XmString.c:
 	Fixed bug #1434 (single character utf8 sting is not displayed)
 
 2008-08-05  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/Label.c
+	* lib/Xm/Label.c:
 	Fixed bug #1442 (Crash on Drag'n'Drop)
 
 2008-08-01  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/XmRenderT.c
+	* lib/Xm/XmRenderT.c:
 	Fixed bug #1436 (Definition of GetSameRenditions in XmRenderT.c needs USE_XFT conditional)
 
 2008-07-30  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/ColorObj.c
+	* lib/Xm/ColorObj.c:
 	Fixed bug #1400 (Corrupted per-display font cache)
 
 2008-07-09  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/Label.c
+	* lib/Xm/Label.c:
 	Fixed bug #1440 (Tags array size in Label widget is not enough)
 
 2008-06-25  Ihor Hayvuk <ihayvuk@ics.com>
-	* ac_find_xft.m4
+	* ac_find_xft.m4:
 	Fixed bug #1429 (Build failure with libtool-2.2.4)
 
 ========================= Open Motif 2.3.1 beta 1 released ================================

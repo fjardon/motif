@@ -2445,7 +2445,8 @@ processCharsetAndTextUtf8(XmStringCharSet tag,
 
   if (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0) {
       if (_XmStringIsCurrentCharset("UTF-8")) {
-          ctlen = strlen((char *)ctext);
+    	  if (ctext)
+    		  ctlen = strlen((char *)ctext);
 
           if (ctlen > 0) {
               *outc = ctextConcat(*outc, *outlen, ctext, ctlen);
