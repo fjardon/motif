@@ -58,6 +58,8 @@
 #include "XmI.h"
 #include "XmStringI.h"
 
+#define FIX_1250
+
 #define	NOKIDS		_XmMMsgComboBox_0000
 #define	TYPEWARNING	_XmMMsgComboBox_0001
 #define	MISSINGKID	_XmMMsgComboBox_0004
@@ -761,7 +763,9 @@ SetValues(Widget    current,
       XtSetArg(list_args[nlist], XmNvisibleItemCount, 
 	       CBS_VisibleItemCount(newcb)), nlist++;
       CBS_VisibleItemCount(newcb) = XmUNSPECIFIED_COUNT;
+#ifndef FIX_1250
       resize = dolayout = redisplay = TRUE;
+#endif
     }
 
   /* Propagate our XmNborderWidth to the popup list shell. */
