@@ -2890,7 +2890,6 @@ _XmXftDrawCreate(Display *display, Window window)
 			return _XmXftDrawCache[i].draw;
 		}
 	}
-        oldErrorHandler = XSetErrorHandler (_XmXftErrorHandler);
 
 #ifdef FIX_1444
 	if (!(draw = XftDrawCreate(display, window,
@@ -2898,8 +2897,10 @@ _XmXftDrawCreate(Display *display, Window window)
 	    DefaultColormap(display, DefaultScreen(display))))) 
             	draw = XftDrawCreateBitmap(display, window);
 #else
+	oldErrorHandler = XSetErrorHandler (_XmXftErrorHandler);	
 	xft_error = 0;
 	XGetWindowAttributes(display, window, &wa);
+	XSetErrorHandler(oldErrorHandler);
 	if (xft_error != BadWindow) {
 	    draw = XftDrawCreate(display, window,
 	        DefaultVisual(display, DefaultScreen(display)),
