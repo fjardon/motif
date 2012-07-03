@@ -65,6 +65,9 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include "XmTabListI.h"
 
 # include <stdarg.h>
+
+#define FIX_1434
+
 # define Va_start(a,b) va_start(a,b)
 
 /* Warning Messages */
@@ -6214,7 +6217,11 @@ ComputeMetrics(XmRendition rend,
 
       if (two_byte_font(font_struct))
 	{
+#ifdef FIX_1434
+	  if (byte_count >= 2 || utf8)
+#else
 	  if (byte_count >= 2)
+#endif
 	    {
 	      if (utf8)
 		{

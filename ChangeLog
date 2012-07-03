@@ -1,5 +1,9 @@
+2008-08-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmString.c
+	Fixed bug #1434 (single character utf8 sting is not displayed)
+
 2008-08-05  Ihor Hayvuk <ihayvuk@ics.com>
-	* lib/Xm/XmRenderT.c
+	* lib/Xm/Label.c
 	Fixed bug #1442 (Crash on Drag'n'Drop)
 
 2008-08-01  Ihor Hayvuk <ihayvuk@ics.com>
