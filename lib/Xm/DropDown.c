@@ -2040,6 +2040,11 @@ PopdownList(Widget w)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
 
+#ifdef FIX_1371
+	Widget gs = XmDropDown_popup_shell(cbw);
+  	if (gs && XmIsGrabShell(gs) && (XmDropDown_list_state(cbw) != XmDropDown_POSTED))
+	XtCallActionProc(gs, "GrabShellPopdown", NULL, NULL, 0);
+#else
     if (XmDropDown_popup_shell(cbw) != NULL) {
 	XSetInputFocus(XtDisplay(w), XmDropDown_focus_owner(cbw),
 		       XmDropDown_focus_state(cbw), 
@@ -2053,6 +2058,7 @@ PopdownList(Widget w)
 	XtUngrabKeyboard(w, XtLastTimestampProcessed(XtDisplay(w)));
 	XtPopdown(XmDropDown_popup_shell(cbw));
     }
+#endif
     else {
 	XmeWarning(w, XmNnoComboShellMsg);
     }
