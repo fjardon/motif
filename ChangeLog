@@ -1,3 +1,7 @@
+2009-02-05  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c:
+	Fixed bug #1468 (XmColorSelectionBox tab order is wrong) 
+
 2009-01-16  Ihor Hayvuk <ihayvuk@ics.com>
 	* doc/man/man3/XmColorSelectionBox.3:
 	Fixed bug #1467 (XmColorSelectionBox man pages are missing some named descendents) 

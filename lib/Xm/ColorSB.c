@@ -1102,6 +1102,7 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
 	XtSetArg(args[ac], XmNy, 0); ac++;
 	XtSetArg(args[ac], XmNwidth, MATRIX_WIDTH); ac++;
 	XtSetArg(args[ac], XmNheight, height); ac++;
+	XtSetArg(args[ac], XmNlayoutDirection, XmTOP_TO_BOTTOM_LEFT_TO_RIGHT); ac++;
 	XtSetArg(args[ac], XmNresizePolicy, XmRESIZE_GROW); ac++;
 	margs = XtMergeArgLists(args, ac, cargs, cnum_args);
 	XmColorSB_MatrixBoard(csb)= XtCreateManagedWidget("MatrixBox",xmBulletinBoardWidgetClass,
@@ -1121,12 +1122,12 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
 	ac = 0;
 	xlations = XtParseTranslationTable(drawTranslations);
 	XtSetArg(args[ac], XmNtranslations, xlations); ac++;
-	XtSetArg(args[ac], XmNtraversalOn, True); ac++;
+	XtSetArg(args[ac], XmNtraversalOn, False); ac++;
+	XtSetArg(args[ac], XmNnavigationType, XmNONE); ac++;
 	XtSetArg(args[ac], XmNx, 2); ac++;
 	XtSetArg(args[ac], XmNy, 2); ac++;
 	XtSetArg(args[ac], XmNwidth, H_len); ac++;
 	XtSetArg(args[ac], XmNheight, 256); ac++;
-	XtSetArg(args[ac], XmNtraversalOn, 0); ac++;
 	XmColorSB_drawingAreaMatrix(csb) = XmCreateDrawingArea(XmColorSB_frameMatrix(csb), (char *)"ColorMatrix", args,	ac);
 	XtManageChild(XmColorSB_drawingAreaMatrix(csb));
 
@@ -1149,6 +1150,8 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
 	XtSetArg(args[ac], XmNtranslations, xlations); ac++;
 	XtSetArg(args[ac], XmNx, 2); ac++;
 	XtSetArg(args[ac], XmNy, 2); ac++;
+	XtSetArg(args[ac], XmNtraversalOn, False); ac++;
+	XtSetArg(args[ac], XmNnavigationType, XmNONE); ac++;
 	XtSetArg(args[ac], XmNwidth, DRAW_VOLUME_WIDTH); ac++;
 	XtSetArg(args[ac], XmNheight, S_len + 1); ac++;
 	XmColorSB_drawingAreaVolume(csb) = XmCreateDrawingArea(XmColorSB_frameVolume(csb), (char *)"Volume", args, ac);
