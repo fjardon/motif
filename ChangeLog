@@ -1,4 +1,8 @@
 2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DataF.c, lib/Xm/Messages.c, lib/Xm/MessagesI.h, lib/Xm/XmMsgI.h:
+	Fixed bug #1420 (DataF.c holds message strings.)
+
+2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Data.c, lib/Xm/TranslNew.c, TransltnsP.h:
 	Fixed bug #1419 (Bindings of DataField defined in DataF.c instead of TranslNew.c)
 

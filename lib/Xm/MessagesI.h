@@ -334,6 +334,15 @@ externalref _XmConst char *_XmMsgSSpinB_0002 ;
 externalref _XmConst char *_XmMsgSSpinB_0003 ;
 
 externalref _XmConst char *XME_WARNING;
+externalref _XmConst char *_XmMsgDataF_0000 ;
+externalref _XmConst char *_XmMsgDataF_0001 ;
+externalref _XmConst char *_XmMsgDataF_0002 ;
+externalref _XmConst char *_XmMsgDataF_0003 ;
+externalref _XmConst char *_XmMsgDataF_0004 ;
+externalref _XmConst char *_XmMsgDataF_0005 ;
+externalref _XmConst char *_XmMsgDataF_0006 ;
+externalref _XmConst char *_XmMsgDataFWcs_0000 ;
+externalref _XmConst char *_XmMsgDataFWcs_0001 ;
 
 #include "XmMsgI.h"
 
