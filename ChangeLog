@@ -1,3 +1,7 @@
+2008-08-27  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Container.c:
+	Fixed bug #1425 (Resetting entryParent causes crash)
+
 2008-08-26  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TabBox.c:
 	Fixed bug #1439 (warnings during compilation in TabBox.c)
