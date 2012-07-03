@@ -136,7 +136,8 @@ typedef struct _XmColorSelectionBoxPart
 	GC gc2;
 	col arr_col[S_len][H_len];
 	Boolean first_expose;
-	
+	Widget highlighted_button;
+	Pixel highlighting_background_color;	
 } XmColorSelectionBoxPart;
 
 typedef struct _XmColorSelectionBoxRec
