@@ -503,6 +503,9 @@ Initialize(Widget    request,	/* unused */
 {
   XmComboBoxWidget newcb = (XmComboBoxWidget)new_w;
   Widget	   ancestor;
+  int i; 
+  Cardinal num_child_args;
+  ArgList child_args;
 
   /* Setup internal state. */
   CB_ShellState(newcb) = POPPED_DOWN;
@@ -575,8 +578,17 @@ Initialize(Widget    request,	/* unused */
     CB_RenderTable(newcb) = XmeGetDefaultRenderTable(new_w, XmTEXT_FONTLIST);
   CB_RenderTable(newcb) = XmFontListCopy(CB_RenderTable(newcb));
 
+  /* Ignore XmNheight resource value for descedants */
+  num_child_args = 0;
+  child_args = (ArgList) XtMalloc(sizeof(Arg) * *num_args);
+  for (i = 0; i < *num_args; i++) 
+	  if (strcmp(args[i].name, "height")) {
+		  child_args[i] = args[i];
+	  	  num_child_args++;
+	  }
   /* Create the widgets that make up a ComboBox. */
-  CreateChildren(new_w, args, num_args);
+  CreateChildren(new_w, child_args, &num_child_args);
+  XtFree((char *) child_args);
 
   /* Walk up hierarchy to find vendor shell. */
   ancestor = XtParent(new_w);
