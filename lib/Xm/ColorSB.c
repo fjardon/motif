@@ -991,7 +991,7 @@ static void DrawMatrix(XmColorSelectionBoxWidget csb)
 	Widget parent_shell;
 
 	dp = XtDisplay(XmColorSB_drawingAreaMatrix(csb));
-	if (!&dp) {
+	if (!dp) {
 		XtError("Can not open display");
 		exit(1);
 	}
