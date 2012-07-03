@@ -6514,7 +6514,7 @@ UpdateGCs(
 	values.background = cw->core.background_pixel;
 	values.graphics_exposures = False;
 	cw->container.normalGC = XtAllocateGC(wid, 0, valueMask, &values,
-						GCClipMask, unusedMask);
+						GCClipMask | GCForeground, unusedMask);
 
 	valueMask = GCForeground | GCSubwindowMode | GCFunction;
 	values.foreground = cw->core.background_pixel ^
