@@ -1,3 +1,7 @@
+2008-12-12  Ihor Hayvuk <ihayvuk@ics.com>
+	* distro/openmotif-f8.spec:
+	Fixed in order to put demos binaries in %{prefix}/share/Xm 
+
 2008-12-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* distro/openmotif-f8.spec:
 	Added spec file for Fedora 8 and similar distros 
