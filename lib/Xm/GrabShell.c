@@ -417,9 +417,9 @@ BtnUp (Widget w,
      click to post time */
   delta = event -> xbutton.time - grabshell -> grab_shell.post_time;
 #ifdef XSETTINGS_ON
-	if (delta <= XmeGetMultiClickTime(XtDisplay(w))) {
+	if (delta <= XmeGetMultiClickTime(XtDisplay(w)) && (grabshell -> grab_shell.post_time > 0)) {
 #else 
-  if (delta <= XtGetMultiClickTime(XtDisplay(w))) {
+  if (delta <= XtGetMultiClickTime(XtDisplay(w)) && (grabshell -> grab_shell.post_time > 0)) {
 #endif
     GSAllowEvents(w, SyncPointer, event -> xbutton.time);
     return;
