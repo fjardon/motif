@@ -86,6 +86,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 
 #define  FIX_1414
 #define  FIX_1444
+#define FIX_1451
 /**********************************************************************
  *	      IMPORTANT NOTE: IMPLEMENTATION OF SHARING
  *
@@ -3045,11 +3046,17 @@ _XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
 	    bg_color.color.blue = xcol.blue;
 	    bg_color.color.alpha = 0xFFFF;
 	}
-
+#ifdef FIX_1451
+        XftDrawRect(draw, &bg_color, x, y - _XmRendXftFont(rend)->ascent,
+	            ext.xOff,
+		    _XmRendXftFont(rend)->ascent +
+		    _XmRendXftFont(rend)->descent);
+#else
         XftDrawRect(draw, &bg_color, x - 10, y - _XmRendXftFont(rend)->ascent - 10,
 	            ext.xOff +20,
 		    _XmRendXftFont(rend)->ascent +
 		    _XmRendXftFont(rend)->descent + 20);
+#endif
     }
 
     if (_XmRendFG(rend) == XmUNSPECIFIED_PIXEL)
