@@ -1,3 +1,7 @@
+2009-04-09  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c, lib/Xm/ColorSBP.h:
+	Fixed bug #1482 (ColorSelectionBox crashes if resources are set on unmanaged widget)
+
 2009-04-08  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/PanedW.c:
 	Refixed bug #1476 (PanedWindow orientation error)

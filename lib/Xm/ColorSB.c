@@ -99,8 +99,8 @@ if (_XmGeoSetupKid (boxPtr, XmColorSB_WorkArea(csb))) \
 }
 
 #define CheckBounds(val, minVal, maxVal) \
-  val=(val>maxVal)?maxVal:val; \
-  val=(val<minVal)?minVal:val;
+  val=((val)>maxVal)?maxVal:val; \
+  val=((val)<minVal)?minVal:val;
 
 typedef struct
 {
@@ -482,8 +482,8 @@ Destroy(
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget)w;
 
-    XFreeGC(XtDisplay(w), XmColorSB_gc(csb));
-    XFreeGC(XtDisplay(w), XmColorSB_gc2(csb));
+	XFreeGC(XtDisplay(w), XmColorSB_gc(csb));
+	XFreeGC(XtDisplay(w), XmColorSB_gc2(csb));
 	XDestroyImage(XmColorSB_im1(csb));
 	XDestroyImage(XmColorSB_im2(csb));
 }
@@ -513,7 +513,7 @@ SetValues(
 	Boolean ColorChanged = False;
 	/*
 	 * Pass argument list through to all children.
-	 */
+     */
 
 	{
 		ArgList f_args;
@@ -522,6 +522,8 @@ SetValues(
 		_XmFilterArgs(args, *num_args, xm_std_filter, &f_args, &f_num_args);
 		XtFree((XtPointer) f_args);
 	}
+
+	XmColorSB_allow_callbacks(csb) = False;
 
 	if (XmColorSB_color_value(curr) != XmColorSB_color_value(csb)) {
 		int r, g, b;
@@ -541,8 +543,6 @@ SetValues(
 		XmTextFieldSetString(XmColorSB_greenF(csb), s);
 		sprintf(s, "%d", b);
 		XmTextFieldSetString(XmColorSB_blueF(csb), s);
-		if (XmColorSB_im1(csb))
-			cb_ChangeColor(NULL, csb , NULL);
 	}
 	else
 	{
@@ -563,27 +563,35 @@ SetValues(
 			sprintf(s, "%d", XmColorSB_red_value(csb));
 			XmTextFieldSetString(XmColorSB_redF(csb), s);
 			ColorChanged=True;
+			XmColorSB_force_sync_RGB(csb) = True;
 		}
 
 		if (XmColorSB_green_value(curr) != XmColorSB_green_value(csb)) {
 			sprintf(s, "%d", XmColorSB_green_value(csb));
 			XmTextFieldSetString(XmColorSB_greenF(csb), s);
 			ColorChanged=True;
+			XmColorSB_force_sync_RGB(csb) = True;
 		}
 
 		if (XmColorSB_blue_value(curr) != XmColorSB_blue_value(csb)) {
 			sprintf(s, "%d", XmColorSB_blue_value(csb));
 			XmTextFieldSetString(XmColorSB_blueF(csb), s);
 			ColorChanged=True;
+			XmColorSB_force_sync_RGB(csb) = True;
 		}
-
-		if(ColorChanged && XmColorSB_im1(csb)) cb_ChangeColor(NULL, csb, NULL);
 
 		if (XmColorSB_brightness_volume(curr) != XmColorSB_brightness_volume(csb)) {
 			sprintf(s, "%d", XmColorSB_brightness_volume(csb));
 			XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
 		}
 	}
+
+	XmColorSB_allow_callbacks(csb) = True;
+
+	if (XmColorSB_im1(csb)) {
+		cb_ChangeColor(NULL, csb , NULL);
+	}
+
 	if ( XmColorSB_helpOn(curr)!= XmColorSB_helpOn(csb)) {
 		XmColorSB_helpOn(csb)=XmColorSB_helpOn(csb);
 		if (!XmColorSB_helpOn(csb))
@@ -844,6 +852,8 @@ Start(
 	char s[10];
 
 	XmColorSB_allow_callbacks(csb) = False;
+	XmColorSB_force_sync_RGB(csb) = False;
+	XmColorSB_force_sync_HSV(csb) = False;
 
 	if (XmColorSB_color_value(csb)!=0){
 		int r, g, b;
@@ -1861,6 +1871,9 @@ FillColorFields(
 	char s[10];
 	k=(float)XmColorSB_brightness_volume(csb)/(S_len-1);
 
+	CheckBounds(XmColorSB_x(csb), 0, H_len-1);
+	CheckBounds(XmColorSB_y(csb), 0, S_len-1);
+
 	sprintf(s, "%d", (int)((float)XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].r * k));
 	XmTextFieldSetString(XmColorSB_redF(csb), s);
 
@@ -1946,7 +1959,7 @@ cb_ChangeColor(
 	int r, g, b, h, s, v;
 
 	static Boolean allow = True;
-	if(!allow || !XmColorSB_allow_callbacks(csb))
+	if(!allow || !XmColorSB_allow_callbacks(csb) || !XtIsManaged((Widget)csb))
 		return;
 
 	if (w) {
@@ -1978,10 +1991,44 @@ cb_ChangeColor(
 	v = atoi(sv);
 	XtFree(sv);
 
+	if( h != XmColorSB_hue_value(csb) ||
+		s != XmColorSB_sat_value(csb) ||
+		v != XmColorSB_brightness_volume(csb) ||
+		XmColorSB_force_sync_HSV(csb))
+	{
+		allow = False;
+
+		CheckBounds(h, 0, H_len-1);
+		CheckBounds(s, 0, S_len-1);
+		CheckBounds(v, 0, S_len-1);
+
+		HSV2RGB(h ,s, v, &r, &g ,&b);
+
+		sprintf(str, "%d", r);
+		XmTextFieldSetString(XmColorSB_redF(csb), str);
+
+		sprintf(str, "%d", g);
+		XmTextFieldSetString(XmColorSB_greenF(csb), str);
+
+		sprintf(str, "%d", b);
+		XmTextFieldSetString(XmColorSB_blueF(csb), str);
+
+		XmColorSB_red_value(csb) = r;
+		XmColorSB_green_value(csb) = g;
+		XmColorSB_blue_value(csb) = b;
+
+		XmColorSB_hue_value(csb) = XmColorSB_x(csb) = h;
+		XmColorSB_sat_value(csb) = XmColorSB_y(csb) = s;
+		XmColorSB_brightness_volume(csb) = v;
+
+		allow = True;
+		XmColorSB_force_sync_HSV(csb) = False;
+	}
+
 	if( r != XmColorSB_red_value(csb) ||
 		g != XmColorSB_green_value(csb) ||
-		b != XmColorSB_blue_value(csb)
-	)
+		b != XmColorSB_blue_value(csb) ||
+		XmColorSB_force_sync_RGB(csb))
 	{
 		allow = False;
 
@@ -2009,38 +2056,7 @@ cb_ChangeColor(
 		XmColorSB_brightness_volume(csb) = v;
 
 		allow = True;
-	}
-
-	if( h != XmColorSB_hue_value(csb) ||
-		s != XmColorSB_sat_value(csb) ||
-		v != XmColorSB_brightness_volume(csb))
-	{
-		allow = False;
-
-		CheckBounds(h, 0, 255);
-		CheckBounds(s, 0, 255);
-		CheckBounds(v, 0, 255);
-
-		HSV2RGB(h ,s, v, &r, &g ,&b);
-
-		sprintf(str, "%d", r);
-		XmTextFieldSetString(XmColorSB_redF(csb), str);
-
-		sprintf(str, "%d", g);
-		XmTextFieldSetString(XmColorSB_greenF(csb), str);
-
-		sprintf(str, "%d", b);
-		XmTextFieldSetString(XmColorSB_blueF(csb), str);
-
-		XmColorSB_red_value(csb) = r;
-		XmColorSB_green_value(csb) = g;
-		XmColorSB_blue_value(csb) = b;
-
-		XmColorSB_hue_value(csb) = XmColorSB_x(csb) = h;
-		XmColorSB_sat_value(csb) = XmColorSB_y(csb) = s;
-		XmColorSB_brightness_volume(csb) = v;
-
-		allow = True;
+		XmColorSB_force_sync_RGB(csb) = False;
 	}
 
 	allow = False;
@@ -2179,7 +2195,7 @@ cb_Input(
 	Position x, y;
 	int current;
 	static int btnPress = 0;
-  char s[10];
+	char s[10];
 
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
 	inputCallback = (XmDrawingAreaCallbackStruct *) call_data;
@@ -2359,7 +2375,8 @@ cb_Ok(
 	fclose(ColorFile);
 }
 
-static void dropper_onKeyPress(
+static void
+dropper_onKeyPress(
     Widget wid,
     XtPointer data,
     XEvent *event,
@@ -2373,7 +2390,8 @@ static void dropper_onKeyPress(
 	}
 }
 
-static void dropper_onButtonPress(
+static void
+dropper_onButtonPress(
     Widget wid,
     XtPointer data,
     XEvent *event,
@@ -2408,9 +2426,9 @@ static void dropper_onButtonPress(
 	result.pixel = p;
 	XQueryColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)), &result);
 
-	char *colorVal = RGB2String((double)result.red/((unsigned short)-1)*255,
-		(double)result.green/((unsigned short)-1)*255,
-		(double)result.blue/((unsigned short)-1)*255);
+	char *colorVal = RGB2String((double)result.red/((unsigned short)-1)*(S_len-1),
+		(double)result.green/((unsigned short)-1)*(S_len-1),
+		(double)result.blue/((unsigned short)-1)*(S_len-1));
 	XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
 
 	if (is_grabbed) {
@@ -2434,9 +2452,9 @@ RGB2HSV(
     int *h, int *s, int *v)
 {
 	/*our r,g,b should be between 0 and 1*/
-	double fr = (double)r/255;
-	double fg = (double)g/255;
-	double fb = (double)b/255;
+	double fr = (double)r/(S_len-1);
+	double fg = (double)g/(S_len-1);
+	double fb = (double)b/(S_len-1);
 
 	double fh, fs, fv;
 
@@ -2452,15 +2470,15 @@ RGB2HSV(
 	else if (fmax == fb)
 		*h = RINT(60*(fr-fg)/(fmax-fmin)+240);
 
-	*h = (double)(*h)*255/360;
+	*h = (double)(*h)*(H_len-1)/360;
 
 	if (fmax == 0)
 		fs = 0;
 	else
 		fs = 1 - fmin/fmax;
-	*s = RINT(fs * 255);
+	*s = RINT(fs * (S_len-1));
 
-	*v = RINT(fmax*255);
+	*v = RINT(fmax*(S_len-1));
 }
 
 static void
@@ -2468,9 +2486,9 @@ HSV2RGB(
     int h, int s, int v,
     int *r, int *g, int *b)
 {
-	double fh = (double)h / 255;
-	double fs = (double)s / 255;
-	double fv = (double)v / 255;
+	double fh = (double)h / (H_len-1);
+	double fs = (double)s / (S_len-1);
+	double fv = (double)v / (S_len-1);
 	double fr = 0, fg = 0, fb = 0;
 
 	if (fs == 0) {

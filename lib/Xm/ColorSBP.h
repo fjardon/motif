@@ -142,7 +142,9 @@ typedef struct _XmColorSelectionBoxPart
 	Widget highlighted_button;
 	Pixel highlighting_background_color;	
 
-  Boolean allow_callbacks;
+	Boolean allow_callbacks;
+	Boolean force_sync_RGB;
+	Boolean force_sync_HSV;
 } XmColorSelectionBoxPart;
 
 typedef struct _XmColorSelectionBoxRec
@@ -233,6 +235,9 @@ externalref XmBulletinBoardClassRec xmBulletinBoardClassRec;
 #define XmColorSB_frameColor(w) (((XmColorSelectionBoxWidget)(w))->cs.frame_color)
 
 #define XmColorSB_allow_callbacks(w) (((XmColorSelectionBoxWidget)(w))->cs.allow_callbacks)
+
+#define XmColorSB_force_sync_RGB(w) (((XmColorSelectionBoxWidget)(w))->cs.force_sync_RGB)
+#define XmColorSB_force_sync_HSV(w) (((XmColorSelectionBoxWidget)(w))->cs.force_sync_HSV)
  
 
 #define CS_WIDTH 570
