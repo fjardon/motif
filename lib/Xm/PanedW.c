@@ -47,6 +47,8 @@ static char rcsid[] = "$TOG: PanedW.c /main/24 1999/07/13 07:46:01 mgreess $"
 #include "MessagesI.h"
 #include "RepTypeI.h"
 
+#define FIX_1476
+
 typedef enum {FirstPane='U', LastPane='L'} Direction;
 
 #define MESSAGE4	_XmMMsgPanedW_0000
@@ -1117,6 +1119,20 @@ CommitNewLocations(
 	     }
 	     if (separator)
 	     {
+#ifdef FIX_1476
+		sepPos = MajorChildPos(pw, *childP) + MajorChildSize(pw, *childP) + 
+			2 * (*childP)->core.border_width + pw->paned_window.spacing / 2 - 
+			separator->core.border_width;
+
+		XmeConfigureObject(separator, 
+				    Major(pw, sepPos, 0),
+				    Major(pw, 0,  sepPos),
+				    Major(pw, 2, pw->core.width),
+				    Major(pw, pw->core.height, 2),
+				    separator->core.border_width);
+
+		XtVaSetValues(separator, XmNorientation, (!Horizontal(pw)) ? XmHORIZONTAL : XmVERTICAL, NULL);
+#else
 		 sepPos = MajorChildPos(pw, *childP) + MajorChildSize(pw, *childP) + 
 		   2 * (*childP)->core.border_width +
 		     pw->paned_window.spacing/2 - MajorChildSize(pw, separator)/2 -
@@ -1128,6 +1144,7 @@ CommitNewLocations(
 				    Major(pw, separator->core.width, pw->core.width),
 				    Major(pw, pw->core.height, separator->core.height),
 				    separator->core.border_width);
+#endif /* FIX_1476 */
            }
 
 	   /* Move and Display the Sash */
@@ -2156,8 +2173,13 @@ ChangeManaged(
       if (XtIsManaged(*childP)) 
 	XmeConfigureObject( *childP,
 			   (*childP)->core.x, (*childP)->core.y,
+#ifdef FIX_1476
+			   Minor(pw, newMinor, (*childP)->core.height),
+			   Minor(pw, (*childP)->core.width, newMinor),
+#else
 			   Major(pw, (*childP)->core.width, newMinor), 
 			   Major(pw, newMinor, (*childP)->core.height),
+#endif
 			   (*childP)->core.border_width);
        if ((XtIsManaged(*childP)) && (*childP != children[num_panes-1])) {
               if (separator && pw->paned_window.separator_on) {
