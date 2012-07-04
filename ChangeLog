@@ -1,3 +1,7 @@
+2009-05-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c:
+	Refactored in order to be able to parse by splint
+
 2009-05-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ColorSB.c, demos/programs/ColorSelBox/colorselboxdemo.c:
 	Fixed color dropper bad icon
