@@ -110,55 +110,56 @@ extern void XmeNavigChangeManaged(Widget);
  *       STATIC FUNCTION DECLARATIONS
  ************************************************************/
 
-static void ChangeManaged(Widget w);
+static void ChangeManaged(Widget);
 static void Destroy(Widget);
-static void ClassPartInitialize(WidgetClass w_class);
+static void ClassPartInitialize(WidgetClass);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
-static void Redisplay(register Widget wid, XEvent *event, Region region);
+static void Redisplay(register Widget, XEvent*, Region);
 
-static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
-static XtGeometryResult GeometryHandler(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
-static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
+static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal*);
+static XtGeometryResult GeometryHandler(Widget, XtWidgetGeometry*, XtWidgetGeometry*);
+static XtGeometryResult QueryGeometry(Widget, XtWidgetGeometry*, XtWidgetGeometry*);
 
-static void CalcPreferredSize(XmColorSelectionBoxWidget, Dimension *, Dimension *);
+static void CalcPreferredSize(XmColorSelectionBoxWidget, Dimension*, Dimension*);
 static void CreateColorPaletteWindow(XmColorSelectionBoxWidget, ArgList, Cardinal);
 static void CreateColorMatrixWindow(XmColorSelectionBoxWidget, ArgList, Cardinal);
 static void CreateSeparatorAndButtons(XmColorSelectionBoxWidget, ArgList, Cardinal);
-static void ChangeBackgroundColor(XmColorSelectionBoxWidget csb, int _value);
-static void DrawVolume(XmColorSelectionBoxWidget csb, Position y);
-static void DrawMatrix(XmColorSelectionBoxWidget csb);
-static void CreateColorMatrix(XmColorSelectionBoxWidget csb, Visual *visual);
-static void CreateVolumeGradient(XmColorSelectionBoxWidget w, Visual *visual);
-static void ReDrawCrossPixel(XmColorSelectionBoxWidget csb, Position y, Position x, Visual *visual);
-static void DrawCross(XmColorSelectionBoxWidget, Position x, Position y);
-static void FillColorFields(XmColorSelectionBoxWidget csb);
-static int DugitCut(Widget w);
-static void CalculateColor(XmColorSelectionBoxWidget csb, Position x, Position y);
-static void trTable_Volume(Widget w, XEvent *event, String *args, Cardinal *num_args);
-static void cb_Volume(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_Input(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_ChangeCoordinateColor(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_ChangeColor(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_AppearCursor(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_AddColor(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_BrightnessChange(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void cb_PutColor(Widget w, XEvent *event, String *args, Cardinal *num_args);
-static void cb_Ok(Widget w, XtPointer csb_ptr, XtPointer call_data);
-static void ColorFieldCreate(XmColorSelectionBoxWidget csb, Widget *w, char *w_name, unsigned long color_name, Position x, Position y);
-static void LoadCustomColors(Widget w, XmColorSelectionBoxWidget csb);
-static void LoadColorValues(XmColorSelectionBoxWidget csb);
-static void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget csb);
-static void ColorSelectionBoxCallback(Widget w, XtPointer client_data, XtPointer call_data);
-static void GetValues_XmNredValue(Widget w, int n, XtArgVal *value);
-static void GetValues_XmNgreenValue(Widget w, int n, XtArgVal *value);
-static void GetValues_XmNblueValue(Widget w, int n, XtArgVal *value);
-static void GetValues_XmNhueValue(Widget w, int n, XtArgVal *value);
-static void GetValues_XmNsatValue(Widget w, int n, XtArgVal *value);
-static void GetValues_XmNbrightnessValue(Widget w, int n, XtArgVal *value);
-static void GetValues_XmNhelpOn(Widget w, int n, XtArgVal *value);
-static XmGeoMatrix ColorSelectionBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidgetGeometry *desired);
+static void ChangeBackgroundColor(XmColorSelectionBoxWidget, int);
+static void DrawVolume(XmColorSelectionBoxWidget, Position);
+static void DrawMatrix(XmColorSelectionBoxWidget);
+static void CreateColorMatrix(XmColorSelectionBoxWidget, Visual*);
+static void CreateVolumeGradient(XmColorSelectionBoxWidget, Visual*);
+static void ReDrawCrossPixel(XmColorSelectionBoxWidget, Position, Position, Visual*);
+static void DrawCross(XmColorSelectionBoxWidget, Position, Position);
+static void FillColorFields(XmColorSelectionBoxWidget);
+static int  DugitCut(Widget);
+static void CalculateColor(XmColorSelectionBoxWidget, Position, Position);
+static void trTable_Volume(Widget, XEvent*, String*, Cardinal*);
+static void cb_Volume(Widget, XtPointer, XtPointer);
+static void cb_Input(Widget, XtPointer, XtPointer);
+static void cb_ChangeCoordinateColor(Widget, XtPointer, XtPointer);
+static void cb_ChangeColor(Widget, XtPointer, XtPointer);
+static void cb_AppearCursor(Widget, XtPointer, XtPointer);
+static void cb_AddColor(Widget, XtPointer, XtPointer);
+static void cb_BrightnessChange(Widget, XtPointer, XtPointer);
+static void cb_PutColor(Widget, XEvent*, String*, Cardinal*);
+static void cb_Ok(Widget, XtPointer, XtPointer);
+static void ColorFieldCreate(Widget, Widget*, char*, unsigned long, Position, Position);
+static void LoadCustomColors(Widget, XmColorSelectionBoxWidget);
+static void LoadColorValues(XmColorSelectionBoxWidget);
+static void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget);
+static void ColorSelectionBoxCallback(Widget, XtPointer, XtPointer);
+static void GetValues_XmNredValue(Widget, int, XtArgVal*);
+static void GetValues_XmNgreenValue(Widget, int, XtArgVal*);
+static void GetValues_XmNblueValue(Widget, int, XtArgVal*);
+static void GetValues_XmNhueValue(Widget, int, XtArgVal*);
+static void GetValues_XmNsatValue(Widget, int, XtArgVal*);
+static void GetValues_XmNbrightnessValue(Widget, int, XtArgVal*);
+static void GetValues_XmNhelpOn(Widget, int, XtArgVal*);
+static XmGeoMatrix ColorSelectionBoxGeoMatrixCreate(Widget, Widget, XtWidgetGeometry*);
 
-extern int _XmManagerHelp(Widget wid, XEvent *event, String *params,/* unused */Cardinal *num_params); /* unused */
+/* unused */
+extern int _XmManagerHelp(Widget, XEvent*, String*,/* unused */Cardinal*); 
 
 /************************************************************
  *       STATIC DECLARATIONS
@@ -372,7 +373,11 @@ ClassPartInitialize(WidgetClass w_class)
 	_XmFastSubclassInit (w_class, XmCOLORSELECTOR_BIT);
 }
 
-static void Redisplay(register Widget wid, XEvent *event, Region region)
+static void 
+Redisplay(
+    register Widget wid, 
+    XEvent *event, 
+    Region region)
 
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget)wid;
@@ -403,7 +408,12 @@ static void Redisplay(register Widget wid, XEvent *event, Region region)
  */
 
 /* ARGSUSED */
-static void Initialize(Widget request, Widget set, ArgList args, Cardinal *num_args)
+static void 
+Initialize(
+    Widget request, 
+    Widget set, 
+    ArgList args, 
+    Cardinal *num_args)
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget)set;
 	Dimension width, height;
@@ -434,8 +444,6 @@ static void Initialize(Widget request, Widget set, ArgList args, Cardinal *num_a
 	if (csb->manager.initial_focus == NULL) {
 		csb->manager.initial_focus = XmColorSB_pButtonOk(csb);
 	}
-	
-	csb->cs.highlighted_button = NULL;
 }
 /*      Function Name: Destroy
  *      Description:   Called to destroy this widget.
@@ -444,7 +452,9 @@ static void Initialize(Widget request, Widget set, ArgList args, Cardinal *num_a
  */
 
 /* ARGSUSED */
-static void Destroy(Widget w)
+static void 
+Destroy(
+    Widget w)
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget)w;
 
@@ -465,7 +475,13 @@ static void Destroy(Widget w)
  */
 
 /* ARGSUSED */
-static Boolean SetValues(Widget current, Widget request, Widget set, ArgList args, Cardinal *num_args)
+static Boolean 
+SetValues(
+    Widget current, 
+    Widget request, 
+    Widget set, 
+    ArgList args, 
+    Cardinal *num_args)
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget)set;
 	XmColorSelectionBoxWidget curr = (XmColorSelectionBoxWidget)current;
@@ -578,9 +594,13 @@ static Boolean SetValues(Widget current, Widget request, Widget set, ArgList arg
  */
 
 /* ARGSUSED */
-static XtGeometryResult GeometryHandler(Widget w, XtWidgetGeometry *request, XtWidgetGeometry *result)
+static XtGeometryResult 
+GeometryHandler(
+    Widget w, 
+    XtWidgetGeometry *request, 
+    XtWidgetGeometry *result)
 {
-	return (XtGeometryNo);
+	return XtGeometryNo;
 }
 
 /*	Function Name: QueryGeometry
@@ -592,11 +612,15 @@ static XtGeometryResult GeometryHandler(Widget w, XtWidgetGeometry *request, XtW
  *	Returns:       See Xt Manual.
  */
 
-static XtGeometryResult QueryGeometry(Widget w, XtWidgetGeometry *intended, XtWidgetGeometry *preferred)
+static XtGeometryResult 
+QueryGeometry(
+    Widget w, 
+    XtWidgetGeometry *intended, 
+    XtWidgetGeometry *preferred)
 {
 	CalcPreferredSize((XmColorSelectionBoxWidget) w, &(preferred->width), &(preferred->height));
 
-	return (_XmHWQuery(w, intended, preferred));
+	return _XmHWQuery(w, intended, preferred);
 }
 
 /*	Function Name: ChangeManaged
@@ -605,7 +629,9 @@ static XtGeometryResult QueryGeometry(Widget w, XtWidgetGeometry *intended, XtWi
  *	Returns: none
  */
 
-static void ChangeManaged(Widget w)
+static void 
+ChangeManaged(
+    Widget w)
 {
 	XtWidgetProc resize;
 	_XmProcessLock();
@@ -616,7 +642,10 @@ static void ChangeManaged(Widget w)
 	XmeNavigChangeManaged(w);
 }
 
-static Pixel GetCval(unsigned char c, unsigned long mask)
+static Pixel 
+GetCval(
+    unsigned char c, 
+    unsigned long mask)
 {
 	Pixel value = c, x;
 	int i;
@@ -634,7 +663,15 @@ static Pixel GetCval(unsigned char c, unsigned long mask)
 	return (value & mask);
 }
 
-static void StorePixel(Visual *visual, Screen *screen, int r, int g, int b, int x, char *cdata)
+static void 
+StorePixel(
+    Visual *visual, 
+    Screen *screen, 
+    int r, 
+    int g, 
+    int b, 
+    int x, 
+    char *cdata)
 {
 	static XColor *ctable= NULL;
 	Pixel px = GetCval(r, visual->red_mask) | GetCval(g, visual->green_mask) | GetCval(b, visual->blue_mask);
@@ -686,7 +723,10 @@ static void StorePixel(Visual *visual, Screen *screen, int r, int g, int b, int 
 	}
 }
 
-static void CreateColorMatrix(XmColorSelectionBoxWidget w, Visual *visual)
+static void 
+CreateColorMatrix(
+    XmColorSelectionBoxWidget w, 
+    Visual *visual)
 {
 	int R, G, B, r, g, b;
 	int H, S, Q;
@@ -775,7 +815,9 @@ static void CreateColorMatrix(XmColorSelectionBoxWidget w, Visual *visual)
  *	Returns: none
  */
 
-static void Start(XmColorSelectionBoxWidget csb)
+static void 
+Start(
+    XmColorSelectionBoxWidget csb)
 {
 	float k;
 	char s[10];
@@ -841,7 +883,10 @@ static void Start(XmColorSelectionBoxWidget csb)
 	}
 }
 
-static void CreateVolumeGradient(XmColorSelectionBoxWidget csb, Visual *visual)
+static void 
+CreateVolumeGradient(
+    XmColorSelectionBoxWidget csb, 
+    Visual *visual)
 {
 	int R, G, B, r, g, b, V, i;
 	int H, S;
@@ -883,7 +928,10 @@ static void CreateVolumeGradient(XmColorSelectionBoxWidget csb, Visual *visual)
  *	Returns: none
  */
 
-static void ChangeBackgroundColor(XmColorSelectionBoxWidget csb, int _value)
+static void 
+ChangeBackgroundColor(
+    XmColorSelectionBoxWidget csb, 
+    int _value)
 {
 	float k;
 	int status;
@@ -909,7 +957,10 @@ static void ChangeBackgroundColor(XmColorSelectionBoxWidget csb, int _value)
  *	Returns: none
  */
 
-static void DrawVolume(XmColorSelectionBoxWidget csb, Position y)
+static void 
+DrawVolume(
+    XmColorSelectionBoxWidget csb, 
+    Position y)
 {
 	char s[5];
 	int R, G, B;
@@ -918,9 +969,10 @@ static void DrawVolume(XmColorSelectionBoxWidget csb, Position y)
 	float k, k1, k2;
 	Visual *visual= NULL;
 	Widget parent_shell = (Widget)csb;
-	unsigned long BLACK = 0x000000;
-	unsigned long WHITE = 0xFFFFFF;
-
+	
+  unsigned long WHITE= XWhitePixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
+  unsigned long BLACK= XBlackPixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
+  
 	if (y < 0)
 		y = 0;
 	if (y > S_len-1)
@@ -979,7 +1031,9 @@ static void DrawVolume(XmColorSelectionBoxWidget csb, Position y)
  *	Returns: none
  */
 
-static void DrawMatrix(XmColorSelectionBoxWidget csb)
+static void 
+DrawMatrix(
+    XmColorSelectionBoxWidget csb)
 {
 	Display *dp;
 	int screen;
@@ -1036,30 +1090,34 @@ static void DrawMatrix(XmColorSelectionBoxWidget csb)
  *	Returns: none
  */
 
-static void ColorFieldCreate(XmColorSelectionBoxWidget csb, Widget *w, char *w_name, unsigned long color_name, Position x, Position y)
+static void 
+ColorFieldCreate(
+    Widget parent, 
+    Widget *w, 
+    char *w_name, 
+    unsigned long color_name,
+    Position x, 
+    Position y)
 {
 	int ac;
 	Arg args[10];
-	Widget fr = XmColorSB_ColorBoard(csb);
+
 	XtActionsRec actions;
 	String translations = "#override \n\
 		<Btn1Down>: frame() ManagerGadgetArm()";
 
 	actions.string = "frame";
 	actions.proc = cb_PutColor;
-	XtAppAddActions(XtDisplayToApplicationContext(XtDisplay(fr)), &actions, 1);
+	XtAppAddActions(XtDisplayToApplicationContext(XtDisplay(parent)), &actions, 1);
 
 	ac = 0;
 	XtSetArg(args[ac], XmNbackground, color_name); ac++;
-	XtSetArg(args[ac], XmNtranslations, XtParseTranslationTable (translations)); ac++;
-	XtSetArg(args[ac], XmNshadowType, XmSHADOW_IN); ac++;
-	XtSetArg(args[ac], XmNborderWidth, 2); ac++;
-	XtSetArg(args[ac], XmNborderColor, csb->cs.highlighting_background_color); ac++;
+	XtSetArg (args[ac], XmNtranslations, XtParseTranslationTable (translations)); ac++;
 	XtSetArg(args[ac], XmNx, x); ac++;
 	XtSetArg(args[ac], XmNy, y); ac++;
 	XtSetArg(args[ac], XmNwidth, COLOR_FRAME_WIDTH); ac++;
 	XtSetArg(args[ac], XmNheight, COLOR_FRAME_HEIGHT); ac++;
-	*w = XmCreateFrame(fr, (char *)"frame", args, ac);
+	*w = XmCreateFrame(parent, (char *)"frame", args, ac);
 	XtManageChild(*w);
 }
 
@@ -1072,7 +1130,11 @@ static void ColorFieldCreate(XmColorSelectionBoxWidget csb, Widget *w, char *w_n
  */
 
 /* ARGSUSED */
-static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs, Cardinal cnum_args)
+static void 
+CreateColorMatrixWindow(
+    XmColorSelectionBoxWidget csb, 
+    ArgList cargs, 
+    Cardinal cnum_args)
 {
 	Widget fr;
 	Arg *margs, args[15];
@@ -1122,7 +1184,6 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
 	XtSetArg(args[ac], XmNy, y); ac++;
 	XtSetArg(args[ac], XmNwidth, H_len+4); ac++;
 	XtSetArg(args[ac], XmNheight, 260); ac++;
-	XtSetArg(args[ac], XmNshadowType, XmSHADOW_IN); ac++;
 	XmColorSB_frameMatrix(csb) = XmCreateFrame(fr, (char *)"FrameMatrix", args,	ac);
 	XtManageChild(XmColorSB_frameMatrix(csb));
 
@@ -1145,7 +1206,6 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
 	XtSetArg(args[ac], XmNy, y); ac++;
 	XtSetArg(args[ac], XmNwidth, 20); ac++;
 	XtSetArg(args[ac], XmNheight, S_len+2); ac++;
-	XtSetArg(args[ac], XmNshadowType, XmSHADOW_IN); ac++;
 	XmColorSB_frameVolume(csb) = XmCreateFrame(fr, (char *)"FrameVolume", args, ac);
 	XtManageChild(XmColorSB_frameVolume(csb));
 
@@ -1172,7 +1232,7 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
 	XtSetArg(args[ac], XmNy, 15+ S_len+4); ac++;
 	XtSetArg(args[ac], XmNwidth, Color_w); ac++;
 	XtSetArg(args[ac], XmNheight,Color_h); ac++;
-	XtSetArg(args[ac], XmNshadowType, XmSHADOW_IN); ac++;
+	XtSetArg(args[ac], XmNshadowType, XmSHADOW_ETCHED_OUT); ac++;
 	XmColorSB_frameColor(csb) = XmCreateFrame(fr, (char *)"FrameColor", args, ac);
 	XtManageChild(XmColorSB_frameColor(csb));
 
@@ -1328,7 +1388,11 @@ static void CreateColorMatrixWindow(XmColorSelectionBoxWidget csb, ArgList cargs
  */
 
 /* ARGSUSED */
-static void CreateColorPaletteWindow(XmColorSelectionBoxWidget csb, ArgList cargs, Cardinal cnum_args)
+static void 
+CreateColorPaletteWindow(
+    XmColorSelectionBoxWidget csb, 
+    ArgList cargs, 
+    Cardinal cnum_args)
 {
 	Widget fr, labelPalette, labelCustomColors;
 	Arg *margs, args[10];
@@ -1356,11 +1420,11 @@ static void CreateColorPaletteWindow(XmColorSelectionBoxWidget csb, ArgList carg
 	XmColorSB_ColorBoard(csb)= XtCreateManagedWidget("PaletteBox",xmBulletinBoardWidgetClass, (Widget) csb,	margs, cnum_args + ac);
 	XtFree((XtPointer) margs);
 
-	XtVaGetValues(XmColorSB_ColorBoard(csb), XtNbackground, &csb->cs.highlighting_background_color, NULL);
-	
+	fr=XmColorSB_ColorBoard(csb);
+
 	for (j=0; j<COUNT_PALETTE_COLORS; j++) {
 		snprintf(s, sizeof(s), "textFieldColored%d", j);
-		ColorFieldCreate(csb, &XmColorSB_ColoredFieldWidget(csb)[j], s, arr_color[j], xx, yy);
+		ColorFieldCreate(fr, &XmColorSB_ColoredFieldWidget(csb)[j], s, arr_color[j], xx, yy);
 		if (xx>=220) {
 			xx=10;
 			yy=yy+30;
@@ -1372,7 +1436,7 @@ static void CreateColorPaletteWindow(XmColorSelectionBoxWidget csb, ArgList carg
 	xx=10, yy=230;
 	for (j=0; j<COUNT_CUSTOM_COLORS; j++) {
 		snprintf(s, sizeof(s), "textField%d", j);
-		ColorFieldCreate(csb, &XmColorSB_CustomFieldWidget(csb)[j], s, 0xffffff, xx, yy);
+		ColorFieldCreate(fr, &XmColorSB_CustomFieldWidget(csb)[j], s, 0xffffff, xx, yy);
 		if (xx>=220) {
 			xx=10;
 			yy=yy+30;
@@ -1380,8 +1444,6 @@ static void CreateColorPaletteWindow(XmColorSelectionBoxWidget csb, ArgList carg
 			xx=xx+30;
 		}
 	}
-	
-	fr=XmColorSB_ColorBoard(csb);
 
 	LoadCustomColors(fr, csb);
 	local_xmstring = XmStringCreate(BASIC_COLOR_STRING,
@@ -1423,19 +1485,21 @@ void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget csb)
 	XtRemoveAllCallbacks( XmColorSB_pButtonOk(csb), XmNactivateCallback) ;
 	XtAddCallback(XmColorSB_pButtonOk(csb), XmNarmCallback, cb_Ok, csb);
 	XtAddCallback(XmColorSB_pButtonOk(csb), XmNactivateCallback,
-	ColorSelectionBoxCallback, (XtPointer) XmDIALOG_OK_BUTTON);
+	    ColorSelectionBoxCallback, (XtPointer) XmDIALOG_OK_BUTTON);
 
 	XmColorSB_pButtonCancel(csb)= _XmBB_CreateButtonG( (Widget) csb, csb->cs.cancel_label_string, "Cancel",
 			XmCancelStringLoc);
 	
 	XtAddCallback(XmColorSB_pButtonCancel(csb), XmNactivateCallback,
-	ColorSelectionBoxCallback, (XtPointer) XmDIALOG_CANCEL_BUTTON);
+	    ColorSelectionBoxCallback, (XtPointer) XmDIALOG_CANCEL_BUTTON);
 
 	XmColorSB_pButtonHelp(csb) = _XmBB_CreateButtonG( (Widget) csb, csb->cs.help_label_string, "Help",
 			XmHelpStringLoc);
+
 	XtRemoveAllCallbacks( XmColorSB_pButtonHelp(csb), XmNactivateCallback) ;
 	XtAddCallback(XmColorSB_pButtonHelp(csb), XmNactivateCallback,
-	ColorSelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON);
+	    ColorSelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON);
+
 	Arg args[10];
 	Cardinal ac=0;
 	XtSetArg(args[ac],XmNx,100); ac++;
@@ -1462,12 +1526,14 @@ void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget csb)
 	XtManageChild(XmColorSB_pButtonCancel(csb));
 	if (XmColorSB_helpOn(csb))
 			XtManageChild(XmColorSB_pButtonHelp(csb));
-
-	return;
 }
 
 /* ARGSUSED */
-static void CreateSeparatorAndButtons(XmColorSelectionBoxWidget csb, ArgList cargs, Cardinal cnum_args)
+static void 
+CreateSeparatorAndButtons(
+    XmColorSelectionBoxWidget csb, 
+    ArgList cargs, 
+    Cardinal cnum_args)
 {
 	Arg args[10];
 	Cardinal ac;
@@ -1487,7 +1553,10 @@ static void CreateSeparatorAndButtons(XmColorSelectionBoxWidget csb, ArgList car
 	_XmSelectionBoxCreateButtons(csb);
 }
 
-static void LoadCustomColors(Widget parent, XmColorSelectionBoxWidget csb)
+static void 
+LoadCustomColors(
+    Widget parent, 
+    XmColorSelectionBoxWidget csb)
 {
 	unsigned long p;
 	Pixel pix;
@@ -1546,7 +1615,12 @@ static void LoadCustomColors(Widget parent, XmColorSelectionBoxWidget csb)
 	}
 }
 
-static void ReDrawCrossPixel(XmColorSelectionBoxWidget csb, Position y, Position x, Visual *visual)
+static void 
+ReDrawCrossPixel(
+    XmColorSelectionBoxWidget csb, 
+    Position y, 
+    Position x, 
+    Visual *visual)
 {
 	char s[10];
 	unsigned long p;
@@ -1562,14 +1636,20 @@ static void ReDrawCrossPixel(XmColorSelectionBoxWidget csb, Position y, Position
 	XmColorSB_im1(csb)->data);
 }
 
-static void DrawCross(XmColorSelectionBoxWidget csb, Position x, Position y)
+static void 
+DrawCross(
+    XmColorSelectionBoxWidget csb, 
+    Position x, 
+    Position y)
 {
 	static Position x_old, y_old;
-	unsigned long BLACK= 0x000000;
-	Display *disp;
 	Visual *visual=NULL;
 	Widget parent_shell = (Widget)csb;
 	int i, j;
+  static int Y;
+
+  unsigned long BLACK= XBlackPixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
+
 	while (!XtIsShell(parent_shell))
 		parent_shell = XtParent(parent_shell);
 	XtVaGetValues(parent_shell, XmNvisual, &visual, NULL);
@@ -1587,7 +1667,6 @@ static void DrawCross(XmColorSelectionBoxWidget csb, Position x, Position y)
   			ReDrawCrossPixel(csb, i, j, visual);	
 	
 	{
-		static int Y;
 		Y=255-y;
 		
 		for (j = MAX(Y - CROSS_LINE_WIDTH/2, 0); j <= MIN(Y + CROSS_LINE_WIDTH/2, S_len-1); j++)
@@ -1607,7 +1686,9 @@ static void DrawCross(XmColorSelectionBoxWidget csb, Position x, Position y)
   XPutImage(XtDisplay(csb), XtWindow(XmColorSB_drawingAreaMatrix(csb)),XmColorSB_gc(csb), XmColorSB_im1(csb), 0,0,0,0, H_len, S_len);
 }
 
-static void FillColorFields(XmColorSelectionBoxWidget csb)
+static void 
+FillColorFields(
+    XmColorSelectionBoxWidget csb)
 {
 	float k;
 	char s[10];
@@ -1620,7 +1701,9 @@ static void FillColorFields(XmColorSelectionBoxWidget csb)
 	XmTextFieldSetString(XmColorSB_blueF(csb), s);
 }
 
-static int DugitCut(Widget w)
+static int 
+DugitCut(
+    Widget w)
 {
 	char *s, *ss;
 	static int zz=0, max_zz;
@@ -1648,7 +1731,9 @@ static int DugitCut(Widget w)
 	return (zz);
 }
 
-static void LoadColorValues(XmColorSelectionBoxWidget csb)
+static void 
+LoadColorValues(
+    XmColorSelectionBoxWidget csb)
 {
 	unsigned long p;
 	int i;
@@ -1670,7 +1755,11 @@ static void LoadColorValues(XmColorSelectionBoxWidget csb)
 	XtFree(v);
 }
 
-static void CalculateColor(XmColorSelectionBoxWidget csb, Position x, Position y)
+static void 
+CalculateColor(
+    XmColorSelectionBoxWidget csb, 
+    Position x, 
+    Position y)
 {
 	float k=0;
 	unsigned long p;
@@ -1705,24 +1794,31 @@ static void CalculateColor(XmColorSelectionBoxWidget csb, Position x, Position y
 	CreateVolumeGradient(csb, NULL);
 }
 
-static void ColorSelectionBoxCallback(Widget w, XtPointer client_data, XtPointer call_data)
+static void 
+ColorSelectionBoxCallback(
+    Widget w, 
+    XtPointer client_data, 
+    XtPointer call_data)
 {
 	unsigned char which_button = (unsigned char)(long) client_data;
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget) XtParent (w);
 	XmAnyCallbackStruct *callback = (XmAnyCallbackStruct *) call_data;
 	XmAnyCallbackStruct temp;
 	temp.event = callback->event;
+  Boolean         allowUnmanage = FALSE ;
 
 	switch (which_button) {
 	case XmDIALOG_OK_BUTTON:
 		temp.reason = XmCR_OK;
 		XtCallCallbackList((Widget) csb, csb->cs.ok_callback, (XtPointer) &temp);
+    allowUnmanage = TRUE;
 		break;
 
 	case XmDIALOG_CANCEL_BUTTON:
 		temp.reason = XmCR_CANCEL;
 		XFlush(XtDisplay (csb));
 		XtCallCallbackList((Widget) csb, csb->cs.cancel_callback, &temp);
+    allowUnmanage = TRUE;
 		break;
 
 	case XmDIALOG_HELP_BUTTON:
@@ -1730,10 +1826,22 @@ static void ColorSelectionBoxCallback(Widget w, XtPointer client_data, XtPointer
 		_XmManagerHelp((Widget)csb, callback->event, NULL, NULL) ;
 		break;
 	}
+
+  if(    allowUnmanage
+      && csb->bulletin_board.shell
+      && csb->bulletin_board.auto_unmanage   )
+  {
+    XtUnmanageChild( (Widget) csb) ;
+  }
+
 	return;
 }
 
-static void cb_AppearCursor(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_AppearCursor(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	Arg arg = { XmNcursorPositionVisible, True };
 	XtSetValues(w, &arg, 1);
@@ -1745,7 +1853,11 @@ static void cb_AppearCursor(Widget w, XtPointer csb_ptr, XtPointer call_data)
  *      Returns:       	none.
  */
 
-static void cb_ChangeColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_ChangeColor(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	XmColorSelectionBoxWidget csb;
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
@@ -1903,7 +2015,11 @@ static void cb_ChangeColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
 	}
 }
 
-static void cb_ChangeCoordinateColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_ChangeCoordinateColor(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	XmColorSelectionBoxWidget csb;
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
@@ -1933,7 +2049,11 @@ static void cb_ChangeCoordinateColor(Widget w, XtPointer csb_ptr, XtPointer call
 	LoadColorValues(csb);
 }
 
-static void cb_Volume(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_Volume(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	XmDrawingAreaCallbackStruct *inputCallback;
 	inputCallback = (XmDrawingAreaCallbackStruct *) call_data;
@@ -1941,7 +2061,12 @@ static void cb_Volume(Widget w, XtPointer csb_ptr, XtPointer call_data)
 	trTable_Volume(w, inputCallback->event, NULL, NULL);
 }
 
-static void trTable_Volume(Widget w, XEvent *event, String *args, Cardinal *num_args)
+static void 
+trTable_Volume(
+    Widget w, 
+    XEvent *event, 
+    String *args, 
+    Cardinal *num_args)
 {
 	char s[5];
 	XmDrawingAreaCallbackStruct *inputCallback;
@@ -1967,7 +2092,11 @@ static void trTable_Volume(Widget w, XEvent *event, String *args, Cardinal *num_
 		btnPress = 0;
 }
 
-static void cb_AddColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_AddColor(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	XmColorSelectionBoxWidget csb;
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
@@ -1984,7 +2113,11 @@ static void cb_AddColor(Widget w, XtPointer csb_ptr, XtPointer call_data)
 		XmColorSB_widget_N(csb)++;
 }
 
-static void cb_Input(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_Input(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	XmDrawingAreaCallbackStruct *inputCallback;
 	XmColorSelectionBoxWidget csb;
@@ -2016,7 +2149,11 @@ static void cb_Input(Widget w, XtPointer csb_ptr, XtPointer call_data)
 	}
 }
 
-static void cb_BrightnessChange(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_BrightnessChange(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	static int i;
 
@@ -2033,25 +2170,20 @@ static void cb_BrightnessChange(Widget w, XtPointer csb_ptr, XtPointer call_data
 	}
 }
 
-static void cb_PutColor(Widget w, XEvent *event, String *args, Cardinal *num_args)
+static void 
+cb_PutColor(
+    Widget w, 
+    XEvent *event, 
+    String *args, 
+    Cardinal *num_args)
 {
 	int r, g, b;
 	char s[10];
 	XmColorSelectionBoxWidget csb;
 	csb = (XmColorSelectionBoxWidget) XtParent(XtParent(w));
-	unsigned long HIGHLIGHT_COLOR = 0x000000;
-	unsigned long p;
-	
-	XtVaGetValues(w, XtNbackground, &p, NULL);
 
-	if (csb->cs.highlighted_button == NULL) {
-		XtVaSetValues(w, XmNborderColor, HIGHLIGHT_COLOR, NULL);
-		csb->cs.highlighted_button = w;
-	} else {
-		XtVaSetValues(csb->cs.highlighted_button, XmNborderColor, csb->cs.highlighting_background_color, NULL);
-		XtVaSetValues(w, XmNborderColor, HIGHLIGHT_COLOR, NULL);
-		csb->cs.highlighted_button = w;
-	}
+	unsigned long p;
+	XtVaGetValues(w, XtNbackground, &p, NULL);
 
 	r = p&0xff0000;
 	g = p&0x00ff00;
@@ -2070,7 +2202,11 @@ static void cb_PutColor(Widget w, XEvent *event, String *args, Cardinal *num_arg
 	cb_ChangeColor(NULL, csb , NULL);
 }
 
-static void cb_Ok(Widget w, XtPointer csb_ptr, XtPointer call_data)
+static void 
+cb_Ok(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
 {
 	FILE *ColorFile;
 	String env;
@@ -2112,7 +2248,11 @@ static void cb_Ok(Widget w, XtPointer csb_ptr, XtPointer call_data)
  *	Returns: none.
  */
 
-static void CalcPreferredSize(XmColorSelectionBoxWidget csb, Dimension *width, Dimension *height)
+static void 
+CalcPreferredSize(
+    XmColorSelectionBoxWidget csb, 
+    Dimension *width, 
+    Dimension *height)
 {
 	*height = CS_HEIGHT;
 	*width = CS_WIDTH;
@@ -2130,7 +2270,12 @@ static void CalcPreferredSize(XmColorSelectionBoxWidget csb, Dimension *width, D
  *	Returns: none.
  */
 
-static void BoxFix(XmGeoMatrix geoSpec, int action, XmGeoMajorLayout layoutPtr, XmKidGeometry rowPtr)
+static void 
+BoxFix(
+    XmGeoMatrix geoSpec, 
+    int action,
+    XmGeoMajorLayout layoutPtr, 
+    XmKidGeometry rowPtr)
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget)geoSpec->composite ;
 	XmKidGeometry matrixBoxGeo;
@@ -2223,7 +2368,9 @@ static void BoxFix(XmGeoMatrix geoSpec, int action, XmGeoMajorLayout layoutPtr, 
 }
 
 /****************************************************************/
-static Boolean ColorSelectionBoxNoGeoRequest(XmGeoMatrix geoSpec)
+static Boolean 
+ColorSelectionBoxNoGeoRequest(
+    XmGeoMatrix geoSpec)
 {
 	if ( BB_InSetValues( geoSpec->composite)
 	&& (XtClass( geoSpec->composite) == xmColorSelectionBoxWidgetClass)) {
@@ -2242,7 +2389,11 @@ static Boolean ColorSelectionBoxNoGeoRequest(XmGeoMatrix geoSpec)
  *	Returns: none.
  */
 
-static XmGeoMatrix ColorSelectionBoxGeoMatrixCreate(Widget wid, Widget instigator, XtWidgetGeometry *desired)
+static XmGeoMatrix 
+ColorSelectionBoxGeoMatrixCreate(
+    Widget wid, 
+    Widget instigator, 
+    XtWidgetGeometry *desired)
 {
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget) wid ;
 	XmGeoMatrix geoSpec;
@@ -2398,43 +2549,71 @@ static XmGeoMatrix ColorSelectionBoxGeoMatrixCreate(Widget wid, Widget instigato
 }
 
 /* ARGSUSED */
-static void GetValues_XmNredValue(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNredValue(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_red_value(w);
 }
 
 /* ARGSUSED */
-static void GetValues_XmNgreenValue(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNgreenValue(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_green_value(w);
 }
 
 /* ARGSUSED */
-static void GetValues_XmNblueValue(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNblueValue(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_blue_value(w);
 }
 
 /* ARGSUSED */
-static void GetValues_XmNhueValue(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNhueValue(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_x(w);
 }
 
 /* ARGSUSED */
-static void GetValues_XmNsatValue(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNsatValue(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_y(w);
 }
 
 /* ARGSUSED */
-static void GetValues_XmNbrightnessValue(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNbrightnessValue(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_brightness_volume(w);
 }
 
 /* ARGSUSED */
-static void GetValues_XmNhelpOn(Widget w, int n, XtArgVal *value)
+static void 
+GetValues_XmNhelpOn(
+    Widget w, 
+    int n, 
+    XtArgVal *value)
 {
 	(*value) = (XtArgVal) XmColorSB_helpOn(w);
 }
@@ -2453,7 +2632,12 @@ static void GetValues_XmNhelpOn(Widget w, int n, XtArgVal *value)
  *	Returns: The created widget.
  */
 
-Widget XmCreateColorSelectionBox(Widget parent, String name, ArgList args, Cardinal num_args)
+Widget 
+XmCreateColorSelectionBox(
+    Widget parent, 
+    String name, 
+    ArgList args, 
+    Cardinal num_args)
 {
 	return (XtCreateWidget(name, xmColorSelectionBoxWidgetClass, parent, args, num_args));
 }
@@ -2463,12 +2647,20 @@ Widget XmCreateColorSelectionBox(Widget parent, String name, ArgList args, Cardi
  *   and a ColorSelectionBox child of the shell;
  *   returns the ColorSelectionBox widget.
  ****************/
-Widget XmCreateColorSelectionDialog(Widget parent, char *name, ArgList arglist, Cardinal argcount)
+Widget 
+XmCreateColorSelectionDialog(
+    Widget parent, 
+    char *name, 
+    ArgList arglist, 
+    Cardinal argcount)
 {
 	return XmeCreateClassDialog(xmColorSelectionBoxWidgetClass, parent, name, arglist, argcount) ;
 }
 
-Widget XmVaCreateColorSelectionBox(Widget parent, char *name, ...)
+Widget 
+XmVaCreateColorSelectionBox(
+    Widget parent, 
+    char *name, ...)
 {
 	register Widget w;
 	va_list var;
@@ -2484,7 +2676,10 @@ Widget XmVaCreateColorSelectionBox(Widget parent, char *name, ...)
 	return w;
 }
 
-Widget XmVaCreateManagedColorSelectionBox(Widget parent, char *name, ...)
+Widget 
+XmVaCreateManagedColorSelectionBox(
+    Widget parent, 
+    char *name, ...)
 {
 	Widget w= NULL;
 	va_list var;

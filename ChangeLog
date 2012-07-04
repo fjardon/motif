@@ -1,3 +1,8 @@
+2009-02-23  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c:
+	Refixed bug #1469 (XmColorSelectionBox: XmNautoUnmanage doesn't work)
+	Refactored some functions 
+
 2009-02-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/PanedW.c:
 	Fixed bug #1476 (PanedWindow orientation error)
