@@ -1,3 +1,8 @@
+2009-03-10  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Form.c:
+	Dropped fix for the bug #1299 (XmForm erroneously finds "Circular dependency"
+	if widgets are inter-attachmed in vertical/horizontal directions)
+
 2009-03-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES
 	Updated for openmotif 2.3.2 
