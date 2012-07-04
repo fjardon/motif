@@ -35,6 +35,8 @@ static char *rcsid = "$XConsortium: RCPopup.c /main/7 1996/03/28 15:15:24 daniel
 #endif
 #endif
 
+#define FIX_1412
+
 #include <stdio.h>
 #include <ctype.h>
 #include "XmI.h"
@@ -590,7 +592,11 @@ AddHandlersToPostFromWidget(
     * events get dispatched by the server to the client.
     */
    XtGrabButton (widget, RC_PostButton(popup), RC_PostModifiers(popup), 
+#ifdef FIX_1412
+		 TRUE, (unsigned int)ButtonReleaseMask, GrabModeAsync,
+#else
 		 TRUE, (unsigned int)ButtonReleaseMask, GrabModeSync,
+#endif
 		 GrabModeSync, None, cursor);
 }
 
