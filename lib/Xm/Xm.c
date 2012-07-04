@@ -47,6 +47,81 @@
  *   here because they are not used by everybody.
  *************************************************************************/
 
+#ifdef FIX_345
+Boolean _init_modifiers = TRUE;
+unsigned int NumLockMask = 0;
+unsigned int ScrollLockMask = 0;
+
+
+/*************************************<->*************************************
+ *
+ *  _XmInitModifiers (void)
+ *
+ *   Description:
+ *   -----------
+ *     Sets the appropriate mask for NumLock and ScrollLock
+ *
+ *
+ *   Inputs:
+ *   ------
+ *     None
+ * 
+ *   Outputs:
+ *   -------
+ *     None
+ *
+ *   Procedures Called
+ *   -----------------
+ *     None
+ *
+ *************************************<->***********************************/
+void
+_XmInitModifiers (void)
+{
+    XModifierKeymap *modmap;
+    Display *dpy;
+    KeySym *keymap;
+    unsigned int keycode;
+    int min_keycode;
+    int max_keycode;
+    int keysyms_per_keycode;
+    int i;
+
+    dpy = _XmGetDefaultDisplay();
+    NumLockMask = 0;
+    ScrollLockMask = 0;
+    keysyms_per_keycode = 0;
+    min_keycode = 0;
+    max_keycode = 0;
+
+    XDisplayKeycodes (dpy, &min_keycode, &max_keycode);
+    modmap = XGetModifierMapping (dpy);
+    keymap = XGetKeyboardMapping (dpy, min_keycode, max_keycode - min_keycode + 1, &keysyms_per_keycode);
+
+    if (modmap && keymap) {
+	for (i = 3 * modmap->max_keypermod; i < 8 * modmap->max_keypermod; i++) {
+	    keycode = modmap->modifiermap[i];
+	    if ((keycode >= min_keycode) && (keycode <= max_keycode)) {
+		int j;
+		KeySym *syms = keymap + (keycode - min_keycode) * keysyms_per_keycode;
+
+		for (j = 0; j < keysyms_per_keycode; j++)
+		    if (!NumLockMask && (syms[j] == XK_Num_Lock))
+			NumLockMask = (1 << (i / modmap->max_keypermod));
+		    else if (!ScrollLockMask && (syms[j] == XK_Scroll_Lock))
+			ScrollLockMask = (1 << (i / modmap->max_keypermod));
+	    }
+	}
+    }
+
+    /* Cleanup memory */
+    if (modmap)
+	XFreeModifiermap (modmap);
+
+    if (keymap)
+	XFree (keymap);
+}
+#endif
 
 
 /**************************************************************************
