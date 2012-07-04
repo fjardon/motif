@@ -1,3 +1,8 @@
+2009-05-15  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/MapEvents.c, lib/Xm/RCMenu.c, lib/Xm/Xm.c, lib/Xm/XmI.h:
+	Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
+	with CapsLock/ScrollLock/NumLock modifiers)
+
 2009-04-23  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac, config/util/makestrs.c, lib/Mrm/Makefile.am, lib/Xm/Makefile.am:
 	Added splint checking and splint target

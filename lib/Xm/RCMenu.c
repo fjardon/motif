@@ -1886,6 +1886,58 @@ _XmGetActiveTopLevelMenu(
    * topLevel = w;
 } 
 
+#ifdef FIX_345
+static void
+GrabKeyWithLockMask (
+        Widget widget,
+        KeyCode keycode,
+        Modifiers modifiers,
+        Boolean owner_events,
+        int pointer_mode, 
+        int keyboard_mode )
+{
+    /* Make sure the modifiers mask is known */
+    _XmCheckInitModifiers();
+
+    /* And grab all the key with all combinations of modifiers */
+    XtGrabKey(widget, keycode, modifiers,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|LockMask,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|ScrollLockMask,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|NumLockMask,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|LockMask|ScrollLockMask,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|LockMask|NumLockMask,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|ScrollLockMask|NumLockMask,
+            owner_events, pointer_mode, keyboard_mode );
+    XtGrabKey(widget, keycode, modifiers|LockMask|ScrollLockMask|NumLockMask,
+            owner_events, pointer_mode, keyboard_mode );
+}
+
+static void
+UngrabKeyWithLockMask (
+        Widget widget,
+        KeyCode keycode,
+        Modifiers modifiers)
+{
+    /* Make sure the modifiers are known */
+    _XmCheckInitModifiers();
+
+    /* And ungrab all combinations of known modifiers */
+    XtUngrabKey(widget, keycode, modifiers);
+    XtUngrabKey(widget, keycode, modifiers|LockMask);
+    XtUngrabKey(widget, keycode, modifiers|ScrollLockMask);
+    XtUngrabKey(widget, keycode, modifiers|NumLockMask);
+    XtUngrabKey(widget, keycode, modifiers|LockMask|ScrollLockMask);
+    XtUngrabKey(widget, keycode, modifiers|LockMask|NumLockMask);
+    XtUngrabKey(widget, keycode, modifiers|ScrollLockMask|NumLockMask);
+    XtUngrabKey(widget, keycode, modifiers|LockMask|ScrollLockMask|NumLockMask);
+}
+#endif
 /*
  * set up the grabs on the appropriate assoc widgets.  For a popup, this
  * is all of the widgets on the postFromList.  For a menubar and option
@@ -1909,14 +1961,24 @@ GrabKeyOnAssocWidgets(
    if (IsPopup(rowcol))
    {
       for (i=0; i < rowcol->row_column.postFromCount; i++)
+#ifdef FIX_345
+         GrabKeyWithLockMask (rowcol->row_column.postFromList[i], detail, modifiers,
+            False, GrabModeAsync, GrabModeAsync);         
+#else
          XtGrabKey(rowcol->row_column.postFromList[i], detail, modifiers,
             False, GrabModeAsync, GrabModeAsync);
+#endif
    }
    else if (IsBar(rowcol) || IsOption(rowcol))
    {
       _XmRCGetTopManager ((Widget) rowcol, &topManager);
+#ifdef FIX_345      
+      GrabKeyWithLockMask (topManager, detail, modifiers, False, 
+	 GrabModeAsync, GrabModeAsync);      
+#else
       XtGrabKey(topManager, detail, modifiers, False, 
 	 GrabModeAsync, GrabModeAsync);
+#endif
    }
    else if (IsPulldown(rowcol))
    {
@@ -1947,14 +2009,22 @@ UngrabKeyOnAssocWidgets(
       {
 	 assocWidget = rowcol->row_column.postFromList[i];
 	 if (!assocWidget->core.being_destroyed)
+#ifdef FIX_345	 
+	    UngrabKeyWithLockMask (assocWidget, detail, modifiers);
+#else
 	    XtUngrabKey(assocWidget, detail, modifiers);
+#endif	    
       }
    }
    else if (IsBar(rowcol) || IsOption(rowcol))
    {
       _XmRCGetTopManager ((Widget) rowcol, &assocWidget);
       if (!assocWidget->core.being_destroyed)
+#ifdef FIX_345
+         UngrabKeyWithLockMask (assocWidget, detail, modifiers);
+#else
          XtUngrabKey(assocWidget, detail, modifiers);
+#endif
    }
    else if (IsPulldown(rowcol))
    {

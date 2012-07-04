@@ -41,6 +41,24 @@
 extern "C" {
 #endif
 
+#define FIX_345
+
+#ifdef FIX_345
+extern Boolean _init_modifiers;
+extern unsigned int NumLockMask;
+extern unsigned int ScrollLockMask;
+
+void _XmInitModifiers (void);
+#define _XmCheckInitModifiers() 						\
+    { 									\
+	if (_init_modifiers) 						\
+	{ 								\
+	    _XmInitModifiers(); 					\
+	    _init_modifiers = FALSE; 					\
+	}								\
+    }
+#endif
+
 #ifndef DEBUG
 # define assert(assert_exp)
 #elif (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
