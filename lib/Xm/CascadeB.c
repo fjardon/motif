@@ -594,7 +594,9 @@ Redisplay(
         XEvent *event,
         Region region )
 {
-
+#ifdef FIX_1395
+    Pixel tmpc;
+#endif
     if (XtIsRealized (cb)) 
     {
 	XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(cb));
@@ -628,7 +630,7 @@ Redisplay(
 		((XmCascadeButtonWidget)cb)->label.normal_GC = 
 		    CB_BackgroundGC(cb);
 	    }
-#if FIX_1395
+#ifdef FIX_1395
 	    /* 1395:
 	     By default (if not etched and not armed) window (widget) have 
 	     background color that used to draw widget bg. When widget is 
@@ -638,7 +640,7 @@ Redisplay(
 	     We should replace colors before expose from label
 	     and change it back after repainting.
 	    */
-            Pixel tmpc = cb->core.background_pixel;
+            tmpc = cb->core.background_pixel;
             XSetWindowBackground(XtDisplay(cb), XtWindow(cb), select_pix);
 #endif
 
@@ -646,7 +648,7 @@ Redisplay(
 	    expose = xmLabelClassRec.core_class.expose;
 	    _XmProcessUnlock();
 	    (*expose)((Widget) cb, event, region);
-#if FIX_1395
+#ifdef FIX_1395
 	    /*
 	     Set correct window background (label is repainted, role back)
 	    */

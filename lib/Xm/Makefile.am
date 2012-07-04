@@ -306,12 +306,12 @@ $(CAT_FILES): Xm.msg
 	$(top_builddir)/localized/util/mkcatdefs XmMsgCatI.h $(srcdir)/Xm.msg >$(top_builddir)/localized/C/msg/Xm.msg
 	gencat Xm.cat $(top_builddir)/localized/C/msg/Xm.msg
 
-    SPLINT_EXTRAFLAGS = -I. +posixlib
+    SPLINT_EXTRAFLAGS = -I/usr/include -I. +posixlib -nestcomment
 else
-    SPLINT_EXTRAFLAGS = -I. -DNO_MESSAGE_CATALOG +posixlib -immediatetrans
+    SPLINT_EXTRAFLAGS = -I/usr/include -I. -DNO_MESSAGE_CATALOG +posixlib -nestcomment
 endif
 
 splint: $(STRING_FILES)
-	$(SPLINT) $(top_srcdir)/lib/Xm/*.c $(INCLUDES) $(SPLINT_EXTRAFLAGS)
+	$(SPLINT) $(INCLUDES) $(SPLINT_EXTRAFLAGS) $(top_srcdir)/lib/Xm/*.c
 
 #include $(srcdir)/check_headers.am
