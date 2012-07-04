@@ -79,7 +79,8 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
   (cons->att[j].w)
   
 #define IS_ATTACHED_WIDGET(cons, j) \
-  (cons->att[j].type == XmATTACH_WIDGET || cons->att[j].type == XmATTACH_OPPOSITE_WIDGET)
+  ((cons->att[j].type == XmATTACH_WIDGET || cons->att[j].type == XmATTACH_OPPOSITE_WIDGET) \
+  && cons->att[j].w != (Widget) NULL)
 #endif /* FIX_1299 */
 
 /* convenient magic numbers */
