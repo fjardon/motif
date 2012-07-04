@@ -181,6 +181,11 @@ void selectColor(Widget w, XtPointer client_data, XtPointer call_data)
 	Arg args[10];
 	int n = 0;
 	unsigned char help;
+	XColor screen_in_out;
+	int status;
+	Colormap cm;
+	int R,G,B;
+	R=G=B=128;
 
 	XtVaGetValues(helpOnValueTrueToggleButton, XmNset, &help, NULL);
 	
@@ -195,9 +200,15 @@ void selectColor(Widget w, XtPointer client_data, XtPointer call_data)
 		break;
 	}
 	
-	if (colorSelectionDialog == NULL) {
-		XtSetArg(args[n], XmNcolorValue, 0xFFFFFFFF); n++;
+	screen_in_out.red=R<<8;
+	screen_in_out.green=G<<8;
+	screen_in_out.blue=B<<8;
+	XtVaGetValues(w, XmNcolormap, &cm);
 		
+	status = XAllocColor(XtDisplay(w), cm, &screen_in_out);
+	if (colorSelectionDialog == NULL) {
+		n=0;
+		XtSetArg(args[n], XmNcolorValue, screen_in_out.pixel); n++;
 		colorSelectionDialog = XmCreateColorSelectionDialog(top, "ColorSelectionDialog", args, n);
 
 		XtAddCallback(colorSelectionDialog, XmNokCallback, colorSelectionDialogOkCallback, client_data);

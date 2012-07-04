@@ -1,3 +1,7 @@
+2009-05-05  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c, demos/programs/ColorSelBox/colorselboxdemo.c:
+	Fixed color dropper bad icon
+
 2009-04-23  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac, config/util/makestrs.c, lib/Mrm/Makefile.am, lib/Xm/Makefile.am:
 	Added splint checking and splint target
