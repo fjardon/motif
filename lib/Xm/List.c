@@ -2473,7 +2473,11 @@ DrawItems(XmListWidget lw,
 	    }
 	  else
 	    {
+#ifdef FIX_1381
+	      _XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
+#else
 	      _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
+#endif
 	      _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
 	    }
 	  _XmRendFGState(lw->list.scratchRend) = XmFORCE_COLOR;
@@ -2481,7 +2485,14 @@ DrawItems(XmListWidget lw,
 	}
       else
 	{
+#ifdef FIX_1381
+	  if (!XtIsSensitive((Widget)lw))
+	      _XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
+	  else
 	  _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
+#else
+	 _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
+#endif
 	  _XmRendFGState(lw->list.scratchRend) = XmAS_IS;
 	  _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
 	  _XmRendBGState(lw->list.scratchRend) = XmAS_IS;
@@ -2764,14 +2775,12 @@ MakeGC(XmListWidget lw)
 #ifdef FIX_1381
 /*added for gray insensitive foreground (instead stipple)*/
   values.foreground = _XmAssignInsensitiveColor((Widget)lw);
-  valueMask |=  GCFillStyle;
 #else
   values.foreground = lw->primitive.foreground;
   valueMask |= GCStipple | GCFillStyle;
-#endif
-
   values.fill_style = FillOpaqueStippled;
   values.stipple = _XmGetInsensitiveStippleBitmap((Widget) lw);
+#endif
 
   lw->list.InsensitiveGC = XtAllocateGC((Widget) lw, lw->core.depth,
 					valueMask, &values, modifyMask, 0);

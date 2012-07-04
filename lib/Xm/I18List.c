@@ -2149,6 +2149,7 @@ CreateGCs(Widget w)
 
 #ifdef FIX_1381
 	/*added for gray insensitive foreground (instead stipple)*/
+	temp = values.foreground;
     values.foreground=_XmAssignInsensitiveColor(w);
 #endif
 
@@ -2167,7 +2168,9 @@ CreateGCs(Widget w)
     	XmI18List_entry_background_stippled_gc(ilist) = XtGetGC(w, smask, &values);
     }
 
+#ifndef FIX_1381
     temp = values.foreground;
+#endif
     values.foreground = values.background;
     values.background = temp;
     XmI18List_rev_gc(ilist) = XtGetGC(w, mask, &values);
