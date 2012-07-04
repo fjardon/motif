@@ -1,3 +1,7 @@
+2009-03-04  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmString.c
+	Added missing 'O' character to UTF8_SUPPORTED macro 
+
 2009-03-02  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
 	Refixed bug #1299 (XmForm erroneously finds "Circular dependency"

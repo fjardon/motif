@@ -3663,7 +3663,7 @@ SubStringPosition(
 	    x + abs(XwcTextEscapement(font_set, (wchar_t *)a, 
 				      begin/sizeof(wchar_t)));
         } else {
-#ifdef UTF8_SUPPRTED
+#ifdef UTF8_SUPPORTED
             if (utf8)
                 *under_begin =
                     x + abs(Xutf8TextEscapement(font_set, a, begin));
