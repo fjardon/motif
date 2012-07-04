@@ -1,3 +1,10 @@
+2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Form.c:
+	Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
+	if widgets are inter-attachmed in vertical/horizontal directions)
+	
+========================= Open Motif 2.3.2 released ============================	
+
 2009-03-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES, RELEASE:
 	Updated for openmotif 2.3.2 
@@ -105,7 +112,7 @@
 	* Makefile.am:
 	Added ACLOCAL_AMFLAGS
 	
-========================= Open Motif 2.3.1 released ==============================	
+========================= Open Motif 2.3.1 released ============================	
 
 2008-09-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:
@@ -232,7 +239,7 @@
 	* ac_find_xft.m4:
 	Fixed bug #1429 (Build failure with libtool-2.2.4)
 
-========================= Open Motif 2.3.1 beta 1 released ================================
+======================= Open Motif 2.3.1 beta 1 released =======================
 
 2008-05-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:

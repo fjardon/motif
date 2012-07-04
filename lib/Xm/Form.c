@@ -49,6 +49,8 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
 
+#define FIX_1299
+
 #define MESSAGE1	_XmMMsgForm_0000
 #define MESSAGE5	_XmMMsgForm_0002
 #define MESSAGE7 	_XmMMsgForm_0003
@@ -71,6 +73,15 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 
 #define SIBLINGS(w,s)	(((w != NULL) && (s != NULL)) &&\
 			 (XtParent(w) == XtParent(s)))
+
+#ifdef FIX_1299
+#define ATTACHED_WIDGET(cons, j) \
+  (cons->att[j].w)
+  
+#define IS_ATTACHED_WIDGET(cons, j) \
+  ((cons->att[j].type == XmATTACH_WIDGET || cons->att[j].type == XmATTACH_OPPOSITE_WIDGET) \
+  && cons->att[j].w != (Widget) NULL)
+#endif /* FIX_1299 */
 
 /* convenient magic numbers */
 
@@ -142,6 +153,18 @@ static void Redisplay(
                         Widget fw,
                         XEvent *event,
                         Region region) ;
+#ifdef FIX_1299
+static void UpdateAttachments(
+                        XmFormWidget fw,
+                        Widget wid,
+                        Widget instigator,
+                        XtWidgetGeometry* inst_geometry);
+static void PlaceChild(
+                        XmFormWidget fw,
+                        Widget child,
+                        Widget instigator,
+                        XtWidgetGeometry* inst_geometry);
+#endif /* FIX_1299 */
 static void PlaceChildren( 
                         XmFormWidget fw,
                         Widget instigator,
@@ -1263,6 +1286,19 @@ PlaceChildren(
         XtWidgetGeometry *inst_geometry )
 {
     Widget child;
+    
+#ifdef FIX_1299
+    for (child = fw->form.first_child;
+        child != NULL;
+        child = (GetFormConstraint(child))->next_sibling) {
+      /* Place child itself */
+      PlaceChild(fw, child, instigator, inst_geometry);
+
+      /* Update all attached widgets 
+       * according to the placement of a child */
+      UpdateAttachments(fw, child, instigator, inst_geometry);
+    }
+#else
     register XmFormConstraint c;
     int height, width;
     Dimension border_width;
@@ -1323,8 +1359,95 @@ PlaceChildren(
 	  }
 	}
       }
+#endif /* FIX_1299 */
 }
 
+#ifdef FIX_1299
+static void
+UpdateAttachments(
+    XmFormWidget fw,
+    Widget wid,
+    Widget instigator,
+    XtWidgetGeometry* inst_geometry)
+{
+  register XmFormConstraint c;
+  c = GetFormConstraint(wid);
+  
+  if (IS_ATTACHED_WIDGET(c, LEFT))
+      PlaceChild(fw, ATTACHED_WIDGET(c, LEFT), instigator, inst_geometry);
+  if (IS_ATTACHED_WIDGET(c, RIGHT))
+      PlaceChild(fw, ATTACHED_WIDGET(c, RIGHT), instigator, inst_geometry);
+  if (IS_ATTACHED_WIDGET(c, TOP))
+      PlaceChild(fw, ATTACHED_WIDGET(c, TOP), instigator, inst_geometry);
+  if (IS_ATTACHED_WIDGET(c, BOTTOM))
+      PlaceChild(fw, ATTACHED_WIDGET(c, BOTTOM), instigator, inst_geometry);
+}
+
+static void
+PlaceChild(
+        XmFormWidget fw,
+        Widget child,
+        Widget instigator,
+        XtWidgetGeometry* inst_geometry)
+{
+  register XmFormConstraint c;
+  int height, width;
+  Dimension border_width;
+  int near_edge;
+
+  if (!XtIsManaged(child))
+	    return;
+
+	c = GetFormConstraint(child);
+	
+	CalcEdgeValues(child, TRUE, instigator, inst_geometry, 
+		       NULL, NULL);
+
+	if ((child == instigator) &&
+	    (inst_geometry->request_mode & CWBorderWidth))
+	    border_width = inst_geometry->border_width;
+	else
+	    border_width = ((RectObj) child)->rectangle.border_width;
+
+        if (LayoutIsRtoLM(fw)) {
+	  /* switch the meanings of left and right attachements */
+	  width = c->att[LEFT].value - c->att[RIGHT].value - (2 * border_width);
+	  near_edge = RIGHT;
+	} else {
+	  width = c->att[RIGHT].value - c->att[LEFT].value - (2 * border_width);
+	  near_edge = LEFT;
+	}
+	height = c->att[BOTTOM].value - c->att[TOP].value
+	    - (2 * border_width);
+
+	if (width <= 0) width = 1;
+	if (height <= 0) height = 1;
+
+	if ((c->att[near_edge].value != ((RectObj) child)->rectangle.x) ||
+	    (c->att[TOP].value != ((RectObj) child)->rectangle.y)  ||
+	    (width != ((RectObj) child)->rectangle.width)          || 
+	    (height != ((RectObj) child)->rectangle.height)        ||
+	    (border_width != ((RectObj) child)->rectangle.border_width)) {
+	  
+	  /* Yes policy everywhere, so don't resize the instigator */
+	  if (child != instigator) {
+	    XmeConfigureObject(child,
+			       c->att[near_edge].value, 
+			       c->att[TOP].value,
+			       width, height, border_width);
+	  } else {
+	    XmeConfigureObject(child,
+			       c->att[near_edge].value, 
+			       c->att[TOP].value,
+			       child->core.width, child->core.height, 
+			       child->core.border_width);
+	    child->core.width = width ;
+	    child->core.height = height ;
+	    child->core.border_width = border_width ;
+	  }
+	}
+}
+#endif /* FIX_1299 */
 
 /************************************************************************
  *
@@ -2030,6 +2153,7 @@ SortChildren(
 						(XtIsRectObj(att_widget)))
 					{
 						c1 = GetFormConstraint (att_widget);
+						
 						if (!c1->sorted)
 							sortable = False;
 					}
@@ -2056,6 +2180,7 @@ SortChildren(
 			last_child = child;
 			c->sorted = True;
 		}
+#ifndef FIX_1299
 
 		else
 		{
@@ -2065,7 +2190,39 @@ SortChildren(
 			XmeWarning( (Widget) fw, MESSAGE5);
 			return;
 		}
+#endif
 	}
+
+#ifdef FIX_1299
+  /*Add other children that haven't been sorted*/
+	for (i = 0; i < fw->composite.num_children; i++)
+	{
+		child = fw->composite.children[i];
+
+    c = GetFormConstraint(child);
+    
+    if (!XtIsRectObj(child) || c->sorted)
+			continue;
+		
+    if(!c->sorted) {
+			if (last_child == NULL) 
+			{
+				c->next_sibling = fw->form.first_child;
+				fw->form.first_child = child;
+			  }
+			else
+			{
+				c1 = GetFormConstraint(last_child);
+				c->next_sibling = c1->next_sibling;
+				c1->next_sibling = child;
+			}
+
+			last_child = child;
+			c->sorted = True;
+		}
+  }
+#endif
+
 }
 
 
