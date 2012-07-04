@@ -1964,11 +1964,10 @@ cb_ChangeColor(
 	XmColorSelectionBoxWidget csb;
 	char str[10];
 	int r, g, b, h, s, v;
-	static Boolean allow;
+	static Boolean allow = True;
 	char *sr, *sg, *sb, *sh, *ss, *sv;
 
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
-	allow = True;
 	
 	if(!allow || !XmColorSB_allow_callbacks(csb) || !XtIsManaged((Widget)csb))
 		return;
