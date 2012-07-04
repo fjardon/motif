@@ -1,4 +1,8 @@
 2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c:
+	Fixed 8 bit depth failule
+
+2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
 	Reversed MAX_LOOP value to 10000
 
