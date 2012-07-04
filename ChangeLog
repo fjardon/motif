@@ -1,3 +1,7 @@
+2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Form.c:
+	Reversed MAX_LOOP value to 10000
+
 2009-04-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
 	Refixed bug #1299 (XmForm erroneously finds "Circular dependency"
