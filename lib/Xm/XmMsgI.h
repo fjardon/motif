@@ -329,6 +329,7 @@ externalref nl_catd Xm_catd;
 #define _XmMMsgColorSB_0007  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0007, _XmMsgColorSB_0007)
 #define _XmMMsgColorSB_0008  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0008, _XmMsgColorSB_0008)
 #define _XmMMsgColorSB_0009  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0009, _XmMsgColorSB_0009)
+#define _XmMMsgColorSB_0010  	 	_XmCatgets(Xm_catd, MS_ColorSB, MSG_ColorSB_0010, _XmMsgColorSB_0010)
 
 /*
 #define _XmMMsgTableLayout_0001     _XmCatgets(Xm_catd, MS_TableLayout, MSG_TableLayout_0001, _XmMsgTableLayout_0001)

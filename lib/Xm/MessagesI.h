@@ -360,6 +360,7 @@ externalref _XmConst char *_XmMsgColorSB_0006 ;
 externalref _XmConst char *_XmMsgColorSB_0007 ;
 externalref _XmConst char *_XmMsgColorSB_0008 ;
 externalref _XmConst char *_XmMsgColorSB_0009 ;
+externalref _XmConst char *_XmMsgColorSB_0010 ;
 
 externalref _XmConst char *XME_WARNING;
 

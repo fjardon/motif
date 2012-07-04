@@ -19,7 +19,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include <X11/cursorfont.h>
+
 #include "ColorSBP.h"
+#include "TextFP.h"
 
 #include <Xm/Xm.h>
 #include <Xm/VaSimpleP.h>
@@ -49,16 +52,25 @@
 #include "XmI.h"
 #include <Xm/RowColumnP.h>
 #include "MessagesI.h"
+#include "IconButton.h"
 
-#define BASIC_COLOR_STRING	_XmMMsgColorSB_0001
-#define CUSTOM_COLOR_STRING	_XmMMsgColorSB_0002
-#define HUE_STRING			_XmMMsgColorSB_0003
-#define SAT_STRING			_XmMMsgColorSB_0004
-#define VAL_STRING			_XmMMsgColorSB_0005
-#define RED_STRING			_XmMMsgColorSB_0006
-#define GREEN_STRING		_XmMMsgColorSB_0007
-#define BLUE_STRING			_XmMMsgColorSB_0008
-#define ADD_COLOR_STRING	_XmMMsgColorSB_0009
+#define BASIC_COLOR_STRING		_XmMMsgColorSB_0001
+#define CUSTOM_COLOR_STRING		_XmMMsgColorSB_0002
+#define HUE_STRING				_XmMMsgColorSB_0003
+#define SAT_STRING				_XmMMsgColorSB_0004
+#define VAL_STRING				_XmMMsgColorSB_0005
+#define RED_STRING				_XmMMsgColorSB_0006
+#define GREEN_STRING			_XmMMsgColorSB_0007
+#define BLUE_STRING				_XmMMsgColorSB_0008
+#define ADD_COLOR_STRING		_XmMMsgColorSB_0009
+#define SELECTED_COLOR_STRING	_XmMMsgColorSB_0010
+
+static unsigned char DROPPER_PIXMAP[] = {
+   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x03, 0x00,
+   0x18, 0x04, 0x00, 0xa0, 0x08, 0x00, 0x10, 0x04, 0x00, 0xa4, 0x0d, 0x00,
+   0x94, 0xf3, 0x00, 0x0c, 0x03, 0x01, 0x90, 0xf0, 0x03, 0xa0, 0xf4, 0x03,
+   0x00, 0xea, 0x03, 0x48, 0x2a, 0x02, 0x10, 0xfe, 0x02, 0x60, 0x22, 0x00,
+   0xc0, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }; 
 
 /************************************************************
  *       TYPEDEFS AND DEFINES
@@ -86,6 +98,10 @@ if (_XmGeoSetupKid (boxPtr, XmColorSB_WorkArea(csb))) \
 	++layoutPtr; \
 }
 
+#define CheckBounds(val, minVal, maxVal) \
+  val=(val>maxVal)?maxVal:val; \
+  val=(val<minVal)?minVal:val;
+
 typedef struct
 {
 	XmKidGeometry filter_label;
@@ -96,9 +112,14 @@ typedef struct
 	Dimension delta_width;
 } CS_GeoExtensionRec;
 
+static Boolean is_grabbed = False;
+
 /************************************************************
  *       MACROS
  ************************************************************/
+
+#define MAX3(a,b,c) (a>b?MAX(a,c):MAX(b,c))
+#define MIN3(a,b,c) ((a>b)?MIN(b,c):MIN(a,c))
 
 /************************************************************
  *       GLOBAL DECLARATIONS
@@ -132,21 +153,17 @@ static void CreateVolumeGradient(XmColorSelectionBoxWidget, Visual*);
 static void ReDrawCrossPixel(XmColorSelectionBoxWidget, Position, Position, Visual*);
 static void DrawCross(XmColorSelectionBoxWidget, Position, Position);
 static void FillColorFields(XmColorSelectionBoxWidget);
-static int  DugitCut(Widget);
-static void CalculateColor(XmColorSelectionBoxWidget, Position, Position);
 static void trTable_Volume(Widget, XEvent*, String*, Cardinal*);
 static void cb_Volume(Widget, XtPointer, XtPointer);
 static void cb_Input(Widget, XtPointer, XtPointer);
-static void cb_ChangeCoordinateColor(Widget, XtPointer, XtPointer);
 static void cb_ChangeColor(Widget, XtPointer, XtPointer);
 static void cb_AppearCursor(Widget, XtPointer, XtPointer);
 static void cb_AddColor(Widget, XtPointer, XtPointer);
-static void cb_BrightnessChange(Widget, XtPointer, XtPointer);
 static void cb_PutColor(Widget, XEvent*, String*, Cardinal*);
 static void cb_Ok(Widget, XtPointer, XtPointer);
+static void cb_ChangeSelectedColor(Widget, XtPointer, XtPointer);
 static void ColorFieldCreate(Widget, Widget*, char*, unsigned long, Position, Position);
 static void LoadCustomColors(Widget, XmColorSelectionBoxWidget);
-static void LoadColorValues(XmColorSelectionBoxWidget);
 static void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget);
 static void ColorSelectionBoxCallback(Widget, XtPointer, XtPointer);
 static void GetValues_XmNredValue(Widget, int, XtArgVal*);
@@ -157,6 +174,13 @@ static void GetValues_XmNsatValue(Widget, int, XtArgVal*);
 static void GetValues_XmNbrightnessValue(Widget, int, XtArgVal*);
 static void GetValues_XmNhelpOn(Widget, int, XtArgVal*);
 static XmGeoMatrix ColorSelectionBoxGeoMatrixCreate(Widget, Widget, XtWidgetGeometry*);
+
+static void dropper_onKeyPress(Widget, XtPointer, XEvent*, Boolean*);
+static void dropper_onButtonPress(Widget, XtPointer, XEvent*, Boolean*);
+
+static void HSV2RGB(int, int, int, int*, int*, int*);
+static void RGB2HSV(int, int, int, int*, int*, int*);
+static char* RGB2String(int, int, int);
 
 /* unused */
 extern int _XmManagerHelp(Widget, XEvent*, String*,/* unused */Cardinal*); 
@@ -526,18 +550,14 @@ SetValues(
 		if (XmColorSB_x(curr) != XmColorSB_x(csb)) {
 			sprintf(s, "%d", XmColorSB_x(csb));
 			XmTextFieldSetString(XmColorSB_hueF(csb), s);
-			XmColorSB_x(csb)=DugitCut(XmColorSB_hueF(csb));
+			XmColorSB_x(csb)=XmColorSB_x(curr);
 			FillColorFields(csb);
-			if (XmColorSB_im1(csb))
-				cb_ChangeCoordinateColor(XmColorSB_hueF(csb), csb, NULL);
 		}
 		if (XmColorSB_y(curr) != XmColorSB_y(csb)) {
 			sprintf(s, "%d", XmColorSB_y(csb));
 			XmTextFieldSetString(XmColorSB_satF(csb), s);
-			XmColorSB_y(csb)=DugitCut(XmColorSB_satF(csb));
+			XmColorSB_y(csb)=XmColorSB_y(curr);
 			FillColorFields(csb);
-			if (XmColorSB_im1(csb))
-				cb_ChangeCoordinateColor(XmColorSB_satF(csb), csb, NULL);
 		}
 
 		if (XmColorSB_red_value(curr) != XmColorSB_red_value(csb)) {
@@ -545,12 +565,14 @@ SetValues(
 			XmTextFieldSetString(XmColorSB_redF(csb), s);
 			ColorChanged=True;
 		}
-		if (XmColorSB_green_value(curr) != XmColorSB_green_value(csb)) {
+		
+    if (XmColorSB_green_value(curr) != XmColorSB_green_value(csb)) {
 			sprintf(s, "%d", XmColorSB_green_value(csb));
 			XmTextFieldSetString(XmColorSB_greenF(csb), s);
 			ColorChanged=True;
 		}
-		if (XmColorSB_blue_value(curr) != XmColorSB_blue_value(csb)) {
+		
+    if (XmColorSB_blue_value(curr) != XmColorSB_blue_value(csb)) {
 			sprintf(s, "%d", XmColorSB_blue_value(csb));
 			XmTextFieldSetString(XmColorSB_blueF(csb), s);
 			ColorChanged=True;
@@ -561,8 +583,6 @@ SetValues(
 		if (XmColorSB_brightness_volume(curr) != XmColorSB_brightness_volume(csb)) {
 			sprintf(s, "%d", XmColorSB_brightness_volume(csb));
 			XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
-			if (XmColorSB_im1(csb))
-				cb_BrightnessChange(XmColorSB_brightnessF(csb), csb, NULL);
 		}
 	}
 	if ( XmColorSB_helpOn(curr)!= XmColorSB_helpOn(csb)) {
@@ -573,8 +593,9 @@ SetValues(
 			XtManageChild(XmColorSB_pButtonHelp(csb));
 	}
 
-	if (((csb->bulletin_board.margin_width != curr->bulletin_board.margin_width) || (csb->bulletin_board.margin_height
-					!= curr->bulletin_board.margin_height))) {
+	if (((csb->bulletin_board.margin_width != curr->bulletin_board.margin_width) ||
+        (csb->bulletin_board.margin_height != curr->bulletin_board.margin_height))) 
+  {
 		XtWidgetProc resize;
 		_XmProcessLock();
 		resize = xmColorSelectionBoxClassRec.core_class.resize;
@@ -789,7 +810,7 @@ CreateColorMatrix(
 			R=255;
 			G=255-S;
 			B=255;
-			if (H>=(Q*5) && H<(Q*6)) {
+			if (H>=(Q*5) && H<=(Q*6)) {
 				XmColorSB_arr_col(w)[S][H].r=R;
 				XmColorSB_arr_col(w)[S][H].g=G;
 				XmColorSB_arr_col(w)[S][H].b=B-(int)(k*(H-Q*5));
@@ -819,68 +840,15 @@ static void
 Start(
     XmColorSelectionBoxWidget csb)
 {
-	float k;
-	char s[10];
+	XmColorSB_red_value(csb) = 0;
+	XmColorSB_green_value(csb) = 0;
+	XmColorSB_blue_value(csb) = 0;
+	XmColorSB_hue_value(csb) = 0;
+	XmColorSB_sat_value(csb) = 0;
+	XmColorSB_brightness_volume(csb) = 0;
 
-	if (XmColorSB_color_value(csb)!=0){
-		int r, g, b;
-		char s[10];
-		unsigned long p;
-		p = XmColorSB_color_value(csb);
-
-		r = p&0xff0000;
-		g = p&0x00ff00;
-		b = p&0x0000ff;
-
-		r = r>>16;
-		g = g>>8;
-
-		sprintf(s, "%d", r);
-		XmTextFieldSetString(XmColorSB_redF(csb), s);
-		sprintf(s, "%d", g);
-		XmTextFieldSetString(XmColorSB_greenF(csb), s);
-		sprintf(s, "%d", b);
-		XmTextFieldSetString(XmColorSB_blueF(csb), s);
-
-		cb_ChangeColor(NULL, csb , NULL);
-	}
-	else if ( XmColorSB_x(csb)!=0 ||  XmColorSB_y(csb)!=0)  {
-		sprintf(s, "%d", XmColorSB_x(csb));
-		XmTextFieldSetString(XmColorSB_hueF(csb), s);
-		XmColorSB_x(csb)=DugitCut(XmColorSB_hueF(csb));
-
-		sprintf(s, "%d", XmColorSB_y(csb));
-		XmTextFieldSetString(XmColorSB_satF(csb), s);
-		XmColorSB_y(csb)=DugitCut(XmColorSB_satF(csb));
-
-		FillColorFields(csb);
-		DrawCross(csb, XmColorSB_x(csb), XmColorSB_y(csb));
-		cb_ChangeCoordinateColor(XmColorSB_hueF(csb), csb, NULL);
-
-		sprintf(s, "%d", XmColorSB_brightness_volume(csb));
-		XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
-		cb_BrightnessChange(XmColorSB_brightnessF(csb), csb, NULL);
-	}
-	else {
-		sprintf(s, "%d", XmColorSB_red_value(csb));
-		XmTextFieldSetString(XmColorSB_redF(csb), s);
-
-		sprintf(s, "%d", XmColorSB_green_value(csb));
-		XmTextFieldSetString(XmColorSB_greenF(csb), s);
-
-		sprintf(s, "%d", XmColorSB_blue_value(csb));
-		XmTextFieldSetString(XmColorSB_blueF(csb), s);
-
-		cb_ChangeColor(NULL, csb, NULL);
-
-		sprintf(s, "%d", XmColorSB_x(csb));
-		XmTextFieldSetString(XmColorSB_hueF(csb), s);
-		XmColorSB_x(csb)=DugitCut(XmColorSB_hueF(csb));
-
-		sprintf(s, "%d", XmColorSB_y(csb));
-		XmTextFieldSetString(XmColorSB_satF(csb), s);
-		XmColorSB_y(csb)=DugitCut(XmColorSB_satF(csb));
-	}
+	XmColorSB_allow_callbacks(csb) = True;
+	XmTextFieldSetString(XmColorSB_brightnessF(csb), "255");
 }
 
 static void 
@@ -918,8 +886,8 @@ CreateVolumeGradient(
 			XmColorSB_im2(csb)->data);
 		}
 	}
-	XPutImage(XtDisplay(csb), XtWindow(XmColorSB_drawingAreaVolume(csb)),XmColorSB_gc2(csb), XmColorSB_im2(csb), 0,0,0,0, DRAW_VOLUME_WIDTH, S_len);
-	DrawVolume(csb, XmColorSB_brightness_volume(csb));
+
+  XPutImage(XtDisplay(csb), XtWindow(XmColorSB_drawingAreaVolume(csb)),XmColorSB_gc2(csb), XmColorSB_im2(csb), 0,0,0,0, DRAW_VOLUME_WIDTH, S_len);
 }
 
 /*!	Function Name: ChangeBackgroundColor
@@ -949,6 +917,14 @@ ChangeBackgroundColor(
 		Arg arg = { XmNbackground, screen_in_out.pixel };
 		XtSetValues(XmColorSB_color(csb), &arg, 1);
 	}
+
+	XmColorSB_allow_callbacks(csb) = False;
+
+	char *colorVal = RGB2String(XmColorSB_red_value(csb), XmColorSB_green_value(csb), XmColorSB_blue_value(csb));
+	if(strcmp(colorVal, XmTextFieldGetString(XmColorSB_selectedColorF(csb))))
+		XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
+
+	XmColorSB_allow_callbacks(csb) = True;
 }
 
 /*!	Function Name: DrawVolume
@@ -969,14 +945,15 @@ DrawVolume(
 	float k, k1, k2;
 	Visual *visual= NULL;
 	Widget parent_shell = (Widget)csb;
-	
-  unsigned long WHITE= XWhitePixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
-  unsigned long BLACK= XBlackPixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
-  
-	if (y < 0)
-		y = 0;
-	if (y > S_len-1)
-		y = S_len-1;
+
+	unsigned long WHITE= XWhitePixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
+	unsigned long BLACK= XBlackPixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
+
+	y = (y<0)?0:y;
+	y = (y>255)?255:y;
+
+	CreateVolumeGradient(csb, NULL);
+
 	while (!XtIsShell(parent_shell))
 		parent_shell = XtParent(parent_shell);
 	XtVaGetValues(parent_shell, XmNvisual, &visual, NULL);
@@ -998,15 +975,18 @@ DrawVolume(
 	G = XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].g;
 	B = XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].b;
 	for (x = 0; x<XmColorSB_im2(csb)->width; x++) {
-		StorePixel(visual, XtScreen(csb), (int)(R*k), (int)(G*k), (int)(B*k), (int)(x + ((S_len - 1) - (y_old)) * DRAW_VOLUME_WIDTH),
-		XmColorSB_im2(csb)->data);
+		StorePixel(visual, XtScreen(csb), 
+			(int)(R*k), (int)(G*k), (int)(B*k), (int)(x + ((S_len - 1) - (y_old)) * DRAW_VOLUME_WIDTH),
+			XmColorSB_im2(csb)->data);
 
 		if (y_old != 0)
-			StorePixel(visual, XtScreen(csb), (int)(R*k1), (int)(G*k1), (int)(B*k1), (int)(x + ((S_len -1) - (y_old - 1)) * DRAW_VOLUME_WIDTH),
-			XmColorSB_im2(csb)->data);
+			StorePixel(visual, XtScreen(csb), 
+				(int)(R*k1), (int)(G*k1), (int)(B*k1), (int)(x + ((S_len -1) - (y_old - 1)) * DRAW_VOLUME_WIDTH),
+				XmColorSB_im2(csb)->data);
 		if (y_old != S_len-1)
-			StorePixel(visual, XtScreen(csb), (int)(R*k2), (int)(G*k2), (int)(B*k2), (int)(x + ((S_len-1) - (y_old + 1)) * DRAW_VOLUME_WIDTH),
-			XmColorSB_im2(csb)->data);
+			StorePixel(visual, XtScreen(csb), 
+				(int)(R*k2), (int)(G*k2), (int)(B*k2), (int)(x + ((S_len-1) - (y_old + 1)) * DRAW_VOLUME_WIDTH),
+				XmColorSB_im2(csb)->data);
 
 		/*! draw three lines Black, White and Black for good looking on all color types */
 		if (((S_len-1) - y) > 0)
@@ -1016,11 +996,14 @@ DrawVolume(
 			XPutPixel(XmColorSB_im2(csb), x,((S_len-1) - y) + 1, BLACK);
 	}
 	y_old = y;
-	sprintf(s, "%d", y);
-	XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
 
-	ChangeBackgroundColor(csb, y);
-	XmColorSB_brightness_volume(csb) = y;
+	/*set brightness with callback call*/
+	if(y!=XmColorSB_brightness_volume(csb)){
+		sprintf(s, "%d", y);
+		XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
+	}
+
+	ChangeBackgroundColor(csb, XmColorSB_brightness_volume(csb));
 
 	XPutImage(XtDisplay(csb), XtWindow(XmColorSB_drawingAreaVolume(csb)),XmColorSB_gc2(csb), XmColorSB_im2(csb), 0,0,0,0, DRAW_VOLUME_WIDTH, S_len);
 }
@@ -1080,6 +1063,7 @@ DrawMatrix(
 	CreateColorMatrix(csb, visual);
 	Start(csb);
 	CreateVolumeGradient(csb, visual);
+	
 	XPutImage(dp, XtWindow(XmColorSB_drawingAreaMatrix(csb)), XmColorSB_gc(csb), XmColorSB_im1(csb), 0, 0, 0, 0, H_len, S_len);
 	XPutImage(dp, XtWindow(XmColorSB_drawingAreaVolume(csb)), XmColorSB_gc2(csb), XmColorSB_im2(csb), 0, 0, 0, 0, DRAW_VOLUME_WIDTH, S_len);
 }
@@ -1151,6 +1135,8 @@ CreateColorMatrixWindow(
 	Dimension label_w = 40, label_h = 30;
 	Dimension Text_w = 40, Text_h = 30;
 	Dimension Color_w = 98, Color_h = 90;
+
+	Dimension shift = 0;
 
 	static char drawTranslations[] =
 		"#override \n\
@@ -1227,8 +1213,9 @@ CreateColorMatrixWindow(
 
 	XtAddCallback(XmColorSB_drawingAreaVolume(csb), XmNinputCallback, cb_Volume, csb);
 
+  /*******************************************/
 	ac = 0;
-	XtSetArg(args[ac], XmNx, x); ac++;
+	XtSetArg(args[ac], XmNx, 10); ac++;
 	XtSetArg(args[ac], XmNy, 15+ S_len+4); ac++;
 	XtSetArg(args[ac], XmNwidth, Color_w); ac++;
 	XtSetArg(args[ac], XmNheight,Color_h); ac++;
@@ -1246,7 +1233,6 @@ CreateColorMatrixWindow(
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
 	XtSetArg(args[ac], XmNx, x+Color_w+5); ac++;
 	XtSetArg(args[ac], XmNy, 20+S_len+4); ac++;
-	XtSetArg(args[ac], XmNwidth, label_w); ac++;
 	XmColorSB_labelHue(csb) = XmCreateLabel(fr, (char *)"LabelHue", args, ac);
 	XtManageChild(XmColorSB_labelHue(csb));
 	XmStringFree(xms);
@@ -1256,7 +1242,6 @@ CreateColorMatrixWindow(
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
 	XtSetArg(args[ac], XmNx, x+Color_w+5); ac++;
 	XtSetArg(args[ac], XmNy, 20+S_len+4+label_h); ac++;
-	XtSetArg(args[ac], XmNwidth, label_w); ac++;
 	XmColorSB_labelSat(csb) = XmCreateLabel(fr, (char *)"LabelSat", args, ac);
 	XtManageChild(XmColorSB_labelSat(csb));
 	XmStringFree(xms);
@@ -1266,17 +1251,71 @@ CreateColorMatrixWindow(
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
 	XtSetArg(args[ac], XmNx, x+Color_w+5); ac++;
 	XtSetArg(args[ac], XmNy, 20+S_len+4+2*label_h); ac++;
-	XtSetArg(args[ac], XmNwidth, label_w); ac++;
 	XmColorSB_labelVal(csb) = XmCreateLabel(fr, (char *)"LabelVal", args, ac);
 	XtManageChild(XmColorSB_labelVal(csb));
 	XmStringFree(xms);
 
+	/*now we have to update the positions of labels according to their size*/
+	int labelHueWidth = XmColorSB_labelHue(csb)->core.width;
+	int labelSatWidth = XmColorSB_labelSat(csb)->core.width;
+	int labelValWidth = XmColorSB_labelVal(csb)->core.width;
+
+	int maxLabelWidth = MAX3(labelHueWidth, labelSatWidth, labelValWidth);
+	shift =  XmColorSB_frameColor(csb)->core.width +
+		XmColorSB_frameColor(csb)->core.x +
+		maxLabelWidth + 5;
+
+	XtVaSetValues(XmColorSB_labelHue(csb), XmNx, 
+		shift-labelHueWidth,
+		NULL);
+	XtVaSetValues(XmColorSB_labelSat(csb), XmNx, 
+		shift-labelSatWidth,
+		NULL);
+	XtVaSetValues(XmColorSB_labelVal(csb), XmNx, 
+		shift-labelValWidth,
+		NULL);
+
+	shift += 5;
+
+	/*******************************/
+
+	ac = 0;
+	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
+	XtSetArg(args[ac], XmNy, 15+S_len+4); ac++;
+	XtSetArg(args[ac], XmNborderWidth, 0); ac++;
+	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
+	XtSetArg(args[ac], XmNvalue, "0"); ac++;
+	XmColorSB_hueF(csb) = XmCreateTextField(fr,	(char *)"HueF",	args, ac);
+	XtManageChild(XmColorSB_hueF(csb));
+
+	ac = 0;
+	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
+	XtSetArg(args[ac], XmNy, 15+S_len+4+label_h); ac++;
+	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
+	XtSetArg(args[ac], XmNvalue, "0"); ac++;
+	XmColorSB_satF(csb) = XmCreateTextField(fr, (char *)"SatF",	args, ac);
+	XtManageChild(XmColorSB_satF(csb));
+
+	ac = 0;
+	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
+	XtSetArg(args[ac], XmNy, 15+S_len+4+2*label_h); ac++;
+	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
+	XtSetArg(args[ac], XmNvalue, "0"); ac++;
+	XmColorSB_brightnessF(csb) = XmCreateTextField(fr, (char *)"BrightnessF", args,	ac);
+	XtManageChild(XmColorSB_brightnessF(csb));
+
+	shift += XmColorSB_brightnessF(csb)->core.width + 5;
+
+	/*******************************/
+
 	ac = 0;
 	xms=XmStringCreateLocalized(RED_STRING);
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+label_w+Text_w+10); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
 	XtSetArg(args[ac], XmNy, 20+S_len+5); ac++;
-	XtSetArg(args[ac], XmNwidth, label_w); ac++;
 	XmColorSB_labelR(csb) = XmCreateLabel(fr, (char *)"LabelR", args, ac);
 	XtManageChild(XmColorSB_labelR(csb));
 	XmStringFree(xms);
@@ -1284,9 +1323,8 @@ CreateColorMatrixWindow(
 	ac = 0;
 	xms=XmStringCreateLocalized(GREEN_STRING);
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+label_w+Text_w+10); ac++;
+	XtSetArg(args[ac], XmNx,shift); ac++;
 	XtSetArg(args[ac], XmNy, 20+S_len+4+label_h); ac++;
-	XtSetArg(args[ac], XmNwidth, label_w); ac++;
 	XmColorSB_labelG(csb) = XmCreateLabel(fr, (char *)"LabelG", args, ac);
 	XtManageChild(XmColorSB_labelG(csb));
 	XmStringFree(xms);
@@ -1294,88 +1332,114 @@ CreateColorMatrixWindow(
 	ac = 0;
 	xms=XmStringCreateLocalized(BLUE_STRING);
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+label_w+Text_w+10); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
 	XtSetArg(args[ac], XmNy, 20+S_len+4+2*label_h);	ac++;
-	XtSetArg(args[ac], XmNwidth, label_w); ac++;
 	XmColorSB_labelB(csb) = XmCreateLabel(fr, (char *)"LabelB", args, ac);
 	XtManageChild(XmColorSB_labelB(csb));
 	XmStringFree(xms);
 
-	ac = 0;
-	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+label_w+5); ac++;
-	XtSetArg(args[ac], XmNy, 15+S_len+4); ac++;
-	XtSetArg(args[ac], XmNborderWidth, 0); ac++;
-	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
-	XmColorSB_hueF(csb) = XmCreateTextField(fr,	(char *)"HueF",	args, ac);
-	XtManageChild(XmColorSB_hueF(csb));
+	int labelRedWidth   = XmColorSB_labelR(csb)->core.width;
+	int labelGreenWidth = XmColorSB_labelG(csb)->core.width;
+	int labelBlueWidth  = XmColorSB_labelB(csb)->core.width;
+
+	maxLabelWidth = MAX3(labelRedWidth, labelGreenWidth, labelBlueWidth);
+
+	shift += maxLabelWidth;
+
+	XtVaSetValues(XmColorSB_labelR(csb), XmNx, shift-labelRedWidth, NULL);
+	XtVaSetValues(XmColorSB_labelG(csb), XmNx, shift-labelGreenWidth, NULL);
+	XtVaSetValues(XmColorSB_labelB(csb), XmNx, shift-labelBlueWidth, NULL);
+
+	shift += 5;
+
+	/*******************************/
 
 	ac = 0;
 	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+label_w+5); ac++;
-	XtSetArg(args[ac], XmNy, 15+S_len+4+label_h); ac++;
-	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
-	XmColorSB_satF(csb) = XmCreateTextField(fr, (char *)"SatF",	args, ac);
-	XtManageChild(XmColorSB_satF(csb));
-
-	ac = 0;
-	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+label_w+5); ac++;
-	XtSetArg(args[ac], XmNy, 15+S_len+4+2*label_h); ac++;
-	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
-	XmColorSB_brightnessF(csb) = XmCreateTextField(fr, (char *)"BrightnessF", args,	ac);
-	XtManageChild(XmColorSB_brightnessF(csb));
-
-	ac = 0;
-	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+2*label_w+Text_w+10); ac++;
-	XtSetArg(args[ac], XmNborderWidth, 0); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
 	XtSetArg(args[ac], XmNy, 15+S_len+4); ac++;
 	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
+	XtSetArg(args[ac], XmNvalue, "0"); ac++;
 	XmColorSB_redF(csb) = XmCreateTextField(fr, (char *)"RedF", args, ac);
 	XtManageChild(XmColorSB_redF(csb));
 
 	ac = 0;
 	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+2*label_w+Text_w+10); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
 	XtSetArg(args[ac], XmNy, 15+S_len+4+label_h); ac++;
 	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
+	XtSetArg(args[ac], XmNvalue, "0"); ac++;
 	XmColorSB_greenF(csb) = XmCreateTextField(fr, (char *)"GreenF",	args, ac);
 	XtManageChild(XmColorSB_greenF(csb));
 
 	ac = 0;
 	XtSetArg(args[ac], XmNcursorPositionVisible, False); ac++;
-	XtSetArg(args[ac], XmNx, x+Color_w+2*label_w+Text_w+10); ac++;
+	XtSetArg(args[ac], XmNx, shift); ac++;
 	XtSetArg(args[ac], XmNy, 15+S_len+4+2*label_h); ac++;
 	XtSetArg(args[ac], XmNwidth, Text_w); ac++;
+	XtSetArg(args[ac], XmNvalue, "0"); ac++;
 	XmColorSB_blueF(csb) = XmCreateTextField(fr, (char *)"BlueF", args, ac);
 	XtManageChild(XmColorSB_blueF(csb));
 
 	ac = 0;
-	xms=XmStringCreateLocalized(ADD_COLOR_STRING);
+	Pixmap xpm = XCreateBitmapFromData(XtDisplay(csb), RootWindowOfScreen(XtScreen(csb)), (char*)DROPPER_PIXMAP, 20, 20 );
+	XtSetArg(args[ac], XmNx, XmColorSB_redF(csb)->core.x); ac++;
+	XtSetArg(args[ac], XmNy, 15+S_len+9+Color_h); ac++;
+	XtSetArg(args[ac], XmNpixmap, xpm); ac++;
+	XtSetArg(args[ac], XmNiconPlacement, XmIconOnly); ac++;
+	XmColorSB_dropper(csb) = XmCreateIconButton(fr, (char *)"Dropper", args, ac);
+	XtManageChild(XmColorSB_dropper(csb));
+	XtAddEventHandler(XmColorSB_dropper(csb), KeyPressMask, False, dropper_onKeyPress, (XtPointer)csb);
+	XtAddEventHandler(XmColorSB_dropper(csb), ButtonPressMask, False, dropper_onButtonPress, (XtPointer)csb);
+
+	ac = 0;
+	xms=XmStringCreateLocalized(SELECTED_COLOR_STRING);
 	XtSetArg(args[ac], XmNlabelString, xms); ac++;
 	XtSetArg(args[ac], XmNx, x); ac++;
-	XtSetArg(args[ac], XmNy, 15+S_len+9+Color_h); ac++;
-	XtSetArg(args[ac], XmNwidth, 258); ac++;
-	XmColorSB_pButtonAddColor(csb) = XmCreatePushButton(fr, (char *)"AddColor", args, ac);
-	XtManageChild(XmColorSB_pButtonAddColor(csb));
+	XtSetArg(args[ac], XmNy, 20+S_len+9+Color_h); ac++;
+	XmColorSB_labelSelectedColor(csb) = XmCreateLabel(fr, (char *)"SelectedColor", args, ac);
+	XtManageChild(XmColorSB_labelSelectedColor(csb));
 	XmStringFree(xms);
+
+	ac = 0;
+	XtSetArg(args[ac], XmNx, XmColorSB_hueF(csb)->core.x); ac++;
+	XtSetArg(args[ac], XmNy, 15+S_len+9+Color_h); ac++;
+	XtSetArg(args[ac], XmNwidth, 
+		XmColorSB_redF(csb)->core.x-XmColorSB_hueF(csb)->core.x); ac++;
+	XmColorSB_selectedColorF(csb) = XmCreateTextField(fr, (char *)"SelectedColorField", args, ac);
+	XtManageChild(XmColorSB_selectedColorF(csb));
+	XtAddCallback(XmColorSB_selectedColorF(csb), XmNvalueChangedCallback, cb_ChangeSelectedColor,csb);
+
+	XmColorSB_dropper(csb)->core.width = XmColorSB_dropper(csb)->core.height = XmColorSB_selectedColorF(csb)->core.height-1;
+
+	XtVaSetValues(XmColorSB_labelSelectedColor(csb), 
+		XmNx, XmColorSB_hueF(csb)->core.x-XmColorSB_labelSelectedColor(csb)->core.width, NULL);
+
+	shift += XmColorSB_blueF(csb)->core.width;
+
+	/******************************/
+	/*update position of Matrix and Volume*/
+
+	if( shift > XmColorSB_MatrixBoard(csb)->core.width){
+		XmColorSB_MatrixBoard(csb)->core.width = shift ;
+
+		XtVaSetValues(XmColorSB_frameVolume(csb), 
+			XmNx, shift-XmColorSB_frameVolume(csb)->core.width, NULL);
+	}
+
+	/******************************/
 
 	XtAddCallback(XmColorSB_pButtonAddColor(csb), XmNactivateCallback, cb_AddColor, csb);
 
-	XtAddCallback(XmColorSB_hueF(csb),XmNlosingFocusCallback, cb_ChangeCoordinateColor , csb);
-	XtAddCallback(XmColorSB_satF(csb),XmNlosingFocusCallback, cb_ChangeCoordinateColor , csb);
-	XtAddCallback(XmColorSB_brightnessF(csb),XmNlosingFocusCallback, cb_BrightnessChange , csb);
-	XtAddCallback(XmColorSB_blueF(csb),XmNlosingFocusCallback, cb_ChangeColor , csb);
-	XtAddCallback(XmColorSB_greenF(csb),XmNlosingFocusCallback, cb_ChangeColor , csb);
-	XtAddCallback(XmColorSB_redF(csb),XmNlosingFocusCallback, cb_ChangeColor , csb);
+	XtAddCallback(XmColorSB_hueF(csb), XmNvalueChangedCallback, cb_ChangeColor , csb);
+	XtAddCallback(XmColorSB_satF(csb), XmNvalueChangedCallback, cb_ChangeColor , csb);
+	XtAddCallback(XmColorSB_brightnessF(csb), XmNvalueChangedCallback, cb_ChangeColor , csb);
+	
+	XtAddCallback(XmColorSB_redF(csb), XmNvalueChangedCallback, cb_ChangeColor , csb);
+	XtAddCallback(XmColorSB_greenF(csb), XmNvalueChangedCallback, cb_ChangeColor , csb);
+	XtAddCallback(XmColorSB_blueF(csb), XmNvalueChangedCallback, cb_ChangeColor , csb);
 
-	XtAddCallback(XmColorSB_hueF(csb),XmNfocusCallback, cb_AppearCursor, csb);
-	XtAddCallback(XmColorSB_satF(csb),XmNfocusCallback, cb_AppearCursor, csb);
-	XtAddCallback(XmColorSB_brightnessF(csb),XmNfocusCallback, cb_AppearCursor , csb);
-	XtAddCallback(XmColorSB_blueF(csb),XmNfocusCallback, cb_AppearCursor, csb);
-	XtAddCallback(XmColorSB_greenF(csb),XmNfocusCallback, cb_AppearCursor, csb);
-	XtAddCallback(XmColorSB_redF(csb),XmNfocusCallback, cb_AppearCursor, csb);
+	ChangeBackgroundColor(csb, XmColorSB_brightness_volume(csb));
 }
 
 /*      Function Name: 	CreateColorPaletteWindow
@@ -1397,13 +1461,13 @@ CreateColorPaletteWindow(
 	Widget fr, labelPalette, labelCustomColors;
 	Arg *margs, args[10];
 	Cardinal ac;
-  XmString local_xmstring ;
-	
-  static unsigned long arr_color[]= { 0x000000, 0xaa0000, 0x005500, 0xaa5500, 0x00aa00, 0xaaaa00, 0x00ff00, 0xaaff00,
-	        0x00007f, 0xaa007f, 0x00557f, 0xaa557f, 0x00aa7f, 0xaaaa7f, 0x00ff7f, 0xaaff7f, 0x0000ff, 0xaa00ff,
-	        0x0055ff, 0xaa55ff, 0x00aaff, 0xaaaaff, 0x00ffff, 0xaaffff, 0x550000, 0xff0000, 0x555500, 0xff5500,
-	        0x55aa00, 0xffaa00, 0x55ff00, 0xffff00, 0x55007f, 0xff007f, 0x55557f, 0xff557f, 0x55aa7f, 0xffaa7f,
-	        0x55ff7f, 0xffff7f, 0x5500ff, 0xff00ff, 0x5555ff, 0xff55ff, 0x55aaff, 0xffaaff, 0x55ffff, 0xffffff };
+	XmString local_xmstring ;
+
+	static unsigned long arr_color[]= { 0x000000, 0xaa0000, 0x005500, 0xaa5500, 0x00aa00, 0xaaaa00, 0x00ff00, 0xaaff00,
+		0x00007f, 0xaa007f, 0x00557f, 0xaa557f, 0x00aa7f, 0xaaaa7f, 0x00ff7f, 0xaaff7f, 0x0000ff, 0xaa00ff,
+		0x0055ff, 0xaa55ff, 0x00aaff, 0xaaaaff, 0x00ffff, 0xaaffff, 0x550000, 0xff0000, 0x555500, 0xff5500,
+		0x55aa00, 0xffaa00, 0x55ff00, 0xffff00, 0x55007f, 0xff007f, 0x55557f, 0xff557f, 0x55aa7f, 0xffaa7f,
+		0x55ff7f, 0xffff7f, 0x5500ff, 0xff00ff, 0x5555ff, 0xff55ff, 0x55aaff, 0xffaaff, 0x55ffff, 0xffffff };
 
 	Dimension height = 400;
 	Dimension width = 250;
@@ -1474,6 +1538,16 @@ CreateColorPaletteWindow(
 	XtManageChild(labelCustomColors);
 	XmStringFree(local_xmstring);
 
+	ac = 0;
+	XmString xms=XmStringCreateLocalized(ADD_COLOR_STRING);
+	XtSetArg(args[ac], XmNlabelString, xms); ac++;
+	XtSetArg(args[ac], XmNx, 0); ac++;
+	XtSetArg(args[ac], XmNy, height-30); ac++;
+	XtSetArg(args[ac], XmNwidth, width-10); ac++;
+	XmColorSB_pButtonAddColor(csb) = XmCreatePushButton(fr, (char *)"AddColor", args, ac);
+	XtManageChild(XmColorSB_pButtonAddColor(csb));
+	XmStringFree(xms);
+
 	XmColorSB_labelPalette(csb)=labelPalette;
 	XmColorSB_labelCustomColors(csb)=labelCustomColors;
 }
@@ -1485,20 +1559,20 @@ void _XmSelectionBoxCreateButtons(XmColorSelectionBoxWidget csb)
 	XtRemoveAllCallbacks( XmColorSB_pButtonOk(csb), XmNactivateCallback) ;
 	XtAddCallback(XmColorSB_pButtonOk(csb), XmNarmCallback, cb_Ok, csb);
 	XtAddCallback(XmColorSB_pButtonOk(csb), XmNactivateCallback,
-	    ColorSelectionBoxCallback, (XtPointer) XmDIALOG_OK_BUTTON);
+		ColorSelectionBoxCallback, (XtPointer) XmDIALOG_OK_BUTTON);
 
 	XmColorSB_pButtonCancel(csb)= _XmBB_CreateButtonG( (Widget) csb, csb->cs.cancel_label_string, "Cancel",
 			XmCancelStringLoc);
 	
 	XtAddCallback(XmColorSB_pButtonCancel(csb), XmNactivateCallback,
-	    ColorSelectionBoxCallback, (XtPointer) XmDIALOG_CANCEL_BUTTON);
+			ColorSelectionBoxCallback, (XtPointer) XmDIALOG_CANCEL_BUTTON);
 
 	XmColorSB_pButtonHelp(csb) = _XmBB_CreateButtonG( (Widget) csb, csb->cs.help_label_string, "Help",
 			XmHelpStringLoc);
 
 	XtRemoveAllCallbacks( XmColorSB_pButtonHelp(csb), XmNactivateCallback) ;
 	XtAddCallback(XmColorSB_pButtonHelp(csb), XmNactivateCallback,
-	    ColorSelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON);
+			ColorSelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON);
 
 	Arg args[10];
 	Cardinal ac=0;
@@ -1643,28 +1717,29 @@ DrawCross(
     Position y)
 {
 	static Position x_old, y_old;
-	Visual *visual=NULL;
+	Visual *visual = NULL;
 	Widget parent_shell = (Widget)csb;
 	int i, j;
-  static int Y;
+	static int Y;
 
-  unsigned long BLACK= XBlackPixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
+  unsigned long BLACK = XBlackPixel(XtDisplay((Widget)csb), XDefaultScreen(XtDisplay((Widget)csb)));
 
 	while (!XtIsShell(parent_shell))
 		parent_shell = XtParent(parent_shell);
-	XtVaGetValues(parent_shell, XmNvisual, &visual, NULL);
+
+  XtVaGetValues(parent_shell, XmNvisual, &visual, NULL);
 	if (!visual)
 		visual = DefaultVisualOfScreen(XtScreen(parent_shell));
 
 	for (j = MAX(y_old - CROSS_LINE_WIDTH/2, 0); j <= MIN(y_old + CROSS_LINE_WIDTH/2, S_len-1); j++)
 		for (i = MAX(x_old - CROSS_SIZE, 0); i <= MIN(x_old + CROSS_SIZE, H_len-1); i++)
 			if( x_old > i + CROSS_CENTER_SIZE || x_old < i - CROSS_CENTER_SIZE ) 
-  			ReDrawCrossPixel(csb, j, i, visual);
+			ReDrawCrossPixel(csb, j, i, visual);
 	
 	for (j = MAX(x_old - CROSS_LINE_WIDTH/2, 0); j <= MIN(x_old + CROSS_LINE_WIDTH/2, H_len-1); j++)
 		for (i = MAX(y_old - CROSS_SIZE, 0); i <= MIN(y_old + CROSS_SIZE, S_len-1); i++)
 			if( y_old > i + CROSS_CENTER_SIZE || y_old < i - CROSS_CENTER_SIZE ) 
-  			ReDrawCrossPixel(csb, i, j, visual);	
+			ReDrawCrossPixel(csb, i, j, visual);	
 	
 	{
 		Y=255-y;
@@ -1672,18 +1747,21 @@ DrawCross(
 		for (j = MAX(Y - CROSS_LINE_WIDTH/2, 0); j <= MIN(Y + CROSS_LINE_WIDTH/2, S_len-1); j++)
 			for (i = MAX(x - CROSS_SIZE, 0); i <= MIN(x + CROSS_SIZE, H_len-1); i++)
 				if( x > i + CROSS_CENTER_SIZE || x < i - CROSS_CENTER_SIZE ) 
-          XPutPixel(XmColorSB_im1(csb), i, j, BLACK);
+					XPutPixel(XmColorSB_im1(csb), i, j, BLACK);
 		
 		for (j = MAX(x - CROSS_LINE_WIDTH/2, 0); j <= MIN(x + CROSS_LINE_WIDTH/2, H_len-1); j++)
 			for (i = MAX(Y - CROSS_SIZE, 0); i <= MIN(Y + CROSS_SIZE, S_len-1); i++)
 				if( Y > i + CROSS_CENTER_SIZE || Y < i - CROSS_CENTER_SIZE ) 
-          XPutPixel(XmColorSB_im1(csb), j, i, BLACK);		
+					XPutPixel(XmColorSB_im1(csb), j, i, BLACK);		
 	}
 
-  x_old=x;
+	x_old=x;
 	y_old=y;
-	
-  XPutImage(XtDisplay(csb), XtWindow(XmColorSB_drawingAreaMatrix(csb)),XmColorSB_gc(csb), XmColorSB_im1(csb), 0,0,0,0, H_len, S_len);
+
+	XmColorSB_x(csb) = XmColorSB_hue_value(csb) = x;
+	XmColorSB_y(csb) = XmColorSB_sat_value(csb) = y;
+
+	XPutImage(XtDisplay(csb), XtWindow(XmColorSB_drawingAreaMatrix(csb)),XmColorSB_gc(csb), XmColorSB_im1(csb), 0,0,0,0, H_len, S_len);
 }
 
 static void 
@@ -1693,106 +1771,20 @@ FillColorFields(
 	float k;
 	char s[10];
 	k=(float)XmColorSB_brightness_volume(csb)/(S_len-1);
-	sprintf(s, "%d", (int)((float)XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].r * k));
+	
+  sprintf(s, "%d", (int)((float)XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].r * k));
 	XmTextFieldSetString(XmColorSB_redF(csb), s);
+
 	sprintf(s, "%d", (int)((float)XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].g * k));
 	XmTextFieldSetString(XmColorSB_greenF(csb), s);
+	
 	sprintf(s, "%d", (int)((float)XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].b * k));
 	XmTextFieldSetString(XmColorSB_blueF(csb), s);
 }
 
-static int 
-DugitCut(
-    Widget w)
-{
-	char *s, *ss;
-	static int zz=0, max_zz;
-	ss=XtName(w);
-
-	if (!strcmp("HueF", ss))
-		max_zz=H_len-1;
-	else
-		max_zz=S_len-1;
-	s = XmTextFieldGetString(w);
-	zz=atoi(s);
-	XtFree(s);
-
-	if (zz>max_zz)
-		zz=max_zz;
-	if (zz<0)
-		zz=0;
-	s = malloc(100);
-	sprintf(s, "%d", zz);
-
-	XmTextFieldSetString(w, s);
-
-	if (s)
-		free(s);
-	return (zz);
-}
-
-static void 
-LoadColorValues(
-    XmColorSelectionBoxWidget csb)
-{
-	unsigned long p;
-	int i;
-	char *v;
-
-	XtVaGetValues(XmColorSB_color(csb), XmNbackground, &p, NULL);
-	XmColorSB_color_value(csb)=p;
-
-	v = XmTextFieldGetString(XmColorSB_blueF(csb));
-	XmColorSB_blue_value(csb)=atoi(v);
-	XtFree(v);
-
-	v = XmTextFieldGetString(XmColorSB_greenF(csb));
-	XmColorSB_green_value(csb)=atoi(v);
-	XtFree(v);
-
-	v = XmTextFieldGetString(XmColorSB_redF(csb));
-	XmColorSB_red_value(csb)=atoi(v);
-	XtFree(v);
-}
-
-static void 
-CalculateColor(
-    XmColorSelectionBoxWidget csb, 
-    Position x, 
-    Position y)
-{
-	float k=0;
-	unsigned long p;
-	char s[10];
-	XColor screen_in_out;
-	int status;
-
-	if (x < 0)
-		x = 0;
-	if (x >= H_len)
-		x = H_len-1;
-	if (y < 0)
-		y = 0;
-	if (y > S_len-1)
-		y = S_len-1;
-
-	XmColorSB_x(csb) = x;
-	XmColorSB_y(csb) = y;
-	sprintf(s, "%d", x);
-	XmTextFieldSetString(XmColorSB_hueF(csb), s);
-
-	sprintf(s, "%d", y);
-	XmTextFieldSetString(XmColorSB_satF(csb), s);
-
-	FillColorFields(csb);
-
-	sprintf(s, "%d", XmColorSB_brightness_volume(csb));
-	XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
-
-	DrawCross(csb, x, y);
-
-	CreateVolumeGradient(csb, NULL);
-}
+/************************************************************
+ *       Events/Callbacks 
+ ************************************************************/
 
 static void 
 ColorSelectionBoxCallback(
@@ -1800,25 +1792,25 @@ ColorSelectionBoxCallback(
     XtPointer client_data, 
     XtPointer call_data)
 {
-	unsigned char which_button = (unsigned char)(long) client_data;
+unsigned char which_button = (unsigned char)(long) client_data;
 	XmColorSelectionBoxWidget csb = (XmColorSelectionBoxWidget) XtParent (w);
 	XmAnyCallbackStruct *callback = (XmAnyCallbackStruct *) call_data;
 	XmAnyCallbackStruct temp;
 	temp.event = callback->event;
-  Boolean         allowUnmanage = FALSE ;
+	Boolean allowUnmanage = FALSE;
 
 	switch (which_button) {
 	case XmDIALOG_OK_BUTTON:
 		temp.reason = XmCR_OK;
 		XtCallCallbackList((Widget) csb, csb->cs.ok_callback, (XtPointer) &temp);
-    allowUnmanage = TRUE;
+		allowUnmanage = TRUE;
 		break;
 
 	case XmDIALOG_CANCEL_BUTTON:
 		temp.reason = XmCR_CANCEL;
 		XFlush(XtDisplay (csb));
 		XtCallCallbackList((Widget) csb, csb->cs.cancel_callback, &temp);
-    allowUnmanage = TRUE;
+		allowUnmanage = TRUE;
 		break;
 
 	case XmDIALOG_HELP_BUTTON:
@@ -1827,12 +1819,11 @@ ColorSelectionBoxCallback(
 		break;
 	}
 
-  if(    allowUnmanage
-      && csb->bulletin_board.shell
-      && csb->bulletin_board.auto_unmanage   )
-  {
-    XtUnmanageChild( (Widget) csb) ;
-  }
+	if(allowUnmanage
+		&& csb->bulletin_board.shell
+		&& csb->bulletin_board.auto_unmanage) {
+		XtUnmanageChild((Widget) csb);
+	}
 
 	return;
 }
@@ -1862,191 +1853,149 @@ cb_ChangeColor(
 	XmColorSelectionBoxWidget csb;
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
 
-	char *sr, *sg, *sb;
-	char s[10];
-	int ir, ig, ib;
-	float k;
-	int S = 0 , H = 0, Q, i;
-	int precision, new_pecision;
+	char str[10];
+	int r, g, b, h, s, v;
+
+	static Boolean allow = True;
+	if(!allow || !XmColorSB_allow_callbacks(csb))
+		return;
+
 	if (w) {
 		Arg arg = { XmNcursorPositionVisible, False };
 		XtSetValues(w, &arg, 1);
-		DugitCut(w);
 	}
 
-	Q = H_len / 6;
-	sr = XmTextFieldGetString(XmColorSB_redF(csb));
-	ir = atoi(sr);
+	char *sr = XmTextFieldGetString(XmColorSB_redF(csb));
+	r = atoi(sr);
 	XtFree(sr);
-	sg = XmTextFieldGetString(XmColorSB_greenF(csb));
-	ig = atoi(sg);
+
+	char *sg = XmTextFieldGetString(XmColorSB_greenF(csb));
+	g = atoi(sg);
 	XtFree(sg);
-	sb = XmTextFieldGetString(XmColorSB_blueF(csb));
-	ib = atoi(sb);
+
+	char *sb = XmTextFieldGetString(XmColorSB_blueF(csb));
+	b = atoi(sb);
 	XtFree(sb);
-	k = (float)XmColorSB_brightness_volume(csb) / (S_len-1);
-	/*! We will compare R G B colors, the heightest color = brightness_volume therefore we compare
-	 three times for find brightness_volume
-	 S (saturation) = 255 - smallest color value (accounting with coefficient )
-	 after that We finding  more fitting H (Hue) in loop*/
-	if ((int)(XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].r * k) != ir
-			|| ((int)(XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].g * k) != ig)
-			|| ((int)(XmColorSB_arr_col(csb)[XmColorSB_y(csb)][XmColorSB_x(csb)].b * k) != ib)) {
-		if (ir == ig && ig == ib) {
-			XmColorSB_brightness_volume(csb) = ir;
-			S = 0;
-			H = 0;
-		} else {
-			if (ir>=ig && ir>ib) {
-				XmColorSB_brightness_volume(csb)=ir;
-				k=(float)ir/255;
-				ir = 255;
-				ig = (int) ((float)ig/k);
-				ib = (int) ((float)ib/k);
-				if (ig==ib) {
-					S=255-ig;
-					H=0;
-				}
-				if (ig>ib) {
-					S=255-ib;
-					H=i=0;
-					precision = abs(XmColorSB_arr_col(csb)[S][i].g-ig);
-					for (i=1; i<Q && precision!=0; i++) {
-						new_pecision= abs(XmColorSB_arr_col(csb)[S][i].g-ig);
-						if (precision > new_pecision) {
-							precision=new_pecision;
-							H=i;
-						}
-					}
 
-				} else {
-					S=255-ig;
-					H=i=Q*5;
-					precision = abs(XmColorSB_arr_col(csb)[S][i].b-ib);
-					for (i=Q*5+1; i<Q*6 && precision!=0; i++) {
-						new_pecision= abs(XmColorSB_arr_col(csb)[S][i].b-ib);
-						if (precision > new_pecision) {
-							precision=new_pecision;
-							H=i;
-						}
-					}
-				}
-			}
-			if (ig>ir && ig>=ib) {
-				XmColorSB_brightness_volume(csb)=ig;
-				k=(float)ig/255;
-				ig = 255;
-				ir = (int) ((float)ir/k);
-				ib = (int) ((float)ib/k);
-				if (ir==ib) {
-					S=255-ig;
-					H=120;
-				}
-				if (ir>ib) {
-					S=255-ib;
-					H=i=Q;
-					precision = abs(XmColorSB_arr_col(csb)[S][i].r-ir);
-					for (i=Q+1; i<Q*2 && precision!=0; i++) {
-						new_pecision= abs(XmColorSB_arr_col(csb)[S][i].r-ir);
-						if (precision > new_pecision) {
-							precision=new_pecision;
-							H=i;
-						}
-					}
-				} else {
-					S=255-ir;
-					H=i=Q*2;
-					precision = abs(XmColorSB_arr_col(csb)[S][i].b-ib);
-					for (i=Q*2+1; i<Q*3 && precision!=0; i++) {
-						new_pecision= abs(XmColorSB_arr_col(csb)[S][i].b-ib);
-						if (precision > new_pecision) {
-							precision=new_pecision;
-							H=i;
-						}
-					}
-				}
-			}
-			if (ib>ig && ib>=ir) {
-				XmColorSB_brightness_volume(csb)=ib;
-				k=(float)ib/255;
-				ib = 255;
-				ir = (int) ((float)ir/k);
-				ig = (int) ((float)ig/k);
-				if (ir==ib) {
-					S=255-ig;
-					H=240;
-				}
-				if (ig>ir) {
-					S=255-ir;
-					H=i=Q*3;
-					precision = abs(XmColorSB_arr_col(csb)[S][i].g-ig);
-					for (i=Q*3+1; i<Q*4 && precision!=0; i++) {
-						new_pecision= abs(XmColorSB_arr_col(csb)[S][i].g-ig);
-						if (precision > new_pecision) {
-							precision=new_pecision;
-							H=i;
-						}
-					}
-				} else {
-					S=255-ig;
-					H=i=Q*4;
-					precision = abs(XmColorSB_arr_col(csb)[S][i].r-ir);
-					for (i=Q*4+1; i<Q*5 && precision!=0; i++) {
-						new_pecision= abs(XmColorSB_arr_col(csb)[S][i].r-ir);
-						if (precision > new_pecision) {
-							precision=new_pecision;
-							H=i;
-						}
-					}
-				}
-			}
-		}
-		sprintf(s, "%d", H);
-		XmTextFieldSetString(XmColorSB_hueF(csb), s);
-		sprintf(s, "%d", S);
-		XmTextFieldSetString(XmColorSB_satF(csb), s);
-		sprintf(s, "%d", XmColorSB_brightness_volume(csb));
-		XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
-		XmColorSB_x(csb)=H;
-		XmColorSB_y(csb)=S;
-		DrawCross(csb, H, S);
-		CreateVolumeGradient(csb, NULL);
-		LoadColorValues(csb);
-	}
-}
+	char *sh = XmTextFieldGetString(XmColorSB_hueF(csb));
+	h = atoi(sh);
+	XtFree(sh);
 
-static void 
-cb_ChangeCoordinateColor(
-    Widget w, 
-    XtPointer csb_ptr, 
-    XtPointer call_data)
-{
-	XmColorSelectionBoxWidget csb;
-	csb = (XmColorSelectionBoxWidget) csb_ptr;
-	Arg arg = { XmNcursorPositionVisible, False };
-	int dig;
+	char *ss = XmTextFieldGetString(XmColorSB_satF(csb));
+	s = atoi(ss);
+	XtFree(ss);
 
-	XtSetValues(w, &arg, 1);
+	char *sv = XmTextFieldGetString(XmColorSB_brightnessF(csb));
+	v = atoi(sv);
+	XtFree(sv);
 
-	dig=DugitCut(w);
-	if (!strcmp("HueF", XtName(w))) {
-		if (XmColorSB_x(csb)!=dig) {
-			XmColorSB_x(csb)=dig;
-			FillColorFields(csb);
-			DrawCross(csb, XmColorSB_x(csb), XmColorSB_y(csb));
-		}
+	if( r != XmColorSB_red_value(csb) || 
+		g != XmColorSB_green_value(csb) || 
+		b != XmColorSB_blue_value(csb)
+	)
+	{
+		allow = False;
+
+		CheckBounds(r, 0, 255);
+		CheckBounds(g, 0, 255);
+		CheckBounds(b, 0, 255);
+
+		RGB2HSV(r, g, b, &h, &s, &v);
+
+		sprintf(str, "%d", h);
+		XmTextFieldSetString(XmColorSB_hueF(csb), str);
+
+		sprintf(str, "%d", s);
+		XmTextFieldSetString(XmColorSB_satF(csb), str);
+
+		sprintf(str, "%d", v);
+		XmTextFieldSetString(XmColorSB_brightnessF(csb), str);
+
+		XmColorSB_red_value(csb) = r;
+		XmColorSB_green_value(csb) = g;
+		XmColorSB_blue_value(csb) = b;
+
+		XmColorSB_hue_value(csb) = XmColorSB_x(csb) = h;
+		XmColorSB_sat_value(csb) = XmColorSB_y(csb) = s;
+		XmColorSB_brightness_volume(csb) = v;
+
+		allow = True;
 	}
 
-	if (!strcmp("SatF", XtName(w))) {
-		if (XmColorSB_y(csb)!=dig) {
-			XmColorSB_y(csb)=dig;
-			FillColorFields(csb);
-			DrawCross(csb, XmColorSB_x(csb), XmColorSB_y(csb));
-		}
+	if( h != XmColorSB_hue_value(csb) || 
+		s != XmColorSB_sat_value(csb) || 
+		v != XmColorSB_brightness_volume(csb))
+	{
+		allow = False;
+
+		CheckBounds(h, 0, 255);
+		CheckBounds(s, 0, 255);
+		CheckBounds(v, 0, 255);
+
+		HSV2RGB(h ,s, v, &r, &g ,&b);
+
+		sprintf(str, "%d", r);
+		XmTextFieldSetString(XmColorSB_redF(csb), str);
+
+		sprintf(str, "%d", g);
+		XmTextFieldSetString(XmColorSB_greenF(csb), str);
+
+		sprintf(str, "%d", b);
+		XmTextFieldSetString(XmColorSB_blueF(csb), str);
+
+		XmColorSB_red_value(csb) = r;
+		XmColorSB_green_value(csb) = g;
+		XmColorSB_blue_value(csb) = b;
+
+		XmColorSB_hue_value(csb) = XmColorSB_x(csb) = h;
+		XmColorSB_sat_value(csb) = XmColorSB_y(csb) = s;
+		XmColorSB_brightness_volume(csb) = v;
+
+		allow = True;
 	}
 
-	CreateVolumeGradient(csb, NULL);
-	LoadColorValues(csb);
+	allow = False;
+
+	sr = XmTextFieldGetString(XmColorSB_redF(csb));
+	sprintf(str, "%d", r);
+	if(strcmp(str, sr))
+		XmTextFieldSetString(XmColorSB_redF(csb), str);
+	XtFree(sr);
+
+	sg = XmTextFieldGetString(XmColorSB_greenF(csb));
+	sprintf(str, "%d", g);
+	if(strcmp(str, sg))
+		XmTextFieldSetString(XmColorSB_greenF(csb), str);
+	XtFree(sg);
+
+	sb = XmTextFieldGetString(XmColorSB_blueF(csb));
+	sprintf(str, "%d", b);
+	if(strcmp(str, sb))
+		XmTextFieldSetString(XmColorSB_blueF(csb), str);
+	XtFree(sb);
+
+	sh = XmTextFieldGetString(XmColorSB_hueF(csb));
+	sprintf(str, "%d", h);
+	if(strcmp(str, sh))
+		XmTextFieldSetString(XmColorSB_hueF(csb), str);
+	XtFree(sh);
+
+	ss = XmTextFieldGetString(XmColorSB_satF(csb));
+	sprintf(str, "%d", s);
+	if(strcmp(str, ss))
+		XmTextFieldSetString(XmColorSB_satF(csb), str);
+	XtFree(ss);
+
+	sv = XmTextFieldGetString(XmColorSB_brightnessF(csb));
+	sprintf(str, "%d", v);
+	if(strcmp(str, sv))
+		XmTextFieldSetString(XmColorSB_brightnessF(csb), str);
+	XtFree(sv);
+
+	allow = True;
+
+	DrawCross(csb, h, s);
+	DrawVolume(csb, v);
 }
 
 static void 
@@ -2071,23 +2020,40 @@ trTable_Volume(
 	char s[5];
 	XmDrawingAreaCallbackStruct *inputCallback;
 	XmColorSelectionBoxWidget csb;
+	csb = (XmColorSelectionBoxWidget) (XtParent(XtParent(XtParent(w))));
 	Position x, y;
 	static int btnPress = 0;
-	csb = (XmColorSelectionBoxWidget) (XtParent(XtParent(XtParent(w))));
 
 	XButtonEvent *bevent = (XButtonEvent *) event;
 
 	if (bevent->type == ButtonPress) {
 		y=event->xbutton.y;
-		DrawVolume(csb, (S_len-1) - y);
-		FillColorFields(csb);
+
+		y = (y<0)?0:y; 
+		y = (y>(S_len-1))?S_len-1:y; 
+
+		y = (S_len-1)-y;
+
+		sprintf(s, "%d", y);
+		XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
+
+		DrawVolume(csb, y);
 		btnPress = 1;
 	}
+
 	if (btnPress && bevent->type == MotionNotify) {
 		y=event->xbutton.y;
-		DrawVolume(csb, (S_len-1) - y);
-		FillColorFields(csb);
+		y = (y<0)?0:y; 
+		y = (y>(S_len-1))?S_len-1:y; 
+
+		y = (S_len-1)-y;
+
+		sprintf(s, "%d", y);
+		XmTextFieldSetString(XmColorSB_brightnessF(csb), s);
+
+		DrawVolume(csb, y);
 	}
+
 	if (bevent->type == ButtonRelease)
 		btnPress = 0;
 }
@@ -2124,6 +2090,7 @@ cb_Input(
 	Position x, y;
 	int current;
 	static int btnPress = 0;
+  char s[10];
 
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
 	inputCallback = (XmDrawingAreaCallbackStruct *) call_data;
@@ -2132,41 +2099,48 @@ cb_Input(
 	case XmCR_INPUT:
 		if (inputCallback->event->type == ButtonPress) {
 			x = inputCallback->event->xbutton.x;
-			y = 255- inputCallback->event->xbutton.y;
-			CalculateColor(csb, x, y);
+			y = 255 - inputCallback->event->xbutton.y;
 			btnPress = 1;
-			LoadColorValues(csb);
+
+			x = (x<0) ? 0 : x;
+			x = (x>(H_len-1)) ? H_len-1 : x;
+
+			y = (y<0) ? 0 : y;
+			y = (y>(S_len-1)) ? S_len-1 : y;
+
+			XmColorSB_allow_callbacks(csb) = False;
+			sprintf(s, "%d", x);
+			XmTextFieldSetString(XmColorSB_hueF(csb), s);
+			sprintf(s, "%d", y);
+			XmColorSB_allow_callbacks(csb) = True;
+			XmTextFieldSetString(XmColorSB_satF(csb), s);
+
+			ChangeBackgroundColor(csb, XmColorSB_brightness_volume(csb));
+			DrawVolume(csb, XmColorSB_brightness_volume(csb));
 		}
 		if (btnPress && inputCallback->event->type == MotionNotify) {
 			x = inputCallback->event->xbutton.x;
-			y = 255- inputCallback->event->xbutton.y;
-			CalculateColor(csb, x, y);
-			LoadColorValues(csb);
+			y = 255 - inputCallback->event->xbutton.y;
+
+			x = (x<0)?0:x; 
+			x = (x>(H_len-1))?H_len-1:x;
+
+			y = (y<0)?0:y; 
+			y = (y>(S_len-1))?S_len-1:y; 
+
+			XmColorSB_allow_callbacks(csb) = False;
+			sprintf(s, "%d", x);
+			XmTextFieldSetString(XmColorSB_hueF(csb), s);
+			sprintf(s, "%d", y);
+			XmColorSB_allow_callbacks(csb) = True;
+			XmTextFieldSetString(XmColorSB_satF(csb), s);
+
+			ChangeBackgroundColor(csb, XmColorSB_brightness_volume(csb));
+			DrawVolume(csb, XmColorSB_brightness_volume(csb));
 		}
 		if (inputCallback->event->type == ButtonRelease)
 			btnPress = 0;
 		break;
-	}
-}
-
-static void 
-cb_BrightnessChange(
-    Widget w, 
-    XtPointer csb_ptr, 
-    XtPointer call_data)
-{
-	static int i;
-
-	XmColorSelectionBoxWidget csb;
-	csb = (XmColorSelectionBoxWidget) csb_ptr;
-	if (!strcmp(XtName(w), "BrightnessF")) {
-		Arg arg= { XmNcursorPositionVisible, False };
-		XtSetValues(w, &arg, 1);
-		i= DugitCut(w);
-		XmColorSB_brightness_volume(csb) = i;
-
-		FillColorFields(csb);
-		DrawVolume(csb, XmColorSB_brightness_volume(csb));
 	}
 }
 
@@ -2202,6 +2176,53 @@ cb_PutColor(
 	cb_ChangeColor(NULL, csb , NULL);
 }
 
+static void
+cb_ChangeSelectedColor(
+    Widget w, 
+    XtPointer csb_ptr, 
+    XtPointer call_data)
+{
+	XmColorSelectionBoxWidget csb;
+	csb = (XmColorSelectionBoxWidget) csb_ptr;
+
+	static Boolean allow = True;
+	if(!allow || !XmColorSB_allow_callbacks(csb))
+		return;
+
+	/*try to parse given string*/
+	Boolean parse_result = True;
+	int r, g, b;
+
+	char* str = XmTextFieldGetString(XmColorSB_selectedColorF(csb));
+
+	if((3==sscanf(str, "#%2x%2x%2x", &r, &g, &b ) && strlen(str)==7) ||
+		(3==sscanf(str, "%2x%2x%2x", &r, &g, &b ) && strlen(str)==6)) {
+
+		char s[10];
+		char colorVal[10];
+		strcpy(colorVal, RGB2String(r, g, b));
+
+		if(strcmp(colorVal, str))
+			XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
+
+		allow = False;
+		XmColorSB_allow_callbacks(csb) = False;
+
+		sprintf(s, "%d", r);
+		XmTextFieldSetString(XmColorSB_redF(csb), s);
+		sprintf(s, "%d", g);
+		XmTextFieldSetString(XmColorSB_greenF(csb), s);
+		sprintf(s, "%d", b);
+		XmTextFieldSetString(XmColorSB_blueF(csb), s);
+
+		XmColorSB_allow_callbacks(csb) = True;
+		allow = True;
+
+		cb_ChangeColor(NULL, csb , NULL);
+	}
+	XtFree(str);
+}
+
 static void 
 cb_Ok(
     Widget w, 
@@ -2219,7 +2240,9 @@ cb_Ok(
 	csb = (XmColorSelectionBoxWidget) csb_ptr;
 	XmSelectionBoxCallbackStruct temp;
 
-	LoadColorValues(csb);
+	XtVaGetValues(XmColorSB_color(csb), XmNbackground, &p, NULL);
+	XmColorSB_color_value(csb)=p;
+	
 	/*! Save custom colors to file*/
 	env = getenv("HOME");
 	sprintf(path, "%s/.custom_colors", env);
@@ -2237,25 +2260,235 @@ cb_Ok(
 
 }
 
+static void dropper_onKeyPress(
+    Widget wid, 
+    XtPointer data, 
+    XEvent *event, 
+    Boolean *cont)
+{
+	XmColorSelectionBoxWidget csb;
+	csb = (XmColorSelectionBoxWidget) data;
+	Widget btn = XmColorSB_dropper(csb);
+	if( event->xkey.keycode==9 /*Escape*/ ){
+		XtUngrabPointer(btn, CurrentTime);
+	}
+}
+
+static void dropper_onButtonPress(
+    Widget wid, 
+    XtPointer data, 
+    XEvent *event, 
+    Boolean *cont)
+{
+	XmColorSelectionBoxWidget csb;
+	csb = (XmColorSelectionBoxWidget) data;
+	Widget btn = XmColorSB_dropper(csb);
+	Display *dpy = XtDisplay(wid);
+	Window root = XRootWindowOfScreen(XtScreen(wid));
+
+	if (!is_grabbed) {
+		Cursor cur; 
+		cur = XCreateFontCursor(XtDisplay(wid), XC_crosshair); 
+		XtGrabPointer(wid, False,
+			ButtonPressMask | ButtonReleaseMask | EnterWindowMask | LeaveWindowMask,
+			GrabModeAsync, GrabModeAsync,
+			None, cur, CurrentTime);
+		is_grabbed = True;
+		XtVaSetValues(wid, XmNset, True, NULL);
+		return;
+	}
+
+	XImage *ximage = XGetImage(dpy, root,
+		event->xbutton.x_root, event->xbutton.y_root,
+		1, 1, -1, ZPixmap);
+
+	unsigned long p = XGetPixel(ximage, 0, 0);
+	XDestroyImage(ximage);
+
+	XColor result;
+	result.pixel = p;
+	XQueryColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)), &result);
+
+	char *colorVal = RGB2String((double)result.red/((unsigned short)-1)*255,
+		(double)result.green/((unsigned short)-1)*255, 
+		(double)result.blue/((unsigned short)-1)*255);
+	XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
+
+	if (is_grabbed) {
+		XtUngrabPointer(btn, CurrentTime);
+		XtVaSetValues(wid, XmNset, False, NULL);
+		is_grabbed = False;
+	}
+}
+
 /************************************************************
  *      LOCAL CODE
  ************************************************************/
 
-/*	Function Name: CalcPreferredSize
- *	Description: Calculates the size this widget would prefer to be.
- *	Arguments: csb - the color selector widget.
- *  RETURNED       width, height - preferred size of the color selector.
- *	Returns: none.
- */
+/* To avoid includinh math.h do rounding ourselves !*/
+#define FLOOR(x) ((int)x)
+#define RINT(x) ( (x-(double)(int)(x))>0.5?((double)(int)(x)+1):((double)(int)(x)) ) 
+
+static void
+RGB2HSV(
+    int r, int g, int b, 
+    int *h, int *s, int *v)
+{
+	/*our r,g,b should be between 0 and 1*/
+	double fr = (double)r/255;
+	double fg = (double)g/255;
+	double fb = (double)b/255;
+
+	double fh, fs, fv;
+
+	double fmax = MAX3(fr, fg, fb);
+	double fmin = MIN3(fr, fg, fb);
+
+	if (fmax == fmin)
+		*h = 0;
+	else if (fmax == fr)
+		*h = RINT( (double)((int)(60*(fg-fb)/(fmax-fmin)+360)%360) );
+	else if (fmax == fg)
+		*h = RINT(60*(fb-fr)/(fmax-fmin)+120);
+	else if (fmax == fb)
+		*h = RINT(60*(fr-fg)/(fmax-fmin)+240);
+
+	*h = (double)(*h)*255/360;
+
+	if (fmax == 0)
+		fs = 0;
+	else
+		fs = 1 - fmin/fmax;
+	*s = RINT(fs * 255);
+
+	*v = RINT(fmax*255);
+}
 
 static void 
+HSV2RGB(
+    int h, int s, int v, 
+    int *r, int *g, int *b)
+{
+	double fh = (double)h / 255;
+	double fs = (double)s / 255;
+	double fv = (double)v / 255;
+	double fr = 0, fg = 0, fb = 0;
+
+	if (fs == 0) {
+		fr = fv;
+		fg = fv;
+		fb = fv;
+	} else {
+		double var_h = (double)fh * 6;
+		double var_i = FLOOR(var_h);
+
+		double var_1 = (double)fv * ( 1 - fs );
+		double var_2 = (double)fv * ( 1 - fs * ( var_h - var_i ) );
+		double var_3 = (double)fv * ( 1 - fs * ( 1 - ( var_h - var_i ) ) );
+
+		if (var_i == 0) {
+			fr = fv;
+			fg = var_3;
+			fb = var_1;
+		}
+		else if (var_i == 1) {
+			fr = var_2;
+			fg = fv;
+			fb = var_1;
+		}
+		else if (var_i == 2) {
+			fr = var_1;
+			fg = fv;
+			fb = var_3;
+		}
+		else if (var_i == 3) {
+			fr = var_1;
+			fg = var_2;
+			fb = fv;
+		}
+		else if (var_i == 4) {
+			fr = var_3;
+			fg = var_1;
+			fb = fv;
+		}
+		else {
+			fr = fv;
+			fg = var_1;
+			fb = var_2;
+		}
+	}
+
+	*r = RINT(fr * 255);
+	*g = RINT(fg * 255);
+	*b = RINT(fb * 255);
+}
+
+static char* 
+RGB2String(
+    int r, 
+    int g, 
+    int b)
+{
+	static char ret[20];
+	char rs[10];
+	char gs[10];
+	char bs[10];
+
+	if(r < 16)
+		sprintf(rs, "0%x", r);
+	else
+		sprintf(rs, "%x", r);
+
+	if(g < 16)
+		sprintf(gs, "0%x", g);
+	else
+		sprintf(gs, "%x", g);
+
+	if (b < 16)
+		sprintf(bs, "0%x", b);
+	else
+		sprintf(bs, "%x", b);
+
+	bzero(ret, 10*sizeof(char));
+	sprintf(ret, "#%s%s%s", rs, gs, bs);
+
+	int i;
+	for(i = 0;i < strlen(ret); i++) {
+		ret[i] = (char)toupper((int)ret[i]);
+	}
+
+	return ret;
+}
+
+/*Function Name: CalcPreferredSize
+ *Description: Calculates the size this widget would prefer to be.
+ *Arguments: csb - the color selector widget.
+ *RETURNED       width, height - preferred size of the color selector.
+ *Returns: none.
+ */
+
+static void
 CalcPreferredSize(
-    XmColorSelectionBoxWidget csb, 
-    Dimension *width, 
+    XmColorSelectionBoxWidget csb,
+    Dimension *width,
     Dimension *height)
 {
+	Widget matrix_box;
+	Widget palette_box;
+	Dimension marginW;
+
+	matrix_box = XmColorSB_MatrixBoard(csb);
+	palette_box = XmColorSB_ColorBoard(csb);
+
 	*height = CS_HEIGHT;
-	*width = CS_WIDTH;
+
+	*width = matrix_box->core.width + palette_box->core.width;
+
+	XtVaGetValues(matrix_box, XmNmarginWidth, &marginW, NULL);
+	*width += 2*marginW;
+
+	XtVaGetValues(palette_box, XmNmarginWidth, &marginW, NULL);
+	*width += 2*marginW;
 }
 
 /****************************************************************
@@ -2283,10 +2516,16 @@ BoxFix(
 	Dimension h;
 	Dimension w;
 	Position X;
-	int W;
+	Dimension W;
+	Dimension matrixW;
+	Widget matrix_box;
+	
 	int i, j = 0;
 	Arg args[10];
 	Cardinal ac = 0;
+
+	matrix_box = XmColorSB_MatrixBoard(csb);
+	matrixW = matrix_box->core.width;
 
 	if (LayoutIsRtoLM(geoSpec->composite)) {
 		matrixBoxGeo = rowPtr++;
@@ -2302,14 +2541,14 @@ BoxFix(
 	}
 
 	W= csb->core.width;
-	matrixBoxGeo->box.width = MATRIX_WIDTH;
-	matrixBoxGeo->box.x = W - MATRIX_WIDTH - 5 - csb->bulletin_board.margin_width;
+	matrixBoxGeo->box.width = matrixW;
+	matrixBoxGeo->box.x = W - matrixW - 5 - csb->bulletin_board.margin_width;
+	
 	if (W<MIN_CORE_WIDTH) {
 		W= csb->core.width = MIN_CORE_WIDTH;
 	} else {
 		/*! 3*csb->bulletin_board.margin_width because we need margin at left, right and middle */
-
-		paletteBoxGeo->box.width = W - MATRIX_WIDTH - 5/*! for good looking :)*/- 3*csb->bulletin_board.margin_width;
+		paletteBoxGeo->box.width = W - matrixW - 5/*! for good looking :)*/- 3*csb->bulletin_board.margin_width;
 	}
 
 	h = (int)(paletteBoxGeo->box.height - COLOR_FRAME_HEIGHT)/10;
@@ -2321,7 +2560,6 @@ BoxFix(
 	for (i = 0; i < COUNT_PALETTE_COLORS; i++) {
 		XtSetArg(args[0], XmNx, (int)(w*j)+10);
 		XtSetValues(XmColorSB_ColoredFieldWidget(csb)[i], args, 1);
-		XtVaGetValues(XmColorSB_ColoredFieldWidget(csb)[i], XmNx, &X, NULL);
 		if (j==7)
 			j=0;
 		else
@@ -2337,6 +2575,9 @@ BoxFix(
 		else
 			j++;
 	}
+
+	XtSetArg(args[0],XmNwidth,w*7+COLOR_FRAME_WIDTH);
+	XtSetValues(XmColorSB_pButtonAddColor(csb), args, 1);
 
 	j=0;
 	XtSetArg(args[0],XmNy, h*j+10);
@@ -2355,6 +2596,7 @@ BoxFix(
 	j++;
 	XtSetArg(args[0],XmNy, h*j+10);
 	XtSetValues(XmColorSB_labelCustomColors(csb), args, 1);
+	
 	for (i=0; i<COUNT_CUSTOM_COLORS; i++) {
 		q=div(i, 8);
 		if (q.rem==0)
@@ -2363,6 +2605,10 @@ BoxFix(
 		XtSetValues(XmColorSB_CustomFieldWidget(csb)[i], args, 1);
 
 	}
+
+  j++;
+	XtSetArg(args[0],XmNy,h*j);
+	XtSetValues(XmColorSB_pButtonAddColor(csb), args, 1);
 
 	return;
 }
@@ -2694,3 +2940,4 @@ XmVaCreateManagedColorSelectionBox(
 	va_end(var);
 	return w;
 }
+

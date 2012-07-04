@@ -32,7 +32,7 @@ extern "C" {
 #define XmColorSelectionBox_COLOR_NAME_SIZE 100
 #define XmColorSelectionBox_NUM_TOGGLES 2
 #define S_len 256
-#define H_len 240
+#define H_len 241
 #define widgetN 15
 #define COUNT_PALETTE_COLORS 48
 #define COUNT_CUSTOM_COLORS 16
@@ -121,6 +121,9 @@ typedef struct _XmColorSelectionBoxPart
 	Widget frame_color;
 	Widget ColoredFieldWidget[48];
 	Widget CustomFieldWidget[48];
+	Widget labelSelectedColor;
+	Widget selectedColorF;
+	Widget dropper;
 
 	XtCallbackList ok_callback; /*  callbacks  */
 	XtCallbackList cancel_callback;
@@ -138,6 +141,8 @@ typedef struct _XmColorSelectionBoxPart
 	Boolean first_expose;
 	Widget highlighted_button;
 	Pixel highlighting_background_color;	
+
+  Boolean allow_callbacks;
 } XmColorSelectionBoxPart;
 
 typedef struct _XmColorSelectionBoxRec
@@ -203,6 +208,9 @@ externalref XmBulletinBoardClassRec xmBulletinBoardClassRec;
 #define XmColorSB_CustomFieldWidget(w) (((XmColorSelectionBoxWidget)(w))->cs.CustomFieldWidget)
 #define XmColorSB_labelPalette(w) (((XmColorSelectionBoxWidget)(w))->cs.labelPalette)
 #define XmColorSB_labelCustomColors(w) (((XmColorSelectionBoxWidget)(w))->cs.labelCustomColors)
+#define XmColorSB_labelSelectedColor(w) (((XmColorSelectionBoxWidget)(w))->cs.labelSelectedColor) 
+#define XmColorSB_selectedColorF(w) (((XmColorSelectionBoxWidget)(w))->cs.selectedColorF) 
+#define XmColorSB_dropper(w) (((XmColorSelectionBoxWidget)(w))->cs.dropper) 
 
 #define XmColorSB_color_value(w) (((XmColorSelectionBoxWidget)(w))->cs.color_value)
 #define XmColorSB_hue_value(w) (((XmColorSelectionBoxWidget)(w))->cs.hue_value)
@@ -223,6 +231,9 @@ externalref XmBulletinBoardClassRec xmBulletinBoardClassRec;
 #define XmColorSB_margin_width(w) (((XmColorSelectionBoxWidget)(w))->cs.margin_width)
 #define XmColorSB_margin_height(w) (((XmColorSelectionBoxWidget)(w))->cs.margin_height)
 #define XmColorSB_frameColor(w) (((XmColorSelectionBoxWidget)(w))->cs.frame_color)
+
+#define XmColorSB_allow_callbacks(w) (((XmColorSelectionBoxWidget)(w))->cs.allow_callbacks)
+ 
 
 #define CS_WIDTH 570
 #define CS_HEIGHT 480

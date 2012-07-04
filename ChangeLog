@@ -1,3 +1,10 @@
+2009-03-25  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/ColorSB.c, lib/Xm/ColorSB.h, lib/Xm/ColorSBP.h, 
+	  lib/XmMessages.c, lib/XmMessagesI.h, lib/XmXmMsgI.h:
+	Fixed bug #1463 (XmColorSelectionBox label space is too small) 
+	Added color dropper
+	Added on change event handling for fields
+
 2009-03-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c
 	Added missing 'O' character to UTF8_SUPPORTED macro 

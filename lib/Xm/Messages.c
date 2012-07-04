@@ -1677,6 +1677,9 @@ externaldef(messages) _XmConst char *_XmMsgColorSB_0008 =
 externaldef(messages) _XmConst char *_XmMsgColorSB_0009 =
    "Add to Custom Colors";
 
+externaldef(messages) _XmConst char *_XmMsgColorSB_0010 =
+   "Selected Color:";
+
 /*
  * This one is not part of the message catalog
  */
