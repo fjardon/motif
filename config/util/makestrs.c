@@ -282,7 +282,7 @@ WriteSourceLine (TableEnt* te, int abi, int fudge)
     char* c;
 
     for (c = te->right; *c; c++) (void) printf ("'%c',", *c);
-    (void) printf ("%c", '0');
+    (void) printf ("%s", "'\\0'");
     if (te->next || fudge) (void) printf ("%c", ',');
     (void) printf ("%s", "\n");
 }

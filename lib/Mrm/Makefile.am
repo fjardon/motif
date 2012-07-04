@@ -44,4 +44,10 @@ $(CAT_FILES): Mrm.msg
 	$(top_builddir)/localized/util/mkcatdefs MrmMsgCatI.h $(srcdir)/Mrm.msg >$(top_builddir)/localized/C/msg/Mrm.msg
 	gencat Mrm.cat $(top_builddir)/localized/C/msg/Mrm.msg
 
+    SPLINT_EXTRAFLAGS = -I. +posixlib
+else
+    SPLINT_EXTRAFLAGS = -I. -DNO_MESSAGE_CATALOG +posixlib -immediatetrans
 endif
+
+splint:
+	$(SPLINT) $(top_srcdir)/lib/Mrm/*.c $(INCLUDES) $(SPLINT_EXTRAFLAGS)

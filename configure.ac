@@ -45,10 +45,18 @@ dnl AC_PROG_YACC
 dnl Do this the old fashioned way. 'bison -y' doesn't cut it
 AC_CHECK_PROGS(YACC, byacc, yacc)
 
+dnl AC_PROG_SPLINT
+AC_CHECK_PROGS(SPLINT, splint)
+if test x$SPLINT = x
+then
+    AC_MSG_WARN([No splint is dound])
+fi
+
 AM_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+
 
 dnl Checks for libraries.
 
@@ -231,6 +239,8 @@ fi
 
 AC_FIND_XFT
 AC_IMAGE_SUPPORT
+
+
 
 # AM_CONDITIONAL(Motif22Compatibility, test x$enable_motif22_compatibility = xyes)
 
