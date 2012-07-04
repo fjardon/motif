@@ -1,3 +1,8 @@
+2009-04-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Form.c:
+	Refixed bug #1299 (XmForm erroneously finds "Circular dependency"
+	if widgets are inter-attachmed in vertical/horizontal directions)
+
 2009-03-25  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ColorSB.c, lib/Xm/ColorSB.h, lib/Xm/ColorSBP.h, 
 	  lib/XmMessages.c, lib/XmMessagesI.h, lib/XmXmMsgI.h:

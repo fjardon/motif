@@ -85,7 +85,7 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 
 /* convenient magic numbers */
 
-#define MAX_LOOP 10000
+#define MAX_LOOP 10
 
 #define LEFT	_XmFORM_LEFT
 #define RIGHT	_XmFORM_RIGHT
@@ -2153,16 +2153,8 @@ SortChildren(
 						(XtIsRectObj(att_widget)))
 					{
 						c1 = GetFormConstraint (att_widget);
-#ifdef FIX_1299
-						if (!c1->sorted && (
-						((j == LEFT || j == RIGHT) && 
-						    (IS_ATTACHED_WIDGET(c1, LEFT) || IS_ATTACHED_WIDGET(c1, RIGHT))) || 
-						((j == TOP || j == BOTTOM) && 
-						    (IS_ATTACHED_WIDGET(c1, TOP) || IS_ATTACHED_WIDGET(c1, BOTTOM)))) 
-						)
-#else
+						
 						if (!c1->sorted)
-#endif
 							sortable = False;
 					}
 				}
@@ -2188,6 +2180,7 @@ SortChildren(
 			last_child = child;
 			c->sorted = True;
 		}
+#ifndef FIX_1299
 
 		else
 		{
@@ -2197,7 +2190,39 @@ SortChildren(
 			XmeWarning( (Widget) fw, MESSAGE5);
 			return;
 		}
+#endif
 	}
+
+#ifdef FIX_1299
+  /*Add other children that haven't been sorted*/
+	for (i = 0; i < fw->composite.num_children; i++)
+	{
+		child = fw->composite.children[i];
+
+    c = GetFormConstraint(child);
+    
+    if (!XtIsRectObj(child) || c->sorted)
+			continue;
+		
+    if(!c->sorted) {
+			if (last_child == NULL) 
+			{
+				c->next_sibling = fw->form.first_child;
+				fw->form.first_child = child;
+			  }
+			else
+			{
+				c1 = GetFormConstraint(last_child);
+				c->next_sibling = c1->next_sibling;
+				c1->next_sibling = child;
+			}
+
+			last_child = child;
+			c->sorted = True;
+		}
+  }
+#endif
+
 }
 
 
