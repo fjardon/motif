@@ -1,3 +1,7 @@
+2009-03-04  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmString.c
+	Added missing 'O' character to UTF8_SUPPORTED macro 
+
 2009-03-02  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
 	Refixed bug #1299 (XmForm erroneously finds "Circular dependency"
@@ -82,6 +86,8 @@
 2008-09-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* Makefile.am:
 	Added ACLOCAL_AMFLAGS
+	
+========================= Open Motif 2.3.1 released ==============================	
 
 2008-09-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:
