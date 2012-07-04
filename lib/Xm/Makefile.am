@@ -41,7 +41,6 @@ EXTRA_SRCS = XmExtUtil.c \
              MultiList.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
              Hierarchy.c Outline.c TabBox.c TabList.c TabStack.c \
              DrawUtils.c Tree.c DropDown.c \
-             XmStrDefs.ht XmStrDefs22.ht XmStrDefs23.ht XmStrDefsI.ht \
              ColorSB.c
 
 SLIDE_HDRS = SlideC.h SlideCP.h
@@ -307,6 +306,12 @@ $(CAT_FILES): Xm.msg
 	$(top_builddir)/localized/util/mkcatdefs XmMsgCatI.h $(srcdir)/Xm.msg >$(top_builddir)/localized/C/msg/Xm.msg
 	gencat Xm.cat $(top_builddir)/localized/C/msg/Xm.msg
 
+    SPLINT_EXTRAFLAGS = -I. +posixlib
+else
+    SPLINT_EXTRAFLAGS = -I. -DNO_MESSAGE_CATALOG +posixlib -immediatetrans
 endif
+
+splint: $(STRING_FILES)
+	$(SPLINT) $(top_srcdir)/lib/Xm/*.c $(INCLUDES) $(SPLINT_EXTRAFLAGS)
 
 #include $(srcdir)/check_headers.am

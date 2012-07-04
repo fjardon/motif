@@ -33,7 +33,7 @@
 #include	<Xm/XmP.h>
 #include	<Xm/ManagerP.h>
 #include	<Xm/PrimitiveP.h>
-#include	<TableLayout.h>
+#include	<Xm/TableLayout.h>
 
 /* the boiler plate for the widget itself */
 
