@@ -32,6 +32,8 @@
 
 #include "XmI.h"
 #include "MessagesI.h"
+#include <stdlib.h>
+#include <X11/keysym.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/GadgetP.h>
