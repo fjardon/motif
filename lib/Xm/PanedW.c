@@ -2086,6 +2086,9 @@ ChangeManaged(
    int num_panes = 0;
    XmPanedWindowConstraintPart * pane;
    XtGeometryResult result;
+#ifdef FIX_1476
+   XtWidgetGeometry request, reply;
+#endif
 
   /* 
    * THIS PREVENTS US FROM RE-ENTERING THIS CODE AS WE MANAGE/UNMANAGE
@@ -2164,18 +2167,30 @@ ChangeManaged(
       if (XtIsRealized((Widget)pw) && XtIsManaged(*childP))
           XtRealizeWidget(*childP);
 
+#ifdef FIX_1476
+      request.request_mode = 0;
+      if( !Horizontal(pw) ) {
+            request.request_mode |= CWWidth;
+            request.width = 0;
+      } else {
+            request.request_mode |= CWHeight;
+            request.height = 0;
+      }
+      XtQueryGeometry(*childP, &request, &reply);
+#else
       /* KEEP SOME RECORD OF DESIRED HEIGHT */
       PaneDMajor(*childP) = MajorChildSize(pw, *childP);
 
       newMinor = childMinor + 2*(childBorderWidth -
                                  (*childP)->core.border_width);
+#endif
 
       if (XtIsManaged(*childP)) 
 	XmeConfigureObject( *childP,
 			   (*childP)->core.x, (*childP)->core.y,
 #ifdef FIX_1476
-			   Minor(pw, newMinor, (*childP)->core.height),
-			   Minor(pw, (*childP)->core.width, newMinor),
+               Major(pw, reply.width, reply.height),
+               Major(pw, reply.width, reply.height),
 #else
 			   Major(pw, (*childP)->core.width, newMinor), 
 			   Major(pw, newMinor, (*childP)->core.height),
@@ -2245,7 +2260,11 @@ ChangeManaged(
    ResetDMajors( pw );
    
    if (XtIsRealized((Widget)pw))
+#ifdef FIX_1476
+      RefigureLocationsAndCommit(pw, pw->paned_window.pane_count - 1, LastPane, False);
+#else
       RefigureLocationsAndCommit(pw, 0, FirstPane, False);
+#endif
 
    XmeNavigChangeManaged((Widget)pw);
 

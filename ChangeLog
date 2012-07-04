@@ -1,6 +1,10 @@
+2009-04-08  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/PanedW.c:
+	Refixed bug #1476 (PanedWindow orientation error)
+
 2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ColorSB.c:
-	Fixed 8 bit depth failule
+	Fixed 8 bit depth failure
 
 2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
