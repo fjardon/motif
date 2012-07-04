@@ -506,6 +506,7 @@ _XmAssignInsensitiveColor(Widget w)
 	Pixel p;
 
 	p = w->core.background_pixel;
+	screen_in_out.pixel = w->core.background_pixel;
 	XQueryColor(XtDisplay(w), w->core.colormap, &screen_in_out);
 	if (		 (abs(screen_in_out.red-RGB_GREY_VALUE)<RGB_GREY_PRESISE)
 			&& (abs(screen_in_out.green-RGB_GREY_VALUE)<RGB_GREY_PRESISE)

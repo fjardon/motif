@@ -3132,12 +3132,12 @@ UpdateGCs(
     values.background = IG_Background(wid) ; 
 #ifdef FIX_1381
     valueMask |= GCFillStyle;
+    values.fill_style = FillSolid;
 #else
     valueMask |= GCFillStyle | GCStipple;
-#endif
-
     values.fill_style = FillOpaqueStippled;
     values.stipple = _XmGetInsensitiveStippleBitmap(wid);
+#endif
 
     IG_InsensitiveGC(wid) = XtAllocateGC(XtParent(wid), 
 					 XtParent(wid)->core.depth, 

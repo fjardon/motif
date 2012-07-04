@@ -1642,8 +1642,7 @@ Redisplay(
 		       lp->alignment,
 		       XmPrim_layout_direction(lw), NULL);
 
-#ifdef FIX_1381
-#else
+#ifndef FIX_1381
 #ifdef USE_XFT
       if (!XtIsSensitive(wid))
         {
