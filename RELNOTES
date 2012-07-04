@@ -84,14 +84,18 @@ Open Motif 2.3.1 was built and tested on the following systems:
 * Fedora 8 x86_64
 * Fedora 9 x86_64
 * Fedora 10 x86_64
-* Redhat Enterprise Linux 3.0 i386
-* Redhat Enterprise Linux 4.5 i386
-* Redhat Enterprise Linux 5.1 i386
-* Redhat Enterprise Linux 4.5 x86_64
-* Redhat Enterprise Linux 5.1 x86_64
+* Red Hat Enterprise Linux 3.0 i386
+* Red Hat Enterprise Linux 4.5 i386
+* Red Hat Enterprise Linux 5.1 i386
+* Red Hat Enterprise Linux 5.3 i386
+* Red Hat Enterprise Linux 4.5 x86_64
+* Red Hat Enterprise Linux 5.1 x86_64
+* Red Hat Enterprise Linux 5.3 x86_64
 * SUSE 9.3 i586
-* Open SUSE 10.3 i586
-* Open SUSE 10.3 x86_64
+* openSUSE 10.3 i586
+* openSUSE 11.1 i586
+* openSUSE 10.3 x86_64
+* openSUSE 11.1 x86_64
 
 In all cases, the compiler originally provided with the OS was used.
 
