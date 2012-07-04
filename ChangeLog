@@ -1,3 +1,7 @@
+2009-04-08  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/PanedW.c:
+	Refixed bug #1476 (PanedWindow orientation error)
+
 2009-04-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
 	Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
