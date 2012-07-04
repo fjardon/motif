@@ -27,6 +27,7 @@ wmluiltok_SOURCES = wmluiltok.l
 wmluiltok_LDADD = @LEXLIB@
 
 wml_SOURCES = wml.c
+wml_DEPENDENCIES = $(noinst_LIBRARIES)
 wml_LDADD = -L. -lwml
 
 wmldbcreate_LDADD = ../../lib/Xm/libXm.la

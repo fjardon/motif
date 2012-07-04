@@ -37,6 +37,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 
 #include <string.h>
 #include <stdio.h>
+#include <wctype.h>
 #include <X11/Xatom.h>
 #include <Xm/XmosP.h>
 #include "XmI.h"
@@ -2762,7 +2763,7 @@ MakeGC(XmListWidget lw)
   values.background = lw->core.background_pixel;
 #ifdef FIX_1381
 /*added for gray insensitive foreground (instead stipple)*/
-  values.foreground = _XmAssignInsensitiveColor(lw);
+  values.foreground = _XmAssignInsensitiveColor((Widget)lw);
   valueMask |=  GCFillStyle;
 #else
   values.foreground = lw->primitive.foreground;

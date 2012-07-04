@@ -1744,7 +1744,7 @@ _XmTextUpdateLineTable(Widget widget,
         }
         _XmTextSetCursorPosition(widget, cursorPos);
       } else if (start == tw->text.cursor_position && tw->text.auto_show_cursor_position) {
-        _XmTextShowPosition(tw, cursorPos);
+        _XmTextShowPosition((Widget)tw, cursorPos);
       }
     }
 #else
