@@ -1,3 +1,7 @@
+2009-06-16  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/RCPopup.c:
+	Fixed bug #1412 (An insensitive popup menu parent lead to a display-freezing)
+
 2009-05-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/MapEvents.c, lib/Xm/RCMenu.c, lib/Xm/Xm.c, lib/Xm/XmI.h:
 	Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
