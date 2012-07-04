@@ -67,8 +67,6 @@ This is a bug fix release.
   XmComboBox, the widget displays the wrong number of items)
 * Added missing 'O' character to UTF8_SUPPORTED macro 
 * Fixed bug #1476 (PanedWindow orientation error)
-* Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
-  if widgets are inter-attachmed in vertical/horizontal directions)
 * Fixed bug #1277 (paned widget does not work under Fedora Core 2 
   with openmotif 2.2.3-4.1)
 * Fixed bug #1212 (XmDropSiteRetrieve frees XRectangles before
