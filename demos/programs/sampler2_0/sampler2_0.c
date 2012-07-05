@@ -475,6 +475,7 @@ InitContainerOutline (Widget w, XtPointer client_data, XtPointer call_data)
     }
 
     XtManageChildren(icongs, i);
+    XtFree((char *)icongs);
 	 
 }
 

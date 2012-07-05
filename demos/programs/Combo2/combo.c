@@ -51,6 +51,9 @@ static void createScreen(Widget parent)
 	XtSetArg(args[n], XmNitems, tmp0); n++;
 	XtSetArg(args[n], XmNitemCount, i); n++;
 	combo = XmCreateDropDown(rc, "combo", args, n);
+	for(n = 0; n < i; n++)
+		XmStringFree(tmp0[n]);
+	XtFree((char *)tmp0);
 	
 	XtManageChild(combo);
 	}	

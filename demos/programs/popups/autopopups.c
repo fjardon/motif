@@ -132,14 +132,26 @@ int main(int argc, char **argv)
   count = 0;
   str = XmStringCreateLocalized(
 	"Click Button3 anywhere to cause a popup menu");
-  tmp1 = XmStringConcat(str, XmStringSeparatorCreate());
+  {
+  XmString sep;
+
+      sep = XmStringSeparatorCreate();
+      tmp1 = XmStringConcat(str, sep);
+      XmStringFree(sep);
+  }
   XmStringFree(str);
   tmp2 = XmStringCreateLocalized(
          "to be posted.  Note that the posted menu");
   str = XmStringConcat(tmp1, tmp2);
   XmStringFree(tmp1);
   XmStringFree(tmp2);
-  tmp1 = XmStringConcat(str, XmStringSeparatorCreate());
+  {
+  XmString sep;
+
+      sep = XmStringSeparatorCreate();
+      tmp1 = XmStringConcat(str, sep);
+      XmStringFree(sep);
+  }
   XmStringFree(str);
   tmp2 = XmStringCreateLocalized(
          "differs depending on where you click.");

@@ -421,7 +421,7 @@ static void ConfigureAirport(Widget area, Airport this)
 {
    Arg args[10];
    int i, n;
-   Window root, parent, *wlist;
+   Window root, parent, *wlist = NULL;
    unsigned int count;
    Dimension width, height;
    int min_width, min_height;
@@ -441,6 +441,10 @@ static void ConfigureAirport(Widget area, Airport this)
       do {
 	 XWindowAttributes wa;
 	 
+	 if (wlist)
+	 {
+	     XFree(wlist);
+	 }
 	 current = this->ocean = parent;
 	 if (XQueryTree(this->display, current, &root, &parent,
 			&wlist, &count) == 0)
@@ -465,6 +469,10 @@ static void ConfigureAirport(Widget area, Airport this)
 	      }
 	 }
       } while (root != current);
+     if (wlist)
+     {
+	 XFree(wlist);
+     }
    }
    
    n = 0;

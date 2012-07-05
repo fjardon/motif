@@ -192,6 +192,7 @@ int main(argc, argv) int argc; char **argv ;
 	XShapeCombineMask (XtDisplay (draw), XtWindow (draw), 
 			   ShapeClip, 0,0, shape_mask, ShapeSet);
 	XFreePixmap (XtDisplay (draw), shape_mask);
+	XFreeGC(XtDisplay(draw), shapeGC);
 	/* don't ask me why I use alternatively draw and toplevel as
 	   a parameter of XtDisplay, it doesn't matter at all */
     } else {
