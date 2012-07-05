@@ -37,7 +37,8 @@ EXTRA_SRCS = XmExtUtil.c \
              Column.c ButtonBox.c ColorS.c Picture.c DataFSel.c DataF.c \
              MultiList.c I18List.c Paned.c FontS.c IconBox.c IconButton.c xmlist.c \
              Hierarchy.c Outline.c TabBox.c TabList.c TabStack.c \
-             DrawUtils.c Tree.c DropDown.c
+             DrawUtils.c Tree.c DropDown.c \
+             XmStrDefs.ht XmStrDefs22.ht XmStrDefs23.ht XmStrDefsI.ht
 
 SLIDE_HDRS = SlideC.h SlideCP.h
 SLIDE_SRCS = SlideC.c
