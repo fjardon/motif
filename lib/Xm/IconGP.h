@@ -101,9 +101,6 @@ typedef struct _XmIconGCacheObjPart
    GC               normal_GC;
    GC               background_GC;
    GC               insensitive_GC;
-#ifdef FIX_1381
-   GC               shadow_GC;
-#endif
    GC               top_shadow_GC;
    GC               bottom_shadow_GC;
    GC               highlight_GC;
@@ -112,6 +109,9 @@ typedef struct _XmIconGCacheObjPart
    Dimension        spacing;
    Dimension        margin_width;
    Dimension        margin_height;
+#ifdef FIX_1381
+   GC               shadow_GC;
+#endif
 } XmIconGCacheObjPart;
 
 typedef struct _XmIconGCacheObjRec

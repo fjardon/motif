@@ -29,7 +29,7 @@
 #ifndef _XmLabelGP_h
 #define _XmLabelGP_h
 
-#include "XmP.h"
+#include <Xm/XmP.h>
 #include <Xm/LabelG.h>
 #include <Xm/GadgetP.h>
 #include <Xm/ExtObjectP.h>

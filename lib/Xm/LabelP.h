@@ -29,7 +29,7 @@
 #ifndef _XmLabelP_h_
 #define _XmLabelP_h_
 
-#include "XmP.h"
+#include <Xm/XmP.h>
 #include <Xm/Label.h>
 #include <Xm/PrimitiveP.h>
 
