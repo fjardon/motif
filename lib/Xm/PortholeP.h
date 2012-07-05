@@ -120,4 +120,3 @@ extern XmPortholeClassRec xmPortholeClassRec;
 #endif
 
 #endif /* _XmPortholeP_h */
-    
