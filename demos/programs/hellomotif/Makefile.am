@@ -13,7 +13,7 @@ INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS}
 all: hellomotif.uid
 
 hellomotif.uid: hellomotif.uil
-	../../../clients/uil/uil -o $@ $< -I$(srcdir)/../../../clients/uil -I../../../clients/uil
+	../../../clients/uil/uil -o $@ $? -I$(srcdir)/../../../clients/uil -I../../../clients/uil
 
 clean-local:
 	$(RM) hellomotif.uid

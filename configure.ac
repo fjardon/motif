@@ -188,6 +188,9 @@ AC_SUBST(INCDIR)
 XMBINDDIR_FALLBACK="${libdir}/X11/bindings"
 AC_SUBST(XMBINDDIR_FALLBACK)
 
+RM="rm -f"
+AC_SUBST(RM)
+
 AC_ARG_ENABLE(motif22-compatibility, [  --disable-motif22-compatibility
                        Disable binary compatibility with OpenMotif 2.2])
 AC_ARG_ENABLE(utf8, [  --disable-utf8
