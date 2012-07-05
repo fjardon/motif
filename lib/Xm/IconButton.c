@@ -26,6 +26,8 @@
 *	INCLUDE FILES
 *************************************************************/
 
+#include "XmI.h"
+
 #include <Xm/XmP.h>
 #include <Xm/DrawP.h>
 #include <Xm/TraitP.h>

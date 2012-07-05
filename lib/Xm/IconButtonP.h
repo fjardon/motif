@@ -31,7 +31,6 @@
 *************************************************************/
 #include <Xm/PrimitiveP.h>
 #include <Xm/IconButton.h>
-#include "XmI.h"
 
 #ifdef __cplusplus
 extern "C" {

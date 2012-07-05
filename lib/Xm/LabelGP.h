@@ -32,7 +32,6 @@
 #include <Xm/LabelG.h>
 #include <Xm/GadgetP.h>
 #include <Xm/ExtObjectP.h>
-#include "XmI.h"
 
 #ifdef __cplusplus
 extern "C" {

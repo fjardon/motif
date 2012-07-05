@@ -31,7 +31,6 @@
 
 #include <Xm/Label.h>
 #include <Xm/PrimitiveP.h>
-#include "XmI.h"
 
 
 #ifdef __cplusplus
