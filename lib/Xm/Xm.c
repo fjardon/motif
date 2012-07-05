@@ -39,6 +39,9 @@
 #include <Xm/GadgetP.h>
 #include <Xm/IconGP.h>
 #include <Xm/LabelGP.h>
+#ifdef FIX_345
+#include <X11/keysym.h>
+#endif
 
 
 /**************************************************************************
