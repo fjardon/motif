@@ -80,6 +80,9 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #include <Xm/XpmP.h>
 #include <string.h>
 #include <Xm/XmP.h>
+#ifdef FIX_1381
+#include <Xm/ColorI.h>
+#endif
 
 #define Pix(w)      LabG_Pixmap(w)
 #define Pix_insen(w)    LabG_PixmapInsensitive(w)
@@ -164,10 +167,6 @@ static void InitNewPixmapBehavior(XmLabelGadget lw);
 static char* GetLabelGadgetAccelerator(Widget);
 static KeySym GetLabelGadgetMnemonic(Widget);
 static void GetColors(Widget widget, XmAccessColorData color_data);
-#ifdef FIX_1381
-static Pixmap ConvertToBW(Widget w, Pixmap pm);
-static unsigned int FromColorToBlackAndWhite(char *col);
-#endif
 /********    End Static Function Declarations    ********/
 
 void _XmLabelConvert(Widget w, XtPointer ignore, XmConvertCallbackStruct*);
@@ -2258,84 +2257,6 @@ Region region)
     _XmRedisplayLabG(wid, event, region, &background_box);
 }
 
-#ifdef FIX_1381
-static
-unsigned int
-FromColorToBlackAndWhite(char *col)
-{
-    unsigned long r, g, b, bw;
-    char k[5];
-
-    k[4] = '\0';
-    memcpy(k, col, 4);
-    r = strtoul(k, NULL, 16);
-    memcpy(k, col + 4, 4);
-    g = strtoul(k, NULL, 16);
-    b = strtoul(col + 8, NULL , 16);
-    bw = (0.3 * r + 0.59 * g + 0.11 * b);
-    return bw;
-}
-
-static
-Pixmap ConvertToBW(Widget w, Pixmap pm)
-{
-    Pixmap bw_pixmap;
-    XpmImage im;
-    int i = 0;
-    unsigned int bw = 0, bw2 = 0;
-    char *col = NULL, *col2 = NULL;
-
-    XpmCreateXpmImageFromPixmap(XtDisplay (w), pm, 0, &im, NULL);
-    if (im.ncolors > 0)	{
-	if (im.ncolors <= 2) {
-	    if (im.ncolors == 1) {
-		col = strdup(im.colorTable[0].c_color);
-		if (col[0] == '#') {
-		    bw = (FromColorToBlackAndWhite(col + 1) * 0.65);
-		    sprintf(im.colorTable[0].c_color, "#%04x%04x%04x", bw, bw, bw);
-		}
-		if (col) free(col);
-	    } else {
-		col = im.colorTable[0].c_color;
-		col2 = im.colorTable[1].c_color;
-		if ((col[0] == '#') && (col2[0] == '#')) {
-		    bw = FromColorToBlackAndWhite(col + 1);
-		    bw2 = FromColorToBlackAndWhite(col2 + 1);
-
-		    if (bw >= bw2) {
-			bw2 = bw2 + ((bw - bw2) * 0.65);
-			sprintf(im.colorTable[1].c_color, "#%04x%04x%04x", bw2, bw2, bw2);
-		    } else {
-			bw = bw + ((bw2 - bw) * 0.65);
-			sprintf(im.colorTable[0].c_color, "#%04x%04x%04x", bw, bw, bw);
-		    }
-		}
-	    }
-	} else {
-	    char e[5];
-	    for (i = 0; i < im.ncolors; i++) {
-		col = im.colorTable[i].c_color;
-		if (col[0] == '#') {
-		    bw = FromColorToBlackAndWhite(col+1);
-		    /*
-		    could be
-		    sprintf(im.colorTable[i].c_color, "#%04x%04x%04x", bw, bw, bw);
-		    Four lower lines is sprintf optimized version 
-		    */
-		    sprintf(e, "%04x", bw);
-		    memcpy(col+1, e, 4);
-		    memcpy(col+5, e, 4);
-		    memcpy(col+9, e, 4);
-		}
-	    }
-	}
-    }
-    XpmCreatePixmapFromXpmImage(XtDisplay(w), pm, &im, &bw_pixmap, 0, NULL);
-    XpmFreeXpmImage(&im);
-    return bw_pixmap;
-}
-#endif
-
 void
 _XmRedisplayLabG(Widget wid,
 XEvent *event,
@@ -2443,7 +2364,7 @@ LRectangle *background_box)
 
             if (pix_use == XmUNSPECIFIED_PIXMAP)
 #ifdef FIX_1381
-		Pix_insen(lw) = pix_use = ConvertToBW(wid, Pix(lw));
+		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
 #else
 		pix_use = Pix(lw);				
 #endif

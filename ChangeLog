@@ -1,5 +1,13 @@
 ========================= Open Motif 2.3.3 released ============================
 
+2009-07-10  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Color.c, 
+	  lib/Xm/ColorI.h,
+	  lib/Xm/Label.c,
+	  lib/Xm/LabelG.c:
+	Moved FromColorToBlackAndWhite() and ConvertToBW() routines from Label.c,
+	LabelG.c to Color.c   
+
 2009-07-09  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac, 
 	  demos/programs/animate/Makefile.am, 
