@@ -1,5 +1,7 @@
 datadir = ${prefix}/share/Xm/doc
 
+ACLOCAL_AMFLAGS = -I .
+
 #data_DATA = BUGREPORT COPYRIGHT.MOTIF COPYING \
 #            README RELEASE RELNOTES
 
