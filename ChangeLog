@@ -1,4 +1,8 @@
 2009-10-29  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/IconButton.c:
+	Removed junk
+
+2009-10-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Xm.h.in:
 	Fixed in order to provide PRINTING_SUPPORTED and USE_XFT 
 	macro definitions in Xm.h
