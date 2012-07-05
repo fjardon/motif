@@ -2369,7 +2369,12 @@ GeometryManager(
   *            requested width are less that the current, allow the children
   *            to shrink if they want to while maintaining our own size.
   */
+#ifdef FIX_1474
+          if (((XtWidth(m) < w) && desired->request_mode & CWWidth) \
+		  || ((XtHeight(m) < h) && desired->request_mode & CWHeight))
+#else 
           if ((XtWidth(m) < w) || (XtHeight(m) < h))
+#endif
           return (XtGeometryNo);
           break;
        default: /* fall out */

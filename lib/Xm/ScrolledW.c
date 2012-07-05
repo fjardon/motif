@@ -53,7 +53,6 @@ static char rcsid[] = "$TOG: ScrolledW.c /main/16 1997/07/25 16:49:57 samborn $"
 #include "ScrollFramTI.h"
 #include "TraversalI.h"
 #include "XmI.h"
-#include <Xm/XmP.h>
 
 #define MAXPOS ((1 << 15)-1)
 
@@ -3103,7 +3102,6 @@ Widget wid )
         desired.request_mode = CWWidth;
         (void) _XmMakeGeometryRequest(wid, &desired);
 
-        GetVariableSize(sw, &desired.width, &desired.height);
         desired.request_mode = CWHeight;
         (void) _XmMakeGeometryRequest(wid, &desired);
 #else

@@ -2069,8 +2069,12 @@ QueryProc(Widget wid,
     {
       viz = lw->list.visibleItemCount;
       /* BEGIN OSF Fix CR 6014 */
+#ifdef FIX_1474
+      lw->list.LastSetVizCount = lw->list.visibleItemCount;
+#else
       if (lw->list.LastSetVizCount)
 	lw->list.visibleItemCount = lw->list.LastSetVizCount;
+#endif
       /* END OSF Fix CR 6014 */
       SetDefaultSize(lw, &MyWidth, &MyHeight, True, True);
       lw->list.visibleItemCount = viz;
