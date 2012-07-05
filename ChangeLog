@@ -1,4 +1,8 @@
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmRenderT.c:
+	Fixed bug #1449 (Uninitalised memory access with XFT fonts)  
+
+2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* INSTALL.configure: 
 	Fixed bug #1418 (Add file with instructions how to build from CVS)  
 
