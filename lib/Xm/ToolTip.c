@@ -66,7 +66,7 @@ ToolTipGetData (Widget w)
 
    ttp = (XmToolTipConfigTrait) XmeTraitGet (top, XmQTtoolTipConfig);
 
-   if (ttp->label == NULL && !top->core.being_destroyed)
+   if (ttp != NULL && ttp->label == NULL && !top->core.being_destroyed)
    {
       Widget shell;
 
