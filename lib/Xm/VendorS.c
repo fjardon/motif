@@ -2919,12 +2919,19 @@ Destroy(
 	     XtFree((char *) ve);
 	 }
 	 XtFree((char *) ext);
-    }    
-    
+    }
+
 #ifdef FIX_1388
-    if (XmeTraitGet((XtPointer) wid, XmQTtoolTipConfig) != NULL)
+    {
+        XmToolTipConfigTrait        ttp;           /* ToolTip pointer */
+
+        if ((ttp = XmeTraitGet((XtPointer) wid, XmQTtoolTipConfig)) != NULL)
+        {
             XmeTraitSet((XtPointer) wid, XmQTtoolTipConfig, (XtPointer) NULL);
-#endif    
+            XtFree((char *)ttp);
+        }
+    }
+#endif
 
     /*
      * If all VendorShells have been destroyed, destroy the XmDisplay object
