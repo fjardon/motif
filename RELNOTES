@@ -63,9 +63,12 @@ and compiled. The distribution contains the following items:
 
 This is a bug fix release.
 
+* Fixed bug #1195 (Making on FreeBSD with non GNU make)   
+* Refixed bug #1388 (SEGV error moving mouse over window related
+  to XmToolTipGetLabel)
 * Fixed bug #1489 (Paned.h is not included by XmAll.h)  
 * Fixed bug #1486 (Tooltip in DropDown widget makes X hang up)  
-* Reixed bug #1476 (PanedWindow orientation error)  
+* Dropped fix #1476 (PanedWindow orientation error)  
 * Fixed bug #1320 (Resizing a scrolled text widget can be very, very slow)  
 * Fixed bug #1449 (Uninitalised memory access with XFT fonts)  
 * Fixed bug #1418 (Add file with instructions how to build from CVS)  
