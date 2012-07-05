@@ -83,6 +83,7 @@ AC_DEFINE(HAVE_LIBXMU, 1, This System has libXmu)
 AC_CHECK_LIB(Xmu,XmuNCopyISOLatin1Lowered ,
 AC_DEFINE(HAVE_XMU_N_COPY_ISO,1,Have XmuNCopyISOLatin1Lowered)
 , , -lXt -lX11)
+,,[[#include <X11/Intrinsic.h>]]
 )
 
 
