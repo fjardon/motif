@@ -1,3 +1,7 @@
+2009-06-19  Ihor Hayvuk <ihayvuk@ics.com>
+	* configure.ac, clients/mwm/Makefile.am, clients/mwm/WmResParse.c: 
+	Fixed bug #1426 (Make location of system.mwmrc configurable)
+
 2009-06-17  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmTenderT.c: 
 	Fixed bug #1451 (XmStringDrawImage works incorrectly with XFT)
