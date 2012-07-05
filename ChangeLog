@@ -1,3 +1,10 @@
+========================= Open Motif 2.3.3 released ============================
+
+2009-06-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* RELNOTES, openmotif-f8.spec, openmotif.spec, RELEASE, Makefile.imake-pure, LICENSE,
+	  Imakefile, configure.ac, lib/Xm/Xm.h.in, clients/mwm/version.c:
+	Updated for OpenMotif 2.3.3  
+
 2009-06-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmAll.h:
 	Fixed bug #1489 (Paned.h is not included by XmAll.h)  
