@@ -17,7 +17,6 @@
 #define _DtPrint_h
 
 #include <Xm/Xm.h>
-#include <X11/extensions/Print.h> 
 
 #ifdef __cplusplus
 extern "C" {
@@ -160,7 +159,7 @@ typedef struct _DtPrintSetupData
 {
     String printer_name;
     Display *print_display;
-    XPContext print_context;
+    XID print_context;
     XtEnum destination;
     String dest_info;
     XtEnum messages_hint;

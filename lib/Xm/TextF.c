@@ -74,7 +74,9 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include "TraversalI.h"
 #include "VendorSEI.h"
 #include "XmStringI.h"
+#ifdef PRINTING_SUPPORTED
 #include <Xm/PrintSP.h>         /* for XmIsPrintShell */
+#endif
 #ifdef USE_XFT
 #include <X11/Xft/Xft.h>
 #include "XmRenderTI.h"

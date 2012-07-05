@@ -35,7 +35,9 @@
 #include <Xm/PrimitiveP.h>
 #include <Xm/GadgetP.h>
 #include <Xm/VendorSEP.h>
+#ifdef PRINTING_SUPPORTED
 #include <Xm/PrintSP.h>
+#endif
 #include "SyntheticI.h"
 
 
@@ -407,6 +409,9 @@ _XmManagerGetValuesHook(Widget w,
   _XmProcessUnlock();
 }
 
+
+#ifdef PRINTING_SUPPORTED
+
 /**********************************************************************
  *
  *  _XmPrintShellGetValuesHook
@@ -431,6 +436,7 @@ _XmPrintShellGetValuesHook(Widget w,
   
   _XmProcessUnlock();
 }
+#endif /* PRINTING_SUPPORTED */ 
 
 /**********************************************************************
  *
