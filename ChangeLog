@@ -1,3 +1,7 @@
+2009-10-26  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/TextFSel.c:
+	Refixed bug #1321 (Pasting into XmTextField is unreliable)
+
 2009-09-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ToolTip.c:
 	Fixed bug #1502 (crash in ToolTipGetData())
