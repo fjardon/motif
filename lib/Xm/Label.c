@@ -75,6 +75,7 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #include <string.h>
 
 #define FIX_1442
+#define FIX_1484
 
 #define Pix(w)			((w)->label.pixmap)
 #define Pix_insen(w)		((w)->label.pixmap_insen)
@@ -1879,8 +1880,11 @@ SetValues(Widget cw,
     {
       new_w->label.label_type = current->label.label_type;
     }
-
+#ifdef FIX_1484
+  if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, new_w->label.pixmap_placement,
+#else
   if (!XmRepTypeValidValue(XmRID_LABEL_TYPE, new_w->label.pixmap_placement,
+#endif
 			   (Widget) new_w))
     {
       new_w->label.pixmap_placement = current->label.pixmap_placement;

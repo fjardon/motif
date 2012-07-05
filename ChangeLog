@@ -1,4 +1,8 @@
 2009-06-19  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Label.c: 
+	Fixed bug #1484 (Warning on XmRlabelType when I put a pixmap and a value "top" on XmNPixmapPlacement)
+
+2009-06-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac, clients/mwm/Makefile.am, clients/mwm/WmResParse.c: 
 	Fixed bug #1426 (Make location of system.mwmrc configurable)
 
