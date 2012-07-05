@@ -24,6 +24,7 @@ static String fallbacks[] = {
        to be paid for making them into Traits :(
      */
     APP_CLASS ".toolTipPostDelay: 2000",
+    "*enableThemes: True",
     "*ContainerScrolledWindow.width: 430",
     "*ContainerScrolledWindow.height: 320",
     "*selectColor: DEFAULT_SELECT_COLOR",

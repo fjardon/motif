@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.7 2009/06/30 19:35:07 rwscott Exp $
+ * $Id: Xsettings.c,v 1.8 2009/07/01 10:27:50 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -44,8 +44,10 @@ It contains the following copright notice ...
 #include <stdlib.h>
 
 #include "XsettingsP.h"
+#include <X11/ObjectP.h>
 #include <X11/Xmd.h>
 #include <Xm/XmP.h>
+#include <Xm/AtomMgr.h>
 
 /*
    Widget methods, forward declarations
@@ -89,6 +91,11 @@ static XtResource resources[] =
 	XmNthemePath, XmCThemePath, XmRString,
 	sizeof(String), Offset(theme_path),
 	XtRImmediate, "%D/themes/%T/%F:%H/.local/share/themes/%T/%F:%H/.themes/%T/%F:%d/themes/%T/%F:/usr/local/share/themes/%T/%F:/usr/share/themes/%T/%F"
+    },
+    {
+	XmNenableThemes, XmCEnableThemes, XmRBoolean,
+	sizeof(Boolean), Offset(enable_themes),
+	XtRImmediate, False
     },
 };
 #undef Offset
@@ -275,28 +282,28 @@ apply_resources(Widget w, XrmDatabase new_db, XmConst XtResourceList resource, C
 {
 Pixel bg = XmUNSPECIFIED_PIXEL;
 
-    for (; num_resources > 0; num_resources--)
+    while (num_resources-- > 0)
     {
 	XtPointer base;
-	String name = XtNewString(resource[num_resources - 1].resource_name);
-	String rtype = XtNewString(resource[num_resources - 1].resource_type);
+	String name = XtNewString(resource[num_resources].resource_name);
+	String rtype = XtNewString(resource[num_resources].resource_type);
 
     	/*
     	printf("%s %i %s %s %i %i %p\n",
 	    XtName(w),
 	    num_resources,
-	    resource[num_resources - 1].resource_name,
-	    resource[num_resources - 1].resource_type,
-	    resource[num_resources - 1].resource_size,
-	    resource[num_resources - 1].resource_offset,
-	    resource[num_resources - 1].default_addr
+	    resource[num_resources].resource_name,
+	    resource[num_resources].resource_type,
+	    resource[num_resources].resource_size,
+	    resource[num_resources].resource_offset,
+	    resource[num_resources].default_addr
 	    );
 	    */
 
-	resource[num_resources - 1].resource_offset = 0;
-	base = XtMalloc(resource[num_resources - 1].resource_size);
+	resource[num_resources].resource_offset = 0;
+	base = XtMalloc(resource[num_resources].resource_size);
 	XtGetApplicationResources(w, base,
-	    &(resource[num_resources - 1]), 1,
+	    &(resource[num_resources]), 1,
 	    NULL, 0);
 	if (strcmp(name, XmNbackground) == 0)
 	{
@@ -314,7 +321,7 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 
 	    /* Resources that are allowed as part of a theme */
 	    arg.name = name;
-	    memcpy(&arg.value, base, resource[num_resources - 1].resource_size);
+	    memcpy(&arg.value, base, resource[num_resources].resource_size);
 	    XtSetValues(w, &arg, 1);
 	}
 #if 0
@@ -329,12 +336,12 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 		num_resources,
 		name,
 		rtype,
-		resource[num_resources - 1].resource_size,
-		resource[num_resources - 1].resource_offset
+		resource[num_resources].resource_size,
+		resource[num_resources].resource_offset
 		);
 	    /*
 	    arg.name = name;
-	    memcpy(&arg.value, base, resource[num_resources - 1].resource_size);
+	    memcpy(&arg.value, base, resource[num_resources].resource_size);
 	    XtSetValues(w, &arg, 1);
 	    */
 	}
@@ -359,16 +366,14 @@ Cardinal num_resources;
 XmSecondaryResourceData *second;
 Cardinal num_seconds;
 
-    //printf("%s\n", XtName(w));
-
     num_seconds = XmGetSecondaryResourceData(w->core.widget_class, &second);
     if (num_seconds > 0)
     {
-    	for (; num_seconds > 0; num_seconds--)
+    	while (num_seconds-- > 0)
     	{
-	    apply_resources(w, new_db, second[num_seconds - 1]->resources, second[num_seconds - 1]->num_resources);
-	    XtFree((char *)second[num_seconds - 1]->resources);
-	    XtFree((char *)second[num_seconds - 1]);
+	    apply_resources(w, new_db, second[num_seconds]->resources, second[num_seconds]->num_resources);
+	    XtFree((char *)second[num_seconds]->resources);
+	    XtFree((char *)second[num_seconds]);
     	}
 	XtFree((char *)second);
     }
@@ -379,17 +384,17 @@ Cardinal num_seconds;
     	XmNchildren, &kid,
     	XmNnumChildren, &numKids,
     	NULL);
-    for (; numKids > 0; numKids--)
+    while (numKids-- > 0)
     {
-    	apply_to_widgets(new_db, kid[numKids - 1]);
+    	apply_to_widgets(new_db, kid[numKids]);
     }
     if (XtIsWidget(w))
     {
 	kid = w->core.popup_list;
 	numKids = w->core.num_popups;
-	for (; numKids > 0; numKids--)
+	while (numKids-- > 0)
 	{
-	    apply_to_widgets(new_db, kid[numKids - 1]);
+	    apply_to_widgets(new_db, kid[numKids]);
 	}
     }
 }
@@ -397,50 +402,55 @@ Cardinal num_seconds;
 static void
 apply_theme(XmXsettingsWidget xs, String theme_name)
 {
-char *theme_file;
-
-    /*
-    printf("%s:%s(%d) - %s %s \"%s\"\n",
-    	__FILE__, __FUNCTION__, __LINE__,
-    	XtName(XtParent((Widget)xs)),
-    	XtName((Widget)xs),
-    	theme_name);
-    	*/
-
-    theme_file = open_theme(xs, theme_name);
-    if (theme_file)
+    if (xs->xsettings.enable_themes)
     {
-    XrmDatabase disp_db = NULL;
-    Window win = XtWindow(XtParent((Widget)xs));
-    Status combine_status;
-    Boolean resize;
+    char *theme_file;
 
 	/*
-	fprintf(stderr, "%s:%s(%d) - 0x%x\n",
+	printf("%s:%s(%d) - %s %s \"%s\"\n",
 	    __FILE__, __FUNCTION__, __LINE__,
-	    (unsigned int)win);
+	    XtName(XtParent((Widget)xs)),
+	    XtName((Widget)xs),
+	    theme_name);
 	    */
 
-	disp_db = XrmGetDatabase(XtDisplay((Widget)xs));
-	combine_status = XrmCombineFileDatabase(theme_file, &disp_db, True);
-	XtVaGetValues(XtParent((Widget)xs),
-	    XmNallowShellResize, &resize,
-	    NULL);
-	XtVaSetValues(XtParent((Widget)xs),
-	    XmNallowShellResize, True,
-	    NULL);
-	apply_to_widgets(disp_db, XtParent((Widget)xs));
-	XtVaSetValues(XtParent((Widget)xs),
-	    XmNallowShellResize, resize,
-	    NULL);
-	XtFree(theme_file);
-    }
-    else
-    {
-	fprintf(stderr, "%s:%s(%d) - Failed to open \"%s\" theme. %s.\n",
-	    __FILE__, __FUNCTION__, __LINE__,
-	    theme_name,
-	    strerror(errno));
+	theme_file = open_theme(xs, theme_name);
+	if (theme_file)
+	{
+	XrmDatabase disp_db = NULL;
+	Window win = XtWindow(XtParent((Widget)xs));
+	Status combine_status;
+	Boolean resize;
+
+	    /*
+	    fprintf(stderr, "%s:%s(%d) - 0x%x\n",
+		__FILE__, __FUNCTION__, __LINE__,
+		(unsigned int)win);
+		*/
+
+	    disp_db = XrmGetDatabase(XtDisplay((Widget)xs));
+	    combine_status = XrmCombineFileDatabase(theme_file, &disp_db, True);
+	    XtVaGetValues(XtParent((Widget)xs),
+		XmNallowShellResize, &resize,
+		NULL);
+	    XtVaSetValues(XtParent((Widget)xs),
+		XmNallowShellResize, True,
+		NULL);
+	    apply_to_widgets(disp_db, XtParent((Widget)xs));
+	    XtVaSetValues(XtParent((Widget)xs),
+		XmNallowShellResize, resize,
+		NULL);
+	    XtFree(theme_file);
+	}
+	else
+	{
+	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget)xs),
+		XrmQuarkToString (xs->object.xrm_name),
+		"File not found",
+		xs->object.widget_class->core_class.class_name, 
+		"Theme not found",
+		NULL, 0);
+	}
     }
 }
 
@@ -460,7 +470,6 @@ int i;
     result = fetch_card8(xs, &buffer, (CARD8 *)&buffer.byte_order);
     if (buffer.byte_order != MSBFirst && buffer.byte_order != LSBFirst)
     {
-	fprintf (stderr, "Invalid byte order in XSETTINGS property\n");
 	result = XSETTINGS_FAILED;
 	goto out;
     }
@@ -712,21 +721,28 @@ unsigned char *data = NULL;
 	    }
 	    else
 	    {
-		printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+		XtAppWarningMsg(XtWidgetToApplicationContext((Widget)xs),
+		    XrmQuarkToString (xs->object.xrm_name),
+		    "File not found",
+		    xs->object.widget_class->core_class.class_name, 
+		    "Invalid property format",
+		    NULL, 0);
 	    }
 	}
 	else
 	{
-	    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget)xs),
+		XrmQuarkToString (xs->object.xrm_name),
+		"File not found",
+		xs->object.widget_class->core_class.class_name, 
+		"Property not found",
+		NULL, 0);
 	}
 	XtFree((char *)data);
 	XtFree((char *)old_setting);
     }
     else
     {
-	/*
-	printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
-	*/
     }
 }
 
@@ -756,12 +772,12 @@ XmXsettingsWidget xs = (XmXsettingsWidget)client_data;
 		*/
 	    XtUnregisterDrawable(XtDisplay(parent), xs->xsettings.manager);
 	    xs->xsettings.manager = None;
-	    for (; xs->xsettings.num_settings > 0; xs->xsettings.num_settings--)
+	    while (xs->xsettings.num_settings-- > 0)
 	    {
 	    XmXsettingsCallbackStruct cbs;
 
 		cbs.action = XSETTINGS_ACTION_DELETED;
-		cbs.setting = xs->xsettings.setting[xs->xsettings.num_settings - 1];
+		cbs.setting = xs->xsettings.setting[xs->xsettings.num_settings];
 		XtCallCallbackList((Widget)xs, xs->xsettings.xsettings_callback, &cbs);
 	    }
 	    XtFree((char *)xs->xsettings.setting);
@@ -849,7 +865,7 @@ Cardinal num_params = XtNumber(params);
     {
 	selection_atom_name_len++;
 	selection_atom_name = XtMalloc(selection_atom_name_len);
-	if (selection_atom_name > 0)
+	if (selection_atom_name)
 	{
 	    snprintf(selection_atom_name, selection_atom_name_len, "_XSETTINGS_S%d", XScreenNumberOfScreen(XtScreen(new_w)));
 	    /*
@@ -858,8 +874,8 @@ Cardinal num_params = XtNumber(params);
 		XtName(new_w),
 		selection_atom_name);
 		*/
-	    new_xs->xsettings.atom = XInternAtom(XtDisplay(new_w), "_XSETTINGS_SETTINGS", True);
-	    new_xs->xsettings.selection_atom = XInternAtom(XtDisplay(new_w), selection_atom_name, True);
+	    new_xs->xsettings.atom = XmInternAtom(XtDisplay(new_w), "_XSETTINGS_SETTINGS", True);
+	    new_xs->xsettings.selection_atom = XmInternAtom(XtDisplay(new_w), selection_atom_name, True);
 	    XtFree(selection_atom_name);
 	    if (new_xs->xsettings.selection_atom != None && new_xs->xsettings.atom != None)
 	    {
@@ -898,17 +914,32 @@ Cardinal num_params = XtNumber(params);
 	    }
 	    else
 	    {
-		printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+		XtAppWarningMsg(XtWidgetToApplicationContext((Widget)new_xs),
+		    XrmQuarkToString (new_xs->object.xrm_name),
+		    "File not found",
+		    new_xs->object.widget_class->core_class.class_name, 
+		    "Atom not found",
+		    NULL, 0);
 	    }
 	}
 	else
 	{
-	    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget)new_xs),
+		XrmQuarkToString (new_xs->object.xrm_name),
+		"No memory",
+		new_xs->object.widget_class->core_class.class_name, 
+		"Out of memory",
+		NULL, 0);
 	}
     }
     else
     {
-	printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	XtAppWarningMsg(XtWidgetToApplicationContext((Widget)new_xs),
+	    XrmQuarkToString (new_xs->object.xrm_name),
+	    "No memory",
+	    new_xs->object.widget_class->core_class.class_name, 
+	    "Out of memory",
+	    NULL, 0);
     }
 }
 
@@ -937,7 +968,6 @@ set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num
 XmXsettingsWidget old_xs = (XmXsettingsWidget) old;
 XmXsettingsWidget new_xs = (XmXsettingsWidget) new_w;
 
-    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
     if (old_xs->xsettings.num_settings != new_xs->xsettings.num_settings)
     {
 	XtAppWarningMsg(XtWidgetToApplicationContext(new_w),

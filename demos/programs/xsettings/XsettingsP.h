@@ -1,6 +1,6 @@
 /**
  *
- * $Id: XsettingsP.h,v 1.3 2009/06/30 19:35:07 rwscott Exp $
+ * $Id: XsettingsP.h,v 1.4 2009/07/01 10:27:51 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -40,6 +40,7 @@ typedef struct _XmXsettingsPart {
     XtPointer user_data;
     Atom selection_atom;
     String theme_path;
+    Boolean enable_themes;
 } XmXsettingsPart;
 
 typedef struct _XmXsettingsRec {
