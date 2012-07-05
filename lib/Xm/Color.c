@@ -43,6 +43,9 @@
 #include "MessagesI.h"
 #include "ScreenI.h"
 #include "XmI.h"
+#ifdef FIX_1381
+#include <Xm/XpmP.h>
+#endif
 
 /* Warning and Error messages */
 
@@ -101,6 +104,10 @@ static XmColorData * GetColors(
                         Screen *screen,
                         Colormap color_map,
                         Pixel background) ;
+#ifdef FIX_1381
+static unsigned int FromColorToBlackAndWhite(
+                        char *col) ;
+#endif
 
 
 /********    End Static Function Declarations    ********/
@@ -1231,3 +1238,84 @@ _XmSelectColorDefault(
 {
    XmeGetDefaultPixel (widget, XmSELECT, offset, value);
 }
+
+#ifdef FIX_1381
+static
+unsigned int
+FromColorToBlackAndWhite(char *col)
+{
+   unsigned long r, g, b, bw;
+   char k[5];
+   k[4] = '\0';
+    
+   memcpy(k, col, 4);
+   r = strtoul(k, NULL, 16);
+   memcpy(k, col + 4, 4);
+   g = strtoul(k, NULL, 16);
+   b = strtoul(col + 8, NULL, 16);
+   bw = (0.3 * r + 0.59 * g + 0.11 * b);
+   return (bw);
+}
+
+Pixmap
+_XmConvertToBW(Widget w, Pixmap pm)
+{
+   XpmImage im;
+   int i = 0;
+   unsigned int bw = 0, bw2 = 0;
+   char *col = NULL, *col2 = NULL;
+   Pixmap bw_pixmap = XmUNSPECIFIED_PIXMAP;
+
+   if (pm == XmUNSPECIFIED_PIXMAP)
+	   return bw_pixmap;
+    
+   XpmCreateXpmImageFromPixmap(XtDisplay(w), pm, 0, &im, NULL);
+   if (im.ncolors > 0) {
+	   if (im.ncolors <= 2) {
+		   if (im.ncolors == 1) {
+			   col = strdup(im.colorTable[0].c_color);
+			   if (col[0] == '#') {
+				   bw = (FromColorToBlackAndWhite(col + 1) * 0.65);
+				   sprintf(im.colorTable[0].c_color, "#%04x%04x%04x", bw, bw, bw);
+			   }
+			   if (col) 
+				   free(col);
+		   } else {
+			   col = im.colorTable[0].c_color;
+			   col2 = im.colorTable[1].c_color;
+			   if ((col[0] == '#') && (col2[0] == '#')) {
+				   bw = FromColorToBlackAndWhite(col + 1);
+				   bw2 = FromColorToBlackAndWhite(col2 + 1);
+				   if (bw >= bw2) {
+					   bw2 = bw2 + ((bw - bw2) * 0.65);
+					   sprintf(im.colorTable[1].c_color, "#%04x%04x%04x", bw2, bw2, bw2);
+				   } else {
+					   bw = bw + ((bw2 - bw) * 0.65);
+					   sprintf (im.colorTable[0].c_color, "#%04x%04x%04x", bw, bw, bw);
+				   }
+			   }
+		   }
+	   } else {
+		   char e[5];
+		   for (i = 0; i < im.ncolors; i++) {
+			   col = im.colorTable[i].c_color;
+			   if (col[0] == '#') {
+				   bw = FromColorToBlackAndWhite(col + 1);
+				   /* could be					
+					sprintf(im.colorTable[i].c_color, "#%04x%04x%04x", bw, bw, bw);
+					Four lower lines is sprintf optimized version */
+				   sprintf(e, "%04x", bw);
+				   memcpy(col + 1, e, 4);
+				   memcpy(col + 5, e, 4);
+				   memcpy(col + 9, e, 4);
+			   }
+		   }
+	   }
+   }
+   XpmCreatePixmapFromXpmImage(XtDisplay(w), pm, &im, &bw_pixmap, 0, NULL);
+   XpmFreeXpmImage(&im);
+    
+   return bw_pixmap;
+}
+#endif
+
