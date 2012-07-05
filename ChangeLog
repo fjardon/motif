@@ -4,11 +4,11 @@
 
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DropDown.c:
-	Fixed bug #1386 (Tooltip in DropDown widget makes X hang up)  
+	Fixed bug #1486 (Tooltip in DropDown widget makes X hang up)  
 
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/PanedW.c:
-	Reixed bug #1376 (PanedWindow orientation error)  
+	Reixed bug #1476 (PanedWindow orientation error)  
 
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TextStrSo.c:
