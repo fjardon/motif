@@ -118,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
-* Tue June 30 2009 Ihor Hayvuk <ihayvuk@ics.com>
+* Tue Jun 30 2009 Ihor Hayvuk <ihayvuk@ics.com>
 - updated for OpenMotif 2.3.3
 
 * Fri Mar 06 2009 Ihor Hayvuk <ihayvuk@ics.com>
