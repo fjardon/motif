@@ -1,3 +1,7 @@
+2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
+	* INSTALL.configure: 
+	Fixed bug #1418 (Add file with instructions how to build from CVS)  
+
 2009-06-24  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmI.h, lib/Xm/XmP.h, lib/Xm/LabelP.h, lib/Xm/LabelGP.h, lib/Xm/Label.c,
 	  lib/Xm/LabelG.c, lib/Xm/IconButton.c, lib/Xm/IconG.c: 
