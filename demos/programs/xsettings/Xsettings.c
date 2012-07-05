@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.8 2009/07/01 10:27:50 rwscott Exp $
+ * $Id: Xsettings.c,v 1.9 2009/07/03 13:37:11 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -278,10 +278,86 @@ SubstitutionRec subs[] = {
 }
 
 static void
-apply_resources(Widget w, XrmDatabase new_db, XmConst XtResourceList resource, Cardinal num_resources)
+fix_pixmap_bg(Widget w, String name, Pixel current_bg, Pixel new_bg)
+{
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
+    if (current_bg != new_bg)
+    {
+    Pixmap pixmap = None;
+
+	XtVaGetValues(w,
+	    name, &pixmap,
+	    NULL);
+	if (pixmap != None && pixmap != XmUNSPECIFIED_PIXMAP)
+	{
+	XImage *image;
+	Window root_return;
+	int x, y;
+	unsigned int width, height;
+	unsigned int border_width;
+	unsigned int depth;
+	GC gc;
+	XGCValues values;
+
+	    XGetGeometry(XtDisplay(w), pixmap,
+		    &root_return,
+		    &x, &y,
+		    &width, &height,
+		    &border_width, &depth);
+
+	    /*
+	    printf("%s:%s(%d) - %s %lx %ix%i\n",
+		__FILE__, __FUNCTION__, __LINE__,
+		XtName(w),
+		pixmap,
+		width, height);
+		*/
+
+	    image = XGetImage(XtDisplay(w), pixmap,
+		0, 0,
+		width, height,
+		(unsigned long)-1, ZPixmap);
+
+	    for (x = 0; x < width; x++)
+	    {
+		for (y = 0; y < height; y++)
+		{
+		    if (XGetPixel(image, x, y) == current_bg)
+		    {
+			XPutPixel(image, x, y, new_bg);
+		    }
+		}
+	    }
+	    values.plane_mask = (unsigned long)-1;
+	    values.subwindow_mode = IncludeInferiors;
+	    values.clip_x_origin = 0;
+	    values.clip_y_origin = 0;
+	    gc = XtGetGC(w,
+		GCPlaneMask | GCSubwindowMode | GCClipXOrigin | GCClipYOrigin,
+		&values);
+	    XPutImage(XtDisplay(w), pixmap, gc,
+		image,
+		0, 0, 0, 0,
+		width, height);
+	    XtReleaseGC(w, gc);
+	    XtVaSetValues(w,
+		name, pixmap,
+		NULL);
+	    XDestroyImage(image);
+	}
+    }
+}
+
+static void
+apply_resources(Widget w, XrmDatabase new_db, XmConst XtResourceList resource, Cardinal num_resources, Pixel current_bg, Pixel new_bg)
 {
 Pixel bg = XmUNSPECIFIED_PIXEL;
 
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
     while (num_resources-- > 0)
     {
 	XtPointer base;
@@ -309,16 +385,26 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 	{
 	    bg = (Pixel)(*(Pixel *)base);
 	}
+	else if (strcmp(rtype, XmRDynamicPixmap) == 0)
+	{
+	    fix_pixmap_bg(w, name, current_bg, new_bg);
+	}
 	else if (strcmp(rtype, XmRPixel) == 0 ||
 	         strcmp(rtype, XmRBitmap) == 0 ||
 	         strcmp(rtype, XmRPixmap) == 0 ||
 	         strcmp(rtype, XmRPixmapPlacement) == 0 ||
 	         strcmp(rtype, XmRAlignment) == 0 ||
+	         strcmp(rtype, XmRLabelType) == 0 ||
 	         strcmp(name, XmNborderWidth) == 0 ||
+	         strcmp(rtype, XmRSelectColor) == 0 ||
 	         False)
 	{
 	Arg arg;
 
+	    if (strcmp(rtype, XmRPixmap) == 0)
+	    {
+		fix_pixmap_bg(w, name, current_bg, new_bg);
+	    }
 	    /* Resources that are allowed as part of a theme */
 	    arg.name = name;
 	    memcpy(&arg.value, base, resource[num_resources].resource_size);
@@ -357,44 +443,68 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 }
 
 static void
-apply_to_widgets(XrmDatabase new_db, Widget w)
+apply_to_widgets(XrmDatabase new_db, Widget w, Pixel old_parent_bg)
 {
-WidgetList kid = NULL;
-Cardinal numKids = 0;
-XtResourceList resource;
-Cardinal num_resources;
-XmSecondaryResourceData *second;
-Cardinal num_seconds;
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
+    //if (XtIsWidget(w))
+    {
+    WidgetList kid = NULL;
+    Cardinal numKids = 0;
+    XtResourceList resource;
+    Cardinal num_resources;
+    XmSecondaryResourceData *second;
+    Cardinal num_seconds;
+    Pixel current_bg = XmUNSPECIFIED_PIXEL;
+    Pixel new_bg = XmUNSPECIFIED_PIXEL;
+    XtResource new_bg_resource = {
+	XmNbackground, XmCBackground, XtRPixel,
+	sizeof(Pixel), 0,
+	XtRImmediate, (XtPointer)XmUNSPECIFIED_PIXEL
+    };
 
-    num_seconds = XmGetSecondaryResourceData(w->core.widget_class, &second);
-    if (num_seconds > 0)
-    {
-    	while (num_seconds-- > 0)
-    	{
-	    apply_resources(w, new_db, second[num_seconds]->resources, second[num_seconds]->num_resources);
-	    XtFree((char *)second[num_seconds]->resources);
-	    XtFree((char *)second[num_seconds]);
-    	}
-	XtFree((char *)second);
-    }
-    XtGetResourceList(w->core.widget_class, &resource, &num_resources);
-    apply_resources(w, new_db, resource, num_resources);
-    XtFree((char *)resource);
-    XtVaGetValues(w,
-    	XmNchildren, &kid,
-    	XmNnumChildren, &numKids,
-    	NULL);
-    while (numKids-- > 0)
-    {
-    	apply_to_widgets(new_db, kid[numKids]);
-    }
-    if (XtIsWidget(w))
-    {
-	kid = w->core.popup_list;
-	numKids = w->core.num_popups;
+	XtVaGetValues(w,
+	    XmNbackground, &current_bg,
+	    NULL);
+	if (current_bg != XmUNSPECIFIED_PIXEL)
+	{
+	    XtGetApplicationResources(w, &new_bg,
+		&new_bg_resource, 1,
+		NULL, 0);
+	}
+	num_seconds = XmGetSecondaryResourceData(w->core.widget_class, &second);
+	if (num_seconds > 0)
+	{
+	    while (num_seconds-- > 0)
+	    {
+		apply_resources(w, new_db, second[num_seconds]->resources, second[num_seconds]->num_resources,
+		    XtIsWidget(w) ? current_bg : old_parent_bg, new_bg);
+		XtFree((char *)second[num_seconds]->resources);
+		XtFree((char *)second[num_seconds]);
+	    }
+	    XtFree((char *)second);
+	}
+	XtGetResourceList(w->core.widget_class, &resource, &num_resources);
+	apply_resources(w, new_db, resource, num_resources,
+	    XtIsWidget(w) ? current_bg : old_parent_bg, new_bg);
+	XtFree((char *)resource);
+	XtVaGetValues(w,
+	    XmNchildren, &kid,
+	    XmNnumChildren, &numKids,
+	    NULL);
 	while (numKids-- > 0)
 	{
-	    apply_to_widgets(new_db, kid[numKids]);
+	    apply_to_widgets(new_db, kid[numKids], current_bg);
+	}
+	if (XtIsWidget(w))
+	{
+	    kid = w->core.popup_list;
+	    numKids = w->core.num_popups;
+	    while (numKids-- > 0)
+	    {
+		apply_to_widgets(new_db, kid[numKids], old_parent_bg);
+	    }
 	}
     }
 }
@@ -402,6 +512,9 @@ Cardinal num_seconds;
 static void
 apply_theme(XmXsettingsWidget xs, String theme_name)
 {
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
     if (xs->xsettings.enable_themes)
     {
     char *theme_file;
@@ -436,7 +549,14 @@ apply_theme(XmXsettingsWidget xs, String theme_name)
 	    XtVaSetValues(XtParent((Widget)xs),
 		XmNallowShellResize, True,
 		NULL);
-	    apply_to_widgets(disp_db, XtParent((Widget)xs));
+	    {
+	    Pixel old_parent_bg;
+
+		XtVaGetValues(XtParent((Widget)xs),
+		    XmNbackground, &old_parent_bg,
+		    NULL);
+		apply_to_widgets(disp_db, XtParent((Widget)xs), old_parent_bg);
+	    }
 	    XtVaSetValues(XtParent((Widget)xs),
 		XmNallowShellResize, resize,
 		NULL);
@@ -444,12 +564,14 @@ apply_theme(XmXsettingsWidget xs, String theme_name)
 	}
 	else
 	{
-	    XtAppWarningMsg(XtWidgetToApplicationContext((Widget)xs),
-		XrmQuarkToString (xs->object.xrm_name),
+	String params[] = {(String)__FILE__, (String)__FUNCTION__, (String)__LINE__, NULL, NULL};
+
+	    params[XtNumber(params) - 2] = theme_name;
+	    params[XtNumber(params) - 1] = xs->xsettings.theme_path;
+	    _XmWarningMsg((Widget)xs,
 		"File not found",
-		xs->object.widget_class->core_class.class_name, 
-		"Theme not found",
-		NULL, 0);
+		"%s:%s(%d) - Theme \"%s\" not found in \"%s\".",
+		params, XtNumber(params));
 	}
     }
 }
@@ -744,6 +866,9 @@ unsigned char *data = NULL;
     else
     {
     }
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
 }
 
 static void
@@ -849,7 +974,8 @@ String params[] = {"param 1", "param 2"};
 Cardinal num_params = XtNumber(params);
 
     /*
-    printf("%s:%s(%d) - %s -> %s\n", __FILE__, __FUNCTION__, __LINE__,
+    printf("%s:%s(%d) - %s -> %s\n",
+    	__FILE__, __FUNCTION__, __LINE__,
     	XtName(XtParent(new_w)),
     	XtName(new_w));
     	*/
@@ -883,7 +1009,6 @@ Cardinal num_params = XtNumber(params);
 		printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
 		*/
 		XSelectInput(XtDisplay(new_w), RootWindow(XtDisplay(new_w), XScreenNumberOfScreen(XtScreen(new_w))), SubstructureNotifyMask);
-		XtRegisterDrawable(XtDisplay(new_w), RootWindow(XtDisplay(new_w), XScreenNumberOfScreen(XtScreen(new_w))), XtParent(new_w));
 		/* This must be the _first_ event handler, otherwise the Shell
 		   is going to abort with "Invalid window in event".
 		 */
@@ -893,6 +1018,7 @@ Cardinal num_params = XtNumber(params);
 			StructureNotifyMask |
 			NoEventMask,
 		    False, xsetting_callback, new_w, XtListHead);
+		XtRegisterDrawable(XtDisplay(new_w), RootWindow(XtDisplay(new_w), XScreenNumberOfScreen(XtScreen(new_w))), XtParent(new_w));
 		XGrabServer(XtDisplay(new_w));
 		new_xs->xsettings.manager = XGetSelectionOwner(XtDisplay(new_w), new_xs->xsettings.selection_atom);
 		if (new_xs->xsettings.manager != None)
@@ -968,6 +1094,9 @@ set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num
 XmXsettingsWidget old_xs = (XmXsettingsWidget) old;
 XmXsettingsWidget new_xs = (XmXsettingsWidget) new_w;
 
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
     if (old_xs->xsettings.num_settings != new_xs->xsettings.num_settings)
     {
 	XtAppWarningMsg(XtWidgetToApplicationContext(new_w),
@@ -1003,5 +1132,8 @@ get_values_hook(Widget w, ArgList args, Cardinal *num_args)
 Widget
 XmCreateXsettings(Widget parent, String name, ArgList arglist, Cardinal argcount)
 {
+    /*
+    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+    */
     return(XtCreateWidget(name, xmXsettingsWidgetClass, parent, arglist, argcount));
 }
