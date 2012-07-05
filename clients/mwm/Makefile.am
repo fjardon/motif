@@ -4,7 +4,7 @@ EXTRA_DIST = Mwm.msg $(rc_DATA)
 
 SUBDIRS = WmWsmLib
 
-rcdir = @LIBDIR@
+rcdir = $(MWMRCDIR)
 
 rc_DATA = system.mwmrc
 
@@ -15,6 +15,7 @@ INCLUDES = -DLARGECURSORS -DR2_COMPAT -DUNMAP_ON_RESTART \
            -DCDE_INSTALLATION_TOP=\"@CDE_INSTALLATION_TOP@\" \
            -DCDE_CONFIGURATION_TOP=\"@CDE_CONFIGURATION_TOP@\" \
            -DBITMAPDIR=\"@INCDIR@/bitmaps\" \
+           -DMWMRCDIR=\"$(MWMRCDIR)\" \
            -I$(top_builddir)/lib \
            -I$(srcdir)/../../lib ${X_CFLAGS}
 

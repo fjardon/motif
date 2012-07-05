@@ -2389,15 +2389,15 @@ FILE *FopenConfigFile (void)
   {
 #endif /* PANELIST */
 
-#ifndef LIBDIR
-#define LIBDIR "/usr/lib/X11"
+#ifndef MWMRCDIR
+#define MWMRCDIR "/usr/lib/X11"
 #endif
     if (LANG != NULL)
     {
 #ifdef WSM
 	if (MwmBehavior)
 	{
-	    strcpy(cfileName, LIBDIR);
+	    strcpy(cfileName, MWMRCDIR);
 	    strncat(cfileName, "/", MAXWMPATH-strlen(cfileName));
 	    strncat(cfileName, LANG, MAXWMPATH-strlen(cfileName));
 	    strncat(cfileName, SLASH_MWMRC, MAXWMPATH - strlen(cfileName));
@@ -2413,7 +2413,7 @@ FILE *FopenConfigFile (void)
        /*
 	* Try /$LANG/system.mwmrc within the install tree
 	*/
-	strcpy(cfileName, LIBDIR);
+	strcpy(cfileName, MWMRCDIR);
 	strncat(cfileName, "/", MAXWMPATH-strlen(cfileName));
 	strncat(cfileName, LANG, MAXWMPATH-strlen(cfileName));
 	strncat(cfileName, SLASH_MWMRC, MAXWMPATH - strlen(cfileName));
@@ -2435,7 +2435,7 @@ FILE *FopenConfigFile (void)
 #ifdef WSM
     if (MwmBehavior)
     {
-	strcpy(cfileName, LIBDIR);
+	strcpy(cfileName, MWMRCDIR);
 	strncat(cfileName, SLASH_MWMRC, MAXWMPATH - strlen(cfileName));
 #ifdef PANELIST
 	fileP = fopen (cfileName, "r");
@@ -2459,7 +2459,7 @@ FILE *FopenConfigFile (void)
     /*
      * Try /system.mwmrc within the install tree
      */
-    strcpy(cfileName, LIBDIR);
+    strcpy(cfileName, MWMRCDIR);
     strncat(cfileName, SLASH_MWMRC, MAXWMPATH - strlen(cfileName));
 
     if (LANG != NULL) 
