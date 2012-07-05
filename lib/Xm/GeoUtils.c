@@ -429,6 +429,7 @@ _XmHandleGeometryManager(
 		*cachePtr = geoSpec ;
 		*allowed = *(geoSpec->in_layout) ;
             } else /* For fixing OSF CR 5956 */ {
+		_XmGeoMatrixFree( geoSpec) ;
 		allowed = NULL ;
 		*cachePtr = NULL ;
 		result = XtGeometryNo ;
