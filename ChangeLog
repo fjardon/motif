@@ -1,5 +1,9 @@
 ========================= Open Motif 2.3.3 released ============================
 
+2009-07-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmRenderT.c:
+	Refixed bug #1449 (Uninitalised memory access with XFT fonts)   
+
 2009-07-03  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ToolTip.c, lib/Xm/VendorS.c:
 	Refixed bug #1388 (SEGV error moving mouse over window related to XmToolTipGetLabel)   

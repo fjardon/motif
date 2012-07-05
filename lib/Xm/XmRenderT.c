@@ -2925,8 +2925,7 @@ _XmXftDrawCreate(Display *display, Window window)
 		XtRealloc((char *)_XmXftDrawCache,
 		sizeof(struct _XmXftDrawCacheStruct) * _XmXftDrawCacheSize);
 #ifdef FIX_1449
-	memset(_XmXftDrawCache + i * sizeof(struct _XmXftDrawCacheStruct), 0,  
-			(_XmXftDrawCacheSize - i) * sizeof(*_XmXftDrawCache));
+	memset(_XmXftDrawCache + i, 0, (_XmXftDrawCacheSize - i) * sizeof(*_XmXftDrawCache));
 #endif
 
 	_XmXftDrawCache[i].display = display;
