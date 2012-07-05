@@ -102,6 +102,11 @@ static void SetNormGC(XmTextWidget tw,
                         Boolean change_stipple,
                         Boolean stipple);
 #endif /* NeedWidePrototypes */
+
+#ifdef FIX_1381
+static void SetShadowGC(XmTextWidget tw,
+		       GC gc);
+#endif
 static void InvertImageGC(XmTextWidget tw);
 static void SetInvGC(XmTextWidget tw,
 		       GC gc);
@@ -612,7 +617,7 @@ SetNormGC(XmTextWidget tw,
     valueMask |= GCFillStyle;
     if (stipple) {
 #ifdef FIX_1381
-		/*added for gray insensitive foreground (instead stipple)*/
+		/*generally gray insensitive foreground (instead stipple)*/
 		values.foreground = _XmAssignInsensitiveColor((Widget)tw);
 	    values.fill_style = FillSolid;
 #else
@@ -627,6 +632,23 @@ SetNormGC(XmTextWidget tw,
   
   XChangeGC(XtDisplay(tw), gc, valueMask, &values);
 }
+
+#ifdef FIX_1381
+static void
+SetShadowGC(XmTextWidget tf, GC gc)
+{
+  unsigned long valueMask = (GCForeground | GCBackground);
+  XGCValues values;
+
+  /*generally light gray insensitive foreground (instead stipple)*/
+  values.foreground = tf->primitive.top_shadow_color;
+  values.background = tf->core.background_pixel;
+
+  values.fill_style = FillSolid;
+
+  XChangeGC(XtDisplay(tf), gc, valueMask, &values);
+}
+#endif
 
 
 
@@ -2612,12 +2634,38 @@ Draw(XmTextWidget tw,
 	    int wx, wy;
 
 	    wx = x - data->hoffset;
+#ifdef FIX_1381
+	    if (stipple)
+	      {
+	        /*Draw shadow for insensitive text*/
+	        SetShadowGC(tw, data->gc);
+	        XmbDrawString(XtDisplay(tw),
+	        XtWindow(tw->text.inner_widget),
+	        (XFontSet) data->font, data->gc,
+	        wx+1, y - data->voffset+1, block.ptr, length);
+	        SetNormGC(tw, data->gc, True, stipple);
+	      }
+#endif
+
 	    XmbDrawString(XtDisplay(tw),
 			  XtWindow(tw->text.inner_widget),
 			  (XFontSet) data->font, data->gc, 
 			  wx, y - data->voffset, block.ptr, length);
 #ifdef USE_XFT
 	  } else if (data->use_xft) {
+#ifdef FIX_1381
+	    if (stipple)
+	      {
+	        /*Draw shadow for insensitive text*/
+	        SetShadowGC(tw, data->gc);
+	        _XmXftDrawString2(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+			  data->gc, (XftFont*) data->font, 1,
+			  x - data->hoffset+1, y - data->voffset+1,
+			  block.ptr, length);
+	        SetNormGC(tw, data->gc, True, stipple);
+	      }
+#endif
+
 	    _XmXftDrawString2(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 			      data->gc, (XftFont*) data->font, 1,
 			      x - data->hoffset, y - data->voffset,
@@ -2640,13 +2688,35 @@ Draw(XmTextWidget tw,
 	      if (_XmIsISO10646(XtDisplay(tw), data->font)) {
 	        size_t ucsstr_len = 0;
 		XChar2b *ucsstr = _XmUtf8ToUcs2(p, csize, &ucsstr_len);
+#ifdef FIX_1381
+		if (stipple)
+		{
+		  /*Draw shadow for insensitive text*/
+		  SetShadowGC(tw, data->gc);
+		  XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+		  		data->gc, orig_x+1, orig_y+1, ucsstr, ucsstr_len);
+		  SetNormGC(tw, data->gc, True, stipple);
+		}
+#endif
 		XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 				data->gc, orig_x, orig_y, ucsstr, ucsstr_len);
 		XFree(ucsstr);
-	      } else
+	      } else {
+#ifdef FIX_1381
+		if (stipple)
+		{
+		  /*Draw shadow for insensitive text*/
+		  SetShadowGC(tw, data->gc);
+		  XDrawString(XtDisplay(tw),
+		  		XtWindow(tw->text.inner_widget), data->gc,
+		  		orig_x+1, orig_y+1, p, csize);
+		  SetNormGC(tw, data->gc, True, stipple);
+		}
+#endif
 	      XDrawString(XtDisplay(tw),
 			  XtWindow(tw->text.inner_widget), data->gc,
 			  orig_x, orig_y, p, csize);
+	      }
 	      orig_y += overall.descent;
 	    }
 	  }
@@ -2671,8 +2741,8 @@ Draw(XmTextWidget tw,
       SetXOCOrientation(tw, (XOC)data->font, orient);
     }
   } else {
-  newx = x;
   
+  newx = x;
   while (start < end && x <= rightedge) {
     start = (*tw->text.source->ReadSource)(tw->text.source, start,
 					       end, &block);
@@ -2913,12 +2983,35 @@ Draw(XmTextWidget tw,
 	}
 	SetNormGC(tw, data->gc, True, stipple);
 	if (data->use_fontset) {
+#ifdef FIX_1381
+	  if (stipple)
+	    {
+	      /*Draw shadow for insensitive text*/
+	      SetShadowGC(tw, data->gc);
+	      XmbDrawString(XtDisplay(tw),
+	      XtWindow(tw->text.inner_widget),
+	      (XFontSet) data->font, data->gc,
+	      x - data->hoffset+1, y+1, block.ptr, length);
+	      SetNormGC(tw, data->gc, True, stipple);
+	    }
+#endif
 	  XmbDrawString(XtDisplay(tw),
 			XtWindow(tw->text.inner_widget),
 			(XFontSet) data->font, data->gc, 
 			x - data->hoffset, y, block.ptr, length);
 #ifdef USE_XFT
 	} else if (data->use_xft) {
+#ifdef FIX_1381
+	  if (stipple)
+	    {
+	      /*Draw shadow for insensitive text*/
+	      SetShadowGC(tw, data->gc);
+	      _XmXftDrawString2(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+	      data->gc, (XftFont*) data->font, 1,
+	      x - data->hoffset+1, y+1, block.ptr, length);
+	      SetNormGC(tw, data->gc, True, stipple);
+	    }
+#endif
 	  _XmXftDrawString2(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 			    data->gc, (XftFont*) data->font, 1,
 			    x - data->hoffset, y, block.ptr, length);
@@ -2927,14 +3020,39 @@ Draw(XmTextWidget tw,
 	  if (_XmIsISO10646(XtDisplay(tw), data->font)) {
 	    size_t ucsstr_len = 0;
 	    XChar2b *ucsstr = _XmUtf8ToUcs2(block.ptr, length, &ucsstr_len);
+#ifdef FIX_1381
+	    if (stipple)
+	      {
+	        /*Draw shadow for insensitive text*/
+	        SetShadowGC(tw, data->gc);
+	        XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
+	        data->gc, x - data->hoffset+1, y+1, ucsstr,
+	        ucsstr_len);
+	        SetNormGC(tw, data->gc, True, stipple);
+	      }
+#endif
+
 	    XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 				data->gc, x - data->hoffset, y, ucsstr,
 				ucsstr_len);
 	    XFree(ucsstr);
 	  } else
+	  {
+#ifdef FIX_1381
+	    if (stipple)
+	      {
+	        /*Draw shadow for insensitive text*/
+	        SetShadowGC(tw, data->gc);
+	        XDrawString(XtDisplay(tw),
+	        XtWindow(tw->text.inner_widget), data->gc,
+	        x - data->hoffset+1, y+1, block.ptr, length);
+		SetNormGC(tw, data->gc, True, stipple);
+	      }
+#endif
 	  XDrawString(XtDisplay(tw),
 		      XtWindow(tw->text.inner_widget), data->gc,
 		      x - data->hoffset, y, block.ptr, length);
+	}
 	}
 	if (stipple) SetNormGC(tw, data->gc, True, !stipple);
       }

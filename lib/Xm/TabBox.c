@@ -55,6 +55,9 @@
 #define _XiBoolean Boolean
 
 typedef enum {XiQUAD_1, XiQUAD_2, XiQUAD_3, XiQUAD_4} XiQuadrant;
+#ifdef FIX_1381
+typedef enum {normal, insensitive, shadow} GC_type;
+#endif
 
 typedef struct _XmTabRect {
     int    x, y;
@@ -184,6 +187,9 @@ static int CalcGeometryMajor _ARGS((XmTabBoxWidget, int));
 
 static void CallCallbacks _ARGS((XmTabBoxWidget, XEvent*, int, int));
 
+#ifdef FIX_1381
+static void SetRightGC(XmTabBoxWidget tab, GC gc, GC_type);
+#endif
 static void DrawVerticalTab _ARGS((XmTabBoxWidget, XmTabAttributes, GC,
 				   _XiBoolean, int, int, int, _XiBoolean, int,
 				   int, XRectangle*, _XiBoolean, _XiBoolean));
@@ -5480,6 +5486,42 @@ CallCallbacks(XmTabBoxWidget tab, XEvent *event, int from, int to)
     cbdata.old_index = from;
     XtCallCallbackList((Widget)tab, XmTabBox_select_callback(tab), (XtPointer)&cbdata);
 }
+#ifdef FIX_1381
+static void
+SetRightGC(XmTabBoxWidget tab, GC gc, GC_type gc_type)
+{
+    XGCValues       values;
+    XtGCMask        valueMask;
+    static Pixel 	p = 0;
+    static GC_type 	last = normal;
+    valueMask = GCForeground;
+    switch( gc_type )
+      {
+        case normal:
+          if (last !=normal)
+            {
+              values.foreground = p;
+                XChangeGC(XtDisplay(tab),gc, valueMask, &values);
+            }
+          last = normal;
+          break;
+        case insensitive:
+          if (last == normal) p=values.foreground;
+            values.foreground = tab->manager.bottom_shadow_color;
+            XChangeGC(XtDisplay(tab),gc, valueMask, &values);
+            last = insensitive;
+          break;
+        case shadow:
+          if (last == normal) p=values.foreground;
+            values.foreground = tab->manager.top_shadow_color;
+            XChangeGC(XtDisplay(tab),gc, valueMask, &values);
+            last = shadow;
+          break;
+        default:
+          break;
+      }
+}
+#endif
 
 /* ARGSUSED */
 static void
@@ -5708,11 +5750,25 @@ DrawLeftToRightTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 
 	if( !sensitive )
 	{
+#ifndef FIX_1381
 	    SetStippledGC(XtDisplay(tab), gc, XmTabBox__gray_stipple(tab));
+#else
+	  /*Draw shadow for insensitive text*/
+	  SetRightGC(tab, gc, shadow);
+	  XmStringDraw(XtDisplay(tab), XiCanvas(tab), font_list,
+	  	info->label_string, gc, draw.x+1, (Position)y+1, draw.width,
+	  	info->label_alignment, info->string_direction,
+	  	NULL);
+	  SetRightGC(tab, gc, insensitive);
+#endif
 	}
 	else
 	{
+#ifndef FIX_1381
 	    RemoveStipple(XtDisplay(tab), gc);
+#else
+	  SetRightGC(tab, gc, normal);
+#endif
 	}
 	XmStringDraw(XtDisplay(tab), XiCanvas(tab), font_list,
 		     info->label_string, gc, draw.x, (Position)y, draw.width,
@@ -6013,7 +6069,12 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	if( !ValidPixmap(XmTabBox__bitmap(tab)) )
 	{
 	    XmTabBox__bitmap(tab) = XCreatePixmap(XtDisplay(tab), XiCanvas(tab),
+#ifndef FIX_1381
 						 label_width, label_height, 1);
+#else
+					 label_width, label_height, XmTabBox__canvas(tab)->core.depth);
+#endif
+
 	    XmTabBox__bitmap_width(tab) = label_width;
 	    XmTabBox__bitmap_height(tab) = label_height;
 	}
@@ -6034,8 +6095,13 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	    XGCValues   gcValues;
 	    unsigned long gcMask;
 
+#ifndef FIX_1381
 	    gcValues.foreground = 0;
 	    gcValues.background = 0;
+#else
+	    gcValues.background = tab->core.background_pixel;
+	    gcValues.foreground = tab->core.background_pixel;
+#endif
 	    XmTabBox__zero_GC(tab) = XCreateGC(XtDisplay(tab), bitmap,
 					      GCForeground | GCBackground,
 					      &gcValues);
@@ -6061,12 +6127,25 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		       0, 0, label_width, label_height);
 	if( !sensitive )
 	{
+#ifndef FIX_1381
 	    SetStippledGC(XtDisplay(tab), XmTabBox__one_GC(tab),
 			  XmTabBox__gray_stipple(tab));
+#else
+	  /*Draw shadow for insensitive text*/
+	  SetRightGC(tab, XmTabBox__one_GC(tab), shadow);
+	  XmStringDraw(XtDisplay(tab), bitmap, font_list, info->label_string,
+	  XmTabBox__one_GC(tab), -1, -1, (Dimension)label_width,
+	  info->label_alignment, info->string_direction, NULL);
+	  SetRightGC(tab, XmTabBox__one_GC(tab), insensitive);
+#endif
 	}
 	else
 	{
+#ifndef FIX_1381
 	    RemoveStipple(XtDisplay(tab), XmTabBox__one_GC(tab));
+#else
+	  SetRightGC(tab, XmTabBox__one_GC(tab), normal);
+#endif
 	}
 	XmStringDraw(XtDisplay(tab), bitmap, font_list, info->label_string,
 		     XmTabBox__one_GC(tab), 0, 0, (Dimension)label_width,
@@ -6077,7 +6156,11 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	 * into an XImage so that we can rotate it.
 	 */
 	src_ximage = XGetImage(XtDisplay(tab), bitmap, 0, 0, label_width, 
+#ifndef FIX_1381
 			       label_height, 1, XYPixmap);
+#else
+				label_height, AllPlanes, XYPixmap);
+#endif
 	dst_ximage = XiRotateImage(tab, src_ximage,
 				   XiTabDegree(XmTabBox_tab_orientation(tab)));
 
@@ -6599,7 +6682,11 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	if( !ValidPixmap(XmTabBox__bitmap(tab)) )
 	{
 	    XmTabBox__bitmap(tab) = XCreatePixmap(XtDisplay(tab), XiCanvas(tab),
+#ifndef FIX_1381
 						 label_width, label_height, 1);
+#else
+						 label_width, label_height, XmTabBox__canvas(tab)->core.depth);
+#endif
 	    XmTabBox__bitmap_width(tab) = label_width;
 	    XmTabBox__bitmap_height(tab) = label_height;
 	}
@@ -6620,8 +6707,13 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	    XGCValues   gcValues;
 	    unsigned long gcMask;
 
+#ifndef FIX_1381
 	    gcValues.foreground = 0;
 	    gcValues.background = 0;
+#else
+	    gcValues.background = tab->core.background_pixel;
+	    gcValues.foreground = tab->core.background_pixel;
+#endif
 	    XmTabBox__zero_GC(tab) = XCreateGC(XtDisplay(tab), bitmap,
 					      GCForeground | GCBackground,
 					      &gcValues);
@@ -6647,12 +6739,34 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 		       0, 0, label_width, label_height);
 	if( !sensitive )
 	{
+#ifndef FIX_1381
 	    SetStippledGC(XtDisplay(tab), XmTabBox__one_GC(tab),
 			  XmTabBox__gray_stipple(tab));
+#else
+	  /*Draw shadow for insensitive text*/
+	  /*text will be rotated below but shadow should be always under the text*/
+	  int x,y;
+	  if (XmTabBox_tab_orientation(tab)==XmTABS_TOP_TO_BOTTOM){
+	    x=1; y=-1;
+	  }
+	  else
+	  {
+	    x=-1; y=1;
+	  }
+	  SetRightGC(tab, XmTabBox__one_GC(tab), shadow);
+	  XmStringDraw(XtDisplay(tab), bitmap, font_list, info->label_string,
+	  		XmTabBox__one_GC(tab), x, y, (Dimension)label_width,
+			info->label_alignment, info->string_direction, NULL);
+	  SetRightGC(tab, XmTabBox__one_GC(tab), insensitive);
+#endif
 	}
 	else
 	{
+#ifndef FIX_1381
 	    RemoveStipple(XtDisplay(tab), XmTabBox__one_GC(tab));
+#else
+	  SetRightGC(tab, XmTabBox__one_GC(tab), normal);
+#endif
 	}
 	XmStringDraw(XtDisplay(tab), bitmap, font_list, info->label_string,
 		     XmTabBox__one_GC(tab), 0, 0, (Dimension)label_width,
@@ -6663,7 +6777,11 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	 * into an XImage so that we can rotate it.
 	 */
 	src_ximage = XGetImage(XtDisplay(tab), bitmap, 0, 0, label_width, 
+#ifndef FIX_1381
 			       label_height, 1, XYPixmap);
+#else
+			       label_height, AllPlanes, XYPixmap);
+#endif
 	dst_ximage = XiRotateImage(tab, src_ximage,
 				   XiTabDegree(XmTabBox_tab_orientation(tab)));
 

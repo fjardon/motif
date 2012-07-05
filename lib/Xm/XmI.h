@@ -285,8 +285,6 @@ extern void (*_XtProcessLock)();
 #define FIX_1396
 
 #ifdef FIX_1381
-#define RGB_GREY_VALUE 128
-#define RGB_GREY_PRESISE 50
 extern Pixel _XmAssignInsensitiveColor(Widget w);
 #endif
 

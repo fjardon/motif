@@ -1240,8 +1240,8 @@ SetNormalGC(XmLabelGadget lw)
         dynamicMask, 0);
 
 #ifdef FIX_1381
-/*added for gray insensitive foreground (instead stipple)*/
-	values.foreground = _XmAssignInsensitiveColor((Widget)mw);
+    /*generally gray insensitive foreground (instead stipple)*/
+    values.foreground = _XmAssignInsensitiveColor((Widget)lw);
     values.background = LabG_Background(lw);
 #else
     valueMask |= GCFillStyle | GCStipple;
@@ -1253,6 +1253,13 @@ SetNormalGC(XmLabelGadget lw)
 
     LabG_InsensitiveGC(lw) = XtAllocateGC((Widget) mw, 0, valueMask, &values,
         dynamicMask, 0);
+#ifdef FIX_1381
+    /*light shadow for insensitive text (instead stipple)*/
+    values.foreground = LabG_TopShadowColor(lw);
+    LabG_ShadowGC(lw)  = XtAllocateGC((Widget) mw, 0, valueMask, &values,
+	dynamicMask, 0);
+#endif
+
 }
 
 
@@ -2170,7 +2177,9 @@ Destroy(Widget w)
 
     XtReleaseGC (XtParent(w), LabG_NormalGC(w));
     XtReleaseGC (XtParent(w), LabG_InsensitiveGC(w));
-
+#ifdef FIX_1381
+	XtReleaseGC (XtParent(w), LabG_ShadowGC(w));
+#endif
     XtReleaseGC (XtParent(w), LabG_BackgroundGC(w));
     XtReleaseGC (XtParent(w), LabG_HighlightGC(w));
     XtReleaseGC (XtParent(w), LabG_TopShadowGC(w));
@@ -2493,7 +2502,38 @@ LRectangle *background_box)
 
             tmp[_XmOSKeySymToCharacter(LabG_Mnemonic(lw), NULL, tmp)] = '\0';
             underline = XmStringCreate(tmp, LabG_MnemonicCharset(lw));
-
+#ifdef FIX_1381
+			if (XtIsSensitive(wid) )
+			{
+				/*Draw normal text*/
+				XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__label(lw),
+						LabG_NormalGC(lw),
+						lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+						lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+						LabG_StringRect(lw).width, LabG_Alignment(lw),
+						LayoutG(lw), NULL, underline);
+			}
+			else
+			{
+				/*Draw shadow for insensitive text*/
+				XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__label(lw),
+						LabG_ShadowGC(lw),
+						lw->rectangle.x+1 + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+						lw->rectangle.y+1 + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+						LabG_StringRect(lw).width, LabG_Alignment(lw),
+						LayoutG(lw), NULL, underline);
+				/*Draw insensitive text*/
+				XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__label(lw),
+						LabG_InsensitiveGC(lw),
+						lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+						lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+						LabG_StringRect(lw).width, LabG_Alignment(lw),
+						LayoutG(lw), NULL, underline);
+			}
+#else
             XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
                 LabG_Font(lw), LabG__label(lw),
                 (XtIsSensitive(wid) ?
@@ -2502,9 +2542,45 @@ LRectangle *background_box)
                 lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
                 LabG_StringRect(lw).width, LabG_Alignment(lw),
                 LayoutG(lw), NULL, underline);
+
+#endif
             XmStringFree(underline);
         }
         else
+#ifdef FIX_1381
+		{
+			if (XtIsSensitive(wid) )
+			{
+				/*Draw normal text*/
+				XmStringDraw (XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__label(lw),
+						LabG_NormalGC(lw),
+						lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+						lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+						LabG_StringRect(lw).width,
+						LabG_Alignment(lw), LayoutG(lw), NULL);
+			}
+			else
+			{
+				/*Draw shadow for insensitive text*/
+				XmStringDraw (XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__label(lw),
+						LabG_ShadowGC(lw),
+						lw->rectangle.x + LabG_TextRect(lw).x+1 + LabG_StringRect(lw).x,
+						lw->rectangle.y + LabG_TextRect(lw).y+1 + LabG_StringRect(lw).y,
+						LabG_StringRect(lw).width,
+						LabG_Alignment(lw), LayoutG(lw), NULL);
+				/*Draw insensitive text*/
+				XmStringDraw (XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__label(lw),
+						LabG_InsensitiveGC(lw),
+						lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+						lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+						LabG_StringRect(lw).width,
+						LabG_Alignment(lw), LayoutG(lw), NULL);
+			}
+		}
+#else
             XmStringDraw (XtDisplay(lw), XtWindow(lw),
                 LabG_Font(lw), LabG__label(lw),
                 (XtIsSensitive(wid) ?
@@ -2513,6 +2589,8 @@ LRectangle *background_box)
             lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
             LabG_StringRect(lw).width,
             LabG_Alignment(lw), LayoutG(lw), NULL);
+#endif
+
 #ifndef FIX_1381
 #ifdef USE_XFT
         if (!XtIsSensitive(wid)) {
@@ -2544,6 +2622,38 @@ LRectangle *background_box)
             LabG_MarginLeft(lw) + LabG_TextRect(lw).width +
             LabG_MarginRight(lw)))
         {
+#ifdef FIX_1381
+			if (XtIsSensitive(wid) )
+			{
+				/*Draw normal text*/
+				XmStringDraw (XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__acceleratorText(lw),
+						LabG_NormalGC(lw),
+						lw->rectangle.x + LabG_AccTextRect(lw).x,
+						lw->rectangle.y + LabG_AccTextRect(lw).y,
+						LabG_AccTextRect(lw).width, XmALIGNMENT_END,
+						LayoutG(lw), NULL);
+			}
+			else
+			{
+				/*Draw shadow for insensitive text*/
+				XmStringDraw (XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__acceleratorText(lw),
+						LabG_ShadowGC(lw) ,
+						lw->rectangle.x + LabG_AccTextRect(lw).x+1,
+						lw->rectangle.y + LabG_AccTextRect(lw).y+1,
+						LabG_AccTextRect(lw).width, XmALIGNMENT_END,
+						LayoutG(lw), NULL);
+				/*Draw insensitive text*/
+				XmStringDraw (XtDisplay(lw), XtWindow(lw),
+						LabG_Font(lw), LabG__acceleratorText(lw),
+						LabG_InsensitiveGC(lw),
+						lw->rectangle.x + LabG_AccTextRect(lw).x,
+						lw->rectangle.y + LabG_AccTextRect(lw).y,
+						LabG_AccTextRect(lw).width, XmALIGNMENT_END,
+						LayoutG(lw), NULL);
+			}
+#else
             XmStringDraw (XtDisplay(lw), XtWindow(lw),
                 LabG_Font(lw), LabG__acceleratorText(lw),
                 (XtIsSensitive(wid) ?
@@ -2552,6 +2662,7 @@ LRectangle *background_box)
                 lw->rectangle.y + LabG_AccTextRect(lw).y,
                 LabG_AccTextRect(lw).width, XmALIGNMENT_END,
                 LayoutG(lw), NULL);
+#endif
         }
     }
 
