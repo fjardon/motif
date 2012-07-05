@@ -40,6 +40,14 @@
 #ifndef UTF8_SUPPORTED
 #undef UTF8_SUPPORTED
 #endif
+
+#ifndef PRINTING_SUPPORTED
+#undef PRINTING_SUPPORTED
+#endif
+
+#ifndef USE_XFT
+#undef USE_XFT
+#endif
  
 #if    !defined(__STDC__) \
     && !defined(__cplusplus) && !defined(c_plusplus) \
