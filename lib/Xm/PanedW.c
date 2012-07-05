@@ -36,6 +36,7 @@ static char rcsid[] = "$TOG: PanedW.c /main/24 1999/07/13 07:46:01 mgreess $"
 #include <config.h>
 #endif
 
+#define FIX_1476
 
 #include <ctype.h>
 #include <X11/cursorfont.h>
@@ -46,8 +47,10 @@ static char rcsid[] = "$TOG: PanedW.c /main/24 1999/07/13 07:46:01 mgreess $"
 #include <Xm/VaSimpleP.h>
 #include "MessagesI.h"
 #include "RepTypeI.h"
+#ifdef FIX_1476
+#include <Xm/SeparatoGP.h>
+#endif
 
-#define FIX_1476
 
 typedef enum {FirstPane='U', LastPane='L'} Direction;
 
@@ -1123,6 +1126,8 @@ CommitNewLocations(
 		sepPos = MajorChildPos(pw, *childP) + MajorChildSize(pw, *childP) + 
 			2 * (*childP)->core.border_width + pw->paned_window.spacing / 2 - 
 			separator->core.border_width;
+		
+		SEPG_Orientation(separator) = (Horizontal(pw)) ? XmVERTICAL : XmHORIZONTAL; 
 
 		XmeConfigureObject(separator, 
 				    Major(pw, sepPos, 0),
@@ -1130,8 +1135,6 @@ CommitNewLocations(
 				    Major(pw, 2, pw->core.width),
 				    Major(pw, pw->core.height, 2),
 				    separator->core.border_width);
-
-		XtVaSetValues(separator, XmNorientation, (!Horizontal(pw)) ? XmHORIZONTAL : XmVERTICAL, NULL);
 #else
 		 sepPos = MajorChildPos(pw, *childP) + MajorChildSize(pw, *childP) + 
 		   2 * (*childP)->core.border_width +
@@ -2167,34 +2170,38 @@ ChangeManaged(
       if (XtIsRealized((Widget)pw) && XtIsManaged(*childP))
           XtRealizeWidget(*childP);
 
-#ifdef FIX_1476
-      request.request_mode = 0;
-      if( !Horizontal(pw) ) {
-            request.request_mode |= CWWidth;
-            request.width = 0;
-      } else {
-            request.request_mode |= CWHeight;
-            request.height = 0;
-      }
-      XtQueryGeometry(*childP, &request, &reply);
-#else
       /* KEEP SOME RECORD OF DESIRED HEIGHT */
       PaneDMajor(*childP) = MajorChildSize(pw, *childP);
 
       newMinor = childMinor + 2*(childBorderWidth -
                                  (*childP)->core.border_width);
-#endif
 
       if (XtIsManaged(*childP)) 
+#ifdef FIX_1476
+      if (XtIsRealized((Widget) pw)) {
+
+      	request.request_mode = 0;
+      	if (Horizontal(pw)) {
+      		request.request_mode |= CWHeight;
+      		request.height = 0;
+      	} else {
+      		request.request_mode |= CWWidth;
+      		request.width = 0;
+      	}
+
+      	XtQueryGeometry(*childP, &request, &reply);
+
+		XmeConfigureObject( *childP,
+			   (*childP)->core.x, (*childP)->core.y,
+			   Major(pw, reply.width, reply.height),
+			   Major(pw, reply.width, reply.height),
+			   (*childP)->core.border_width);
+      } else
+#endif
 	XmeConfigureObject( *childP,
 			   (*childP)->core.x, (*childP)->core.y,
-#ifdef FIX_1476
-               Major(pw, reply.width, reply.height),
-               Major(pw, reply.width, reply.height),
-#else
 			   Major(pw, (*childP)->core.width, newMinor), 
 			   Major(pw, newMinor, (*childP)->core.height),
-#endif
 			   (*childP)->core.border_width);
        if ((XtIsManaged(*childP)) && (*childP != children[num_panes-1])) {
               if (separator && pw->paned_window.separator_on) {
