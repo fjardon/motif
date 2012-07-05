@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.6 2009/06/28 11:49:55 rwscott Exp $
+ * $Id: Xsettings.c,v 1.7 2009/06/30 19:35:07 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -84,6 +84,11 @@ static XtResource resources[] =
 	XmNuserData, XmCUserData, XmRPointer,
 	sizeof(XtPointer), Offset(user_data),
 	XtRImmediate, NULL
+    },
+    {
+	XmNthemePath, XmCThemePath, XmRString,
+	sizeof(String), Offset(theme_path),
+	XtRImmediate, "%D/themes/%T/%F:%H/.local/share/themes/%T/%F:%H/.themes/%T/%F:%d/themes/%T/%F:/usr/local/share/themes/%T/%F:/usr/share/themes/%T/%F"
     },
 };
 #undef Offset
@@ -245,38 +250,28 @@ xsettings_byte_order (void)
 #endif
 
 static char *
-open_theme(const String theme_name)
+open_theme(XmXsettingsWidget xs, XmConst String theme_name)
 {
-char *file_name = NULL;
-char *home;
+String file;
+SubstitutionRec subs[] = {
+    {'H', NULL},
+    {'D', NULL},
+    {'d', NULL},
+    {'T', "Default"},
+    {'F', "Xm/xrdb.ad"},
+};
 
-    /*
-       $XDG_DATA_HOME/themes/theme_name/Xm/xrdb.ad
-	   $HOME/.local/share/themes/theme_name/Xm/xrdb.ad
-	   $HOME/.themes/theme_name/Xm/xrdb.ad
-       $XDG_DATA_DIRS/themes/theme_name/Xm/xrdb.ad
-	   /usr/local/share/themes/theme_name/Xm/xrdb.ad
-	   /usr/share/themes/theme_name/Xm/xrdb.ad
-     */
-    home = getenv("HOME");
-    if (home)
-    {
-    char *format = "%s/.themes/%s/Xm/xrdb.ad";
+    subs[0].substitution = getenv("HOME");
+    subs[1].substitution = getenv("XDG_DATA_HOME");
+    subs[2].substitution = getenv("XDG_DATA_DIRS");
+    subs[3].substitution = theme_name;
+    file = XtFindFile(xs->xsettings.theme_path, subs, XtNumber(subs), NULL);
 
-	/*
-	printf("%s:%s(%d) - \"%s\"\n",
-	    __FILE__, __FUNCTION__, __LINE__,
-	    home);
-	    */
-	file_name = XtMalloc(strlen(home) + strlen(theme_name) + strlen(format) + 1);
-	sprintf(file_name, format, home, theme_name);
-    }
-
-    return(file_name);
+    return(file);
 }
 
 static void
-apply_resources(Widget w, XrmDatabase new_db, const XtResourceList resource, Cardinal num_resources)
+apply_resources(Widget w, XrmDatabase new_db, XmConst XtResourceList resource, Cardinal num_resources)
 {
 Pixel bg = XmUNSPECIFIED_PIXEL;
 
@@ -412,7 +407,7 @@ char *theme_file;
     	theme_name);
     	*/
 
-    theme_file = open_theme(theme_name);
+    theme_file = open_theme(xs, theme_name);
     if (theme_file)
     {
     XrmDatabase disp_db = NULL;
@@ -747,73 +742,68 @@ XmXsettingsWidget xs = (XmXsettingsWidget)client_data;
 	xs ? XtName((Widget)xs) : "NULL",
 	event ? event->type : -1);
 	*/
-    if (event && event->type == DestroyNotify && event->xany.window == xs->xsettings.manager)
+    if (event && (event->xany.window == xs->xsettings.manager ||
+                  event->xany.window == RootWindow(XtDisplay(parent), XScreenNumberOfScreen(XtScreen(parent)))))
     {
-	/*
-	printf("%s:%s(%d) - %s %s %s\n",
-	    __FILE__, __FUNCTION__, __LINE__,
-	    parent ? XtName(parent) : "NULL",
-	    xs ? XtName((Widget)xs) : "NULL",
-	    *continue_to_dispatch ? "True" : "False");
-	    */
-	*continue_to_dispatch = False;
-	XtUnregisterDrawable(XtDisplay(parent), xs->xsettings.manager);
-	xs->xsettings.manager = None;
-	for (; xs->xsettings.num_settings > 0; xs->xsettings.num_settings--)
+	if (event->type == DestroyNotify && event->xany.window == xs->xsettings.manager)
 	{
-	XmXsettingsCallbackStruct cbs;
-
-	    cbs.action = XSETTINGS_ACTION_DELETED;
-	    cbs.setting = xs->xsettings.setting[xs->xsettings.num_settings - 1];
-	    XtCallCallbackList((Widget)xs, xs->xsettings.xsettings_callback, &cbs);
-	}
-	XtFree((char *)xs->xsettings.setting);
-	xs->xsettings.setting = NULL;
-    }
-    else if (event && event->type == PropertyNotify && event->xany.window == xs->xsettings.manager)
-    {
-	read_settings(xs);
-    }
-    else if (event && event->type == CreateNotify && event->xany.window == RootWindow(XtDisplay(parent), XScreenNumberOfScreen(XtScreen(parent))))
-    {
-	/*
-	printf("%s:%s(%d) - %s %s %s 0x%x\n",
-	    __FILE__, __FUNCTION__, __LINE__,
-	    parent ? XtName(parent) : "NULL",
-	    xs ? XtName((Widget)xs) : "NULL",
-	    *continue_to_dispatch ? "True" : "False",
-	    event->xcreatewindow.window);
-	    */
-	*continue_to_dispatch = False;
-	if (xs->xsettings.manager == None)
-	{
-	    xs->xsettings.manager = XGetSelectionOwner(XtDisplay(parent), xs->xsettings.selection_atom);
-	    if (xs->xsettings.manager != None)
+	    /*
+	    printf("%s:%s(%d) - %s %s %s\n",
+		__FILE__, __FUNCTION__, __LINE__,
+		parent ? XtName(parent) : "NULL",
+		xs ? XtName((Widget)xs) : "NULL",
+		*continue_to_dispatch ? "True" : "False");
+		*/
+	    XtUnregisterDrawable(XtDisplay(parent), xs->xsettings.manager);
+	    xs->xsettings.manager = None;
+	    for (; xs->xsettings.num_settings > 0; xs->xsettings.num_settings--)
 	    {
-		/*
-		printf("%s:%s(%d) - 0x%x\n",
-		    __FILE__, __FUNCTION__, __LINE__,
-		    xs->xsettings.manager);
-		    */
-		XSelectInput(XtDisplay(parent), xs->xsettings.manager,
-		    PropertyChangeMask |  /* to find when a setting changes */
-		    StructureNotifyMask | /* to find when the window disappears */
-		    NoEventMask);
-		XtRegisterDrawable(XtDisplay(parent), xs->xsettings.manager, parent);
-		read_settings(xs);
+	    XmXsettingsCallbackStruct cbs;
+
+		cbs.action = XSETTINGS_ACTION_DELETED;
+		cbs.setting = xs->xsettings.setting[xs->xsettings.num_settings - 1];
+		XtCallCallbackList((Widget)xs, xs->xsettings.xsettings_callback, &cbs);
+	    }
+	    XtFree((char *)xs->xsettings.setting);
+	    xs->xsettings.setting = NULL;
+	}
+	else if (event->type == PropertyNotify && event->xany.window == xs->xsettings.manager)
+	{
+	    read_settings(xs);
+	}
+	else if (event->type == CreateNotify && event->xany.window == RootWindow(XtDisplay(parent), XScreenNumberOfScreen(XtScreen(parent))))
+	{
+	    /*
+	    printf("%s:%s(%d) - %s %s %s 0x%x\n",
+		__FILE__, __FUNCTION__, __LINE__,
+		parent ? XtName(parent) : "NULL",
+		xs ? XtName((Widget)xs) : "NULL",
+		*continue_to_dispatch ? "True" : "False",
+		event->xcreatewindow.window);
+		*/
+	    if (xs->xsettings.manager == None)
+	    {
+		xs->xsettings.manager = XGetSelectionOwner(XtDisplay(parent), xs->xsettings.selection_atom);
+		if (xs->xsettings.manager != None)
+		{
+		    /*
+		    printf("%s:%s(%d) - 0x%x\n",
+			__FILE__, __FUNCTION__, __LINE__,
+			xs->xsettings.manager);
+			*/
+		    XSelectInput(XtDisplay(parent), xs->xsettings.manager,
+			PropertyChangeMask |  /* to find when a setting changes */
+			StructureNotifyMask | /* to find when the window disappears */
+			NoEventMask);
+		    XtRegisterDrawable(XtDisplay(parent), xs->xsettings.manager, parent);
+		    read_settings(xs);
+		}
 	    }
 	}
-    }
-    else if (event && event->xany.window != XtWindow(parent))
-    {
-	/*
-	printf("%s:%s(%d) - %s %s %s\n",
-	    __FILE__, __FUNCTION__, __LINE__,
-	    parent ? XtName(parent) : "NULL",
-	    xs ? XtName((Widget)xs) : "NULL",
-	    *continue_to_dispatch ? "True" : "False");
-	    */
 	*continue_to_dispatch = False;
+    }
+    else
+    {
     }
 }
 

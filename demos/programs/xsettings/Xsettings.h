@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.h,v 1.1 2009/06/18 18:05:51 rwscott Exp $
+ * $Id: Xsettings.h,v 1.2 2009/06/30 19:35:07 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -66,6 +66,12 @@ extern "C" {
 #endif
 #ifndef XmCXsettings
 #define XmCXsettings "Xsettings"
+#endif
+#ifndef XmNthemePath
+#define XmNthemePath "themePath"
+#endif
+#ifndef XmCThemePath
+#define XmCThemePath "ThemePath"
 #endif
 
 extern WidgetClass xmXsettingsWidgetClass;
