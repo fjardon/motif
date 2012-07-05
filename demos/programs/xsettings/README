@@ -1,0 +1,39 @@
+This is used to keep track of the XSETTINGS property. At least, the gnome
+themes use this when switch themes. This allows OpenMotif applications
+to switch when the gnome theme is changed. Unfortunately there are not
+OpenMotif themes yet :( So to use this ....
+
+gnome theme changes make an attempt to change the look of Xt based toolkits,
+but in my experience, it is not done very well. It uses files in
+
+/usr/share/control-center-2.0/xrdb
+
+So, first of all, edit the *.ad files in that directory and comment out
+_all_ of the lines.
+
+Next you have to create the theme resources. For now the only theme directory
+that is searched is
+
+$HOME/.themes
+
+So, to create two themes to play with, create the following files
+
+$HOME/.themes/Bluecurve/Xm/xrdb.ad:
+*background:    #efede7
+*XmTextField.background:    white
+
+$HOME/.themes/Clearlooks/Xm/xrdb.ad:
+*background: gray75
+*XmTextField.background:    gray75
+
+You should be able to get started by
+
+cp -r /usr/share/themes/Bluecurve /usr/share/themes/Clearlooks $HOME/.themes
+
+and then create the xrdb.ad theme files. You can then start whatever
+application you use to switch gnome themes and this application should
+follow the changes .... That's all there is to it :)
+
+So far there is only a very limited number of resources that can be "themed",
+still need to determine which resources are "safe" to change on the fly ...
+
