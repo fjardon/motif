@@ -53,6 +53,7 @@ static char rcsid[] = "$TOG: ScrolledW.c /main/16 1997/07/25 16:49:57 samborn $"
 #include "ScrollFramTI.h"
 #include "TraversalI.h"
 #include "XmI.h"
+#include <Xm/XmP.h>
 
 #define MAXPOS ((1 << 15)-1)
 
@@ -2972,6 +2973,12 @@ XtWidgetGeometry *reply )
         /* else it's for real */
         retval = _XmMakeGeometryRequest((Widget) sw, &parent_request);
 
+#ifdef FIX_1474
+        if (retval == XtGeometryNo && !(request->request_mode & CWWidth)) {
+            parent_request.request_mode = CWHeight;
+            retval = _XmMakeGeometryRequest((Widget) sw, &parent_request);
+        }
+#endif
         if (retval == XtGeometryYes)
         {
             XtWidgetProc resize;
@@ -3090,9 +3097,20 @@ Widget wid )
             desired.width = 0 ;
             desired.height = 0 ;
         }
+
+#ifdef FIX_1474
+        GetVariableSize(sw, &desired.width, &desired.height);
+        desired.request_mode = CWWidth;
+        (void) _XmMakeGeometryRequest(wid, &desired);
+
+        GetVariableSize(sw, &desired.width, &desired.height);
+        desired.request_mode = CWHeight;
+        (void) _XmMakeGeometryRequest(wid, &desired);
+#else
         GetVariableSize(sw, &desired.width, &desired.height);
         desired.request_mode = (CWWidth | CWHeight);
         (void) _XmMakeGeometryRequest(wid, &desired);
+#endif
     }
 
     _XmProcessLock();
