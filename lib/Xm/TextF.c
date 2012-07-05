@@ -79,6 +79,7 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include <X11/Xft/Xft.h>
 #include "XmRenderTI.h"
 #endif
+#include <Xm/XmP.h>
 
 #define FIX_1409
 

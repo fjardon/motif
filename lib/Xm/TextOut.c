@@ -71,6 +71,7 @@ static char rcsid[] = "$TOG: TextOut.c /main/41 1999/08/12 11:37:30 vipin $"
 #ifdef USE_XFT
 #include "XmRenderTI.h"
 #endif
+#include <Xm/XmP.h>
 
 
 #define MSG1	_XmMMsgTextOut_0000

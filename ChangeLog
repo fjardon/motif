@@ -1,3 +1,9 @@
+2009-06-24  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/IconButtonP.h, lib/Xm/IconG.c, lib/Xm/IconGP.h, lib/Xm/Label.c, lib/Xm/LabelG.c,
+	  lib/Xm/LabelGP.h, lib/Xm/LabelP.h, lib/Xm/List.c, lib/Xm/TabBox.c, lib/Xm/TextF.c,
+	  lib/Xm/TextOut.c, lib/Xm/XmI.h, lib/Xm/XmP.h: 
+	Moved define FIX_1381 from XmI.h to XmP.h  
+
 2009-06-22  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/IconButton.c, lib/Xm/IconButtonP.h, lib/Xm/IconG.c, lib/Xm/IconGP, lib/Xm/Label.c,
       lib/Xm/LabelG.c, lib/Xm/LabelGP.h, lib/Xm/LabelP.h, lib/Xm/List.c, lib/Xm/TabBox.c,

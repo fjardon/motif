@@ -73,6 +73,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include "XmRenderTI.h"
 #include "XmStringI.h"
 #include "ToolTipI.h"
+#include <Xm/XmP.h>
 
 #define FIX_1390	1
 #define FIX_1365	1

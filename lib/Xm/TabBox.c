@@ -47,6 +47,7 @@
 #include <Xm/PrimitiveP.h>
 #include <Xm/TabStackP.h>
 #include <Xm/DrawUtils.h>
+#include <Xm/XmP.h>
 
 #ifdef USE_XFT
 #include <X11/Xft/Xft.h>

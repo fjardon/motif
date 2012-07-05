@@ -56,6 +56,7 @@
 #include "XmTabListI.h"
 #include "XmosI.h"
 #include "IconGI.h"
+#include <Xm/XmP.h>
 
 
 /* spacing between the line and the detail string.

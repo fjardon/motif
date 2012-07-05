@@ -281,7 +281,6 @@ extern void (*_XtProcessLock)();
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 
-#define FIX_1381
 #define FIX_1396
 
 #ifdef FIX_1381
