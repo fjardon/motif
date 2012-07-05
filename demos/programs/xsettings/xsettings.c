@@ -58,6 +58,9 @@ cancelTimer(Widget w, XtPointer client_data, XtPointer call_data)
 {
 FlashControl *fc = client_data;
 
+    XtVaSetValues(w,
+    	XmNuserData, NULL,
+    	NULL);
     XtRemoveTimeOut(fc->id);
     XtFree((char *)fc);
 }
@@ -85,6 +88,9 @@ Widget w = fc->w;
     {
 	XtRemoveCallback(fc->w, XmNdestroyCallback, cancelTimer, fc);
 	visualEmphasis = fc->visualEmphasis;
+	XtVaSetValues(fc->w,
+	    XmNuserData, NULL,
+	    NULL);
     	XtFree((char *)fc);
     }
     XtVaSetValues(w,
@@ -99,22 +105,35 @@ flash(Widget w)
     {
     FlashControl *fc;
 
-	fc = XtNew(FlashControl);
-	fc->w = w;
-	fc->count = 10;
-	XtVaGetValues(fc->w,
-	    XmNvisualEmphasis, &fc->visualEmphasis,
+	XtVaGetValues(w,
+	    XmNuserData, &fc,
 	    NULL);
+	if (fc == NULL)
+	{
+	    fc = XtNew(FlashControl);
+	    fc->w = w;
+	    XtVaGetValues(fc->w,
+		XmNvisualEmphasis, &fc->visualEmphasis,
+		NULL);
+	    XtAddCallback(fc->w, XmNdestroyCallback, cancelTimer, fc);
+	    XtVaSetValues(fc->w,
+		XmNuserData, fc,
+	    	NULL);
+	}
+	else
+	{
+	    XtRemoveTimeOut(fc->id);
+	}
+	fc->count = 10;
 	fc->id = XtAppAddTimeOut(XtWidgetToApplicationContext(w),
 	    0,
 	    _flash,
 	    fc);
-	XtAddCallback(fc->w, XmNdestroyCallback, cancelTimer, fc);
     }
 }
 
 static void
-printSetting(XSettingsSetting *setting, Widget container)
+printSetting(XSettingsSetting *setting, Widget container, Boolean delete)
 {
 String fullname = NULL;
 String tmp;
@@ -122,15 +141,17 @@ String tok;
 Widget entryParent = NULL;
 XmStringTable detail;
 Cardinal detailCount;
+int numKids;
+WidgetList kid = NULL;
 
     fullname = XtNewString(XrmQuarkToString(setting->name));
     tmp = fullname;
 
+    /*
+    printf("%s\n", fullname);
+    */
     while ((tok = strtok(tmp, "/")))
     {
-    int numKids;
-    WidgetList kid = NULL;
-
     	numKids = XmContainerGetItemChildren(container, entryParent, &kid);
     	for (; numKids > 0; numKids--)
     	{
@@ -195,65 +216,74 @@ Cardinal detailCount;
     	}
     	tmp = NULL;
     	XtFree((char *)kid);
+    	kid = NULL;
     }
-    detailCount = 0;
-    detail = NULL;
-    switch (setting->type)
+    XtFree((char *)kid);
+    if (delete)
     {
-    case XSETTINGS_TYPE_INT:
-    	{
-    	String tmp = "";
-    	int len;
+    	XtDestroyWidget(entryParent);
+    }
+    else
+    {
+	detailCount = 0;
+	detail = NULL;
+	switch (setting->type)
+	{
+	case XSETTINGS_TYPE_INT:
+	    {
+	    String tmp = "";
+	    int len;
 
-	    len = snprintf(tmp, 0, "%i", setting->data.v_int);
-	    tmp = XtMalloc(len + 1);
-	    len = snprintf(tmp, len + 1, "%i", setting->data.v_int);
+		len = snprintf(tmp, 0, "%i", setting->data.v_int);
+		tmp = XtMalloc(len + 1);
+		len = snprintf(tmp, len + 1, "%i", setting->data.v_int);
+		detailCount = 1;
+		detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
+		detail[0] = XmStringCreateLocalized(tmp);
+		XtFree(tmp);
+	    }
+	    break;
+	case XSETTINGS_TYPE_STRING:
 	    detailCount = 1;
 	    detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
-	    detail[0] = XmStringCreateLocalized(tmp);
-	    XtFree(tmp);
-    	}
-    	break;
-    case XSETTINGS_TYPE_STRING:
-    	detailCount = 1;
-    	detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
-    	detail[0] = XmStringCreateLocalized(XrmQuarkToString(setting->data.v_string));
-    	break;
-    case XSETTINGS_TYPE_COLOR:
-    	{
-    	String tmp = "";
-    	int len;
+	    detail[0] = XmStringCreateLocalized(XrmQuarkToString(setting->data.v_string));
+	    break;
+	case XSETTINGS_TYPE_COLOR:
+	    {
+	    String tmp = "";
+	    int len;
 
-	    len = snprintf(tmp, 0, "#%02x%02x%02x %02x",
-		setting->data.v_color.red,
-		setting->data.v_color.green,
-		setting->data.v_color.blue,
-		setting->data.v_color.alpha);
-	    tmp = XtMalloc(len + 1);
-	    len = snprintf(tmp, len + 1, "#%02x%02x%02x %02x",
-		setting->data.v_color.red,
-		setting->data.v_color.green,
-		setting->data.v_color.blue,
-		setting->data.v_color.alpha);
-	    detailCount = 1;
-	    detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
-	    detail[0] = XmStringCreateLocalized(tmp);
-	    XtFree(tmp);
-    	}
-    	break;
-    default:
-    	printf("Unknown\n");
-    	break;
+		len = snprintf(tmp, 0, "#%02x%02x%02x %02x",
+		    setting->data.v_color.red,
+		    setting->data.v_color.green,
+		    setting->data.v_color.blue,
+		    setting->data.v_color.alpha);
+		tmp = XtMalloc(len + 1);
+		len = snprintf(tmp, len + 1, "#%02x%02x%02x %02x",
+		    setting->data.v_color.red,
+		    setting->data.v_color.green,
+		    setting->data.v_color.blue,
+		    setting->data.v_color.alpha);
+		detailCount = 1;
+		detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
+		detail[0] = XmStringCreateLocalized(tmp);
+		XtFree(tmp);
+	    }
+	    break;
+	default:
+	    printf("Unknown\n");
+	    break;
+	}
+	XtVaSetValues(entryParent,
+	    XmNdetail, detail,
+	    XmNdetailCount, detailCount,
+	    NULL);
+	for (; detailCount > 0; detailCount--)
+	{
+	    XmStringFree(detail[detailCount - 1]);
+	}
+	XtFree((char *)detail);
     }
-    XtVaSetValues(entryParent,
-    	XmNdetail, detail,
-    	XmNdetailCount, detailCount,
-    	NULL);
-    for (; detailCount > 0; detailCount--)
-    {
-    	XmStringFree(detail[detailCount - 1]);
-    }
-    XtFree((char *)detail);
     XtFree(fullname);
 }
 
@@ -262,7 +292,7 @@ settingsCallback(Widget w, XtPointer client_data, XtPointer call_data)
 {
 XmXsettingsCallbackStruct *cbs = (XmXsettingsCallbackStruct *)call_data;
 
-    printSetting(&cbs->setting, client_data);
+    printSetting(&cbs->setting, client_data, (cbs->action == XSETTINGS_ACTION_DELETED));
 }
 
 int 
@@ -308,7 +338,7 @@ int i;
 	    NULL);
 	for (i = 0; i < num_settings; i++)
 	{
-	    printSetting(&setting[i], helloworld_main);
+	    printSetting(&setting[i], helloworld_main, False);
 	}
 	XtAddCallback(settings, XmNxsettingsCallback, settingsCallback, helloworld_main);
     }

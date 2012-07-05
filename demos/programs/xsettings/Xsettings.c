@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.5 2009/06/27 13:09:48 rwscott Exp $
+ * $Id: Xsettings.c,v 1.6 2009/06/28 11:49:55 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -729,7 +729,9 @@ unsigned char *data = NULL;
     }
     else
     {
+	/*
 	printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	*/
     }
 }
 
@@ -739,14 +741,79 @@ xsetting_callback(Widget parent, XtPointer client_data, XEvent *event, Boolean *
 XmXsettingsWidget xs = (XmXsettingsWidget)client_data;
 
     /*
-    printf("%s:%s(%d) - %s %s\n",
+    printf("%s:%s(%d) - %s %s %i\n",
 	__FILE__, __FUNCTION__, __LINE__,
 	parent ? XtName(parent) : "NULL",
-	xs ? XtName((Widget)xs) : "NULL");
+	xs ? XtName((Widget)xs) : "NULL",
+	event ? event->type : -1);
 	*/
-    if (event && event->xany.window == xs->xsettings.manager)
+    if (event && event->type == DestroyNotify && event->xany.window == xs->xsettings.manager)
+    {
+	/*
+	printf("%s:%s(%d) - %s %s %s\n",
+	    __FILE__, __FUNCTION__, __LINE__,
+	    parent ? XtName(parent) : "NULL",
+	    xs ? XtName((Widget)xs) : "NULL",
+	    *continue_to_dispatch ? "True" : "False");
+	    */
+	*continue_to_dispatch = False;
+	XtUnregisterDrawable(XtDisplay(parent), xs->xsettings.manager);
+	xs->xsettings.manager = None;
+	for (; xs->xsettings.num_settings > 0; xs->xsettings.num_settings--)
+	{
+	XmXsettingsCallbackStruct cbs;
+
+	    cbs.action = XSETTINGS_ACTION_DELETED;
+	    cbs.setting = xs->xsettings.setting[xs->xsettings.num_settings - 1];
+	    XtCallCallbackList((Widget)xs, xs->xsettings.xsettings_callback, &cbs);
+	}
+	XtFree((char *)xs->xsettings.setting);
+	xs->xsettings.setting = NULL;
+    }
+    else if (event && event->type == PropertyNotify && event->xany.window == xs->xsettings.manager)
     {
 	read_settings(xs);
+    }
+    else if (event && event->type == CreateNotify && event->xany.window == RootWindow(XtDisplay(parent), XScreenNumberOfScreen(XtScreen(parent))))
+    {
+	/*
+	printf("%s:%s(%d) - %s %s %s 0x%x\n",
+	    __FILE__, __FUNCTION__, __LINE__,
+	    parent ? XtName(parent) : "NULL",
+	    xs ? XtName((Widget)xs) : "NULL",
+	    *continue_to_dispatch ? "True" : "False",
+	    event->xcreatewindow.window);
+	    */
+	*continue_to_dispatch = False;
+	if (xs->xsettings.manager == None)
+	{
+	    xs->xsettings.manager = XGetSelectionOwner(XtDisplay(parent), xs->xsettings.selection_atom);
+	    if (xs->xsettings.manager != None)
+	    {
+		/*
+		printf("%s:%s(%d) - 0x%x\n",
+		    __FILE__, __FUNCTION__, __LINE__,
+		    xs->xsettings.manager);
+		    */
+		XSelectInput(XtDisplay(parent), xs->xsettings.manager,
+		    PropertyChangeMask |  /* to find when a setting changes */
+		    StructureNotifyMask | /* to find when the window disappears */
+		    NoEventMask);
+		XtRegisterDrawable(XtDisplay(parent), xs->xsettings.manager, parent);
+		read_settings(xs);
+	    }
+	}
+    }
+    else if (event && event->xany.window != XtWindow(parent))
+    {
+	/*
+	printf("%s:%s(%d) - %s %s %s\n",
+	    __FILE__, __FUNCTION__, __LINE__,
+	    parent ? XtName(parent) : "NULL",
+	    xs ? XtName((Widget)xs) : "NULL",
+	    *continue_to_dispatch ? "True" : "False");
+	    */
+	*continue_to_dispatch = False;
     }
 }
 
@@ -784,6 +851,8 @@ Cardinal num_params = XtNumber(params);
     new_xs->xsettings.num_settings = 0;
     new_xs->xsettings.setting = NULL;
     new_xs->xsettings.serial = 0;
+    new_xs->xsettings.selection_atom = None;
+    new_xs->xsettings.atom = None;
     new_xs->xsettings.local_byte_order = xsettings_byte_order();
     selection_atom_name_len = snprintf(selection_atom_name, 0, "_XSETTINGS_S%d", XScreenNumberOfScreen(XtScreen(new_w)));
     if (selection_atom_name_len > 0)
@@ -792,8 +861,6 @@ Cardinal num_params = XtNumber(params);
 	selection_atom_name = XtMalloc(selection_atom_name_len);
 	if (selection_atom_name > 0)
 	{
-	Atom selection_atom;
-
 	    snprintf(selection_atom_name, selection_atom_name_len, "_XSETTINGS_S%d", XScreenNumberOfScreen(XtScreen(new_w)));
 	    /*
 	    printf("%s:%s(%d) - %s -> %s \"%s\"\n", __FILE__, __FUNCTION__, __LINE__,
@@ -801,28 +868,40 @@ Cardinal num_params = XtNumber(params);
 		XtName(new_w),
 		selection_atom_name);
 		*/
-	    selection_atom = XInternAtom(XtDisplay(new_w), selection_atom_name, True);
+	    new_xs->xsettings.atom = XInternAtom(XtDisplay(new_w), "_XSETTINGS_SETTINGS", True);
+	    new_xs->xsettings.selection_atom = XInternAtom(XtDisplay(new_w), selection_atom_name, True);
 	    XtFree(selection_atom_name);
-	    if (selection_atom != None)
+	    if (new_xs->xsettings.selection_atom != None && new_xs->xsettings.atom != None)
 	    {
 		/*
 		printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
 		*/
+		XSelectInput(XtDisplay(new_w), RootWindow(XtDisplay(new_w), XScreenNumberOfScreen(XtScreen(new_w))), SubstructureNotifyMask);
+		XtRegisterDrawable(XtDisplay(new_w), RootWindow(XtDisplay(new_w), XScreenNumberOfScreen(XtScreen(new_w))), XtParent(new_w));
+		/* This must be the _first_ event handler, otherwise the Shell
+		   is going to abort with "Invalid window in event".
+		 */
+		XtInsertEventHandler(XtParent(new_w),
+			PropertyChangeMask |
+			SubstructureNotifyMask |
+			StructureNotifyMask |
+			NoEventMask,
+		    False, xsetting_callback, new_w, XtListHead);
 		XGrabServer(XtDisplay(new_w));
-		new_xs->xsettings.manager = XGetSelectionOwner(XtDisplay(new_w), selection_atom);
+		new_xs->xsettings.manager = XGetSelectionOwner(XtDisplay(new_w), new_xs->xsettings.selection_atom);
 		if (new_xs->xsettings.manager != None)
+		{
+		    XSelectInput(XtDisplay(new_w), new_xs->xsettings.manager,
+		    	PropertyChangeMask |  /* to find when a setting changes */
+		    	StructureNotifyMask | /* to find when the window disappears */
+		    	NoEventMask);
+		    XtRegisterDrawable(XtDisplay(new_w), new_xs->xsettings.manager, XtParent(new_w));
+		}
+		else
 		{
 		    /*
 		    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
 		    */
-		    XSelectInput(XtDisplay(new_w), new_xs->xsettings.manager, PropertyChangeMask | StructureNotifyMask);
-		    XtRegisterDrawable(XtDisplay(new_w), new_xs->xsettings.manager, XtParent(new_w));
-		    XtAddEventHandler(XtParent(new_w), PropertyChangeMask | StructureNotifyMask, False, xsetting_callback, new_w);
-		    new_xs->xsettings.atom = XInternAtom(XtDisplay(new_w), "_XSETTINGS_SETTINGS", True);
-		}
-		else
-		{
-		    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
 		}
 		XUngrabServer(XtDisplay(new_w));
 		read_settings(new_xs);
@@ -855,6 +934,11 @@ XmXsettingsWidget xs = (XmXsettingsWidget)w;
     {
 	XtFree((char *)xs->xsettings.setting);
     }
+    if (xs->xsettings.manager != None)
+    {
+	XtUnregisterDrawable(XtDisplay(XtParent(w)), xs->xsettings.manager);
+    }
+    XtUnregisterDrawable(XtDisplay(XtParent(w)), RootWindow(XtDisplay(XtParent(w)), XScreenNumberOfScreen(XtScreen(XtParent(w)))));
 }
 
 static Boolean 

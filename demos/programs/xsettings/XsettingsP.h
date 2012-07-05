@@ -1,6 +1,6 @@
 /**
  *
- * $Id: XsettingsP.h,v 1.1 2009/06/18 18:05:51 rwscott Exp $
+ * $Id: XsettingsP.h,v 1.2 2009/06/28 11:49:56 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -38,6 +38,7 @@ typedef struct _XmXsettingsPart {
     char local_byte_order;
     XtCallbackList xsettings_callback;
     XtPointer user_data;
+    Atom selection_atom;
 } XmXsettingsPart;
 
 typedef struct _XmXsettingsRec {
