@@ -1,4 +1,8 @@
 2009-09-08  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Paned.h:
+	Removed xmPanedWindowWidgetClass definition
+
+2009-09-08  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmP.h, lib/Xm/List.c, lib/Xm/ScrolledW.c:
 	Fixed bug #1474 (Incrementation of XmNvisibleItemCount value does not work
 	properly in XmComboBox)

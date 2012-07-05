@@ -40,12 +40,6 @@ extern "C" {
 typedef struct _XmPanedClassRec	*XmPanedWidgetClass;
 typedef struct _XmPanedRec	*XmPanedWidget;
 
-/*
- * For people used to Motif names this will make things easier.
- */
-
-#define xmPanedWindowWidgetClass xmPanedWidgetClass
-
 /************************************************************
  *
  *  Public Procedures 
