@@ -332,6 +332,7 @@ demos/programs/Paned/Makefile \
 demos/programs/TabStack/Makefile \
 demos/programs/Tree/Makefile \
 demos/programs/pixmaps/Makefile \
+demos/programs/xsettings/Makefile \
 demos/unsupported/Makefile \
 demos/unsupported/Exm/Makefile \
 demos/unsupported/aicon/Makefile \

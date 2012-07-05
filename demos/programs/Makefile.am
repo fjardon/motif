@@ -33,7 +33,8 @@ SUBDIRS = airport \
          Ext18List \
          IconB \
          Paned \
-         pixmaps
+         pixmaps \
+         xsettings
 
 EXTRA_DIST = Imakefile
 
