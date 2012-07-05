@@ -85,6 +85,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
    ((unsigned int)(unsigned long)(tablist) != XmAS_IS))
 
 #define  FIX_1414
+#define  FIX_1449
 #define  FIX_1444
 #define FIX_1451
 /**********************************************************************
@@ -2923,6 +2924,10 @@ _XmXftDrawCreate(Display *display, Window window)
 	_XmXftDrawCache = (struct _XmXftDrawCacheStruct *)
 		XtRealloc((char *)_XmXftDrawCache,
 		sizeof(struct _XmXftDrawCacheStruct) * _XmXftDrawCacheSize);
+#ifdef FIX_1449
+	memset(_XmXftDrawCache + i * sizeof(struct _XmXftDrawCacheStruct), 0,  
+			(_XmXftDrawCacheSize - i) * sizeof(*_XmXftDrawCache));
+#endif
 
 	_XmXftDrawCache[i].display = display;
 	_XmXftDrawCache[i].draw = draw;
