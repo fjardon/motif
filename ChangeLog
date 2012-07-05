@@ -1,3 +1,7 @@
+2009-07-1  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DropDown.c:
+	Fixed warning: implicit declaration of function '_XmPopupSpringLoaded   
+
 2009-06-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmAll.h:
 	Fixed bug #1489 (Paned.h is not included by XmAll.h)  

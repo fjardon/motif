@@ -29,6 +29,10 @@
 #define FIX_1371
 #define FIX_1486
 
+#ifdef FIX_1486
+#include "MenuShellI.h"
+#endif
+
 /*
  * NOTE:  I use the same syntax for popup and popdown that Xt Uses. 
  *        so something is "up" if it is on the screen.  With combo
