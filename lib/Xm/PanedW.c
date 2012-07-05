@@ -36,7 +36,6 @@ static char rcsid[] = "$TOG: PanedW.c /main/24 1999/07/13 07:46:01 mgreess $"
 #include <config.h>
 #endif
 
-#define FIX_1476
 
 #include <ctype.h>
 #include <X11/cursorfont.h>
@@ -47,10 +46,6 @@ static char rcsid[] = "$TOG: PanedW.c /main/24 1999/07/13 07:46:01 mgreess $"
 #include <Xm/VaSimpleP.h>
 #include "MessagesI.h"
 #include "RepTypeI.h"
-#ifdef FIX_1476
-#include <Xm/SeparatoGP.h>
-#endif
-
 
 typedef enum {FirstPane='U', LastPane='L'} Direction;
 
@@ -1122,20 +1117,6 @@ CommitNewLocations(
 	     }
 	     if (separator)
 	     {
-#ifdef FIX_1476
-		sepPos = MajorChildPos(pw, *childP) + MajorChildSize(pw, *childP) + 
-			2 * (*childP)->core.border_width + pw->paned_window.spacing / 2 - 
-			separator->core.border_width;
-		
-		SEPG_Orientation(separator) = (Horizontal(pw)) ? XmVERTICAL : XmHORIZONTAL; 
-
-		XmeConfigureObject(separator, 
-				    Major(pw, sepPos, 0),
-				    Major(pw, 0,  sepPos),
-				    Major(pw, 2, pw->core.width),
-				    Major(pw, pw->core.height, 2),
-				    separator->core.border_width);
-#else
 		 sepPos = MajorChildPos(pw, *childP) + MajorChildSize(pw, *childP) + 
 		   2 * (*childP)->core.border_width +
 		     pw->paned_window.spacing/2 - MajorChildSize(pw, separator)/2 -
@@ -1147,7 +1128,6 @@ CommitNewLocations(
 				    Major(pw, separator->core.width, pw->core.width),
 				    Major(pw, pw->core.height, separator->core.height),
 				    separator->core.border_width);
-#endif /* FIX_1476 */
            }
 
 	   /* Move and Display the Sash */
@@ -2089,9 +2069,6 @@ ChangeManaged(
    int num_panes = 0;
    XmPanedWindowConstraintPart * pane;
    XtGeometryResult result;
-#ifdef FIX_1476
-   XtWidgetGeometry request, reply;
-#endif
 
   /* 
    * THIS PREVENTS US FROM RE-ENTERING THIS CODE AS WE MANAGE/UNMANAGE
@@ -2177,27 +2154,6 @@ ChangeManaged(
                                  (*childP)->core.border_width);
 
       if (XtIsManaged(*childP)) 
-#ifdef FIX_1476
-      if (XtIsRealized((Widget) pw)) {
-
-      	request.request_mode = 0;
-      	if (Horizontal(pw)) {
-      		request.request_mode |= CWHeight;
-      		request.height = 0;
-      	} else {
-      		request.request_mode |= CWWidth;
-      		request.width = 0;
-      	}
-
-      	XtQueryGeometry(*childP, &request, &reply);
-
-		XmeConfigureObject( *childP,
-			   (*childP)->core.x, (*childP)->core.y,
-			   Major(pw, reply.width, reply.height),
-			   Major(pw, reply.width, reply.height),
-			   (*childP)->core.border_width);
-      } else
-#endif
 	XmeConfigureObject( *childP,
 			   (*childP)->core.x, (*childP)->core.y,
 			   Major(pw, (*childP)->core.width, newMinor), 
@@ -2267,11 +2223,7 @@ ChangeManaged(
    ResetDMajors( pw );
    
    if (XtIsRealized((Widget)pw))
-#ifdef FIX_1476
-      RefigureLocationsAndCommit(pw, pw->paned_window.pane_count - 1, LastPane, False);
-#else
       RefigureLocationsAndCommit(pw, 0, FirstPane, False);
-#endif
 
    XmeNavigChangeManaged((Widget)pw);
 
