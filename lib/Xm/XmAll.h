@@ -74,7 +74,9 @@
 #include <Xm/PanedW.h>
 #include <Xm/Paned.h>
 #include <Xm/Primitive.h>
+#ifdef PRINTING_SUPPORTED
 #include <Xm/Print.h>
+#endif
 #include <Xm/Protocols.h>
 #include <Xm/PushB.h>
 #include <Xm/PushBG.h>

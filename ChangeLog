@@ -1,3 +1,9 @@
+2009-10-28  Ihor Hayvuk <ihayvuk@ics.com>
+	* configure.ac, include/Dt/Print.h, lib/Xm/ImageCache.c, lib/Xm/Makefile.am,
+	  lib/Xm/ResInd.c, lib/Xm/Synthetic.c, lib/Xm/SyntheticI.h, lib/Xm/TextF.c,
+	  lib/Xm/TextOut.c, lib/Xm/Xm.h.in, lib/Xm/XmAll.h: 
+	Fixed in order to allow build without libXp
+
 2009-10-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmI.h, lib/Xm/XmP.h, lib/Xm/List.c, lib/Xm/ScrolledW.c,
 	  lib/Xm/RowColumn.c:

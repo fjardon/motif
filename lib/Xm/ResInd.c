@@ -45,7 +45,9 @@ static char rcsid[] = "$XConsortium: ResInd.c /main/17 1996/06/07 11:40:05 danie
 #include "ResIndI.h"
 #include "ScreenI.h"
 #include "XmI.h"
+#ifdef PRINTING_SUPPORTED
 #include "PrintSI.h"
+#endif
 
 /*********** Macros and Internal Types   ************/
 
@@ -377,6 +379,7 @@ _XmConvertUnits(
   
   /*  Get the screen dimensional data  */
   
+#ifdef PRINTING_SUPPORTED
   /* specialize for printing */
   _XmProcessLock();
   /* if there is at least one print shell around, look if this
@@ -390,6 +393,7 @@ _XmConvertUnits(
 	  mm_per_pixel = 25400/ pshell->print.print_resolution ;
   }
   _XmProcessUnlock();
+#endif /* PRINTING_SUPPORTED */
 
   if (!mm_per_pixel) {
       if (dimension == XmHORIZONTAL)

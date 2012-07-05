@@ -54,7 +54,9 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #include <Xm/AccColorT.h>       /* for new _XmGetColoredPixmap API */
 #include <Xm/ColorObjP.h>       /* for Xme Color Obj access API */
 #include <Xm/IconFile.h>        /* XmGetIconFileName */
+#ifdef PRINTING_SUPPORTED
 #include <Xm/PrintSP.h>         /* for pixmap resolution */
+#endif
 #include <Xm/XpmP.h>
 #include <X11/Xresource.h>
 #ifdef JPEG_SUPPORTED
@@ -1340,13 +1342,14 @@ _XmGetScaledPixmap(
 	pix_data.print_shell = XtParent(pix_data.print_shell);
     /* pix_data.print_shell might be NULL here */
 
-
+#ifdef PRINTING_SUPPORTED
     /* scaling_ratio == 0 means use print_resolution and pixmap_resolution 
        in scaling - so first find out the print_resolution, since it
        is used in caching */
     if (!scaling_ratio && pix_data.print_shell) 
 	pix_data.print_resolution = 
 	  ((XmPrintShellWidget)pix_data.print_shell)->print.print_resolution ;
+#endif
 
     /* if scaling_ratio a real number, like 1 or 1.2 
        print_resolution still 100 and will not be used */
@@ -1391,11 +1394,14 @@ _XmGetScaledPixmap(
 	       in which case, the print shell default resolution 
 	       for pixmap is used */
 
+#ifdef PRINTING_SUPPORTED
 	    if (pix_data.print_shell) 
 		pixmap_resolution = 
 		    ((XmPrintShellWidget)pix_data.print_shell)
 			->print.default_pixmap_resolution ;
-	    else pixmap_resolution = 100 ;
+	    else
+#endif /* PRINTING_SUPPORTED */
+		pixmap_resolution = 100 ;
 	}
 
 	pix_data.scaling_ratio = (double)pix_data.print_resolution / 
@@ -2068,6 +2074,7 @@ void _XmPutScaledImage (
     ratio_x = (double)dest_width / (double)src_width;
     ratio_y = (double)dest_height / (double)src_height;
  
+#ifdef PRINTING_SUPPORTED
     /*
      * Check that we have uniform scaling, and that the print extension
      * exists.  We can't call XpGetContext first, because if the print
@@ -2103,6 +2110,7 @@ void _XmPutScaledImage (
 	    }
 	}
     }
+#endif /* PRINTING_SUPPORTED */
 
     src_max_x = src_x + src_width;
 

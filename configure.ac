@@ -244,6 +244,39 @@ then
     AC_SEARCH_LIBS([libiconv_open], [iconv]))
 fi
 
+AC_ARG_ENABLE(printing, [  --disable-printing
+                       Disable printing support])
+
+if test x$enable_printing = x
+then
+    enable_printing="yes"
+fi
+
+if test "$enable_printing" = "yes"
+then
+  AC_MSG_CHECKING([for libXp])
+  AC_CHECK_HEADERS(X11/extensions/Print.h,
+    AC_CHECK_LIB(Xp, XpCreateContext, ,enable_printing="no"),
+  enable_printing="no")
+fi
+
+if test "$enable_printing" = "yes"
+then
+  LIB_XP=-lXp
+  AC_DEFINE([PRINTING_SUPPORTED], [1], [Printing is supported])
+  PRINTING_SUPPORTED_FALSE=!
+  PRINTING_SUPPORTED_TRUE=
+else
+  LIB_XP=
+  PRINTING_SUPPORTED_FALSE=
+  PRINTING_SUPPORTED_TRUE=!
+fi
+AC_SUBST(PRINTING_SUPPORTED_FALSE)
+AC_SUBST(PRINTING_SUPPORTED_TRUE)
+
+AM_CONDITIONAL(PRINTING, test "$enable_printing" = "yes")
+AC_SUBST(LIB_XP)
+
 AC_FIND_XFT
 AC_IMAGE_SUPPORT
 

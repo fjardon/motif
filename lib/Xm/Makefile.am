@@ -68,7 +68,13 @@ PNG_SRCS =
 PNG_HDRS =
 endif
 
-libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt -lXext -lXp -lX11 ${X_EXTRA_LIBS}
+if PRINTING
+PRINTS_SRC = PrintS.c
+else
+PRINTS_SRC =
+endif
+
+libXm_la_LIBADD = ${X_LIBS} ${X_XMU} -lXt -lXext ${LIB_XP} -lX11 ${X_EXTRA_LIBS}
 
 noinst_HEADERS = BaseClassI.h \
 BitmapsI.h \
@@ -259,7 +265,7 @@ SRCS2 = Desktop.c       Messages.c      Transltns.c     RepType.c \
         GetRes.c        BBUtil.c        ChColor.c       ColObjFunc.c \
         DrTog.c         DrArrow.c       DrPoly.c        DrHiDash.c \
         ValTime.c       FocusAct.c      CvtUnit.c       ScalTics.c \
-        ScroVis.c       WidGet.c        PrintS.c	\
+        ScroVis.c       WidGet.c        $(PRINTS_SRC)	\
         TableLayout.c
 
 OBSO_SRCS = Obso1_2.c ObsoStr.c ObsoXme.c Obso2_0.c
