@@ -1,3 +1,9 @@
+2009-06-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/IconButton.c, lib/Xm/IconButtonP.h, lib/Xm/IconG.c, lib/Xm/IconGP, lib/Xm/Label.c,
+      lib/Xm/LabelG.c, lib/Xm/LabelGP.h, lib/Xm/LabelP.h, lib/Xm/List.c, lib/Xm/TabBox.c,
+      lib/Xm/TextF.c, lib/Xm/TextOut.c, lib/Xm/Xm.c, lib/Xm/XmI.h: 
+	Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+
 2009-06-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c: 
 	Fixed bug #1484 (Warning on XmRlabelType when I put a pixmap and a value "top" on XmNPixmapPlacement)

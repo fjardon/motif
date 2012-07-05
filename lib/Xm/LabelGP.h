@@ -32,6 +32,7 @@
 #include <Xm/LabelG.h>
 #include <Xm/GadgetP.h>
 #include <Xm/ExtObjectP.h>
+#include "XmI.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -177,6 +178,9 @@ typedef struct _XmLabelGadgetPart
 
   XRectangle	  PixmapRect;   /* The bounding box of the pixmap in TextRect */
   XRectangle	  StringRect;   /* The bounding box of the string in TextRect */
+#ifdef FIX_1381
+  GC		  shadow_GC;
+#endif
 
 } XmLabelGadgetPart;
 
@@ -281,6 +285,10 @@ typedef struct _LRectangle
                                            label.normal_GC)
 #define LabG_InsensitiveGC(w)		(((XmLabelGadget)(w)) -> \
                                            label.insensitive_GC)
+#ifdef FIX_1381
+#define LabG_ShadowGC(w)		(((XmLabelGadget)(w)) -> \
+                                           label.shadow_GC)
+#endif
 #define LabG_TextRect(w)		(((XmLabelGadget)(w)) -> \
                                            label.TextRect)
 #define LabG_AccTextRect(w)		(((XmLabelGadget)(w)) -> \

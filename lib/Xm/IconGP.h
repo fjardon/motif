@@ -32,6 +32,7 @@
 #include <Xm/GadgetP.h>
 #include <Xm/IconG.h>
 #include <Xm/ExtObjectP.h>
+#include "XmI.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -101,6 +102,9 @@ typedef struct _XmIconGCacheObjPart
    GC               normal_GC;
    GC               background_GC;
    GC               insensitive_GC;
+#ifdef FIX_1381
+   GC               shadow_GC;
+#endif
    GC               top_shadow_GC;
    GC               bottom_shadow_GC;
    GC               highlight_GC;
@@ -231,6 +235,10 @@ typedef struct _XmIconGadgetRec
 				 icong.cache->background_GC)
 #define	IG_InsensitiveGC(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->insensitive_GC)
+#ifdef FIX_1381
+#define	IG_ShadowGC(w)	(((XmIconGadget)(w))-> \
+				 icong.cache->shadow_GC)
+#endif
 #define	IG_TopShadowGC(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->top_shadow_GC)
 #define	IG_BottomShadowGC(w)	(((XmIconGadget)(w))-> \

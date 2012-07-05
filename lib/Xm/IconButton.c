@@ -1771,6 +1771,16 @@ static void
 	     */
 	    XSetClipRectangles(XtDisplay(w), text_gc,
 			       0, 0, &clip, 1, Unsorted);
+#ifdef FIX_1381
+		/*Draw shadow for insensitive text*/
+		if (!XtIsSensitive(w)) {
+			XmStringDraw(XtDisplay(w), XtWindow(w), XmIconButton_font_list(iw),
+				XmIconButton_label_string(iw), XmIconButton_shadow_gc(iw),
+				XmIconButton_text_x(iw)+1, XmIconButton_text_y(iw)+1,
+				XmIconButton_max_text_width(iw), XmIconButton_alignment(iw),
+				XmPrim_layout_direction(iw), NULL);
+		}
+#endif
 	    XmStringDraw(XtDisplay(w), XtWindow(w), XmIconButton_font_list(iw),
 			 XmIconButton_label_string(iw), text_gc, 
 			 XmIconButton_text_x(iw), XmIconButton_text_y(iw),
@@ -1870,11 +1880,18 @@ CreateGCs(Widget w)
     XmIconButton_gc(iw) = XtGetGC(w, mask, &values);
 
 #ifdef FIX_1381
-	/*added for gray insensitive foreground (instead stipple)*/
-    values.foreground = _XmAssignInsensitiveColor(w);
+    /*generally gray insensitive foreground (instead stipple)*/
+    values.foreground = _XmAssignInsensitiveColor(iw);
+    XmIconButton_insensitive_text_gc(iw) = XtGetGC(w, smask, &values);
+#else 
+    XmIconButton_stippled_text_gc(iw) = XtGetGC(w, smask, &values);
 #endif
 
-    XmIconButton_stippled_text_gc(iw) = XtGetGC(w, smask, &values);
+#ifdef FIX_1381
+    /*light shadow for insensitive text (instead stipple)*/
+    values.foreground = iw->primitive.top_shadow_color;
+    XmIconButton_shadow_gc(iw) = XtGetGC(w, smask, &values);
+#endif
 
     /*
      * HACK ALERT: !!! Motif hack for monochrome displays. !!!
@@ -1922,7 +1939,12 @@ DestroyGCs(Widget w)
     XtReleaseGC(w, XmIconButton_pixmap_fill_gc(iw));
     XtReleaseGC(w, XmIconButton_stippled_set_gc(iw));
     XtReleaseGC(w, XmIconButton_stippled_unset_gc(iw));
+#ifdef FIX_1381
+    XtReleaseGC(w, XmIconButton_shadow_gc(iw));
+    XtReleaseGC(w, XmIconButton_insensitive_text_gc(iw));
+#else 
     XtReleaseGC(w, XmIconButton_stippled_text_gc(iw));
+#endif
     XtReleaseGC(w, XmIconButton_stippled_set_text_gc(iw));
 }
 

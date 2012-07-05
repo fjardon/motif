@@ -2459,7 +2459,14 @@ DrawItems(XmListWidget lw,
 	gc = ((lw->list.InternalList[pos]->selected) ?
 	      lw->list.InverseGC : lw->list.NormalGC);
       else
+#ifdef FIX_1381
+	  {
+		gc = lw->list.InsensitiveGC;
+		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor(lw);
+	  }
+#else
 	gc = lw->list.InsensitiveGC;
+#endif
 
       /* CR 7281: Set rendition background too. */
       if ((lw->list.InternalList[pos]->selected) &&
@@ -2472,30 +2479,35 @@ DrawItems(XmListWidget lw,
 	      _XmRendBG(lw->list.scratchRend) = lw->primitive.foreground;
 	    }
 	  else
-	    {
 #ifdef FIX_1381
-	      _XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
+	      _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
 #else
+	    {
 	      _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
-#endif
 	      _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
 	    }
+#endif
 	  _XmRendFGState(lw->list.scratchRend) = XmFORCE_COLOR;
 	  _XmRendBGState(lw->list.scratchRend) = XmFORCE_COLOR;
 	}
       else
 	{
 #ifdef FIX_1381
-	  if (!XtIsSensitive((Widget)lw))
-	      _XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
+	  if (XtIsSensitive((Widget)lw))
+	  {
+		  _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
+		  _XmRendFGState(lw->list.scratchRend) = XmAS_IS;
+		  _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
+		  _XmRendBGState(lw->list.scratchRend) = XmAS_IS;
+	  }
 	  else
-	  _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
+		  _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
 #else
-	 _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
-#endif
+	  _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
 	  _XmRendFGState(lw->list.scratchRend) = XmAS_IS;
 	  _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
 	  _XmRendBGState(lw->list.scratchRend) = XmAS_IS;
+#endif
 	}
 
       _XmRendGC(lw->list.scratchRend) = gc;
@@ -2504,6 +2516,27 @@ DrawItems(XmListWidget lw,
           _XmXftGetXftColor(XtDisplay(lw), _XmRendFG(lw->list.scratchRend));
 #endif
 
+#ifdef FIX_1381
+if (!XtIsSensitive((Widget)lw))
+{
+	/*Draw shadow for insensitive text*/
+	Pixel p;
+	p = _XmRendFG(lw->list.scratchRend);
+	_XmRendFG(lw->list.scratchRend) = lw->primitive.top_shadow_color;
+	_XmStringRender(XtDisplay(lw),
+		      XtWindow(lw),
+		      lw->list.font,
+		      lw->list.scratchRend,
+		      (_XmString)lw->list.items[pos],
+		      x + 1,
+		      y + 1 + ((int)(lw->list.MaxItemHeight -
+				   lw->list.InternalList[pos]->height) >> 1),
+		      width,
+		      XmALIGNMENT_BEGINNING,
+		      lw->list.StrDir);
+	_XmRendFG(lw->list.scratchRend) = p;
+}
+#endif
       /* CR 9204: Let _XmStringRender handle right-to-left drawing. */
       _XmStringRender(XtDisplay(lw),
 		      XtWindow(lw),
@@ -2773,7 +2806,7 @@ MakeGC(XmListWidget lw)
 
   values.background = lw->core.background_pixel;
 #ifdef FIX_1381
-/*added for gray insensitive foreground (instead stipple)*/
+  /*generally gray insensitive foreground (instead stipple)*/
   values.foreground = _XmAssignInsensitiveColor((Widget)lw);
 #else
   values.foreground = lw->primitive.foreground;

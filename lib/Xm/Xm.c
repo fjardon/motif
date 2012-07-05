@@ -37,6 +37,9 @@
 #include <Xm/PrimitiveP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/GadgetP.h>
+#include <Xm/IconGP.h>
+#include <Xm/LabelGP.h>
+
 
 /**************************************************************************
  *   This is Xm.c
@@ -503,39 +506,24 @@ XmObjectAtPoint(
 Pixel
 _XmAssignInsensitiveColor(Widget w)
 {
-	static XColor screen_in_out;
-	int status;
 	Pixel p;
 
-	p = w->core.background_pixel;
-	screen_in_out.pixel = w->core.background_pixel;
-	XQueryColor(XtDisplay(w), w->core.colormap, &screen_in_out);
-	if (		 (abs(screen_in_out.red-RGB_GREY_VALUE)<RGB_GREY_PRESISE)
-			&& (abs(screen_in_out.green-RGB_GREY_VALUE)<RGB_GREY_PRESISE)
-			&& (abs(screen_in_out.blue-RGB_GREY_VALUE)<RGB_GREY_PRESISE) )
-	{
-		/*text color have to be more light for wosn't be invisible*/
-		screen_in_out.red=(RGB_GREY_VALUE+RGB_GREY_VALUE/2)<<8;
-		screen_in_out.green=(RGB_GREY_VALUE+RGB_GREY_VALUE/2)<<8;
-		screen_in_out.blue=(RGB_GREY_VALUE+RGB_GREY_VALUE/2)<<8;
-
-		status = XAllocColor(XtDisplay(w), w->core.colormap, &screen_in_out);
-		if (status)
-		{
-			p = screen_in_out.pixel;
+	if (XmIsPrimitive(w)) {
+		XmPrimitiveWidget pw = (XmPrimitiveWidget) w;
+		p = pw->primitive.bottom_shadow_color;
+	}
+	else if (XmIsGadget(w)) {
+		if (XmIsLabelGadget(w)) {
+			XmLabelGadget lg = (XmLabelGadget) w;
+			p = LabG_BottomShadowColor(lg);
+		}
+		if (XmIsIconGadget(w)) {
+			XmIconGadget  ig = (XmIconGadget) w;
+			p = IG_BottomShadowColor(ig);
 		}
 	}
-	else
-	{    /*gray color*/
-		screen_in_out.red=RGB_GREY_VALUE<<8;
-		screen_in_out.green=RGB_GREY_VALUE<<8;
-		screen_in_out.blue=RGB_GREY_VALUE<<8;
-
-		status = XAllocColor(XtDisplay(w), w->core.colormap, &screen_in_out);
-		if (status)
-		{
-			p = screen_in_out.pixel;
-		}
+	else {
+		p = 0;
 	}
 
 	return p;

@@ -1391,6 +1391,9 @@ Initialize(
     IG_NormalGC(nw) = NULL;
     IG_BackgroundGC(nw) = NULL;
     IG_InsensitiveGC(nw) = NULL;
+#ifdef FIX_1381
+    IG_ShadowGC(nw) = NULL;
+#endif
     IG_TopShadowGC(nw) = NULL;
     IG_BottomShadowGC(nw) = NULL;
     IG_HighlightGC(nw) = NULL;
@@ -1437,6 +1440,9 @@ Destroy(
 
     XtReleaseGC(XtParent(wid),IG_NormalGC(wid));
     XtReleaseGC(XtParent(wid),IG_InsensitiveGC(wid));
+#ifdef FIX_1381
+    XtReleaseGC(XtParent(wid),IG_ShadowGC(wid));
+#endif
     XtReleaseGC(XtParent(wid),IG_BackgroundGC(wid));
     XtReleaseGC(XtParent(wid),IG_SelectedGC(wid));
     if (IG_InverseGC(wid)) XtReleaseGC(XtParent(wid),IG_InverseGC(wid));
@@ -2193,6 +2199,18 @@ Redisplay(
 	   up to IG_InverseGC at the beginning of this routine,
 	   so what's left is the forcing of this ink/foreground */
 	
+#ifdef FIX_1381
+	/*Draw shadow for insensitive text*/
+	if (!XtIsSensitive(wid)) {
+		XmStringDraw(XtDisplay(wid),XtWindow(wid),
+		      IG_RenderTable(wid),IG_LabelString(wid), IG_ShadowGC(wid),
+		      ig->rectangle.x + label_x+1 + DEFAULT_LABEL_MARGIN_WIDTH,
+		      ig->rectangle.y + label_y+1 + DEFAULT_LABEL_MARGIN_HEIGHT,
+		      IG_LabelRectWidth(wid) - 2*DEFAULT_LABEL_MARGIN_WIDTH,
+		      XmALIGNMENT_BEGINNING,
+		      LayoutG(wid), NULL);
+	}
+#endif
 	XmStringDraw(XtDisplay(wid),XtWindow(wid),
 		      IG_RenderTable(wid),IG_LabelString(wid), gc,
 		      ig->rectangle.x + label_x + DEFAULT_LABEL_MARGIN_WIDTH,
@@ -3123,8 +3141,8 @@ UpdateGCs(
     /** insensitive gc **/
 
 #ifdef FIX_1381
-	/*added for gray insensitive foreground (instead stipple)*/
-	values.foreground = _XmAssignInsensitiveColor( XtParent(wid));
+	/*generally gray insensitive foreground (instead stipple)*/
+    values.foreground = _XmAssignInsensitiveColor( wid);
 #else
     values.foreground = IG_Foreground(wid) ;
 #endif
@@ -3142,6 +3160,13 @@ UpdateGCs(
     IG_InsensitiveGC(wid) = XtAllocateGC(XtParent(wid), 
 					 XtParent(wid)->core.depth, 
 					 valueMask, &values, modifyMask, 0);
+#ifdef FIX_1381
+	/*light shadow for insensitive text (instead stipple)*/
+	values.foreground = IG_TopShadowColor(wid);
+	IG_ShadowGC(wid) = XtAllocateGC(XtParent(wid),
+					XtParent(wid)->core.depth,
+					 valueMask, &values, modifyMask, 0);
+#endif
 
     /** highlight **/
     

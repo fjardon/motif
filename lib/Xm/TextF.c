@@ -240,6 +240,11 @@ static void SetNormGC(XmTextFieldWidget tf,
                         Boolean stipple);
 #endif /* NeedWidePrototypes */
 
+#ifdef FIX_1381
+static void SetShadowGC(XmTextFieldWidget tf,
+                        GC gc);
+#endif
+
 static void SetInvGC(XmTextFieldWidget tf,
 		       GC gc);
 
@@ -1991,7 +1996,7 @@ SetNormGC(XmTextFieldWidget tf,
     valueMask |= GCFillStyle;
     if (stipple) {
 #ifdef FIX_1381
-		  /*added for gray insensitive foreground (instead stipple)*/
+      /*generally gray insensitive foreground (instead stipple)*/
 		  values.foreground = _XmAssignInsensitiveColor((Widget)tf);
     	  values.fill_style = FillSolid;
 #else
@@ -2005,6 +2010,20 @@ SetNormGC(XmTextFieldWidget tf,
   
   XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
+
+#ifdef FIX_1381
+static void
+SetShadowGC(XmTextFieldWidget tf, GC gc)
+{
+  unsigned long valueMask = (GCForeground | GCBackground);
+  XGCValues values;
+
+  values.foreground = tf->primitive.top_shadow_color;
+  values.background = tf->core.background_pixel;
+
+  XChangeGC(XtDisplay(tf), gc, valueMask, &values);
+}
+#endif
 
 static void 
 SetInvGC(XmTextFieldWidget tf,
@@ -2196,6 +2215,21 @@ DrawTextSegment(XmTextFieldWidget tf,
 		   TextF_FontAscent(tf) + TextF_FontDescent(tf));
     SetNormGC(tf, tf->text.gc, True, stipple);
   }
+#ifdef FIX_1381
+if (stipple){
+    /*Draw shadow for insensitive text*/
+    SetShadowGC(tf, tf->text.gc);
+    if (tf->text.max_char_size != 1) {
+      DrawText(tf, tf->text.gc, *x+1, y+1, (char*) (TextF_WcValue(tf) + seg_start),
+	      (int)seg_end - (int)seg_start);
+    } else {
+    DrawText(tf, tf->text.gc, *x+1, y+1, TextF_Value(tf) + seg_start,
+	      (int)seg_end - (int)seg_start);
+    }
+    SetNormGC(tf, tf->text.gc, True, stipple);
+}
+#endif
+
   
   if (tf->text.max_char_size != 1) {
     DrawText(tf, tf->text.gc, *x, y, (char*) (TextF_WcValue(tf) + seg_start),
@@ -7226,7 +7260,6 @@ InitializeTextStruct(XmTextFieldWidget tf)
   /* Flag used in losing focus verification to indicate that a traversal
    * key was pressed.  Must be initialized to False.
    */
-  
   XIMCallback xim_cb[5];        /* on the spot im callbacks */
   Arg args[11];                 /* To set initial values to input method */
   Cardinal n = 0;

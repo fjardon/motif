@@ -685,7 +685,7 @@ SetNormalGC(XmLabelWidget lw)
 				     dynamicMask, 0);
   
 #ifdef FIX_1381
-/*added for gray insensitive foreground (instead stipple)*/
+  /*generally gray insensitive foreground (instead stipple)*/
   values.foreground =  _XmAssignInsensitiveColor((Widget)lw);
   values.background = lw->core.background_pixel;
 #else
@@ -698,6 +698,13 @@ SetNormalGC(XmLabelWidget lw)
   
   lw->label.insensitive_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
 					  dynamicMask, 0);
+#ifdef FIX_1381
+  /*light shadow for insensitive text (instead stipple)*/
+  values.foreground = lw->primitive.top_shadow_color;
+  lw->label.shadow_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
+					  dynamicMask, 0);
+#endif
+
 }
 
 /************************************************************************
@@ -1368,6 +1375,9 @@ Destroy(
 
   XtReleaseGC ((Widget) lw, lw->label.normal_GC);
   XtReleaseGC ((Widget) lw, lw->label.insensitive_GC);
+#ifdef FIX_1381
+  XtReleaseGC ((Widget) lw, lw->label.shadow_GC);
+#endif
 }
 
 #ifdef FIX_1381
@@ -1620,6 +1630,45 @@ Redisplay(
  	  tmp[_XmOSKeySymToCharacter(lp->mnemonic, NULL, tmp)] = '\0';
 	  underline = XmStringCreate(tmp, lp->mnemonicCharset);
 	  
+#ifdef FIX_1381
+	  if (XtIsSensitive(wid) )
+	  {
+		  /*Draw normal text*/
+		  XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
+				  lp->font, lp->_label,
+				  lp->normal_GC,
+				  lp->TextRect.x + lp->StringRect.x,
+				  lp->TextRect.y + lp->StringRect.y,
+				  lp->StringRect.width,
+				  lp->alignment,
+				  XmPrim_layout_direction(lw), NULL,
+				  underline);
+	  }
+	  else
+	  {
+		  /*Draw shadow for insensitive text*/
+		  XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
+				  lp->font, lp->_label,
+				  lp->shadow_GC,
+				  lp->TextRect.x+1 + lp->StringRect.x,
+				  lp->TextRect.y+1 + lp->StringRect.y,
+				  lp->StringRect.width,
+				  lp->alignment,
+				  XmPrim_layout_direction(lw), NULL,
+				  underline);
+		  /*Draw insensitive text*/
+		  XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
+				  lp->font, lp->_label,
+				  lp->insensitive_GC,
+				  lp->TextRect.x + lp->StringRect.x,
+				  lp->TextRect.y + lp->StringRect.y,
+				  lp->StringRect.width,
+				  lp->alignment,
+				  XmPrim_layout_direction(lw), NULL,
+				  underline);
+
+	  }
+#else
 	  XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
 				lp->font, lp->_label,
 				(XtIsSensitive(wid) ? 
@@ -1630,9 +1679,47 @@ Redisplay(
 				lp->alignment,
 				XmPrim_layout_direction(lw), NULL,
 				underline);
+#endif
 	  XmStringFree(underline);
 	}
       else
+#ifdef FIX_1381
+	{
+	  if (XtIsSensitive(wid) )
+	  {
+	  /*Draw normal text*/
+	  XmStringDraw (XtDisplay(lw), XtWindow(lw),
+			  lp->font, lp->_label,
+  			  lp->normal_GC,
+			  lp->TextRect.x + lp->StringRect.x,
+			  lp->TextRect.y + lp->StringRect.y,
+			  lp->StringRect.width,
+			  lp->alignment,
+			  XmPrim_layout_direction(lw), NULL);
+	  }
+	else
+	  {
+	    /*Draw shadow for insensitive text*/
+	    XmStringDraw (XtDisplay(lw), XtWindow(lw),
+			  lp->font, lp->_label,
+			  lp->shadow_GC,
+			  lp->TextRect.x+1 + lp->StringRect.x,
+			  lp->TextRect.y+1 + lp->StringRect.y,
+			  lp->StringRect.width,
+			  lp->alignment,
+			  XmPrim_layout_direction(lw), NULL);
+	    /*Draw insensitive text*/
+	    XmStringDraw (XtDisplay(lw), XtWindow(lw),
+			  lp->font, lp->_label,
+			  lp->insensitive_GC,
+			  lp->TextRect.x + lp->StringRect.x,
+			  lp->TextRect.y + lp->StringRect.y,
+			  lp->StringRect.width,
+			  lp->alignment,
+			  XmPrim_layout_direction(lw), NULL);
+	  }
+	}
+#else
 	XmStringDraw (XtDisplay(lw), XtWindow(lw),
 		       lp->font, lp->_label,
 		       (XtIsSensitive(wid) ? 
@@ -1642,6 +1729,7 @@ Redisplay(
 		       lp->StringRect.width,
 		       lp->alignment,
 		       XmPrim_layout_direction(lw), NULL);
+#endif
 
 #ifndef FIX_1381
 #ifdef USE_XFT
@@ -1673,6 +1761,36 @@ Redisplay(
 		lw->primitive.shadow_thickness +
 		lp->margin_width) +
 	   lp->margin_left + lp->TextRect.width + lp->margin_right))
+
+#ifdef FIX_1381
+		  if (XtIsSensitive(wid) )
+		  {
+			  /*Draw normal text*/
+			  XmStringDraw (XtDisplay(lw), XtWindow(lw),
+					  lp->font, lp->_acc_text,
+     				   lp->normal_GC,
+					  lp->acc_TextRect.x, lp->acc_TextRect.y,
+					  lp->acc_TextRect.width, XmALIGNMENT_END,
+					  XmPrim_layout_direction(lw), NULL);
+		  }
+		  else
+		  {
+			/*Draw shadow for insensitive text*/
+			XmStringDraw (XtDisplay(lw), XtWindow(lw),
+					  lp->font, lp->_acc_text,
+					   lp->shadow_GC,
+					  lp->acc_TextRect.x+1, lp->acc_TextRect.y+1,
+					  lp->acc_TextRect.width, XmALIGNMENT_END,
+					  XmPrim_layout_direction(lw), NULL);
+			/*Draw insensitive text*/
+			XmStringDraw (XtDisplay(lw), XtWindow(lw),
+					  lp->font, lp->_acc_text,
+					   lp->insensitive_GC,
+					  lp->acc_TextRect.x, lp->acc_TextRect.y,
+					  lp->acc_TextRect.width, XmALIGNMENT_END,
+					  XmPrim_layout_direction(lw), NULL);
+		  }
+#else
 	XmStringDraw (XtDisplay(lw), XtWindow(lw),
 		       lp->font, lp->_acc_text,
 		       (XtIsSensitive(wid) ? 
@@ -1680,6 +1798,7 @@ Redisplay(
 		       lp->acc_TextRect.x, lp->acc_TextRect.y,
 		       lp->acc_TextRect.width, XmALIGNMENT_END,
 		       XmPrim_layout_direction(lw), NULL);
+#endif
     }
   
   /* Redraw the proper highlight  */
