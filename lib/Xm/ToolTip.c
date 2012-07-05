@@ -314,6 +314,7 @@ void _XmToolTipRemove(Widget w)
     if (ttp != NULL) {
 	XmStringFree(ttp->tool_tip_string); 
 	XmeTraitSet(w, XmQTtoolTip, (XtPointer) NULL); 
+	XtFree((char*)ttp);
     }
 }
 #endif /* FIX_1388 */
