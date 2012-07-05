@@ -1,3 +1,9 @@
+2009-10-27  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmI.h, lib/Xm/XmP.h, lib/Xm/List.c, lib/Xm/ScrolledW.c,
+	  lib/Xm/RowColumn.c:
+	Refixed bug #1474 (Incrementation of XmNvisibleItemCount value does not work
+	properly in XmComboBox)
+
 2009-10-26  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TextFSel.c:
 	Refixed bug #1321 (Pasting into XmTextField is unreliable)

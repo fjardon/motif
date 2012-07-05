@@ -1457,7 +1457,6 @@ extern void _XmDestroyParentCallback(
 #endif
 
 #define FIX_1381
-#define FIX_1474
 
 #endif /* _XmP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */
