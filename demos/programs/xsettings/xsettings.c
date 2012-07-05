@@ -121,7 +121,9 @@ int i;
      *  Loop and process events
      */
 
+    /*
     printf("%i\n", XtGetMultiClickTime(XtDisplay(top_level)));
+    */
     XtAppMainLoop(app_context);
 
     /* UNREACHABLE */
