@@ -1,3 +1,11 @@
+2009-07-09  Ihor Hayvuk <ihayvuk@ics.com>
+	* configure.ac, 
+	  demos/programs/animate/Makefile.am, 
+	  demos/programs/fileview/Makefile.am,
+	  demos/programs/hellomotif/Makefile.am, 
+	  demos/programs/periodic/Makefile.am:
+	Fixed bug #1195 (Making on FreeBSD with non GNU make)   
+
 2009-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmRenderT.c:
 	Refixed bug #1449 (Uninitalised memory access with XFT fonts)   
