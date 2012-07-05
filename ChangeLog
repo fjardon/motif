@@ -15,7 +15,7 @@
 
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/PanedW.c:
-	Reixed bug #1476 (PanedWindow orientation error)  
+	Refixed bug #1476 (PanedWindow orientation error)  
 
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TextStrSo.c:
