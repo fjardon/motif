@@ -1479,6 +1479,9 @@ SetValues(Widget old,
   XmListWidget oldlw = (XmListWidget) old;
   XmListWidget newlw = (XmListWidget) new_w;
   Boolean new_size = FALSE;
+#ifdef FIX_1474
+  Boolean new_size_viz = FALSE;
+#endif
   Boolean reset_max = FALSE;
   Boolean redraw = FALSE;
   Boolean reset_select = FALSE;
@@ -1612,15 +1615,28 @@ SetValues(Widget old,
       else if (newlw->list.visibleItemCount == 0)
 	{
 	  /* CR 6014, 8655, 9604: Stop forcing list size. */
+#ifdef FIX_1474
+	  new_size_viz = TRUE;
+#else
 	  new_size = TRUE;
+#endif
 	  newlw->list.LastSetVizCount = 0;
 	  newlw->list.visibleItemCount = ComputeVizCount(newlw);
 	}
       else
         {
+#ifdef FIX_1474
+	  new_size_viz = TRUE;
+	  newlw->list.LastSetVizCount = newlw->list.visibleItemCount;
+	  newlw->list.visibleItemCount = oldlw->list.visibleItemCount;
+#else
 	  new_size = TRUE;
 	  newlw->list.LastSetVizCount = newlw->list.visibleItemCount;
+#endif
         }
+#ifdef FIX_1474
+      redraw = TRUE;
+#endif
     }
 
   if (XtIsSensitive(new_w) != XtIsSensitive(old))
@@ -1890,7 +1906,11 @@ SetValues(Widget old,
 	}
     }
 
+#ifdef FIX_1474
+  if (new_size || new_size_viz)
+#else
   if (new_size)
+#endif
     {
       redraw = TRUE;
       SetDefaultSize(newlw, &width, &height, reset_max, reset_max);
@@ -1902,8 +1922,13 @@ SetValues(Widget old,
 	newlw->list.HighlightThickness +
 	  newlw->primitive.shadow_thickness;
 
+#ifdef FIX_1474
+      if (((newlw->list.SizePolicy != XmCONSTANT) ||
+	  !(newlw->core.width)) && new_size)
+#else
       if ((newlw->list.SizePolicy != XmCONSTANT) ||
 	  !(newlw->core.width))
+#endif
 	newlw->core.width = width;
       newlw->core.height = height;
     }

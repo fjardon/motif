@@ -1,3 +1,8 @@
+2009-09-08  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmP.h, lib/Xm/List.c, lib/Xm/ScrolledW.c:
+	Fixed bug #1474 (Incrementation of XmNvisibleItemCount value does not work
+	properly in XmComboBox)
+
 2009-07-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/PanedW.c:
 	Dropped fix #1476 (PanedWindow orientation error)
