@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.3 2009/06/20 15:01:23 rwscott Exp $
+ * $Id: Xsettings.c,v 1.4 2009/06/21 09:14:36 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -273,26 +273,6 @@ char *home;
     return(file_name);
 }
 
-static Bool
-set(XrmDatabase *db, XrmBindingList bindings, XrmQuarkList quarks, XrmRepresentation *type, XrmValuePtr value, XPointer data)
-{
-Widget w = (Widget)data;
-
-    for (; *quarks; quarks++, bindings++)
-    {
-    	//printf("%s %s %s %s\n", XtName((Widget)data), XrmQuarkToString(*quarks), XrmQuarkToString(*bindings), XrmQuarkToString(*type));
-    }
-    quarks--;
-    bindings--;
-    printf("%s %s %s %s\n", XtName(w), XrmQuarkToString(*quarks), XrmQuarkToString(*bindings), XrmQuarkToString(*type));
-    /*
-    XtVaSetValues(w,
-    	XtVaTypedArg, XrmQuarkToString(*quarks), XrmQuarkToString(*type), value->addr, value->size,
-    	NULL);
-    	*/
-    return(False);
-}
-
 static void
 apply_resources(Widget w, XrmDatabase new_db, XtResourceList resource, Cardinal num_resources)
 {
@@ -318,6 +298,11 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 	sprintf(full_name, format, XtName(w), resource[num_resources - 1].resource_name);
 	full_class = XtMalloc(strlen(format) + strlen(w->core.widget_class->core_class.class_name) + strlen(resource[num_resources - 1].resource_class) + 1);
 	sprintf(full_class, format, w->core.widget_class->core_class.class_name, resource[num_resources - 1].resource_class);
+
+	/*
+	printf("\"%s\" \"%s\"\n", full_name, full_class);
+	*/
+
 	if (XrmGetResource(new_db, full_name, full_class, &type, &value))
 	{
 	XrmValue to;
@@ -340,7 +325,9 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 	    {
 		if (strcmp(resource[num_resources - 1].resource_name, XmNbackground) == 0)
 		{
-		    //XmChangeColor(w, (Pixel)(*((XtPointer *)(to.addr))));
+		    /*
+		    XmChangeColor(w, (Pixel)(*((XtPointer *)(to.addr))));
+		    */
 		    bg = (Pixel)(*((XtPointer *)(to.addr)));
 		}
 		else
@@ -348,6 +335,11 @@ Pixel bg = XmUNSPECIFIED_PIXEL;
 		    XtVaSetValues(w,
 			resource[num_resources - 1].resource_name, *((XtPointer *)(to.addr)),
 			NULL);
+		    /*
+		    XtVaSetValues(w,
+			XtVaTypedArg, resource[num_resources - 1].resource_name, type, value.addr, value.size,
+			NULL);
+			*/
 		}
 	    }
 	    else
@@ -380,15 +372,29 @@ WidgetList kid = NULL;
 Cardinal numKids = 0;
 XtResourceList resource;
 Cardinal num_resources;
+XmSecondaryResourceData *second;
+Cardinal num_seconds;
 
     //printf("%s\n", XtName(w));
-    if (XmIsGadget(w))
+    /*
+    XtGetResourceList(w->core.widget_class, &resource, &num_resources);
+    apply_resources(w, new_db, resource, num_resources);
+    XtFree((char *)resource);
+    */
+    num_seconds = XmGetSecondaryResourceData(w->core.widget_class, &second);
+    if (num_seconds > 0)
     {
-	XtGetResourceList(XtParent(w)->core.widget_class, &resource, &num_resources);
-	apply_resources(w, new_db, resource, num_resources);
+    	for (; num_seconds > 0; num_seconds--)
+    	{
+	    apply_resources(w, new_db, second[num_seconds - 1]->resources, second[num_seconds - 1]->num_resources);
+	    XtFree((char *)second[num_seconds - 1]->resources);
+	    XtFree((char *)second[num_seconds - 1]);
+    	}
+	XtFree((char *)second);
     }
     XtGetResourceList(w->core.widget_class, &resource, &num_resources);
     apply_resources(w, new_db, resource, num_resources);
+    XtFree((char *)resource);
     XtVaGetValues(w,
     	XmNchildren, &kid,
     	XmNnumChildren, &numKids,
@@ -415,33 +421,27 @@ char *theme_file;
     {
     XrmDatabase disp_db = NULL;
     Window win = XtWindow(XtParent((Widget)xs));
+    Status combine_status;
+    Boolean resize;
 
 	fprintf(stderr, "%s:%s(%d) - 0x%x\n",
 	    __FILE__, __FUNCTION__, __LINE__,
 	    (unsigned int)win);
-	if (win == None)
-	{
-	    disp_db = XrmGetDatabase(XtDisplay((Widget)xs));
-	}
-	//if (disp_db)
-	{
-	Status combine_status;
-	Boolean resize;
 
-	    printf("combining \"%s\"\n", theme_file);
-	    combine_status = XrmCombineFileDatabase(theme_file, &disp_db, True);
-	    printf("combine_status %i\n", combine_status);
-	    XtVaGetValues(XtParent((Widget)xs),
-	    	XmNallowShellResize, &resize,
-	    	NULL);
-	    XtVaSetValues(XtParent((Widget)xs),
-	    	XmNallowShellResize, True,
-	    	NULL);
-	    apply_to_widgets(disp_db, XtParent((Widget)xs));
-	    XtVaSetValues(XtParent((Widget)xs),
-	    	XmNallowShellResize, resize,
-	    	NULL);
-	}
+	disp_db = XrmGetDatabase(XtDisplay((Widget)xs));
+	printf("combining \"%s\"\n", theme_file);
+	combine_status = XrmCombineFileDatabase(theme_file, &disp_db, True);
+	printf("combine_status %i\n", combine_status);
+	XtVaGetValues(XtParent((Widget)xs),
+	    XmNallowShellResize, &resize,
+	    NULL);
+	XtVaSetValues(XtParent((Widget)xs),
+	    XmNallowShellResize, True,
+	    NULL);
+	apply_to_widgets(disp_db, XtParent((Widget)xs));
+	XtVaSetValues(XtParent((Widget)xs),
+	    XmNallowShellResize, resize,
+	    NULL);
 	XtFree(theme_file);
     }
     else

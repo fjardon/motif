@@ -2,6 +2,8 @@
 
 #include <Xm/XmAll.h>        
 
+#include "Xsettings.h"
+
 /*
  * Fallbacks: font, label and position go together in this demo 
  */
@@ -274,7 +276,7 @@ main(int argc, char *argv[])
 	XtManageChild(toolTipPostDuration);
     }
 
-    exitButton = XmVaCreatePushButton(helloworld_main, "Exit",
+    exitButton = XmVaCreatePushButtonGadget(helloworld_main, "Exit",
     	XmNtopAttachment, XmATTACH_WIDGET,
     	XmNtopWidget, toolTipPostDuration,
     	XmNleftAttachment, XmATTACH_FORM,
