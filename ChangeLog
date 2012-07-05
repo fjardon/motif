@@ -1,3 +1,7 @@
+2009-06-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmAll.h:
+	Fixed bug #1489 (Paned.h is not included by XmAll.h)  
+
 2009-06-28  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DropDown.c:
 	Fixed bug #1386 (Tooltip in DropDown widget makes X hang up)  

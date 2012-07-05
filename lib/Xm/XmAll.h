@@ -61,6 +61,7 @@
 #include <Xm/IconFile.h>
 #include <Xm/IconG.h>
 #include <Xm/IconH.h>
+#include <Xm/IconButton.h>
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 #include <Xm/List.h>
@@ -71,6 +72,7 @@
 #include <Xm/MwmUtil.h>
 #include <Xm/Notebook.h>
 #include <Xm/PanedW.h>
+#include <Xm/Paned.h>
 #include <Xm/Primitive.h>
 #include <Xm/Print.h>
 #include <Xm/Protocols.h>
