@@ -30,8 +30,6 @@
 #endif
 
 
-#include "XmI.h"
-
 #include <Xm/AccColorT.h>
 #include <Xm/CareVisualT.h>
 #include <Xm/ContItemT.h>

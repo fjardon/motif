@@ -29,6 +29,7 @@
 #ifndef _XmLabelP_h_
 #define _XmLabelP_h_
 
+#include "XmP.h"
 #include <Xm/Label.h>
 #include <Xm/PrimitiveP.h>
 
@@ -98,9 +99,6 @@ typedef struct _XmLabelPart
   
   GC		  normal_GC;   /* GC for text */	
   GC		  insensitive_GC;
-#ifdef FIX_1381
-  GC		  shadow_GC;
-#endif
   XRectangle	  TextRect;	/* The bounding box of the text or clip */
   XRectangle	  acc_TextRect; /* rectangle of the window; whichever is */
 				/* smaller */
@@ -121,6 +119,9 @@ typedef struct _XmLabelPart
 
   XRectangle	  PixmapRect;   /* The bounding box of the pixmap in TextRect */
   XRectangle	  StringRect;   /* The bounding box of the string in TextRect */
+#ifdef FIX_1381
+  GC		  shadow_GC;
+#endif
 } XmLabelPart;
 
 

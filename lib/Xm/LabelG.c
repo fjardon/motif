@@ -35,8 +35,6 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #include <config.h>
 #endif
 
-#include "XmI.h"
-#include "LabelGP.h"
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
