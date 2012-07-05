@@ -1,0 +1,3 @@
+--suppressions=xsettings.supp
+--tool=memcheck
+--memcheck:leak-check=yes

@@ -1,311 +1,324 @@
+/*
+ *
+ * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
+ *
+ */
 #include <stdlib.h>
+#include <limits.h>
+#include <string.h>
 
 #include <Xm/XmAll.h>        
 
 #include "Xsettings.h"
 
+#define APP_CLASS "xsettings"
+
 /*
  * Fallbacks: font, label and position go together in this demo 
  */
 static String fallbacks[] = {
-"?.toolTipEnable: True",
-"?.toolTipPostDelay: 2000",
-"?.toolTipPostDuration: 500",
-"?.TipShell.TipLabel.background: blue",
-"*ToolTipControl.messageString: ToolTip Control Panel",
-"*ToolTipControl.messageAlignment: XmALIGNMENT_CENTER",
-"*ToolTipSlider.slideInterval: 5",
-"*toolTipEnable.indicatorOn: False",
-"*toolTipEnable.shadowThickness: 2",
-"*toolTipEnable.fillOnSelect: True",
-"*toolTipEnable.rightAttachment: XmATTACH_FORM",
-"*toolTipEnable.labelString: Enable Tips",
-"*toolTipString: No tip defined",
-"*toolTipEnable.toolTipString: toggle usage of tool-tips",
-"*toolTipPostDelayLabel.labelString: Posting Delay",
-"*toolTipPostDelay.toolTipString: tip posting delay\\nin mS",
-"*toolTipPostDelay.columns: 8",
-"*toolTipPostDurationLabel.labelString: Duration",
-"*toolTipPostDuration.toolTipString: tip duration\\nin mS",
-"*toolTipPostDuration.columns: 8",
-"*Exit.toolTipString: no tip necessary",
-NULL
+    /* Since the toolTip resources are now SubResources of the VendorShell,
+       the application class _has_ to be prefixed onto the resource in
+       order to have the fallback resource work. Originally you could
+       simply use "*toolTipPostDelay: 2000". I guess this is the price
+       to be paid for making them into Traits :(
+     */
+    APP_CLASS ".toolTipPostDelay: 2000",
+    "*ContainerScrolledWindow.width: 430",
+    "*ContainerScrolledWindow.height: 320",
+    "*selectColor: DEFAULT_SELECT_COLOR",
+    NULL
 };
 
 typedef struct {
-	Pixel modified_color;
+	//Pixel modified_color;
 } AppResources_t, *AppResourcesPtr;
 AppResources_t AppResources;
 
 static XtResource resources[] =
 {
-    {"modifiedColor", "ModifiedColor", XtRPixel, sizeof(Pixel), XtOffset(AppResourcesPtr, modified_color), XtRString, "red"},
+    //{"modifiedColor", "ModifiedColor", XtRPixel, sizeof(Pixel), XtOffset(AppResourcesPtr, modified_color), XtRString, "red"},
 };
 
-static void
-ToggleEnable(Widget w, XtPointer client_data, XtPointer call_data)
-{
-Widget shell = (Widget)client_data;
-XmToggleButtonCallbackStruct *cbs = (XmToggleButtonCallbackStruct *)call_data;
+typedef struct FlashControlRec {
+    Widget w;
+    int count;
+    XtIntervalId id;
+    unsigned char visualEmphasis;
+} FlashControl;
 
-    XtVaSetValues(shell,
-    	XmNtoolTipEnable, cbs->set,
-    	NULL);
+static void
+okCallback(Widget w, XtPointer client_data, XtPointer call_data)
+{
+    XtAppSetExitFlag(XtWidgetToApplicationContext(w));
 }
 
 static void
-ValueChanged(Widget w, XtPointer client_data, XtPointer call_data)
+cancelTimer(Widget w, XtPointer client_data, XtPointer call_data)
 {
-Widget shell = (Widget)client_data;
-String valueString;
-int value;
-XmTextPosition position;
+FlashControl *fc = client_data;
 
-    valueString = XmTextFieldGetString(w);
-    value = atoi(valueString);
-    value = value < 0 ? 0 : value;
-    value = value > 60000 ? 60000 : value;
-    valueString = XtRealloc(valueString, 255);
-    sprintf(valueString, "%i", value);
-    position = XmTextFieldGetInsertionPosition(w);
-    XtRemoveCallback(w, XmNvalueChangedCallback, (XtCallbackProc)ValueChanged, shell);
-    XmTextFieldSetString(w, valueString);
-    XtAddCallback(w, XmNvalueChangedCallback, (XtCallbackProc)ValueChanged, shell);
-    XmTextFieldSetInsertionPosition(w, position);
-    XtFree(valueString);
+    XtRemoveTimeOut(fc->id);
+    XtFree((char *)fc);
 }
 
 static void
-Activate(Widget w, XtPointer client_data, XtPointer call_data)
+_flash(XtPointer client_data, XtIntervalId *id)
 {
-Widget shell = (Widget)client_data;
-String valueString;
-String callback;
-int value;
-Pixel background;
+FlashControl *fc = client_data;
+unsigned char visualEmphasis;
+Widget w = fc->w;
 
-    valueString = XmTextFieldGetString(w);
-    XtVaGetValues(w,
-    	XmNuserData, &callback,
-    	NULL);
-    value = atoi(valueString);
-    XtVaSetValues(shell,
-    	callback, value,
-    	NULL);
-    XtFree(valueString);
-    XtVaGetValues(XtParent(w),
-    	XmNbackground, &background,
-    	NULL);
-    XtVaSetValues(w,
-    	XmNbackground, background,
-    	NULL);
-}
-
-static void
-ModifyVerify(Widget w, XtPointer client_data, XtPointer call_data)
-{
-Widget shell = (Widget)client_data;
-XmTextVerifyCallbackStruct *cbs = (XmTextVerifyCallbackStruct *)call_data;
-int i;
-
-    for (i = 0; i < cbs->text->length; i++)
+    XtVaGetValues(fc->w,
+	XmNvisualEmphasis, &visualEmphasis,
+	NULL);
+    if (fc->count > 0)
     {
-    	if (cbs->text->ptr[i] < '0' ||
-    	    cbs->text->ptr[i] > '9')
-	{
-	    cbs->doit = False;
-	    break;
-	}
-    }
-    if (cbs->doit)
-    {
-    	XtVaSetValues(w,
-	    XmNbackground, AppResources.modified_color,
-	    NULL);
-    }
-}
-
-static void
-ToolTipPopup(Widget w, XtPointer client_data, XtPointer call_data)
-{
-    if ((int)client_data == 0)
-    {
-	printf("popping up\n");
+	fc->id = XtAppAddTimeOut(XtWidgetToApplicationContext(fc->w),
+	    250,
+	    _flash,
+	    fc);
+	fc->count--;
+	visualEmphasis = visualEmphasis == XmNOT_SELECTED ? XmSELECTED : XmNOT_SELECTED;
     }
     else
     {
-	printf("popping down\n");
+	XtRemoveCallback(fc->w, XmNdestroyCallback, cancelTimer, fc);
+	visualEmphasis = fc->visualEmphasis;
+    	XtFree((char *)fc);
+    }
+    XtVaSetValues(w,
+	XmNvisualEmphasis, visualEmphasis,
+	NULL);
+}
+
+static void
+flash(Widget w)
+{
+    if (XtIsRealized(w))
+    {
+    FlashControl *fc;
+
+	fc = XtNew(FlashControl);
+	fc->w = w;
+	fc->count = 10;
+	XtVaGetValues(fc->w,
+	    XmNvisualEmphasis, &fc->visualEmphasis,
+	    NULL);
+	fc->id = XtAppAddTimeOut(XtWidgetToApplicationContext(w),
+	    0,
+	    _flash,
+	    fc);
+	XtAddCallback(fc->w, XmNdestroyCallback, cancelTimer, fc);
     }
 }
 
 static void
-cancelCallback(Widget w, XtPointer client_data, XtPointer call_data)
+printSetting(XSettingsSetting *setting, Widget container)
 {
-Widget child = XmMessageBoxGetChild(w, XmDIALOG_CANCEL_BUTTON);
+String fullname = NULL;
+String tmp;
+String tok;
+Widget entryParent = NULL;
+XmStringTable detail;
+Cardinal detailCount;
 
-    XtSetSensitive(child, !XtIsSensitive(child));
+    fullname = XtNewString(XrmQuarkToString(setting->name));
+    tmp = fullname;
+
+    while ((tok = strtok(tmp, "/")))
+    {
+    int numKids;
+    WidgetList kid = NULL;
+
+    	numKids = XmContainerGetItemChildren(container, entryParent, &kid);
+    	for (; numKids > 0; numKids--)
+    	{
+	    if (strcmp(tok, XtName(kid[numKids - 1])) == 0)
+	    {
+	    	break;
+	    }
+    	}
+    	if (numKids > 0)
+    	{
+	    entryParent = kid[numKids - 1];
+	    flash(entryParent);
+    	}
+    	else
+    	{
+    	Widget new_kid;
+    	XmString toolTipString = NULL;
+
+	    if (entryParent)
+	    {
+	    String format = "%s is type\n%s";
+	    String tmp;
+	    String type;
+
+	    	switch (setting->type)
+	    	{
+	    	case XSETTINGS_TYPE_INT:
+		    type = "int";
+		    break;
+	    	case XSETTINGS_TYPE_STRING:
+		    type = "char *";
+		    break;
+	    	case XSETTINGS_TYPE_COLOR:
+		    type = "Color";
+		    break;
+	    	default:
+		    type = "Unknown";
+		    break;
+	    	}
+	    	tmp = XtMalloc(strlen(tok) + strlen(type) + strlen(format) + 1);
+	    	sprintf(tmp, format, tok, type);
+	    	toolTipString = XmStringCreateLocalized(tmp);
+	    	XtFree(tmp);
+	    }
+	    else
+	    {
+	    String format = "%s related settings";
+	    String tmp;
+
+	    	tmp = XtMalloc(strlen(tok) + strlen(format) + 1);
+	    	sprintf(tmp, format, tok);
+	    	toolTipString = XmStringCreateLocalized(tmp);
+	    	XtFree(tmp);
+	    }
+	    new_kid = XmVaCreateIconGadget(container, tok,
+	    	XmNentryParent, entryParent,
+	    	XmNtoolTipString, toolTipString,
+	    	NULL);
+	    XmStringFree(toolTipString);
+	    XtManageChild(new_kid);
+	    entryParent = new_kid;
+    	}
+    	tmp = NULL;
+    	XtFree((char *)kid);
+    }
+    detailCount = 0;
+    detail = NULL;
+    switch (setting->type)
+    {
+    case XSETTINGS_TYPE_INT:
+    	{
+    	String tmp = "";
+    	int len;
+
+	    len = snprintf(tmp, 0, "%i", setting->data.v_int);
+	    tmp = XtMalloc(len + 1);
+	    len = snprintf(tmp, len + 1, "%i", setting->data.v_int);
+	    detailCount = 1;
+	    detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
+	    detail[0] = XmStringCreateLocalized(tmp);
+	    XtFree(tmp);
+    	}
+    	break;
+    case XSETTINGS_TYPE_STRING:
+    	detailCount = 1;
+    	detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
+    	detail[0] = XmStringCreateLocalized(XrmQuarkToString(setting->data.v_string));
+    	break;
+    case XSETTINGS_TYPE_COLOR:
+    	{
+    	String tmp = "";
+    	int len;
+
+	    len = snprintf(tmp, 0, "#%02x%02x%02x %02x",
+		setting->data.v_color.red,
+		setting->data.v_color.green,
+		setting->data.v_color.blue,
+		setting->data.v_color.alpha);
+	    tmp = XtMalloc(len + 1);
+	    len = snprintf(tmp, len + 1, "#%02x%02x%02x %02x",
+		setting->data.v_color.red,
+		setting->data.v_color.green,
+		setting->data.v_color.blue,
+		setting->data.v_color.alpha);
+	    detailCount = 1;
+	    detail = (XmStringTable)XtMalloc(detailCount * sizeof(XmString));
+	    detail[0] = XmStringCreateLocalized(tmp);
+	    XtFree(tmp);
+    	}
+    	break;
+    default:
+    	printf("Unknown\n");
+    	break;
+    }
+    XtVaSetValues(entryParent,
+    	XmNdetail, detail,
+    	XmNdetailCount, detailCount,
+    	NULL);
+    for (; detailCount > 0; detailCount--)
+    {
+    	XmStringFree(detail[detailCount - 1]);
+    }
+    XtFree((char *)detail);
+    XtFree(fullname);
+}
+
+static void
+settingsCallback(Widget w, XtPointer client_data, XtPointer call_data)
+{
+XmXsettingsCallbackStruct *cbs = (XmXsettingsCallbackStruct *)call_data;
+
+    printSetting(&cbs->setting, client_data);
 }
 
 int 
 main(int argc, char *argv[])
 {
-    XtAppContext        app_context;
-    Widget              top_level, helloworld_main,
-                        toolTipEnable;
-    Widget toolTipPostDelay;
-    Widget toolTipPostDuration;
-    Widget exitButton;
-    Widget MessageBox;
-    Widget ToolTipLabel;
-    Widget settings;
+XtAppContext        app_context;
+Widget              top_level, helloworld_main;
+Widget MessageBox;
+Widget settings;
+Widget sw;
+XSettingsSetting *setting;
+int num_settings;
+int i;
 
-    /* 
-     * Initialize Xt and create a resizable shell 
-     */
-
-    top_level = XtVaAppInitialize(&app_context, "test1", 
-				  NULL, 0, &argc, argv, fallbacks, NULL); 
+    top_level = XtVaAppInitialize(&app_context, APP_CLASS, 
+	NULL, 0,
+	&argc, argv,
+	fallbacks, NULL); 
+#if 0
+    settings = XtNameToWidget(top_level, ".XSettings");
+#else
     settings = XmCreateXsettings(top_level, "XSettings", NULL, 0);
+#endif
 
     XtGetApplicationResources(top_level, &AppResources, 
     	resources, XtNumber(resources),
     	NULL, 0);
-    /*
-     *  Create the widget tree: first the bb parent.
-     */
-    MessageBox = XmCreateMessageBox(top_level, "ToolTipControl", NULL, 0);
-    helloworld_main = XmCreateForm (MessageBox, "helloworld_main", NULL, 0);
-
-    toolTipEnable = XmCreateToggleButton(helloworld_main, "toolTipEnable", NULL, 0);
-    {
-    Boolean enable;
-
-    	XtVaGetValues(top_level,
-	    XmNtoolTipEnable, &enable,
-	    NULL);
-	XmToggleButtonSetState(toolTipEnable, enable, False);
-    }
-    XtVaSetValues(toolTipEnable,
-    	XmNtopAttachment, XmATTACH_FORM,
-    	XmNleftAttachment, XmATTACH_FORM,
+    MessageBox = XmCreateMessageBox(top_level, "XSettingsControl", NULL, 0);
+    sw = XmVaCreateScrolledWindow(MessageBox, "ContainerScrolledWindow",
+    	XmNscrollingPolicy, XmAUTOMATIC,
     	NULL);
-    XtAddCallback(toolTipEnable, XmNvalueChangedCallback, (XtCallbackProc)ToggleEnable, top_level);
-    XtManageChild(toolTipEnable);
-
-    {
-    Widget label, text;
-    int delay;
-    char buf[255];
-
-	toolTipPostDelay = XmCreateForm(helloworld_main, "toolTipPostDelayForm", NULL, 0);
-	XtVaSetValues(toolTipPostDelay,
-	    XmNtopAttachment, XmATTACH_WIDGET,
-	    XmNtopWidget, toolTipEnable,
-	    XmNleftAttachment, XmATTACH_FORM,
-	    XmNrightAttachment, XmATTACH_FORM,
-	    NULL);
-	label = XmCreateLabel(toolTipPostDelay, "toolTipPostDelayLabel", NULL, 0);
-	text = XmCreateTextField(toolTipPostDelay, "toolTipPostDelay", NULL, 0);
-	XtVaGetValues(top_level,
-	    XmNtoolTipPostDelay, &delay,
-	    NULL);
-	sprintf(buf, "%i", delay);
-	XmTextFieldSetString(text, buf);
-	XtAddCallback(text, XmNmodifyVerifyCallback, (XtCallbackProc)ModifyVerify, top_level);
-	XtAddCallback(text, XmNvalueChangedCallback, (XtCallbackProc)ValueChanged, top_level);
-	XtAddCallback(text, XmNactivateCallback, (XtCallbackProc)Activate, top_level);
-	XtVaSetValues(text,
-	    XmNuserData, XmNtoolTipPostDelay,
-	    XmNtopAttachment, XmATTACH_FORM,
-	    XmNrightAttachment, XmATTACH_FORM,
-	    NULL);
-	XtVaSetValues(label,
-	    XmNalignment, XmALIGNMENT_BEGINNING,
-	    XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET,
-	    XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET,
-	    XmNrightAttachment, XmATTACH_WIDGET,
-	    XmNtopWidget, text,
-	    XmNbottomWidget, text,
-	    XmNrightWidget, text,
-	    XmNleftAttachment, XmATTACH_FORM,
-	    NULL);
-	XtManageChild(label);
-	XtManageChild(text);
-	XtManageChild(toolTipPostDelay);
-    }
-
-    {
-    Widget label, text;
-    int delay;
-    char buf[255];
-
-	toolTipPostDuration = XmCreateForm(helloworld_main, "toolTipPostDurationForm", NULL, 0);
-	XtVaSetValues(toolTipPostDuration,
-	    XmNtopAttachment, XmATTACH_WIDGET,
-	    XmNtopWidget, toolTipPostDelay,
-	    XmNleftAttachment, XmATTACH_FORM,
-	    XmNrightAttachment, XmATTACH_FORM,
-	    NULL);
-	label = XmCreateLabel(toolTipPostDuration, "toolTipPostDurationLabel", NULL, 0);
-	text = XmCreateTextField(toolTipPostDuration, "toolTipPostDuration", NULL, 0);
-	XtVaGetValues(top_level,
-	    XmNtoolTipPostDuration, &delay,
-	    NULL);
-	sprintf(buf, "%i", delay);
-	XmTextFieldSetString(text, buf);
-	XtAddCallback(text, XmNmodifyVerifyCallback, (XtCallbackProc)ModifyVerify, top_level);
-	XtAddCallback(text, XmNvalueChangedCallback, (XtCallbackProc)ValueChanged, top_level);
-	XtAddCallback(text, XmNactivateCallback, (XtCallbackProc)Activate, top_level);
-	XtVaSetValues(text,
-	    XmNuserData, XmNtoolTipPostDuration,
-	    XmNtopAttachment, XmATTACH_FORM,
-	    XmNrightAttachment, XmATTACH_FORM,
-	    NULL);
-	XtVaSetValues(label,
-	    XmNalignment, XmALIGNMENT_BEGINNING,
-	    XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET,
-	    XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET,
-	    XmNrightAttachment, XmATTACH_WIDGET,
-	    XmNtopWidget, text,
-	    XmNbottomWidget, text,
-	    XmNrightWidget, text,
-	    XmNleftAttachment, XmATTACH_FORM,
-	    NULL);
-	XtManageChild(label);
-	XtManageChild(text);
-	XtManageChild(toolTipPostDuration);
-    }
-
-    exitButton = XmVaCreatePushButtonGadget(helloworld_main, "Exit",
-    	XmNtopAttachment, XmATTACH_WIDGET,
-    	XmNtopWidget, toolTipPostDuration,
-    	XmNleftAttachment, XmATTACH_FORM,
-    	XmNrightAttachment, XmATTACH_FORM,
+    helloworld_main = XmVaCreateContainer(sw, "xsettings_main",
+    	XmNlayoutType, XmDETAIL,
     	NULL);
-    XtAddCallback(exitButton, XmNactivateCallback, (XtCallbackProc)exit, NULL);
-    XtManageChild(exitButton);
+    XtAddCallback(MessageBox, XmNokCallback, okCallback, NULL);
+    XtAddCallback(MessageBox, XmNcancelCallback, okCallback, NULL);
 
+    if (settings)
+    {
+	XtVaGetValues(settings,
+	    XmNnumXsettings, &num_settings,
+	    XmNxsettings, &setting,
+	    NULL);
+	for (i = 0; i < num_settings; i++)
+	{
+	    printSetting(&setting[i], helloworld_main);
+	}
+	XtAddCallback(settings, XmNxsettingsCallback, settingsCallback, helloworld_main);
+    }
     XtManageChild(helloworld_main);
+    XtManageChild(sw);
     XtManageChild(MessageBox);
-    XtAddCallback(MessageBox, XmNcancelCallback, (XtCallbackProc)cancelCallback, NULL);
-    XtAddCallback(MessageBox, XmNokCallback, (XtCallbackProc)cancelCallback, NULL);
-
-    ToolTipLabel = XmToolTipGetLabel(top_level);
-    XtAddCallback(XtParent(ToolTipLabel), XmNpopupCallback, (XtCallbackProc)ToolTipPopup, (XtPointer)0);
-    XtAddCallback(XtParent(ToolTipLabel), XmNpopdownCallback, (XtCallbackProc)ToolTipPopup, (XtPointer)1);
-    /*
-     *  Realize the toplevel widget.  This will cause the entire "managed"
-     *  widget hierarchy to be displayed
-     */
 
     XtRealizeWidget(top_level);
 
-    /*
-     *  Loop and process events
-     */
-
     XtAppMainLoop(app_context);
 
-    /* UNREACHABLE */
     return (0);
 }

@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.4 2009/06/21 09:14:36 rwscott Exp $
+ * $Id: Xsettings.c,v 1.5 2009/06/27 13:09:48 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -245,7 +245,7 @@ xsettings_byte_order (void)
 #endif
 
 static char *
-open_theme(String theme_name)
+open_theme(const String theme_name)
 {
 char *file_name = NULL;
 char *home;
@@ -263,9 +263,11 @@ char *home;
     {
     char *format = "%s/.themes/%s/Xm/xrdb.ad";
 
+	/*
 	printf("%s:%s(%d) - \"%s\"\n",
 	    __FILE__, __FUNCTION__, __LINE__,
 	    home);
+	    */
 	file_name = XtMalloc(strlen(home) + strlen(theme_name) + strlen(format) + 1);
 	sprintf(file_name, format, home, theme_name);
     }
@@ -274,90 +276,77 @@ char *home;
 }
 
 static void
-apply_resources(Widget w, XrmDatabase new_db, XtResourceList resource, Cardinal num_resources)
+apply_resources(Widget w, XrmDatabase new_db, const XtResourceList resource, Cardinal num_resources)
 {
 Pixel bg = XmUNSPECIFIED_PIXEL;
 
     for (; num_resources > 0; num_resources--)
     {
-    char *type;
-    XrmValue value;
-    char *format = "*%s*%s";
-    char *full_name;
-    char *full_class;
+	XtPointer base;
+	String name = XtNewString(resource[num_resources - 1].resource_name);
+	String rtype = XtNewString(resource[num_resources - 1].resource_type);
 
     	/*
-    	printf("%s %i %s %s\n",
+    	printf("%s %i %s %s %i %i %p\n",
 	    XtName(w),
 	    num_resources,
 	    resource[num_resources - 1].resource_name,
-	    resource[num_resources - 1].resource_type
+	    resource[num_resources - 1].resource_type,
+	    resource[num_resources - 1].resource_size,
+	    resource[num_resources - 1].resource_offset,
+	    resource[num_resources - 1].default_addr
 	    );
 	    */
-	full_name = XtMalloc(strlen(format) + strlen(XtName(w)) + strlen(resource[num_resources - 1].resource_name) + 1);
-	sprintf(full_name, format, XtName(w), resource[num_resources - 1].resource_name);
-	full_class = XtMalloc(strlen(format) + strlen(w->core.widget_class->core_class.class_name) + strlen(resource[num_resources - 1].resource_class) + 1);
-	sprintf(full_class, format, w->core.widget_class->core_class.class_name, resource[num_resources - 1].resource_class);
 
-	/*
-	printf("\"%s\" \"%s\"\n", full_name, full_class);
-	*/
-
-	if (XrmGetResource(new_db, full_name, full_class, &type, &value))
+	resource[num_resources - 1].resource_offset = 0;
+	base = XtMalloc(resource[num_resources - 1].resource_size);
+	XtGetApplicationResources(w, base,
+	    &(resource[num_resources - 1]), 1,
+	    NULL, 0);
+	if (strcmp(name, XmNbackground) == 0)
 	{
-	XrmValue to;
+	    bg = (Pixel)(*(Pixel *)base);
+	}
+	else if (strcmp(rtype, XmRPixel) == 0 ||
+	         strcmp(rtype, XmRBitmap) == 0 ||
+	         strcmp(rtype, XmRPixmap) == 0 ||
+	         strcmp(rtype, XmRPixmapPlacement) == 0 ||
+	         strcmp(rtype, XmRAlignment) == 0 ||
+	         strcmp(name, XmNborderWidth) == 0 ||
+	         False)
+	{
+	Arg arg;
 
-	    /*
-	    printf("%s %i %s %s %i %s %i %s\n",
+	    /* Resources that are allowed as part of a theme */
+	    arg.name = name;
+	    memcpy(&arg.value, base, resource[num_resources - 1].resource_size);
+	    XtSetValues(w, &arg, 1);
+	}
+#if 0
+    	else
+    	{
+	Arg arg;
+
+	    /* Resources that I'm not sure about yet */
+
+	    printf("%s %i %s %s %i %i\n",
 		XtName(w),
 		num_resources,
-		resource[num_resources - 1].resource_name,
-		resource[num_resources - 1].resource_type,
+		name,
+		rtype,
 		resource[num_resources - 1].resource_size,
-		value.addr,
-		value.size,
-		type
+		resource[num_resources - 1].resource_offset
 		);
-		*/
-	    to.size = resource[num_resources - 1].resource_size;
-	    to.addr = XtMalloc(resource[num_resources - 1].resource_size);
-	    if (XtConvertAndStore(w, type, &value, resource[num_resources - 1].resource_type, &to))
-	    {
-		if (strcmp(resource[num_resources - 1].resource_name, XmNbackground) == 0)
-		{
-		    /*
-		    XmChangeColor(w, (Pixel)(*((XtPointer *)(to.addr))));
-		    */
-		    bg = (Pixel)(*((XtPointer *)(to.addr)));
-		}
-		else
-		{
-		    XtVaSetValues(w,
-			resource[num_resources - 1].resource_name, *((XtPointer *)(to.addr)),
-			NULL);
-		    /*
-		    XtVaSetValues(w,
-			XtVaTypedArg, resource[num_resources - 1].resource_name, type, value.addr, value.size,
-			NULL);
-			*/
-		}
-	    }
-	    else
-	    {
-		fprintf(stderr, "%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
-	    }
-	    XtFree(to.addr);
-	}
-	else
-	{
-	    /* The current theme does not set this resource, which is fine.
-	     */
 	    /*
-	    fprintf(stderr, "%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	    arg.name = name;
+	    memcpy(&arg.value, base, resource[num_resources - 1].resource_size);
+	    XtSetValues(w, &arg, 1);
 	    */
 	}
-	XtFree(full_name);
-	XtFree(full_class);
+#endif
+	XtFree(base);
+	XtFree(rtype);
+	XtFree(name);
     }
     if (bg != XmUNSPECIFIED_PIXEL)
     {
@@ -376,11 +365,7 @@ XmSecondaryResourceData *second;
 Cardinal num_seconds;
 
     //printf("%s\n", XtName(w));
-    /*
-    XtGetResourceList(w->core.widget_class, &resource, &num_resources);
-    apply_resources(w, new_db, resource, num_resources);
-    XtFree((char *)resource);
-    */
+
     num_seconds = XmGetSecondaryResourceData(w->core.widget_class, &second);
     if (num_seconds > 0)
     {
@@ -403,6 +388,15 @@ Cardinal num_seconds;
     {
     	apply_to_widgets(new_db, kid[numKids - 1]);
     }
+    if (XtIsWidget(w))
+    {
+	kid = w->core.popup_list;
+	numKids = w->core.num_popups;
+	for (; numKids > 0; numKids--)
+	{
+	    apply_to_widgets(new_db, kid[numKids - 1]);
+	}
+    }
 }
 
 static void
@@ -410,11 +404,13 @@ apply_theme(XmXsettingsWidget xs, String theme_name)
 {
 char *theme_file;
 
+    /*
     printf("%s:%s(%d) - %s %s \"%s\"\n",
     	__FILE__, __FUNCTION__, __LINE__,
     	XtName(XtParent((Widget)xs)),
     	XtName((Widget)xs),
     	theme_name);
+    	*/
 
     theme_file = open_theme(theme_name);
     if (theme_file)
@@ -424,14 +420,14 @@ char *theme_file;
     Status combine_status;
     Boolean resize;
 
+	/*
 	fprintf(stderr, "%s:%s(%d) - 0x%x\n",
 	    __FILE__, __FUNCTION__, __LINE__,
 	    (unsigned int)win);
+	    */
 
 	disp_db = XrmGetDatabase(XtDisplay((Widget)xs));
-	printf("combining \"%s\"\n", theme_file);
 	combine_status = XrmCombineFileDatabase(theme_file, &disp_db, True);
-	printf("combine_status %i\n", combine_status);
 	XtVaGetValues(XtParent((Widget)xs),
 	    XmNallowShellResize, &resize,
 	    NULL);
@@ -496,11 +492,11 @@ int i;
 
     for (i = 0; i < xs->xsettings.num_settings; i++)
     {
-      char *name;
-      char *v_string;
-      CARD16 name_len;
-      size_t pad_len;
-      CARD32 v_int;
+    char *name;
+    char *v_string;
+    CARD16 name_len;
+    size_t pad_len;
+    CARD32 v_int;
       
       result = fetch_card8 (xs, &buffer, (CARD8 *)&xs->xsettings.setting[i].type);
       if (result != XSETTINGS_SUCCESS) goto out;
@@ -617,117 +613,124 @@ unsigned char *data = NULL;
     printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
     */
 
-    num_old_settings = xs->xsettings.num_settings;
-    old_setting = xs->xsettings.setting;
-    xs->xsettings.num_settings = 0;
-    xs->xsettings.setting = NULL;
-
-    old_handler = XSetErrorHandler(ignore_errors);
-    result = XGetWindowProperty(XtDisplay((Widget)xs), xs->xsettings.manager,
-	xs->xsettings.atom, 0, LONG_MAX,
-	False, xs->xsettings.atom,
-	&type, &format, &n_items, &bytes_after, &data);
-    XSetErrorHandler(old_handler);
-    if (result == Success && type == xs->xsettings.atom)
+    if (xs->xsettings.manager != None)
     {
-    	if (format == 8)
-    	{
-    	int old_iter = 0, new_iter = 0;
-	XmXsettingsCallbackStruct cbs;
-	XrmQuark multiclick_time;
-	XrmQuark theme_name;
+	num_old_settings = xs->xsettings.num_settings;
+	old_setting = xs->xsettings.setting;
+	xs->xsettings.num_settings = 0;
+	xs->xsettings.setting = NULL;
 
-	    /*
-	    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
-	    */
-	    parse_settings(xs, data, n_items);
-	    multiclick_time = XrmPermStringToQuark("Net/DoubleClickTime");
-	    theme_name = XrmPermStringToQuark("Net/ThemeName");
-	    cbs.action = XSETTINGS_ACTION_NONE;
-	    while (old_iter < num_old_settings || new_iter < xs->xsettings.num_settings)
+	old_handler = XSetErrorHandler(ignore_errors);
+	result = XGetWindowProperty(XtDisplay((Widget)xs), xs->xsettings.manager,
+	    xs->xsettings.atom, 0, LONG_MAX,
+	    False, xs->xsettings.atom,
+	    &type, &format, &n_items, &bytes_after, &data);
+	XSetErrorHandler(old_handler);
+	if (result == Success && type == xs->xsettings.atom)
+	{
+	    if (format == 8)
 	    {
-	    int cmp;
+	    int old_iter = 0, new_iter = 0;
+	    XmXsettingsCallbackStruct cbs;
+	    XrmQuark multiclick_time;
+	    XrmQuark theme_name;
 
 		/*
-		fprintf(stderr, "%s:%s(%d) - %i(%i) %i(%i)\n",
-		    __FILE__, __FUNCTION__, __LINE__,
-		    old_iter, num_old_settings,
-		    new_iter, xs->xsettings.num_settings);
-		    */
-		if (old_iter < num_old_settings && new_iter < xs->xsettings.num_settings)
+		printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+		*/
+		parse_settings(xs, data, n_items);
+		multiclick_time = XrmPermStringToQuark("Net/DoubleClickTime");
+		theme_name = XrmPermStringToQuark("Net/ThemeName");
+		cbs.action = XSETTINGS_ACTION_NONE;
+		while (old_iter < num_old_settings || new_iter < xs->xsettings.num_settings)
 		{
-		    cmp = old_setting[old_iter].name == xs->xsettings.setting[new_iter].name ? 0 : -1;
-		}
-		else if (old_iter < num_old_settings)
-		{
-		    cmp = -1;
-		}
-		else
-		{
-		    cmp = 1;
-		}
-		if (cmp < 0)
-		{
+		int cmp;
+
 		    /*
-		    fprintf(stderr, "%s:%s(%d) - %s Deleted\n",
+		    fprintf(stderr, "%s:%s(%d) - %i(%i) %i(%i)\n",
 			__FILE__, __FUNCTION__, __LINE__,
-			XrmQuarkToString(old_setting[old_iter].name));
+			old_iter, num_old_settings,
+			new_iter, xs->xsettings.num_settings);
 			*/
-		    cbs.action = XSETTINGS_ACTION_DELETED;
-		    cbs.setting = old_setting[old_iter];
-		}
-		else if (cmp == 0)
-		{
-		    if (old_setting[old_iter].last_change_serial != xs->xsettings.setting[new_iter].last_change_serial)
+		    if (old_iter < num_old_settings && new_iter < xs->xsettings.num_settings)
+		    {
+			cmp = old_setting[old_iter].name == xs->xsettings.setting[new_iter].name ? 0 : -1;
+		    }
+		    else if (old_iter < num_old_settings)
+		    {
+			cmp = -1;
+		    }
+		    else
+		    {
+			cmp = 1;
+		    }
+		    if (cmp < 0)
 		    {
 			/*
-			fprintf(stderr, "%s:%s(%d) - %s %li %li Changed\n",
+			fprintf(stderr, "%s:%s(%d) - %s Deleted\n",
 			    __FILE__, __FUNCTION__, __LINE__,
-			    XrmQuarkToString(old_setting[old_iter].name),
-			    old_setting[old_iter].last_change_serial, xs->xsettings.setting[new_iter].last_change_serial);
+			    XrmQuarkToString(old_setting[old_iter].name));
 			    */
-			cbs.action = XSETTINGS_ACTION_CHANGED;
+			cbs.action = XSETTINGS_ACTION_DELETED;
+			cbs.setting = old_setting[old_iter];
+		    }
+		    else if (cmp == 0)
+		    {
+			if (old_setting[old_iter].last_change_serial != xs->xsettings.setting[new_iter].last_change_serial)
+			{
+			    /*
+			    fprintf(stderr, "%s:%s(%d) - %s %li %li Changed\n",
+				__FILE__, __FUNCTION__, __LINE__,
+				XrmQuarkToString(old_setting[old_iter].name),
+				old_setting[old_iter].last_change_serial, xs->xsettings.setting[new_iter].last_change_serial);
+				*/
+			    cbs.action = XSETTINGS_ACTION_CHANGED;
+			    cbs.setting = xs->xsettings.setting[new_iter];
+			}
+		    }
+		    else
+		    {
+			/*
+			fprintf(stderr, "%s:%s(%d) - %s New\n",
+			    __FILE__, __FUNCTION__, __LINE__,
+			    XrmQuarkToString(xs->xsettings.setting[new_iter].name));
+			    */
+			cbs.action = XSETTINGS_ACTION_NEW;
 			cbs.setting = xs->xsettings.setting[new_iter];
 		    }
-		}
-		else
-		{
-		    /*
-		    fprintf(stderr, "%s:%s(%d) - %s New\n",
-			__FILE__, __FUNCTION__, __LINE__,
-			XrmQuarkToString(xs->xsettings.setting[new_iter].name));
-			*/
-		    cbs.action = XSETTINGS_ACTION_NEW;
-		    cbs.setting = xs->xsettings.setting[new_iter];
-		}
-		if (cbs.action != XSETTINGS_ACTION_NONE)
-		{
-		    if (multiclick_time == xs->xsettings.setting[new_iter].name)
+		    if (cbs.action != XSETTINGS_ACTION_NONE)
 		    {
-			XtSetMultiClickTime(XtDisplay((Widget)xs), xs->xsettings.setting[new_iter].data.v_int);
+			if (multiclick_time == xs->xsettings.setting[new_iter].name)
+			{
+			    XtSetMultiClickTime(XtDisplay((Widget)xs), xs->xsettings.setting[new_iter].data.v_int);
+			}
+			else if (theme_name == xs->xsettings.setting[new_iter].name)
+			{
+			    apply_theme(xs, XrmQuarkToString(xs->xsettings.setting[new_iter].data.v_string));
+			}
+			XtCallCallbackList((Widget)xs, xs->xsettings.xsettings_callback, &cbs);
+			cbs.action = XSETTINGS_ACTION_NONE;
 		    }
-		    else if (theme_name == xs->xsettings.setting[new_iter].name)
-		    {
-			apply_theme(xs, XrmQuarkToString(xs->xsettings.setting[new_iter].data.v_string));
-		    }
-		    XtCallCallbackList((Widget)xs, xs->xsettings.xsettings_callback, &cbs);
-		    cbs.action = XSETTINGS_ACTION_NONE;
+		    old_iter++;
+		    new_iter++;
 		}
-		old_iter++;
-		new_iter++;
 	    }
-    	}
-    	else
-    	{
+	    else
+	    {
+		printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	    }
+	}
+	else
+	{
 	    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
-    	}
+	}
+	XtFree((char *)data);
+	XtFree((char *)old_setting);
     }
     else
     {
 	printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
     }
-    XtFree((char *)data);
-    XtFree((char *)old_setting);
 }
 
 static void
@@ -816,13 +819,13 @@ Cardinal num_params = XtNumber(params);
 		    XtRegisterDrawable(XtDisplay(new_w), new_xs->xsettings.manager, XtParent(new_w));
 		    XtAddEventHandler(XtParent(new_w), PropertyChangeMask | StructureNotifyMask, False, xsetting_callback, new_w);
 		    new_xs->xsettings.atom = XInternAtom(XtDisplay(new_w), "_XSETTINGS_SETTINGS", True);
-		    read_settings(new_xs);
 		}
 		else
 		{
 		    printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
 		}
 		XUngrabServer(XtDisplay(new_w));
+		read_settings(new_xs);
 	    }
 	    else
 	    {
