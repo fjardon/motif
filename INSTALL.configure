@@ -13,6 +13,13 @@ you can run in the future to recreate the current configuration, a file
 reconfiguring, and a file `config.log' containing compiler output
 (useful mainly for debugging `configure').
 
+   If you don't see `configure' shell script in the package directory
+run `autogen.sh'. It will run in turn libtoolize, aclocal, autoconf,
+autoheader and automake commands that will produce `configure' shell
+script. If you don't see `configure' shell script that means one of the 
+listed above commands failed and you need to update/install autotools 
+package on your system.
+
    If you need to do unusual things to compile the package, please try
 to figure out how `configure' could check whether to do them, and mail
 diffs or instructions to the address given in the `README' so they can
@@ -26,10 +33,11 @@ it or regenerate `configure' using a newer version of `autoconf'.
 The simplest way to compile this package is:
 
   1. `cd' to the directory containing the package's source code and type
-     `./configure' to configure the package for your system.  If you're
-     using `csh' on an old version of System V, you might need to type
-     `sh ./configure' instead to prevent `csh' from trying to execute
-     `configure' itself.
+     `./autogen.sh' to create configure shell script according to your
+     environment and to run automatically 'configure' of the package
+     for your system. If you're using `csh' on an old version of System
+     V, you might need to type `sh ./autogen.sh' instead to prevent `csh' 
+     from trying to execute `autogen.sh' itself.
 
      Running `configure' takes awhile.  While running, it prints some
      messages telling which features it is checking for.
