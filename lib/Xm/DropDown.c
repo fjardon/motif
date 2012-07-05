@@ -27,6 +27,7 @@
 #include <Xm/ExtP.h>
 
 #define FIX_1371
+#define FIX_1486
 
 /*
  * NOTE:  I use the same syntax for popup and popdown that Xt Uses. 
@@ -2268,7 +2269,11 @@ PopupList(Widget w)
         XSetInputFocus(XtDisplay(shell), XtWindow((Widget) cbw), RevertToParent, 
 		   XtLastTimestampProcessed(XtDisplay(w)) - 1);
 
+#ifdef FIX_1486
+    _XmPopupSpringLoaded(shell);
+#else
     XtPopupSpringLoaded(shell);
+#endif
 
     if (!XmIsGrabShell(shell)) {
         ret = XtGrabPointer(shell, True,
