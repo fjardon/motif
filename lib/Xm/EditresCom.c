@@ -430,16 +430,25 @@ static void
 FreeEvent(event)
 EditresEvent * event;
 {
+    if (event->any_event.type == SetValues) {
+	int i;
+
+	for (i = 0; i < event->set_values_event.num_entries; i++)
+	{
+	    XtFree((char *)event->set_values_event.widgets[i].ids);
+	}
+	XtFree((char *)event->set_values_event.widgets);
+	event->set_values_event.widgets = NULL;
+	XtFree(event->set_values_event.name);     /* XtFree does not free if */
+	XtFree(event->set_values_event.res_type); /* value is NULL. */
+	XtFree(event->set_values_event.value);
+    }
+	
     if (event->any_event.widgets != NULL) {
 	XtFree((char *)event->any_event.widgets->ids);
 	XtFree((char *)event->any_event.widgets);
     }
 
-    if (event->any_event.type == SetValues) {
-	XtFree(event->set_values_event.name);     /* XtFree does not free if */
-	XtFree(event->set_values_event.res_type); /* value is NULL. */
-    }
-	
     XtFree((char *)event);
 }
 

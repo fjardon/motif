@@ -1,6 +1,6 @@
 /**
  *
- * $Id: Xsettings.c,v 1.2 2009/06/18 20:05:55 rwscott Exp $
+ * $Id: Xsettings.c,v 1.3 2009/06/20 15:01:23 rwscott Exp $
  *
  * Copyright 2009 Rick Scott <rwscott@users.sourceforge.net>
  *
@@ -40,6 +40,8 @@ It contains the following copright notice ...
 #endif
 
 #include <limits.h>
+#include <errno.h>
+#include <stdlib.h>
 
 #include "XsettingsP.h"
 #include <X11/Xmd.h>
@@ -242,15 +244,213 @@ xsettings_byte_order (void)
 }
 #endif
 
+static char *
+open_theme(String theme_name)
+{
+char *file_name = NULL;
+char *home;
+
+    /*
+       $XDG_DATA_HOME/themes/theme_name/Xm/xrdb.ad
+	   $HOME/.local/share/themes/theme_name/Xm/xrdb.ad
+	   $HOME/.themes/theme_name/Xm/xrdb.ad
+       $XDG_DATA_DIRS/themes/theme_name/Xm/xrdb.ad
+	   /usr/local/share/themes/theme_name/Xm/xrdb.ad
+	   /usr/share/themes/theme_name/Xm/xrdb.ad
+     */
+    home = getenv("HOME");
+    if (home)
+    {
+    char *format = "%s/.themes/%s/Xm/xrdb.ad";
+
+	printf("%s:%s(%d) - \"%s\"\n",
+	    __FILE__, __FUNCTION__, __LINE__,
+	    home);
+	file_name = XtMalloc(strlen(home) + strlen(theme_name) + strlen(format) + 1);
+	sprintf(file_name, format, home, theme_name);
+    }
+
+    return(file_name);
+}
+
+static Bool
+set(XrmDatabase *db, XrmBindingList bindings, XrmQuarkList quarks, XrmRepresentation *type, XrmValuePtr value, XPointer data)
+{
+Widget w = (Widget)data;
+
+    for (; *quarks; quarks++, bindings++)
+    {
+    	//printf("%s %s %s %s\n", XtName((Widget)data), XrmQuarkToString(*quarks), XrmQuarkToString(*bindings), XrmQuarkToString(*type));
+    }
+    quarks--;
+    bindings--;
+    printf("%s %s %s %s\n", XtName(w), XrmQuarkToString(*quarks), XrmQuarkToString(*bindings), XrmQuarkToString(*type));
+    /*
+    XtVaSetValues(w,
+    	XtVaTypedArg, XrmQuarkToString(*quarks), XrmQuarkToString(*type), value->addr, value->size,
+    	NULL);
+    	*/
+    return(False);
+}
+
+static void
+apply_resources(Widget w, XrmDatabase new_db, XtResourceList resource, Cardinal num_resources)
+{
+Pixel bg = XmUNSPECIFIED_PIXEL;
+
+    for (; num_resources > 0; num_resources--)
+    {
+    char *type;
+    XrmValue value;
+    char *format = "*%s*%s";
+    char *full_name;
+    char *full_class;
+
+    	/*
+    	printf("%s %i %s %s\n",
+	    XtName(w),
+	    num_resources,
+	    resource[num_resources - 1].resource_name,
+	    resource[num_resources - 1].resource_type
+	    );
+	    */
+	full_name = XtMalloc(strlen(format) + strlen(XtName(w)) + strlen(resource[num_resources - 1].resource_name) + 1);
+	sprintf(full_name, format, XtName(w), resource[num_resources - 1].resource_name);
+	full_class = XtMalloc(strlen(format) + strlen(w->core.widget_class->core_class.class_name) + strlen(resource[num_resources - 1].resource_class) + 1);
+	sprintf(full_class, format, w->core.widget_class->core_class.class_name, resource[num_resources - 1].resource_class);
+	if (XrmGetResource(new_db, full_name, full_class, &type, &value))
+	{
+	XrmValue to;
+
+	    /*
+	    printf("%s %i %s %s %i %s %i %s\n",
+		XtName(w),
+		num_resources,
+		resource[num_resources - 1].resource_name,
+		resource[num_resources - 1].resource_type,
+		resource[num_resources - 1].resource_size,
+		value.addr,
+		value.size,
+		type
+		);
+		*/
+	    to.size = resource[num_resources - 1].resource_size;
+	    to.addr = XtMalloc(resource[num_resources - 1].resource_size);
+	    if (XtConvertAndStore(w, type, &value, resource[num_resources - 1].resource_type, &to))
+	    {
+		if (strcmp(resource[num_resources - 1].resource_name, XmNbackground) == 0)
+		{
+		    //XmChangeColor(w, (Pixel)(*((XtPointer *)(to.addr))));
+		    bg = (Pixel)(*((XtPointer *)(to.addr)));
+		}
+		else
+		{
+		    XtVaSetValues(w,
+			resource[num_resources - 1].resource_name, *((XtPointer *)(to.addr)),
+			NULL);
+		}
+	    }
+	    else
+	    {
+		fprintf(stderr, "%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	    }
+	    XtFree(to.addr);
+	}
+	else
+	{
+	    /* The current theme does not set this resource, which is fine.
+	     */
+	    /*
+	    fprintf(stderr, "%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
+	    */
+	}
+	XtFree(full_name);
+	XtFree(full_class);
+    }
+    if (bg != XmUNSPECIFIED_PIXEL)
+    {
+	XmChangeColor(w, bg);
+    }
+}
+
+static void
+apply_to_widgets(XrmDatabase new_db, Widget w)
+{
+WidgetList kid = NULL;
+Cardinal numKids = 0;
+XtResourceList resource;
+Cardinal num_resources;
+
+    //printf("%s\n", XtName(w));
+    if (XmIsGadget(w))
+    {
+	XtGetResourceList(XtParent(w)->core.widget_class, &resource, &num_resources);
+	apply_resources(w, new_db, resource, num_resources);
+    }
+    XtGetResourceList(w->core.widget_class, &resource, &num_resources);
+    apply_resources(w, new_db, resource, num_resources);
+    XtVaGetValues(w,
+    	XmNchildren, &kid,
+    	XmNnumChildren, &numKids,
+    	NULL);
+    for (; numKids > 0; numKids--)
+    {
+    	apply_to_widgets(new_db, kid[numKids - 1]);
+    }
+}
+
 static void
 apply_theme(XmXsettingsWidget xs, String theme_name)
 {
-    /* themes/theme_name/Xm/xrdb.ad */
+char *theme_file;
+
     printf("%s:%s(%d) - %s %s \"%s\"\n",
     	__FILE__, __FUNCTION__, __LINE__,
     	XtName(XtParent((Widget)xs)),
     	XtName((Widget)xs),
     	theme_name);
+
+    theme_file = open_theme(theme_name);
+    if (theme_file)
+    {
+    XrmDatabase disp_db = NULL;
+    Window win = XtWindow(XtParent((Widget)xs));
+
+	fprintf(stderr, "%s:%s(%d) - 0x%x\n",
+	    __FILE__, __FUNCTION__, __LINE__,
+	    (unsigned int)win);
+	if (win == None)
+	{
+	    disp_db = XrmGetDatabase(XtDisplay((Widget)xs));
+	}
+	//if (disp_db)
+	{
+	Status combine_status;
+	Boolean resize;
+
+	    printf("combining \"%s\"\n", theme_file);
+	    combine_status = XrmCombineFileDatabase(theme_file, &disp_db, True);
+	    printf("combine_status %i\n", combine_status);
+	    XtVaGetValues(XtParent((Widget)xs),
+	    	XmNallowShellResize, &resize,
+	    	NULL);
+	    XtVaSetValues(XtParent((Widget)xs),
+	    	XmNallowShellResize, True,
+	    	NULL);
+	    apply_to_widgets(disp_db, XtParent((Widget)xs));
+	    XtVaSetValues(XtParent((Widget)xs),
+	    	XmNallowShellResize, resize,
+	    	NULL);
+	}
+	XtFree(theme_file);
+    }
+    else
+    {
+	fprintf(stderr, "%s:%s(%d) - Failed to open \"%s\" theme. %s.\n",
+	    __FILE__, __FUNCTION__, __LINE__,
+	    theme_name,
+	    strerror(errno));
+    }
 }
 
 static void
@@ -411,7 +611,7 @@ Atom type;
 int format;
 unsigned long n_items;
 unsigned long bytes_after;
-unsigned char *data;
+unsigned char *data = NULL;
 
     /*
     printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
@@ -526,6 +726,7 @@ unsigned char *data;
     {
 	printf("%s:%s(%d)\n", __FILE__, __FUNCTION__, __LINE__);
     }
+    XtFree((char *)data);
     XtFree((char *)old_setting);
 }
 
