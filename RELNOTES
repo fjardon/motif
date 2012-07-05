@@ -81,7 +81,6 @@ This is a bug fix release.
 * Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
   with CapsLock/ScrollLock/NumLock modifiers)
 * Added splint checking and splint target
-* Refixed bug #1476 (PanedWindow orientation error)
 * Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
   if widgets are inter-attachmed in vertical/horizontal directions)
 
