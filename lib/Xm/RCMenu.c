@@ -86,6 +86,7 @@ static char *rcsid = "$TOG: RCMenu.c /main/25 1999/05/24 18:06:57 samborn $";
 #include "UniqueEvnI.h"
 #include "VendorSI.h"
 
+#define FIX_1535
 
 static void SwallowEventHandler(
 				   Widget widget, 
@@ -1067,7 +1068,12 @@ _XmMenuFocus(
 	    mst->RC_menuFocus.oldTime = _time;
 	    if (tmpWindow != mst->RC_menuFocus.oldFocus)
 	    {
+#ifdef FIX_1535
+	      if (mst->RC_menuFocus.oldFocus != (Window) NULL &&
+		  mst->RC_menuFocus.oldWidget != NULL)
+#else
 	      if (mst->RC_menuFocus.oldWidget != NULL)
+#endif
 		XtRemoveCallback(mst->RC_menuFocus.oldWidget, 
 				 XtNdestroyCallback,
 				 (XtCallbackProc)InvalidateOldFocus,
