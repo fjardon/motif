@@ -164,7 +164,7 @@ fi
 if test x$GCC = xyes
 then
     CFLAGS="$CFLAGS -Wall -g -fno-strict-aliasing -Wno-unused -Wno-comment"
-    if test ` gcc -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4" ; then
+    if test ` $CC -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4" ; then
         CFLAGS="$CFLAGS -fno-tree-ter"
     fi
 fi
