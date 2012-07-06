@@ -5291,14 +5291,20 @@ ContainerConvertProc(
 	  {
 	    type = atoms[XmA_COMPOUND_TEXT];
 	    value = XmCvtXmStringToCT(return_xmstr);
-	    length = strlen((char*) value);
+	    if (value != NULL)
+	    	length = strlen((char*) value);
+	    else
+	    	length = 0;
 	  }
 #ifdef UTF8_SUPPORTED
 	else if (cs->target == atoms[XmAUTF8_STRING])
 	  {
 	    type = atoms[XmAUTF8_STRING];
 	    value = XmCvtXmStringToUTF8String(return_xmstr);
-	    length = strlen((char*) value);
+	    if (value != NULL)
+	    	length = strlen((char*) value);
+	    else
+	    	length = 0;
 	  }
 #endif
 	XmStringFree(return_xmstr);
