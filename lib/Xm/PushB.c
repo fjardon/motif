@@ -1353,12 +1353,14 @@ DrawPushButtonLabel(
   Boolean deadjusted = False;
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(pb));
   Boolean etched_in = dpy->display.enable_etched_in_menu;
+  Pixel bg_pixel;
 
   if (pb->pushbutton.armed &&
       ((! Lab_IsMenupane(pb) && pb->pushbutton.fill_on_arm) ||
        (Lab_IsMenupane(pb) && etched_in)))
     {
-      XSetWindowBackground(XtDisplay(pb), XtWindow(pb), pb->pushbutton.arm_color);
+	  bg_pixel = pb->core.background_pixel;
+      pb->core.background_pixel = pb->pushbutton.arm_color;
       replaceBg = True;
       if ((pb->label.label_type == XmSTRING ||
            pb->label.label_type == XmPIXMAP_AND_STRING) && 
@@ -1416,7 +1418,7 @@ DrawPushButtonLabel(
   if (replaceGC)
       pb->label.normal_GC = tmp_gc;    
   if (replaceBg) {
-      XSetWindowBackground(XtDisplay(pb), XtWindow(pb), XtBackground(pb));
+	  pb->core.background_pixel = bg_pixel;
       if (pb->core.background_pixmap != XmUNSPECIFIED_PIXMAP) {
           XSetWindowBackgroundPixmap(XtDisplay(pb), XtWindow(pb),
 	      pb->core.background_pixmap);

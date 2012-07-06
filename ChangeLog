@@ -1,3 +1,8 @@
+2010-03-01  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Label.c, lib/Xm/PushB.c:
+	Fixed bug #1511 (CheckBook program from EditTable samples crashes 
+	with OpenMotif since 2.3.0 release.)
+
 2009-12-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c:
 	Fixed bug #1495 (mwm's icon box has graphics corruption)
