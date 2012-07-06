@@ -1,3 +1,7 @@
+2011-08-10  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/LabelG.c:
+	Added missing include
+
 2011-07-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Mrm/Mrm.msg, lib/Xm/Xm.msg:
 	Fixed bug #1496 (Version 2.3.2 won't compile if configured enable-message-catalog)
