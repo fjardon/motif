@@ -1,3 +1,7 @@
+2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmIm.c:
+	Fixed bug #1510 (Input methods do not work with XFT fonts)
+
 2011-07-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Color.c:
 	Fixed bug #1500 (XmPushButton with grayscale pixmap is not changed visibly when it's sensitivity is changed)
