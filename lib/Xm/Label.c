@@ -79,6 +79,7 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 
 #define FIX_1442
 #define FIX_1484
+#define FIX_1504
 
 #define Pix(w)			((w)->label.pixmap)
 #define Pix_insen(w)		((w)->label.pixmap_insen)
@@ -1958,6 +1959,12 @@ SetValues(Widget cw,
     }
   
   /* ValidateInputs(new_w); */
+#ifdef FIX_1504
+  _XmCalcLabelDimensions((Widget) new_w);
+  Boolean pixmap_size_changed = ((newlp->PixmapRect.width
+      != curlp->PixmapRect.width) || (newlp->PixmapRect.height
+      != curlp->PixmapRect.height));
+#endif
   
   if (((Lab_IsText(new_w) || Lab_IsPixmapAndText(new_w)) && 
        ((newstring) ||
@@ -1968,7 +1975,11 @@ SetValues(Widget cw,
 	/* When you have different sized pixmaps for sensitive and */
 	/* insensitive states and sensitivity changes, */
 	/* the right size is chosen. (osfP2560) */
+#ifdef FIX_1504
+	(XtIsSensitive(nw) != XtIsSensitive(cw))) && pixmap_size_changed) ||
+#else
 	(XtIsSensitive(nw) != XtIsSensitive(cw)))) ||
+#endif
       (Lab_IsPixmapAndText(new_w) &&
 	(newlp->pixmap_placement != curlp->pixmap_placement)) ||
       (newlp->label_type != curlp->label_type))
@@ -1983,7 +1994,9 @@ SetValues(Widget cw,
 	    new_w->core.height = 0;
 	}
 	  
+#ifndef FIX_1504
       _XmCalcLabelDimensions((Widget) new_w);
+#endif
 
       Call_Resize = True;
 
