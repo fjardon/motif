@@ -1,4 +1,8 @@
 2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
+	* doc/man/man3/XmSpinBoxValidatePosition.3:
+	Fixed misspellings in the manpage
+
+2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c:
 	Fixed bug #1504 (Changing sensitivity on a PushButton with Pixmap causes recomputeSize)
 
