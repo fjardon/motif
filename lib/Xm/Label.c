@@ -1456,23 +1456,11 @@ Redisplay(
     if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)
 		&& lp->TextRect.width > 0 && lp->TextRect.height > 0)
       {
-        GC _gc;
-        XGCValues values;
-        unsigned long mask = 0;
-
-        mask = GCForeground | GCFillStyle;
-        values.foreground = wid->core.background_pixel;
-        values.fill_style = FillSolid;
-
-        _gc = XCreateGC(XtDisplay(lw), XtWindow(lw), mask, &values);
-
-        XFillRectangle(XtDisplay(lw), XtWindow(lw), _gc,
-  			lp->TextRect.x,
-  			lp->TextRect.y,
-  			lp->TextRect.width,
-  			lp->TextRect.height);
-  	
-        XFreeGC(XtDisplay(lw), _gc);
+        XClearArea(XtDisplay(lw), XtWindow(lw),
+			lp->TextRect.x,
+			lp->TextRect.y,
+ 			lp->TextRect.width,
+			lp->TextRect.height, False);
      }
 #endif
   

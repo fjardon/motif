@@ -1,3 +1,7 @@
+2010-03-11  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Label.c, lib/Xm/PushB.c:
+	Dropped fix #1511
+
 2010-03-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/PushB.c:
 	Fixed bug #1511 (CheckBook program from EditTable samples crashes 
