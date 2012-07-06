@@ -11,7 +11,7 @@ INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
            ${X_CFLAGS}
 xmdir = $(includedir)/Xm
 
-LDFLAGS = -version-info @CURRENT@:@REVISION@:@AGE@
+libXm_la_LDFLAGS = -version-info @CURRENT@:@REVISION@:@AGE@
 
 lib_LTLIBRARIES = libXm.la
 
