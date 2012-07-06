@@ -1,4 +1,8 @@
 2010-11-11  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/SpinB.c:
+	Fixed bug #1519 (XmSpinBoxValidatePosition does not properly check XmNincrementValue)
+
+2010-11-11  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/LabelG.c:
 	Added missing #ifdef USE_XFT directive to the patch #1521
 
