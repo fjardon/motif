@@ -1,3 +1,7 @@
+2010-11-15  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DataF.c:
+	Fixed bug #1531 (Using DataField widget with XFT font causes an X Error)
+
 2010-11-11  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/SpinB.c:
 	Fixed bug #1519 (XmSpinBoxValidatePosition does not properly check XmNincrementValue)
