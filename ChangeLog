@@ -8,6 +8,7 @@
 2011-08-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/RCLayout.c:
 	Refixed bug #1521 (LabelGadget draws the text over border of its parent)
+	by Igor Gala <igala@ics.com>
 
 2011-08-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/LabelG.c:
@@ -16,6 +17,7 @@
 2011-07-07  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Mrm/Mrm.msg, lib/Xm/Xm.msg:
 	Fixed bug #1496 (Version 2.3.2 won't compile if configured enable-message-catalog)
+	by Igor Gala <igala@ics.com>
 
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Xmos.c:
@@ -24,62 +26,77 @@
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/SSpinB.c:
 	Fixed bug #1530 (SimpleSpinBox doesn't return correct values for child on some platforms)
+	by Igor Gala <igala@ics.com>
 
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TraversalI.h:
 	Fixed bug #1272 (Application goes into infinite loop in TraversalI.c:Sort())
+	by Igor Gala <igala@ics.com>
 
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/CopyPaste.c:
 	Fixed bug #1529 (Copy/paste problem with Clipboard)
+	by Igor Gala <igala@ics.com>
 
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmRenderT.c:
 	Fixed bug #1536 (Performance issue: XmListSetPos() is very very slow)
+	by Igor Gala <igala@ics.com>
 
 2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DataF.c, lib/Xm/TextF.c, lib/Xm/TextOut.c, lib/Xm/XmI.h:
 	Fixed bug #1501 (XmText widget sensitive/unsensitive is visibly same at startup)
+	by Igor Gala <igala@ics.com>
 
 2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DataF.c:
 	Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+	by Igor Gala <igala@ics.com>
 
 2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmIm.c:
 	Fixed bug #1510 (Input methods do not work with XFT fonts)
+	by Igor Gala <igala@ics.com>
 
 2011-07-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Color.c:
 	Fixed bug #1500 (XmPushButton with grayscale pixmap is not changed visibly when it's sensitivity is changed)
+	by Igor Gala <igala@ics.com>
 
 2011-07-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XpmCrBufFrI.c:
 	Fixed bug #1540 (XpmCreateBufferFromPixmap function doesn't work properly)
+	by Igor Gala <igala@ics.com>
 
 2011-05-23  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Color.c, lib/Xm/Label.c, lib/Xm/LabelG.c, XmI.h:
 	Fixed bug #1505 (Some problems with new insensitive code for label pixmaps)
+	by Igor Gala <igala@ics.com>
 
 2011-04-11  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmIm.c:
 	Fixed bug #1534 (im_widget double-free issue)
+	by Igor Gala <igala@ics.com>
 
 2011-03-31  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/RCMenu.c:
 	Fixed bug #1535 (Destroying a torn-off menu with a submenu mapped causes a crash)
+	by Igor Gala <igala@ics.com>
 
 2010-12-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c:
 	Fixed bug #1532 (Incorrect handling of clip areas for a string (XmString.c))
+	by Igor Gala <igala@ics.com>
 
 2010-11-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DataF.c:
 	Fixed bug #1531 (Using DataField widget with XFT font causes an X Error)
+	by Igor Gala <igala@ics.com>
 
 2010-11-11  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/SpinB.c:
 	Fixed bug #1519 (XmSpinBoxValidatePosition does not properly check XmNincrementValue)
+	by Igor Gala <igala@ics.com>
 
 2010-11-11  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/LabelG.c:
@@ -87,7 +104,7 @@
 
 2010-09-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c:
-	Fixed bug #1488 (XmStringDraw clip not honored)
+	Fixed bug #1488 (XmStringDraw clip not honored) by Igor Gala <igala@ics.com>
 
 2010-09-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* clients/uil/UilDefI.h:
@@ -96,6 +113,7 @@
 2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Scale.c:
 	Fixed bug #1528 (Scale widget has some Geometry issues)
+	by Igor Gala <igala@ics.com>
 
 2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac:
@@ -108,6 +126,7 @@
 2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c:
 	Fixed bug #1504 (Changing sensitivity on a PushButton with Pixmap causes recomputeSize)
+	by Igor Gala <igala@ics.com> 
 
 2010-09-24  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/PushB.c:
@@ -138,6 +157,7 @@
 2010-08-18  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmI.h, lib/Xm/XmString.c, lib/Xm/LabelG.c:
 	Fixed bug #1521 (LabelGadget draws the text over border of its parent)
+	by Igor Gala <igala@ics.com>
 
 2010-05-20  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Png.c:
