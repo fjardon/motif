@@ -1,3 +1,8 @@
+2010-09-24  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/PushB.c:
+	Fixed bug #1516 (Can receive X error setting pixmaps to
+	XmUNSPECIFIED_PIXMAP on PushButton)
+
 2010-09-02  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TabBox.c:
 	Fixed bug #1503 (XmNtabBackground resource is not working properly in XmTabStack widget)
