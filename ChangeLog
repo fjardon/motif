@@ -1,3 +1,7 @@
+2011-03-31  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/RCMenu.c:
+	Fixed bug #1535 (Destroying a torn-off menu with a submenu mapped causes a crash)
+
 2010-12-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c:
 	Fixed bug #1532 (Incorrect handling of clip areas for a string (XmString.c))
