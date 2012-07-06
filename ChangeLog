@@ -1,3 +1,7 @@
+2010-11-11  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/LabelG.c:
+	Added missing #ifdef USE_XFT directive to the patch #1521
+
 2010-09-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c:
 	Fixed bug #1488 (XmStringDraw clip not honored)
