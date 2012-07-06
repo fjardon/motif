@@ -587,7 +587,7 @@ Initialize(Widget    request,	/* unused */
   child_args = (ArgList) XtMalloc(sizeof(Arg) * *num_args);
   for (i = 0; i < *num_args; i++) 
 	  if (strcmp(args[i].name, "height")) {
-		  child_args[i] = args[i];
+		  child_args[num_child_args] = args[i];
 	  	  num_child_args++;
 	  }
   /* Create the widgets that make up a ComboBox. */
