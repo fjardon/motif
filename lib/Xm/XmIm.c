@@ -59,6 +59,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 # include <stdarg.h>
 # define Va_start(a,b) va_start(a,b)
 
+#define FIX_1510
 
 #ifdef NO_XICPROC
 typedef Bool (*XICProc)( XIC, XPointer, XPointer);
@@ -1263,7 +1264,17 @@ set_values(Widget w,
     va_vlist = VaCopy(&xic_vlist);
     
     if (va_vlist)
+    {
       icp->xic = XCreateIC(xim_info->xim, XNVaNestedList, va_vlist, NULL);
+#ifdef FIX_1510
+      if (icp->xic == NULL)
+      {
+        icp->input_style = XIMPreeditNothing | XIMStatusNothing;
+        icp->xic = XCreateIC(xim_info->xim, XNInputStyle, icp->input_style,
+            XNClientWindow, XtWindow(p), XNFocusWindow, XtWindow(p), NULL);
+      }
+#endif
+    }
     else
       icp->xic = XCreateIC(xim_info->xim, NULL);
     
@@ -1389,7 +1400,17 @@ set_values(Widget w,
       va_vlist = VaCopy(&xic_vlist);
       
       if (va_vlist)
+      {
 	icp->xic = XCreateIC(xim_info->xim, XNVaNestedList, va_vlist, NULL);
+#ifdef FIX_1510
+        if (icp->xic == NULL)
+        {
+          icp->input_style = XIMPreeditNothing | XIMStatusNothing;
+          icp->xic = XCreateIC(xim_info->xim, XNInputStyle, icp->input_style,
+              XNClientWindow, XtWindow(p), XNFocusWindow, XtWindow(p), NULL);
+        }
+#endif
+      }
       else
 	icp->xic = XCreateIC(xim_info->xim, NULL);
       
