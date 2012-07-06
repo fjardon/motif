@@ -41,6 +41,8 @@ wmlparse.c: wmllex.c
 
 wmllex.c: wmllex.l
 
+wmlsynbld.c: wmlparse.h
+
 $(srcdir)/wmldbcreate.c: $(WMLTARGETS) UilLexPars.h
 
 UilLexPars.h: UilLexPars.c
@@ -49,7 +51,9 @@ UilLexPars.c: Uil.c
 	$(LN_S) Uil.h UilLexPars.h
 	$(LN_S) Uil.c UilLexPars.c
 
-$(WMLTARGETS): wmluiltok wml UilLexPars.c $(TABLE)
+$(WMLTARGETS): wml-uil.mm
+
+wml-uil.mm: wmluiltok wml UilLexPars.c $(TABLE)
 	$(RM) $(WMLTARGETS) wml.report wml-uil.mm
 	./wmluiltok <$(srcdir)/Uil.y >tokens.dat
 	$(RM) wml-uil.mm
