@@ -1,3 +1,7 @@
+2011-08-15  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Label.c, lib/Xm/RCLayout.c:
+	Refixed bug #1521 (LabelGadget draws the text over border of its parent)
+
 2011-08-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/LabelG.c:
 	Added missing include
