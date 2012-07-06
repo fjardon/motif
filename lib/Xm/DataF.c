@@ -1931,6 +1931,24 @@ _XmDataFToggleCursorGC(
 
     if (!XmTextF_has_rect(tf)) _XmDataFieldSetClipRect(tf);
 
+#ifdef FIX_1501
+    if (!XtIsSensitive(widget)) {
+      valuemask = GCForeground|GCBackground|GCFillStyle|GCStipple|GCFunction;
+      values.foreground = _XmAssignInsensitiveColor((Widget)tf);
+      values.background = tf->core.background_pixel;
+      values.fill_style = FillStippled;
+
+      if (XmTextF_overstrike(tf)) {
+        if (XmTextF_stipple_tile(tf) == XmUNSPECIFIED_PIXMAP) return;
+        values.stipple = XmTextF_stipple_tile(tf);
+        values.function = GXxor;
+      } else {
+        if (XmTextF_cursor(tf) == XmUNSPECIFIED_PIXMAP) return;
+        values.stipple = XmTextF_cursor(tf);
+        values.function = GXcopy;
+      }
+    } else {
+#endif
     if (XmTextF_overstrike(tf)) {
       if (!XmTextF_add_mode(tf) && XtIsSensitive(widget) &&
 	  (XmTextF_has_focus(tf) || XmTextF_has_destination(tf))) {
@@ -1961,6 +1979,9 @@ _XmDataFToggleCursorGC(
       }
       valuemask |= GCStipple;
     }
+#ifdef FIX_1501
+    }
+#endif
     XChangeGC(XtDisplay(widget), XmTextF_image_gc(tf), valuemask, &values);
 }
 
@@ -2211,6 +2232,14 @@ df_PaintCursor(
     }
 
     if ((XmTextF_cursor_on(tf) >= 0) && XmTextF_blink_on(tf)) {
+#ifdef FIX_1501
+       if (!XtIsSensitive((Widget) tf)) {
+          df_XmSetShadowGC(tf, XmTextF_image_gc(tf));
+          XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_image_gc(tf), x + 1, y + 1,
+                         XmTextF_cursor_width(tf), XmTextF_cursor_height(tf));
+       }
+       _XmDataFToggleCursorGC((Widget) tf);
+#endif
        XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_image_gc(tf), x, y,
 		      XmTextF_cursor_width(tf), XmTextF_cursor_height(tf));
     } else {

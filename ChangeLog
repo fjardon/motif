@@ -1,4 +1,8 @@
 2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DataF.c, lib/Xm/TextF.c, lib/Xm/TextOut.c, lib/Xm/XmI.h:
+	Fixed bug #1501 (XmText widget sensitive/unsensitive is visibly same at startup)
+
+2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DataF.c:
 	Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
 
