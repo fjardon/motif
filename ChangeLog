@@ -1,4 +1,8 @@
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/SSpinB.c:
+	Fixed bug #1530 (SimpleSpinBox doesn't return correct values for child on some platforms)
+
+2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/TraversalI.h:
 	Fixed bug #1272 (Application goes into infinite loop in TraversalI.c:Sort())
 
