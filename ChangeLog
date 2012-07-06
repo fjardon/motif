@@ -1,5 +1,5 @@
 2010-09-02  Ihor Hayvuk <ihayvuk@ics.com>
-	* configure.ac:
+	* lib/Xm/TabBox.c:
 	Fixed bug #1503 (XmNtabBackground resource is not working properly in XmTabStack widget)
 
 2010-08-27  Ihor Hayvuk <ihayvuk@ics.com>
