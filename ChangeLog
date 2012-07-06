@@ -1,3 +1,8 @@
+2010-05-20  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Png.c:
+	Fixed in order to provide compatibility with libpng14, backwards
+    compatible with libpng12
+
 2010-05-18  Ihor Hayvuk <ihayvuk@ics.com>
 	* tools/wml/Makefile.am:
 	Fixed dependencies in order to allow build with "make -j" 
