@@ -1,4 +1,8 @@
 2011-07-04  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Color.c:
+	Fixed bug #1500 (XmPushButton with grayscale pixmap is not changed visibly when it's sensitivity is changed)
+
+2011-07-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XpmCrBufFrI.c:
 	Fixed bug #1540 (XpmCreateBufferFromPixmap function doesn't work properly)
 

@@ -47,6 +47,8 @@
 #include <Xm/XpmP.h>
 #endif
 
+#define FIX_1500
+
 /* Warning and Error messages */
 
 #define MESSAGE0	_XmMMsgVisual_0000
@@ -1265,10 +1267,16 @@ _XmConvertToBW(Widget w, Pixmap pm)
    unsigned int bw = 0, bw2 = 0;
    char *col = NULL, *col2 = NULL;
    Pixmap bw_pixmap = XmUNSPECIFIED_PIXMAP;
+#ifdef FIX_1500
+   char *data_before = NULL, *data_after = NULL;
+#endif
 
    if (pm == XmUNSPECIFIED_PIXMAP)
 	   return bw_pixmap;
     
+#ifdef FIX_1500
+   XpmCreateBufferFromPixmap(XtDisplay(w), &data_before, pm, 0, NULL);
+#endif
    XpmCreateXpmImageFromPixmap(XtDisplay(w), pm, 0, &im, NULL);
    if (im.ncolors > 0) {
 	   if (im.ncolors <= 2) {
@@ -1313,6 +1321,18 @@ _XmConvertToBW(Widget w, Pixmap pm)
 	   }
    }
    XpmCreatePixmapFromXpmImage(XtDisplay(w), pm, &im, &bw_pixmap, 0, NULL);
+#ifdef FIX_1500
+   if (bw_pixmap)
+	   XpmCreateBufferFromPixmap(XtDisplay(w), &data_after, bw_pixmap, 0, NULL);
+
+   if (data_before && data_after && !strcmp(data_before, data_after))
+	   bw_pixmap = 0;
+
+   if (data_before)
+	   XpmFree(data_before);
+   if (data_after)
+	   XpmFree(data_after);
+#endif
    XpmFreeXpmImage(&im);
     
 #ifdef FIX_1505
