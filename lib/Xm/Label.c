@@ -1453,7 +1453,8 @@ Redisplay(
 
 #ifdef USE_XFT
     /* it is needed to clear anti-aliased text before draw it again */
-    if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)) 
+    if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)
+		&& lp->TextRect.width > 0 && lp->TextRect.height > 0)
       {
         XClearArea(XtDisplay(lw), XtWindow(lw),
 			lp->TextRect.x,

@@ -1,3 +1,7 @@
+2009-12-29  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Label.c:
+	Fixed bug #1495 (mwm's icon box has graphics corruption)
+
 2009-10-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/IconButton.c:
 	Removed junk
