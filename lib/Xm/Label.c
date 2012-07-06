@@ -1540,6 +1540,19 @@ Redisplay(
 
  	      }
 #endif
+#ifdef FIX_1505
+	      if (pix_use == Pix(lw)) {
+		  XSetFillStyle(XtDisplay(lw), gc, FillStippled);
+		  XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap(lw));
+		  XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
+			lp->TextRect.x + lp->PixmapRect.x,
+			lp->TextRect.y + lp->PixmapRect.y,
+			lp->PixmapRect.width,
+			lp->PixmapRect.height);
+		  XSetFillStyle(XtDisplay(lw), gc, FillSolid);
+
+	      }
+#endif
 	    }
 	}
     }

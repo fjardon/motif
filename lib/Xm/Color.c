@@ -1315,7 +1315,11 @@ _XmConvertToBW(Widget w, Pixmap pm)
    XpmCreatePixmapFromXpmImage(XtDisplay(w), pm, &im, &bw_pixmap, 0, NULL);
    XpmFreeXpmImage(&im);
     
+#ifdef FIX_1505
+   return (bw_pixmap) ? bw_pixmap : pm;
+#else
    return bw_pixmap;
+#endif
 }
 #endif
 
