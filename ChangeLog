@@ -1,3 +1,10 @@
+========================= Open Motif 2.3.4 released ============================
+
+2011-08-22  Ihor Hayvuk <ihayvuk@ics.com>
+	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec, Makefile.imake-pure, LICENSE, 
+	Imakefile, configure.ac, lib/Xm/Xm.h.in, clients/mwm/version.c:
+	Updated for OpenMotif 2.3.4 by Igor Gala <igala@ics.com>
+
 2011-08-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/RCLayout.c:
 	Refixed bug #1521 (LabelGadget draws the text over border of its parent)
@@ -134,7 +141,7 @@
 
 2010-05-20  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Png.c:
-	Fixed in order to provide compability with libpng14, backwards
+	Fixed in order to provide compatibility with libpng14, backwards
     compatible with libpng12
 
 2010-05-18  Ihor Hayvuk <ihayvuk@ics.com>

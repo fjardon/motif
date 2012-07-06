@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 
 
-                            Open Motif 2.3.3
+                            Open Motif 2.3.4
 
                               Release Notes
 
@@ -10,9 +10,9 @@
                      Integrated Computer Solutions
 
 
-This document provides Release Notes for the release of Open Motif 2.3.3.
+This document provides Release Notes for the release of Open Motif 2.3.4.
 
-This contains information on what is new in Open Motif 2.3.3. 
+This contains information on what is new in Open Motif 2.3.4. 
 Please see the COPYRIGHT.MOTIF file included with this release.
 
 
@@ -34,7 +34,7 @@ using the autoconf tools. This method is now fully supported and
 is the recommended build method.
 
 
-1. What is Open Motif 2.3.3
+1. What is Open Motif 2.3.4
 
 Open Motif is the freely available source code distribution for the 
 Motif user interface component toolkit. Open Motif is built on top of the 
@@ -42,7 +42,7 @@ standard X Toolkit(Xt) and X11 libraries.
 
 1.1. Overview of Open Motif
 
-Open Motif 2.3.3 is an updated version of Open Motif 2.3. 
+Open Motif 2.3.4 is an updated version of Open Motif 2.3. 
 Any applications built against a previous 2.x release of Open Motif will be 
 binary compatible with this release.
 
@@ -59,62 +59,94 @@ and compiled. The distribution contains the following items:
 * Demo programs
 
 
-2. What is New in Open Motif 2.3.3
+2. What is New in Open Motif 2.3.4
 
 This is a bug fix release.
 
-* Fixed bug #1507 (LDFLAGS not respected for building libXm and libMrm libraries)
+* Fixed bug #1496 (Version 2.3.2 won't compile if configured 
+  enable-message-catalog)
+* Dropped fix #1359 (File dialog filter problem with * or [ in directory)
+* Fixed bug #1530 (SimpleSpinBox doesn't return correct values for child on 
+  some platforms)
+* Fixed bug #1272 (Application goes into infinite loop in TraversalI.c:Sort())
+* Fixed bug #1529 (Copy/paste problem with Clipboard)
+* Fixed bug #1536 (Performance issue: XmListSetPos() is very very slow)
+* Fixed bug #1501 (XmText widget sensitive/unsensitive is visibly same 
+  at startup)
+* Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+* Fixed bug #1510 (Input methods do not work with XFT fonts)
+* Fixed bug #1500 (XmPushButton with grayscale pixmap is not changed visibly 
+  when it's sensitivity is changed)
+* Fixed bug #1540 (XpmCreateBufferFromPixmap function doesn't work properly)
+* Fixed bug #1505 (Some problems with new insensitive code for label pixmaps)
+* Fixed bug #1534 (im_widget double-free issue)
+* Fixed bug #1535 (Destroying a torn-off menu with a submenu mapped causes 
+  a crash)
+* Fixed bug #1532 (Incorrect handling of clip areas for a string (XmString.c))
+* Fixed bug #1531 (Using DataField widget with XFT font causes an X Error)
+* Fixed bug #1519 (XmSpinBoxValidatePosition does not properly check 
+  XmNincrementValue)
+* Added missing #ifdef USE_XFT directive to the patch #1521
+* Fixed bug #1488 (XmStringDraw clip not honored)
+* Fixed bug #1479 (Compiling libUil fails on mac OS X 10.5)
+* Fixed bug #1528 (Scale widget has some Geometry issues)
+* Fixed bug #1518 (gcc check in configure script does not use $CC)
+* Fixed misspellings in the manpage
+* Fixed bug #1504 (Changing sensitivity on a PushButton with Pixmap 
+  causes recomputeSize)
+* Fixed bug #1516 (Can receive X error setting pixmaps to
+  XmUNSPECIFIED_PIXMAP on PushButton)
+* Fixed bug #1503 (XmNtabBackground resource is not working properly 
+  in XmTabStack widget)
+* Fixed bug #1512 (Small configure portability fix)
+* Fixed bug #1523 (Check a return value of XmCvtXmStringToCT before 
+  use in strlen)
+* Refixed bug #1473 (When we set XmNvisibleItemCount resource available in 
+  XmComboBox, the widget displays the wrong number of items)
+* Fixed bug #1521 (LabelGadget draws the text over border of its parent)
+* Fixed in order to provide compatibility with libpng14, backwards 
+  compatible with libpng12
+* Fixed dependencies in order to allow build with "make -j" 
+* Fixed bug #1509 (background pixmap not fully displayed)
+* Fixed bug #1517 (LabelGadget draws over parent window with 
+  the background color)
+* Fixed bug #1507 (LDFLAGS not respected for building libXm 
+  and libMrm libraries)
+* Fixed bug #1511 (CheckBook program from EditTable samples crashes 
+  with OpenMotif since 2.3.0 release.)
 * Fixed bug #1495 (mwm's icon box has graphics corruption)
+* Fixed in order to provide PRINTING_SUPPORTED and USE_XFT 
+  macro definitions in Xm.h
+* Fixed in order to allow build without libXp
+* Refixed bug #1321 (Pasting into XmTextField is unreliable)
 * Fixed bug #1502 (crash in ToolTipGetData())
+* Removed xmPanedWindowWidgetClass definition
 * Fixed bug #1474 (Incrementation of XmNvisibleItemCount value does not work
   properly in XmComboBox)
-* Fixed bug #1195 (Making on FreeBSD with non GNU make)   
-* Fixed bug #1489 (Paned.h is not included by XmAll.h)  
-* Fixed bug #1486 (Tooltip in DropDown widget makes X hang up)  
-* Fixed bug #1320 (Resizing a scrolled text widget can be very, very slow)  
-* Fixed bug #1449 (Uninitalised memory access with XFT fonts)  
-* Fixed bug #1418 (Add file with instructions how to build from CVS)  
-* Fixed bug #1484 (Warning on XmRlabelType when I put a pixmap 
-  and a value "top" on XmNPixmapPlacement)
-* Fixed bug #1475 (autoconf warning "X11/Xmu/Editres.h header present
-  but cannot be compiled")
-* Fixed bug #1426 (Make location of system.mwmrc configurable)
-* Fixed bug #1451 (XmStringDrawImage works incorrectly with XFT)
-* Fixed bug #1453 (MultiList not displayed properly)
-* Fixed bug #1412 (An insensitive popup menu parent lead to a display-freezing)
-* Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
-  with CapsLock/ScrollLock/NumLock modifiers)
-* Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
-  if widgets are inter-attachmed in vertical/horizontal directions)
-* Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
-* Refixed bug #1388 (SEGV error moving mouse over window related
-  to XmToolTipGetLabel)
-* Refixed bug #1321 (Pasting into XmTextField is unreliable)  
-* Removed xmPanedWindowWidgetClass definition from Paned.h
-* Dropped fix #1476 (PanedWindow orientation error)
-* Added ability to build without libXp
-* Added splint checking and splint target
 
 3. Build Systems
 
-Open Motif 2.3.3 was built and tested on the following systems:
-* Fedora 8 i386
-* Fedora 9 i386
-* Fedora 10 i386
-* Fedora 8 x86_64
-* Fedora 9 x86_64
-* Fedora 10 x86_64
+Open Motif 2.3.4 was built and tested on the following systems:
+* Fedora 13 i686
+* Fedora 14 i686
+* Fedora 15 i686
+* Fedora 13 x86_64
+* Fedora 14 x86_64
+* Fedora 15 x86_64
 * Red Hat Enterprise Linux 4.5 i386
 * Red Hat Enterprise Linux 5.1 i386
-* Red Hat Enterprise Linux 5.3 i386
+* Red Hat Enterprise Linux 6.0 i386
 * Red Hat Enterprise Linux 4.5 x86_64
 * Red Hat Enterprise Linux 5.1 x86_64
-* Red Hat Enterprise Linux 5.3 x86_64
-* SUSE 9.3 i586
-* openSUSE 10.3 i586
-* openSUSE 11.1 i586
-* openSUSE 10.3 x86_64
-* openSUSE 11.1 x86_64
+* Red Hat Enterprise Linux 6.0 x86_64
+* Ubuntu 10.04 i386
+* Ubuntu 11.04 i386
+* Ubuntu 10.04 x86_64
+* Ubuntu 11.04 x86_64
+* openSUSE 11.3 i686
+* openSUSE 11.4 i686
+* openSUSE 11.3 x86_64
+* openSUSE 11.4 x86_64
 
 In all cases, the compiler originally provided with the OS was used.
 
@@ -156,8 +188,33 @@ with the Open Motif 2.2+ header files.
 
 7. Change Log
 
-2.3.3 March 2010 
+2.3.4 August 2011
 This Release
+
+2.3.3 March 2010 
+* Fixed bug #1195 (Making on FreeBSD with non GNU make)   
+* Refixed bug #1388 (SEGV error moving mouse over window related
+  to XmToolTipGetLabel)
+* Fixed bug #1489 (Paned.h is not included by XmAll.h)  
+* Fixed bug #1486 (Tooltip in DropDown widget makes X hang up)  
+* Dropped fix #1476 (PanedWindow orientation error)  
+* Fixed bug #1320 (Resizing a scrolled text widget can be very, very slow)  
+* Fixed bug #1449 (Uninitalised memory access with XFT fonts)  
+* Fixed bug #1418 (Add file with instructions how to build from CVS)  
+* Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+* Fixed bug #1484 (Warning on XmRlabelType when I put a pixmap 
+  and a value "top" on XmNPixmapPlacement)
+* Fixed bug #1475 (autoconf warning "X11/Xmu/Editres.h header present
+  but cannot be compiled")
+* Fixed bug #1426 (Make location of system.mwmrc configurable)
+* Fixed bug #1451 (XmStringDrawImage works incorrectly with XFT)
+* Fixed bug #1453 (MultiList not displayed properly)
+* Fixed bug #1412 (An insensitive popup menu parent lead to a display-freezing)
+* Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
+  with CapsLock/ScrollLock/NumLock modifiers)
+* Added splint checking and splint target
+* Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
+  if widgets are inter-attachmed in vertical/horizontal directions)
 
 2.3.2 March 2009 
 * Fixed bug #1473 (When we set XmNvisibleItemCount resource available in 

@@ -3,7 +3,7 @@
 
 Summary: Open Motif runtime libraries and executables.
 Name: openmotif
-Version: 2.3.3
+Version: 2.3.4
 Release: 1
 License: Open Group Public License
 Group: System Environment/Libraries
@@ -117,6 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/Xm/*
 
 %changelog
+
+* Mon Aug 22 2011 Ihor Hayvuk <ihayvuk@ics.com>
+- updated for OpenMotif 2.3.4
 
 * Tue Jun 30 2009 Ihor Hayvuk <ihayvuk@ics.com>
 - updated for OpenMotif 2.3.3
