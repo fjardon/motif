@@ -184,6 +184,9 @@ static void df_XmSetFullGC() ;
 static void df_XmSetMarginGC() ;
 static void df_XmResetSaveGC() ;
 static void df_XmSetNormGC() ;
+#ifdef FIX_1381
+static void df_XmSetShadowGC() ;
+#endif
 static void df_XmSetInvGC() ;
 static void df_DrawText() ;
 static int df_FindPixelLength() ;
@@ -405,6 +408,12 @@ static void df_XmSetNormGC(
                         Boolean change_stipple,
                         Boolean stipple) ;
 #endif /* NeedWidePrototypes */
+
+#ifdef FIX_1381
+static void df_XmSetShadowGC( 
+                        XmDataFieldWidget tf,
+                        GC gc);
+#endif
 
 static void df_XmSetInvGC( 
                         XmDataFieldWidget tf,
@@ -2601,14 +2610,45 @@ df_XmSetNormGC(
     values.foreground = tf->primitive.foreground;
     values.background = tf->core.background_pixel;
     if (change_stipple) {
+#ifdef FIX_1381
+       valueMask |= GCFillStyle;
+       if (stipple) {
+          /*generally gray insensitive foreground (instead stipple)*/
+          values.foreground = _XmAssignInsensitiveColor((Widget)tf);
+          values.fill_style = FillSolid;
+       } else values.fill_style = FillSolid;
+#else
        valueMask |= GCTile | GCFillStyle;
        values.tile = XmTextF_stipple_tile(tf);
        if (stipple) values.fill_style = FillTiled;
        else values.fill_style = FillSolid;
+#endif
     }
 
     XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
+
+#ifdef FIX_1381
+static void
+#ifdef _NO_PROTO
+df_XmSetShadowGC( tf, gc )
+        XmDataFieldWidget tf ;
+        GC gc ;
+#else
+df_XmSetShadowGC(
+        XmDataFieldWidget tf,
+        GC gc )
+#endif /* _NO_PROTO */
+{
+    unsigned long valueMask = (GCForeground | GCBackground);
+    XGCValues values;
+
+    values.foreground = tf->primitive.top_shadow_color;
+    values.background = tf->core.background_pixel;
+
+    XChangeGC(XtDisplay(tf), gc, valueMask, &values);
+}
+#endif
 
 static void 
 #ifdef _NO_PROTO
@@ -2859,6 +2899,21 @@ df_DrawTextSegment(
 		      XmTextF_font_ascent(tf) + XmTextF_font_descent(tf));
        df_XmSetNormGC(tf, XmTextF_gc(tf), True, stipple);
     }
+
+#ifdef FIX_1381
+    if (stipple) {
+       /*Draw shadow for insensitive text*/
+       df_XmSetShadowGC(tf, XmTextF_gc(tf));
+       if (tf->text.max_char_size != 1) {
+          df_DrawText(tf, XmTextF_gc(tf), *x + 1, y + 1, (char*) (XmTextF_wc_value(tf) + seg_start),
+                                              (int)seg_end - (int)seg_start);
+       } else {
+           df_DrawText(tf, XmTextF_gc(tf), *x + 1, y + 1, XmTextF_value(tf) + seg_start,
+                                              (int)seg_end - (int)seg_start);
+       }
+       df_XmSetNormGC(tf, XmTextF_gc(tf), True, stipple);
+    }
+#endif
 
     if (XmTextF_max_char_size(tf) != 1) {
        df_DrawText(tf, XmTextF_gc(tf), *x, y, (char*) (XmTextF_wc_value(tf) + seg_start),
