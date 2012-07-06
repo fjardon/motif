@@ -86,6 +86,7 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #endif
 #ifdef FIX_1521
 #ifdef USE_XFT
+#include "XmRenderTI.h"
 #include <X11/Xft/Xft.h>
 #endif
 #endif
