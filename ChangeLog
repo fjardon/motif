@@ -1,4 +1,8 @@
 2010-08-18  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/LabelG.c:
+	Refixed bug #1517 (LabelGadget draws over parent window with the background color)
+
+2010-08-18  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmI.h, lib/Xm/XmString.c, lib/Xm/LabelG.c:
 	Fixed bug #1521 (LabelGadget draws the text over border of its parent)
 

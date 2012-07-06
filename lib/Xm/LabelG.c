@@ -34,6 +34,7 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#define FIX_1517
 
 #include <string.h>
 #include <stdio.h>
@@ -2337,12 +2338,28 @@ LRectangle *background_box)
 #endif
     }
 
+#ifdef FIX_1517
 #ifdef USE_XFT
+    {
+    int width, height;
+    
+    int x = lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x;
+    int y = lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y;
+    
+    if (LabG_StringRect(lw).width < availW - marginal_width)
+    	width = LabG_StringRect(lw).width;
+    else
+    	width = availW - marginal_width - x;
+
+    if (LabG_StringRect(lw).height < availH - marginal_height)
+    	height = LabG_StringRect(lw).height;
+    else
+    	height = availH - marginal_height - y;
+    
     XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_BackgroundGC(lw),
-		lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
-        lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
-        LabG_StringRect(lw).width,
-        LabG_StringRect(lw).height);
+		x, y, width, height);
+    }
+#endif
 #endif
 
     /*  Draw the pixmap or text  */
