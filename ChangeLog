@@ -1,4 +1,8 @@
 2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/DataF.c:
+	Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+
+2011-07-05  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmIm.c:
 	Fixed bug #1510 (Input methods do not work with XFT fonts)
 
