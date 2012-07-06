@@ -68,6 +68,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 
 #define FIX_1434
 #define FIX_1488
+#define FIX_1532
 
 # define Va_start(a,b) va_start(a,b)
 
@@ -4977,7 +4978,9 @@ _calc_align_and_clip(
 #ifdef USE_XFT
             if (font_type == XmFONT_IS_XFT)
 	      _XmXftSetClipRectangles(d, w, 0, 0, clip, 1);
+#ifndef FIX_1532
 	    else
+#endif
 #endif
             XSetClipRectangles (d, gc, 0, 0, clip, 1, YXBanded);
 	}

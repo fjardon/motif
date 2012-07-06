@@ -1,3 +1,7 @@
+2010-12-10  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmString.c:
+	Fixed bug #1532 (Incorrect handling of clip areas for a string (XmString.c))
+
 2010-11-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/DataF.c:
 	Fixed bug #1531 (Using DataField widget with XFT font causes an X Error)
