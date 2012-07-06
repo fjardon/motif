@@ -1,3 +1,7 @@
+2010-03-12  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Makefile.am, lib/Mrm/Makefile.am:
+	Fixed bug #1507 (LDFLAGS not respected for building libXm and libMrm libraries)
+
 2010-03-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/PushB.c:
 	Fixed bug #1511 (CheckBook program from EditTable samples crashes 
