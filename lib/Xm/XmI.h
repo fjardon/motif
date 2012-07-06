@@ -295,6 +295,7 @@ extern Pixel _XmAssignInsensitiveColor(Widget w);
 #define FIX_1402
 #define FIX_1445
 #define FIX_1474
+#define FIX_1521
 
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

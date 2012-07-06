@@ -5084,7 +5084,11 @@ _render(Display *d,
             draw_x = base_x ; /* most left position */
             _calc_align_and_clip( d, w, gc, &draw_x, y, width, line_width, 
                                 lay_dir, clip, align, descender, 
+#ifdef FIX_1521
+                                &restore_clip, _XmRendFontType(rend2));
+#else
                                 &restore_clip, _XmRendFontType(rend));
+#endif
 
             DrawLine(d, w, &screen, draw_x, y, (_XmStringEntry)string, 
 		     &rend2, rend, rendertable, lay_dir, image, 
@@ -5114,7 +5118,11 @@ _render(Display *d,
 	  }
 	
 	/* width, height, ascent, descent of this line */
+#ifdef FIX_1521
+	LineMetrics(line, rendertable, &rend1, rend, lay_dir,
+#else
 	LineMetrics(line, rendertable, &rend2, rend, lay_dir,
+#endif
 		    &line_width, &line_height, &ascender, &descender);
 
 	y += ascender;
@@ -5125,7 +5133,11 @@ _render(Display *d,
 
 	    _calc_align_and_clip(d, w, gc, &draw_x, y, width, line_width, 
 				 direction, clip, align, descender, 
+#ifdef FIX_1521
+				 &restore_clip, _XmRendFontType(rend1));
+#else
 				 &restore_clip, _XmRendFontType(rend));
+#endif
 
 	    DrawLine(d, w, &screen, draw_x, y, line, &rend1, rend,
 		     rendertable, lay_dir, image, &underline,
@@ -5140,7 +5152,17 @@ _render(Display *d,
 	y += descender;			  /* go to bottom of this line */
       }
   }
-  if (restore_clip) XSetClipMask (d, gc, None); 
+  if (restore_clip) {
+#ifdef FIX_1521
+#ifdef USE_XFT
+	  if (_XmRendFontType((_XmStrOptimized(string)) ? rend2 : rend1) == XmFONT_IS_XFT) {
+		  XftDraw *draw = _XmXftDrawCreate(d, w);
+		  XftDrawSetClip(draw, NULL);
+	  } else
+#endif
+#endif
+		  XSetClipMask (d, gc, None);
+  }
 
   if (_XmRendTags(rend1) != NULL) XtFree((char *)_XmRendTags(rend1));
   if (_XmRendTags(rend2) != NULL) XtFree((char *)_XmRendTags(rend2));
