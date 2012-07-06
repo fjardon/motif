@@ -1,3 +1,7 @@
+2010-04-20  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/LabelG.c:
+	Fixed bug #1517
+
 2010-03-12  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Makefile.am, lib/Mrm/Makefile.am:
 	Fixed bug #1507 (LDFLAGS not respected for building libXm and libMrm libraries)

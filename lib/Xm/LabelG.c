@@ -2204,9 +2204,7 @@ LRectangle *background_box)
     switch (lw->label.fill_bg_box)
     {
         case _XmPLAIN_BG_BOX:
-#ifndef USE_XFT
             return;
-#endif
 
         case _XmFILL_BG_BOX:
         case _XmALWAYS_FILL_BG_BOX:
@@ -2322,6 +2320,14 @@ LRectangle *background_box)
         XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
     } else
     XSetClipMask (XtDisplay (lw), clipgc, None);
+
+#ifdef USE_XFT
+    XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_BackgroundGC(lw),
+		lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
+        lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
+        LabG_StringRect(lw).width,
+        LabG_StringRect(lw).height);
+#endif
 
     /*  Draw the pixmap or text  */
     LabelDrawBackground((Widget)lw, event, region, background_box);
