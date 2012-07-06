@@ -63,16 +63,17 @@ and compiled. The distribution contains the following items:
 
 This is a bug fix release.
 
+* Fixed bug #1507 (LDFLAGS not respected for building libXm and libMrm libraries)
+* Fixed bug #1495 (mwm's icon box has graphics corruption)
+* Fixed bug #1502 (crash in ToolTipGetData())
+* Fixed bug #1474 (Incrementation of XmNvisibleItemCount value does not work
+  properly in XmComboBox)
 * Fixed bug #1195 (Making on FreeBSD with non GNU make)   
-* Refixed bug #1388 (SEGV error moving mouse over window related
-  to XmToolTipGetLabel)
 * Fixed bug #1489 (Paned.h is not included by XmAll.h)  
 * Fixed bug #1486 (Tooltip in DropDown widget makes X hang up)  
-* Dropped fix #1476 (PanedWindow orientation error)  
 * Fixed bug #1320 (Resizing a scrolled text widget can be very, very slow)  
 * Fixed bug #1449 (Uninitalised memory access with XFT fonts)  
 * Fixed bug #1418 (Add file with instructions how to build from CVS)  
-* Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
 * Fixed bug #1484 (Warning on XmRlabelType when I put a pixmap 
   and a value "top" on XmNPixmapPlacement)
 * Fixed bug #1475 (autoconf warning "X11/Xmu/Editres.h header present
@@ -83,9 +84,16 @@ This is a bug fix release.
 * Fixed bug #1412 (An insensitive popup menu parent lead to a display-freezing)
 * Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
   with CapsLock/ScrollLock/NumLock modifiers)
-* Added splint checking and splint target
 * Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
   if widgets are inter-attachmed in vertical/horizontal directions)
+* Refixed bug #1381 (Sensitivity invisible with antialiased fonts)
+* Refixed bug #1388 (SEGV error moving mouse over window related
+  to XmToolTipGetLabel)
+* Refixed bug #1321 (Pasting into XmTextField is unreliable)  
+* Removed xmPanedWindowWidgetClass definition from Paned.h
+* Dropped fix #1476 (PanedWindow orientation error)
+* Added ability to build without libXp
+* Added splint checking and splint target
 
 3. Build Systems
 
@@ -132,7 +140,7 @@ The listing for the status of submitted bugs is maintained there.
 For postscript and PDF documentation (users guides and reference 
 manuals), see the URL:
 
-http://www.motifzone.net/index.php?module=pagemaster&PAGE_user_op=view_page&PAGE_id=73
+http://www.motifzone.net
 
 
 6. Compatibility Notice
@@ -148,7 +156,7 @@ with the Open Motif 2.2+ header files.
 
 7. Change Log
 
-2.3.3 July 2009 
+2.3.3 March 2010 
 This Release
 
 2.3.2 March 2009 
