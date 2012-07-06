@@ -1,3 +1,7 @@
+2011-04-11  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmIm.c:
+	Fixed bug #1534 (im_widget double-free issue)
+
 2011-03-31  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/RCMenu.c:
 	Fixed bug #1535 (Destroying a torn-off menu with a submenu mapped causes a crash)
