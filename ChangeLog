@@ -1,4 +1,8 @@
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/CopyPaste.c:
+	Fixed bug #1529 (Copy/paste problem with Clipboard)
+
+2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmRenderT.c:
 	Fixed bug #1536 (Performance issue: XmListSetPos() is very very slow)
 
