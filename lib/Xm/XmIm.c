@@ -54,6 +54,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 #include "XmImI.h"
 #include <X11/Xlib.h>
   
+#define FIX_1534
   
 # include <stdarg.h>
 # define Va_start(a,b) va_start(a,b)
@@ -861,7 +862,12 @@ _XmImFreeShellData(Widget     widget,
   assert(im_info->shell_xic == NULL);
   
   /* Delete the dummy widget. */
+#ifdef FIX_1534
+  if (im_info->im_widget != NULL &&
+      !widget->core.being_destroyed)
+#else
   if (im_info->im_widget != NULL)
+#endif
     {
       XtDestroyWidget(im_info->im_widget);
       im_info->im_widget = NULL;
