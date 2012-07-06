@@ -49,6 +49,8 @@
 #include <Xm/DrawUtils.h>
 #include <Xm/XmP.h>
 
+#define FIX_1503
+
 #ifdef USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
@@ -3884,7 +3886,11 @@ DrawTab(tab, info, geometry, selected, keyboard)
 
     if( selected && XiSelectSpecified(tab) )
     {
+#ifdef FIX_1503
+	SetSelectGC(tab, XmTabBox__tab_GC(tab));
+#else
 	SetSelectGC(tab, tab->manager.background_GC);
+#endif
     }
     else
     {
@@ -3898,7 +3904,11 @@ DrawTab(tab, info, geometry, selected, keyboard)
 	     * It appears that this tab wants its background filled in
 	     * to a specific color so lets do that.
 	     */
+#ifdef FIX_1503
+	    SetBackgroundGC(tab, info, XmTabBox__tab_GC(tab));
+#else
 	    SetBackgroundGC(tab, info, tab->manager.background_GC);
+#endif
 	}
 	else
 	{
@@ -3916,14 +3926,27 @@ DrawTab(tab, info, geometry, selected, keyboard)
     switch( XmTabBox_tab_style(tab) )
     {
     case XmTABS_SQUARED:
+#ifdef FIX_1503
+	XFillRectangle(XtDisplay(tab), XiCanvas(tab), XmTabBox__tab_GC(tab), geometry->x,
+		       geometry->y, geometry->width, geometry->height);
+#else
 	XFillRectangle(XtDisplay(tab), XiCanvas(tab), tab->manager.background_GC, geometry->x,
 		       geometry->y, geometry->width, geometry->height);
+#endif
 	break;
     case XmTABS_ROUNDED:
+#ifdef FIX_1503
+	FillRoundedTab(tab, XmTabBox__tab_GC(tab), geometry, edge);
+#else
 	FillRoundedTab(tab, tab->manager.background_GC, geometry, edge);
+#endif
 	break;
     case XmTABS_BEVELED:
+#ifdef FIX_1503
+	FillBeveledTab(tab, XmTabBox__tab_GC(tab), geometry, edge);
+#else
 	FillBeveledTab(tab, tab->manager.background_GC, geometry, edge);
+#endif
 	break;
     }
 

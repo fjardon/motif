@@ -1,3 +1,7 @@
+2010-09-02  Ihor Hayvuk <ihayvuk@ics.com>
+	* configure.ac:
+	Fixed bug #1503 (XmNtabBackground resource is not working properly in XmTabStack widget)
+
 2010-08-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac:
 	Fixed bug #1512 (Small configure portability fix)
