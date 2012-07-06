@@ -66,6 +66,8 @@ static char rcsid[] = "$TOG: CascadeB.c /main/27 1999/08/11 14:26:35 mgreess $"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
 
+#define FIX_1509
+
 #define CASCADE_PIX_SPACE    4	 /* pixels between label and bit map */
 #define MAP_DELAY_DEFAULT   180
 #define EVENTS              ((unsigned int) (ButtonPressMask | \
@@ -605,14 +607,22 @@ Redisplay(
 	XtExposeProc expose;
 
 	if (etched_in) {
+#ifdef FIX_1509
+		if (CB_IsArmed(cb))
+		    XFillRectangle(XtDisplay(cb), XtWindow(cb), CB_ArmGC(cb),
+				   0, 0, cb->core.width, cb->core.height);
+		else
+	        XClearArea(XtDisplay(cb), XtWindow(cb),
+				0, 0, cb->core.width, cb->core.height, False);
+#else
 	    XFillRectangle(XtDisplay(cb), XtWindow(cb),
 		           CB_IsArmed(cb) ? CB_ArmGC(cb) : CB_BackgroundGC(cb),
 			   0, 0, cb->core.width, cb->core.height);
+#endif
 #ifdef USE_XFT
 	} else if (Lab_MenuType(cb) != XmWORK_AREA) { /* adeed with XFT support */
-	    XFillRectangle(XtDisplay(cb), XtWindow(cb),
-		           CB_BackgroundGC(cb),
-			   0, 0, cb->core.width, cb->core.height);
+        XClearArea(XtDisplay(cb), XtWindow(cb),
+			0, 0, cb->core.width, cb->core.height, False);
 #endif
 	}
 	if (etched_in && CB_IsArmed(cb)) {
@@ -653,6 +663,9 @@ Redisplay(
 	     Set correct window background (label is repainted, role back)
 	    */
 	    XSetWindowBackground(XtDisplay(cb), XtWindow(cb), tmpc);
+	    if (cb->core.background_pixmap != XmUNSPECIFIED_PIXMAP)
+	    	XSetWindowBackgroundPixmap(XtDisplay(cb), XtWindow(cb),
+	    			cb->core.background_pixmap);
 #endif
 
 	    if (replaceGC)

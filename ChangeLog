@@ -1,3 +1,7 @@
+2010-04-23  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/CascadeB.c:
+	Fixed bug #1509
+
 2010-04-20  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/LabelG.c:
 	Fixed bug #1517
