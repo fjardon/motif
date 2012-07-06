@@ -1,3 +1,7 @@
+2010-08-26  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Container.c:
+	Fixed bug #1523 (Check a return value of XmCvtXmStringToCT before use in strlen)
+
 2010-08-19  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ComboBox.c:
 	Refixed bug #1473 (When we set XmNvisibleItemCount resource available in 
