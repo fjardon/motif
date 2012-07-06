@@ -1,4 +1,8 @@
 2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Scale.c:
+	Fixed bug #1528 (Scale widget has some Geometry issues)
+
+2010-09-27  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac:
 	Fixed bug #1518 (gcc check in configure script does not use $CC)
 
