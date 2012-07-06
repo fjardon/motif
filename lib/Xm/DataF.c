@@ -71,6 +71,8 @@
 
 
 #include "MessagesI.h"
+
+#define FIX_1531
 /*
  * Stuff from various internal motif headers that we need to declare
  */
@@ -8837,6 +8839,10 @@ df_LoadFontMetrics(
 #else
         charwidth = XmTextF_xft_font(tf)->max_advance_width;
 #endif
+#ifdef FIX_1531
+        XmTextF_font_ascent(tf) = TextF_XftFont(tf)->ascent;
+        XmTextF_font_descent(tf) = TextF_XftFont(tf)->descent;
+#endif /* FIX_1531 */
 #endif
     } else {
        font = XmTextF_font(tf);
