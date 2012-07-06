@@ -1,3 +1,7 @@
+2010-04-20  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/LabelG.c:
+	Fixed bug #1517
+
 ========================= Open Motif 2.3.3 released ============================
 
 2010-03-12  Ihor Hayvuk <ihayvuk@ics.com>
