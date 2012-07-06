@@ -1299,6 +1299,16 @@ LayoutHorizontaltight(
 	SetAsking (m, m_width, m_height, Double(border), 
 		    max_x, 0, x, y, w, h);
     
+#ifdef FIX_1521
+    for (child_i = 0; kg[child_i].kid != NULL; child_i++)
+    {
+        bx = &(kg[child_i].box);
+        ASSIGN_MIN(BWidth(bx), *m_width - Double(MGR_ShadowThickness(m))
+            - Double(RC_MarginW(m)) - Double(BBorder(bx)));
+        if (IsHelp(m, ((Widget) kg[child_i].kid)))
+            ASSIGN_MAX(BX(&(kg[child_i].box)), MGR_ShadowThickness(m) + RC_MarginW(m));
+    }
+#endif
     if (RC_AdjLast(m))
 	AdjustLast (m, start_i, *m_width, *m_height);
     else

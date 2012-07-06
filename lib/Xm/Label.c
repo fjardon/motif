@@ -77,6 +77,12 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #ifdef FIX_1381
 #include <Xm/ColorI.h>
 #endif
+#ifdef FIX_1521
+#ifdef USE_XFT
+#include "XmRenderTI.h"
+#include <X11/Xft/Xft.h>
+#endif
+#endif
 
 #define FIX_1442
 #define FIX_1484
@@ -1449,8 +1455,21 @@ Redisplay(
 	clip_rect.height = 0;
       
       XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
+#ifdef FIX_1521
+#ifdef USE_XFT
+      _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), 0, 0, &clip_rect, 1);
+#endif
+#endif
     } else
+    {
       XSetClipMask (XtDisplay (lw), clipgc, None);
+#ifdef FIX_1521
+#ifdef USE_XFT
+      XftDraw* draw = _XmXftDrawCreate(XtDisplay(lw), XtWindow(lw));
+      XftDrawSetClip(draw, NULL);
+#endif
+#endif
+    }
 
 #ifdef USE_XFT
     /* it is needed to clear anti-aliased text before draw it again */
