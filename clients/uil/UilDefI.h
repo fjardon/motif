@@ -270,7 +270,7 @@ extern char* uil_mmove(char*, char*, int);
 #include "UilIODef.h"
 #include "UilDiagDef.h"
 #include "UilSarDef.h"
-#if defined(linux)
+#if defined(linux) || defined(__APPLE__)
 #define YYSTYPE yystype
 #endif
 #include "UilLexPars.h"
