@@ -88,6 +88,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #define  FIX_1449
 #define  FIX_1444
 #define FIX_1451
+#define FIX_1536
 /**********************************************************************
  *	      IMPORTANT NOTE: IMPLEMENTATION OF SHARING
  *
@@ -172,6 +173,9 @@ static Boolean GetResources(XmRendition rend,
 			    ArgList arglist,
 			    Cardinal argcount);
 static void SetDefault(XmRendition rend); 
+#ifdef FIX_1536
+static XftColor GetCachedXftColor(Display *display, Pixel color);
+#endif
 
 /********    End Static Function Declarations    ********/
 
@@ -787,6 +791,10 @@ SetRend(XmRendition to,
   if ((_XmRendFG(from) != XmUNSPECIFIED_PIXEL) &&
       (_XmRendFG(to) == XmUNSPECIFIED_PIXEL))
     {
+#ifdef FIX_1536
+      _XmRendFG(to) = _XmRendFG(from);
+      _XmRendXftFG(to) = GetCachedXftColor(_XmRendDisplay(to), _XmRendFG(to));
+#else
       XColor xcolor;
       _XmRendFG(to) = _XmRendFG(from);
       xcolor.pixel = _XmRendFG(to);
@@ -797,10 +805,15 @@ SetRend(XmRendition to,
       (_XmRendXftFG(to)).color.green = xcolor.green;
       (_XmRendXftFG(to)).color.blue = xcolor.blue;
       (_XmRendXftFG(to)).color.alpha = 0xFFFF;
+#endif
     }
   if ((_XmRendBG(from) != XmUNSPECIFIED_PIXEL) &&
       (_XmRendBG(to) == XmUNSPECIFIED_PIXEL))
     {
+#ifdef FIX_1536
+      _XmRendBG(to) = _XmRendBG (from);
+      _XmRendXftBG(to) = GetCachedXftColor(_XmRendDisplay(to), _XmRendBG(to));
+#else
       XColor xcolor;
       _XmRendBG(to) = _XmRendBG (from);
       xcolor.pixel = _XmRendBG (to);
@@ -811,6 +824,7 @@ SetRend(XmRendition to,
       (_XmRendXftBG(to)).color.green = xcolor.green;
       (_XmRendXftBG(to)).color.blue = xcolor.blue;
       (_XmRendXftBG(to)).color.alpha = 0xFFFF;
+#endif
     }
   if ((_XmRendXftFont (from) != NULL) &&
       ((unsigned int) (unsigned long) _XmRendXftFont (to) == XmAS_IS))
@@ -3105,9 +3119,58 @@ _XmXftSetClipRectangles(Display *display, Window window, Position x, Position y,
 	XftDrawSetClipRectangles(d, x, y, rects, n);
 }
 
+#ifdef FIX_1536
+static XftColor
+GetCachedXftColor(Display *display, Pixel color)
+{
+  static XftColor *color_cache = NULL;
+  static int colors_count = 0;
+
+  XftColor xftcol = {0, {0,0,0,0xFFFF}};
+  XColor xcol;
+  Boolean color_exist = FALSE;
+  int i;
+
+  if (color_cache != NULL)
+  {
+    for (i = 0; i < colors_count; ++i)
+    {
+      if (color_cache[i].pixel == color)
+      {
+        xftcol = color_cache[i];
+        color_exist = TRUE;
+        break;
+      }
+    }
+  }
+
+  if (!color_exist)
+  {
+    xcol.pixel = color;
+    XQueryColor(display, DefaultColormap(display,
+      DefaultScreen(display)), &xcol);
+    xftcol.pixel = color;
+    xftcol.color.red = xcol.red;
+    xftcol.color.blue = xcol.blue;
+    xftcol.color.green = xcol.green;
+    xftcol.color.alpha = 0xFFFF;
+
+    color_cache = (XftColor *) XtRealloc((char *) color_cache,
+      (Cardinal) (sizeof(XftColor) * (colors_count + 1)));
+    if (color_cache != NULL)
+      color_cache[colors_count++] = xftcol;
+  }
+
+  return xftcol;
+}
+#endif
+
 XftColor
 _XmXftGetXftColor(Display *display, Pixel color)
 {
+#ifdef FIX_1536
+    return GetCachedXftColor(display, color);
+#else
     XColor xcol;
     XftColor xftcol;
     
@@ -3120,6 +3183,7 @@ _XmXftGetXftColor(Display *display, Pixel color)
     xftcol.color.green = xcol.green;
     xftcol.color.alpha = 0xFFFF;
     return xftcol;
+#endif
 }
 
 #ifdef FIX_1415
