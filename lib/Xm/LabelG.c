@@ -85,7 +85,9 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #include <Xm/ColorI.h>
 #endif
 #ifdef FIX_1521
-#include <X11/Xft/Xft.h> 
+#ifdef USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 #endif
 
 #define Pix(w)      LabG_Pixmap(w)
