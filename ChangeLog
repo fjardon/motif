@@ -1,4 +1,8 @@
 2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/Xmos.c:
+	Dropped fix #1359 (File dialog filter problem with * or [ in directory)
+
+2011-07-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/SSpinB.c:
 	Fixed bug #1530 (SimpleSpinBox doesn't return correct values for child on some platforms)
 
