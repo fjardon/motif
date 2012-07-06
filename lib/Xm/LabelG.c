@@ -2448,6 +2448,20 @@ LRectangle *background_box)
                     XSetFillStyle(XtDisplay(lw), gc, FillOpaqueStippled);
                 }
 #endif
+#ifdef FIX_1505
+                if (pix_use == Pix(lw)) {
+                    XSetFillStyle(XtDisplay(lw), gc, FillStippled);
+                    XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap(lw));
+                    XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
+                       lw->rectangle.x + LabG_TextRect(lw).x +
+                       LabG_PixmapRect(lw).x,
+                       lw->rectangle.y + LabG_TextRect(lw).y +
+                       LabG_PixmapRect(lw).y,
+                       LabG_PixmapRect(lw).width,
+                       LabG_PixmapRect(lw).height);
+                    XSetFillStyle(XtDisplay(lw), gc, FillSolid);
+                }
+#endif
             }
         }
     }
