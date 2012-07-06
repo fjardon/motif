@@ -83,6 +83,9 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #ifdef FIX_1381
 #include <Xm/ColorI.h>
 #endif
+#ifdef FIX_1521
+#include <X11/Xft/Xft.h> 
+#endif
 
 #define Pix(w)      LabG_Pixmap(w)
 #define Pix_insen(w)    LabG_PixmapInsensitive(w)
@@ -2318,8 +2321,21 @@ LRectangle *background_box)
             clip_rect.height = 0;
 
         XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
+#ifdef FIX_1521
+#ifdef USE_XFT
+        _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), 0, 0, &clip_rect, 1);
+#endif
+#endif
     } else
+    {
     XSetClipMask (XtDisplay (lw), clipgc, None);
+#ifdef FIX_1521    
+#ifdef USE_XFT
+	XftDraw	*draw = _XmXftDrawCreate(XtDisplay(lw), XtWindow(lw));
+	XftDrawSetClip(draw, NULL);
+#endif
+#endif
+    }
 
 #ifdef USE_XFT
     XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_BackgroundGC(lw),
