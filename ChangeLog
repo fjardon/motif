@@ -1,3 +1,7 @@
+2010-05-18  Ihor Hayvuk <ihayvuk@ics.com>
+	* tools/wml/Makefile.am:
+	Fixed dependencies in order to allow build with "make -j" 
+
 2010-04-23  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/CascadeB.c:
 	Fixed bug #1509
