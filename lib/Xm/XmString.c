@@ -67,6 +67,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 # include <stdarg.h>
 
 #define FIX_1434
+#define FIX_1488
 
 # define Va_start(a,b) va_start(a,b)
 
@@ -383,6 +384,9 @@ static void _calc_align_and_clip(
                         Dimension width,
 #endif /* NeedWidePrototypes */
                         int line_width,
+#ifdef FIX_1488
+                        int line_height,
+#endif
 #if NeedWidePrototypes
                         unsigned int lay_dir,
 #else
@@ -4917,6 +4921,9 @@ _calc_align_and_clip(
         Dimension width,
 #endif /* NeedWidePrototypes */
         int line_width,
+#ifdef FIX_1488
+        int line_height,
+#endif
 #if NeedWidePrototypes
         unsigned int lay_dir,
 #else
@@ -4954,10 +4961,17 @@ _calc_align_and_clip(
 
     if ((clip != NULL) && ( ! *restore))
 
+#ifdef FIX_1488
+        if (((*x) <= clip->x + clip->width) &&
+            (clip->x <= (*x) + line_width) &&
+            (y - line_height + descender <= clip->y + clip->height) &&
+            (clip->y <= y + descender))
+#else
 /* BEGIN OSF Fix CR 5106 */
         if ((line_width > clip->width) ||
 /* END OSF Fix CR 5106 */
 	     (y + descender) > (clip->y + clip->height))
+#endif
 	{
 	    *restore = TRUE;
 #ifdef USE_XFT
@@ -5083,7 +5097,11 @@ _render(Display *d,
           {   
             draw_x = base_x ; /* most left position */
             _calc_align_and_clip( d, w, gc, &draw_x, y, width, line_width, 
+#ifdef FIX_1488
+                                line_height, lay_dir, clip, align, descender,
+#else
                                 lay_dir, clip, align, descender, 
+#endif
 #ifdef FIX_1521
                                 &restore_clip, _XmRendFontType(rend2));
 #else
@@ -5132,7 +5150,11 @@ _render(Display *d,
 	    draw_x = base_x;			  /* most left position */
 
 	    _calc_align_and_clip(d, w, gc, &draw_x, y, width, line_width, 
+#ifdef FIX_1488
+	            line_height, direction, clip, align, descender,
+#else
 				 direction, clip, align, descender, 
+#endif
 #ifdef FIX_1521
 				 &restore_clip, _XmRendFontType(rend1));
 #else

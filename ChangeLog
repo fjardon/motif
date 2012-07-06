@@ -1,3 +1,7 @@
+2010-09-30  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XmString.c:
+	Fixed bug #1488 (XmStringDraw clip not honored)
+
 2010-09-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* clients/uil/UilDefI.h:
 	Fixed bug #1479 (Compiling libUil fails on mac OS X 10.5)
