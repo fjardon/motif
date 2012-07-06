@@ -3239,11 +3239,27 @@ PaintCursor(XmTextWidget tw)
 	     cursor_width = (tw->text.inner_widget->core.width -              
 			(tw->primitive.shadow_thickness +          
 			tw->primitive.highlight_thickness)) - x;   
+#ifdef FIX_1501
+	  if ( cursor_width > 0 && cursor_height > 0 ) {
+	    if (!XtIsSensitive((Widget)tw)) {
+		SetShadowGC(tw, data->imagegc);
+		XFillRectangle(XtDisplay((Widget)tw), XtWindow((Widget)tw),
+					data->imagegc, x + 1, y + 1,
+					(unsigned int )cursor_width,
+					(unsigned int )cursor_height);
+	    }
+
+	    _XmTextToggleCursorGC((Widget)tw);
+#else
 	  if ( cursor_width > 0 && cursor_height > 0 )
+#endif
 		XFillRectangle(XtDisplay((Widget)tw), XtWindow((Widget)tw),  
 			data->imagegc, x, y, 
 			(unsigned int )cursor_width,          
 			(unsigned int )cursor_height);                        
+#ifdef FIX_1501
+	  }
+#endif
     } else {
         Position src_x = 0;                                                     
         if (x + data->cursorwidth > tw->text.inner_widget->core.width -    
@@ -6175,6 +6191,24 @@ _XmTextToggleCursorGC(Widget w)
   
   _XmTextResetClipOrigin(tw, tw->text.cursor_position, False);
   
+#ifdef FIX_1501
+  if (!XtIsSensitive((Widget)tw)) {
+    valueMask = GCForeground|GCBackground|GCFillStyle|GCStipple|GCFunction;
+    values.foreground = _XmAssignInsensitiveColor((Widget)tw);
+    values.background = tw->core.background_pixel;
+    values.fill_style = FillStippled;
+
+    if (i_data->overstrike) {
+      if (data->stipple_tile == XmUNSPECIFIED_PIXMAP) return;
+      values.stipple = data->stipple_tile;
+      values.function = GXxor;
+    } else {
+      if (data->cursor == XmUNSPECIFIED_PIXMAP) return;
+      values.stipple = data->cursor;
+      values.function = GXcopy;
+    }
+  } else {
+#endif
   if (i_data->overstrike) {
     valueMask = GCFillStyle|GCFunction|GCForeground|GCBackground;
     if (XtIsSensitive(w) && !tw->text.add_mode &&
@@ -6218,6 +6252,10 @@ _XmTextToggleCursorGC(Widget w)
     values.fill_style = FillStippled;
     values.function = GXcopy;
   }
+#ifdef FIX_1501
+  }
+#endif
+
   XSetClipMask(XtDisplay(tw), data->save_gc, None);
   XChangeGC(XtDisplay(tw), data->imagegc, valueMask, &values);
 }

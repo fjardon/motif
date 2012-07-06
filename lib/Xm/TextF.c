@@ -1478,6 +1478,24 @@ _XmTextFToggleCursorGC(Widget widget)
   
   if (!XtIsRealized(widget)) return;
   
+#ifdef FIX_1501
+  if (!XtIsSensitive((Widget)tf)) {
+    valueMask = GCForeground|GCBackground|GCFillStyle|GCStipple|GCFunction;
+    values.foreground = _XmAssignInsensitiveColor((Widget)tf);
+    values.background = tf->core.background_pixel;
+    values.fill_style = FillStippled;
+
+    if (tf->text.overstrike) {
+      if (tf->text.stipple_tile == XmUNSPECIFIED_PIXMAP) return;
+      values.stipple = tf->text.stipple_tile;
+      values.function = GXxor;
+    } else {
+      if (tf->text.cursor == XmUNSPECIFIED_PIXMAP) return;
+      values.stipple = tf->text.cursor;
+      values.function = GXcopy;
+    }
+  } else {
+#endif
   if (tf->text.overstrike) {
     valueMask = GCFillStyle|GCFunction|GCForeground|GCBackground;
     if (!tf->text.add_mode && XtIsSensitive(widget) &&
@@ -1521,6 +1539,9 @@ _XmTextFToggleCursorGC(Widget widget)
       values.background = tf->core.background_pixel;
     }
   }
+#ifdef FIX_1501
+  }
+#endif
   XSetClipMask(XtDisplay(widget), tf->text.save_gc, None);
   XChangeGC(XtDisplay(widget), tf->text.image_gc, valueMask, &values);
 }
@@ -1705,9 +1726,22 @@ PaintCursor(XmTextFieldWidget tf)
           cursor_width = (tf->core.width -              
                                  (tf->primitive.shadow_thickness +          
                                  tf->primitive.highlight_thickness)) - x;   
+#ifdef FIX_1501
+        if (cursor_width > 0 && cursor_height > 0) {
+          if (!XtIsSensitive((Widget) tf)) {
+            SetShadowGC(tf, tf->text.image_gc);
+            XFillRectangle(XtDisplay(tf), XtWindow(tf), tf->text.image_gc, x + 1, y + 1,
+                           (unsigned int) cursor_width, (unsigned int) cursor_height);
+          }
+          _XmTextFToggleCursorGC((Widget) tf);
+#else
            if ( cursor_width > 0 && cursor_height > 0 )
+#endif
     		XFillRectangle(XtDisplay(tf), XtWindow(tf), tf->text.image_gc, x, y,
 		   cursor_width, cursor_height);
+#ifdef FIX_1501
+	    }
+#endif
   } else {
         Position src_x = 0;                                                     
         if ((int)(x + tf->text.cursor_width) > (int)(tf->core.width -    
