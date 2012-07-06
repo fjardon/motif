@@ -313,7 +313,7 @@ WriteColors(dataptr, data_size, used_size, colors, ncolors, cpp)
 	l = s + 3 - buf;
 	if( *data_size                   >= UINT_MAX-l ||
 	    *data_size + l               <= *used_size ||
-	   (*data_size + l - *used_size) <= sizeof(buf))
+	   (*data_size + l - *used_size) <= strlen(buf))
 		return(XpmNoMemory);
 	s = (char *) XpmRealloc(*dataptr, *data_size + l);
 	if (!s)

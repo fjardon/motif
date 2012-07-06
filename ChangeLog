@@ -1,3 +1,7 @@
+2011-07-04  Ihor Hayvuk <ihayvuk@ics.com>
+	* lib/Xm/XpmCrBufFrI.c:
+	Fixed bug #1540 (XpmCreateBufferFromPixmap function doesn't work properly)
+
 2011-05-23  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Color.c, lib/Xm/Label.c, lib/Xm/LabelG.c, XmI.h:
 	Fixed bug #1505 (Some problems with new insensitive code for label pixmaps)
