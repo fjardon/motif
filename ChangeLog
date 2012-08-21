@@ -1,5 +1,9 @@
 ========================= Open Motif 2.3.4 released ============================
 2012-08-21  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/XmIm.c:
+	Removed fix for bug report #1129
+
+2012-08-21  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/Text.c:
 	Fixed bug bug #1147 (XmText doesn't updates scrollbars if parent is not XmScrolledWindow)
 
