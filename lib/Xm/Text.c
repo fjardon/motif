@@ -70,6 +70,7 @@ static char rcsid[] = "$TOG: Text.c /main/47 1999/01/26 15:18:26 mgreess $"
 #include "XmStringI.h"
 
 #define FIX_1367
+#define FIX_1147
 /* Resolution independence conversion functions */
 
 #define MESSAGE2	_XmMMsgText_0000
@@ -2944,19 +2945,35 @@ _XmTextEnableRedisplay(XmTextWidget widget)
     if (XmDirectionMatch(XmPrim_layout_direction(widget),
 			 XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       if (widget->text.output->data->scrollvertical &&
+#ifdef FIX_1147
+	  XmIsScrolledWindow(XtParent(widget)))
+#else
 	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
+#endif
 	_XmRedisplayVBar(widget);
       if (widget->text.output->data->scrollhorizontal &&
+#ifdef FIX_1147
+	  XmIsScrolledWindow(XtParent(widget)) &&
+#else
 	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
+#endif
 	  !widget->text.hsbar_scrolling)
 	_XmChangeHSB(widget);
     } else {
       if (widget->text.output->data->scrollvertical &&
+#ifdef FIX_1147
+	  XmIsScrolledWindow(XtParent(widget)) &&
+#else
 	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
+#endif
 	  !widget->text.vsbar_scrolling)
 	_XmChangeVSB(widget);
       if (widget->text.output->data->scrollhorizontal &&
+#ifdef FIX_1147
+	  XmIsScrolledWindow(XtParent(widget)))
+#else
 	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
+#endif
 	_XmRedisplayHBar(widget);
     }
   }
