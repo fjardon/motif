@@ -2944,19 +2944,19 @@ _XmTextEnableRedisplay(XmTextWidget widget)
     if (XmDirectionMatch(XmPrim_layout_direction(widget),
 			 XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       if (widget->text.output->data->scrollvertical &&
-	  XmIsScrolledWindow(XtParent(widget)))
+	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
 	_XmRedisplayVBar(widget);
       if (widget->text.output->data->scrollhorizontal &&
-	  XmIsScrolledWindow(XtParent(widget)) &&
+	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
 	  !widget->text.hsbar_scrolling)
 	_XmChangeHSB(widget);
     } else {
       if (widget->text.output->data->scrollvertical &&
-	  XmIsScrolledWindow(XtParent(widget)) &&
+	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
 	  !widget->text.vsbar_scrolling)
 	_XmChangeVSB(widget);
       if (widget->text.output->data->scrollhorizontal &&
-	  XmIsScrolledWindow(XtParent(widget)))
+	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
 	_XmRedisplayHBar(widget);
     }
   }
