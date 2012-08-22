@@ -1,5 +1,9 @@
 ========================= Open Motif 2.3.4 released ============================
-2007-10-25  Yuriy Syrota  <yura@ics.com>
+2012-08-22  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/XmIm.c:
+	Fixed bug #1129 (XmIm causes Segmentation Fault after some widgets are disposed)
+
+2012-08-22  Yuriy Syrota  <yura@ics.com>
 	* lib/Xm/XmIm.c, configure.ac:
 	Added checking for XICProc type defined.
 

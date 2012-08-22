@@ -60,6 +60,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 # define Va_start(a,b) va_start(a,b)
 
 #define FIX_1510
+#define FIX_1129
 
 #ifdef NO_XICPROC
 typedef Bool (*XICProc)( XIC, XPointer, XPointer);
@@ -479,6 +480,9 @@ XmImSetFocusValues(Widget w,
           im_info->current_widget = w;
           XtVaGetValues(w, XmNbackground, &bg, NULL);
           XtVaSetValues(p, XmNbackground, bg, NULL);
+#ifdef FIX_1129
+          ImGeoReq(p);
+#endif
           draw_separator(p);
         }
     }
@@ -1293,6 +1297,9 @@ set_values(Widget w,
       XtAddEventHandler(p, (EventMask)mask, False, null_proc, NULL);
     }
     if (XtIsRealized(p)) {
+#ifdef FIX_1129
+      im_info->current_widget = w;
+#endif
       if (XmIsDialogShell(p)) {
 	for (i = 0; 
 	     i < ((CompositeWidget)p)->composite.num_children; 
@@ -1303,7 +1310,9 @@ set_values(Widget w,
 	  }
       } else
 	ImGeoReq(p);
+#ifndef FIX_1129
       im_info->current_widget = w;
+#endif
     }
     /* Is this new XIC supposed to be shared? */
     switch (input_policy)
@@ -2090,14 +2099,24 @@ ImSetGeo(Widget  vw,
 	  rect_preedit.height = icp->sp_height;
         } else if ((use_plist = (icp->input_style & XIMPreeditPosition)) != 0)
         {
-          unsigned int  margin = ((XmPrimitiveWidget)im_info->current_widget)
-                                ->primitive.shadow_thickness
-                            + ((XmPrimitiveWidget)im_info->current_widget)
-                                ->primitive.highlight_thickness;
+          unsigned int  margin;
+#ifdef FIX_1129
+        /*
+         * im_info->current_widget can contains NULL,
+         * for example, when widget having XIC focus is disposed.
+         * Thus, we should check this and avoid dereferencing NULL pointer.
+         */
+          if (im_info->current_widget == NULL)
+            break;
+#endif
+          margin = ((XmPrimitiveWidget)im_info->current_widget)
+                  ->primitive.shadow_thickness
+              + ((XmPrimitiveWidget)im_info->current_widget)
+                  ->primitive.highlight_thickness;
 
-          rect_preedit.width = MIN(icp->preedit_width,
+            rect_preedit.width = MIN(icp->preedit_width,
                   XtWidth(im_info->current_widget) - 2*margin);
-          rect_preedit.height = MIN(icp->sp_height,
+            rect_preedit.height = MIN(icp->sp_height,
                   XtHeight(im_info->current_widget) - 2*margin);
 	}
       
