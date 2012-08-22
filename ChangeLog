@@ -1,4 +1,8 @@
 ========================= Open Motif 2.3.4 released ============================
+2007-10-25  Yuriy Syrota  <yura@ics.com>
+	* lib/Xm/XmIm.c, configure.ac:
+	Added checking for XICProc type defined.
+
 2012-08-21  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/XmIm.c:
 	Removed fix for bug report #1129
