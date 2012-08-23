@@ -1,3 +1,7 @@
+2012-08-23  Yuriy Syrota <yura@ics.com>
+	* clients/mwm/WmProperty.c:
+	Removed fix for bug #1141
+
 2012-08-21  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/XmIm.c:
 	Fixed bug #1129 (XmIm causes Segmentation Fault after some widgets are disposed)
