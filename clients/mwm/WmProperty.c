@@ -1095,9 +1095,14 @@ GetMwmMenuItems(
 	}
 	else
 	{
-	    menuItems = ParseMwmMenuStr (PSD_FOR_CLIENT(pCD), 
+	    if(textList)
+	    {
+		menuItems = ParseMwmMenuStr (PSD_FOR_CLIENT(pCD),
 					 (unsigned char *)textList[0]);
-	    XFreeStringList(textList);
+		XFreeStringList(textList);
+	    }
+	    else
+		menuItems = NULL;
 	}
 
 	XFree((void *)textProperty.value);
