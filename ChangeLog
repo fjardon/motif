@@ -1,5 +1,9 @@
 ========================= Open Motif 2.3.4 released ============================
 2012-08-27  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/I18List.c:
+	Removed fix for bug #1166
+
+2012-08-27  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/XmRenderT.c:
 	Fixed bug #1152 (64-bit int/long botch in XmRenderT.c)
 
