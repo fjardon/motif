@@ -49,6 +49,7 @@
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
+#define FIX_1166
 
 #define SUPERCLASS ((WidgetClass) &xmPrimitiveClassRec)
 
@@ -903,9 +904,11 @@ static void
 ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
     short row, col;
+#ifdef FIX_1166
+    Boolean notify_type;
+#endif
     XmI18ListWidget ilist = (XmI18ListWidget) w;
     XButtonEvent * bevent = (XButtonEvent *) event;
-
     if (*num_params > 1) {
         XmeWarning(w, XmNbadMotionParamsMsg);
         return;
@@ -961,7 +964,8 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
      * Invalid row.
      */
 
-    if ((col >= XmI18List_num_columns(ilist)) || (row >= XmI18List_num_rows(ilist))) {
+    if ((col >= XmI18List_num_columns(ilist)) || (row >= XmI18List_num_rows(ilist)))
+    {
 	XBell(XtDisplay(w), 0);
 	return;
     }
@@ -971,7 +975,8 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
      * or extended selections.
      */
 
-    if (XmI18List_working_row(ilist) == IN_COLUMN_HEADER) {
+    if (XmI18List_working_row(ilist) == IN_COLUMN_HEADER)
+    {
 	SelectHeader((Widget) ilist, XmI18List_working_col(ilist));
 	return;
     }
@@ -979,14 +984,37 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
 		XmI18List_search_column(ilist) = -1;
 
     if ((event->xbutton.time - XmI18List_time(ilist)) >
-#ifdef XSETTINGS_ON
-                  XmeGetMultiClickTime(XtDisplay(w)));
-#else
-	XtGetMultiClickTime(XtDisplay(w)))
-#endif
+	    XtGetMultiClickTime(XtDisplay(w)))
     {
 	SingleClick(ilist);
     }
+#ifdef FIX_1166
+    /*
+     * Invalid row started selection.
+     */
+
+    if ((XmI18List_working_col(ilist) >= XmI18List_num_columns(ilist)) || 
+       (XmI18List_working_row(ilist) >= XmI18List_num_rows(ilist))) 
+    {
+	return;
+    }
+
+    /*
+     * Click in a row, need to handle double click.
+     * notify_type == True specifies double click, False is a single click.
+     */
+
+    notify_type = ((event->xbutton.time - XmI18List_time(ilist)) <=
+#ifdef XSETTINGS_ON
+                  XmeGetMultiClickTime(XtDisplay(w)));
+#else
+                  XtGetMultiClickTime(XtDisplay(w)));
+#endif
+
+    Notify(w, notify_type);
+
+    XmI18List_time(ilist) = event->xbutton.time;
+#endif /* FIX_1166 */
 }
 
 /*	Function Name: ButtonUpOrLeaveAction
@@ -996,13 +1024,14 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
  *                     params, num_params - action routine parameters.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 ButtonUpOrLeaveAction(Widget w, XEvent *event, 
 		      String *params, Cardinal *num_params)
 {
+#ifndef FIX_1166
     Boolean notify_type;
+#endif
     XmI18ListWidget ilist = (XmI18ListWidget) w;
 
     if (event->type != ButtonRelease) {
@@ -1014,6 +1043,7 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
 	return;
     }
 
+#ifndef FIX_1166
     /*
      * Invalid row started selection.
      */
@@ -1031,12 +1061,10 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
 
     notify_type = ((event->xbutton.time - XmI18List_time(ilist)) <=
 #ifdef XSETTINGS_ON
-                  XmeGetMultiClickTime(XtDisplay(w)));
+	XmeGetMultiClickTime(XtDisplay(w)));
 #else
-		   XtGetMultiClickTime(XtDisplay(w)));
+	XtGetMultiClickTime(XtDisplay(w)));
 #endif
-
-
 
     Notify(w, notify_type);
 
@@ -1045,7 +1073,7 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
     /*
      * Reset all these flags. 
      */
-
+#endif /* FIX_1166 */
     XmI18List_state(ilist) &= ~OUTSIDE_WIDGET;
 }
 
