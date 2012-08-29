@@ -1,5 +1,9 @@
 ========================= Open Motif 2.3.4 released ============================
 2012-08-29  Yuriy Syrota <yura@ics.com>
+	* configure.ac:
+	Removed fix for bug #1179
+
+2012-08-29  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/DropDown.c:
 	Fixed  bug #1170 (XmCombinationbox2 does not havent desensitization/sensitization)
 
