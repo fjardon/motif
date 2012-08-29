@@ -533,7 +533,6 @@ GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
  *	Returns:       none
  */
 
-#define CR1170
 /*ARGSUSED*/
 static Boolean 
 SetValues(Widget current, Widget request, Widget set,
@@ -672,13 +671,6 @@ SetValues(Widget current, Widget request, Widget set,
 	}
     }
     XtFree((char *) f_args);
-
-#ifdef CR1170
-    if (XtIsSensitive((Widget)set_cbw) != XtIsSensitive((Widget)old_cbw))
-    {
-	retval = True;
-    }
-#endif /* CR1170 */
 
     if (place_children)
 	{
