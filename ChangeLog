@@ -1,4 +1,8 @@
 2012-08-29  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/DropDown.c:
+	Removed fix for bug #1170
+
+2012-08-29  Yuriy Syrota <yura@ics.com>
 	* clients/mwm/WmResParse.c:
 	Fixed bug #1127 (cannot load Java TextEditor3)
 
