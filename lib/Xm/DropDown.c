@@ -28,6 +28,7 @@
 
 #define FIX_1371
 #define FIX_1486
+#define FIX_1170
 
 #ifdef FIX_1486
 #include "MenuShellI.h"
@@ -671,6 +672,13 @@ SetValues(Widget current, Widget request, Widget set,
 	}
     }
     XtFree((char *) f_args);
+
+#ifdef FIX_1170
+    if (XtIsSensitive((Widget)set_cbw) != XtIsSensitive((Widget)old_cbw))
+    {
+	retval = True;
+    }
+#endif
 
     if (place_children)
 	{
