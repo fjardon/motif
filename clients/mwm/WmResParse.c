@@ -85,6 +85,8 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 #include <signal.h>
 #endif /* WSM */
 
+#define FIX_1127
+
 /* maximum string lengths */
 
 #define MAX_KEYSYM_STRLEN    100
@@ -5312,6 +5314,11 @@ GetNextLine (void)
     {
 	string = line;
 #ifndef NO_MULTIBYTE
+#ifdef FIX_1127
+	chlen = mblen((char *)parseP, MB_CUR_MAX);
+	if(chlen==-1) string = NULL;
+#endif
+
 	while ((*parseP != '\0') &&
                ((chlen = mblen ((char *)parseP, MB_CUR_MAX)) > 0) &&
 	       (*parseP != '\n'))
@@ -5327,9 +5334,10 @@ GetNextLine (void)
 	/* copy all but end-of-line and newlines to line buffer */
 	{
 	    *(string++) = *(parseP++);
-        }
+    }
 #endif
-	*string = '\0';
+	if (string)
+	    *string = '\0';
 	if (*parseP == '\n')
 	{
 	    parseP++;
