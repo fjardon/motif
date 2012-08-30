@@ -40,6 +40,7 @@
 #endif
 
 #define FIX_1400
+#define FIX_1181
 
 #include "XmI.h"
 #include "ColorObjI.h"
@@ -406,6 +407,9 @@ Initialize(
 {
     XmColorObj new_obj = (XmColorObj) nw ;
     int      i, nscreens;
+#ifdef FIX_1181
+    Boolean  init_first_time = False;
+#endif
     Atom     tmpAtom = 0;
     unsigned long savetimeout = (unsigned long)-1 ;
     /* window id of the selection owner */
@@ -585,7 +589,13 @@ Initialize(
 		       */
 
 		      /* certain thing we have to do only once for all screens */
+#ifdef FIX_1181
+		      if (init_first_time == False) {
+			  init_first_time = True;
+#else
 		      if (i == 0) {
+#endif
+                          
 			  if(!XtIsRealized((Widget) new_obj))
 			      XtRealizeWidget((Widget) new_obj);
 	
