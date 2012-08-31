@@ -61,6 +61,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 
 #define FIX_1510
 #define FIX_1129
+#define FIX_1196
 
 #ifdef NO_XICPROC
 typedef Bool (*XICProc)( XIC, XPointer, XPointer);
@@ -2533,7 +2534,10 @@ unset_current_xic(XmImXICInfo	  xic_info,
   assert(xim_info->current_xics != (XContext) 0);
   (void) XDeleteContext(XtDisplay(widget), (XID) widget, 
 			xim_info->current_xics);
-  
+#ifdef FIX_1196
+  if (im_info->current_widget == widget)
+    im_info->current_widget = NULL;
+#endif
   /* Remove this widget as a reference to this XIC. */
   if (remove_ref(&xic_info->widget_refs, widget) == 0)
     {
@@ -2545,10 +2549,10 @@ unset_current_xic(XmImXICInfo	  xic_info,
 	    *ptr = xic_info->next;
 	    break;
 	  }
-      
+#ifndef FIX_1196
       if (im_info->current_widget == widget)
 	im_info->current_widget = NULL;
-
+#endif
       /* Don't let anyone share this XIC. */
       if (xic_info->source != NULL)
 	*(xic_info->source) = NULL;
