@@ -660,16 +660,7 @@ _XmGetFirstFont(
 
       if (XFontsOfFontSet((XFontSet)font,
 			  &font_struct_list, &font_name_list))
-	{
-	  if (font_struct_list[0]->fid != 0)
-	    {
-	      font_struct = font_struct_list[0];
-	    }
-	  else
-	    {
-	      font_struct = NULL;
-	    }
-	}
+	font_struct = font_struct_list[0];
       else
 	font_struct = NULL;
     }
