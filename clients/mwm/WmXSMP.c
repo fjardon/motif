@@ -30,6 +30,8 @@
 # include <Dt/Session.h>
 #endif
 
+#define FIX_1193
+
 typedef struct _ProxyClientInfo
 {
     int screen;
@@ -446,10 +448,21 @@ getNewRestartCmd(void)
 static void
 freeNewRestartCmd(char **restartCmd)
 {
+#ifdef FIX_1193
+    if(restartCmd)
+    {
+	char **tmp = restartCmd;
+	while (*restartCmd != (char *)NULL)
+		XtFree(*(restartCmd++));
+
+	XtFree((char *)tmp);
+    }
+#else
     while (*restartCmd != (char *)NULL)
 	XtFree(*(restartCmd++));
 
     XtFree((char *)restartCmd);
+#endif
 }
 
 #endif /* ! WSM */
