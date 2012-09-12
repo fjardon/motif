@@ -56,6 +56,7 @@ static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
 #include <Xm/XmP.h>
 #include <Xm/TransltnsP.h>
 
+#define FIX_1300
 
 /* This is the new-style translation table, which is used with
  * versions of libXt that have the :-production translation fix
@@ -954,7 +955,30 @@ c<Btn1Up>:		MenuButtonTakeFocusUp()\n\
 /*** VirtKeys.c ***/
 
 /* Do not abbreviate meta, ctrl, shift, lock, alt, etc. */
-
+#ifdef FIX_1300
+externaldef(translations) _XmConst char _XmVirtKeys_fallbackBindingString[] = "\
+osfCancel:<Key>Escape,<Key>Cancel\n\
+osfLeft:<Key>Left,<Key>KP_Left\n\
+osfUp:<Key>Up,<Key>KP_Up\n\
+osfRight:<Key>Right,<Key>KP_Right\n\
+osfDown:<Key>Down,<Key>KP_Down\n\
+osfEndLine:<Key>End,<Key>KP_End\n\
+osfBeginLine:<Key>Home,<Key>Begin,<Key>KP_Home\n\
+osfPageUp:<Key>Prior,<Key>KP_Prior\n\
+osfPageDown:<Key>Next,<Key>KP_Next\n\
+osfBackSpace:<Key>BackSpace\n\
+osfDelete:<Key>Delete,<Key>KP_Delete\n\
+osfInsert:<Key>Insert,<Key>KP_Insert\n\
+osfAddMode:Shift<Key>F8\n\
+osfHelp:<Key>F1,<Key>Help\n\
+osfMenu:Shift<Key>F10,<Key>Menu\n\
+osfMenuBar:<Key>F10,Shift<Key>Menu\n\
+osfSelect:<Key>Select\n\
+osfActivate:<Key>KP_Enter,<Key>Execute\n\
+osfClear:<Key>Clear\n\
+osfUndo:<Key>Undo\n\
+osfSwitchDirection:Alt<Key>Return,Alt<Key>KP_Enter";
+#else
 externaldef(translations) _XmConst char _XmVirtKeys_fallbackBindingString[] = "\
 osfCancel:<Key>Escape,<Key>Cancel\n\
 osfLeft:<Key>Left\n\
@@ -977,7 +1001,7 @@ osfActivate:<Key>KP_Enter,<Key>Execute\n\
 osfClear:<Key>Clear\n\
 osfUndo:<Key>Undo\n\
 osfSwitchDirection:Alt<Key>Return,Alt<Key>KP_Enter";
-
+#endif
 
 /*"Acorn Computers Ltd"
 * Acorn RISC iX versions 1.0->1.2 running on Acorn R140, R225, R260

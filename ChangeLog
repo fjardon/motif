@@ -1,3 +1,7 @@
+2012-09-12  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/ClipWindow.c, lib/Xm/Transltns.c:
+	Fixed bug #1300 (Keypad arrows don't work)
+
 2012-08-31  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/Hash.c:
 	Fixed bug #1264 (crash in PutDSToStream due to bug in _XmResizeHashTable)

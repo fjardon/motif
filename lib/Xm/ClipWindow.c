@@ -258,7 +258,7 @@ static XmConst _XmBuildVirtualKeyStruct ClipWindowKeys[] = {
      {0,           XmVosfPageRight, "ActionGrab(SWRightPage)\n"},
      {ControlMask, XmVosfPageDown,  "ActionGrab(SWRightPage)\n"},
      {0,           XmVosfPageUp,    "ActionGrab(SWUpPage)\n"},
-     {0,           XmVosfPageDown,  "ActionGrab(SWDownPage)"}
+     {0,           XmVosfPageDown,  "ActionGrab(SWDownPage)\n"}
 };
 
 #define MAX_CLIPWINDOW_TM_SIZE 1000  /* roughly 10lines * 100chars */
