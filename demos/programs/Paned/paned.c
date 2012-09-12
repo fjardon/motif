@@ -54,7 +54,7 @@ static String fallbacks[] = {
     "*other_res.labelString: Other Resources...",
     "*cons_res.labelString: Constraint Resources...",
     "*quit_pb.labelString: Quit",
-    "*XmPaned*XmForm*XmLabel.labelString: OpenMotif Paned Widget",
+    "*XmPaned*XmForm*XmLabel.labelString: Motif Paned Widget",
     "*XmPaned*XmForm*XmToggleButton.labelString: Show Sash",
     "*XmPaned*XmForm*sash_three_tog.labelString: Pane Demo",
     
@@ -228,7 +228,7 @@ ConstraintResCB(Widget w, XtPointer client, XtPointer call)
 	XmString xmstring;
 
 	xmstring = XmStringCreateLtoR(
-"The OpenMotif Paned Widget adds \"constraint\" widgets to any children that are\n\
+"The Motif Paned Widget adds \"constraint\" widgets to any children that are\n\
 inside it. Here's the list of available constraint resources:\n\
 \n\
      Resource (Type)\n\
@@ -272,11 +272,11 @@ OtherResCB(Widget w, XtPointer client, XtPointer call)
 	XmString xmstring;
 
 	xmstring = XmStringCreateLtoR(
-"The OpenMotif Paned widget provides other resources. Here's a partial\n\
+"The Motif Paned widget provides other resources. Here's a partial\n\
 list of available resources:\n\
 \n\
      Resource (Type)\n\
-     cursor (Cursor) - Cursor to use over OpenMotif Paned\n\
+     cursor (Cursor) - Cursor to use over Motif Paned\n\
      marginHeight, marginWidth (Dimension)\n\
      sashHeight (Position)\n\
      sashShawdowThickness (Dimension)",
@@ -312,14 +312,14 @@ CreateLabel(Widget w, XtPointer client, XtPointer call)
     XmString xmstring;
     
     xmstring = XmStringCreateLtoR(
-"The OpenMotif Paned Widget extends the capabilities of the standard Paned\n\
+"The Motif Paned Widget extends the capabilities of the standard Paned\n\
 Window that comes with Motif.\n\
 \n\
-The OpenMotif Paned Widget offers horizontal as well as vertical orientation,\n\
+The Motif Paned Widget offers horizontal as well as vertical orientation,\n\
 (the Motif Paned widget only offers a vertical orientation). To see the\n\
 two forms of orienation, press the XmHORIZONTAL or XmVERTICAL toggles.\n\
 \n\
-The OpenMotif Paned Widget can be used as a \"smarter\" Row Column widget, by\n\
+The Motif Paned Widget can be used as a \"smarter\" Row Column widget, by\n\
 turning off the separators between panes. Press the True or False toggles\n\
 to see this behavior.",
 				  XmSTRING_DEFAULT_CHARSET);
@@ -366,7 +366,7 @@ main(int argc, char **argv)
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
-    XtSetArg(args[argcnt], XmNtitle, "OpenMotif Paned Widget Demo"); argcnt++;
+    XtSetArg(args[argcnt], XmNtitle, "Motif Paned Widget Demo"); argcnt++;
     top = XtOpenApplication(&app, "Paned", NULL, 0,
 			    &argc, argv, fallbacks, 
                             sessionShellWidgetClass, 
@@ -377,7 +377,7 @@ main(int argc, char **argv)
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
-    XtSetArg(args[argcnt], XmNtitle, "OpenMotif Paned Widget Demo"); argcnt++;
+    XtSetArg(args[argcnt], XmNtitle, "Motif Paned Widget Demo"); argcnt++;
     paned_top = XtAppCreateShell("paned_top", "Paned_Top",
 				topLevelShellWidgetClass, XtDisplay(top),
 				args, argcnt);

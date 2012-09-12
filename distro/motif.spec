@@ -1,11 +1,11 @@
 %define _unpackaged_files_terminate_build 0
-%define intern_name openmotif
+%define intern_name motif
 
-Summary: Open Motif runtime libraries and executables.
-Name: openmotif
+Summary: Motif runtime libraries and executables.
+Name: motif
 Version: 2.3.4
 Release: 1
-License: Open Group Public License
+License: LGPL
 Group: System Environment/Libraries
 Source:  ftp://ftp.ics.com/pub/Products/Motif/%{intern_name}-%{version}.tar.gz
 Source1: xmbind
@@ -28,7 +28,7 @@ linked against Motif, and the Motif Window Manager "mwm".
 Summary: Open Motif development libraries and header files.
 Group: Development/Libraries
 Conflicts: lesstif-devel <= 0.92.32-6
-Requires: openmotif = %{version}-%{release}
+Requires: motif = %{version}-%{release}
 
 %description devel
 This is the Open Motif %{version} development environment. It includes the
@@ -37,7 +37,7 @@ static libraries and header files necessary to build Motif applications.
 %package demos
 Summary: Open Motif example code and demo programs.
 Group: Development/Libraries
-Requires: openmotif = %{version}-%{release}
+Requires: motif = %{version}-%{release}
 
 %description demos
 This is the Open Motif %{version} example code and demo programs.
@@ -119,25 +119,25 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 
 * Mon Aug 22 2011 Ihor Hayvuk <ihayvuk@ics.com>
-- updated for OpenMotif 2.3.4
+- updated for Motif 2.3.4
 
 * Tue Jun 30 2009 Ihor Hayvuk <ihayvuk@ics.com>
-- updated for OpenMotif 2.3.3
+- updated for Motif 2.3.3
 
 * Fri Mar 06 2009 Ihor Hayvuk <ihayvuk@ics.com>
-- updated for OpenMotif 2.3.2
+- updated for Motif 2.3.2
 
 * Sat May 03 2008 Ihor Hayvuk <ihayvuk@ics.com>
-- updated for OpenMotif 2.3.1
+- updated for Motif 2.3.1
 
 * Thu Nov 14 2007 Yuriy Syrota <ysyrota@softservecom.com>
-- updated for OpenMotif 2.3.1
+- updated for Motif 2.3.1
 
 * Thu Sep 16 2005 Yuriy Syrota <ysyrota@softservecom.com>
-- updated for openMotif 2.3.0 Beta1
+- updated for Motif 2.3.0 Beta1
 
 * Thu Mar 05 2004 Justin Noel <justin@ics.com>
-- updated for openMotif 2.2.3
+- updated for Motif 2.2.3
 - added demos RPM
 
 * Wed Jan 22 2003 Tim Powers <timp@redhat.com>
@@ -164,7 +164,7 @@ rm -rf $RPM_BUILD_ROOT
 - build using gcc-3.2-0.1
 
 * Tue Jun 25 2002 Than Ngo <than@redhat.com> 2.2.2-9
-- fix to build openmotif (bug #64176)
+- fix to build motif (bug #64176)
 
 * Thu Jun 13 2002 Than Ngo <than@redhat.com> 2.2.2-8
 - rebuild in new enviroment

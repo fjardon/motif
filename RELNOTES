@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 
 
-                            Open Motif 2.3.4
+                               Motif 2.3.4
 
                               Release Notes
 
@@ -10,10 +10,10 @@
                      Integrated Computer Solutions
 
 
-This document provides Release Notes for the release of Open Motif 2.3.4.
+This document provides Release Notes for the release of Motif 2.3.4.
 
-This contains information on what is new in Open Motif 2.3.4. 
-Please see the COPYRIGHT.MOTIF file included with this release.
+This contains information on what is new in Motif 2.3.4. 
+Please see the COPYING file included with this release.
 
 
 Introduction
@@ -22,7 +22,7 @@ This document and accompanying text files contain important information.
 Please read them carefully before starting the build and
 installation procedures.
 
-There are two ways to build Open Motif from source code: Imake and AutoTools.
+There are two ways to build Motif from source code: Imake and AutoTools.
 
 If you are using Imake, please read INSTALL.imake for notes on how to build
 and install this product using Imake. This method is deprecated due to
@@ -34,32 +34,32 @@ using the autoconf tools. This method is now fully supported and
 is the recommended build method.
 
 
-1. What is Open Motif 2.3.4
+1. What is Motif 2.3.4
 
-Open Motif is the freely available source code distribution for the 
-Motif user interface component toolkit. Open Motif is built on top of the 
+Motif is the freely available source code distribution for the 
+Motif user interface component toolkit. Motif is built on top of the 
 standard X Toolkit(Xt) and X11 libraries.
 
-1.1. Overview of Open Motif
+1.1. Overview of Motif
 
-Open Motif 2.3.4 is an updated version of Open Motif 2.3. 
-Any applications built against a previous 2.x release of Open Motif will be 
+Motif 2.3.4 is an updated version of Motif 2.3. 
+Any applications built against a previous 2.x release of Motif will be 
 binary compatible with this release.
 
 Pre-compiled versions are available for download at the MotifZone:
 
-http://www.openmotif.org
+http://www.motifzone.org
 
 After downloading this source distribution, it will need to be unpacked 
 and compiled. The distribution contains the following items:
 
 * libXm source code and include files
-* Open Motif reference documentation (man pages)
+* Motif reference documentation (man pages)
 * Utility libraries
 * Demo programs
 
 
-2. What is New in Open Motif 2.3.4
+2. What is New in Motif 2.3.4
 
 This is a bug fix release.
 
@@ -113,7 +113,7 @@ This is a bug fix release.
 * Fixed bug #1507 (LDFLAGS not respected for building libXm 
   and libMrm libraries)
 * Fixed bug #1511 (CheckBook program from EditTable samples crashes 
-  with OpenMotif since 2.3.0 release.)
+  with Motif since 2.3.0 release.)
 * Fixed bug #1495 (mwm's icon box has graphics corruption)
 * Fixed in order to provide PRINTING_SUPPORTED and USE_XFT 
   macro definitions in Xm.h
@@ -126,7 +126,7 @@ This is a bug fix release.
 
 3. Build Systems
 
-Open Motif 2.3.4 was built and tested on the following systems:
+Motif 2.3.4 was built and tested on the following systems:
 * Fedora 13 i686
 * Fedora 14 i686
 * Fedora 15 i686
@@ -158,11 +158,11 @@ The following platforms are supported operating systems:
 
 4. Filing Bug Reports
 
-If you find a reproducible bug in any of the Open Motif libraries or code, 
+If you find a reproducible bug in any of the Motif libraries or code, 
 or an error in the documentation, please reference the BUGREPORT file 
-and/or submit a bug report online at the Open Motif Development zone:
+and/or submit a bug report online at the Motif Development zone:
 
-http://bugs.openmotif.org
+http://bugs.motifzone.org
 
 The listing for the status of submitted bugs is maintained there.
 
@@ -177,13 +177,13 @@ http://www.motifzone.net
 
 6. Compatibility Notice
 
-Open Motif 2.3.x is binary compatible with Open Motif 2.2.x. 
-Applications built against Open Motif 2.2 should work with Open Motif 2.3.x 
+Motif 2.3.x is binary compatible with Motif 2.2.x. 
+Applications built against Motif 2.2 should work with Motif 2.3.x 
 without having to recompile it.
 
-Open Motif 2.3.x is not binary compatible with Open Motif 2.1.30.
-Applications built against Open Motif 2.1.30 will need to be recompiled 
-with the Open Motif 2.2+ header files.
+Motif 2.3.x is not binary compatible with Motif 2.1.30.
+Applications built against Motif 2.1.30 will need to be recompiled 
+with the Motif 2.2+ header files.
 
 
 7. Change Log
@@ -210,7 +210,7 @@ This Release
 * Fixed bug #1451 (XmStringDrawImage works incorrectly with XFT)
 * Fixed bug #1453 (MultiList not displayed properly)
 * Fixed bug #1412 (An insensitive popup menu parent lead to a display-freezing)
-* Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
+* Fixed bug #345 (Motif accelerators XmNaccelerator do not work 
   with CapsLock/ScrollLock/NumLock modifiers)
 * Added splint checking and splint target
 * Fixed bug #1299 (XmForm erroneously finds "Circular dependency"
@@ -222,7 +222,7 @@ This Release
 * Added missing 'O' character to UTF8_SUPPORTED macro 
 * Fixed bug #1476 (PanedWindow orientation error)
 * Fixed bug #1277 (paned widget does not work under Fedora Core 2 
-  with openmotif 2.2.3-4.1)
+  with motif 2.2.3-4.1)
 * Fixed bug #1212 (XmDropSiteRetrieve frees XRectangles before
   caller can use them)
 * Fixed in order to allow build out of source tree
@@ -244,7 +244,7 @@ This Release
 * Fixed bug #1420 (DataF.c holds message strings.)
 * Fixed bug #1419 (Bindings of DataField defined in DataF.c instead
   of TranslNew.c)
-* Fixed bug #1431 (openmotif 2.3 and xorg 7.1.0 64bit problems)
+* Fixed bug #1431 (motif 2.3 and xorg 7.1.0 64bit problems)
 * Fixed bug #1432 (XmContainer incorrect GC allocation)
 * Fixed bug #1250 (XmCombo glyph is unexpectedly shifted
   when setting XmNvisibleItemCount)
@@ -383,7 +383,7 @@ a. The Test directory that contained the automated tests was mentioned
    available from the CVS tree.
 b. Due to an oversight, imake support was not included in the distribution. 
    It was added back in this update.
-c. If an older version of Open Motif was installed, the Autoconf build would
+c. If an older version of Motif was installed, the Autoconf build would
    pick up the older #include files and fail. The Autoconf configuration 
    files were updated to use the proper #include files.
 d. Formatting errors in doc/man/man3/Makefile.am were corrected.

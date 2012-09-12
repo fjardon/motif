@@ -378,11 +378,11 @@ main(int argc, char **argv)
                 0);
 
     xmstring = XmStringCreateLtoR(
-"The OpenMotif Button Box widget can arrange buttons into single rows and columns\n\
+"The Motif Button Box widget can arrange buttons into single rows and columns\n\
 much more easily than the Motif Row Column or Motif Form!\n\
 (And two ButtonBoxes paired together do a great job of lining items up.)\n\
 \n\
-The four buttons in the other window are inside an OpenMotif Button Box. Try \
+The four buttons in the other window are inside an Motif Button Box. Try \
 resizing\n\
 this window! Try modifying the Button Box's resources using the area below.\n\
 \n\

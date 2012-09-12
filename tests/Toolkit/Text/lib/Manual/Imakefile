@@ -19,12 +19,6 @@ XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
 XCOMM
-XCOMM HISTORY
-XCOMM $Log: Imakefile,v $
-XCOMM Revision 1.2  2002/01/05 15:21:28  jimk
-XCOMM Pulled in the sources from OpenMotif 2.1.30_5
-XCOMM
-XCOMM $EndLog$
 #include <Library.tmpl>
 
 DEFINES         = TestDefines

@@ -314,7 +314,7 @@ main(int argc, char **argv)
 
 
     xmstring = XmStringCreateLtoR(
-"This is a demo of two unique OpenMotif Widgets: the Icon Button and Icon Box.\n\
+"This is a demo of two unique Motif Widgets: the Icon Button and Icon Box.\n\
 \n\
 Labels, Push Buttons, and Toggle Buttons are limited because these\n\
 widgets only allow EITHER labels OR pixmaps on the face but NOT BOTH.\n\

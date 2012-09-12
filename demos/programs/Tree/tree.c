@@ -399,9 +399,9 @@ void WriteUpHype(Widget parent)
     XmString xmstring;
     
     xmstring = XmStringCreateLtoR(
-"The OpenMotif Tree Widget displays hierarchical data in a tree layout with a Motif\n\
+"The Motif Tree Widget displays hierarchical data in a tree layout with a Motif\n\
 look and feel. The Tree widget displayed below contains entries corresponding\n\
-to OpenMotif widgets. The nodes are XmPushButtons, but the tree can accept any type of widget.\n\
+to Motif widgets. The nodes are XmPushButtons, but the tree can accept any type of widget.\n\
 \n\
 The Tree Widget uses \"constraints\" to arrange the children with the right layout.\n\
 To see the code to generate the tree below, press \"Show Layout Code...\".\n\
@@ -508,7 +508,7 @@ static void ExplainCB(Widget w, XtPointer client, XtPointer call)
 	XmString xmstring;
 
 	xmstring = XmStringCreateLtoR(
-"The OpenMotif Tree and Outline widget actually derive behavior from the\n\
+"The Motif Tree and Outline widget actually derive behavior from the\n\
 Hierarchy Widget. The Hierarchy widget provides resources that specify\n\
 the relationships between children.\n\
 \n\

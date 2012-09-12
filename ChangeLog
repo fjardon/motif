@@ -1,4 +1,4 @@
-========================= Open Motif 2.3.4 released ============================
+========================= Motif 2.3.4 released ============================
 2012-09-12  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/ClipWindow.c, lib/Xm/Transltns.c:
 	Fixed bug #1300 (Keypad arrows don't work)
@@ -108,9 +108,9 @@
 	Removed fix for bug report #1147
 
 2011-08-22  Ihor Hayvuk <ihayvuk@ics.com>
-	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec, Makefile.imake-pure, LICENSE, 
+	* RELNOTES, RELEASE, motif.spec, Makefile.imake-pure, LICENSE, 
 	Imakefile, configure.ac, lib/Xm/Xm.h.in, clients/mwm/version.c:
-	Updated for OpenMotif 2.3.4 by Igor Gala <igala@ics.com>
+	Updated for Motif 2.3.4 by Igor Gala <igala@ics.com>
 
 2011-08-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/RCLayout.c:
@@ -296,7 +296,7 @@
 2010-03-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/PushB.c:
 	Fixed bug #1511 (CheckBook program from EditTable samples crashes 
-	with OpenMotif since 2.3.0 release.)
+	with Motif since 2.3.0 release.)
 
 2009-12-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c:
@@ -373,9 +373,9 @@
 	Fixed warning: implicit declaration of function '_XmPopupSpringLoaded   
 
 2009-06-30  Ihor Hayvuk <ihayvuk@ics.com>
-	* RELNOTES, openmotif-f8.spec, openmotif.spec, RELEASE, Makefile.imake-pure, LICENSE,
+	* RELNOTES, motif.spec, RELEASE, Makefile.imake-pure, LICENSE,
 	  Imakefile, configure.ac, lib/Xm/Xm.h.in, clients/mwm/version.c:
-	Updated for OpenMotif 2.3.3  
+	Updated for Motif 2.3.3  
 
 2009-06-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmAll.h:
@@ -440,7 +440,7 @@
 
 2009-05-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/MapEvents.c, lib/Xm/RCMenu.c, lib/Xm/Xm.c, lib/Xm/XmI.h:
-	Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
+	Fixed bug #345 (Motif accelerators XmNaccelerator do not work 
 	with CapsLock/ScrollLock/NumLock modifiers)
 
 2009-04-23  Ihor Hayvuk <ihayvuk@ics.com>
@@ -460,7 +460,7 @@
 
 2009-03-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES, RELEASE:
-	Updated for openmotif 2.3.2 
+	Updated for motif 2.3.2 
 
 2009-03-10  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Form.c:
@@ -469,12 +469,12 @@
 
 2009-03-06  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELNOTES:
-	Updated for openmotif 2.3.2 
+	Updated for motif 2.3.2 
 
 2009-03-06  Ihor Hayvuk <ihayvuk@ics.com>
-	* openmotif-f8.spec, openmotif.spec, RELEASE, Makefile.imake-pure, LICENSE,
+	* motif.spec, RELEASE, Makefile.imake-pure, LICENSE,
 	  Imakefile, configure.ac, lib/Xm/Xm.h.in, clients/mwm/version.c:
-	Updated OpenMotif version 
+	Updated Motif version 
 
 2009-03-04  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/XmString.c:
@@ -496,7 +496,7 @@
 
 2009-02-18  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Paned.c:
-	Fixed bug #1277 (paned widget does not work under Fedora Core 2 with openmotif 2.2.3-4.1)
+	Fixed bug #1277 (paned widget does not work under Fedora Core 2 with motif 2.2.3-4.1)
 
 2009-02-17  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ComboBox.c:
@@ -568,8 +568,8 @@
 ========================= Open Motif 2.3.1 released ============================	
 
 2008-09-01  Ihor Hayvuk <ihayvuk@ics.com>
-	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:
-	Updated for OpenMotif 2.3.1
+	* RELNOTES, RELEASE, motif.spec:
+	Updated for Motif 2.3.1
 
 2008-08-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* demos/programs/ButtonBox/Makefile.am, demos/programs/ColorSel/Makefile.am,
@@ -634,7 +634,7 @@
 	* demos/programs/filemanager/filemanager.c,
 	demos/programs/setdate/setDate.c,
 	demos/programs/todo/todo.c:
-	Fixed bug #1431 (openmotif 2.3 and xorg 7.1.0 64bit problems)
+	Fixed bug #1431 (motif 2.3 and xorg 7.1.0 64bit problems)
 
 2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Container.c:
@@ -695,12 +695,12 @@
 ======================= Open Motif 2.3.1 beta 1 released =======================
 
 2008-05-29  Ihor Hayvuk <ihayvuk@ics.com>
-	* RELNOTES, RELEASE, openmotif-f8.spec, openmotif.spec:
-	Updated for OpenMotif 2.3.1 beta 1
+	* RELNOTES, RELEASE, motif.spec:
+	Updated for Motif 2.3.1 beta 1
 
 2008-05-03  Ihor Hayvuk <ihayvuk@ics.com>
-	* openmotif.spec, TODO, RELEASE:
-	Updated for OpenMotif 2.3.1
+	* motif.spec, TODO, RELEASE:
+	Updated for Motif 2.3.1
 
 2008-05-02  Ihor Hayvuk <ihayvuk@ics.com>
 	* RELEASE:
@@ -810,7 +810,7 @@
 	* Makefile.imake-pure:
 	* RELEASE:
 	* configure.ac:
-	* openmotif.spec:
+	* motif.spec:
 	* lib/Xm/Xm.h.in:
 	* clients/mwm/version.c:
 	Changed version number to 2.3.1.
