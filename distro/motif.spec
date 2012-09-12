@@ -20,27 +20,27 @@ Conflicts: lesstif <= 0.92.32-6
 Prefix: /usr
 
 %description
-This is the Open Motif %{version} runtime environment. It includes the
+This is the Motif %{version} runtime environment. It includes the
 Motif shared libraries, needed to run applications which are dynamically
 linked against Motif, and the Motif Window Manager "mwm".
 
 %package devel
-Summary: Open Motif development libraries and header files.
+Summary: Motif development libraries and header files.
 Group: Development/Libraries
 Conflicts: lesstif-devel <= 0.92.32-6
 Requires: motif = %{version}-%{release}
 
 %description devel
-This is the Open Motif %{version} development environment. It includes the
+This is the Motif %{version} development environment. It includes the
 static libraries and header files necessary to build Motif applications.
 
 %package demos
-Summary: Open Motif example code and demo programs.
+Summary: Motif example code and demo programs.
 Group: Development/Libraries
 Requires: motif = %{version}-%{release}
 
 %description demos
-This is the Open Motif %{version} example code and demo programs.
+This is the Motif %{version} example code and demo programs.
 
 
 %prep

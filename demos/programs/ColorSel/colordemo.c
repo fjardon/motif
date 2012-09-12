@@ -164,7 +164,7 @@ CreateHelpArea()
 {
   XmString xmstr = 
     XmStringCreateLtoR(
-"The Open Motif Color Selector is an interface to the colors \n\
+"The Motif Color Selector is an interface to the colors \n\
 available on a display.\n\
 \n\
 In Scale Mode, the position of the sliders \n\
