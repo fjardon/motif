@@ -264,7 +264,7 @@
 2010-03-01  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c, lib/Xm/PushB.c:
 	Fixed bug #1511 (CheckBook program from EditTable samples crashes 
-	with OpenMotif since 2.3.0 release.)
+	with Motif since 2.3.0 release.)
 
 2009-12-29  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Label.c:
@@ -398,7 +398,7 @@
 
 2009-05-15  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/MapEvents.c, lib/Xm/RCMenu.c, lib/Xm/Xm.c, lib/Xm/XmI.h:
-	Fixed bug #345 (Openmotif accelerators XmNaccelerator do not work 
+	Fixed bug #345 (Motif accelerators XmNaccelerator do not work 
 	with CapsLock/ScrollLock/NumLock modifiers)
 
 2009-05-06  Ihor Hayvuk <ihayvuk@ics.com>
@@ -466,7 +466,7 @@
 
 2009-02-18  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Paned.c:
-	Fixed bug #1277 (paned widget does not work under Fedora Core 2 with openmotif 2.2.3-4.1)
+	Fixed bug #1277 (paned widget does not work under Fedora Core 2 with motif 2.2.3-4.1)
 
 2009-02-17  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/ComboBox.c:
@@ -508,14 +508,6 @@
 2009-01-16  Ihor Hayvuk <ihayvuk@ics.com>
 	* doc/man/man3/XmColorSelectionBox.3:
 	Fixed bug #1467 (XmColorSelectionBox man pages are missing some named descendents) 
-
-2008-12-12  Ihor Hayvuk <ihayvuk@ics.com>
-	* distro/openmotif-f8.spec:
-	Fixed in order to put demos binaries in %{prefix}/share/Xm 
-
-2008-12-04  Ihor Hayvuk <ihayvuk@ics.com>
-	* distro/openmotif-f8.spec:
-	Added spec file for Fedora 8 and similar distros 
 
 2008-10-30  Ihor Hayvuk <ihayvuk@ics.com>
 	* configure.ac:
@@ -646,7 +638,7 @@
 	* demos/programs/filemanager/filemanager.c,
 	demos/programs/setdate/setDate.c,
 	demos/programs/todo/todo.c:
-	Fixed bug #1431 (openmotif 2.3 and xorg 7.1.0 64bit problems)
+	Fixed bug #1431 (motif 2.3 and xorg 7.1.0 64bit problems)
 
 2008-08-22  Ihor Hayvuk <ihayvuk@ics.com>
 	* lib/Xm/Container.c:

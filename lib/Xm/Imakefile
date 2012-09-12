@@ -37,9 +37,6 @@ XCOMM  This is unpublished proprietary source code of FUJITSU LIMITED
 #define HugeLibrary	YES
 #define LargePICTable	YES
 
-XCOMM Modifications made by Robert Hartley (rhartley@ics.com)
-XCOMM for the Open Motif Everywhere v2.2 release.
-
 #ifndef ExtraWidgets
 #define ExtraWidgets YES
 #endif

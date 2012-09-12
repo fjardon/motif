@@ -20,28 +20,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
- * $Log: RowCol1_1.c,v $
- * Revision 1.2  2002/01/05 15:21:27  jimk
- * Pulled in the sources from OpenMotif 2.1.30_5
- *
- * Revision 1.1.3.1  1994/08/01  19:57:51  deblois
- * 	no change.
- * 	[1994/08/01  19:57:31  deblois]
- *
- * 	moved from ../DataSpace/
- * 	[1994/08/01  19:09:18  deblois]
- *
- * Revision 1.3.2.2  1993/07/30  14:02:20  yak
- * 	Expanded copyright marker
- * 	[1993/07/30  13:44:14  yak]
- * 
- * Revision 1.3  1992/03/13  18:33:15  devsrc
- * 	Converted to ODE
- * 
- * $EndLog$
-*/ 
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol1_1.c /main/7 1996/10/30 11:17:38 drk $"

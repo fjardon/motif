@@ -33,9 +33,9 @@ oldincludedir = /usr/include
 
 DESTDIR =
 
-pkgdatadir = $(datadir)/openMotif
-pkglibdir = $(libdir)/openMotif
-pkgincludedir = $(includedir)/openMotif
+pkgdatadir = $(datadir)/motif
+pkglibdir = $(libdir)/motif
+pkgincludedir = $(includedir)/motif
 
 top_builddir = .
 
@@ -78,7 +78,7 @@ MAINT =
 MAKEINFO = makeinfo
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
-PACKAGE = openMotif
+PACKAGE = motif
 RANLIB = ranlib
 REVISION = 30
 STRIP = strip
@@ -88,7 +88,7 @@ XMBINDDIR_FALLBACK = ${exec_prefix}/lib/X11/bindings
 YACC = byacc
 
 
-EXTRA_DIST = BUGREPORT CLOSEDBUGS COPYRIGHT.MOTIF Imakefile LICENSE OPENBUGS README README.ICS RELEASE RELNOTES openmotif-2.1.30.spec INSTALL.configure
+EXTRA_DIST = BUGREPORT CLOSEDBUGS COPYING Imakefile LICENSE OPENBUGS README README.ICS RELEASE RELNOTES distro/motif.spec INSTALL.configure
 MAINTAINERCLEANFILES = Makefile.in configure libtool config.guess config.sub ltconfig ltmain.sh aclocal.m4 config.h.in install-sh missing mkinstalldirs
 SUBDIRS = bindings bitmaps config localized lib include tools clients doc demos
 

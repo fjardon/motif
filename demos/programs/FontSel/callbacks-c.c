@@ -33,7 +33,7 @@ XtPointer call;
     XmString xmstring;
 
     xmstring = XmStringCreateLtoR(
-"The Open Motif Font Selector lets the developer add font selecting capabilities into their applications.\n\
+"The Motif Font Selector lets the developer add font selecting capabilities into their applications.\n\
 The Font Selector allows the end user to choose particular fonts based on font family, size,\n\
 weight, and other advanced criteria from the X Logical Font Description (XFLD).",
 				  XmSTRING_DEFAULT_CHARSET);

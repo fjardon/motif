@@ -19,14 +19,8 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
-XCOMM HISTORY
-XCOMM $Log: Imakefile,v $
-XCOMM Revision 1.2  2002/01/05 15:21:28  jimk
-XCOMM Pulled in the sources from OpenMotif 2.1.30_5
 XCOMM
-XCOMM $XConsortium: Imakefile /main/10 1996/07/08 15:37:28 jakku $
+
 INCLUDES	 = -I. -I../bitmaps -I.. -I$(TESTCOMSRC) \
 	           -I../../../lib/
 DEFINES 	= TestDefines

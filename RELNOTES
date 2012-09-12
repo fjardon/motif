@@ -12,7 +12,7 @@
 
 This document provides Release notes for the Beta Release of Motif 2.3.0.
 This contains information on what is new in Motif 2.3.0. Please see the
-COPYRIGHT.MOTIF file included with this release.
+COPYING file included with this release.
 
 
 THIS IS A BETA RELEASE
@@ -60,7 +60,7 @@ built against a previous 2.X release of Motif will be binary
 compatible with this release.  This is a source code release.
 Pre-compiled versions are available for download at the MotifZone:
 
-http://www.openmotif.org
+http://www.motifzone.org
 
 After downloading this source distribution, it will need to be unpacked
 and compiled.  The distribution contains the following items:
@@ -162,7 +162,7 @@ or code, or an error in the documentation, please reference the
 BUGREPORT file and/or submit a bug report online at the Motif
 Development zone:
 
-http://bugs.openmotif.org
+http://bugs.motifzone.org
 
 The listing for the status of submitted bugs is maintained there.
 

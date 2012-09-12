@@ -1,7 +1,7 @@
 This is used to keep track of the XSETTINGS property. At least, the gnome
-themes use this when switch themes. This allows OpenMotif applications
+themes use this when switch themes. This allows Motif applications
 to switch when the gnome theme is changed. Unfortunately there are not
-OpenMotif themes yet :( So to use this ....
+Motif themes yet :( So to use this ....
 
 gnome theme changes make an attempt to change the look of Xt based toolkits,
 but in my experience, it is not done very well. It uses files in

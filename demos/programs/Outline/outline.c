@@ -354,7 +354,7 @@ void WriteUpHype(Widget parent)
     XmString xmstring;
     
     xmstring = XmStringCreateLtoR(
-"The OpenMotif Outline Widget displays hierarchical data in an outline layout with a Motif\n\
+"The Motif Outline Widget displays hierarchical data in an outline layout with a Motif\n\
 look and feel. The Outline widget displayed below has several Motif PushButtons (the\n\
 Outline can accept any type of widget); press one to add a new child.\n\
 \n\
@@ -435,7 +435,7 @@ static void ExplainCB(Widget w, XtPointer client, XtPointer call)
 	XmString xmstring;
 
 	xmstring = XmStringCreateLtoR(
-"The OpenMotif Tree and Outline widget actually derive behavior from the\n\
+"The Motif Tree and Outline widget actually derive behavior from the\n\
 Hierarchy Widget. The Hierarchy widget provides resources that specify\n\
 the relationships between children.\n\
 \n\

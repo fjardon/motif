@@ -13,7 +13,7 @@ AC_CHECK_FILE(/usr/X11R6/include/X11/X.h,
 AM_MAINTAINER_MODE
 AC_CANONICAL_TARGET
 
-dnl The version of the OpenMotif libraries
+dnl The version of the Motif libraries
 CURRENT=4
 REVISION=0
 AGE=0
@@ -22,7 +22,7 @@ AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(openmotif,2.3.0,no-define)
+AM_INIT_AUTOMAKE(motif,2.3.0,no-define)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 

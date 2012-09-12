@@ -1,4 +1,4 @@
-Instructions for creating openMotif RPMS.  
+Instructions for creating Motif RPMS.  
 --------------------------------------------
 Written by Jonathan Nierenburg (jon@ics.com)
 Initial Release: 03/17/2004
@@ -6,25 +6,25 @@ Initial Release: 03/17/2004
 
 1. Check the source out of CVS or download the source tarball.
    -If you downloaded the tar ball it should have the filename:
-    openMotif-x.x.x.tar.gz.  
+    motif-x.x.x.tar.gz.
     Unzip the source tarball file.
 
-   -If you checked out openMotif from CVS do the following:
-   	$ cd openmotif
+   -If you checked out Motif from CVS do the following:
+   	$ cd motif
 	$ ./autogen.sh
 	$ ./configure
 	$ make
 	$ make dist
-    You should now have an openMotif-x.x.x.tar.gz file in your openmotif
+    You should now have an motif-x.x.x.tar.gz file in your motif
     directory.  
 
-2. Copy the openMotif-x.x.x.tar.gz to $RPMROOT/SOURCES
+2. Copy the motif-x.x.x.tar.gz to $RPMROOT/SOURCES
    Note: $RPMROOT is usually /usr/src/redhat, /usr/src/RPMS, /usr/src/packaging
          or something similar.
 
-3. Copy the openmotif/distro/xmbind file to $RPMROOT/SOURCES.
+3. Copy the motif/distro/xmbind file to $RPMROOT/SOURCES.
 
-4. Copy the openmotif/distro/openmotif.spec file into $RPMROOT/SPECS
+4. Copy the motif/distro/motif.spec file into $RPMROOT/SPECS
 
 5. Make any needed changes to the spec file such as version number or filename
    updates.
@@ -32,9 +32,9 @@ Initial Release: 03/17/2004
          the Release variable.
 
 6. As root, run the following command in $RPMROOT/SPECS:
-   rpmbuild -ba openmotif.spec
+   rpmbuild -ba motif.spec
 
    Note: If you are running an old version of rpm you will have to use:
-   rpm -ba openmotif.spec
+   rpm -ba motif.spec
 
 The RPMS will be placed automatically into $RPMROOT/RPMS/$DEFAULT_ARCH/ and the source RPM will be placed in $RPMROOT/SRPMS.

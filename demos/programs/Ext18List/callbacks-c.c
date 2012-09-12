@@ -427,7 +427,7 @@ XtPointer call;
     XmString xmstring;
 
     xmstring = XmStringCreateLtoR(
-"This is a demo of the Open Motif Internationalized Extended List widget.\n\
+"This is a demo of the Motif Internationalized Extended List widget.\n\
 \n\
 The Internationalized Extended List provides multi-column list \n\
 capabilities, which are not available in Motif. It uses XmStrings \n\
