@@ -6,9 +6,8 @@ ACLOCAL_AMFLAGS = -I .
 #            README RELEASE RELNOTES
 
 EXTRA_DIST = BUGREPORT \
-             COPYRIGHT.MOTIF \
+             COPYING \
              Imakefile \
-             LICENSE \
              README RELEASE RELNOTES \
              INSTALL.configure Makefile.imake-pure
 
