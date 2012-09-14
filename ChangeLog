@@ -1,5 +1,9 @@
 ========================= Motif 2.3.4 released ============================
 2012-09-12  Yuriy Syrota <yura@ics.com>
+	* Makefile.am:
+	Fixed dist build configuration
+
+2012-09-12  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/ClipWindow.c, lib/Xm/Transltns.c:
 	Fixed bug #1300 (Keypad arrows don't work)
 

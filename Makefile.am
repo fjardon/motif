@@ -4,9 +4,8 @@ datadir = ${prefix}/share/Xm/doc
 #            README RELEASE RELNOTES
 
 EXTRA_DIST = BUGREPORT \
-             COPYRIGHT.MOTIF \
+             COPYING \
              Imakefile \
-             LICENSE \
              README RELEASE RELNOTES \
              INSTALL.configure Makefile.imake-pure
 
