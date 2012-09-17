@@ -1,3 +1,7 @@
+2012-09-17  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/XmRenderT.c:
+	Removed extra token at end of #endif directive
+
 2012-09-14  Yuriy Syrota <yura@ics.com>
 	* Makefile.am:
 	Fixed dist build configuration
