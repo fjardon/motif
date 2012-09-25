@@ -1,4 +1,8 @@
 2012-09-25  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/MenuShell.c, lib/Xm/MenuUtil.c, lib/Xm/XmI.h:
+	Fixed bug #1565 (The active window changes to inactive when the drop down list is clicked)
+
+2012-09-25  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/XmRenderT.c, lib/Xm/XmString.c:
 	Fixed issues with non-XFT build
 
