@@ -173,8 +173,10 @@ static Boolean GetResources(XmRendition rend,
 			    ArgList arglist,
 			    Cardinal argcount);
 static void SetDefault(XmRendition rend); 
+#ifdef USE_XFT
 #ifdef FIX_1536
 static XftColor GetCachedXftColor(Display *display, Pixel color);
+#endif
 #endif
 
 /********    End Static Function Declarations    ********/

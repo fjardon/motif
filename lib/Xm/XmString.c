@@ -3941,7 +3941,7 @@ _XmStringDrawSegment(Display *d,
 		  (font_type == XmFONT_IS_FONTSET));
 		  
 #ifdef UTF8_SUPPORTED
-      utf8 = ((text_type == XmMULTIBYTE_TEXT | text_type == XmCHARSET_TEXT) &&
+      utf8 = ((text_type == XmMULTIBYTE_TEXT || text_type == XmCHARSET_TEXT) &&
 		   (font_type == XmFONT_IS_FONTSET ||
 		    font_type == XmFONT_IS_XFT ||
 		    (font_type == XmFONT_IS_FONT
