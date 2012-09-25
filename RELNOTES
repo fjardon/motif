@@ -63,6 +63,9 @@ and compiled. The distribution contains the following items:
 
 This is a bug fix release.
 
+* Fixed bug #1565 (The active window changes to inactive when the drop down
+  list is clicked)
+* Implemented feature request #1300 (Keypad arrows don't work)
 * Fixed bug #1496 (Version 2.3.2 won't compile if configured 
   enable-message-catalog)
 * Dropped fix #1359 (File dialog filter problem with * or [ in directory)
@@ -127,26 +130,8 @@ This is a bug fix release.
 3. Build Systems
 
 Motif 2.3.4 was built and tested on the following systems:
-* Fedora 13 i686
-* Fedora 14 i686
-* Fedora 15 i686
-* Fedora 13 x86_64
-* Fedora 14 x86_64
 * Fedora 15 x86_64
-* Red Hat Enterprise Linux 4.5 i386
-* Red Hat Enterprise Linux 5.1 i386
-* Red Hat Enterprise Linux 6.0 i386
-* Red Hat Enterprise Linux 4.5 x86_64
-* Red Hat Enterprise Linux 5.1 x86_64
-* Red Hat Enterprise Linux 6.0 x86_64
-* Ubuntu 10.04 i386
-* Ubuntu 11.04 i386
-* Ubuntu 10.04 x86_64
-* Ubuntu 11.04 x86_64
-* openSUSE 11.3 i686
-* openSUSE 11.4 i686
-* openSUSE 11.3 x86_64
-* openSUSE 11.4 x86_64
+* Solaris 10 sparc
 
 In all cases, the compiler originally provided with the OS was used.
 
@@ -155,6 +140,7 @@ In all cases, the compiler originally provided with the OS was used.
 The following platforms are supported operating systems:
 
 * Linux 2.6
+* Solaris 10
 
 4. Filing Bug Reports
 

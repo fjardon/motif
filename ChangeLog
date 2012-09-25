@@ -1,5 +1,9 @@
 ========================= Motif 2.3.4 released ============================
 2012-09-25  Yuriy Syrota <yura@ics.com>
+	* RELNOTES:
+	Updated Release Notes
+
+2012-09-25  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/MenuShell.c, lib/Xm/MenuUtil.c, lib/Xm/XmI.h:
 	Fixed bug #1565 (The active window changes to inactive when the drop down list is clicked)
 
