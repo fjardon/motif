@@ -1,4 +1,8 @@
 ========================= Motif 2.3.4 released ============================
+2012-09-25  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/XmRenderT.c, lib/Xm/XmString.c:
+	Fixed issues with non-XFT build
+
 2012-09-17  Yuriy Syrota <yura@ics.com>
 	* lib/Xm/XmRenderT.c:
 	Removed extra token at end of #endif directive
