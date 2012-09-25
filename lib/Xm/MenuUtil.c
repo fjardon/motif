@@ -1051,19 +1051,23 @@ _XmMenuGrabKeyboardAndPointer(
       Time time )
 {
 
-   register int status = 
-           (_XmGrabKeyboard(widget, 
-                            True, 
-                            GrabModeSync, 
+   register int status =
+           (_XmGrabKeyboard(widget,
+#ifdef FIX_1565
+                            False,
+#else
+                            True,
+#endif
+                            GrabModeSync,
                             GrabModeAsync,
                             time) != GrabSuccess);
    if (status)
       return(status);
-   
+
    status = _XmGrabPointer(widget, True, EVENTS, GrabModeSync,
        GrabModeAsync, None, XmGetMenuCursor(XtDisplay(widget)), time) !=
          GrabSuccess;
-   
+
    if (status)
       XtUngrabKeyboard(widget, CurrentTime);
 
