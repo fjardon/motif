@@ -1,5 +1,10 @@
 ========================= Motif 2.3.4 released ============================
 2012-09-25  Yuriy Syrota <yura@ics.com>
+	* demos/programs/hellomotifi18n/Makefile.am,
+	demos/unsupported/dogs/Makefile.am:
+	Fixed library dependencies
+
+2012-09-25  Yuriy Syrota <yura@ics.com>
 	* RELNOTES:
 	Updated Release Notes
 
