@@ -1,3 +1,7 @@
+2012-10-31  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/FontS.c:
+	Fixed bug #1581 (Buffer overrun in FontS.c)
+
 2012-09-25  Yuriy Syrota <yura@ics.com>
 	* demos/programs/hellomotifi18n/Makefile.am,
 	demos/unsupported/dogs/Makefile.am:
