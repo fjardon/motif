@@ -1,3 +1,7 @@
+2012-10-31  Yuriy Syrota <yura@ics.com>
+	* lib/Xm/FontS.c:
+	Fixed bug #1581 (Buffer overrun in FontS.c)
+
 ========================= Motif 2.3.4 released ============================
 2012-10-22  Yuriy Syrota <yura@ics.com>
 	* RELNOTES:

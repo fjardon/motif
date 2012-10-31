@@ -1879,7 +1879,7 @@ SetDisplayedFont(XmFontSelectorWidget fsw, String new_font)
 		String params[1];
 		Cardinal num = 1;
 		
-		params[1] = new_font;
+		params[0] = new_font;
 		dbg(); _XmWarningMsg((Widget) fsw, XmNbadXlfdFont,
 			XmNbadXlfdFontMsg, params, num);
 	    }
