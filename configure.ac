@@ -47,10 +47,6 @@ AC_CHECK_PROGS(YACC, byacc, yacc)
 
 dnl AC_PROG_SPLINT
 AC_CHECK_PROGS(SPLINT, splint)
-if test x$SPLINT = x
-then
-    AC_MSG_WARN([No splint is dound])
-fi
 
 AM_PROG_LEX
 AC_PROG_INSTALL
