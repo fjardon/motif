@@ -189,7 +189,7 @@ no)
 yes)
 	case "$fc_config" in
 	no)
-		FONTCONFIG_CFLAGS=""
+		FONTCONFIG_CFLAGS="`pkg-config fontconfig --cflags`"
 		;;
 	*)
 		FONTCONFIG_CFLAGS="`$fc_config --cflags`"
@@ -208,7 +208,7 @@ no)
 yes)
 	case "$fc_config" in
 	no)
-		fontconfig_lib=""
+		FONTCONFIG_LIBS="`pkg-config fontconfig --libs`"
 		;;
 	*)
 		FONTCONFIG_LIBS="`$fc_config --libs`"
