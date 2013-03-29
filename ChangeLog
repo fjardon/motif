@@ -1,3 +1,8 @@
+2013-03-29  Yuriy Syrota <yura@ics.com>
+	* ac_find_xft.m4:
+	Fixed bug #1593 (Missing fontconfig lib in linking, due to outdated test in
+	ac_find_xft.m4). Patch by Ulrich Müller.
+
 2013-03-28  Yuriy Syrota <yura@ics.com>
 	* configure.ac:
 	Fixed bug #1594 (configure: typo in warning "No splint is dound")
