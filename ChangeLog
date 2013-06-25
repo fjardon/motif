@@ -1,3 +1,12 @@
+2013-06-25  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/ColorSB.c:
+	Fixed bug #1577  (Was prevented memory leak in call XmTextFieldGetString).
+
+2013-06-25  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* configure.ac:
+	Fixed bug #1595 (Automake scripts not work with automake tools 1.13 and 1.13.1 versions). 
+	Patch by Ulrich Müller.
+
 2013-03-29  Yuriy Syrota <yura@ics.com>
 	* ac_find_xft.m4:
 	Fixed bug #1593 (Missing fontconfig lib in linking, due to outdated test in
