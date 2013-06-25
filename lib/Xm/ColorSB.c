@@ -124,7 +124,7 @@ static Boolean is_grabbed = False;
  *       FIXES
  ************************************************************/
 
-#define FIX_1595
+#define FIX_1577
 
 /************************************************************
  *       GLOBAL DECLARATIONS
@@ -989,7 +989,7 @@ ChangeBackgroundColor(
 	int status;
 	XColor screen_in_out;
 	char *colorVal;
-#ifdef FIX_1595
+#ifdef FIX_1577
         char *colorStr;
 #endif
 
@@ -1009,7 +1009,7 @@ ChangeBackgroundColor(
 	XmColorSB_allow_callbacks(csb) = False;
 
 	colorVal = RGB2String(XmColorSB_red_value(csb), XmColorSB_green_value(csb), XmColorSB_blue_value(csb));
-#ifdef FIX_1595
+#ifdef FIX_1577
 	colorStr = XmTextFieldGetString(XmColorSB_selectedColorF(csb));
 	if(strcmp(colorVal, colorStr))
 		XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
