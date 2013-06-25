@@ -121,6 +121,12 @@ static Boolean is_grabbed = False;
 #define MIN3(a,b,c) ((a>b)?MIN(b,c):MIN(a,c))
 
 /************************************************************
+ *       FIXES
+ ************************************************************/
+
+#define FIX_1595
+
+/************************************************************
  *       GLOBAL DECLARATIONS
  ************************************************************/
 
@@ -983,6 +989,9 @@ ChangeBackgroundColor(
 	int status;
 	XColor screen_in_out;
 	char *colorVal;
+#ifdef FIX_1595
+        char *colorStr;
+#endif
 
 	k=(float)_value/(S_len-1);
 
@@ -1000,9 +1009,15 @@ ChangeBackgroundColor(
 	XmColorSB_allow_callbacks(csb) = False;
 
 	colorVal = RGB2String(XmColorSB_red_value(csb), XmColorSB_green_value(csb), XmColorSB_blue_value(csb));
+#ifdef FIX_1595
+	colorStr = XmTextFieldGetString(XmColorSB_selectedColorF(csb));
+	if(strcmp(colorVal, colorStr))
+		XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
+	XtFree(colorStr);
+#else
 	if(strcmp(colorVal, XmTextFieldGetString(XmColorSB_selectedColorF(csb))))
 		XmTextFieldSetString(XmColorSB_selectedColorF(csb), colorVal);
-
+#endif
 	XmColorSB_allow_callbacks(csb) = True;
 }
 
