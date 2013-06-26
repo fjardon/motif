@@ -2486,7 +2486,7 @@ DrawItems(XmListWidget lw,
 #ifdef FIX_1381
 	  {
 		gc = lw->list.InsensitiveGC;
-		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor(lw);
+		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
 	  }
 #else
 	gc = lw->list.InsensitiveGC;
@@ -2831,7 +2831,7 @@ MakeGC(XmListWidget lw)
   values.background = lw->core.background_pixel;
 #ifdef FIX_1381
   /*generally gray insensitive foreground (instead stipple)*/
-  values.foreground = _XmAssignInsensitiveColor(lw);
+  values.foreground = _XmAssignInsensitiveColor((Widget)lw);
 #else
   values.foreground = lw->primitive.foreground;
   valueMask |= GCStipple | GCFillStyle;

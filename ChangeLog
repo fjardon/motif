@@ -1,3 +1,17 @@
+2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
+> 	* Label.c,
+> 	  LabelG.c,
+> 	  List.c,
+> 	  Text.c,
+> 	  TextIn.c,
+> 	  TextF.c,
+> 	  ResEncod.c,
+> 	  ColorObj.c,
+> 	  Container.c,
+> 	  DataF.c,
+> 	  IconButton.c:
+> 	Fixed bug #XXXX (Eliminates warnings of  incompatible type argument from some modules).
+
 2013-06-25  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* configure.ac:
 	Fixed bug #1595 (Automake scripts not work with automake tools 1.13 and 1.13.1 versions). 

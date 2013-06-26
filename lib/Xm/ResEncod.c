@@ -2513,9 +2513,9 @@ processCharsetAndTextUtf8(XmStringCharSet tag,
 
   /* Now copy in the text */
   if (ctlen > 0) {
-    char *text = Convert(ctext, ctlen, "UTF-8", tag);
+    char *text = Convert((char *)ctext, ctlen, "UTF-8", tag);
     if (text == NULL) return(False);
-    *outc = ctextConcat(*outc, *outlen, text, strlen(text));
+    *outc = ctextConcat(*outc, *outlen, (const_OctetPtr)text, strlen(text));
     *outlen += ctlen;
     XtFree(text);
   };

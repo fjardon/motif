@@ -8867,7 +8867,7 @@ df_LoadFontMetrics(
 #ifdef USE_XFT
     } else if (XmTextF_use_xft(tf)) {
 #ifdef FIX_1415
-	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), &charwidth);
+	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), (int *)&charwidth);
 #else
         charwidth = XmTextF_xft_font(tf)->max_advance_width;
 #endif

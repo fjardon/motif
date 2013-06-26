@@ -1870,7 +1870,7 @@ CreateGCs(Widget w)
 
 #ifdef FIX_1381
     /*generally gray insensitive foreground (instead stipple)*/
-    values.foreground = _XmAssignInsensitiveColor(iw);
+    values.foreground = _XmAssignInsensitiveColor((Widget)iw);
     XmIconButton_insensitive_text_gc(iw) = XtGetGC(w, smask, &values);
 #else 
     XmIconButton_stippled_text_gc(iw) = XtGetGC(w, smask, &values);
