@@ -334,12 +334,12 @@ Idb__INX_SearchIndex (IDBFile			file_id,
    *  Local variables
    */
   MrmType		buftyp ;	/* buffer type */
-  IDBIndexLeafRecordPtr	leafrec ;	/* index leaf record */
-  IDBIndexLeafHdrPtr	leafhdr ;	/* index leaf header */
+  IDBIndexLeafRecordPtr	leafrec =NULL ;	/* index leaf record */
+  IDBIndexLeafHdrPtr	leafhdr =NULL;	/* index leaf header */
   IDBIndexNodeRecordPtr	noderec ;	/* index node record */
   IDBIndexNodeHdrPtr	nodehdr ;	/* index node header */
-  IDBIndexLeafEntryPtr	leaf_ndxvec ;	/* index leaf entry vector */
-  IDBIndexNodeEntryPtr	node_ndxvec ;	/* index node entry vector */
+  IDBIndexLeafEntryPtr	leaf_ndxvec = NULL;	/* index leaf entry vector */
+  IDBIndexNodeEntryPtr	node_ndxvec = NULL;	/* index node entry vector */
   MrmCount		ndxcnt ;	/* number of entries in vector */
   char			*stgbase ;	/* base adddress for string offsets */
   int			lowlim ;	/* binary search lower limit index */

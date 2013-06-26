@@ -8003,8 +8003,7 @@ XmStringParseText(XtPointer    text,
     case XmMULTIBYTE_TEXT:
       /* Non-NULL values (except _MOTIF_DEFAULT_LOCALE)
          are not accepted in Motif 2.0. */
-      if (tag != NULL && !(tag == _MOTIF_DEFAULT_LOCALE ||
-			   strcmp(tag, _MOTIF_DEFAULT_LOCALE) == 0))
+      if ((tag != NULL) && (strcmp(tag, _MOTIF_DEFAULT_LOCALE) != 0))
       {
 	_XmProcessUnlock();
 	return NULL;
@@ -8617,8 +8616,7 @@ XmStringComponentCreate(XmStringComponentType c_type,
 	_XmProcessUnlock();
 	return NULL;
       }
-      if ((value != _MOTIF_DEFAULT_LOCALE) &&
-	  (strcmp((char*) value, _MOTIF_DEFAULT_LOCALE) != 0)) {
+      if (strcmp((char*) value, _MOTIF_DEFAULT_LOCALE) != 0) {
 	_XmProcessUnlock();
 	return NULL;
       }
