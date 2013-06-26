@@ -3049,24 +3049,24 @@ Urm__CW_LoadIconImage (RGMIconImagePtr		iconptr ,
    * provide the correct relocation for color items.
    */
   if (iconptr->validation != URMIconImageValid)
-    if ( Urm__SwapValidation(iconptr->validation) == URMIconImageValid ) 
-      {
-	swapbytes( iconptr->validation );
-	swapbytes( iconptr->width );
-	swapbytes( iconptr->height );
-	swapbytes( iconptr->hot_x );
-	swapbytes( iconptr->hot_y );
-	swapbytes( iconptr->ct_type );
-	swapbytes( iconptr->annex1 );
-	swapbytes( iconptr->color_table.ctoff );
-	swapbytes( iconptr->pixel_data.pdoff );
-	swap_needed = TRUE;
-      }
-    else
-      /* CR9259 */
-      return Urm__UT_Error ("Urm__CW_LoadIconImage", 
+    { if ( Urm__SwapValidation(iconptr->validation) == URMIconImageValid ) 
+       { swapbytes( iconptr->validation );
+         swapbytes( iconptr->width );
+         swapbytes( iconptr->height );
+         swapbytes( iconptr->hot_x );
+         swapbytes( iconptr->hot_y );
+         swapbytes( iconptr->ct_type );
+         swapbytes( iconptr->annex1 );
+         swapbytes( iconptr->color_table.ctoff );
+         swapbytes( iconptr->pixel_data.pdoff );
+         swap_needed = TRUE;
+        }
+      else
+        { /* CR9259 */
+          return Urm__UT_Error ("Urm__CW_LoadIconImage", 
 			    _MrmMMsg_0028, NULL, NULL, MrmNOT_VALID) ;
-
+        }
+    }
   iconptr->pixel_data.pdptr = (char *) bufptr+iconptr->pixel_data.pdoff ;
   switch ( iconptr->ct_type )
     {
@@ -3105,16 +3105,18 @@ Urm__CW_LoadIconImage (RGMIconImagePtr		iconptr ,
    */
   ctable = iconptr->color_table.ctptr ;
   if (ctable->validation != URMColorTableValid)
-    if ( Urm__SwapValidation(ctable->validation) == URMColorTableValid )
-      {
-	swapbytes( ctable->validation );
-	swapbytes( ctable->count );
-	swap_needed = TRUE;
-      }
-    else
-      /* CR9259 */
-      return Urm__UT_Error ("Urm__CW_LoadIconImage", 
+    { if ( Urm__SwapValidation(ctable->validation) == URMColorTableValid )
+        {	swapbytes( ctable->validation );
+            swapbytes( ctable->count );
+            swap_needed = TRUE;
+        }
+      else
+        {
+            /* CR9259 */
+            return Urm__UT_Error ("Urm__CW_LoadIconImage", 
 			    _MrmMMsg_0028, NULL, NULL, MrmNOT_VALID) ;
+        }
+    }
 
   for ( ndx=URMColorTableUserMin ; ndx<ctable->count ; ndx++ )
     {
