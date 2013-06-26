@@ -1717,8 +1717,8 @@ DrawOutlineLine(Widget w, XRectangle *rect, OutlineConstraints node)
     OutlineConstraints * kids;
     register int i, num_kids;
     Boolean anyKidManaged = False; /* CR03730 Support Case 22066 */
-    LadderPoint from_node_point, kid_point;
-    LadderPoint last_kid_point;
+    LadderPoint from_node_point ={0, 0}, kid_point = {0, 0};
+    LadderPoint last_kid_point ={0, 0};
     XmOutlineWidget ow = (XmOutlineWidget)w;
 
     num_kids = XmHierarchyC_num_children(node);

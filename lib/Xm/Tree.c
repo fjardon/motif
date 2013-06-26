@@ -1329,8 +1329,8 @@ DrawTreeLine(Widget w, XRectangle *rect, TreeConstraints node)
     TreeConstraints * kids;
     register int i, num_kids;
     TreeConstraints from_node = node;
-    LadderPoint from_node_point, kid_point, first_kid_point;
-    LadderPoint last_kid_point;
+    LadderPoint from_node_point = {0, 0}, kid_point = {0, 0}, first_kid_point = {0, 0};
+    LadderPoint last_kid_point = {0, 0};
     Boolean first_time=True;
     XmTreeWidget tw = (XmTreeWidget)w;
 
@@ -1421,7 +1421,7 @@ _DrawLine(Widget w, XRectangle *rect, TreeConstraints parent,
 {
     GC gc;
     XmTreeWidget tw = (XmTreeWidget) w;
-    register int x2, y2, extra_space;
+    register int x2=0, y2=0, extra_space;
     register int rx2, ry2, cx1, cx2, cy1, cy2;
 
     /*

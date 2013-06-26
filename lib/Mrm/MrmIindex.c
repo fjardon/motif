@@ -345,7 +345,7 @@ Idb__INX_SearchIndex (IDBFile			file_id,
   int			lowlim ;	/* binary search lower limit index */
   int			uprlim ;	/* binary search upper limit index */
   char			*ndxstg ;	/* pointer to current index string */
-  int			cmpres ;	/* strncmp result */
+  int			cmpres=0;	/* strncmp result */
 
 
   /*

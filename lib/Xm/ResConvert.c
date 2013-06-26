@@ -2665,7 +2665,7 @@ CvtStringToXmTabList(Display *dpy,
   char 		*s;
   float 	value;
   char 		unitType[12]; /* longest unit name is "millimeters"  */
-  XmOffsetModel	offsetModel;
+  XmOffsetModel	offsetModel = XmABSOLUTE;
   int		units;
   XmParseResult	result;
   XmTab		tab;
@@ -2691,7 +2691,6 @@ CvtStringToXmTabList(Display *dpy,
 	    {
 	      units = XmPIXELS;
 	    }
-	  
 	  tab = XmTabCreate(value, (unsigned char)units, offsetModel,
 			    XmALIGNMENT_BEGINNING, XmS);
 	  

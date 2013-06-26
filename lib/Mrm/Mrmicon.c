@@ -925,8 +925,8 @@ Urm__MapIconAllocate (RGMIconImagePtr		icon,
   int			bit;		/* bit loop index */
   int			pix;		/* line pixel number */
   unsigned char		srcbyt;		/* icon image byte */
-  int			bitmask;        /* mask all but significant bits */
-  int			num_bits;       /* real (not coded) pixel size */
+  int			bitmask = 0;    /* mask all but significant bits */
+  int			num_bits = 0;   /* real (not coded) pixel size */
   int			tndx;		/* color table index */
   XImage		*imagep;	/* X image */
   GC			gc;
@@ -1094,7 +1094,7 @@ Urm__RealizeColorTable (Screen			*screen,
   /*
    *  Local variables
    */
-  Cardinal		result;		/* function results */
+  Cardinal		result = 0;		/* function results */
   Cardinal		ndx;		/* loop index */
   RGMColorTableEntryPtr	citem;		/* color table entry */
   Colormap		cmap;		/* default color map */
