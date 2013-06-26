@@ -80,6 +80,7 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 #endif
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 
 /*
@@ -159,6 +160,7 @@ void wmlInit ();
  * External variables
  */
 extern	int	yyleng;
+extern  int yyparse();
 
 
 

@@ -1,8 +1,14 @@
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* tools/wml/wml.c
+	  tools/wml/wmloutp1.c
+	  tools/wml/wmlresolve.c:
+	Fixed bug #XXXX (Eliminates warnings "simplicit declaration of function" in some modules).
+
+2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/Label.c,
 	  lib/Xm/TextF.c,
 	  lib/Mrm/MrmIrid.c
-	  lib/Mrm/Mrmwcrw.c
+	  lib/Mrm/Mrmwcrw.c:
 	Fixed bug #XXXX (Eliminates warnings "suggest explicit braces to avoid ambiguous" in some modules).
 
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
@@ -17,7 +23,7 @@
 	  tools/wml/wmlouth.c
 	  tools/wml/wmlutils.c
 	  lib/Mrm/MrmIindex.x
-	  lib/Mrm/Mrmicon.c
+	  lib/Mrm/Mrmicon.c:
 	Fixed bug #XXXX (Eliminates warnings about using uninitialized variables in some modules).
 
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
