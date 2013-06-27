@@ -684,7 +684,7 @@ _MapEvent(
         Modifiers *modifiers,
 	Boolean *status)
 {
-  Cardinal index;
+  Cardinal index=0;
   
   /* Initialize, if first time called */
   _XmProcessLock();

@@ -345,7 +345,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     XpmColor **colorTablePtr;
     xpmHashTable *hashtable;
 {
-    unsigned int key, l, a, b, len;
+    unsigned int key = 0, l, a, b, len;
     unsigned int curkey;		/* current color key */
     unsigned int lastwaskey;		/* key read */
     char buf[BUFSIZ + 1];

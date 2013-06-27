@@ -770,7 +770,7 @@ int			ndx;		/* loop index */
 WmlResourceDefPtr	resobj;		/* resource object */
 WmlSynResourceDefPtr	synobj;		/* syntactic object */
 char			maskbuf[100];	/* to constuct each mask */
-int			bitno;		/* current bit number, from code */
+int			bitno = 0;		/* current bit number, from code */
 
 /*
  * Open the output file. Write canned header.
@@ -863,7 +863,7 @@ WmlResourceDefPtr	resobj;		/* current reason */
 int			clsndx;		/* inner loop index */
 WmlClassDefPtr		clsobj;		/* current class object */
 WmlClassResDefPtr	resref;		/* class' resource reference */
-int			itemno;		/* item in bye */
+int			itemno = 0;		/* item in bye */
 char			maskbuf[500];	/* current mask buffer */
 char			itembuf[100];	/* for current item */
 int			donl;		/* TRUE if append \n to mask */
@@ -989,7 +989,7 @@ WmlResourceDefPtr	resobj;		/* current argument */
 int			clsndx;		/* inner loop index */
 WmlClassDefPtr		clsobj;		/* current class object */
 WmlClassResDefPtr	resref;		/* class' resource reference */
-int			itemno;		/* item in bye */
+int			itemno = 0;		/* item in bye */
 char			maskbuf[500];	/* current mask buffer */
 char			itembuf[100];	/* for current item */
 int			donl;		/* TRUE if append \n to mask */
@@ -1114,7 +1114,7 @@ WmlChildDefPtr		childobj;	/* current argument */
 int			clsndx;		/* inner loop index */
 WmlClassDefPtr		clsobj;		/* current class object */
 WmlClassChildDefPtr	childref;	/* class' child reference */
-int			itemno;		/* item in byte */
+int			itemno = 0;		/* item in byte */
 char			maskbuf[500];	/* current mask buffer */
 char			itembuf[100];	/* for current item */
 int			donl;		/* TRUE if append \n to mask */
@@ -1236,7 +1236,7 @@ int			ctlndx;		/* outer loop index */
 WmlClassDefPtr		ctlobj;		/* current class allowing controls */
 int			clsndx;		/* inner loop index */
 WmlClassDefPtr		clsobj;		/* current class object */
-int			itemno;		/* item in bye */
+int			itemno = 0;		/* item in bye */
 char			maskbuf[500];	/* current mask buffer */
 char			itembuf[100];	/* for current item */
 int			donl;		/* TRUE if append \n to mask */

@@ -261,9 +261,9 @@ void wmlInsertInHList (listptr, name, obj)
 int		ndx;		/* current index in list */
 int		londx;		/* low index */
 int		hindx;		/* high index */
-int		midndx;		/* midpoint index */
+int		midndx = 0;		/* midpoint index */
 int		newndx;		/* new entry index */
-int		cmpres;		/* strcmp result */
+int		cmpres = 0;		/* strcmp result */
 
 
 /*
@@ -344,9 +344,9 @@ void wmlInsertInKeyList (listptr, name, obj)
   int		ndx;				  /* current index in list */
   int		londx;				  /* low index */
   int		hindx;				  /* high index */
-  int		midndx;				  /* midpoint index */
+  int		midndx = 0;			  /* midpoint index */
   int		newndx;				  /* new entry index */
-  int		cmpres;				  /* strcmp result */
+  int		cmpres = 0;			  /* strcmp result */
 
   /*
    * Guarantee enough space in the list

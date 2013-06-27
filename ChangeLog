@@ -1,16 +1,32 @@
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
-> 	* Label.c,
-> 	  LabelG.c,
-> 	  List.c,
-> 	  Text.c,
-> 	  TextIn.c,
-> 	  TextF.c,
-> 	  ResEncod.c,
-> 	  ColorObj.c,
-> 	  Container.c,
-> 	  DataF.c,
-> 	  IconButton.c:
-> 	Fixed bug #XXXX (Eliminates warnings of  incompatible type argument from some modules).
+	* lib/Xm/MapEvents.c,
+	  lib/Xm/Outline.c
+	  lib/Xm/ResConvert.c
+	  lib/Xm/TabBox.c
+	  lib/Xm/Tree.c
+	  lib/Xm/TxtPropCv.c
+	  lib/Xm/Xm.c
+	  lib/Xm/Xpmparse.c
+	  tools/wml/wmlouth.c
+	  tools/wml/wmlutils.c
+	  lib/Mrm/MrmIindex.x
+	  lib/Mrm/Mrmicon.c
+	Fixed bug #XXXX (Eliminates warnings about using uninitialized variables in some modules).
+
+
+2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/Label.c,
+	  lib/Xm/LabelG.c,
+	  lib/Xm/List.c,
+	  lib/Xm/Text.c,
+	  lib/Xm/TextIn.c,
+	  lib/Xm/TextF.c,
+	  lib/Xm/ResEncod.c,
+	  lib/Xm/ColorObj.c,
+	  lib/Xm/Container.c,
+	  lib/Xm/DataF.c,
+	  lib/Xm/IconButton.c:
+	Fixed bug #XXXX (Eliminates warnings of  incompatible type argument from some modules).
 
 2013-06-25  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/ColorSB.c:

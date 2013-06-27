@@ -279,7 +279,7 @@ GetUseableText(Display *display, XmString xmstring, char **buffer,
 {
     _XmStringContextRec stack_context;
     XTextProperty text_prop_return;
-    char *text = NULL, *final_string = NULL, *text_item, *compound_text;
+    char *text = NULL, *final_string = NULL, *text_item=NULL, *compound_text;
     unsigned char return_status;
     int result, size_so_far = 1; /* initialized for the ending NULL */
     XICCEncodingStyle encoding_style;

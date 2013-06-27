@@ -509,7 +509,7 @@ XmObjectAtPoint(
 Pixel
 _XmAssignInsensitiveColor(Widget w)
 {
-	Pixel p;
+	Pixel p = 0;
 
 	if (XmIsPrimitive(w)) {
 		XmPrimitiveWidget pw = (XmPrimitiveWidget) w;

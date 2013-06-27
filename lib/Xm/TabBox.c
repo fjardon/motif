@@ -5518,6 +5518,7 @@ SetRightGC(XmTabBoxWidget tab, GC gc, GC_type gc_type)
     static Pixel 	p = 0;
     static GC_type 	last = normal;
     valueMask = GCForeground;
+    values.foreground = 0;
     switch( gc_type )
       {
         case normal:
