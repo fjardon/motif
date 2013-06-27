@@ -2041,7 +2041,7 @@ Urm__CW_ConvertValue (Widget			parent,
   String		fontstg ;	/* font id string */
   RGMFontItemPtr	fontptr ;	/* val as font descriptor */
   RGMFontListPtr	fontlist ;	/* val as font list */
-  XmFontList		dfontlist ;	/* converted font list */
+  XmFontList		dfontlist = NULL;	/* converted font list */
   RGMColorDescPtr	colorptr ;	/* val as color descriptor */
   Pixel			pix ;		/* result of color/pixel conversion */
   int			ndx ;		/* conversion loop index */

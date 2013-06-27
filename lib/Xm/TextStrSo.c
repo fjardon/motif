@@ -1144,15 +1144,15 @@ ScanParagraph(XmSourceData data,
     c = Look(data, position, dir);
     (void) _XmTextCharactersToBytes(mb_char, c, 1, 
 				    (int)data->widgets[0]->text.char_size);
-    if (mb_char && *mb_char == '\n') {
+    if (*mb_char == '\n') {
       /* DELTA: Look now returns a pointer */
       c = Look(data, position + ddir, dir);
       (void) _XmTextCharactersToBytes(mb_char, c, 1,
 				      (int)data->widgets[0]->text.char_size);
-      while (mb_char && isspace((unsigned char)*mb_char)) {
+      while (isspace((unsigned char)*mb_char)) {
 	if (*mb_char == '\n') {
 	  found = True;
-	  while (mb_char && isspace((unsigned char)*mb_char)) {
+	  while (isspace((unsigned char)*mb_char)) {
 	    /* DELTA: Look now returns a pointer */
 	    c = Look(data, position + ddir, dir);
 	    (void) _XmTextCharactersToBytes(mb_char, c, 1,
@@ -1172,7 +1172,7 @@ ScanParagraph(XmSourceData data,
 	/* END 3145 */
       }
       if (found) break;
-    } else if (mb_char && !isspace((unsigned char)*mb_char)) {
+    } else if (!isspace((unsigned char)*mb_char)) {
       *last_char = (position) + ddir;
     }
     
@@ -1249,7 +1249,7 @@ Scan(XmTextSource source,
 					       Look(data, position, dir),
 					       1, (int)tw->text.char_size);
 	  cur_is_mb = (num_bytes < 2 ? False : True);
-	  if (!cur_is_mb && mb_char && 
+	  if (!cur_is_mb && 
 	      isspace((unsigned char)*mb_char)) {
 	    if (whiteSpace < 0) whiteSpace = position;
 	  } else if ((sType == XmSELECT_WORD) &&
@@ -1317,7 +1317,7 @@ Scan(XmTextSource source,
 					Look(data, position, dir), 
 					1, (int)tw->text.char_size);
 	/* if is space, go back to first non-space */
-	while (mb_char && isspace((unsigned char)*mb_char)) {
+	while (isspace((unsigned char)*mb_char)) {
 	  if (position > 0)
 	    position--;
 	  else if (position == 0)

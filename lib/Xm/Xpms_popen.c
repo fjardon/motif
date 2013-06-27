@@ -56,7 +56,7 @@ FILE *Xpms_popen(char *cmd, const char *type)
   char *cmdcpy;
 
 
-  if(cmd == NULL || cmd == "")
+  if((cmd == NULL) || (strlen(cmd)==0))
     return(NULL);
 
   if(type[0] != 'r' && type[0] != 'w')

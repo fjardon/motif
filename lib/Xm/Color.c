@@ -1001,9 +1001,11 @@ GetColors(
 	 * initialize them to a value that is always valid (for most
 	 * implementations of X).
 	 */
-	new_colors.foreground.pixel = new_colors.top_shadow.pixel = 
-		new_colors.top_shadow.pixel = new_colors.select.pixel = 0;
-
+	new_colors.foreground.pixel = 0;
+	new_colors.top_shadow.pixel = 0; 
+	new_colors.top_shadow.pixel = 0; 
+	new_colors.select.pixel = 0;
+    
 	/*  Generate the foreground, top_shadow, and bottom_shadow based  */
 	/*  on the background                                             */
 

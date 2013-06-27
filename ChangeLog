@@ -1,30 +1,41 @@
+2013-06-27  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/Color.c,
+	  lib/Xm/Obso2_O.c
+	  lib/Xm/SlideC.c,
+	  lib/Xm/TextStrSo.c,
+	  lib/Xm/XmString.c,
+	  lib/Xm/Xpms_popen.c,
+	  lib/Mrm/MrmIindex.c,
+	  lib/Mrm/Mrmwcrw.c:
+	Fixed bug #1603 (Eliminates some type warnings in some modules).
+
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
-	* tools/wml/wml.c
-	  tools/wml/wmloutp1.c
+	* tools/wml/wml.c,
+	  tools/wml/wmloutp1.c,
 	  tools/wml/wmlresolve.c:
-	Fixed bug #XXXX (Eliminates warnings "simplicit declaration of function" in some modules).
+	Fixed bug #1602 (Eliminates warnings "implicit declaration of function" in some modules).
 
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/Label.c,
 	  lib/Xm/TextF.c,
-	  lib/Mrm/MrmIrid.c
+	  lib/Mrm/MrmIrid.c,
 	  lib/Mrm/Mrmwcrw.c:
-	Fixed bug #XXXX (Eliminates warnings "suggest explicit braces to avoid ambiguous" in some modules).
+	Fixed bug #1601 (Eliminates warnings "suggest explicit braces to avoid ambiguous" in some modules).
 
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/MapEvents.c,
-	  lib/Xm/Outline.c
-	  lib/Xm/ResConvert.c
-	  lib/Xm/TabBox.c
-	  lib/Xm/Tree.c
-	  lib/Xm/TxtPropCv.c
-	  lib/Xm/Xm.c
-	  lib/Xm/Xpmparse.c
-	  tools/wml/wmlouth.c
-	  tools/wml/wmlutils.c
-	  lib/Mrm/MrmIindex.x
+	  lib/Xm/Outline.c,
+	  lib/Xm/ResConvert.c,
+	  lib/Xm/TabBox.c,
+	  lib/Xm/Tree.c,
+	  lib/Xm/TxtPropCv.c,
+	  lib/Xm/Xm.c,
+	  lib/Xm/Xpmparse.c,
+	  tools/wml/wmlouth.c,
+	  tools/wml/wmlutils.c,
+	  lib/Mrm/MrmIindex.x,
 	  lib/Mrm/Mrmicon.c:
-	Fixed bug #XXXX (Eliminates warnings about using uninitialized variables in some modules).
+	Fixed bug #1600 (Eliminates warnings about using uninitialized variables in some modules).
 
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/Label.c,
@@ -38,7 +49,7 @@
 	  lib/Xm/Container.c,
 	  lib/Xm/DataF.c,
 	  lib/Xm/IconButton.c:
-	Fixed bug #XXXX (Eliminates warnings of  incompatible type argument from some modules).
+	Fixed bug #1599 (Eliminates warnings of  incompatible type argument from some modules).
 
 2013-06-25  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/ColorSB.c:
