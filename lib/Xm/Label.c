@@ -1729,7 +1729,7 @@ Redisplay(
 		lw->primitive.shadow_thickness +
 		lp->margin_width) +
 	   lp->margin_left + lp->TextRect.width + lp->margin_right))
-
+	     {
 #ifdef FIX_1381
 		  if (XtIsSensitive(wid) )
 		  {
@@ -1767,6 +1767,7 @@ Redisplay(
 		       lp->acc_TextRect.width, XmALIGNMENT_END,
 		       XmPrim_layout_direction(lw), NULL);
 #endif
+	     }
     }
   
   /* Redraw the proper highlight  */

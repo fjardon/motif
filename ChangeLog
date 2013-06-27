@@ -1,4 +1,11 @@
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/Label.c,
+	  lib/Xm/TextF.c,
+	  lib/Mrm/MrmIrid.c
+	  lib/Mrm/Mrmwcrw.c
+	Fixed bug #XXXX (Eliminates warnings "suggest explicit braces to avoid ambiguous" in some modules).
+
+2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/MapEvents.c,
 	  lib/Xm/Outline.c
 	  lib/Xm/ResConvert.c
@@ -12,7 +19,6 @@
 	  lib/Mrm/MrmIindex.x
 	  lib/Mrm/Mrmicon.c
 	Fixed bug #XXXX (Eliminates warnings about using uninitialized variables in some modules).
-
 
 2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/Label.c,
