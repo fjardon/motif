@@ -1345,7 +1345,7 @@ PrintableString(XmTextWidget tw,
 #ifdef USE_XFT
   } else if (o_data->use_xft) {
     XGlyphInfo ext;
-    XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, str, n, &ext);
+    XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, (_Xconst FcChar8 *)str, n, &ext);
     return ext.xOff != 0;    
 #endif
   } else {

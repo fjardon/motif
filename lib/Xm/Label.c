@@ -1573,7 +1573,7 @@ Redisplay(
 #ifdef FIX_1505
 	      if (pix_use == Pix(lw)) {
 		  XSetFillStyle(XtDisplay(lw), gc, FillStippled);
-		  XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap(lw));
+		  XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap((Widget)lw));
 		  XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
 			lp->TextRect.x + lp->PixmapRect.x,
 			lp->TextRect.y + lp->PixmapRect.y,

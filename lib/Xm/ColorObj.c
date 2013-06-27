@@ -62,7 +62,7 @@
 #define WARNING2	_XmMMsgColObj_0002
 
 #ifdef FIX_1400
-static void trap_XCloseDisplay(Display *disp, XExtCodes *codes);
+static int trap_XCloseDisplay(Display *disp, XExtCodes *codes);
 #endif
 
 /** default should not be killed unless application is dying **/
@@ -1543,9 +1543,10 @@ XmeGetDesktopColorCells (Screen * screen,
 }
 
 #ifdef FIX_1400
-static void trap_XCloseDisplay(Display *disp, XExtCodes *codes)
+static int trap_XCloseDisplay(Display *disp, XExtCodes *codes)
 {
     if (disp == _XmColorObjCacheDisplay)
     	_XmColorObjCacheDisplay = NULL;
+    return 0;
 }
 #endif

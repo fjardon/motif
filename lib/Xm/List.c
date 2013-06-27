@@ -2491,7 +2491,7 @@ DrawItems(XmListWidget lw,
 #ifdef FIX_1381
 	  {
 		gc = lw->list.InsensitiveGC;
-		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor(lw);
+		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
 	  }
 #else
 	gc = lw->list.InsensitiveGC;

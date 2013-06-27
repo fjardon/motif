@@ -3234,7 +3234,7 @@ ConstraintSetValues(
 	    ContainerResetDepths(nc);
 
 #ifdef FIX_1425
-		FindMaxDepths(cc, (Widget)cw);
+		FindMaxDepths(cc, cw);
 #else
 	    cw->container.max_depth = MAX(cw->container.max_depth,nc->depth);
 #endif
@@ -7181,7 +7181,7 @@ static void FindMaxDepths(XmContainerConstraint	c, Widget w)
 		Widget child = node->widget_ptr;
 		XmContainerConstraint cc = GetContainerConstraint(child);
 		cw->container.max_depth = MAX(cw->container.max_depth, cc->depth);
-		FindMaxDepths(cc, (Widget)cw);
+		FindMaxDepths(cc, cw);
 		node = node->next_ptr;
 	}
 }

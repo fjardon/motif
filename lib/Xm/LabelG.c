@@ -2452,7 +2452,7 @@ LRectangle *background_box)
 #ifdef FIX_1505
                 if (pix_use == Pix(lw)) {
                     XSetFillStyle(XtDisplay(lw), gc, FillStippled);
-                    XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap(lw));
+                    XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap((Widget)lw));
                     XFillRectangle(XtDisplay(lw), XtWindow(lw), gc,
                        lw->rectangle.x + LabG_TextRect(lw).x +
                        LabG_PixmapRect(lw).x,

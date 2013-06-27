@@ -1,3 +1,17 @@
+2013-06-26  Mykola Vshyvkov <mvshyvkov@ics.com>
+> 	* Label.c,
+> 	  LabelG.c,
+> 	  List.c,
+> 	  Text.c,
+> 	  TextIn.c,
+> 	  TextF.c,
+> 	  ResEncod.c,
+> 	  ColorObj.c,
+> 	  Container.c,
+> 	  DataF.c,
+> 	  IconButton.c:
+> 	Fixed bug #XXXX (Eliminates warnings of  incompatible type argument from some modules).
+
 2013-06-25  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/ColorSB.c:
 	Fixed bug #1577  (Was prevented memory leak in call XmTextFieldGetString).
