@@ -58,6 +58,7 @@ static char rcsid[] = "$XConsortium: wmlresolve.c /main/9 1995/08/29 11:11:05 dr
 #include <stdlib.h>
 #endif
 #include <stdio.h>
+#include <string.h>
 
 /*
  * Routines used only in this module
