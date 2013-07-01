@@ -95,7 +95,6 @@ int             yytknval2;              /* terminal token value 2 */
 "Gadget"		{ return GADGET;}
 "Argument"		{ return ARGUMENT;}
 "Reason"		{ return REASON;}
-"Constraint"		{ return CONSTRAINT;}
 "SubResource"		{ return SUBRESOURCE;}
 "True"			{ return ATTRTRUE; }
 "False"			{ return ATTRFALSE; }

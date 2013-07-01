@@ -260,7 +260,7 @@ void emit_chars(table_id)
     int	    table_id;
 {
     _db_header	    header;
-    unsigned char   *ptr;
+    unsigned char   *ptr = NULL;
     int		    i;
 
     switch (table_id)
@@ -338,7 +338,7 @@ void emit_ints_and_string(table_id)
     int	    table_id;
 {
     _db_header		    header;
-    key_keytable_entry_type *table;
+    key_keytable_entry_type *table = NULL;
     int			    i;
 
     switch (table_id)
@@ -376,7 +376,7 @@ void emit_ints_and_string(table_id)
 void emit_char_table(table_id)
 int	table_id;
 {
-    unsigned char **table;
+    unsigned char **table = NULL;
     _db_header header;
     unsigned char *entry_vec;
     int i, j;
@@ -437,7 +437,7 @@ int	table_id;
     _db_header	header;
     int		*lengths;
     char	*string_table;
-    char	**table;
+    char	**table = NULL;
     int		i;
 
     switch (table_id)
@@ -558,7 +558,7 @@ void emit_shorts(table_id)
     int	    table_id;
 {
     _db_header		header;
-    unsigned short int	*ptr;
+    unsigned short int	*ptr = NULL;
     int			i;
 
     switch (table_id)
@@ -624,7 +624,7 @@ void emit_int_and_table_shorts(table_id)
     int	    table_id;
 {
     _db_header		header;
-    UilEnumSetDescDef	*table;
+    UilEnumSetDescDef	*table = NULL;
     int			j, i;
     unsigned short int	*value_vec;
 
@@ -657,7 +657,7 @@ void emit_ints(table_id)
     int	    table_id;
 {
     _db_header	header;
-    int		*ptr;
+    int		*ptr = NULL;
     int		i;
 
     switch (table_id)

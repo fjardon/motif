@@ -1993,7 +1993,7 @@ GetSameRenditions(XmRendition *rend_cache, XmRendition rend, int count_rend)
 	for (i=0; i<count_rend; i++){
 
 		if ( rend_cache && (rend_cache[i])
-				&& (((_XmRendFontName(rend) 	&& _XmRendFontName(rend_cache[i]) ) && !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend))
+				&& ((((_XmRendFontName(rend) 	&& _XmRendFontName(rend_cache[i]) ) && !strcmp(_XmRendFontName(rend_cache[i]), _XmRendFontName(rend)))
 					|| 	(!_XmRendFontName(rend) && !_XmRendFontName(rend_cache[i])))
 				&& (((_XmRendFontFoundry(rend) && _XmRendFontFoundry(rend_cache[i])) && !strcmp(_XmRendFontFoundry(rend_cache[i]), _XmRendFontFoundry(rend)))
 					|| 	(!_XmRendFontFoundry(rend) && !_XmRendFontFoundry(rend_cache[i])))

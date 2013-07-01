@@ -1,3 +1,11 @@
+2013-07-01  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/XmRenderT.c
+	  tools/wml/wml.h,
+	  tools/wml/wmldbcreate.c,
+	  tools/wml/wmllex.l,
+	  tools/wml/wmluiltok.l:
+	Fixed bug #1605 (Eliminates some type warnings in modules of WML tool).
+
 2013-06-27  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/Color.c,
 	  lib/Xm/Obso2_O.c
