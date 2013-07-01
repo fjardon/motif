@@ -678,6 +678,19 @@ extern void wmlCreateCharset ();
 extern void wmlAddCharsetAttribute ();
 extern void LexIssueError ();
 
+/*      May be, declaration of functions must be next:
+extern void wmlAddClassChild ();
+extern void wmlCreateChild ();
+extern void wmlCreateOrAppendCtrlList ();
+extern void wmlAddCtrlListControl ();
+        But, we are using real function arguments type declaration:
+*/
+extern void wmlAddClassChild (char *);
+extern void wmlCreateChild (char *, char *);
+extern void wmlCreateOrAppendCtrlList (char *);
+extern void wmlAddCtrlListControl (char *);
+
+
 
 /*
  * Defined in wmlresolve.c
