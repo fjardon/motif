@@ -60,7 +60,7 @@ static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #define MAXLINE		256
 
 /* FIXES */
-#define FIX_1604
+/* #define FIX_1604 */
 
 /********    Static Function Declarations    ********/
 
@@ -236,13 +236,18 @@ CvtStringToVirtualBinding(Display    *dpy,
 	    event.state = 0;
 #ifdef FIX_1604
 	    int keysyms_per_keycode=0;
+	    int min_codes_per_sym = 0;
 	    KeySym *keysymTab = XGetKeyboardMapping(dpy, event.keycode, 1, &keysyms_per_keycode);
 	    if ((keysymTab != NULL) && (keysyms_per_keycode > 0))
-	      { if (keysymTab[0] != keysyms[tmp])
-		  for (j = 1; j < codes_per_sym; j++)
+	      { if (keysyms_per_keycode > codes_per_sym)
+		  min_codes_per_sym = codes_per_sym;
+		else
+		  min_codes_per_sym = keysyms_per_keycode;
+		  
+		if (keysymTab[0] != keysyms[tmp])
+		  for (j = 1; j < min_codes_per_sym; j++)
 		    if (keysymTab[j] == keysyms[tmp])
-			{
-
+			{ 
                   /* 
 		   * Gross Hack for Hobo keyboard .. 
 		   * Assumptions: 
