@@ -1,5 +1,9 @@
 2013-07-01  Mykola Vshyvkov <mvshyvkov@ics.com>
-	* lib/Xm/XmRenderT.c
+	* lib/Xm/VirtKeys.c:
+	Fixed bug #1604 (Was been replaced  depecated code with using XKeycodeToKeysym Xlib function calls).
+
+2013-07-01  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/XmRenderT.c,
 	  tools/wml/wml.h,
 	  tools/wml/wmldbcreate.c,
 	  tools/wml/wmllex.l,
