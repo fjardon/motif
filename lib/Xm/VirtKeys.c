@@ -59,6 +59,9 @@ static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #define BUFFERSIZE	2048
 #define MAXLINE		256
 
+/* FIXES */
+#define FIX_1604
+
 /********    Static Function Declarations    ********/
 
 static Boolean CvtStringToVirtualBinding(Display *dpy,
@@ -231,6 +234,45 @@ CvtStringToVirtualBinding(Display    *dpy,
 	     * modifers.
 	     */
 	    event.state = 0;
+#ifdef FIX_1604
+	    int keysyms_per_keycode=0;
+	    KeySym *keysymTab = XGetKeyboardMapping(dpy, event.keycode, 1, &keysyms_per_keycode);
+	    if ((keysymTab != NULL) && (keysyms_per_keycode > 0))
+	      { if (keysymTab[0] != keysyms[tmp])
+		  for (j = 1; j < codes_per_sym; j++)
+		    if (keysymTab[j] == keysyms[tmp])
+			{
+
+                  /* 
+		   * Gross Hack for Hobo keyboard .. 
+		   * Assumptions: 
+		   * 	1. Hobo keyboard has XK_Return  as the first entry
+		   *		and XK_KP_Enter as the 4th entry in its
+		   *            keycode to keysym key map.
+		   *	2. This fix is only designed to work for the precise 
+		   *            combination of the Sun server with vendor 
+		   *            string "Sun Microsystems, Inc." and the Hobo 
+		   *            keyboard, as the fix assumes knowledge of the 
+		   *            server keycode to keysym key map.
+		   */
+
+			  if ((keysyms[tmp] == XK_KP_Enter) &&
+			      (j == 4) &&
+			      (keysymTab[0] == XK_Return) &&
+			      (strcmp("Sun Microsystems, Inc.", ServerVendor(dpy)) == 0)) 
+				{
+				  fini = True;
+				}
+			  else
+			    event.state = 1 << (j-1);
+
+			  break;
+			}
+		XFree(keysymTab);
+	      }
+	    
+	    
+#else
 	    if (XKeycodeToKeysym(dpy, event.keycode, 0) != keysyms[tmp])
 	      for (j = 1; j < codes_per_sym; j++)
 		if (XKeycodeToKeysym(dpy, event.keycode, j) == keysyms[tmp])
@@ -262,6 +304,7 @@ CvtStringToVirtualBinding(Display    *dpy,
 
 		    break;
 		  }
+#endif
 
 	    if (!fini) {
 		event.state |= modifiers[tmp];
