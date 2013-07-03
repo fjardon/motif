@@ -229,11 +229,12 @@ void
 Uil_sym_cleanup_storage (boolean freealloc)
 {
 if ( freealloc )
-    if ( sym_az_allocated_nodes != NULL )
+  { if ( sym_az_allocated_nodes != NULL )
 	UrmPlistFreeContents (sym_az_allocated_nodes);
-else
-    if ( sym_az_freed_nodes != NULL )
-	UrmPlistFreeContents (sym_az_freed_nodes);
+    else
+      if ( sym_az_freed_nodes != NULL )
+	 UrmPlistFreeContents (sym_az_freed_nodes);
+  }
 if ( sym_az_allocated_nodes != NULL )
     UrmPlistFree (sym_az_allocated_nodes);
 if ( sym_az_freed_nodes != NULL )

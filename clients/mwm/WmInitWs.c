@@ -272,7 +272,7 @@ BuildLockMaskSequence(void)
 	 * funny because we skip the case of all the
 	 * bits cleared.
 	 */
-	run = (0x1 << bit-1);	/* number of consecutive masks to set
+	run = (0x1 << (bit-1));	/* number of consecutive masks to set
 				   bits in */
 	bit_on = False;		/* are we setting bits or not? */
 
