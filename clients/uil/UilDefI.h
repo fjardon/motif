@@ -608,7 +608,7 @@ extern void sym_dump_object_variant  _ARGUMENTS(( sym_def_obj_entry_type *az_sym
 extern void sym_dump_root_entry  _ARGUMENTS(( sym_root_entry_type *az_symbol_entry ));
 extern char *sym_section_text  _ARGUMENTS(( int b_type ));
 extern void dump_free_list  _ARGUMENTS(( void ));
-
+extern int sar_get_units_type (yystype *parse_frame);
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif

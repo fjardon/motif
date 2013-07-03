@@ -63,6 +63,7 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 #include "WmResource.h"
 
 #include <Xm/VirtKeysP.h>
+#include "Xm/VirtKeysI.h"
 
 #include <X11/cursorfont.h>
 #include <X11/keysym.h>

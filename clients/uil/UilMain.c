@@ -104,8 +104,9 @@ static void UilWrapup _ARGUMENTS((Uil_compile_desc_type *compile_desc));
 #endif
 
 externaldef(uilmsg) nl_catd uil_catd = NULL;
-
 #endif
+
+extern  int yyparse();
 
 /*
 **

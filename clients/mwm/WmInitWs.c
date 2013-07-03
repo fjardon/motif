@@ -134,6 +134,7 @@ typedef struct
 #include <stdlib.h>
 #endif /* WSM */
 #include "WmXSMP.h"
+#include "Xm/VirtKeysI.h"
 
 /*
  * Function Declarations:

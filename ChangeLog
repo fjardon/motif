@@ -1,4 +1,18 @@
 2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* clients/mwm/WmCmd.c,
+	  clients/mwm/WmCmd.h,
+	  clients/mwm/WmFunction.c,
+	  clients/mwm/WmInitWs.c,
+	  clients/mwm/WmResParse.c,
+	  clients/mwm/WmWinList.c,
+	  clients/mwm/WmWsmLib/recv.c,
+	  clients/mwm/WmWsmLib/send.c,
+	  clients/uil/UilDefI.h,
+	  clients/uil/UilMain.c,
+	  clients/xmbind/xmbind.c:
+	Fixed bug #1609 (Eliminates 18 warnings  of "incompatible implicit declaration" in modules of "clients" catalog).
+
+2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* clients/uil/UilP2Out.c,
 	  clients/uil/UilP2Reslv.c,
 	  clients/uil/UilSarObj.c,
