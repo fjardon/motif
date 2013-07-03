@@ -484,7 +484,7 @@ MakeMenuSpec (String menuName, CARD32 commandID)
 static MenuItem *
 DuplicateMenuItems (MenuItem *menuItems)
 {
-    MenuItem *newMenuItem = (MenuItem *) NULL, *returnMenuItem, *curMenuItem;
+    MenuItem *newMenuItem = (MenuItem *) NULL, *returnMenuItem = NULL, *curMenuItem;
     
     for (curMenuItem = menuItems;
 	 curMenuItem != (MenuItem *) NULL;

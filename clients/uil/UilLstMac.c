@@ -396,7 +396,7 @@ src_source_record_type	*az_src_rec;
 {
 
     char			buffer [132], * ptr;
-    int				child_index;
+    int				child_index = 0;
 
     while ( ! off_stack_empty ) {
 

@@ -1328,9 +1328,9 @@ sym_value_entry_type	*value_entry;
 
 {
     MrmCode	    access;
-    int		    value_size;
+    int		    value_size = 0;
     MrmType	    value_type;
-    int		    value_count;    
+    int		    value_count = 0;    
     char	    *buffer;
     status	    urm_status;
     XmString	    tmp_str;

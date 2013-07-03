@@ -1019,7 +1019,7 @@ int	yylex()
     int		l_state;	    /* current token_table state */
     int		l_lex_pos;	    /* next available position in c_lex_buffer*/
     cell	z_cell;		    /* local copy of current token_table state*/
-    int		l_bslash_value;	    /* current value of \digit...\ construct */
+    int		l_bslash_value = 0;	    /* current value of \digit...\ construct */
     int		l_start_src_pos;    /* starting source position of a token */
     int		l_charset;	    /* character set for strings */
     int		l_write_direction;	    /* writing direction */

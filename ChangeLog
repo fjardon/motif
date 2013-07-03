@@ -1,4 +1,26 @@
 2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* clients/mwm/WmCDecor.c,
+	  clients/mwm/WmCEvent.c,
+	  clients/mwm/WmCmd.c,
+	  clients/mwm/WmFunction.c,
+	  clients/mwm/WmKeyFocus.c,
+	  clients/mwm/WmMenu.c,
+	  clients/mwm/WmResParse.c,
+	  clients/mwm/WmWinInfo.c,
+	  clients/mwm/WmWsmLib/debug.c,
+	  clients/uil/UilDB.c,
+	  clients/uil/UilLexAna.c,
+	  clients/uil/UilLstMac.c,
+	  clients/uil/UilP2Out.c,
+	  clients/uil/UilSarExp.c,
+	  clients/uil/UilSarMod.c,
+	  clients/uil/UilSarObj.c,
+	  clients/uil/UilSarProc.c,
+	  clients/uil/UilSarVal.c,
+	  clients/uil/UilSemVal.c:
+	Fixed bug #1607 (Eliminates 92 warnings  of "variable may be used uninitialized" in modules of "clients" catalog).
+
+2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* clients/mwm/WmFunction.c,
 	  clients/mwm/WmMenu.c,
 	  clients/uil/UilSymStor.c:

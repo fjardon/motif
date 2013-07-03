@@ -377,7 +377,7 @@ void db_read_ints_and_string(header)
  *  Local variables
  */
 	int			return_num_items, i, string_size=0;
-	key_keytable_entry_type	*table;
+	key_keytable_entry_type	*table = NULL;
 	char			*string_table;
 	 
 	switch (header->table_id)
@@ -472,7 +472,7 @@ void db_read_char_table(header)
 /*
  *  Local variables
  */
-	unsigned char	**ptr;
+	unsigned char	**ptr = NULL;
 	int		return_num_items, i;
 	unsigned char	*table;
 	 
@@ -573,7 +573,7 @@ void db_read_length_and_string(header)
 	int		return_num_items, i, string_size=0;
 	int		*lengths;
 	char		*string_table;
-	char		**table;
+	char		**table = NULL;
 	 
 	switch (header->table_id)
 	    {
@@ -723,7 +723,7 @@ void db_read_int_and_shorts(header)
  *  Local variables
  */
 	int			return_num_items, i, int_table_size=0;
-	UilEnumSetDescDef	*table;
+	UilEnumSetDescDef	*table = NULL;
 	unsigned short int 	*int_table;
 	 
 	switch (header->table_id)

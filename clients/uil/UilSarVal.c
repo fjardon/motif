@@ -215,7 +215,7 @@ yystype	    *id_frame;
 
     sym_name_entry_type	    *name_entry;
     sym_value_entry_type    *value_entry;
-    int			    enum_code;
+    int			    enum_code = 0;
 
     _assert( id_frame->b_tag == sar_k_token_frame,
 	     "id frame missing from stack" );
@@ -244,7 +244,7 @@ yystype	    *id_frame;
 
 	if (name_entry == NULL)
 	{
-	    int	    source_type;
+	    int	    source_type = 0;
 	    unsigned short int	arg_code;
 	    unsigned short int	rel_code;
 
@@ -549,7 +549,7 @@ yystype	    *keyword_frame;
 int	    arg_type;
 
 {
-    sym_value_entry_type    *value_entry;
+    sym_value_entry_type    *value_entry = NULL;
     /*
     **	This should be a long because the call to sem_create_value_entry passes the sizeof(long).   This also
     **	maps on top of value.l_integer which is a long and is used in sar_chk_comp_str_attr.
@@ -2534,7 +2534,7 @@ yystype	    *prior_target_frame;
 yystype	    *keyword_frame;
 
 {
-    sym_value_entry_type    *font_table_entry;
+    sym_value_entry_type    *font_table_entry = NULL;
     sym_value_entry_type    *font_item;
 
     _assert( font_frame->b_tag == sar_k_value_frame, "font item missing" );
@@ -3208,7 +3208,7 @@ yystype	    *prior_target_frame;
 
 {
     sym_color_item_entry_type   *item_entry;
-    sym_color_item_entry_type   *prior_item_entry;
+    sym_color_item_entry_type   *prior_item_entry = NULL;
 
     /*
     **	Tag for the prior_target frame indicates if this is the first
@@ -3251,7 +3251,7 @@ yystype	    *prior_target_frame;
     {
     case sar_k_value_frame:
     {
-	sym_color_item_entry_type   *next_item_entry;
+	sym_color_item_entry_type   *next_item_entry = NULL;
 
 	item_entry =
 	    (sym_color_item_entry_type *) item_frame->value.az_symbol_entry;
@@ -3325,8 +3325,8 @@ yystype	    *keyword_frame;
 
 {
     sym_color_item_entry_type   *next_item_entry;
-    sym_value_entry_type	*color_table_entry;
-    int				target_type;
+    sym_value_entry_type	*color_table_entry = NULL;
+    int				target_type = 0;
 
     /*
     **	Tag for the list frame indicates if there are any color items.
@@ -3478,7 +3478,7 @@ yystype	    *keyword_frame;
 {
     sym_value_entry_type    *color_entry;
     sym_value_entry_type    *value_entry;
-    int			    state;
+    int			    state = 0;
 
     /*
     **	Mono frame can point to the keyword FOREGROUND or BACKGROUND
@@ -3596,9 +3596,9 @@ yystype	    *list_frame;
 yystype	    *keyword_frame;
 
 {
-    sym_value_entry_type    *table_entry;
+    sym_value_entry_type    *table_entry = NULL;
     sym_value_entry_type    *icon_entry;
-    sym_value_entry_type    *head_row_entry;
+    sym_value_entry_type    *head_row_entry = NULL;
     int			    target_type;
     int			    width;
     int			    height;
