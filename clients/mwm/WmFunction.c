@@ -112,6 +112,7 @@ extern pid_t vfork();
 #include "WmWinList.h"
 #include "WmWinState.h"
 #include "WmXSMP.h"
+#include "WmCmd.h"
 
 #include <Xm/RowColumnP.h> /* for MS_LastManagedMenuTime */
 extern XmMenuState _XmGetMenuState();

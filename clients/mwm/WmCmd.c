@@ -48,6 +48,7 @@
 #include "WmWsm.h"
 #include "WmDebug.h"
 #include "WmWinConf.h"
+#include "WmFeedback.h"
 
 
 

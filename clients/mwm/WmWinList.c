@@ -63,7 +63,7 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
 #ifdef WSM
 #include "WmWrkspace.h"
 #endif /* WSM */
-
+#include "WmEvent.h"
 
 
 

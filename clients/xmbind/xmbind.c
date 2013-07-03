@@ -29,6 +29,7 @@ static char rcsid[] = "$TOG: xmbind.c /main/10 1997/06/18 17:34:48 samborn $"
 #endif
 #endif
 #include <stdio.h>
+#include <stdlib.h>
 #include <Xm/Xm.h>
 
 /* Internal routines "borrowed" from libXm.  Don't try this at home! */
