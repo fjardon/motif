@@ -1,3 +1,9 @@
+2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* clients/mwm/WmFunction.c,
+	  clients/mwm/WmMenu.c,
+	  clients/uil/UilSymStor.c:
+	Fixed bug #1606 (Eliminates 130 warnings  of "expects argument of type" in modules of "clients" catalog).
+
 2013-07-01  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* lib/Xm/VirtKeys.c:
 	Fixed bug #1604 (Was been replaced  depecated code with using XKeycodeToKeysym Xlib function calls).

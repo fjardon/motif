@@ -724,7 +724,7 @@ sym_dump_symbol (sym_entry_type *az_symbol_entry)
 		int	    i;
 
 		_debug_output("%x  unknown type: %d  size: %d  byte: %x\n", 
-			      az_symbol_entry,
+			      (unsigned)az_symbol_entry,
 			      az_symbol_entry->header.b_tag,
 			      az_symbol_entry->header.w_node_size,
 			      az_symbol_entry->header.b_type );
@@ -785,14 +785,14 @@ sym_dump_widget( XmConst sym_widget_entry_type *az_widget_entry )
 	"  %s %s  controls: %x  callbacks: %x  arguments: %x  parent_list: %x\n", 
 	    diag_object_text( az_widget_entry->header.b_type),
 	    diag_tag_text( az_widget_entry->header.b_tag ),
-	    az_widget_entry->az_controls,
-	    az_widget_entry->az_callbacks,
-	    az_widget_entry->az_arguments,
-        az_widget_entry->parent_list);
+	    (unsigned)az_widget_entry->az_controls,
+	    (unsigned)az_widget_entry->az_callbacks,
+	    (unsigned)az_widget_entry->az_arguments,
+	    (unsigned)az_widget_entry->parent_list);
 
     if (az_widget_entry->az_create_proc != NULL) {
 	_debug_output ("  create proc: %x\n",
-			az_widget_entry->az_create_proc);
+			(unsigned)az_widget_entry->az_create_proc);
     }
     /* preserve comments */
     _debug_output ("\n Comment: %s\n", az_widget_entry->obj_header.az_comment);
@@ -837,8 +837,8 @@ sym_dump_argument( XmConst sym_argument_entry_type *az_argument_entry )
     sym_dump_obj_header ((sym_obj_entry_type *)az_argument_entry);
 
     _debug_output ( "  arg name: %x  arg value: %x\n", 
-	az_argument_entry->az_arg_name,
-	az_argument_entry->az_arg_value );
+	(unsigned)az_argument_entry->az_arg_name,
+	(unsigned)az_argument_entry->az_arg_value );
 
 }
 
@@ -892,7 +892,7 @@ sym_dump_control( XmConst sym_control_entry_type *az_control_entry )
     }
 
     _debug_output ( "  obj: %x\n", 
-	az_control_entry->az_con_obj );
+	(unsigned)az_control_entry->az_con_obj );
 
 }
 
@@ -934,9 +934,9 @@ sym_dump_callback( XmConst sym_callback_entry_type *az_callback_entry )
     sym_dump_obj_header ((sym_obj_entry_type *)az_callback_entry);
 
     _debug_output ( "  reason name: %x  proc ref: %x  proc ref list: %x\n", 
-	az_callback_entry->az_call_reason_name,
-	az_callback_entry->az_call_proc_ref,
-    az_callback_entry->az_call_proc_ref_list );
+	(unsigned)az_callback_entry->az_call_reason_name,
+	(unsigned)az_callback_entry->az_call_proc_ref,
+    (unsigned)az_callback_entry->az_call_proc_ref_list );
 
 }
 
@@ -1024,10 +1024,10 @@ sym_dump_name( XmConst sym_name_entry_type *az_name_entry )
 
     _debug_output
 	( "%x name size: %d  next name: %x  object: %x",
-	  az_name_entry,
+	  (unsigned)az_name_entry,
 	  az_name_entry->header.w_node_size,
-	  az_name_entry->az_next_name_entry,
-	  az_name_entry->az_object );
+	  (unsigned)az_name_entry->az_next_name_entry,
+	  (unsigned)az_name_entry->az_object );
 
     if (az_name_entry->b_flags & sym_m_referenced) {
 	_debug_output (" referenced");
@@ -1075,10 +1075,10 @@ sym_dump_module( XmConst sym_module_entry_type *az_module_entry )
 
     _debug_output
 	( "%x module size: %d  name: %x  version: %x \n",
-	  az_module_entry,
+	  (unsigned)az_module_entry,
 	  az_module_entry->header.w_node_size,
-	  az_module_entry->obj_header.az_name,
-	  az_module_entry->az_version );
+	  (unsigned)az_module_entry->obj_header.az_name,
+	  (unsigned)az_module_entry->az_version );
 
     /* preserve comments */
     _debug_output ("\n Comment: %s\n", az_module_entry->obj_header.az_comment);
@@ -1122,12 +1122,12 @@ sym_dump_color_item( XmConst sym_color_item_entry_type *az_color_item_entry )
 
     _debug_output
 	( "%x color_item  size: %d  letter: %c  index: %d  color: %x  next: %x\n",
-	  az_color_item_entry,
+	  (unsigned)az_color_item_entry,
 	  az_color_item_entry->header.w_node_size,
 	  az_color_item_entry->b_letter,
 	  az_color_item_entry->b_index,
-	  az_color_item_entry->az_color,
-	  az_color_item_entry->az_next );
+	  (unsigned)az_color_item_entry->az_color,
+	  (unsigned)az_color_item_entry->az_next );
 }
 
 
@@ -1165,10 +1165,10 @@ sym_dump_parent_list_item ( XmConst sym_parent_list_type *az_parent_list_item )
 {
     _debug_output
 	( "%x parent_list  size: %d  parent: %x  next: %x \n",
-	  az_parent_list_item,
+	  (unsigned)az_parent_list_item,
       az_parent_list_item->header.w_node_size,
-      az_parent_list_item->parent,
-      az_parent_list_item->next);
+      (unsigned)az_parent_list_item->parent,
+      (unsigned)az_parent_list_item->next);
 }
 
 
@@ -1209,10 +1209,10 @@ sym_dump_external_def(
 
     _debug_output
 	( "%x external def  size: %d  next external: %x  object: %x \n",
-	  az_external_def_entry,
+	  (unsigned)az_external_def_entry,
 	  az_external_def_entry->header.w_node_size,
-	  az_external_def_entry->az_next_object,
-	  az_external_def_entry->az_name );
+	  (unsigned)az_external_def_entry->az_next_object,
+	  (unsigned)az_external_def_entry->az_name );
 
 }
 
@@ -1272,9 +1272,9 @@ sym_dump_proc_def( XmConst sym_proc_def_entry_type *az_proc_def_entry )
 
     _debug_output
 	( "%x proc def  size: %d  name: %x %s%s%s%s  count: %d  %s\n",
-	  az_proc_def_entry,
+	  (unsigned)az_proc_def_entry,
 	  az_proc_def_entry->header.w_node_size,
-	  az_proc_def_entry->obj_header.az_name,
+	  (unsigned)az_proc_def_entry->obj_header.az_name,
 	  checking_flag,
 	  private_flag,
 	  exported_flag,
@@ -1327,10 +1327,10 @@ sym_dump_proc_ref( XmConst sym_proc_ref_entry_type *az_proc_ref_entry )
 
     _debug_output
 	( "%x proc ref  size: %d  proc def: %x  value: %x\n",
-	  az_proc_ref_entry,
+	  (unsigned)az_proc_ref_entry,
 	  az_proc_ref_entry->header.w_node_size,
-	  az_proc_ref_entry->az_proc_def,
-	  az_proc_ref_entry->az_arg_value );
+	  (unsigned)az_proc_ref_entry->az_proc_def,
+	  (unsigned)az_proc_ref_entry->az_arg_value );
 
 }
 
@@ -1371,16 +1371,16 @@ sym_dump_forward_ref(XmConst sym_forward_ref_entry_type *az_forward_ref_entry)
 
     _debug_output
 	( "%x forward ref  size: %d  next ref: %x  location: %x  %s  parent: %x\n",
-	  az_forward_ref_entry,
+	  (unsigned)az_forward_ref_entry,
 	  az_forward_ref_entry->header.w_node_size,
-	  az_forward_ref_entry->az_next_ref,
-	  az_forward_ref_entry->a_update_location,
+	  (unsigned)az_forward_ref_entry->az_next_ref,
+	  (unsigned)az_forward_ref_entry->a_update_location,
 	  diag_object_text( az_forward_ref_entry->header.b_type ),
-      az_forward_ref_entry->parent );
+      (unsigned)az_forward_ref_entry->parent );
 
     _debug_output
 	( "  name: %x %s\n",
-	  az_forward_ref_entry->az_name,
+	  (unsigned)az_forward_ref_entry->az_name,
 	  az_forward_ref_entry->az_name->c_text );
 
 }
@@ -1442,9 +1442,9 @@ sym_dump_value( XmConst sym_value_entry_type *az_value_entry )
 
     _debug_output
 	( "%x value  size: %d  name: %x  %s%s%s%s",
-	  az_value_entry,
+	  (unsigned)az_value_entry,
 	  az_value_entry->header.w_node_size,
-	  az_value_entry->obj_header.az_name,
+	  (unsigned)az_value_entry->obj_header.az_name,
 	  builtin_flag, private_flag, exported_flag, imported_flag );
 
     if (az_value_entry->obj_header.b_flags & sym_m_imported)
@@ -1522,11 +1522,11 @@ common_special_type:
 
     case sym_k_compound_string_value:
 	_debug_output("  compound string\n  first component: %x\n", 
-		      az_value_entry->az_first_table_value );
+		      (unsigned)az_value_entry->az_first_table_value );
 
 	if ( (az_value_entry->b_aux_flags & sym_m_table_entry) != 0 ) {
 	    _debug_output("  next table entry: %x",
-			  az_value_entry->az_next_table_value);
+			  (unsigned)az_value_entry->az_next_table_value);
 	}
 
 	break;
@@ -1539,7 +1539,7 @@ common_special_type:
 			  diag_charset_text( az_value_entry->b_charset ) );
 	else
 	    _debug_output("  font  charset: userdefined(%x)", 
-			  diag_charset_text( (long)az_value_entry->az_charset_value ) );
+			  (unsigned)diag_charset_text( (long)az_value_entry->az_charset_value ) );
 
 	goto check_for_table_value;
 
@@ -1571,13 +1571,13 @@ common_special_type:
 		    _debug_output
 			("  string length: %d\n  charset: userdefined(%x)  L_TO_R", 
 			  az_value_entry->w_length,
-			  az_value_entry->az_charset_value);
+			  (unsigned)az_value_entry->az_charset_value);
 		    break;
 		case XmSTRING_DIRECTION_R_TO_L:
 		    _debug_output
 			("  string length: %d\n  charset: userdefined(%x)  R_TO_L", 
 			  az_value_entry->w_length,
-			  az_value_entry->az_charset_value);
+			  (unsigned)az_value_entry->az_charset_value);
 		    break;
 		}
 
@@ -1586,7 +1586,7 @@ check_for_table_value:
 
 	if ( (az_value_entry->b_aux_flags & sym_m_table_entry) != 0 ) {
 	    _debug_output("  next table entry: %x",
-			  az_value_entry->az_next_table_value);
+			  (unsigned)az_value_entry->az_next_table_value);
 	}
 
 	output_text
@@ -1603,8 +1603,8 @@ check_for_table_value:
 	_debug_output("  icon  width: %d  height: %d  colors: %x  rows: %x \n", 
 		      az_value_entry->value.z_icon->w_width,
 		      az_value_entry->value.z_icon->w_height,
-		      az_value_entry->value.z_icon->az_color_table,
-		      az_value_entry->value.z_icon->az_rows );
+		      (unsigned)az_value_entry->value.z_icon->az_color_table,
+		      (unsigned)az_value_entry->value.z_icon->az_rows );
 
 	break;
 
@@ -1622,7 +1622,7 @@ check_for_table_value:
 common_table:
 
 	_debug_output("  %s  first table entry: %x\n",
-		table_type, az_value_entry->az_first_table_value);
+		table_type, (unsigned)az_value_entry->az_first_table_value);
 
 	break;
 
@@ -1640,7 +1640,7 @@ common_table:
 	    _debug_output( "    letter: %c  index: %d  color: %x\n",
 			   az_value_entry->value.z_color[index].b_letter,
 			   az_value_entry->value.z_color[index].b_index,
-			   az_value_entry->value.z_color[index].az_color );
+			   (unsigned)az_value_entry->value.z_color[index].az_color );
 	}
 
 	break;
@@ -1798,21 +1798,21 @@ sym_dump_obj_header (XmConst sym_obj_entry_type *az_obj_entry)
 
     _debug_output
 	( "%x %s  size: %d  \n",
-	  az_obj_entry,
+	  (unsigned)az_obj_entry,
 	  diag_tag_text (az_obj_entry->header.b_tag),
 	  az_obj_entry->header.w_node_size);
 
     if (az_obj_entry->obj_header.az_name != NULL) {
-	_debug_output ("  name: %x", az_obj_entry->obj_header.az_name);
+	_debug_output ("  name: %x", (unsigned)az_obj_entry->obj_header.az_name);
     }
 
     if (az_obj_entry->obj_header.az_reference != NULL) {
 	_debug_output ("  reference: %x",
-			az_obj_entry->obj_header.az_reference);
+			(unsigned)az_obj_entry->obj_header.az_reference);
     }
 
     if (az_obj_entry->obj_header.az_next != NULL) {
-	_debug_output ("  next: %x", az_obj_entry->obj_header.az_next);
+	_debug_output ("  next: %x", (unsigned)az_obj_entry->obj_header.az_next);
     }
 
     if (az_obj_entry->obj_header.b_flags & sym_m_private) {
@@ -1837,7 +1837,7 @@ sym_dump_include_file ( sym_include_file_entry_type *az_symbol_entry )
 {
 
     _debug_output ("%x  include file  file name: %s  full file name: %s\n",
-	az_symbol_entry,
+	(unsigned)az_symbol_entry,
 	az_symbol_entry->file_name, az_symbol_entry->full_file_name);
 
 }
@@ -1848,10 +1848,10 @@ void
 sym_dump_section ( sym_section_entry_type *az_symbol_entry )
 {
     _debug_output ("%x  %s section  prev section : %x  next section: %x  entries: %x\n",
-	az_symbol_entry,
+	(unsigned)az_symbol_entry,
 	sym_section_text(az_symbol_entry->header.b_type),
-	az_symbol_entry->prev_section, az_symbol_entry->next, 
-	az_symbol_entry->entries);
+	(unsigned)az_symbol_entry->prev_section, (unsigned)az_symbol_entry->next, 
+	(unsigned)az_symbol_entry->entries);
 
 }
 
@@ -1861,8 +1861,8 @@ void
 sym_dump_object_variant ( sym_def_obj_entry_type * az_symbol_entry )
 {
     _debug_output ("%x  default obj var  next: %x  object info: %d, variant_info: %d\n",
-	az_symbol_entry,
-	az_symbol_entry->next, az_symbol_entry->b_object_info, 
+	(unsigned)az_symbol_entry,
+	(unsigned)az_symbol_entry->next, az_symbol_entry->b_object_info, 
 	az_symbol_entry->b_variant_info);
 }
 
@@ -1872,10 +1872,10 @@ void
 sym_dump_root_entry ( sym_root_entry_type *az_symbol_entry )
 {
     _debug_output (  "%x  root  tag: %d  module: %x  sections: %x\n  module tail: ",
-	az_symbol_entry,
+	(unsigned)az_symbol_entry,
 	az_symbol_entry->header.b_tag,
-	az_symbol_entry->module_hdr,
-	az_symbol_entry->sections);
+	(unsigned)az_symbol_entry->module_hdr,
+	(unsigned)az_symbol_entry->sections);
 }
 
 
