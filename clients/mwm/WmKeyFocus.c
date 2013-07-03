@@ -633,8 +633,8 @@ ClientData *GetClientUnderPointer (pSameScreen)
 
 Boolean FocusNextWindow (unsigned long type, Time focusTime)
 {
-    ClientListEntry *pCurrentEntry;
-    ClientListEntry *pNextEntry;
+    ClientListEntry *pCurrentEntry = NULL;
+    ClientListEntry *pNextEntry = NULL;
     Boolean focused = False;
     ClientData *pCD;
 
@@ -1015,8 +1015,8 @@ ClientData *FindNextTFocusInSeq (pCD, startAt)
 
 Boolean FocusPrevWindow (unsigned long type, Time focusTime)
 {
-    ClientListEntry *pCurrentEntry;
-    ClientListEntry *pNextEntry;
+    ClientListEntry *pCurrentEntry = NULL;
+    ClientListEntry *pNextEntry = NULL;
     Boolean focused = False;
     ClientData *pCD;
 

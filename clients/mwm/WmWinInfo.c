@@ -1513,9 +1513,9 @@ ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, long manageFlags)
     int                 diff;
     unsigned long       decoration;
     unsigned int        boxdim, tmpMin;
-    unsigned int	oldWidthInc, oldHeightInc;
-    unsigned int	oldBaseWidth, oldBaseHeight;
-    unsigned int	incWidth, incHeight;
+    unsigned int	oldWidthInc = 0, oldHeightInc = 0;
+    unsigned int	oldBaseWidth = 0, oldBaseHeight = 0;
+    unsigned int	incWidth = 0, incHeight = 0;
 
     /*
      * Use a custom verion of the Xlib routine to get WM_NORMAL_HINTS.

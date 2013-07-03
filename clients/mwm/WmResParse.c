@@ -2827,7 +2827,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
     MenuItem      *firstMenuItem;
     MenuItem      *lastMenuItem;
     MenuItem      *menuItem;
-    register int   ix;
+    register int   ix = 0;
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     Boolean        use_separators = False;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */

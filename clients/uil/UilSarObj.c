@@ -206,7 +206,7 @@ void		sar_create_object
 
     sym_name_entry_type		* name_entry;
     sym_obj_entry_type		* obj_entry;
-    int				node_size;
+    int				node_size = 0;
     yystype			* source_frame;
 
     source_frame = & yylval;
@@ -1385,7 +1385,7 @@ yystype 	* feature_frame;
     yystype			* widget_frame;
     sym_widget_entry_type	* widget_entry;
     sym_entry_type		* feature_entry;
-    sym_entry_type		* * ptr;
+    sym_entry_type		* * ptr = NULL;
 
     yystype			* source_frame;
 

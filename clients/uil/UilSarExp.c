@@ -128,7 +128,7 @@ yystype	    *op2_frame;
 
 {
     sym_value_entry_type    *res_entry;
-    int	    		    operator;
+    int	    		    operator = 0;
 
     _assert( operator_frame->b_tag == sar_k_token_frame,
 	     "operator missing" );
@@ -258,8 +258,8 @@ yystype	    *op1_frame;
 
 {
     sym_value_entry_type    *res_entry;
-    int			    operator;
-    int			    res_type;
+    int			    operator = 0;
+    int			    res_type = 0;
 
 
     _assert( operator_frame->b_tag == sar_k_token_frame,

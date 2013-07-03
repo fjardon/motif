@@ -287,7 +287,7 @@ sym_proc_ref_entry_type
                           XmConst yystype *value_frame, 
                           XmConst int     context )
 {
-    sym_value_entry_type    *value_entry;
+    sym_value_entry_type    *value_entry = NULL;
     sym_proc_def_entry_type *proc_def_entry;
     sym_proc_ref_entry_type *proc_ref_entry;
 

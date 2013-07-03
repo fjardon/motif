@@ -374,7 +374,7 @@ IncludeCommand (
      int            fmt)
 {
   CARD32         inLine, commandID, selection, count;
-  Window        *windowIDs;
+  Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
   int            i, win;
   unsigned long  activeContext = 0L;
@@ -501,7 +501,7 @@ EnableCommand (
      int            fmt)
 {
   CARD32         commandID, count;
-  Window        *windowIDs;
+  Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
   int            i, win;
   unsigned long  activeContext = 0L;
@@ -623,7 +623,7 @@ DisableCommand (
      int            fmt)
 {
   CARD32         commandID, count;
-  Window        *windowIDs;
+  Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
   int            i, win;
   unsigned long  activeContext = 0L;
@@ -745,7 +745,7 @@ RenameCommand (
      int            fmt)
 {
   CARD32         commandID, count;
-  Window        *windowIDs;
+  Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
   int            i, win;
   unsigned long  activeContext = 0L;
@@ -869,7 +869,7 @@ RemoveCommand (
      int            fmt)
 {
   CARD32         commandID, count;
-  Window        *windowIDs;
+  Window        *windowIDs = NULL;
   CmdTree       *tPtr, *pNext;
   int            i, win;
   unsigned long  activeContext = 0L;
@@ -1470,11 +1470,12 @@ static void
 GetResizeInfo(ClientData *pcd, XtPointer reply, int dir)
 {
       int i;
-      GadgetRectangle east_resize, west_resize, gravity_resize, title;
+      GadgetRectangle east_resize = {0, {0, 0, 0, 0}}, west_resize = {0, {0, 0, 0, 0}}, gravity_resize, title;
       CARD32  upperBorderWidth, lowerBorderWidth;
       Window frameWin;
       int filledCount;
       Boolean titleFound = False;
+      
 
 
       filledCount = pcd->cTitleGadgets;
@@ -2092,7 +2093,7 @@ GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigne
   XtPointer reply;
   int size;
 
-  int i, n, menuItemCount;
+  int i, n, menuItemCount = 0;
   MenuItem *menu_item;
 
 

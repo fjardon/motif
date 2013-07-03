@@ -412,7 +412,7 @@ yystype	    *value_frame;
 yystype	    *start_frame;
 
 {
-    sym_value_entry_type    *value_entry;
+    sym_value_entry_type    *value_entry = NULL;
 
     _assert( value_frame->b_tag == sar_k_value_frame, "value frame missing" );
 
@@ -587,7 +587,7 @@ yystype	    *token_frame;
 yystype	    *start_frame;
 
 {
-    sym_value_entry_type	*value_entry;
+    sym_value_entry_type	*value_entry = NULL;
 
     _assert( (token_frame->b_tag == sar_k_token_frame) ||
 	     (token_frame->b_tag == sar_k_value_frame), "token or value frame missing" );

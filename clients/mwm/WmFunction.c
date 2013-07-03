@@ -1322,7 +1322,7 @@ void Do_Quit_Mwm (Boolean diedOnRestart)
 
 void ReBorderClient (ClientData *pCD, Boolean reMapClient)
 {
-    int x, y;
+    int x = 0, y = 0;
     int xoff, yoff;
     XWindowChanges windowChanges;
 

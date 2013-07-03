@@ -722,7 +722,7 @@ sym_value_entry_type		*argvalue_value_entry;
 key_keytable_entry_type		*keytable_entry;
 sym_argument_entry_type		**seen_entry;
 boolean				supported_flag;
-unsigned char			expected_type, actual_type, actual_tag;
+unsigned char			expected_type, actual_type = 0, actual_tag;
 boolean				valid_value;
 
 
@@ -2965,10 +2965,10 @@ sym_value_entry_type *sem_evaluate_value_expr (value_entry)
     char		    		res_type;
     data_value_type	    		op1_data;
     data_value_type	    		op2_data;
-    sym_value_entry_type    	*op1_entry;
-    sym_value_entry_type    	*op2_entry;
-    data_value_type	    		*op1_ptr;
-    data_value_type	    		*op2_ptr;
+    sym_value_entry_type    	*op1_entry = NULL;
+    sym_value_entry_type    	*op2_entry = NULL;
+    data_value_type	    		*op1_ptr = NULL;
+    data_value_type	    		*op2_ptr = NULL;
     data_value_type	    		res_data;
     sym_value_entry_type		*cat_str_entry;
     
@@ -4305,7 +4305,7 @@ sym_value_entry_type	*operand_entry;
 data_value_type	    	*data_value;
 
 {
-    int			    res_type;
+    int			    res_type = 0;
 
     uil_az_error_env_valid = TRUE; 
     if (setjmp(uil_az_error_env_block) == 0 ) 
