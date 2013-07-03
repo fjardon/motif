@@ -187,7 +187,7 @@ void	sem_resolve_forward_refs()
 	** resolved by the corresponding gadget class, and vice versa.
 	*/
 	if ((object_entry->header.b_type!=object_type) &&
-	    (uil_gadget_variants[object_entry->header.b_type]!=object_type) &&
+	    (uil_gadget_variants[(int)object_entry->header.b_type]!=object_type) &&
 	    (uil_gadget_variants[object_type]!=object_entry->header.b_type))
 	    {
 	    diag_issue_diagnostic

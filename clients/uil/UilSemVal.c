@@ -533,7 +533,7 @@ if (widget_node->obj_header.b_flags & sym_m_validated)
  * Pick up widget parameters
  */
 if (widget_node->header.b_tag == sym_k_child_entry)
-  widget_type = child_class_table[widget_node->header.b_type];
+  widget_type = child_class_table[(int)widget_node->header.b_type];
 else widget_type = widget_node->header.b_type;
 
 /*
@@ -1710,7 +1710,7 @@ if (control_obj_entry->header.b_tag == sym_k_child_entry)
       diag_issue_diagnostic
 	(d_unsupported,
 	 _sar_source_pos2(control_entry),
-	 uil_child_names[control_obj_entry->header.b_type],
+	 uil_child_names[(int)control_obj_entry->header.b_type],
 	 "automatic child",
 	 diag_object_text(widget_type));
   }
@@ -3054,7 +3054,7 @@ sym_value_entry_type *sem_evaluate_value_expr (value_entry)
 	{
 	    op1_ptr  = &op1_data;
 	    if (res_type <= error_arg_type)
-	      op1_type = (* numeric_convert_table[ res_type ])
+	      op1_type = (* numeric_convert_table[ (int)res_type ])
 		( op1_entry, op1_ptr );
 	    else if ((res_type != cstr_arg_type) &&
 		     (res_type != lstr_arg_type))
@@ -3078,7 +3078,7 @@ sym_value_entry_type *sem_evaluate_value_expr (value_entry)
 	{
 	    op2_ptr  = &op2_data;
 	    if (res_type <= error_arg_type)
-	      op2_type = (* numeric_convert_table[ res_type ])
+	      op2_type = (* numeric_convert_table[ (int)res_type ])
 		( op2_entry, op2_ptr );
 	    else if ((res_type != cstr_arg_type) &&
 		     (res_type != lstr_arg_type))
@@ -4104,7 +4104,7 @@ sym_value_entry_type *sem_evaluate_value_expr (value_entry)
     diag_issue_diagnostic
       ( d_out_range,
        _sar_source_pos2( value_entry ),
-       value_text[ res_type ],
+       value_text[ (int)res_type ],
        ""
        );
     res_type = error_arg_type;

@@ -474,7 +474,7 @@ src_get_source_line(void)
     /* Find the current fcb */
 
     az_fcb = src_az_source_file_table
-		[ src_az_current_source_buffer->b_file_number ];
+		[ (int)src_az_current_source_buffer->b_file_number ];
 
     /* Read the next record */
 
