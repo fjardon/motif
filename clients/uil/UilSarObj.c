@@ -323,7 +323,7 @@ void		sar_create_child
 /*
  * Indicate in compress table that this child type is used.
  */
-    uil_child_compr[obj_entry->header.b_type] = 1;
+    uil_child_compr[(int)obj_entry->header.b_type] = 1;
     
 /*
  * Set the definition in progress bit.
@@ -758,7 +758,7 @@ yystype		* current_frame;
 **  We always identify user defined widgets as MrmwcUnknown.
 */
     if ( obj_entry->header.b_type != uil_sym_user_defined_object )
-        uil_widget_compr[obj_entry->header.b_type] = 1;
+        uil_widget_compr[(int)obj_entry->header.b_type] = 1;
 
 }
 
@@ -876,7 +876,7 @@ yystype		* current_frame;
     */
 
     if ((obj_entry->obj_header.b_flags & sym_m_obj_is_gadget) != 0)
-	uil_widget_compr[obj_entry->header.b_type] = 1;
+	uil_widget_compr[(int)obj_entry->header.b_type] = 1;
 
 }
 
@@ -997,9 +997,9 @@ yystype 	* ref_frame;
 	    invalid_ref =
 		(ref_entry->header.b_tag!=obj_entry->header.b_tag) ||
 		((ref_entry->header.b_type!=obj_entry->header.b_type) &&
-		 (uil_gadget_variants[ref_entry->header.b_type]!=
+		 (uil_gadget_variants[(int)ref_entry->header.b_type]!=
 		  obj_entry->header.b_type) &&
-		 (uil_gadget_variants[obj_entry->header.b_type]!=
+		 (uil_gadget_variants[(int)obj_entry->header.b_type]!=
 		  ref_entry->header.b_type));
 	else
 	    invalid_ref =

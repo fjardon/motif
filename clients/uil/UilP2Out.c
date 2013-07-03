@@ -719,7 +719,7 @@ if( urm_status != MrmSUCCESS)
     ** treated as children rather than as widget references. Multiple
     ** children issue a diagnostic.
     */
-    subtree_code = uil_urm_subtree_resource[widget_entry->header.b_type];
+    subtree_code = uil_urm_subtree_resource[(int)widget_entry->header.b_type];
     if ( subtree_code != 0 )
 	{
 	int			    count;
@@ -749,8 +749,8 @@ if( urm_status != MrmSUCCESS)
      * Set the class in the widget record
      */
     if (widget_variety == UilMrmAutoChildVariety)
-      widget_class = uil_child_compr[widget_entry->header.b_type];
-    else widget_class = uil_widget_compr[widget_entry->header.b_type];      
+      widget_class = uil_child_compr[(int)widget_entry->header.b_type];
+    else widget_class = uil_widget_compr[(int)widget_entry->header.b_type];      
 
 
     /*

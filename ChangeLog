@@ -1,4 +1,12 @@
 2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* clients/uil/UilP2Out.c,
+	  clients/uil/UilP2Reslv.c,
+	  clients/uil/UilSarObj.c,
+	  clients/uil/UilSemVal.c,
+	  clients/uil/UilSrcSrc.c:
+	Fixed bug #1608 (Eliminates 30 warnings  of "array subscript has type 'char'" in modules of "clients" catalog).
+
+2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* clients/mwm/WmCDecor.c,
 	  clients/mwm/WmCEvent.c,
 	  clients/mwm/WmCmd.c,
