@@ -1033,7 +1033,7 @@ RemoveCommandsForClient (
       MenuSpec *pMS;
       WmScreenData *pSD = ACTIVE_PSD;
 
-      while (tPtr = FindCmd (cmdKillList[ i ], CCI_TREE_OF_SCR(scr)))
+      while ((tPtr = FindCmd (cmdKillList[ i ], CCI_TREE_OF_SCR(scr))))
 	{
 	  /* make sure ModifyClientCommandTree can't muck with cmdTree. */
 	  pNext = tPtr->next;

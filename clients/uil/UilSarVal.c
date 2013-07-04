@@ -1302,11 +1302,11 @@ sym_value_entry_type	*value_entry;
 	**  If the value is a boolean, then set the b_direction field.
 	*/
 	if (value_entry->b_type == sym_k_bool_value)
-	    if (value_entry->value.l_integer == TRUE)
+	  { if (value_entry->value.l_integer == TRUE)
 		target_frame->b_direction = XmSTRING_DIRECTION_R_TO_L;
 	    else
 		target_frame->b_direction = XmSTRING_DIRECTION_L_TO_R;
-
+	  }
 	break;
     }
 
@@ -1317,11 +1317,11 @@ sym_value_entry_type	*value_entry;
 	**  accordingly.
 	*/
 	if (value_entry->b_type == sym_k_bool_value)
-	    if (value_entry->value.l_integer == TRUE)
+	  { if (value_entry->value.l_integer == TRUE)
 		target_frame->b_type |= sym_m_separate; 
 	    else
 		target_frame->b_type &= ~sym_m_separate; 
-
+	  }
 	break;
     }
 

@@ -1,3 +1,14 @@
+2013-07-04  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* clients/mwm/WmCmd.c,
+	  clients/mwm/WmFunction.c,
+	  clients/mwm/WmInitWs.c,
+	  clients/mwm/WmMenu.c,
+	  clients/mwm/WmResParse.c,
+	  clients/mwm/WmResource.c,
+	  clients/uil/UilSarVal.c,
+	  clients/uil/UilSymStor.c:
+	Fixed bug #1610 (Eliminates 15 warnings of some types in modules of "clients" catalog).
+
 2013-07-03  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* clients/mwm/WmCmd.c,
 	  clients/mwm/WmCmd.h,

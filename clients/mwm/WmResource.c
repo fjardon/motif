@@ -4432,7 +4432,7 @@ MakeAppearanceResources (WmScreenData *pSD, AppearanceData *pAData, Boolean make
 
     if (! XmeRenderTableGetDefaultFont(pAData->fontList, &(pAData->font)))
     {
-	sprintf((char *)wmGD.tmpBuffer, ((char *)GETMESSAGE(62, 23, "failed to load font: %.100s\0")), (char*) pAData->fontList);
+	sprintf((char *)wmGD.tmpBuffer, ((char *)GETMESSAGE(62, 23, "failed to load font: %.100s")), (char*) pAData->fontList);
 	Warning((char *)wmGD.tmpBuffer);
 	ExitWM(WM_ERROR_EXIT_VALUE);
     }
