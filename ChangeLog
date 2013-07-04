@@ -1,4 +1,12 @@
 2013-07-04  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* clients/mwm/WmCPlace.c,
+	  clients/mwm/WmResParse.c,
+	  clients/mwm/WmWinConf.c,
+	  clients/mwm/WmWinConf.h:
+	Fixed bug #1611 (Was been replaced  depecated code with using XKeycodeToKeysym Xlib 
+	function calls in modules of "clients" catalog).
+
+2013-07-04  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* clients/mwm/WmCmd.c,
 	  clients/mwm/WmFunction.c,
 	  clients/mwm/WmInitWs.c,
