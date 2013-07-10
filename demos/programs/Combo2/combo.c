@@ -4,6 +4,7 @@
 #include <Xm/DropDown.h>
 #include <Xm/XmAll.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static int done = 0;
 

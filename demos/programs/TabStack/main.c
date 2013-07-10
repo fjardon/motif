@@ -16,6 +16,7 @@
 #include <X11/StringDefs.h>
 #include <Xm/Xm.h>
 #include <Xm/DialogS.h>
+#include <Xm/Form.h>
 #if (XmVersion >= 1002)
 #include <Xm/RepType.h>
 #endif

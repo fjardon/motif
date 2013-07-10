@@ -29,9 +29,11 @@ static char rcsid[] = "$XConsortium: wsmData.c /main/6 1995/07/14 09:48:38 drk $
 #endif
 #endif
 #include <stdio.h>
+#include <stdlib.h>
 #include <Xm/Xm.h>
 #include "wsm.h"
 #include "wsmDebug.h"
+#include "xrmLib.h"
 
 void 
 LongListDestructor(

@@ -30,6 +30,8 @@
 #include "wsm_proto.h"
 #include "utm_send.h"
 
+extern Time GetTimestamp (Display *dpy);
+
 typedef struct _RequestInfo {
     WSMReplyCallbackFunc reply_callback; /* The reply callback func */
     XtPointer reply_data;	/* The user data for the callback func */

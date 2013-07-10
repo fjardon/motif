@@ -25,7 +25,8 @@
 /*
  * HISTORY
  */
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <Xm/XmP.h>
 #include <Xm/ToggleB.h>
 #include <Xm/ToggleBG.h>

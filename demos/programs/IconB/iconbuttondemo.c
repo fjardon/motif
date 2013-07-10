@@ -26,6 +26,25 @@ void Explain(Widget , XtPointer client, XtPointer );
 void ShowThisButton(Widget, XtPointer, XtPointer);
 void CreateLabel(Widget , XtPointer , XtPointer );
 
+
+/**************************************************************
+External functions
+**************************************************************/
+#ifdef NeedFunctionPrototypes
+#define ARGLIST(p)	(
+#define ARG(a, b)	a b,
+#define GRA(a, b)	a b)
+#else
+#define ARGLIST(p)	p
+#define ARG(a, b)	a b;
+#define GRA(a, b)	a b;
+#endif
+extern Pixmap XPM_PIXMAP
+ARGLIST((w, pixmapName))
+ARG(Widget, w)
+GRA(char **, pixmapName);
+
+
 /*
  *
  * The following define is essentially to assist in the 

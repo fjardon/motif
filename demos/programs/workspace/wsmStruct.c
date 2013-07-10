@@ -30,6 +30,7 @@ static char rcsid[] = "$TOG: wsmStruct.c /main/7 1997/05/02 10:04:46 dbl $"
 #endif
 #include <stdio.h>
 #include <Xm/Xm.h>
+#include <Xm/AtomMgr.h>
 
 
 #include "wsm.h"
@@ -38,6 +39,8 @@ static char rcsid[] = "$TOG: wsmStruct.c /main/7 1997/05/02 10:04:46 dbl $"
 #include "wsm_cb.h"
 #include "wsmDebug.h"
 #include "xrmLib.h"
+#include "command_ui.h"
+
 
 extern AtomStruct atoms;
 extern Space *space_list;

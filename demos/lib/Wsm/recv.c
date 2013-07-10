@@ -29,6 +29,9 @@
 #include "wsm_proto.h"
 #include "utm_send.h"
 #include <X11/Xatom.h>
+#include <Xm/TransferP.h>
+
+extern Time GetTimestamp (Display *dpy);
 
 static Boolean ConvertProc(
 Widget, Atom *, Atom *, XtPointer, unsigned long, int, Atom *,
