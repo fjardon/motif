@@ -1715,6 +1715,7 @@ XrmValue * from_val, * to_val;
 XtPointer * converter_data;
 {
     char ptr[BUFSIZ];
+    ptr[0]='\0';
     static EditresBlock block;
 
 /*    XmuCopyISOLatin1Lowered(ptr, from_val->addr);*/

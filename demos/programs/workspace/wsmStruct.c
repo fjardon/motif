@@ -1310,7 +1310,7 @@ static char*
 GetWMName(Window window, Boolean is_icon)
 {
   XTextProperty   textProperty;
-  char *str;
+  char *str = NULL;
 
   if (window == 0) 
     {

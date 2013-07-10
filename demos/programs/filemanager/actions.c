@@ -62,7 +62,7 @@ manageCB(Widget widget, Widget w_to_manage, XtPointer callback_data)
 void 
 viewCB(Widget widget, char   *type, XtPointer callback_data)
 {
-  XtEnum size, spatial;
+  XtEnum size=0, spatial=0;
 
   if (strcmp(type, "large") == 0) {
     size = XmLARGE_ICON;

@@ -1144,7 +1144,7 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
     XmDropProcCallbackStruct *ds = 
     (XmDropProcCallbackStruct *) cs -> destination_data;
   Boolean                         rectFound, bgFound, pixFound;
-  XmString                        helpStr;
+  XmString                        helpStr = NULL;
   RectPtr                         rect;
   Arg                             args[5];
   XmString                        tempStr, buttonArray[2];

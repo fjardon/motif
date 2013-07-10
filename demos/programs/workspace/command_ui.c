@@ -140,7 +140,7 @@ void
 SendMessage(RType rtype, XtPointer msg, int len, Time time)
 {
   XtCallbackProc s_proc;
-  Atom target;
+  Atom target = 0;
 
   if (!exiting) s_proc = SelectionProc;
   else s_proc = LastSelectionProc;

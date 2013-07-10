@@ -391,7 +391,7 @@ CreateHideWSMWinData(Boolean diffs_allowed,
                      int *num_data_return)
 {
   int i;
-  WSMWinData *win_data;
+  WSMWinData *win_data = NULL;
   int num_data = 0;
 
   *num_data_return = 0;

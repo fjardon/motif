@@ -2344,7 +2344,7 @@ GRA(BxXpmAttributes *, attributes)
 					 * colorTable in case an error
 					 * occurs while reading the hints
 					 * line */
-    unsigned int key;			/* color key */
+    unsigned int key = 0;			/* color key */
     char *chars = NULL, buf[BUFSIZ];
     unsigned int *iptr;
     unsigned int a, b, x, y, l;
@@ -2555,7 +2555,7 @@ GRA(BxXpmAttributes *, attributes)
     Visual *visual;
     Colormap colormap;
     unsigned int depth;
-    BxXpmColorSymbol *colorsymbols;
+    BxXpmColorSymbol *colorsymbols = NULL;
     unsigned int numsymbols;
 
     /* variables to return */
