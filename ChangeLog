@@ -1,5 +1,27 @@
+2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* demos/lib/Exm/MenuB.c,
+	  demos/lib/Exm/TabB.c,
+	  demos/lib/Exm/wml/wmldbcreate.c,
+	  demos/lib/Wsm/debug.c,
+	  demos/lib/Xmd/RegEdit.c,
+	  demos/programs/ColorSel/util-c.c,
+	  demos/programs/Ext18List/util-c.c,
+	  demos/programs/IconB/misc.c,
+	  demos/programs/TabStack/bxutils.c,
+	  demos/programs/Tree/bxutil-c.c,
+	  demos/programs/drag_and_drop/DNDDemo.c,
+	  demos/programs/drag_and_drop/simpledrop.c,
+	  demos/programs/filemanager/actions.c,
+	  demos/programs/fileview/main.c,
+	  demos/programs/workspace/command_ui.c,
+	  demos/programs/workspace/wsmData.c,
+	  demos/programs/workspace/wsmSend.c,
+	  demos/programs/workspace/wsmStruct.c,
+	  demos/unsupported/motifshell/motifshell.c:
+	Fixed bug #1614 (Eliminates 36 warnings "variable may be used uninitialized" in modules from "demos" catalog).
+
 2013-07-10  Mykola Vshyvkov <mvshyvkov@ics.com>
-	  demos/doc/programGuide/ch06/spin_box/interface.c,
+	* demos/doc/programGuide/ch06/spin_box/interface.c,
 	  demos/lib/Exm/MenuB.c,
 	  demos/lib/Wsm/recv.c,
 	  demos/lib/Wsm/send.c,

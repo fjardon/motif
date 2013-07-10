@@ -879,7 +879,7 @@ DrawShadow (
 {
     XPoint pts[3] ;
     XRectangle hrect ;
-    GC tune_gc;
+    GC tune_gc = 0;
     ExmTabButtonWidget tb = (ExmTabButtonWidget) wid;
 
   /* ExmTabButton cannot inherit the draw_shadow routine of ExmSimple.

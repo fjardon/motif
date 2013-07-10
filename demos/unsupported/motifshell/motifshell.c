@@ -657,7 +657,7 @@ void Menu1CB (Widget w, XtPointer clientData, XtPointer callData)
 void Menu2CB (Widget w, XtPointer clientData, XtPointer callData)
 {
   int        itemNo = (int)clientData;
-  char      *buffer;
+  char      *buffer = NULL;
   XmString   labelStr;
 
 

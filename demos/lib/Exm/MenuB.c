@@ -947,7 +947,7 @@ BtnDown (
   ExmMenuButtonWidget mw = (ExmMenuButtonWidget)w;
   XmAnyCallbackStruct cb;
 
-  Boolean validButton;
+  Boolean validButton = False;
   Boolean already_armed;
   ShellWidget popup;
   int	status;
@@ -1026,7 +1026,7 @@ BtnUp (
   Widget parent = XtParent(mw);
   XmAnyCallbackStruct cb;
   Boolean flushDone = False;
-  Boolean validButton;
+  Boolean validButton = False;
   Boolean popped_up;
   Widget shell = XtParent(XtParent(mw));
   XmMenuSystemTrait menuSTrait;

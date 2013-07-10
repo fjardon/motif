@@ -354,7 +354,7 @@ static void SomethingDropped(Widget dropSite, XtPointer client_data,
    Arg get_args[4];
    Atom * exports;
    XmDropTransferEntryRec target_data[NUMREC];
-   unsigned char status;
+   unsigned char status = '\0';
    Widget dc = call_data->dragContext;
    int n = 0;
    int i = 0;

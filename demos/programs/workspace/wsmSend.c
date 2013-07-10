@@ -414,7 +414,7 @@ GetChangeSpaceRequest(Space *to_s, WSMRequest *request)
   int num_win;
   WSMWinData *xrm_data_list;
   int num_xrm_data_list;
-  WSMWinInfo *win_info;
+  WSMWinInfo *win_info = NULL;
   XrmQuark room_name;
 
   PRINT("\n\nCHANGE ROOM from %s to %s\n", 
@@ -919,7 +919,7 @@ CreateSetState(WSMWinData *data_list, int num_data_list,
 	       WSMRequest *request)
 {
   Boolean retval;
-  WSMWinInfo *win_info;
+  WSMWinInfo *win_info = NULL;
   int count;
   print_window(w_window);
   print_win_data(data_list,num_data_list);

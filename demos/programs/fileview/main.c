@@ -180,7 +180,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
  */
 static void SelectLocale(ViewPtr this, OS os, String os_name)
 {
-   Widget select_box;
+   Widget select_box = NULL;
    
    if (locale_box == NULL)
      select_box = CreateLocaleBox(this, os, os_name);
