@@ -31,6 +31,8 @@ static char rcsid[] = "$XConsortium: interface.c /main/6 1995/07/14 09:41:50 drk
 #endif
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <Xm/Xm.h>           /* Motif Toolkit */
 #include <Xm/CascadeBG.h>
 #include <Xm/Container.h>

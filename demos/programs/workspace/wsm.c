@@ -51,9 +51,13 @@ static char rcsid[] = "$TOG: wsm.c /main/8 1997/05/02 10:08:35 dbl $"
 #include <Xm/RowColumn.h>
 #include <Xm/Text.h>
 #include <Xm/PanedW.h>
+#include <Xm/TransferP.h>
 
 extern Atom WM_S0;
 extern Atom _MOTIF_WM_INVOKE_COMMAND;
+
+extern Time GetTimestamp (Display *dpy);
+
 
 /* globals */
 

@@ -49,6 +49,7 @@
 #include <Xm/DrawingA.h>   
 #include <Xm/IconH.h>   
 #include <Xm/ScrollFrameT.h>
+#include <Xm/XmI.h>
 #include <Exm/ContainerP.h>
 
 /* This one should be somewhere common */

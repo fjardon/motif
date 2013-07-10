@@ -19,6 +19,7 @@
 #include <Xm/Xm.h>
 #include <Xm/MessageB.h>
 #include <Xm/Paned.h>
+#include <Xm/ToggleB.h>
 
 /**************************************************************
  *		GLOBALS

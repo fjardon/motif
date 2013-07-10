@@ -26,6 +26,8 @@
  * HISTORY
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <Xm/XmP.h>
 #include <Xm/PushBG.h>
 #include <Xm/CascadeBG.h>

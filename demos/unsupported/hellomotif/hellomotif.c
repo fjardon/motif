@@ -25,6 +25,7 @@
 /*
  * HISTORY
  */
+#include <stdlib.h>
 #include <Xm/XmAll.h>        
 
 #define APP_CLASS "XmdHelloMotif"

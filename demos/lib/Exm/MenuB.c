@@ -61,6 +61,7 @@
 #include <Xm/TraitP.h>
 #include <Xm/MenuT.h>
 #include <Xm/SpecRenderT.h> /* header file for XmBUTTON_RENDER_TABLE */
+#include <Xm/UniqueEvnI.h>
 #include <X11/keysymdef.h>
 #include <Exm/MenuBP.h>
 

@@ -136,6 +136,9 @@ Widget, Atom, XtPointer, unsigned long,
 int, Atom *, XtPointer *, unsigned long *, int *
 );
 
+Atom *
+WSMGetTargetList(Widget w, Boolean include_defaults, unsigned long *len_ret);
+
 /*
  * send.c
  */

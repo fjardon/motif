@@ -30,6 +30,7 @@ static char *rcsid = "$XConsortium: interface.c /main/7 1996/06/11 17:27:01 pasc
 #endif
 #endif
 
+#include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <X11/Shell.h>

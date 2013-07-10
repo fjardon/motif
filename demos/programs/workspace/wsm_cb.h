@@ -387,4 +387,7 @@ XtPointer,
 XtPointer
 );
 
+extern void
+UpdateButtons(WorkWindow *w_window);
+
 #endif

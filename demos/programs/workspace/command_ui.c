@@ -29,12 +29,14 @@ static char rcsid[] = "$TOG: command_ui.c /main/8 1997/05/02 10:08:26 dbl $"
 #endif
 #endif
 
+#include <stdlib.h>
 #include <Xm/Xm.h>
 #include <Xm/ToggleB.h>
 #include <X11/Xmd.h>
 
 #include "Wsm/wsm_proto.h"
 #include "Wsm/wsm_funcs.h"
+#include "Wsm/utm_send.h"
 #include "wsm.h"
 #include "wsmStruct.h"
 #include "wsmDebug.h"

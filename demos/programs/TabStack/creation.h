@@ -40,4 +40,7 @@ static char * allviewpix_icon[] = {
 "........XXoooooXX.......",
 "..........XXXXX........."
 };
+
+
+extern Widget Createform(Widget parent);
 #endif

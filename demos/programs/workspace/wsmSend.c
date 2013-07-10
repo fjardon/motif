@@ -37,6 +37,7 @@ static char rcsid[] = "$TOG: wsmSend.c /main/7 1997/03/31 14:15:32 dbl $"
 #include "wsmData.h"
 #include "wsmDebug.h"
 #include "wsmStruct.h"
+#include "command_ui.h"
 
 
 

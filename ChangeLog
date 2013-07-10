@@ -1,3 +1,36 @@
+2013-07-10  Mykola Vshyvkov <mvshyvkov@ics.com>
+	  demos/doc/programGuide/ch06/spin_box/interface.c,
+	  demos/lib/Exm/MenuB.c,
+	  demos/lib/Wsm/recv.c,
+	  demos/lib/Wsm/send.c,
+	  demos/lib/Wsm/wsm_funcs.h,
+	  demos/lib/Xmd/Menus.c,
+	  demos/lib/Xmd/Print.c,
+	  demos/programs/Combo2/combo.c,
+	  demos/programs/Exm/app_in_c/exm_in_c.c,
+	  demos/programs/Ext18List/ext18list.c,
+	  demos/programs/IconB/iconbuttondemo.c,
+	  demos/programs/Paned/paned.c,
+	  demos/programs/TabStack/callbacks.c,
+	  demos/programs/TabStack/creation.h,
+	  demos/programs/TabStack/main.c,
+	  demos/programs/Tree/tree.c,
+	  demos/programs/filemanager/interface.c,
+	  demos/programs/setdate/setDate.c,
+	  demos/programs/workspace/command_ui.c,
+	  demos/programs/workspace/wsm.c,
+	  demos/programs/workspace/wsmData.c,
+	  demos/programs/workspace/wsmSend.c,
+	  demos/programs/workspace/wsmStruct.c,
+	  demos/programs/workspace/wsm_cb.h,
+	  demos/programs/workspace/xrmLib.c,
+	  demos/unsupported/Exm/Container.c,
+	  demos/unsupported/aicon/aicon.c,
+	  demos/unsupported/hellomotif/hellomotif.c,
+	  demos/unsupported/transfer/interface.c:
+	Fixed bug #1613 (Eliminates 60 warnings "implicit declaration of function" in modules from "demos" catalog).
+
+
 2013-07-04  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* clients/mwm/WmCPlace.c,
 	  clients/mwm/WmResParse.c,
