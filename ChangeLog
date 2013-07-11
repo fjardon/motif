@@ -1,4 +1,14 @@
 2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* demos/programs/ColorSel/util-c.c,
+	  demos/programs/Ext18List/bxutil-c.c,
+	  demos/programs/Ext18List/util-c.c,
+	  demos/programs/IconB/misc.c,
+	  demos/programs/Paned/paned.c,
+	  demos/programs/TabStack/bxutils.c,
+	  demos/programs/Tree/bxutil-c.c:
+	Fixed bug #1617 (Eliminates 23 warnings "cast to pointer from integer of different size" in modules from "demos" catalog).
+
+2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* demos/lib/Wsm/debug.c,
 	  demos/lib/Wsm/pack.c,
 	  demos/programs/workspace/command_ui.c,

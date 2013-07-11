@@ -453,7 +453,7 @@ static void copyWcsToMbs
     }
 
     tmp = tbuf[lenToConvert];
-    tbuf[lenToConvert] = NULL;
+    tbuf[lenToConvert] = (unsigned)NULL;
     numCvt = doWcstombs(mbs, tbuf, lenToConvert);
     tbuf[lenToConvert] = tmp;
     
@@ -1435,17 +1435,17 @@ XtPointer CONVERT
 	switch(toVal.size)
 	{
 	case 1:
-	    val = (XTPOINTER)(*(char*)toVal.addr);
+	    val = (XTPOINTER)(unsigned)(*(char*)toVal.addr);    /* may be here exists bug ! */
 	    break;
 	case 2:
-	    val = (XTPOINTER)(*(short*)toVal.addr);
+	    val = (XTPOINTER)(unsigned)(*(short*)toVal.addr);   /* may be here exists bug ! */
 	    break;
 	case 4:
-	    val = (XTPOINTER)(*(int*)toVal.addr);
+	    val = (XTPOINTER)(unsigned)(*(int*)toVal.addr);     /* may be here exists bug ! */
 	    break;
 	case 8:
 	default:
-	    val = (XTPOINTER)(*(long*)toVal.addr);
+	    val = (XTPOINTER)(unsigned)(*(long*)toVal.addr);    /* may be here exists bug ! */
 	    break;
 	}
     }
@@ -2180,11 +2180,11 @@ GRA(BxXpmAttributes *,attributes)
      * initialize return values
      */
     if (pixmap_return) {
-        *pixmap_return = NULL;
+        *pixmap_return = (Pixmap)NULL;
         imageptr = &image;
     }
     if (shapemask_return) {
-        *shapemask_return = NULL;
+        *shapemask_return = (Pixmap)NULL;
         shapeimageptr = &shapeimage;
     }
 
