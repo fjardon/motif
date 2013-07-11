@@ -169,6 +169,14 @@ SendMessage(RType rtype, XtPointer msg, int len, Time time)
     case RENAME:
       target = _MOTIF_WM_RENAME_COMMAND;
       break;
+    case ROOT:
+    case ALL:
+    case ICON:
+    case WIN:
+    case INLINE:
+    case MAXTOGGLES:
+      /* Not handled cases */
+      break;  
     }
 
   UTMSendMessage(utmShell, WM_S0, target,

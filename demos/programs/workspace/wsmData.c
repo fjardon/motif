@@ -253,6 +253,9 @@ WinDataCopy(WSMWinData *w_data,
       w_data->type = WSM_VALUE_DATA;
       break;    
     }
+  case WSM_NONE:
+    /* Not handled case */
+    break;  
   }     
   w_data->nameq = copy_data->nameq;
 
@@ -612,6 +615,9 @@ FreeValues(int num_values, XrmValue *value_list)
               num_values++;
               break;
             }
+          case WSM_NONE:
+              /* Not handled case */
+              break;  
           }
         }
       else

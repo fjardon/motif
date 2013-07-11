@@ -109,6 +109,14 @@ PrintRequest(WSMRequest *request)
     case WSM_REG_WINDOW:
 	sprintf(ptr, "Window: 0x%X\n", request->register_window.window);
 	break;
+    case WSM_WM_GET_BACKGROUND_WINDOW:
+    case WSM_WM_SET_BACKGROUND_WINDOW:
+    case WSM_WM_WINDOWS:
+    case WSM_WM_FOCUS:
+    case WSM_WM_POINTER:
+    case WSM_UNKNOWN:
+        /* Not handled cases */
+        break;
     }
 
     return(str);
@@ -172,6 +180,14 @@ PrintReply(WSMReply *reply)
 	    }
 	}
 	break;
+    case WSM_WM_GET_BACKGROUND_WINDOW:
+    case WSM_WM_SET_BACKGROUND_WINDOW:
+    case WSM_WM_WINDOWS:
+    case WSM_WM_FOCUS:
+    case WSM_WM_POINTER:
+    case WSM_UNKNOWN:
+        /* Not handled cases */
+        break;
     }
 
     return(str);
@@ -241,6 +257,10 @@ PrintWindowData(
     case WSM_LONG_LIST_DATA:
 	type_str = "Long List";
 	break;
+    case WSM_VALUE_DATA:
+    case WSM_NONE:
+        /* Not handled cases */
+        break;
     }
     
     sprintf(str, "%sName: %s, Type: %s, Len: %d\n%s%s", tab_str,
@@ -260,6 +280,10 @@ PrintWindowData(
 	    break;
 	case WSM_LONG_LIST_DATA:
 	    sprintf(str, "%ld", win_data->data.long_ptr[i]);
+	    break;
+	case WSM_VALUE_DATA:
+	case WSM_NONE:
+             /* Not handled cases */
 	    break;
 	}
 	if (i < (win_data->data_len - 1))
