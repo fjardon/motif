@@ -1,4 +1,29 @@
 2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* demos/lib/Wsm/debug.c,
+	  demos/lib/Xmd/onHelp.c,
+	  demos/programs/ColorSel/util-c.c,
+	  demos/programs/Exm/simple_app/simpleDemo.c,
+	  demos/programs/Ext18List/ext18list.c,
+	  demos/programs/Ext18List/util-c.c,
+	  demos/programs/FontSel/fontsel.c,
+	  demos/programs/IconB/iconbuttondemo.c,
+	  demos/programs/IconB/misc.c,
+	  demos/programs/Tree/bxutil-c.c,
+	  demos/programs/filemanager/actions.c,
+	  demos/programs/fileview/main.h,
+	  demos/programs/fileview/text.c,
+	  demos/programs/piano/piano.c,
+	  demos/programs/popups/autopopups.c,
+	  demos/programs/workspace/command_ui.c,
+	  demos/programs/workspace/wsm.c,
+	  demos/programs/workspace/wsm_cb.c,
+	  demos/unsupported/Exm/Container.c,
+	  demos/unsupported/dogs/Dog.c,
+	  demos/unsupported/xmfonts/xmfonts.c,
+	  demos/unsupported/xmforc/xmforc.c:
+	Fixed bug #1618 (Eliminates 29 warnings of some type in modules from "demos" catalog).
+
+2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* demos/programs/ColorSel/util-c.c,
 	  demos/programs/Ext18List/util-c.c,
 	  demos/programs/IconB/misc.c,

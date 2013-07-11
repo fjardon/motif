@@ -446,7 +446,7 @@ static XtGeometryResult QueryGeometry (w, intended, reply)
 {
     reply->request_mode = 0;
 
-    if (intended->request_mode & (~(CWWidth | CWHeight)) != 0)
+    if ((intended->request_mode & (~(CWWidth | CWHeight))) != 0)
         return (XtGeometryNo);
 
     reply->request_mode = (CWWidth | CWHeight);

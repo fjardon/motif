@@ -142,7 +142,7 @@ Widget shell;
   stopsign_pix = XPM_PIXMAP(shell, stopsign);
   clown_pix = XCreateBitmapFromData(XtDisplay(shell),
 				RootWindowOfScreen(XtScreen(shell)),
-				clown_bits, clown_width, clown_height);
+				(char *)clown_bits, clown_width, clown_height);
 
 }
 

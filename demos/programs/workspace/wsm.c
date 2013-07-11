@@ -548,10 +548,11 @@ void
 MyXtErrorHandler(char *err)
 {
   PRINT("Called MyXtErrorHandler Xt Xt Xt Xt Xt Xt Xt Xt Xt\n");
+  return;
 }
 
 #endif
-main(argc, argv)
+int main(argc, argv)
     int argc;
     char **argv;
 {
@@ -733,7 +734,7 @@ main(argc, argv)
       if(XtDispatchEvent(&event)) 
 	continue;	
     }
-
+  return 0;
 }
 
 

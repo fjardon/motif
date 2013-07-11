@@ -387,7 +387,7 @@ name lengths are below the given maxLen application resource.\n\
 The button label is the name of the font.  When you select \n\
 a button, a small window will display a sample of the font.  \n\n\
 Press the 'close' button to close a font window.  \n\
-Select 'quit' from the 'exit' menu to exit this application.\0");
+Select 'quit' from the 'exit' menu to exit this application.");
 	message_string = XmStringCreateLtoR (message, charset);
 	button_string = XmStringCreateLtoR ("Close", charset);
 	title_string = XmStringCreateLtoR ("xmfonts help", charset);

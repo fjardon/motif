@@ -700,7 +700,7 @@ void DoLoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 	    {
 	      note = (NoteRec *) XtMalloc(sizeof(NoteRec));
 	      if (fscanf(fp, "%d %d %d %d %d\n",
-			 &note->noteType,
+			 (int *)&note->noteType,
 			 &note->noteDuration,
 			 &note->noteNumber,
 			 &note->noteIndex,

@@ -121,5 +121,6 @@ char **argv;
     XtRealizeWidget(top);
 
     XtAppMainLoop(app);
+    return 0;
 }
 

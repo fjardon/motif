@@ -78,7 +78,7 @@ viewCB(Widget widget, char   *type, XtPointer callback_data)
   XtVaSetValues(fileviewer,
 		XmNlayoutType, spatial,
 		XmNentryViewType, size,
-		0, 0);
+		0, NULL);
 
   fixViewerSize(XtParent(fileviewer), NULL, NULL);
 

@@ -311,7 +311,7 @@ UpdateList(Widget list,Space *s)
      if (_WSMGetConfigFormatType(w_list->work_win->window) == WSM_WINDOW_FMT)
        {
 	 str = (char*) XtMalloc((strlen(w_list->work_win->name) + 15) * sizeof(char));
-	 sprintf(str,"0x%x %s",w_list->work_win->window, w_list->work_win->name);
+	 sprintf(str,"0x%x %s",(unsigned)w_list->work_win->window, w_list->work_win->name);
      
 	 xmstr = XmStringCreateLocalized(str);
 	 XmListAddItemUnselected(list,xmstr,0);

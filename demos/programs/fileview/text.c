@@ -147,7 +147,7 @@ void NewPaneCallback(Widget widget, ViewPtr this,
       XtSetValues(XtParent(new->text), args, n);
       XmTextSetTopCharacter(new->text,
 			    XmTextGetTopCharacter(this->current_pane->text));
-      XtVaSetValues(target, XmNheight, (Dimension) height/2);
+      XtVaSetValues(target, XmNheight, (Dimension) height/2, NULL);
    }
    printf("source text set\n");
    XtManageChild(new->text);
