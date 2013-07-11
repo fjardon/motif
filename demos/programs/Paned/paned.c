@@ -180,7 +180,7 @@ SepValChCB(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;
-    Boolean val = (Boolean) client;
+    Boolean val = (Boolean) (unsigned)client;
 
     if (!XmToggleButtonGetState(w))
 	return;
@@ -201,7 +201,7 @@ OrientChValCB(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;
-    unsigned char orient = (unsigned char) client;
+    unsigned char orient = (unsigned char) (unsigned)client;
     
     if (!XmToggleButtonGetState(w))
 	return;
