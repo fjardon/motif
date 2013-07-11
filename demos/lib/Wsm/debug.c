@@ -95,7 +95,7 @@ PrintRequest(WSMRequest *request)
 	break;
     case WSM_GET_STATE:
 	sprintf(ptr, "Window: 0x%X\nDiffs Allowed: %s\n", 
-		request->get_state.window, 
+		(unsigned)request->get_state.window, 
 		request->get_state.diffs_allowed ? "True" : "False");
 	break;
     case WSM_SET_STATE:
@@ -107,7 +107,7 @@ PrintRequest(WSMRequest *request)
 	}
 	break;
     case WSM_REG_WINDOW:
-	sprintf(ptr, "Window: 0x%X\n", request->register_window.window);
+	sprintf(ptr, "Window: 0x%X\n", (unsigned)request->register_window.window);
 	break;
     case WSM_WM_GET_BACKGROUND_WINDOW:
     case WSM_WM_SET_BACKGROUND_WINDOW:
@@ -216,7 +216,7 @@ PrintWindowInfo(
     WSMWinData *win_data = win_info->data_list;
     
     sprintf(str, "Window: 0x%X\nNumber of Data Attributes: %d\n", 
-	    win_info->window, num);
+	    (unsigned)win_info->window, num);
 
     for (i = 0; i < num; i++, win_data++) {
 	str += strlen(str);

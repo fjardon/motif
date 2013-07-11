@@ -477,7 +477,7 @@ specify which cell in the Icon Box each child should go.\n\
 
     icon_pixmap = XCreateBitmapFromData(XtDisplay(iconBox),
                                    RootWindowOfScreen(XtScreen(iconBox)),
-                                   small_bits,
+                                   (char *)small_bits,
                                    small_width, small_height);
     iconButton4 = XtVaCreateManagedWidget("XmIconRight",
                 xmIconButtonWidgetClass, iconBox,XmNpixmap, icon_pixmap,

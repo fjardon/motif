@@ -3469,6 +3469,7 @@ GRA(xpmData *, mdata)
         }
         return (c);
     }
+   return 0; 
 }
 
 
@@ -3490,6 +3491,7 @@ GRA(xpmData *, mdata)
             mdata->InsideString = !mdata->InsideString;
         return (ungetc(c, mdata->stream.file));
     }
+   return -0; 
 }
 
 /*

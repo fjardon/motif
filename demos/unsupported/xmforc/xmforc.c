@@ -699,7 +699,7 @@ CreateHelp (Widget parent)		/*  parent widget	*/
 	sprintf (message, "\
 Use the numChildren resource to control the creation and destruction\n\
 of the RowColumn. Then use the other controls to manipulate the RowColumn\n\
-layout resources.\0");
+layout resources.");
 
 	message_string = XmStringCreateLtoR (message, 
 					     XmSTRING_DEFAULT_CHARSET);

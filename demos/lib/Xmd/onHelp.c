@@ -53,7 +53,7 @@ int main(int argc, String argv[])
   Widget dismiss;
 
   toplevel = XtVaAppInitialize(&app_context, "HelpOnHelp", NULL, 0, 
-			       &argc, argv, NULL, 0);
+			       &argc, argv, NULL, NULL);
   n = 0;
   XtSetArg(args[n], XmdNhelpFile, "helpOn"); n++;
   help = XmdCreateHelp(toplevel, "help", args, n);

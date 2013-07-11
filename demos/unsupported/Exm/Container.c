@@ -50,11 +50,14 @@
 #include <Xm/IconH.h>   
 #include <Xm/ScrollFrameT.h>
 #include <Xm/XmI.h>
+#include <Xm/XmTabListI.h>
 #include <Exm/ContainerP.h>
 
 /* This one should be somewhere common */
 /* The Max macro returns the higher of two input arguments. */ 
 #define Max(x, y) (((x) > (y)) ? (x) : (y))
+
+extern Dimension XmTabListGetPosition(Screen *,XmTabList, Cardinal);
 
 
 /* Declare static functions. */

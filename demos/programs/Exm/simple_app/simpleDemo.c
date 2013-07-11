@@ -149,7 +149,7 @@ main (int argc, char **argv)
 
   menu = XmCreatePulldownMenu(menuBar, "FileMenu", NULL, 0);
 
-  XtVaSetValues(cascade, XmNsubMenuId, menu, 0);
+  XtVaSetValues(cascade, XmNsubMenuId, menu, NULL);
 
   str = XmStringCreateLocalized("Quit");
   menuitem = XtVaCreateManagedWidget("item", xmPushButtonWidgetClass,

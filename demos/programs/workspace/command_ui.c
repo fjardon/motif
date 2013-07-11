@@ -181,7 +181,7 @@ SendMessage(RType rtype, XtPointer msg, int len, Time time)
 
   UTMSendMessage(utmShell, WM_S0, target,
 		 (XtPointer) msg, (unsigned long)len, WSM_PROTO_FMT,
-		 s_proc, ++debug_index, time);
+		 s_proc, (XtPointer)++debug_index, time);
 
   if (msg != NULL)
     XtFree(msg);

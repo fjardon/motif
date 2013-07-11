@@ -70,7 +70,7 @@ int main(int argc, char **argv)
   XmString	str, tmp1, tmp2;
 
   shell     = XtVaAppInitialize(&context, APP_CLASS, NULL, 0, &argc, argv,
-				NULL, 0);
+				NULL, NULL);
 
   frame1 = XmCreateFrame(shell, "outerframe", NULL, 0);
   XtManageChild(frame1);
