@@ -222,7 +222,7 @@ char *NextCap (char *path, char *cp, int len)
   if (!finish)
     return(NULL);
   
-  if (ep = strchr(cp, ':'))
+  if ((ep = strchr(cp, ':')))
     span = ep - cp;
   else
     {
@@ -249,7 +249,7 @@ int file_exist (char *fullname)
   /* Save the file pointer so it can be closed */
   FILE *tmpf;
 
-  if (tmpf=fopen(fullname,"r"))
+  if ((tmpf=fopen(fullname,"r")))
   {
       fclose(tmpf);
       return(1);
@@ -269,12 +269,12 @@ char *search_in_env (char *filename)
 
 
   len = strlen(filename);
-  if (envpath = getenv("PATH"))
+  if ((envpath = getenv("PATH")))
     {
       cp  = envpath;
       cp += 2; 
       
-      while (prefix = NextCap(envpath, cp, len))
+      while ((prefix = NextCap(envpath, cp, len)))
 	{
 	  cp += strlen(prefix);
 	  strncat(prefix, filename, len);
@@ -310,7 +310,7 @@ char *GetSource (char *fileptr)
       
     if ((fd = open (pathname, O_RDONLY)) < 0)
     {
-      if (defaultcap = getenv("MOTIFSHELLFILES"))
+      if ((defaultcap = getenv("MOTIFSHELLFILES")))
 	{
 	  catlen = strlen(defaultcap);
 	  datahome = (char *) malloc(catlen + strlen(fileptr) + 2);
@@ -328,7 +328,7 @@ char *GetSource (char *fileptr)
 	  free(datahome);
 	}
       else
-	if (capfileptr = search_in_env(fileptr))
+	if ((capfileptr = search_in_env(fileptr)))
 	  {
 	    fd = open (capfileptr, O_RDONLY);
 	    free(capfileptr);

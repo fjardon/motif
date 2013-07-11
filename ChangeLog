@@ -1,5 +1,15 @@
 2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* demos/programs/ColorSel/util-c.c,
+	  demos/programs/Ext18List/util-c.c,
+	  demos/programs/IconB/misc.c,
+	  demos/programs/TabStack/bxutils.c,
+	  demos/programs/Tree/bxutil-c.c,
+	  demos/unsupported/dainput/dainput.c,
+	  demos/unsupported/motifshell/motifshell.c:
+	Fixed bug #1616 (Eliminates 23 warnings "suggest parentheses around assignment used" in modules from "demos" catalog).
+
+2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* demos/programs/ColorSel/util-c.c,
 	  demos/programs/Ext18List/bxutil-c.c,
 	  demos/programs/Ext18List/util-c.c,
 	  demos/programs/IconB/misc.c,
