@@ -1,4 +1,12 @@
 2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* demos/lib/Wsm/debug.c,
+	  demos/lib/Wsm/pack.c,
+	  demos/programs/workspace/command_ui.c,
+	  demos/programs/workspace/wsm.c,
+	  demos/programs/workspace/wsmData.c:
+	Fixed bug #1615 (Eliminates 35 warnings "enumeration value XXX not handled" in modules from "demos" catalog).
+
+2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* demos/lib/Exm/MenuB.c,
 	  demos/lib/Exm/TabB.c,
 	  demos/lib/Exm/wml/wmldbcreate.c,

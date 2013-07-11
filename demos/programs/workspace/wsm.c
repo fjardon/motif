@@ -885,7 +885,18 @@ RequestReceived(Widget w, XtPointer textp,
       PRINT("    got it\n");
     }
     break;
-
+  case WSM_EXTENSIONS:
+  case WSM_CONFIG_FMT:
+  case WSM_GET_STATE:
+  case WSM_SET_STATE:
+  case WSM_WM_GET_BACKGROUND_WINDOW:
+  case WSM_WM_SET_BACKGROUND_WINDOW:
+  case WSM_WM_WINDOWS:
+  case WSM_WM_FOCUS:
+  case WSM_WM_POINTER:
+  case WSM_UNKNOWN:
+    /* Not handled cases */
+    break;
   }
     
   /*
