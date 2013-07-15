@@ -435,7 +435,7 @@ ToolbarSetValues(Widget old, Widget request, Widget set,
       
       qsort(XmToolbar_GroupMembers(set_tbw, group), 
 	    XmToolbar_GroupMemCount(set_tbw, group),
-	    sizeof(Widget), CompareGroupPositions);
+	    sizeof(Widget), (__compar_fn_t)CompareGroupPositions);
       
       if (XtIsRealized((Widget)set_tbw)) redisplay = True;
 
@@ -1206,7 +1206,7 @@ InsertInGroupList(XmToolbarWidget tbw, Widget w)
       XmToolbar_group_lists(tbw)[XmToolbar_num_groups(tbw) - 1]->num_members = 0;
       
       qsort(XmToolbar_group_lists(tbw), XmToolbar_num_groups(tbw), sizeof(ToolbarGroup *),
-	    CompareGroupIds);
+	    (__compar_fn_t)CompareGroupIds);
       
       groupNdx = 0;
       for ( i = 0; i < XmToolbar_num_groups(tbw); i++ )
@@ -1234,7 +1234,7 @@ InsertInGroupList(XmToolbarWidget tbw, Widget w)
       XmToolbarC_position(w) = new_pos;
 
     qsort(XmToolbar_GroupMembers(tbw, groupNdx), XmToolbar_GroupMemCount(tbw, groupNdx),
-	  sizeof(Widget), CompareGroupPositions);
+	  sizeof(Widget), (__compar_fn_t)CompareGroupPositions);
 }
 
 /*

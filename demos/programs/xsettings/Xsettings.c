@@ -48,6 +48,10 @@ It contains the following copright notice ...
 #include <X11/Xmd.h>
 #include <Xm/XmP.h>
 #include <Xm/AtomMgr.h>
+#include <Xm/XmI.h>
+
+#include <stdlib.h>
+
 
 /*
    Widget methods, forward declarations
@@ -121,10 +125,10 @@ XmXsettingsClassRec xmXsettingsClassRec = {
 /* resources for subclass fields    XtResourceList    */ resources,
 /* number of entries in resources   Cardinal          */ XtNumber(resources),
 /* resource class quarkified        XrmClass          */ NULLQUARK,
-/* NULL                             Boolean           */ (Boolean)NULL,
-/* NULL                             XtEnum            */ (XtEnum)NULL,
-/* NULL				    Boolean           */ (Boolean)NULL,
-/* NULL                             Boolean           */ (Boolean)NULL,
+/* NULL                             Boolean           */ (Boolean)(unsigned)NULL,
+/* NULL                             XtEnum            */ (XtEnum)(unsigned)NULL,
+/* NULL				    Boolean           */ (Boolean)(unsigned)NULL,
+/* NULL                             Boolean           */ (Boolean)(unsigned)NULL,
 /* free data for subclass pointers  XtWidgetProc      */ destroy,
 /* NULL                             XtProc            */ NULL,
 /* NULL			            XtProc            */ NULL,

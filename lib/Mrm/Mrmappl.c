@@ -237,8 +237,8 @@ MrmOpenHierarchyPerDisplay (Display		*display,
   if (new_os_ext_list != NULL) 
   {
     for (file_index = 0; file_index < num_files; file_index++)
-	XtFree(new_os_ext_list[file_index]);
-    XtFree(new_os_ext_list);
+	XtFree((char *)new_os_ext_list[file_index]);
+    XtFree((char *)new_os_ext_list);
   }    
 #else
   if (os_ext_list == NULL) 

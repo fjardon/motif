@@ -1,4 +1,15 @@
 2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* ChangeLog
+	  demos/programs/ColorSelBox/colorselboxdemo.c
+	  demos/programs/xsettings/Xsettings.c
+	  lib/Mrm/Mrmappl.c
+	  lib/Xm/Container.c
+	  lib/Xm/Text.c
+	  lib/Xm/Toolbar.c
+	Fixed bug #1619 (Eliminates 17 warnings of some type in branch master).
+
+
+2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* demos/lib/Wsm/debug.c,
 	  demos/lib/Xmd/onHelp.c,
 	  demos/programs/ColorSel/util-c.c,

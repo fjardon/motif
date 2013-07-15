@@ -203,7 +203,7 @@ void selectColor(Widget w, XtPointer client_data, XtPointer call_data)
 	screen_in_out.red=R<<8;
 	screen_in_out.green=G<<8;
 	screen_in_out.blue=B<<8;
-	XtVaGetValues(w, XmNcolormap, &cm);
+	XtVaGetValues(w, XmNcolormap, &cm, NULL);
 		
 	status = XAllocColor(XtDisplay(w), cm, &screen_in_out);
 	if (colorSelectionDialog == NULL) {

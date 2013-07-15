@@ -1,3 +1,4 @@
+%option main
 %{
 /*
  * Motif
