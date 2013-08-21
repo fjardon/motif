@@ -50,6 +50,7 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #include "GMUtilsI.h"
 
 #define FIX_1299
+#define FIX_1612
 
 #define MESSAGE1	_XmMMsgForm_0000
 #define MESSAGE5	_XmMMsgForm_0002
@@ -285,6 +286,12 @@ static int GetFormOffset(
                         XmFormWidget fw,
                         int which,
                         XmFormAttachment a) ;
+#ifdef FIX_1612                        
+static Boolean IsWidgetAttachedOneHorizontalSide(
+                        Widget w);
+static Boolean IsWidgetAttachedOneVerticalSide(
+                        Widget w);
+#endif
 
 /********    End Static Function Declarations    ********/
 
@@ -1083,13 +1090,20 @@ GeometryManager(
 	    } else {
 		/* the size the Form wants for the kid request is bigger than
 		   its current or proposed size, return No to the kid */
-
 		/* backup the original Form size first */
 		fw->core.width = orig_form_width  ;
 		fw->core.height = orig_form_height;
-
 		/* we haden't changed anything else, just return No */
 		reply = XtGeometryNo;
+#ifdef FIX_1612
+                if (((IsWidgetAttachedOneHorizontalSide(w)) && 
+                     (desired->request_mode & CWWidth)) ||
+                    ((IsWidgetAttachedOneVerticalSide(w)) && 
+                     (desired->request_mode & CWHeight)))
+		  { PlaceChildren (fw, w, desired);
+		    reply = XtGeometryYes; 
+		  }
+#endif
 	    }
 	} else {
 	    /* ok, we got a Yes form the Form's parent, let's relayout
@@ -3477,3 +3491,42 @@ XmCreateFormDialog(
    return XmeCreateClassDialog (xmFormWidgetClass,
 				parent, name, arglist, argcount) ;
 }
+
+
+
+#ifdef FIX_1612
+/************************************************************************
+ *
+ *  IsWidgetAttachedOneHorizontalSide
+ *	Checking the attachments of widget in horizontal direction.
+ *  Returns True if only one (left or right) side of widget is attached
+ *
+ ************************************************************************/
+static Boolean IsWidgetAttachedOneHorizontalSide(Widget w)
+  { if (w != NULL)
+      { XmFormConstraint c = GetFormConstraint(w);
+        if (((c->att[LEFT].type == XmATTACH_NONE) && 
+             (c->att[RIGHT].type != XmATTACH_NONE)) ||
+            ((c->att[LEFT].type != XmATTACH_NONE) && 
+             (c->att[RIGHT].type == XmATTACH_NONE)))
+          return True;
+          
+      }
+    return False;
+  }    
+
+  
+static Boolean IsWidgetAttachedOneVerticalSide(Widget w)
+  { if (w != NULL)
+      { XmFormConstraint c = GetFormConstraint(w);
+        if (((c->att[TOP].type == XmATTACH_NONE) && 
+             (c->att[BOTTOM].type != XmATTACH_NONE)) ||
+            ((c->att[TOP].type != XmATTACH_NONE) && 
+             (c->att[BOTTOM].type == XmATTACH_NONE)))
+          return True;
+          
+      }
+    return False;
+  }    
+  
+#endif

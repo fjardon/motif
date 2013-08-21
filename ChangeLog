@@ -1,3 +1,7 @@
+2013-07-16  Mykola Vshyvkov <mvshyvkov@ics.com>
+	* lib/Xm/Forms.c,
+	Fixed bug #1612 (Label size computed wrong within a Form).
+
 2013-07-11  Mykola Vshyvkov <mvshyvkov@ics.com>
 	* ChangeLog
 	  demos/programs/ColorSelBox/colorselboxdemo.c
