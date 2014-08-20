@@ -78,6 +78,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #define FIX_1390	1
 #define FIX_1365	1
 #define FIX_1362	1
+#define FIX_1636    1
 
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
@@ -8514,6 +8515,11 @@ XmListDeleteAllItems(Widget w)
 
   if (lw->list.items && (lw->list.itemCount > 0))
     {
+#ifdef FIX_1636
+      XmListDeselectAllItems(w);
+      SetSelectionParams(lw);
+#endif
+
       Dimension old_max_height = lw->list.MaxItemHeight;
 
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
